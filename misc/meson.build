@@ -21,5 +21,3 @@ conf_data.set('bindir', bindir)
 conf_data.set('sysconfdir', sysconfdir)
 conf_data.set('libdir', libdir)
 conf_data.set('localstatedir', localstatedir)
-
-subdir('db')
