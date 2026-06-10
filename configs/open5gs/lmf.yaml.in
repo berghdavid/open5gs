@@ -1,6 +1,5 @@
 logger:
   file:
-    path: ./var/log/open5gs/lmf.log
     level: debug   # fatal|error|warn|info(default)|debug|tracelogger:
 #  level: info   # fatal|error|warn|info(default)|debug|tracelogger:
 
