@@ -26,7 +26,7 @@
 
 static void show_version(void)
 {
-    printf("Open5GS %s\n\n", OPEN5GS_VERSION);
+    printf("LMF %s\n\n", LMF_VERSION);
 }
 
 static void show_help(const char *name)
@@ -207,7 +207,7 @@ int main(int argc, const char *const argv[])
     ogs_signal_init();
     ogs_setup_signal_thread();
 
-    rv = ogs_app_initialize(OPEN5GS_VERSION, DEFAULT_CONFIG_FILENAME, argv_out);
+    rv = ogs_app_initialize(LMF_VERSION, DEFAULT_CONFIG_FILENAME, argv_out);
     if (rv != OGS_OK) {
         if (rv == OGS_RETRY)
             return EXIT_SUCCESS;

@@ -57,7 +57,7 @@ lmf_sources = files('''
     ../main.c
 '''.split())
 
-executable('open5gs-lmfd',
+executable('lmfd',
     sources : lmf_sources,
     c_args : '-DDEFAULT_CONFIG_FILENAME="@0@/lmf.yaml"'.format(sysconfdir),
     include_directories : srcinc,
