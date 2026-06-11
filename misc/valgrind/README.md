@@ -3,7 +3,6 @@
 user@host ~/Documents/git/open5gs$ \
     sudo valgrind --leak-check=full --show-leak-kinds=all \
     --suppressions=support/valgrind/mongoc.suppressions \
-    --suppressions=support/valgrind/freeDiameter.suppressions \
     ./test/testepc
 
 * Generate Suppression File
