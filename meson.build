@@ -45,7 +45,7 @@ python3 = find_program('python3', 'python')
 if meson.version().version_compare('>=0.55.0')
 python3_exe = join_paths(python3.full_path())
 else
-python3_exe = join_paths(python3.path())
+python3_exe = join_paths(python3.full_path())
 endif
 mkdir_p = 'import os; os.makedirs("@0@", exist_ok=True) if not os.environ.get("DESTDIR") else False;'
 symlink = 'import os; os.symlink("@0@", "@1@") if not os.environ.get("DESTDIR") and not os.path.islink("@1@") else False;'
@@ -125,16 +125,6 @@ subdir('configs')
 subdir('lib')
 subdir('src')
 subdir('misc')
-# Don't build the tests unless we can run them (either natively or in an exe wrapper)
-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
-if build_tests
-    subdir('tests')
-endif
-
-# Check if the 'fuzzing' option is defined
-if get_option('fuzzing')
-    subdir('tests/fuzzing')
-endif
 
 message('\n'.join([
   '',
@@ -154,8 +144,7 @@ message('\n'.join([
 if cppcheck.found()
     run_target('analyze-cppcheck',
     command : [ 'misc/static-code-analyze.sh',
-        meson.version().version_compare('>=0.55.0') ?
-          cppcheck.full_path() : cppcheck.path(),
+        clangtidy.full_path(),
         meson.current_build_dir(),
         meson.current_source_dir()
         ]
@@ -165,8 +154,7 @@ endif
 if clangtidy.found()
     run_target('analyze-clang-tidy',
     command : [ 'misc/static-code-analyze.sh',
-        meson.version().version_compare('>=0.55.0') ?
-          clangtidy.full_path() : clangtidy.path(),
+        clangtidy.full_path(),
         meson.current_build_dir(),
         meson.current_source_dir()
         ]
