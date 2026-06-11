@@ -17,6 +17,6 @@
 
 subdir('common')
 subdir('util')
-subdir('ngap')
+#subdir('ngap')
 subdir('nrppa_ecid')
-subdir('s1ap')
+#subdir('s1ap')
