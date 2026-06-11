@@ -1,0 +1,53 @@
+logger:
+  file:
+    level: debug   # fatal|error|warn|info(default)|debug|tracelogger:
+#  level: info   # fatal|error|warn|info(default)|debug|tracelogger:
+
+global:
+  max:
+    ue: 1024  # The number of UE can be increased depending on memory size.
+#    peer: 64
+
+lmf:
+  sbi:
+    server:
+      - address: 127.0.0.16
+        port: 7777
+    client:
+#      nrf:
+#        - uri: http://127.0.0.10:7777
+      amf:
+        - uri: http://127.0.0.5:7777
+      scp:
+        - uri: http://127.0.0.200:7777
+
+  # Cell database for location calculation
+  # Each cell entry contains geographic position and antenna configuration
+  cell_database:
+    cells:
+      # Example cell entry - update with your actual cell information
+      - ncgi: 190001
+        plmn_id:
+          mcc: 999
+          mnc: 70
+        latitude: 48.2345
+        longitude: 17.2562
+        altitude: 137.0         # Meters above sea level
+        cell_radius: 500       # Cell radius in meters
+        antenna:
+          azimuth: 120         # Antenna azimuth in degrees (0-360)
+          beamwidth: 65        # Antenna beamwidth in degrees
+          tilt: -5             # Antenna tilt in degrees (negative = down)
+
+      - ncgi: 2b2cdc06f
+        plmn_id:
+          mcc: 999
+          mnc: 70
+        latitude: 48.139848
+        longitude: 17.128145
+        altitude: 150.0
+        cell_radius: 200
+        antenna:
+          azimuth: 60
+          beamwidth: 65
+          tilt: -5

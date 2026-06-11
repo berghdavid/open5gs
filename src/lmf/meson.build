@@ -59,7 +59,7 @@ lmf_sources = files('''
 
 executable('open5gs-lmfd',
     sources : lmf_sources,
-    c_args : '-DDEFAULT_CONFIG_FILENAME="@0@/lmf.yaml"'.format(open5gs_sysconfdir),
+    c_args : '-DDEFAULT_CONFIG_FILENAME="@0@/lmf.yaml"'.format(sysconfdir),
     include_directories : srcinc,
     dependencies : liblmf_dep,
     install_rpath : libdir,
