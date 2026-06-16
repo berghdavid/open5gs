@@ -1,5 +1,5 @@
-#ifndef OGS_SBI_ANY_TYPE_H
-#define OGS_SBI_ANY_TYPE_H
+#ifndef ANY_TYPE_H
+#define ANY_TYPE_H
 
 #include <stdbool.h>
 #include "../external/cJSON.h"
@@ -52,4 +52,4 @@ void OpenAPI_any_type_free(OpenAPI_any_type_t *any_type);
 }
 #endif
 
-#endif /* OGS_SBI_ANY_TYPE_H */
+#endif /* ANY_TYPE_H */

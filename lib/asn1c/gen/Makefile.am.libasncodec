@@ -1,0 +1,1185 @@
+ASN_MODULE_SRCS=	\
+	./gen/Criticality.c	\
+	./gen/NRPPATransactionID.c	\
+	./gen/Presence.c	\
+	./gen/PrivateIE-ID.c	\
+	./gen/ProcedureCode.c	\
+	./gen/ProtocolIE-ID.c	\
+	./gen/TriggeringMessage.c	\
+	./gen/ProtocolIE-Container.c	\
+	./gen/ProtocolIE-Single-Container.c	\
+	./gen/ProtocolIE-Field.c	\
+	./gen/ProtocolIE-ContainerList.c	\
+	./gen/ProtocolExtensionContainer.c	\
+	./gen/ProtocolExtensionField.c	\
+	./gen/PrivateIE-Container.c	\
+	./gen/PrivateIE-Field.c	\
+	./gen/AbortTransmission.c	\
+	./gen/ActiveULBWP.c	\
+	./gen/AdditionalPathList.c	\
+	./gen/AdditionalPathListItem.c	\
+	./gen/AggregatedPosSRSResourceID-List.c	\
+	./gen/AggregatedPosSRSResourceID-Item.c	\
+	./gen/AggregatedPRSResourceSetList.c	\
+	./gen/AggregatedPRSResourceSet-Item.c	\
+	./gen/DL-PRS-ResourceSet-List.c	\
+	./gen/DL-PRS-ResourceSet-Item.c	\
+	./gen/ExtendedAdditionalPathList.c	\
+	./gen/ExtendedAdditionalPathList-Item.c	\
+	./gen/AoA-AssistanceInfo.c	\
+	./gen/AperiodicSRSResourceTriggerList.c	\
+	./gen/AperiodicSRSResourceTrigger.c	\
+	./gen/AngleMeasurementType.c	\
+	./gen/Expected-UL-AoA.c	\
+	./gen/Expected-ZoA-only.c	\
+	./gen/Expected-Azimuth-AoA.c	\
+	./gen/Expected-Zenith-AoA.c	\
+	./gen/ARP-ID.c	\
+	./gen/ARPLocationInformation.c	\
+	./gen/ARPLocationInformation-Item.c	\
+	./gen/ARPLocationType.c	\
+	./gen/Assistance-Information.c	\
+	./gen/AssistanceInformationFailureList.c	\
+	./gen/AssistanceInformationMetaData.c	\
+	./gen/BandwidthSRS.c	\
+	./gen/Bandwidth-Aggregation-Request-Indication.c	\
+	./gen/BCCH.c	\
+	./gen/Broadcast.c	\
+	./gen/BroadcastPeriodicity.c	\
+	./gen/PositioningBroadcastCells.c	\
+	./gen/BSSID.c	\
+	./gen/CarrierFreq.c	\
+	./gen/Cause.c	\
+	./gen/CauseMisc.c	\
+	./gen/CauseProtocol.c	\
+	./gen/CauseRadioNetwork.c	\
+	./gen/Cell-Portion-ID.c	\
+	./gen/CGI-EUTRA.c	\
+	./gen/CGI-NR.c	\
+	./gen/ChannelResponseInformation.c	\
+	./gen/ChannelResponseWindowSize.c	\
+	./gen/ChannelResponseNumber.c	\
+	./gen/CPLength-EUTRA.c	\
+	./gen/CriticalityDiagnostics.c	\
+	./gen/CriticalityDiagnostics-IE-List.c	\
+	./gen/CommonTAParameters.c	\
+	./gen/DL-Bandwidth-EUTRA.c	\
+	./gen/DL-PRS.c	\
+	./gen/DL-PRSMutingPattern.c	\
+	./gen/DLPRSResourceCoordinates.c	\
+	./gen/DLPRSResourceSetARP.c	\
+	./gen/DL-PRSResourceSetARPLocation.c	\
+	./gen/DLPRSResourceARP.c	\
+	./gen/DL-PRSResourceARPLocation.c	\
+	./gen/DL-reference-signal-UERxTx-TD.c	\
+	./gen/E-CID-MeasurementResult.c	\
+	./gen/E-CID-AoA-NR-per-TRP.c	\
+	./gen/E-CID-AoA-NR-per-TRP-Item.c	\
+	./gen/EUTRACellIdentifier.c	\
+	./gen/EARFCN.c	\
+	./gen/Expected-Value-AoA.c	\
+	./gen/Expected-Value-ZoA.c	\
+	./gen/GeographicalCoordinates.c	\
+	./gen/GNB-RxTxTimeDiff.c	\
+	./gen/GNBRxTxTimeDiffMeas.c	\
+	./gen/HESSID.c	\
+	./gen/Inferred-measurement.c	\
+	./gen/LCS-to-GCS-Translation.c	\
+	./gen/LCS-to-GCS-TranslationItem.c	\
+	./gen/LocationUncertainty.c	\
+	./gen/LocalOrigin.c	\
+	./gen/LoS-NLoSIndicatorHard.c	\
+	./gen/LoS-NLoSIndicatorSoft.c	\
+	./gen/LoS-NLoSInformation.c	\
+	./gen/MeasBasedOnAggregatedResources.c	\
+	./gen/Measurement-ID.c	\
+	./gen/MeasurementAmount.c	\
+	./gen/MeasurementBeamInfoRequest.c	\
+	./gen/MeasurementBeamInfo.c	\
+	./gen/MeasurementPeriodicity.c	\
+	./gen/MeasurementPeriodicityExtended.c	\
+	./gen/MeasurementPeriodicityNR-AoA.c	\
+	./gen/MeasurementQuantities.c	\
+	./gen/MeasurementQuantities-Item.c	\
+	./gen/MeasurementQuantitiesValue.c	\
+	./gen/MeasurementTimeOccasion.c	\
+	./gen/MeasurementCharacteristicsRequestIndicator.c	\
+	./gen/MeasuredResults.c	\
+	./gen/MeasuredResultsAssociatedInfoList.c	\
+	./gen/MeasuredResultsAssociatedInfoItem.c	\
+	./gen/MeasuredResultsValue.c	\
+	./gen/Mobile-TRP-LocationInformation.c	\
+	./gen/Mobile-IAB-MT-UE-ID.c	\
+	./gen/MultipleULAoA.c	\
+	./gen/MultipleULAoA-List.c	\
+	./gen/MultipleULAoA-Item.c	\
+	./gen/MeasuredFrequencyHops.c	\
+	./gen/NarrowBandIndex.c	\
+	./gen/NG-RANAccessPointPosition.c	\
+	./gen/NGRANHighAccuracyAccessPointPosition.c	\
+	./gen/NG-RAN-CGI.c	\
+	./gen/NG-RANCell.c	\
+	./gen/NR-ARFCN.c	\
+	./gen/NRCellIdentifier.c	\
+	./gen/NrofSymbolsExtended.c	\
+	./gen/NR-PCI.c	\
+	./gen/NR-PRS-Beam-Information.c	\
+	./gen/NR-PRS-Beam-InformationItem.c	\
+	./gen/NR-TADV.c	\
+	./gen/NumberOfAntennaPorts-EUTRA.c	\
+	./gen/NumberOfDlFrames-EUTRA.c	\
+	./gen/NumberOfDlFrames-Extended-EUTRA.c	\
+	./gen/NumberOfFrequencyHoppingBands.c	\
+	./gen/NumberOfTRPRxTEG.c	\
+	./gen/NumberOfTRPRxTxTEG.c	\
+	./gen/NZP-CSI-RS-ResourceID.c	\
+	./gen/OnDemandPRS-Info.c	\
+	./gen/OTDOACells.c	\
+	./gen/OTDOACell-Information.c	\
+	./gen/OTDOACell-Information-Item.c	\
+	./gen/OTDOA-Information-Item.c	\
+	./gen/OtherRATMeasurementQuantities.c	\
+	./gen/OtherRATMeasurementQuantities-Item.c	\
+	./gen/OtherRATMeasurementQuantitiesValue.c	\
+	./gen/OtherRATMeasurementResult.c	\
+	./gen/OtherRATMeasuredResultsValue.c	\
+	./gen/Outcome.c	\
+	./gen/PathlossReferenceInformation.c	\
+	./gen/PathlossReferenceSignal.c	\
+	./gen/PCI-EUTRA.c	\
+	./gen/PhysCellIDGERAN.c	\
+	./gen/PhysCellIDUTRA-FDD.c	\
+	./gen/PhysCellIDUTRA-TDD.c	\
+	./gen/PLMN-Identity.c	\
+	./gen/PeriodicityList.c	\
+	./gen/PeriodicityItem.c	\
+	./gen/PosSIBs.c	\
+	./gen/PosSIB-Segments.c	\
+	./gen/PosSIB-Type.c	\
+	./gen/PositioningDataInformation.c	\
+	./gen/TRP-Measurement-List.c	\
+	./gen/TRP-Measurement-Item.c	\
+	./gen/PositioningDataUnavailable.c	\
+	./gen/PositioningDataCollectionNeeded.c	\
+	./gen/PRSBWAggregationRequestInfoList.c	\
+	./gen/PRSBWAggregationRequestInfo-Item.c	\
+	./gen/DL-PRSBWAggregationRequestInfo-List.c	\
+	./gen/DL-PRSBWAggregationRequestInfo-Item.c	\
+	./gen/PosSRSResource-List.c	\
+	./gen/PosSRSResource-Item.c	\
+	./gen/PosSRSResourceID-List.c	\
+	./gen/PosSRSResourceSet-List.c	\
+	./gen/PosSRSResourceIDPerSet-List.c	\
+	./gen/PosSRSResourceSet-Item.c	\
+	./gen/PosSRSResourceSet-Aggregation-List.c	\
+	./gen/PosSRSResourceSet-Aggregation-Item.c	\
+	./gen/Combined-PosSRSResourceSet-List.c	\
+	./gen/Combined-PosSRSResourceSet-Item.c	\
+	./gen/PosResourceSetType.c	\
+	./gen/PosResourceSetTypePeriodic.c	\
+	./gen/PosResourceSetTypeSemi-persistent.c	\
+	./gen/PosResourceSetTypeAperiodic.c	\
+	./gen/PreconfigurationResult.c	\
+	./gen/PRS-Bandwidth-EUTRA.c	\
+	./gen/PRSAngleItem.c	\
+	./gen/PRSInformationPos.c	\
+	./gen/PRSConfigRequestType.c	\
+	./gen/PRSConfiguration.c	\
+	./gen/PRS-ConfigurationIndex-EUTRA.c	\
+	./gen/PRS-ID-EUTRA.c	\
+	./gen/PRSMutingConfiguration-EUTRA.c	\
+	./gen/PRSOccasionGroup-EUTRA.c	\
+	./gen/PRSFrequencyHoppingConfiguration-EUTRA.c	\
+	./gen/PRS-Measurements-Info-List.c	\
+	./gen/PRS-Measurements-Info-List-Item.c	\
+	./gen/PRSMuting.c	\
+	./gen/PRSMutingOption1.c	\
+	./gen/PRSMutingOption2.c	\
+	./gen/PRSResource-List.c	\
+	./gen/PRSResource-Item.c	\
+	./gen/ExtendedResourceSymbolOffset.c	\
+	./gen/PRSResource-QCLInfo.c	\
+	./gen/PRSResource-QCLSourceSSB.c	\
+	./gen/PRSResource-QCLSourcePRS.c	\
+	./gen/PRSResourceSet-List.c	\
+	./gen/PRSResourceSet-Item.c	\
+	./gen/PRS-Resource-ID.c	\
+	./gen/PRS-Resource-Set-ID.c	\
+	./gen/PRS-ID.c	\
+	./gen/PRSTransmissionOffIndication.c	\
+	./gen/PRSTransmissionOffPerResource.c	\
+	./gen/PRSTransmissionOffPerResource-Item.c	\
+	./gen/PRSTransmissionOffIndicationPerResource-Item.c	\
+	./gen/PRSTransmissionOffInformation.c	\
+	./gen/PRSTransmissionOffPerResourceSet.c	\
+	./gen/PRSTransmissionOffPerResourceSet-Item.c	\
+	./gen/PRSTRPList.c	\
+	./gen/PRSTRPItem.c	\
+	./gen/PRSTransmissionTRPList.c	\
+	./gen/PRSTransmissionTRPItem.c	\
+	./gen/PosValidityAreaCellList.c	\
+	./gen/PosValidityAreaCell-Item.c	\
+	./gen/PointA.c	\
+	./gen/ReferenceSignal.c	\
+	./gen/ReferencePoint.c	\
+	./gen/CoordinateID.c	\
+	./gen/RelativeGeodeticLocation.c	\
+	./gen/RelativeCartesianLocation.c	\
+	./gen/RelativePathDelay.c	\
+	./gen/Remote-UE-Indication-Request.c	\
+	./gen/Remote-UE-Indication.c	\
+	./gen/Remote-UE-Status.c	\
+	./gen/RepetitionFactorExtended.c	\
+	./gen/ReportCharacteristics.c	\
+	./gen/ReportingGranularitykminus1.c	\
+	./gen/ReportingGranularitykminus2.c	\
+	./gen/ReportingGranularitykminus3.c	\
+	./gen/ReportingGranularitykminus4.c	\
+	./gen/ReportingGranularitykminus5.c	\
+	./gen/ReportingGranularitykminus6.c	\
+	./gen/ReportingGranularitykminus1AdditionalPath.c	\
+	./gen/ReportingGranularitykminus2AdditionalPath.c	\
+	./gen/ReportingGranularitykminus3AdditionalPath.c	\
+	./gen/ReportingGranularitykminus4AdditionalPath.c	\
+	./gen/ReportingGranularitykminus5AdditionalPath.c	\
+	./gen/ReportingGranularitykminus6AdditionalPath.c	\
+	./gen/RequestedDLPRSTransmissionCharacteristics.c	\
+	./gen/RequestedDLPRSResourceSet-List.c	\
+	./gen/RequestedDLPRSResourceSet-Item.c	\
+	./gen/RequestedDLPRSResource-List.c	\
+	./gen/RequestedDLPRSResource-Item.c	\
+	./gen/RequestedSRSTransmissionCharacteristics.c	\
+	./gen/ResourceMapping.c	\
+	./gen/RequestedSRSPreconfigurationCharacteristics-List.c	\
+	./gen/RequestedSRSPreconfigurationCharacteristics-Item.c	\
+	./gen/SRSResourceSet-Item.c	\
+	./gen/RequestType.c	\
+	./gen/ResourceSetType.c	\
+	./gen/ResourceSetTypePeriodic.c	\
+	./gen/ResourceSetTypeSemi-persistent.c	\
+	./gen/ResourceSetTypeAperiodic.c	\
+	./gen/ResourceType.c	\
+	./gen/ResourceTypePeriodic.c	\
+	./gen/ResourceTypeSemi-persistent.c	\
+	./gen/ResourceTypeAperiodic.c	\
+	./gen/ResourceTypePos.c	\
+	./gen/ResourceTypePeriodicPos.c	\
+	./gen/ResourceTypeSemi-persistentPos.c	\
+	./gen/ResourceTypeAperiodicPos.c	\
+	./gen/ResponseTime.c	\
+	./gen/ResultCSI-RSRP.c	\
+	./gen/ResultCSI-RSRP-Item.c	\
+	./gen/ResultCSI-RSRP-PerCSI-RS.c	\
+	./gen/ResultCSI-RSRP-PerCSI-RS-Item.c	\
+	./gen/ResultCSI-RSRQ.c	\
+	./gen/ResultCSI-RSRQ-Item.c	\
+	./gen/ResultCSI-RSRQ-PerCSI-RS.c	\
+	./gen/ResultCSI-RSRQ-PerCSI-RS-Item.c	\
+	./gen/ResultEUTRA.c	\
+	./gen/ResultEUTRA-Item.c	\
+	./gen/ResultRSRP-EUTRA.c	\
+	./gen/ResultRSRP-EUTRA-Item.c	\
+	./gen/ResultRSRQ-EUTRA.c	\
+	./gen/ResultRSRQ-EUTRA-Item.c	\
+	./gen/ResultSS-RSRP.c	\
+	./gen/ResultSS-RSRP-Item.c	\
+	./gen/ResultSS-RSRP-PerSSB.c	\
+	./gen/ResultSS-RSRP-PerSSB-Item.c	\
+	./gen/ResultSS-RSRQ.c	\
+	./gen/ResultSS-RSRQ-Item.c	\
+	./gen/ResultSS-RSRQ-PerSSB.c	\
+	./gen/ResultSS-RSRQ-PerSSB-Item.c	\
+	./gen/ResultGERAN.c	\
+	./gen/ResultGERAN-Item.c	\
+	./gen/ResultNR.c	\
+	./gen/ResultNR-Item.c	\
+	./gen/ResultUTRAN.c	\
+	./gen/ResultUTRAN-Item.c	\
+	./gen/RSSI.c	\
+	./gen/RxTxTimingErrorMargin.c	\
+	./gen/SCS-480.c	\
+	./gen/SCS-960.c	\
+	./gen/SCS-SpecificCarrier.c	\
+	./gen/Search-window-information.c	\
+	./gen/RelativeTime1900.c	\
+	./gen/SFNInitialisationTime-EUTRA.c	\
+	./gen/SlotNumber.c	\
+	./gen/SlotOffsetForRemainingHopsList.c	\
+	./gen/SlotOffsetForRemainingHopsItem.c	\
+	./gen/SlotOffsetRemainingHops.c	\
+	./gen/SlotOffsetRemainingHopsAperiodic.c	\
+	./gen/SlotOffsetRemainingHopsSemiPersistent.c	\
+	./gen/SlotOffsetRemainingHopsPeriodic.c	\
+	./gen/SpatialDirectionInformation.c	\
+	./gen/SpatialRelationInfo.c	\
+	./gen/SpatialRelationforResourceID.c	\
+	./gen/SpatialRelationforResourceIDItem.c	\
+	./gen/SpatialRelationPerSRSResource.c	\
+	./gen/SpatialRelationPerSRSResource-List.c	\
+	./gen/SpatialRelationPerSRSResourceItem.c	\
+	./gen/SpatialRelationPos.c	\
+	./gen/SRSConfig.c	\
+	./gen/SRSCarrier-List.c	\
+	./gen/SRSCarrier-List-Item.c	\
+	./gen/SRSConfiguration.c	\
+	./gen/SrsFrequency.c	\
+	./gen/SRSPortIndex.c	\
+	./gen/SRSPosPeriodicConfigHyperSFNIndex.c	\
+	./gen/SRSPosResourceID.c	\
+	./gen/SRSResource.c	\
+	./gen/SRSResourceID.c	\
+	./gen/SRSResource-List.c	\
+	./gen/SRSResourceSet-List.c	\
+	./gen/SRSResourceID-List.c	\
+	./gen/SRSResourceSet.c	\
+	./gen/SRSResourceSetID.c	\
+	./gen/SRSResourceTrigger.c	\
+	./gen/SRSResourcetype.c	\
+	./gen/SRSResourceTypeChoice.c	\
+	./gen/SRSInfo.c	\
+	./gen/SRSTransmissionStatus.c	\
+	./gen/PosSRSInfo.c	\
+	./gen/SSBInfo.c	\
+	./gen/SSBInfoItem.c	\
+	./gen/SSB.c	\
+	./gen/SSBBurstPosition.c	\
+	./gen/SSB-Index.c	\
+	./gen/SSID.c	\
+	./gen/StartRBIndex.c	\
+	./gen/StartRBHopping.c	\
+	./gen/StartTimeAndDuration.c	\
+	./gen/SymbolIndex.c	\
+	./gen/SystemFrameNumber.c	\
+	./gen/SystemInformation.c	\
+	./gen/SRSReservationType.c	\
+	./gen/SRSPreconfiguration-List.c	\
+	./gen/SRSPreconfiguration-Item.c	\
+	./gen/SRSPeriodicity.c	\
+	./gen/TAC.c	\
+	./gen/TDD-Config-EUTRA-Item.c	\
+	./gen/TRPTEGInformation.c	\
+	./gen/RxTxTEG.c	\
+	./gen/RxTEG.c	\
+	./gen/TimingErrorMargin.c	\
+	./gen/TF-Configuration.c	\
+	./gen/TimeStamp.c	\
+	./gen/TimeStampSlotIndex.c	\
+	./gen/TimeWindowDurationMeasurement.c	\
+	./gen/TimeWindowDurationSRS.c	\
+	./gen/TimeWindowPeriodicityMeasurement.c	\
+	./gen/TimeWindowPeriodicitySRS.c	\
+	./gen/TimeWindowStartSRS.c	\
+	./gen/TimingReportingGranularityFactorExtended.c	\
+	./gen/TimeWindowInformation-Measurement-List.c	\
+	./gen/TimeWindowInformation-Measurement-Item.c	\
+	./gen/TimeWindowInformation-SRS-List.c	\
+	./gen/TimeWindowInformation-SRS-Item.c	\
+	./gen/TimeWindowStart.c	\
+	./gen/TP-ID-EUTRA.c	\
+	./gen/TP-Type-EUTRA.c	\
+	./gen/TransmissionComb.c	\
+	./gen/TransmissionCombn8.c	\
+	./gen/TransmissionCombPos.c	\
+	./gen/TRPBeamAntennaInformation.c	\
+	./gen/Choice-TRP-Beam-Antenna-Info-Item.c	\
+	./gen/TRP-BeamAntennaExplicitInformation.c	\
+	./gen/TRP-BeamAntennaAngles.c	\
+	./gen/TRP-BeamAntennaAnglesList-Item.c	\
+	./gen/TRP-ElevationAngleList-Item.c	\
+	./gen/TRP-Beam-Power-Item.c	\
+	./gen/TRPMeasurementQuantities.c	\
+	./gen/TRPMeasurementQuantitiesList-Item.c	\
+	./gen/TRPMeasurementType.c	\
+	./gen/TrpMeasurementResult.c	\
+	./gen/TrpMeasurementResultItem.c	\
+	./gen/TrpMeasuredResultsValue.c	\
+	./gen/TrpMeasurementQuality.c	\
+	./gen/TrpMeasurementTimingQuality.c	\
+	./gen/TrpMeasurementAngleQuality.c	\
+	./gen/TRPPhaseQuality.c	\
+	./gen/TRP-MeasurementRequestList.c	\
+	./gen/TRP-MeasurementRequestItem.c	\
+	./gen/TRP-MeasurementResponseList.c	\
+	./gen/TRP-MeasurementResponseItem.c	\
+	./gen/TRP-MeasurementUpdateList.c	\
+	./gen/TRP-MeasurementUpdateItem.c	\
+	./gen/TRPInformationListTRPResp.c	\
+	./gen/TRPInformation.c	\
+	./gen/TRPInformationTypeResponseList.c	\
+	./gen/TRPInformationTypeResponseItem.c	\
+	./gen/TRPInformationTypeListTRPReq.c	\
+	./gen/TRPInformationTypeItem.c	\
+	./gen/TRPList.c	\
+	./gen/TRPItem.c	\
+	./gen/TRP-ID.c	\
+	./gen/TRPPositionDefinitionType.c	\
+	./gen/TRPPositionDirect.c	\
+	./gen/TRPPositionDirectAccuracy.c	\
+	./gen/TRPPositionReferenced.c	\
+	./gen/TRP-PRS-Information-List.c	\
+	./gen/TRP-PRS-Information-List-Item.c	\
+	./gen/TRPReferencePointType.c	\
+	./gen/TRP-Rx-TEGInformation.c	\
+	./gen/TRP-RxTx-TEGInformation.c	\
+	./gen/TRP-Tx-TEGInformation.c	\
+	./gen/TRPTxTEGAssociation.c	\
+	./gen/TRPTEGItem.c	\
+	./gen/DLPRSResourceID-Item.c	\
+	./gen/TRPType.c	\
+	./gen/TypeOfError.c	\
+	./gen/TxHoppingConfiguration.c	\
+	./gen/UARFCN.c	\
+	./gen/UE-Measurement-ID.c	\
+	./gen/UEReportingInformation.c	\
+	./gen/UEReportingInterval-milliseconds.c	\
+	./gen/UE-Rx-Tx-Time-Diff.c	\
+	./gen/UE-TEG-ReportingPeriodicity.c	\
+	./gen/UETxTEGAssociationList.c	\
+	./gen/UETxTEGAssociationItem.c	\
+	./gen/SRSResourceID-Item.c	\
+	./gen/UE-TEG-Info-Request.c	\
+	./gen/UTRA-EcN0.c	\
+	./gen/UTRA-RSCP.c	\
+	./gen/UL-AoA.c	\
+	./gen/UL-RTOAMeasurement.c	\
+	./gen/UL-RSCPMeas.c	\
+	./gen/ULRTOAMeas.c	\
+	./gen/UL-SRS-RSRP.c	\
+	./gen/UL-SRS-RSRPP.c	\
+	./gen/UL-SRS-TDCT.c	\
+	./gen/UL-SRS-TDCT-List.c	\
+	./gen/UL-SRS-TDCT-Item.c	\
+	./gen/UL-SRS-TDCT-Information.c	\
+	./gen/UL-SRS-TDCP-Item.c	\
+	./gen/UplinkChannelBW-PerSCS-List.c	\
+	./gen/Uncertainty-range-AoA.c	\
+	./gen/Uncertainty-range-ZoA.c	\
+	./gen/ValueRSRP-EUTRA.c	\
+	./gen/ValueRSRQ-EUTRA.c	\
+	./gen/ValueRSRP-NR.c	\
+	./gen/ValueRSRQ-NR.c	\
+	./gen/ValidityAreaSpecificSRSInformation.c	\
+	./gen/ValidityAreaSpecificSRSInformationExtended.c	\
+	./gen/WLANMeasurementQuantities.c	\
+	./gen/WLANMeasurementQuantities-Item.c	\
+	./gen/WLANMeasurementQuantitiesValue.c	\
+	./gen/WLANMeasurementResult.c	\
+	./gen/WLANMeasurementResult-Item.c	\
+	./gen/WLAN-RSSI.c	\
+	./gen/WLANBand.c	\
+	./gen/WLANChannelList.c	\
+	./gen/WLANChannel.c	\
+	./gen/WLANCountryCode.c	\
+	./gen/WLANOperatingClass.c	\
+	./gen/WAB-MT-UE-ID.c	\
+	./gen/ZoA.c	\
+	./gen/E-CIDMeasurementInitiationRequest.c	\
+	./gen/E-CIDMeasurementInitiationResponse.c	\
+	./gen/E-CIDMeasurementInitiationFailure.c	\
+	./gen/E-CIDMeasurementFailureIndication.c	\
+	./gen/E-CIDMeasurementReport.c	\
+	./gen/E-CIDMeasurementTerminationCommand.c	\
+	./gen/OTDOAInformationRequest.c	\
+	./gen/OTDOA-Information-Type.c	\
+	./gen/OTDOA-Information-Type-Item.c	\
+	./gen/OTDOAInformationResponse.c	\
+	./gen/OTDOAInformationFailure.c	\
+	./gen/AssistanceInformationControl.c	\
+	./gen/AssistanceInformationFeedback.c	\
+	./gen/ErrorIndication.c	\
+	./gen/PrivateMessage.c	\
+	./gen/PositioningInformationRequest.c	\
+	./gen/PositioningInformationResponse.c	\
+	./gen/PositioningInformationFailure.c	\
+	./gen/PositioningInformationUpdate.c	\
+	./gen/MeasurementRequest.c	\
+	./gen/MeasurementResponse.c	\
+	./gen/MeasurementFailure.c	\
+	./gen/MeasurementReport.c	\
+	./gen/MeasurementUpdate.c	\
+	./gen/MeasurementAbort.c	\
+	./gen/MeasurementFailureIndication.c	\
+	./gen/TRPInformationRequest.c	\
+	./gen/TRPInformationResponse.c	\
+	./gen/TRPInformationFailure.c	\
+	./gen/PositioningActivationRequest.c	\
+	./gen/SRSType.c	\
+	./gen/SemipersistentSRS.c	\
+	./gen/AperiodicSRS.c	\
+	./gen/PositioningActivationResponse.c	\
+	./gen/PositioningActivationFailure.c	\
+	./gen/PositioningDeactivation.c	\
+	./gen/PRSConfigurationRequest.c	\
+	./gen/PRSConfigurationResponse.c	\
+	./gen/PRSConfigurationFailure.c	\
+	./gen/MeasurementPreconfigurationRequired.c	\
+	./gen/MeasurementPreconfigurationConfirm.c	\
+	./gen/MeasurementPreconfigurationRefuse.c	\
+	./gen/MeasurementActivation.c	\
+	./gen/SRSInformationReservationNotification.c	\
+	./gen/PositioningDataCollectionReport.c	\
+	./gen/NRPPA-PDU.c	\
+	./gen/InitiatingMessage.c	\
+	./gen/SuccessfulOutcome.c	\
+	./gen/UnsuccessfulOutcome.c	\
+	./gen/EXTERNAL.c
+
+ASN_MODULE_HDRS=	\
+	./gen/Criticality.h	\
+	./gen/NRPPATransactionID.h	\
+	./gen/Presence.h	\
+	./gen/PrivateIE-ID.h	\
+	./gen/ProcedureCode.h	\
+	./gen/ProtocolIE-ID.h	\
+	./gen/TriggeringMessage.h	\
+	./gen/ProtocolIE-Container.h	\
+	./gen/ProtocolIE-Single-Container.h	\
+	./gen/ProtocolIE-Field.h	\
+	./gen/ProtocolIE-ContainerList.h	\
+	./gen/ProtocolExtensionContainer.h	\
+	./gen/ProtocolExtensionField.h	\
+	./gen/PrivateIE-Container.h	\
+	./gen/PrivateIE-Field.h	\
+	./gen/AbortTransmission.h	\
+	./gen/ActiveULBWP.h	\
+	./gen/AdditionalPathList.h	\
+	./gen/AdditionalPathListItem.h	\
+	./gen/AggregatedPosSRSResourceID-List.h	\
+	./gen/AggregatedPosSRSResourceID-Item.h	\
+	./gen/AggregatedPRSResourceSetList.h	\
+	./gen/AggregatedPRSResourceSet-Item.h	\
+	./gen/DL-PRS-ResourceSet-List.h	\
+	./gen/DL-PRS-ResourceSet-Item.h	\
+	./gen/ExtendedAdditionalPathList.h	\
+	./gen/ExtendedAdditionalPathList-Item.h	\
+	./gen/AoA-AssistanceInfo.h	\
+	./gen/AperiodicSRSResourceTriggerList.h	\
+	./gen/AperiodicSRSResourceTrigger.h	\
+	./gen/AngleMeasurementType.h	\
+	./gen/Expected-UL-AoA.h	\
+	./gen/Expected-ZoA-only.h	\
+	./gen/Expected-Azimuth-AoA.h	\
+	./gen/Expected-Zenith-AoA.h	\
+	./gen/ARP-ID.h	\
+	./gen/ARPLocationInformation.h	\
+	./gen/ARPLocationInformation-Item.h	\
+	./gen/ARPLocationType.h	\
+	./gen/Assistance-Information.h	\
+	./gen/AssistanceInformationFailureList.h	\
+	./gen/AssistanceInformationMetaData.h	\
+	./gen/BandwidthSRS.h	\
+	./gen/Bandwidth-Aggregation-Request-Indication.h	\
+	./gen/BCCH.h	\
+	./gen/Broadcast.h	\
+	./gen/BroadcastPeriodicity.h	\
+	./gen/PositioningBroadcastCells.h	\
+	./gen/BSSID.h	\
+	./gen/CarrierFreq.h	\
+	./gen/Cause.h	\
+	./gen/CauseMisc.h	\
+	./gen/CauseProtocol.h	\
+	./gen/CauseRadioNetwork.h	\
+	./gen/Cell-Portion-ID.h	\
+	./gen/CGI-EUTRA.h	\
+	./gen/CGI-NR.h	\
+	./gen/ChannelResponseInformation.h	\
+	./gen/ChannelResponseWindowSize.h	\
+	./gen/ChannelResponseNumber.h	\
+	./gen/CPLength-EUTRA.h	\
+	./gen/CriticalityDiagnostics.h	\
+	./gen/CriticalityDiagnostics-IE-List.h	\
+	./gen/CommonTAParameters.h	\
+	./gen/DL-Bandwidth-EUTRA.h	\
+	./gen/DL-PRS.h	\
+	./gen/DL-PRSMutingPattern.h	\
+	./gen/DLPRSResourceCoordinates.h	\
+	./gen/DLPRSResourceSetARP.h	\
+	./gen/DL-PRSResourceSetARPLocation.h	\
+	./gen/DLPRSResourceARP.h	\
+	./gen/DL-PRSResourceARPLocation.h	\
+	./gen/DL-reference-signal-UERxTx-TD.h	\
+	./gen/E-CID-MeasurementResult.h	\
+	./gen/E-CID-AoA-NR-per-TRP.h	\
+	./gen/E-CID-AoA-NR-per-TRP-Item.h	\
+	./gen/EUTRACellIdentifier.h	\
+	./gen/EARFCN.h	\
+	./gen/Expected-Value-AoA.h	\
+	./gen/Expected-Value-ZoA.h	\
+	./gen/GeographicalCoordinates.h	\
+	./gen/GNB-RxTxTimeDiff.h	\
+	./gen/GNBRxTxTimeDiffMeas.h	\
+	./gen/HESSID.h	\
+	./gen/Inferred-measurement.h	\
+	./gen/LCS-to-GCS-Translation.h	\
+	./gen/LCS-to-GCS-TranslationItem.h	\
+	./gen/LocationUncertainty.h	\
+	./gen/LocalOrigin.h	\
+	./gen/LoS-NLoSIndicatorHard.h	\
+	./gen/LoS-NLoSIndicatorSoft.h	\
+	./gen/LoS-NLoSInformation.h	\
+	./gen/MeasBasedOnAggregatedResources.h	\
+	./gen/Measurement-ID.h	\
+	./gen/MeasurementAmount.h	\
+	./gen/MeasurementBeamInfoRequest.h	\
+	./gen/MeasurementBeamInfo.h	\
+	./gen/MeasurementPeriodicity.h	\
+	./gen/MeasurementPeriodicityExtended.h	\
+	./gen/MeasurementPeriodicityNR-AoA.h	\
+	./gen/MeasurementQuantities.h	\
+	./gen/MeasurementQuantities-Item.h	\
+	./gen/MeasurementQuantitiesValue.h	\
+	./gen/MeasurementTimeOccasion.h	\
+	./gen/MeasurementCharacteristicsRequestIndicator.h	\
+	./gen/MeasuredResults.h	\
+	./gen/MeasuredResultsAssociatedInfoList.h	\
+	./gen/MeasuredResultsAssociatedInfoItem.h	\
+	./gen/MeasuredResultsValue.h	\
+	./gen/Mobile-TRP-LocationInformation.h	\
+	./gen/Mobile-IAB-MT-UE-ID.h	\
+	./gen/MultipleULAoA.h	\
+	./gen/MultipleULAoA-List.h	\
+	./gen/MultipleULAoA-Item.h	\
+	./gen/MeasuredFrequencyHops.h	\
+	./gen/NarrowBandIndex.h	\
+	./gen/NG-RANAccessPointPosition.h	\
+	./gen/NGRANHighAccuracyAccessPointPosition.h	\
+	./gen/NG-RAN-CGI.h	\
+	./gen/NG-RANCell.h	\
+	./gen/NR-ARFCN.h	\
+	./gen/NRCellIdentifier.h	\
+	./gen/NrofSymbolsExtended.h	\
+	./gen/NR-PCI.h	\
+	./gen/NR-PRS-Beam-Information.h	\
+	./gen/NR-PRS-Beam-InformationItem.h	\
+	./gen/NR-TADV.h	\
+	./gen/NumberOfAntennaPorts-EUTRA.h	\
+	./gen/NumberOfDlFrames-EUTRA.h	\
+	./gen/NumberOfDlFrames-Extended-EUTRA.h	\
+	./gen/NumberOfFrequencyHoppingBands.h	\
+	./gen/NumberOfTRPRxTEG.h	\
+	./gen/NumberOfTRPRxTxTEG.h	\
+	./gen/NZP-CSI-RS-ResourceID.h	\
+	./gen/OnDemandPRS-Info.h	\
+	./gen/OTDOACells.h	\
+	./gen/OTDOACell-Information.h	\
+	./gen/OTDOACell-Information-Item.h	\
+	./gen/OTDOA-Information-Item.h	\
+	./gen/OtherRATMeasurementQuantities.h	\
+	./gen/OtherRATMeasurementQuantities-Item.h	\
+	./gen/OtherRATMeasurementQuantitiesValue.h	\
+	./gen/OtherRATMeasurementResult.h	\
+	./gen/OtherRATMeasuredResultsValue.h	\
+	./gen/Outcome.h	\
+	./gen/PathlossReferenceInformation.h	\
+	./gen/PathlossReferenceSignal.h	\
+	./gen/PCI-EUTRA.h	\
+	./gen/PhysCellIDGERAN.h	\
+	./gen/PhysCellIDUTRA-FDD.h	\
+	./gen/PhysCellIDUTRA-TDD.h	\
+	./gen/PLMN-Identity.h	\
+	./gen/PeriodicityList.h	\
+	./gen/PeriodicityItem.h	\
+	./gen/PosSIBs.h	\
+	./gen/PosSIB-Segments.h	\
+	./gen/PosSIB-Type.h	\
+	./gen/PositioningDataInformation.h	\
+	./gen/TRP-Measurement-List.h	\
+	./gen/TRP-Measurement-Item.h	\
+	./gen/PositioningDataUnavailable.h	\
+	./gen/PositioningDataCollectionNeeded.h	\
+	./gen/PRSBWAggregationRequestInfoList.h	\
+	./gen/PRSBWAggregationRequestInfo-Item.h	\
+	./gen/DL-PRSBWAggregationRequestInfo-List.h	\
+	./gen/DL-PRSBWAggregationRequestInfo-Item.h	\
+	./gen/PosSRSResource-List.h	\
+	./gen/PosSRSResource-Item.h	\
+	./gen/PosSRSResourceID-List.h	\
+	./gen/PosSRSResourceSet-List.h	\
+	./gen/PosSRSResourceIDPerSet-List.h	\
+	./gen/PosSRSResourceSet-Item.h	\
+	./gen/PosSRSResourceSet-Aggregation-List.h	\
+	./gen/PosSRSResourceSet-Aggregation-Item.h	\
+	./gen/Combined-PosSRSResourceSet-List.h	\
+	./gen/Combined-PosSRSResourceSet-Item.h	\
+	./gen/PosResourceSetType.h	\
+	./gen/PosResourceSetTypePeriodic.h	\
+	./gen/PosResourceSetTypeSemi-persistent.h	\
+	./gen/PosResourceSetTypeAperiodic.h	\
+	./gen/PreconfigurationResult.h	\
+	./gen/PRS-Bandwidth-EUTRA.h	\
+	./gen/PRSAngleItem.h	\
+	./gen/PRSInformationPos.h	\
+	./gen/PRSConfigRequestType.h	\
+	./gen/PRSConfiguration.h	\
+	./gen/PRS-ConfigurationIndex-EUTRA.h	\
+	./gen/PRS-ID-EUTRA.h	\
+	./gen/PRSMutingConfiguration-EUTRA.h	\
+	./gen/PRSOccasionGroup-EUTRA.h	\
+	./gen/PRSFrequencyHoppingConfiguration-EUTRA.h	\
+	./gen/PRS-Measurements-Info-List.h	\
+	./gen/PRS-Measurements-Info-List-Item.h	\
+	./gen/PRSMuting.h	\
+	./gen/PRSMutingOption1.h	\
+	./gen/PRSMutingOption2.h	\
+	./gen/PRSResource-List.h	\
+	./gen/PRSResource-Item.h	\
+	./gen/ExtendedResourceSymbolOffset.h	\
+	./gen/PRSResource-QCLInfo.h	\
+	./gen/PRSResource-QCLSourceSSB.h	\
+	./gen/PRSResource-QCLSourcePRS.h	\
+	./gen/PRSResourceSet-List.h	\
+	./gen/PRSResourceSet-Item.h	\
+	./gen/PRS-Resource-ID.h	\
+	./gen/PRS-Resource-Set-ID.h	\
+	./gen/PRS-ID.h	\
+	./gen/PRSTransmissionOffIndication.h	\
+	./gen/PRSTransmissionOffPerResource.h	\
+	./gen/PRSTransmissionOffPerResource-Item.h	\
+	./gen/PRSTransmissionOffIndicationPerResource-Item.h	\
+	./gen/PRSTransmissionOffInformation.h	\
+	./gen/PRSTransmissionOffPerResourceSet.h	\
+	./gen/PRSTransmissionOffPerResourceSet-Item.h	\
+	./gen/PRSTRPList.h	\
+	./gen/PRSTRPItem.h	\
+	./gen/PRSTransmissionTRPList.h	\
+	./gen/PRSTransmissionTRPItem.h	\
+	./gen/PosValidityAreaCellList.h	\
+	./gen/PosValidityAreaCell-Item.h	\
+	./gen/PointA.h	\
+	./gen/ReferenceSignal.h	\
+	./gen/ReferencePoint.h	\
+	./gen/CoordinateID.h	\
+	./gen/RelativeGeodeticLocation.h	\
+	./gen/RelativeCartesianLocation.h	\
+	./gen/RelativePathDelay.h	\
+	./gen/Remote-UE-Indication-Request.h	\
+	./gen/Remote-UE-Indication.h	\
+	./gen/Remote-UE-Status.h	\
+	./gen/RepetitionFactorExtended.h	\
+	./gen/ReportCharacteristics.h	\
+	./gen/ReportingGranularitykminus1.h	\
+	./gen/ReportingGranularitykminus2.h	\
+	./gen/ReportingGranularitykminus3.h	\
+	./gen/ReportingGranularitykminus4.h	\
+	./gen/ReportingGranularitykminus5.h	\
+	./gen/ReportingGranularitykminus6.h	\
+	./gen/ReportingGranularitykminus1AdditionalPath.h	\
+	./gen/ReportingGranularitykminus2AdditionalPath.h	\
+	./gen/ReportingGranularitykminus3AdditionalPath.h	\
+	./gen/ReportingGranularitykminus4AdditionalPath.h	\
+	./gen/ReportingGranularitykminus5AdditionalPath.h	\
+	./gen/ReportingGranularitykminus6AdditionalPath.h	\
+	./gen/RequestedDLPRSTransmissionCharacteristics.h	\
+	./gen/RequestedDLPRSResourceSet-List.h	\
+	./gen/RequestedDLPRSResourceSet-Item.h	\
+	./gen/RequestedDLPRSResource-List.h	\
+	./gen/RequestedDLPRSResource-Item.h	\
+	./gen/RequestedSRSTransmissionCharacteristics.h	\
+	./gen/ResourceMapping.h	\
+	./gen/RequestedSRSPreconfigurationCharacteristics-List.h	\
+	./gen/RequestedSRSPreconfigurationCharacteristics-Item.h	\
+	./gen/SRSResourceSet-Item.h	\
+	./gen/RequestType.h	\
+	./gen/ResourceSetType.h	\
+	./gen/ResourceSetTypePeriodic.h	\
+	./gen/ResourceSetTypeSemi-persistent.h	\
+	./gen/ResourceSetTypeAperiodic.h	\
+	./gen/ResourceType.h	\
+	./gen/ResourceTypePeriodic.h	\
+	./gen/ResourceTypeSemi-persistent.h	\
+	./gen/ResourceTypeAperiodic.h	\
+	./gen/ResourceTypePos.h	\
+	./gen/ResourceTypePeriodicPos.h	\
+	./gen/ResourceTypeSemi-persistentPos.h	\
+	./gen/ResourceTypeAperiodicPos.h	\
+	./gen/ResponseTime.h	\
+	./gen/ResultCSI-RSRP.h	\
+	./gen/ResultCSI-RSRP-Item.h	\
+	./gen/ResultCSI-RSRP-PerCSI-RS.h	\
+	./gen/ResultCSI-RSRP-PerCSI-RS-Item.h	\
+	./gen/ResultCSI-RSRQ.h	\
+	./gen/ResultCSI-RSRQ-Item.h	\
+	./gen/ResultCSI-RSRQ-PerCSI-RS.h	\
+	./gen/ResultCSI-RSRQ-PerCSI-RS-Item.h	\
+	./gen/ResultEUTRA.h	\
+	./gen/ResultEUTRA-Item.h	\
+	./gen/ResultRSRP-EUTRA.h	\
+	./gen/ResultRSRP-EUTRA-Item.h	\
+	./gen/ResultRSRQ-EUTRA.h	\
+	./gen/ResultRSRQ-EUTRA-Item.h	\
+	./gen/ResultSS-RSRP.h	\
+	./gen/ResultSS-RSRP-Item.h	\
+	./gen/ResultSS-RSRP-PerSSB.h	\
+	./gen/ResultSS-RSRP-PerSSB-Item.h	\
+	./gen/ResultSS-RSRQ.h	\
+	./gen/ResultSS-RSRQ-Item.h	\
+	./gen/ResultSS-RSRQ-PerSSB.h	\
+	./gen/ResultSS-RSRQ-PerSSB-Item.h	\
+	./gen/ResultGERAN.h	\
+	./gen/ResultGERAN-Item.h	\
+	./gen/ResultNR.h	\
+	./gen/ResultNR-Item.h	\
+	./gen/ResultUTRAN.h	\
+	./gen/ResultUTRAN-Item.h	\
+	./gen/RSSI.h	\
+	./gen/RxTxTimingErrorMargin.h	\
+	./gen/SCS-480.h	\
+	./gen/SCS-960.h	\
+	./gen/SCS-SpecificCarrier.h	\
+	./gen/Search-window-information.h	\
+	./gen/RelativeTime1900.h	\
+	./gen/SFNInitialisationTime-EUTRA.h	\
+	./gen/SlotNumber.h	\
+	./gen/SlotOffsetForRemainingHopsList.h	\
+	./gen/SlotOffsetForRemainingHopsItem.h	\
+	./gen/SlotOffsetRemainingHops.h	\
+	./gen/SlotOffsetRemainingHopsAperiodic.h	\
+	./gen/SlotOffsetRemainingHopsSemiPersistent.h	\
+	./gen/SlotOffsetRemainingHopsPeriodic.h	\
+	./gen/SpatialDirectionInformation.h	\
+	./gen/SpatialRelationInfo.h	\
+	./gen/SpatialRelationforResourceID.h	\
+	./gen/SpatialRelationforResourceIDItem.h	\
+	./gen/SpatialRelationPerSRSResource.h	\
+	./gen/SpatialRelationPerSRSResource-List.h	\
+	./gen/SpatialRelationPerSRSResourceItem.h	\
+	./gen/SpatialRelationPos.h	\
+	./gen/SRSConfig.h	\
+	./gen/SRSCarrier-List.h	\
+	./gen/SRSCarrier-List-Item.h	\
+	./gen/SRSConfiguration.h	\
+	./gen/SrsFrequency.h	\
+	./gen/SRSPortIndex.h	\
+	./gen/SRSPosPeriodicConfigHyperSFNIndex.h	\
+	./gen/SRSPosResourceID.h	\
+	./gen/SRSResource.h	\
+	./gen/SRSResourceID.h	\
+	./gen/SRSResource-List.h	\
+	./gen/SRSResourceSet-List.h	\
+	./gen/SRSResourceID-List.h	\
+	./gen/SRSResourceSet.h	\
+	./gen/SRSResourceSetID.h	\
+	./gen/SRSResourceTrigger.h	\
+	./gen/SRSResourcetype.h	\
+	./gen/SRSResourceTypeChoice.h	\
+	./gen/SRSInfo.h	\
+	./gen/SRSTransmissionStatus.h	\
+	./gen/PosSRSInfo.h	\
+	./gen/SSBInfo.h	\
+	./gen/SSBInfoItem.h	\
+	./gen/SSB.h	\
+	./gen/SSBBurstPosition.h	\
+	./gen/SSB-Index.h	\
+	./gen/SSID.h	\
+	./gen/StartRBIndex.h	\
+	./gen/StartRBHopping.h	\
+	./gen/StartTimeAndDuration.h	\
+	./gen/SymbolIndex.h	\
+	./gen/SystemFrameNumber.h	\
+	./gen/SystemInformation.h	\
+	./gen/SRSReservationType.h	\
+	./gen/SRSPreconfiguration-List.h	\
+	./gen/SRSPreconfiguration-Item.h	\
+	./gen/SRSPeriodicity.h	\
+	./gen/TAC.h	\
+	./gen/TDD-Config-EUTRA-Item.h	\
+	./gen/TRPTEGInformation.h	\
+	./gen/RxTxTEG.h	\
+	./gen/RxTEG.h	\
+	./gen/TimingErrorMargin.h	\
+	./gen/TF-Configuration.h	\
+	./gen/TimeStamp.h	\
+	./gen/TimeStampSlotIndex.h	\
+	./gen/TimeWindowDurationMeasurement.h	\
+	./gen/TimeWindowDurationSRS.h	\
+	./gen/TimeWindowPeriodicityMeasurement.h	\
+	./gen/TimeWindowPeriodicitySRS.h	\
+	./gen/TimeWindowStartSRS.h	\
+	./gen/TimingReportingGranularityFactorExtended.h	\
+	./gen/TimeWindowInformation-Measurement-List.h	\
+	./gen/TimeWindowInformation-Measurement-Item.h	\
+	./gen/TimeWindowInformation-SRS-List.h	\
+	./gen/TimeWindowInformation-SRS-Item.h	\
+	./gen/TimeWindowStart.h	\
+	./gen/TP-ID-EUTRA.h	\
+	./gen/TP-Type-EUTRA.h	\
+	./gen/TransmissionComb.h	\
+	./gen/TransmissionCombn8.h	\
+	./gen/TransmissionCombPos.h	\
+	./gen/TRPBeamAntennaInformation.h	\
+	./gen/Choice-TRP-Beam-Antenna-Info-Item.h	\
+	./gen/TRP-BeamAntennaExplicitInformation.h	\
+	./gen/TRP-BeamAntennaAngles.h	\
+	./gen/TRP-BeamAntennaAnglesList-Item.h	\
+	./gen/TRP-ElevationAngleList-Item.h	\
+	./gen/TRP-Beam-Power-Item.h	\
+	./gen/TRPMeasurementQuantities.h	\
+	./gen/TRPMeasurementQuantitiesList-Item.h	\
+	./gen/TRPMeasurementType.h	\
+	./gen/TrpMeasurementResult.h	\
+	./gen/TrpMeasurementResultItem.h	\
+	./gen/TrpMeasuredResultsValue.h	\
+	./gen/TrpMeasurementQuality.h	\
+	./gen/TrpMeasurementTimingQuality.h	\
+	./gen/TrpMeasurementAngleQuality.h	\
+	./gen/TRPPhaseQuality.h	\
+	./gen/TRP-MeasurementRequestList.h	\
+	./gen/TRP-MeasurementRequestItem.h	\
+	./gen/TRP-MeasurementResponseList.h	\
+	./gen/TRP-MeasurementResponseItem.h	\
+	./gen/TRP-MeasurementUpdateList.h	\
+	./gen/TRP-MeasurementUpdateItem.h	\
+	./gen/TRPInformationListTRPResp.h	\
+	./gen/TRPInformation.h	\
+	./gen/TRPInformationTypeResponseList.h	\
+	./gen/TRPInformationTypeResponseItem.h	\
+	./gen/TRPInformationTypeListTRPReq.h	\
+	./gen/TRPInformationTypeItem.h	\
+	./gen/TRPList.h	\
+	./gen/TRPItem.h	\
+	./gen/TRP-ID.h	\
+	./gen/TRPPositionDefinitionType.h	\
+	./gen/TRPPositionDirect.h	\
+	./gen/TRPPositionDirectAccuracy.h	\
+	./gen/TRPPositionReferenced.h	\
+	./gen/TRP-PRS-Information-List.h	\
+	./gen/TRP-PRS-Information-List-Item.h	\
+	./gen/TRPReferencePointType.h	\
+	./gen/TRP-Rx-TEGInformation.h	\
+	./gen/TRP-RxTx-TEGInformation.h	\
+	./gen/TRP-Tx-TEGInformation.h	\
+	./gen/TRPTxTEGAssociation.h	\
+	./gen/TRPTEGItem.h	\
+	./gen/DLPRSResourceID-Item.h	\
+	./gen/TRPType.h	\
+	./gen/TypeOfError.h	\
+	./gen/TxHoppingConfiguration.h	\
+	./gen/UARFCN.h	\
+	./gen/UE-Measurement-ID.h	\
+	./gen/UEReportingInformation.h	\
+	./gen/UEReportingInterval-milliseconds.h	\
+	./gen/UE-Rx-Tx-Time-Diff.h	\
+	./gen/UE-TEG-ReportingPeriodicity.h	\
+	./gen/UETxTEGAssociationList.h	\
+	./gen/UETxTEGAssociationItem.h	\
+	./gen/SRSResourceID-Item.h	\
+	./gen/UE-TEG-Info-Request.h	\
+	./gen/UTRA-EcN0.h	\
+	./gen/UTRA-RSCP.h	\
+	./gen/UL-AoA.h	\
+	./gen/UL-RTOAMeasurement.h	\
+	./gen/UL-RSCPMeas.h	\
+	./gen/ULRTOAMeas.h	\
+	./gen/UL-SRS-RSRP.h	\
+	./gen/UL-SRS-RSRPP.h	\
+	./gen/UL-SRS-TDCT.h	\
+	./gen/UL-SRS-TDCT-List.h	\
+	./gen/UL-SRS-TDCT-Item.h	\
+	./gen/UL-SRS-TDCT-Information.h	\
+	./gen/UL-SRS-TDCP-Item.h	\
+	./gen/UplinkChannelBW-PerSCS-List.h	\
+	./gen/Uncertainty-range-AoA.h	\
+	./gen/Uncertainty-range-ZoA.h	\
+	./gen/ValueRSRP-EUTRA.h	\
+	./gen/ValueRSRQ-EUTRA.h	\
+	./gen/ValueRSRP-NR.h	\
+	./gen/ValueRSRQ-NR.h	\
+	./gen/ValidityAreaSpecificSRSInformation.h	\
+	./gen/ValidityAreaSpecificSRSInformationExtended.h	\
+	./gen/WLANMeasurementQuantities.h	\
+	./gen/WLANMeasurementQuantities-Item.h	\
+	./gen/WLANMeasurementQuantitiesValue.h	\
+	./gen/WLANMeasurementResult.h	\
+	./gen/WLANMeasurementResult-Item.h	\
+	./gen/WLAN-RSSI.h	\
+	./gen/WLANBand.h	\
+	./gen/WLANChannelList.h	\
+	./gen/WLANChannel.h	\
+	./gen/WLANCountryCode.h	\
+	./gen/WLANOperatingClass.h	\
+	./gen/WAB-MT-UE-ID.h	\
+	./gen/ZoA.h	\
+	./gen/E-CIDMeasurementInitiationRequest.h	\
+	./gen/E-CIDMeasurementInitiationResponse.h	\
+	./gen/E-CIDMeasurementInitiationFailure.h	\
+	./gen/E-CIDMeasurementFailureIndication.h	\
+	./gen/E-CIDMeasurementReport.h	\
+	./gen/E-CIDMeasurementTerminationCommand.h	\
+	./gen/OTDOAInformationRequest.h	\
+	./gen/OTDOA-Information-Type.h	\
+	./gen/OTDOA-Information-Type-Item.h	\
+	./gen/OTDOAInformationResponse.h	\
+	./gen/OTDOAInformationFailure.h	\
+	./gen/AssistanceInformationControl.h	\
+	./gen/AssistanceInformationFeedback.h	\
+	./gen/ErrorIndication.h	\
+	./gen/PrivateMessage.h	\
+	./gen/PositioningInformationRequest.h	\
+	./gen/PositioningInformationResponse.h	\
+	./gen/PositioningInformationFailure.h	\
+	./gen/PositioningInformationUpdate.h	\
+	./gen/MeasurementRequest.h	\
+	./gen/MeasurementResponse.h	\
+	./gen/MeasurementFailure.h	\
+	./gen/MeasurementReport.h	\
+	./gen/MeasurementUpdate.h	\
+	./gen/MeasurementAbort.h	\
+	./gen/MeasurementFailureIndication.h	\
+	./gen/TRPInformationRequest.h	\
+	./gen/TRPInformationResponse.h	\
+	./gen/TRPInformationFailure.h	\
+	./gen/PositioningActivationRequest.h	\
+	./gen/SRSType.h	\
+	./gen/SemipersistentSRS.h	\
+	./gen/AperiodicSRS.h	\
+	./gen/PositioningActivationResponse.h	\
+	./gen/PositioningActivationFailure.h	\
+	./gen/PositioningDeactivation.h	\
+	./gen/PRSConfigurationRequest.h	\
+	./gen/PRSConfigurationResponse.h	\
+	./gen/PRSConfigurationFailure.h	\
+	./gen/MeasurementPreconfigurationRequired.h	\
+	./gen/MeasurementPreconfigurationConfirm.h	\
+	./gen/MeasurementPreconfigurationRefuse.h	\
+	./gen/MeasurementActivation.h	\
+	./gen/SRSInformationReservationNotification.h	\
+	./gen/PositioningDataCollectionReport.h	\
+	./gen/NRPPA-PDU.h	\
+	./gen/InitiatingMessage.h	\
+	./gen/SuccessfulOutcome.h	\
+	./gen/UnsuccessfulOutcome.h	\
+	./gen/EXTERNAL.h
+
+ASN_MODULE_HDRS+=./gen/ANY.h
+ASN_MODULE_SRCS+=./gen/ANY.c
+ASN_MODULE_HDRS+=./gen/OCTET_STRING.h
+ASN_MODULE_HDRS+=./gen/OPEN_TYPE.h
+ASN_MODULE_SRCS+=./gen/OPEN_TYPE.c
+ASN_MODULE_HDRS+=./gen/constr_CHOICE.h
+ASN_MODULE_HDRS+=./gen/ENUMERATED.h
+ASN_MODULE_SRCS+=./gen/ENUMERATED.c
+ASN_MODULE_HDRS+=./gen/INTEGER.h
+ASN_MODULE_HDRS+=./gen/NativeEnumerated.h
+ASN_MODULE_HDRS+=./gen/GraphicString.h
+ASN_MODULE_SRCS+=./gen/GraphicString.c
+ASN_MODULE_SRCS+=./gen/INTEGER.c
+ASN_MODULE_HDRS+=./gen/asn_constraint_value.h
+ASN_MODULE_SRCS+=./gen/asn_constraint_value.c
+ASN_MODULE_HDRS+=./gen/NULL.h
+ASN_MODULE_SRCS+=./gen/NULL.c
+ASN_MODULE_SRCS+=./gen/NativeEnumerated.c
+ASN_MODULE_HDRS+=./gen/NativeInteger.h
+ASN_MODULE_SRCS+=./gen/NativeInteger.c
+ASN_MODULE_HDRS+=./gen/OBJECT_IDENTIFIER.h
+ASN_MODULE_SRCS+=./gen/OBJECT_IDENTIFIER.c
+ASN_MODULE_HDRS+=./gen/asn_codecs_prim.h
+ASN_MODULE_HDRS+=./gen/ObjectDescriptor.h
+ASN_MODULE_SRCS+=./gen/ObjectDescriptor.c
+ASN_MODULE_HDRS+=./gen/asn_SEQUENCE_OF.h
+ASN_MODULE_SRCS+=./gen/asn_SEQUENCE_OF.c
+ASN_MODULE_HDRS+=./gen/asn_SET_OF.h
+ASN_MODULE_SRCS+=./gen/asn_SET_OF.c
+ASN_MODULE_SRCS+=./gen/constr_CHOICE.c
+ASN_MODULE_HDRS+=./gen/constr_SEQUENCE.h
+ASN_MODULE_SRCS+=./gen/constr_SEQUENCE.c
+ASN_MODULE_HDRS+=./gen/constr_SEQUENCE_OF.h
+ASN_MODULE_SRCS+=./gen/constr_SEQUENCE_OF.c
+ASN_MODULE_HDRS+=./gen/constr_SET_OF.h
+ASN_MODULE_SRCS+=./gen/constr_SET_OF.c
+ASN_MODULE_HDRS+=./gen/asn_application.h
+ASN_MODULE_SRCS+=./gen/asn_application.c
+ASN_MODULE_HDRS+=./gen/asn_ioc.h
+ASN_MODULE_HDRS+=./gen/asn_system.h
+ASN_MODULE_HDRS+=./gen/asn_codecs.h
+ASN_MODULE_HDRS+=./gen/asn_internal.h
+ASN_MODULE_SRCS+=./gen/asn_internal.c
+ASN_MODULE_HDRS+=./gen/asn_bit_data.h
+ASN_MODULE_SRCS+=./gen/asn_bit_data.c
+ASN_MODULE_SRCS+=./gen/OCTET_STRING.c
+ASN_MODULE_HDRS+=./gen/BIT_STRING.h
+ASN_MODULE_SRCS+=./gen/BIT_STRING.c
+ASN_MODULE_SRCS+=./gen/asn_codecs_prim.c
+ASN_MODULE_HDRS+=./gen/ber_tlv_length.h
+ASN_MODULE_SRCS+=./gen/ber_tlv_length.c
+ASN_MODULE_HDRS+=./gen/ber_tlv_tag.h
+ASN_MODULE_SRCS+=./gen/ber_tlv_tag.c
+ASN_MODULE_HDRS+=./gen/constr_TYPE.h
+ASN_MODULE_SRCS+=./gen/constr_TYPE.c
+ASN_MODULE_HDRS+=./gen/constraints.h
+ASN_MODULE_SRCS+=./gen/constraints.c
+ASN_MODULE_HDRS+=./gen/per_decoder.h
+ASN_MODULE_HDRS+=./gen/per_encoder.h
+ASN_MODULE_HDRS+=./gen/per_support.h
+ASN_MODULE_HDRS+=./gen/per_opentype.h
+ASN_MODULE_SRCS+=./gen/per_decoder.c
+ASN_MODULE_SRCS+=./gen/per_encoder.c
+ASN_MODULE_SRCS+=./gen/per_support.c
+ASN_MODULE_SRCS+=./gen/per_opentype.c
+ASN_MODULE_HDRS+=./gen/aper_decoder.h
+ASN_MODULE_HDRS+=./gen/aper_encoder.h
+ASN_MODULE_HDRS+=./gen/aper_support.h
+ASN_MODULE_HDRS+=./gen/aper_opentype.h
+ASN_MODULE_SRCS+=./gen/aper_decoder.c
+ASN_MODULE_SRCS+=./gen/aper_encoder.c
+ASN_MODULE_SRCS+=./gen/aper_support.c
+ASN_MODULE_SRCS+=./gen/aper_opentype.c
+ASN_MODULE_SRCS+=./gen/ANY_aper.c
+ASN_MODULE_SRCS+=./gen/ENUMERATED_aper.c
+ASN_MODULE_SRCS+=./gen/INTEGER_aper.c
+ASN_MODULE_SRCS+=./gen/NULL_aper.c
+ASN_MODULE_SRCS+=./gen/NativeEnumerated_aper.c
+ASN_MODULE_SRCS+=./gen/NativeInteger_aper.c
+ASN_MODULE_SRCS+=./gen/OCTET_STRING_aper.c
+ASN_MODULE_SRCS+=./gen/OPEN_TYPE_aper.c
+ASN_MODULE_SRCS+=./gen/constr_CHOICE_aper.c
+ASN_MODULE_SRCS+=./gen/constr_SEQUENCE_OF_aper.c
+ASN_MODULE_SRCS+=./gen/constr_SEQUENCE_aper.c
+ASN_MODULE_SRCS+=./gen/constr_SET_OF_aper.c
+ASN_MODULE_SRCS+=./gen/BIT_STRING_print.c
+ASN_MODULE_SRCS+=./gen/INTEGER_print.c
+ASN_MODULE_SRCS+=./gen/NULL_print.c
+ASN_MODULE_SRCS+=./gen/NativeInteger_print.c
+ASN_MODULE_SRCS+=./gen/OBJECT_IDENTIFIER_print.c
+ASN_MODULE_SRCS+=./gen/OCTET_STRING_print.c
+ASN_MODULE_SRCS+=./gen/OPEN_TYPE_print.c
+ASN_MODULE_SRCS+=./gen/constr_CHOICE_print.c
+ASN_MODULE_SRCS+=./gen/constr_SEQUENCE_print.c
+ASN_MODULE_SRCS+=./gen/constr_SET_OF_print.c
+ASN_MODULE_HDRS+=./gen/asn_random_fill.h
+ASN_MODULE_SRCS+=./gen/asn_random_fill.c
+ASN_MODULE_SRCS+=./gen/BIT_STRING_rfill.c
+ASN_MODULE_SRCS+=./gen/INTEGER_rfill.c
+ASN_MODULE_SRCS+=./gen/NULL_rfill.c
+ASN_MODULE_SRCS+=./gen/NativeInteger_rfill.c
+ASN_MODULE_SRCS+=./gen/OBJECT_IDENTIFIER_rfill.c
+ASN_MODULE_SRCS+=./gen/OCTET_STRING_rfill.c
+ASN_MODULE_SRCS+=./gen/constr_CHOICE_rfill.c
+ASN_MODULE_SRCS+=./gen/constr_SEQUENCE_rfill.c
+ASN_MODULE_SRCS+=./gen/constr_SET_OF_rfill.c
+ASN_MODULE_HDRS+=./gen/cbor_support.h
+ASN_MODULE_HDRS+=./gen/cbor_decoder.h
+ASN_MODULE_HDRS+=./gen/cbor_encoder.h
+ASN_MODULE_SRCS+=./gen/cbor_support.c
+ASN_MODULE_SRCS+=./gen/cbor_decoder.c
+ASN_MODULE_SRCS+=./gen/cbor_encoder.c
+ASN_MODULE_SRCS+=./gen/BIT_STRING_cbor.c
+ASN_MODULE_SRCS+=./gen/ENUMERATED_cbor.c
+ASN_MODULE_SRCS+=./gen/INTEGER_cbor.c
+ASN_MODULE_SRCS+=./gen/NULL_cbor.c
+ASN_MODULE_SRCS+=./gen/NativeEnumerated_cbor.c
+ASN_MODULE_SRCS+=./gen/NativeInteger_cbor.c
+ASN_MODULE_SRCS+=./gen/OCTET_STRING_cbor.c
+ASN_MODULE_SRCS+=./gen/asn_codecs_prim_cbor.c
+ASN_MODULE_SRCS+=./gen/constr_CHOICE_cbor.c
+ASN_MODULE_SRCS+=./gen/constr_SEQUENCE_OF_cbor.c
+ASN_MODULE_SRCS+=./gen/constr_SEQUENCE_cbor.c
+ASN_MODULE_SRCS+=./gen/constr_SET_OF_cbor.c
+ASN_MODULE_SRCS+=./gen/OPEN_TYPE_cbor.c
+
+ASN_MODULE_CFLAGS=-DASN_DISABLE_BER_SUPPORT -DASN_DISABLE_XER_SUPPORT -DASN_DISABLE_OER_SUPPORT -DASN_DISABLE_UPER_SUPPORT -DASN_DISABLE_JER_SUPPORT 
+
+lib_LTLIBRARIES+=libasncodec.la
+libasncodec_la_SOURCES=$(ASN_MODULE_SRCS) $(ASN_MODULE_HDRS)
+libasncodec_la_CPPFLAGS=-I$(top_srcdir)/./gen/
+libasncodec_la_CFLAGS=$(ASN_MODULE_CFLAGS)
+libasncodec_la_LDFLAGS=-lm

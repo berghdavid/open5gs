@@ -56,7 +56,7 @@ libcurl_dep = dependency('libcurl', version: '>=7.52.1')
 
 libsbi = library('ogssbi',
     sources : libsbi_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : sbi_cc_flags,
     include_directories : [libsbi_inc, libinc],
     dependencies : [libcrypt_dep,

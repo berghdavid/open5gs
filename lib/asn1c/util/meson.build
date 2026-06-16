@@ -24,7 +24,7 @@ libasn1c_util_inc = include_directories('.')
 
 libasn1c_util = library('ogsasn1c-util',
     sources : libasn1c_util_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : libasn1c_common_cc_flags,
     include_directories : libasn1c_util_inc,
     dependencies : libasn1c_common_dep,

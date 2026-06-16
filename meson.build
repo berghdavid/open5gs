@@ -7,7 +7,7 @@ project('lmf', 'c', 'cpp',
     ],
 )
 
-libogslib_version = '2.7.6'
+genlib_version = '0.0.0'
 
 prefix = get_option('prefix')
 bindir = join_paths(prefix, get_option('bindir'))

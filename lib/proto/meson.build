@@ -33,7 +33,7 @@ libproto_inc = include_directories('.')
 
 libproto = library('ogsproto',
     sources : libproto_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : '-DOGS_PROTO_COMPILATION',
     include_directories : [libproto_inc, libinc],
     dependencies : libcore_dep,

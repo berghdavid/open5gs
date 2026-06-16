@@ -35,7 +35,7 @@ libapp_inc = include_directories('.')
 
 libapp = library('ogsapp',
     sources : libapp_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : '-DOGS_APP_COMPILATION',
     include_directories : [libapp_inc, libinc],
     dependencies : [libproto_dep, yaml_dep],

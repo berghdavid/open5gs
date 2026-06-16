@@ -315,7 +315,7 @@ libtalloc_dep = dependency('talloc')
 
 libcore = library('ogscore',
     sources : libcore_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : '-DOGS_CORE_COMPILATION',
     include_directories : [libcore_inc, libinc],
     dependencies : [threads, librt, libexecinfo, libsocket, libtalloc_dep],

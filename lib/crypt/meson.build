@@ -56,7 +56,7 @@ libcrypt_inc = include_directories('.')
 
 libcrypt = library('ogscrypt',
     sources : libcrypt_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : '-DOGS_CRYPT_COMPILATION',
     include_directories : [libcrypt_inc, libinc],
     dependencies : libproto_dep,

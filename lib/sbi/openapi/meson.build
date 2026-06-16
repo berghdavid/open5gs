@@ -1425,7 +1425,7 @@ endif
 
 libsbi_openapi = library('ogssbi-openapi',
     sources : libsbi_openapi_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : sbi_openapi_cc_flags,
     include_directories : [libsbi_openapi_inc, libinc],
     dependencies : libcore_dep,

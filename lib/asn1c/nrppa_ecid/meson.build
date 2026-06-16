@@ -11,7 +11,7 @@ libasn1c_nrppa_inc = include_directories('.')
 
 libasn1c_nrppa = library('ogsasn1c-nrppa',
     sources : nrppa_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : libasn1c_common_cc_flags,
     include_directories : libasn1c_nrppa_inc,
     dependencies : [libasn1c_common_dep, libasn1c_util_dep],

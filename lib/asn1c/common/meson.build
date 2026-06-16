@@ -134,27 +134,13 @@ libasn1c_common_sources = files('''
     constr_SET_OF_rfill.c
 '''.split())
 
-libasn1c_common_cc_flags = ['-DASN_DISABLE_BER_SUPPORT',
-                            '-DASN_DISABLE_XER_SUPPORT',
-                            '-DASN_DISABLE_OER_SUPPORT',
-                            '-DASN_DISABLE_UPER_SUPPORT',
-                            '-DASN_DISABLE_JER_SUPPORT']
-
-#libasn1c_common_cc_flags += cc.get_supported_arguments([
-#    '-Wno-parentheses-equality',
-#    '-Wno-overflow',
-#    '-Wno-format',
-#
-#    '-Wno-implicit-fallthrough',
-#    '-Wno-missing-prototypes',
-#    '-Wno-missing-declarations',
-#    '-Wno-missing-field-initializers',
-#    '-Wno-format-nonliteral',
-#    '-Wno-format-security',
-#    '-Wno-type-limits',
-#    '-w',
-#    '-std=gnu99',
-#])
+libasn1c_common_cc_flags = [
+    '-DASN_DISABLE_BER_SUPPORT',
+    '-DASN_DISABLE_XER_SUPPORT',
+    '-DASN_DISABLE_OER_SUPPORT',
+    '-DASN_DISABLE_UPER_SUPPORT',
+    '-DASN_DISABLE_JER_SUPPORT',
+]
 libasn1c_common_cc_flags += cc.get_supported_arguments([
     '-w', '-std=gnu99',
 ])
@@ -163,7 +149,7 @@ libasn1c_common_inc = include_directories('.')
 
 libasn1c_common = library('ogsasn1c-common',
     sources : libasn1c_common_sources,
-    version : libogslib_version,
+    version : genlib_version,
     c_args : libasn1c_common_cc_flags,
     include_directories : libasn1c_common_inc,
     dependencies : libcore_dep,
