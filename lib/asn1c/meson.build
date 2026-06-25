@@ -18,3 +18,4 @@
 subdir('common')
 subdir('util')
 subdir('nrppa_ecid')
+subdir('gen')

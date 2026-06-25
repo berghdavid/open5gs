@@ -147,15 +147,17 @@ libasn1c_common_cc_flags += cc.get_supported_arguments([
 
 libasn1c_common_inc = include_directories('.')
 
-libasn1c_common = library('ogsasn1c-common',
+libasn1c_common = library('asn1c-common',
     sources : libasn1c_common_sources,
     version : genlib_version,
     c_args : libasn1c_common_cc_flags,
     include_directories : libasn1c_common_inc,
     dependencies : libcore_dep,
-    install : true)
+    install : true,
+)
 
 libasn1c_common_dep = declare_dependency(
     link_with : libasn1c_common,
     include_directories : libasn1c_common_inc,
-    dependencies : libcore_dep)
+    dependencies : libcore_dep,
+)
