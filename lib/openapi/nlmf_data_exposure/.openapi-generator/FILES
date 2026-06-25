@@ -111,6 +111,7 @@ model/access_token_req.h
 model/accuracy_fulfilment_indicator.c
 model/accuracy_fulfilment_indicator.h
 model/angular_velocity.c
+model/angular_velocity.c
 model/angular_velocity.h
 model/any_type.c
 model/any_type.h
@@ -208,6 +209,7 @@ model/nwdaf_event.h
 model/object.c
 model/object.h
 model/patch_item.c
+model/patch_item.c
 model/patch_item.h
 model/patch_operation.c
 model/patch_operation.h
@@ -245,6 +247,7 @@ model/query_param_combination.c
 model/query_param_combination.h
 model/query_parameter.c
 model/query_parameter.h
+model/radial_velocity.c
 model/radial_velocity.c
 model/radial_velocity.h
 model/range_direction.c

@@ -10,6 +10,7 @@ openapi_sources = files('''
   api/IndividualSubscriptionDocumentAPI.c
   api/SubscriptionsCollectionAPI.c
 
+  model/any_type.c
   model/positioning_method_and_usage.c
   model/units_angular_velocity.c
   model/location_qo_s.c

@@ -52,6 +52,12 @@ paths:
                 binaryDataLppMessage:
                   type: string
                   format: binary
+                binaryDataLppMessageExt1: # EDITED
+                  type: string # EDITED
+                  format: binary # EDITED
+                binaryDataLppMessageExt2: # EDITED
+                  type: string # EDITED
+                  format: binary # EDITED
             encoding:
               jsonData:
                 contentType:  application/json

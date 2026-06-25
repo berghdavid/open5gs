@@ -5,15 +5,20 @@
 #include "openssl/pem.h"
 #endif
 
-binary_t* instantiate_binary_t(char* data, int len) {
-	binary_t* ret = malloc(sizeof(struct binary_t));
+binary_t *instantiate_binary_t(char *data, int len)
+{
+	binary_t* ret = malloc(sizeof(binary_t));
+
 	ret->len=len;
 	ret->data = malloc(len);
 	memcpy(ret->data, data, len);
+
 	return ret;
 }
 
-char *base64encode (const void *b64_encode_this, int encode_this_many_bytes){
+char *base64encode(const void *b64_encode_this,
+    int encode_this_many_bytes)
+{
 #ifdef OPENSSL
     BIO *b64_bio, *mem_bio;      //Declares two OpenSSL BIOs: a base64 filter and a memory BIO.
     BUF_MEM *mem_bio_mem_ptr;    //Pointer to a "memory BIO" structure holding our base64 data.
@@ -30,12 +35,14 @@ char *base64encode (const void *b64_encode_this, int encode_this_many_bytes){
     (*mem_bio_mem_ptr).data[(*mem_bio_mem_ptr).length] = '\0';  //Adds null-terminator to tail.
     return (*mem_bio_mem_ptr).data; //Returns base-64 encoded data. (See: "buf_mem_st" struct).
 #else // OPENSSL
-#warning Data will not be encoded. If you want to use function "base64encode", please define "-DOPENSSL" when building the library.
+//#warning Data will not be encoded. If you want to use function "base64encode", please define "-DOPENSSL" when building the library.
     return NULL;
 #endif // OPENSSL
 }
 
-char *base64decode (const void *b64_decode_this, int decode_this_many_bytes, int *decoded_bytes){
+char *base64decode(const void *b64_decode_this,
+    int decode_this_many_bytes, int *decoded_bytes)
+{
 #ifdef OPENSSL
     BIO *b64_bio, *mem_bio;      //Declares two OpenSSL BIOs: a base64 filter and a memory BIO.
     char *base64_decoded = calloc( (decode_this_many_bytes*3)/4+1, sizeof(char) ); //+1 = null.
@@ -52,7 +59,7 @@ char *base64decode (const void *b64_decode_this, int decode_this_many_bytes, int
     *decoded_bytes = decoded_byte_index;
     return base64_decoded;        //Returns base-64 decoded data with trailing null terminator.
 #else // OPENSSL
-#warning Data will not be decoded. If you want to use function "base64decode", please define "-DOPENSSL" when building the library.
+//#warning Data will not be decoded. If you want to use function "base64decode", please define "-DOPENSSL" when building the library.
     return NULL;
 #endif // OPENSSL
 }

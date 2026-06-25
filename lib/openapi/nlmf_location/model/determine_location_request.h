@@ -22,13 +22,17 @@ typedef struct determine_location_request_t determine_location_request_t;
 typedef struct determine_location_request_t {
     struct input_data_t *json_data; //model
     binary_t* binary_data_lpp_message; //binary
+    binary_t* binary_data_lpp_message_ext1; //binary
+    binary_t* binary_data_lpp_message_ext2; //binary
 
     int _library_owned; // Is the library responsible for freeing this object?
 } determine_location_request_t;
 
 __attribute__((deprecated)) determine_location_request_t *determine_location_request_create(
     input_data_t *json_data,
-    binary_t* binary_data_lpp_message
+    binary_t* binary_data_lpp_message,
+    binary_t* binary_data_lpp_message_ext1,
+    binary_t* binary_data_lpp_message_ext2
 );
 
 void determine_location_request_free(determine_location_request_t *determine_location_request);

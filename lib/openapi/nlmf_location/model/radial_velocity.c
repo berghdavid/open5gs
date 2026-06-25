@@ -117,7 +117,7 @@ fail:
 
 radial_velocity_t *radial_velocity_parseFromJSON(cJSON *radial_velocityJSON){
 
-    radial_velocity_t *radial_velocity_local_var = NULL;
+    radial_velocity_t *radial_velocity = NULL;
 
     // define the local variable for radial_velocity->units_radial_velocity
     units_linear_velocity_t *units_radial_velocity_local_nonprim = NULL;
@@ -141,16 +141,16 @@ radial_velocity_t *radial_velocity_parseFromJSON(cJSON *radial_velocityJSON){
     units_radial_velocity_local_nonprim = units_linear_velocity_parseFromJSON(units_radial_velocity); //nonprimitive
 
     // radial_velocity->radial_velocity
-    cJSON *radial_velocity = cJSON_GetObjectItemCaseSensitive(radial_velocityJSON, "radialVelocity");
-    if (cJSON_IsNull(radial_velocity)) {
-        radial_velocity = NULL;
+    cJSON *radial_velocity_item_cjson = cJSON_GetObjectItemCaseSensitive(radial_velocityJSON, "radialVelocity");
+    if (cJSON_IsNull(radial_velocity_item_cjson)) {
+        radial_velocity_item_cjson = NULL;
     }
-    if (!radial_velocity) {
+    if (!radial_velocity_item_cjson) {
         goto end;
     }
 
     
-    if(!cJSON_IsNumber(radial_velocity))
+    if(!cJSON_IsNumber(radial_velocity_item_cjson))
     {
     goto end; //Numeric
     }
@@ -159,7 +159,7 @@ radial_velocity_t *radial_velocity_parseFromJSON(cJSON *radial_velocityJSON){
     {
         goto end;
     }
-    *radial_velocity_local_var = radial_velocity->valuedouble;
+    *radial_velocity_local_var = radial_velocity_item_cjson->valueint;
 
     // radial_velocity->r_velocity_uncertainty
     cJSON *r_velocity_uncertainty = cJSON_GetObjectItemCaseSensitive(radial_velocityJSON, "rVelocityUncertainty");
@@ -184,18 +184,22 @@ radial_velocity_t *radial_velocity_parseFromJSON(cJSON *radial_velocityJSON){
 
 
 
-    radial_velocity_local_var = radial_velocity_create_internal (
+    radial_velocity = radial_velocity_create_internal (
         units_radial_velocity_local_nonprim,
         radial_velocity_local_var,
         r_velocity_uncertainty_local_var
         );
 
-    if (!radial_velocity_local_var) {
+    if (!radial_velocity) {
         goto end;
     }
 
-    return radial_velocity_local_var;
+    return radial_velocity;
 end:
+    if (radial_velocity_item_cjson) {
+        cJSON_Delete(radial_velocity_item_cjson);
+        radial_velocity_item_cjson = NULL;
+    }
     if (units_radial_velocity_local_nonprim) {
         units_linear_velocity_free(units_radial_velocity_local_nonprim);
         units_radial_velocity_local_nonprim = NULL;

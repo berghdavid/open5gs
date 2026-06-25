@@ -123,7 +123,7 @@ angular_velocity_t *angular_velocity_parseFromJSON(cJSON *angular_velocityJSON){
     units_angular_velocity_t *units_angular_velocity_local_nonprim = NULL;
 
     // define the local variable for angular_velocity->angular_velocity
-    int *angular_velocity_local_var = NULL;
+    int *angular_velocity_local_var_int = NULL;
 
     // define the local variable for angular_velocity->a_velocity_uncertainty
     int *a_velocity_uncertainty_local_var = NULL;
@@ -152,14 +152,14 @@ angular_velocity_t *angular_velocity_parseFromJSON(cJSON *angular_velocityJSON){
     
     if(!cJSON_IsNumber(angular_velocity))
     {
-    goto end; //Numeric
+        goto end; //Numeric
     }
-    angular_velocity_local_var = malloc(sizeof(int));
-    if(!angular_velocity_local_var)
+    angular_velocity_local_var_int = malloc(sizeof(int));
+    if(!angular_velocity_local_var_int)
     {
         goto end;
     }
-    *angular_velocity_local_var = angular_velocity->valuedouble;
+    *angular_velocity_local_var_int = angular_velocity->valuedouble;
 
     // angular_velocity->a_velocity_uncertainty
     cJSON *a_velocity_uncertainty = cJSON_GetObjectItemCaseSensitive(angular_velocityJSON, "aVelocityUncertainty");
@@ -186,7 +186,7 @@ angular_velocity_t *angular_velocity_parseFromJSON(cJSON *angular_velocityJSON){
 
     angular_velocity_local_var = angular_velocity_create_internal (
         units_angular_velocity_local_nonprim,
-        angular_velocity_local_var,
+        angular_velocity_local_var_int,
         a_velocity_uncertainty_local_var
         );
 
@@ -200,9 +200,9 @@ end:
         units_angular_velocity_free(units_angular_velocity_local_nonprim);
         units_angular_velocity_local_nonprim = NULL;
     }
-    if (angular_velocity_local_var) {
-        free(angular_velocity_local_var);
-        angular_velocity_local_var = NULL;
+    if (angular_velocity_local_var_int) {
+        free(angular_velocity_local_var_int);
+        angular_velocity_local_var_int = NULL;
     }
     if (a_velocity_uncertainty_local_var) {
         free(a_velocity_uncertainty_local_var);

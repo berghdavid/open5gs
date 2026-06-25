@@ -21,32 +21,33 @@ extern "C" {
 #define OpenAPI_IsReference 256
 #define OpenAPI_StringIsConst 512
 
-typedef struct OpenAPI_any_type_s OpenAPI_any_type_t;
-typedef struct OpenAPI_any_type_s {
+typedef struct any_type_s any_type_t;
+typedef struct any_type_s {
     cJSON *json;
-} OpenAPI_any_type_t;
+} any_type_t;
+typedef any_type_t any_type_t;
 
-bool OpenAPI_IsInvalid(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsFalse(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsTrue(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsBool(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsNull(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsNumber(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsString(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsArray(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsObject(const OpenAPI_any_type_t * const item);
-bool OpenAPI_IsRaw(const OpenAPI_any_type_t * const item);
+bool OpenAPI_IsInvalid(const any_type_t * const item);
+bool OpenAPI_IsFalse(const any_type_t * const item);
+bool OpenAPI_IsTrue(const any_type_t * const item);
+bool OpenAPI_IsBool(const any_type_t * const item);
+bool OpenAPI_IsNull(const any_type_t * const item);
+bool OpenAPI_IsNumber(const any_type_t * const item);
+bool OpenAPI_IsString(const any_type_t * const item);
+bool OpenAPI_IsArray(const any_type_t * const item);
+bool OpenAPI_IsObject(const any_type_t * const item);
+bool OpenAPI_IsRaw(const any_type_t * const item);
 
-OpenAPI_any_type_t *OpenAPI_any_type_create(cJSON *json);
-OpenAPI_any_type_t *OpenAPI_any_type_parseFromJSON(cJSON *json);
-cJSON *OpenAPI_any_type_convertToJSON(OpenAPI_any_type_t *any_type);
+any_type_t *OpenAPI_any_type_create(cJSON *json);
+any_type_t *OpenAPI_any_type_parseFromJSON(cJSON *json);
+cJSON *OpenAPI_any_type_convertToJSON(any_type_t *any_type);
 
-OpenAPI_any_type_t *OpenAPI_any_type_create_true(void);
-OpenAPI_any_type_t *OpenAPI_any_type_create_false(void);
-OpenAPI_any_type_t *OpenAPI_any_type_create_bool(bool boolean);
-OpenAPI_any_type_t *OpenAPI_any_type_create_number(double num);
-OpenAPI_any_type_t *OpenAPI_any_type_create_string(const char *string);
-void OpenAPI_any_type_free(OpenAPI_any_type_t *any_type);
+any_type_t *OpenAPI_any_type_create_true(void);
+any_type_t *OpenAPI_any_type_create_false(void);
+any_type_t *OpenAPI_any_type_create_bool(bool boolean);
+any_type_t *OpenAPI_any_type_create_number(double num);
+any_type_t *OpenAPI_any_type_create_string(const char *string);
+void OpenAPI_any_type_free(any_type_t *any_type);
 
 #ifdef __cplusplus
 }
