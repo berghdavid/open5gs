@@ -11,3 +11,8 @@ Compile ASN1 files:
 ```sh
 asn1c -pdu=all -fcompound-names -findirect-choice -fno-include-deps -no-gen-BER -no-gen-XER -no-gen-OER -no-gen-UPER -no-gen-JER -D ./gen/ specs/19.1.0/NRPPA-*.asn
 ```
+
+Remove `converter-example.c`
+```sh
+rm gen/converter-example.c
+```
