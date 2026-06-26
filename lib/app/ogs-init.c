@@ -29,7 +29,7 @@ int ogs_app_initialize(
         const char *const argv[])
 {
     int rv, opt;
-    ogs_getopt_t options;
+    struct optparse options;
     struct {
         char *config_file;
         char *log_file;
@@ -50,8 +50,8 @@ int ogs_app_initialize(
      */
     memset(&optarg, 0, sizeof(optarg));
 
-    ogs_getopt_init(&options, (char**)argv);
-    while ((opt = ogs_getopt(&options, "c:l:e:m:k:")) != -1) {
+    optparse_init(&options, (char**)argv);
+    while ((opt = optparse(&options, "c:l:e:m:k:")) != -1) {
         switch (opt) {
         case 'c':
             optarg.config_file = options.optarg;
