@@ -26,6 +26,8 @@
 
 #define OGS_USE_TALLOC 1
 
+#include "core/log.h"
+#include "core/optparse.h"
 #include "core/ogs-compat.h"
 #include "core/ogs-macros.h"
 #include "core/ogs-list.h"
@@ -61,7 +63,6 @@
 #include "core/ogs-fsm.h"
 #include "core/ogs-hash.h"
 #include "core/ogs-misc.h"
-#include "core/ogs-getopt.h"
 #include "core/ogs-file.h"
 
 #undef OGS_CORE_INSIDE

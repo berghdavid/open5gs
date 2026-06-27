@@ -98,7 +98,7 @@ int main(int argc, const char *const argv[])
      * Keep the order of starting-up
      */
     int rv, i, opt;
-    ogs_getopt_t options;
+    struct optparse options;
     struct {
         char *config_file;
         char *config_section;
@@ -113,8 +113,8 @@ int main(int argc, const char *const argv[])
 
     memset(&optarg, 0, sizeof(optarg));
 
-    ogs_getopt_init(&options, (char**)argv);
-    while ((opt = ogs_getopt(&options, "vhDc:l:e:m:dtk:")) != -1) {
+    optparse_init(&options, (char**)argv);
+    while ((opt = optparse(&options, "vhDc:l:e:m:dtk:")) != -1) {
         switch (opt) {
         case 'v':
             show_version();

@@ -225,6 +225,11 @@ configure_file(output : 'core-config.h', configuration : ogs_libcore_conf)
 libcore_sources = files('''
     ogs-core.h
 
+    log.c
+    log.h
+    optparse.h
+    optparse.c
+
     ogs-compat.h
     ogs-macros.h
     ogs-pool.h
@@ -260,9 +265,7 @@ libcore_sources = files('''
     ogs-fsm.h
     ogs-hash.h
     ogs-misc.h
-    ogs-getopt.h
     ogs-file.h
-    abts.h
 
     ogs-abort.c
     ogs-errno.c
@@ -296,10 +299,8 @@ libcore_sources = files('''
     ogs-fsm.c
     ogs-hash.c
     ogs-misc.c
-    ogs-getopt.c
     ogs-file.c
     ogs-core.c
-    abts.c
 '''.split())
 
 if have_func_epoll_ctl
