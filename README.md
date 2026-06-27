@@ -8,5 +8,5 @@ ninja -C build
 
 Run LMF (prerequisites: 5G-core):
 ```sh
-./build/src/lmf/open5gs-lmfd -c build/configs/lmf.yaml
+./build/src/lmf/lmfd -c build/configs/lmf.yaml
 ```

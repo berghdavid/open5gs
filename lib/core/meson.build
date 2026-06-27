@@ -266,7 +266,6 @@ libcore_sources = files('''
     ogs-hash.h
     ogs-misc.h
     ogs-file.h
-    abts.h
 
     ogs-abort.c
     ogs-errno.c
@@ -302,7 +301,6 @@ libcore_sources = files('''
     ogs-misc.c
     ogs-file.c
     ogs-core.c
-    abts.c
 '''.split())
 
 if have_func_epoll_ctl
