@@ -28,6 +28,7 @@
 
 #include "core/log.h"
 #include "core/optparse.h"
+#include "core/signal_handler.h"
 #include "core/ogs-compat.h"
 #include "core/ogs-macros.h"
 #include "core/ogs-list.h"
@@ -46,7 +47,6 @@
 #include "core/ogs-timer.h"
 #include "core/ogs-thread.h"
 #include "core/ogs-process.h"
-#include "core/ogs-signal.h"
 #include "core/ogs-sockaddr.h"
 #include "core/ogs-socket.h"
 #include "core/ogs-sockopt.h"
