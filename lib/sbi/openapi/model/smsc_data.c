@@ -10,7 +10,7 @@ OpenAPI_smsc_data_t *OpenAPI_smsc_data_create(
 )
 {
     OpenAPI_smsc_data_t *smsc_data_local_var = ogs_malloc(sizeof(OpenAPI_smsc_data_t));
-    ogs_assert(smsc_data_local_var);
+    log_assert(smsc_data_local_var);
 
     smsc_data_local_var->smsc_map_address = smsc_map_address;
     smsc_data_local_var->smsc_diameter_address = smsc_diameter_address;
@@ -42,14 +42,14 @@ cJSON *OpenAPI_smsc_data_convertToJSON(OpenAPI_smsc_data_t *smsc_data)
     OpenAPI_lnode_t *node = NULL;
 
     if (smsc_data == NULL) {
-        ogs_error("OpenAPI_smsc_data_convertToJSON() failed [SmscData]");
+        log_error("OpenAPI_smsc_data_convertToJSON() failed [SmscData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (smsc_data->smsc_map_address) {
     if (cJSON_AddStringToObject(item, "smscMapAddress", smsc_data->smsc_map_address) == NULL) {
-        ogs_error("OpenAPI_smsc_data_convertToJSON() failed [smsc_map_address]");
+        log_error("OpenAPI_smsc_data_convertToJSON() failed [smsc_map_address]");
         goto end;
     }
     }
@@ -57,12 +57,12 @@ cJSON *OpenAPI_smsc_data_convertToJSON(OpenAPI_smsc_data_t *smsc_data)
     if (smsc_data->smsc_diameter_address) {
     cJSON *smsc_diameter_address_local_JSON = OpenAPI_network_node_diameter_address_1_convertToJSON(smsc_data->smsc_diameter_address);
     if (smsc_diameter_address_local_JSON == NULL) {
-        ogs_error("OpenAPI_smsc_data_convertToJSON() failed [smsc_diameter_address]");
+        log_error("OpenAPI_smsc_data_convertToJSON() failed [smsc_diameter_address]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smscDiameterAddress", smsc_diameter_address_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_smsc_data_convertToJSON() failed [smsc_diameter_address]");
+        log_error("OpenAPI_smsc_data_convertToJSON() failed [smsc_diameter_address]");
         goto end;
     }
     }
@@ -81,7 +81,7 @@ OpenAPI_smsc_data_t *OpenAPI_smsc_data_parseFromJSON(cJSON *smsc_dataJSON)
     smsc_map_address = cJSON_GetObjectItemCaseSensitive(smsc_dataJSON, "smscMapAddress");
     if (smsc_map_address) {
     if (!cJSON_IsString(smsc_map_address) && !cJSON_IsNull(smsc_map_address)) {
-        ogs_error("OpenAPI_smsc_data_parseFromJSON() failed [smsc_map_address]");
+        log_error("OpenAPI_smsc_data_parseFromJSON() failed [smsc_map_address]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_smsc_data_t *OpenAPI_smsc_data_parseFromJSON(cJSON *smsc_dataJSON)
     if (smsc_diameter_address) {
     smsc_diameter_address_local_nonprim = OpenAPI_network_node_diameter_address_1_parseFromJSON(smsc_diameter_address);
     if (!smsc_diameter_address_local_nonprim) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_parseFromJSON failed [smsc_diameter_address]");
+        log_error("OpenAPI_network_node_diameter_address_1_parseFromJSON failed [smsc_diameter_address]");
         goto end;
     }
     }
@@ -114,10 +114,10 @@ OpenAPI_smsc_data_t *OpenAPI_smsc_data_copy(OpenAPI_smsc_data_t *dst, OpenAPI_sm
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_smsc_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_smsc_data_convertToJSON() failed");
+        log_error("OpenAPI_smsc_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -125,14 +125,14 @@ OpenAPI_smsc_data_t *OpenAPI_smsc_data_copy(OpenAPI_smsc_data_t *dst, OpenAPI_sm
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

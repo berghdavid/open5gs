@@ -12,7 +12,7 @@ OpenAPI_ec_restriction_1_t *OpenAPI_ec_restriction_1_create(
 )
 {
     OpenAPI_ec_restriction_1_t *ec_restriction_1_local_var = ogs_malloc(sizeof(OpenAPI_ec_restriction_1_t));
-    ogs_assert(ec_restriction_1_local_var);
+    log_assert(ec_restriction_1_local_var);
 
     ec_restriction_1_local_var->af_instance_id = af_instance_id;
     ec_restriction_1_local_var->reference_id = reference_id;
@@ -53,35 +53,35 @@ cJSON *OpenAPI_ec_restriction_1_convertToJSON(OpenAPI_ec_restriction_1_t *ec_res
     OpenAPI_lnode_t *node = NULL;
 
     if (ec_restriction_1 == NULL) {
-        ogs_error("OpenAPI_ec_restriction_1_convertToJSON() failed [EcRestriction_1]");
+        log_error("OpenAPI_ec_restriction_1_convertToJSON() failed [EcRestriction_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!ec_restriction_1->af_instance_id) {
-        ogs_error("OpenAPI_ec_restriction_1_convertToJSON() failed [af_instance_id]");
+        log_error("OpenAPI_ec_restriction_1_convertToJSON() failed [af_instance_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "afInstanceId", ec_restriction_1->af_instance_id) == NULL) {
-        ogs_error("OpenAPI_ec_restriction_1_convertToJSON() failed [af_instance_id]");
+        log_error("OpenAPI_ec_restriction_1_convertToJSON() failed [af_instance_id]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "referenceId", ec_restriction_1->reference_id) == NULL) {
-        ogs_error("OpenAPI_ec_restriction_1_convertToJSON() failed [reference_id]");
+        log_error("OpenAPI_ec_restriction_1_convertToJSON() failed [reference_id]");
         goto end;
     }
 
     if (ec_restriction_1->plmn_ec_infos) {
     cJSON *plmn_ec_infosList = cJSON_AddArrayToObject(item, "plmnEcInfos");
     if (plmn_ec_infosList == NULL) {
-        ogs_error("OpenAPI_ec_restriction_1_convertToJSON() failed [plmn_ec_infos]");
+        log_error("OpenAPI_ec_restriction_1_convertToJSON() failed [plmn_ec_infos]");
         goto end;
     }
     OpenAPI_list_for_each(ec_restriction_1->plmn_ec_infos, node) {
         cJSON *itemLocal = OpenAPI_plmn_ec_info_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_ec_restriction_1_convertToJSON() failed [plmn_ec_infos]");
+            log_error("OpenAPI_ec_restriction_1_convertToJSON() failed [plmn_ec_infos]");
             goto end;
         }
         cJSON_AddItemToArray(plmn_ec_infosList, itemLocal);
@@ -90,7 +90,7 @@ cJSON *OpenAPI_ec_restriction_1_convertToJSON(OpenAPI_ec_restriction_1_t *ec_res
 
     if (ec_restriction_1->mtc_provider_information) {
     if (cJSON_AddStringToObject(item, "mtcProviderInformation", ec_restriction_1->mtc_provider_information) == NULL) {
-        ogs_error("OpenAPI_ec_restriction_1_convertToJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_ec_restriction_1_convertToJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -110,21 +110,21 @@ OpenAPI_ec_restriction_1_t *OpenAPI_ec_restriction_1_parseFromJSON(cJSON *ec_res
     cJSON *mtc_provider_information = NULL;
     af_instance_id = cJSON_GetObjectItemCaseSensitive(ec_restriction_1JSON, "afInstanceId");
     if (!af_instance_id) {
-        ogs_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [af_instance_id]");
+        log_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [af_instance_id]");
         goto end;
     }
     if (!cJSON_IsString(af_instance_id)) {
-        ogs_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [af_instance_id]");
+        log_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [af_instance_id]");
         goto end;
     }
 
     reference_id = cJSON_GetObjectItemCaseSensitive(ec_restriction_1JSON, "referenceId");
     if (!reference_id) {
-        ogs_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [reference_id]");
+        log_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [reference_id]");
         goto end;
     }
     if (!cJSON_IsNumber(reference_id)) {
-        ogs_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [reference_id]");
+        log_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [reference_id]");
         goto end;
     }
 
@@ -132,7 +132,7 @@ OpenAPI_ec_restriction_1_t *OpenAPI_ec_restriction_1_parseFromJSON(cJSON *ec_res
     if (plmn_ec_infos) {
         cJSON *plmn_ec_infos_local = NULL;
         if (!cJSON_IsArray(plmn_ec_infos)) {
-            ogs_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [plmn_ec_infos]");
+            log_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [plmn_ec_infos]");
             goto end;
         }
 
@@ -140,12 +140,12 @@ OpenAPI_ec_restriction_1_t *OpenAPI_ec_restriction_1_parseFromJSON(cJSON *ec_res
 
         cJSON_ArrayForEach(plmn_ec_infos_local, plmn_ec_infos) {
             if (!cJSON_IsObject(plmn_ec_infos_local)) {
-                ogs_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [plmn_ec_infos]");
+                log_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [plmn_ec_infos]");
                 goto end;
             }
             OpenAPI_plmn_ec_info_1_t *plmn_ec_infosItem = OpenAPI_plmn_ec_info_1_parseFromJSON(plmn_ec_infos_local);
             if (!plmn_ec_infosItem) {
-                ogs_error("No plmn_ec_infosItem");
+                log_error("No plmn_ec_infosItem");
                 goto end;
             }
             OpenAPI_list_add(plmn_ec_infosList, plmn_ec_infosItem);
@@ -155,7 +155,7 @@ OpenAPI_ec_restriction_1_t *OpenAPI_ec_restriction_1_parseFromJSON(cJSON *ec_res
     mtc_provider_information = cJSON_GetObjectItemCaseSensitive(ec_restriction_1JSON, "mtcProviderInformation");
     if (mtc_provider_information) {
     if (!cJSON_IsString(mtc_provider_information) && !cJSON_IsNull(mtc_provider_information)) {
-        ogs_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_ec_restriction_1_parseFromJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -185,10 +185,10 @@ OpenAPI_ec_restriction_1_t *OpenAPI_ec_restriction_1_copy(OpenAPI_ec_restriction
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ec_restriction_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ec_restriction_1_convertToJSON() failed");
+        log_error("OpenAPI_ec_restriction_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -196,14 +196,14 @@ OpenAPI_ec_restriction_1_t *OpenAPI_ec_restriction_1_copy(OpenAPI_ec_restriction
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

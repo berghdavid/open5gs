@@ -10,7 +10,7 @@ OpenAPI_sm_policy_notification_t *OpenAPI_sm_policy_notification_create(
 )
 {
     OpenAPI_sm_policy_notification_t *sm_policy_notification_local_var = ogs_malloc(sizeof(OpenAPI_sm_policy_notification_t));
-    ogs_assert(sm_policy_notification_local_var);
+    log_assert(sm_policy_notification_local_var);
 
     sm_policy_notification_local_var->resource_uri = resource_uri;
     sm_policy_notification_local_var->sm_policy_decision = sm_policy_decision;
@@ -42,14 +42,14 @@ cJSON *OpenAPI_sm_policy_notification_convertToJSON(OpenAPI_sm_policy_notificati
     OpenAPI_lnode_t *node = NULL;
 
     if (sm_policy_notification == NULL) {
-        ogs_error("OpenAPI_sm_policy_notification_convertToJSON() failed [SmPolicyNotification]");
+        log_error("OpenAPI_sm_policy_notification_convertToJSON() failed [SmPolicyNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (sm_policy_notification->resource_uri) {
     if (cJSON_AddStringToObject(item, "resourceUri", sm_policy_notification->resource_uri) == NULL) {
-        ogs_error("OpenAPI_sm_policy_notification_convertToJSON() failed [resource_uri]");
+        log_error("OpenAPI_sm_policy_notification_convertToJSON() failed [resource_uri]");
         goto end;
     }
     }
@@ -57,12 +57,12 @@ cJSON *OpenAPI_sm_policy_notification_convertToJSON(OpenAPI_sm_policy_notificati
     if (sm_policy_notification->sm_policy_decision) {
     cJSON *sm_policy_decision_local_JSON = OpenAPI_sm_policy_decision_convertToJSON(sm_policy_notification->sm_policy_decision);
     if (sm_policy_decision_local_JSON == NULL) {
-        ogs_error("OpenAPI_sm_policy_notification_convertToJSON() failed [sm_policy_decision]");
+        log_error("OpenAPI_sm_policy_notification_convertToJSON() failed [sm_policy_decision]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smPolicyDecision", sm_policy_decision_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sm_policy_notification_convertToJSON() failed [sm_policy_decision]");
+        log_error("OpenAPI_sm_policy_notification_convertToJSON() failed [sm_policy_decision]");
         goto end;
     }
     }
@@ -81,7 +81,7 @@ OpenAPI_sm_policy_notification_t *OpenAPI_sm_policy_notification_parseFromJSON(c
     resource_uri = cJSON_GetObjectItemCaseSensitive(sm_policy_notificationJSON, "resourceUri");
     if (resource_uri) {
     if (!cJSON_IsString(resource_uri) && !cJSON_IsNull(resource_uri)) {
-        ogs_error("OpenAPI_sm_policy_notification_parseFromJSON() failed [resource_uri]");
+        log_error("OpenAPI_sm_policy_notification_parseFromJSON() failed [resource_uri]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_sm_policy_notification_t *OpenAPI_sm_policy_notification_parseFromJSON(c
     if (sm_policy_decision) {
     sm_policy_decision_local_nonprim = OpenAPI_sm_policy_decision_parseFromJSON(sm_policy_decision);
     if (!sm_policy_decision_local_nonprim) {
-        ogs_error("OpenAPI_sm_policy_decision_parseFromJSON failed [sm_policy_decision]");
+        log_error("OpenAPI_sm_policy_decision_parseFromJSON failed [sm_policy_decision]");
         goto end;
     }
     }
@@ -114,10 +114,10 @@ OpenAPI_sm_policy_notification_t *OpenAPI_sm_policy_notification_copy(OpenAPI_sm
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sm_policy_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sm_policy_notification_convertToJSON() failed");
+        log_error("OpenAPI_sm_policy_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -125,14 +125,14 @@ OpenAPI_sm_policy_notification_t *OpenAPI_sm_policy_notification_copy(OpenAPI_sm
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

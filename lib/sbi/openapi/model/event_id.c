@@ -8,7 +8,7 @@ OpenAPI_event_id_t *OpenAPI_event_id_create(
 )
 {
     OpenAPI_event_id_t *event_id_local_var = ogs_malloc(sizeof(OpenAPI_event_id_t));
-    ogs_assert(event_id_local_var);
+    log_assert(event_id_local_var);
 
 
     return event_id_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_event_id_convertToJSON(OpenAPI_event_id_t *event_id)
     OpenAPI_lnode_t *node = NULL;
 
     if (event_id == NULL) {
-        ogs_error("OpenAPI_event_id_convertToJSON() failed [EventId]");
+        log_error("OpenAPI_event_id_convertToJSON() failed [EventId]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_event_id_t *OpenAPI_event_id_copy(OpenAPI_event_id_t *dst, OpenAPI_event
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_event_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_event_id_convertToJSON() failed");
+        log_error("OpenAPI_event_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_event_id_t *OpenAPI_event_id_copy(OpenAPI_event_id_t *dst, OpenAPI_event
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

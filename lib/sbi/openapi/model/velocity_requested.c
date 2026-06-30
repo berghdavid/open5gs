@@ -8,7 +8,7 @@ OpenAPI_velocity_requested_t *OpenAPI_velocity_requested_create(
 )
 {
     OpenAPI_velocity_requested_t *velocity_requested_local_var = ogs_malloc(sizeof(OpenAPI_velocity_requested_t));
-    ogs_assert(velocity_requested_local_var);
+    log_assert(velocity_requested_local_var);
 
 
     return velocity_requested_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_velocity_requested_convertToJSON(OpenAPI_velocity_requested_t *ve
     OpenAPI_lnode_t *node = NULL;
 
     if (velocity_requested == NULL) {
-        ogs_error("OpenAPI_velocity_requested_convertToJSON() failed [VelocityRequested]");
+        log_error("OpenAPI_velocity_requested_convertToJSON() failed [VelocityRequested]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_velocity_requested_t *OpenAPI_velocity_requested_copy(OpenAPI_velocity_r
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_velocity_requested_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_velocity_requested_convertToJSON() failed");
+        log_error("OpenAPI_velocity_requested_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_velocity_requested_t *OpenAPI_velocity_requested_copy(OpenAPI_velocity_r
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

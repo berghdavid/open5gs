@@ -36,7 +36,7 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_create(
 )
 {
     OpenAPI_dccf_cond_t *dccf_cond_local_var = ogs_malloc(sizeof(OpenAPI_dccf_cond_t));
-    ogs_assert(dccf_cond_local_var);
+    log_assert(dccf_cond_local_var);
 
     dccf_cond_local_var->condition_type = condition_type;
     dccf_cond_local_var->tai_list = tai_list;
@@ -88,30 +88,30 @@ cJSON *OpenAPI_dccf_cond_convertToJSON(OpenAPI_dccf_cond_t *dccf_cond)
     OpenAPI_lnode_t *node = NULL;
 
     if (dccf_cond == NULL) {
-        ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [DccfCond]");
+        log_error("OpenAPI_dccf_cond_convertToJSON() failed [DccfCond]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (dccf_cond->condition_type == OpenAPI_dccf_cond_CONDITIONTYPE_NULL) {
-        ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [condition_type]");
+        log_error("OpenAPI_dccf_cond_convertToJSON() failed [condition_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "conditionType", OpenAPI_condition_typedccf_cond_ToString(dccf_cond->condition_type)) == NULL) {
-        ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [condition_type]");
+        log_error("OpenAPI_dccf_cond_convertToJSON() failed [condition_type]");
         goto end;
     }
 
     if (dccf_cond->tai_list) {
     cJSON *tai_listList = cJSON_AddArrayToObject(item, "taiList");
     if (tai_listList == NULL) {
-        ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [tai_list]");
+        log_error("OpenAPI_dccf_cond_convertToJSON() failed [tai_list]");
         goto end;
     }
     OpenAPI_list_for_each(dccf_cond->tai_list, node) {
         cJSON *itemLocal = OpenAPI_tai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [tai_list]");
+            log_error("OpenAPI_dccf_cond_convertToJSON() failed [tai_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_listList, itemLocal);
@@ -121,13 +121,13 @@ cJSON *OpenAPI_dccf_cond_convertToJSON(OpenAPI_dccf_cond_t *dccf_cond)
     if (dccf_cond->tai_range_list) {
     cJSON *tai_range_listList = cJSON_AddArrayToObject(item, "taiRangeList");
     if (tai_range_listList == NULL) {
-        ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [tai_range_list]");
+        log_error("OpenAPI_dccf_cond_convertToJSON() failed [tai_range_list]");
         goto end;
     }
     OpenAPI_list_for_each(dccf_cond->tai_range_list, node) {
         cJSON *itemLocal = OpenAPI_tai_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [tai_range_list]");
+            log_error("OpenAPI_dccf_cond_convertToJSON() failed [tai_range_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_range_listList, itemLocal);
@@ -137,12 +137,12 @@ cJSON *OpenAPI_dccf_cond_convertToJSON(OpenAPI_dccf_cond_t *dccf_cond)
     if (dccf_cond->serving_nf_type_list != OpenAPI_nf_type_NULL) {
     cJSON *serving_nf_type_listList = cJSON_AddArrayToObject(item, "servingNfTypeList");
     if (serving_nf_type_listList == NULL) {
-        ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [serving_nf_type_list]");
+        log_error("OpenAPI_dccf_cond_convertToJSON() failed [serving_nf_type_list]");
         goto end;
     }
     OpenAPI_list_for_each(dccf_cond->serving_nf_type_list, node) {
         if (cJSON_AddStringToObject(serving_nf_type_listList, "", OpenAPI_nf_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [serving_nf_type_list]");
+            log_error("OpenAPI_dccf_cond_convertToJSON() failed [serving_nf_type_list]");
             goto end;
         }
     }
@@ -151,12 +151,12 @@ cJSON *OpenAPI_dccf_cond_convertToJSON(OpenAPI_dccf_cond_t *dccf_cond)
     if (dccf_cond->serving_nf_set_id_list) {
     cJSON *serving_nf_set_id_listList = cJSON_AddArrayToObject(item, "servingNfSetIdList");
     if (serving_nf_set_id_listList == NULL) {
-        ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [serving_nf_set_id_list]");
+        log_error("OpenAPI_dccf_cond_convertToJSON() failed [serving_nf_set_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(dccf_cond->serving_nf_set_id_list, node) {
         if (cJSON_AddStringToObject(serving_nf_set_id_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_dccf_cond_convertToJSON() failed [serving_nf_set_id_list]");
+            log_error("OpenAPI_dccf_cond_convertToJSON() failed [serving_nf_set_id_list]");
             goto end;
         }
     }
@@ -182,11 +182,11 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
     OpenAPI_list_t *serving_nf_set_id_listList = NULL;
     condition_type = cJSON_GetObjectItemCaseSensitive(dccf_condJSON, "conditionType");
     if (!condition_type) {
-        ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [condition_type]");
+        log_error("OpenAPI_dccf_cond_parseFromJSON() failed [condition_type]");
         goto end;
     }
     if (!cJSON_IsString(condition_type)) {
-        ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [condition_type]");
+        log_error("OpenAPI_dccf_cond_parseFromJSON() failed [condition_type]");
         goto end;
     }
     condition_typeVariable = OpenAPI_condition_typedccf_cond_FromString(condition_type->valuestring);
@@ -195,7 +195,7 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
     if (tai_list) {
         cJSON *tai_list_local = NULL;
         if (!cJSON_IsArray(tai_list)) {
-            ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [tai_list]");
+            log_error("OpenAPI_dccf_cond_parseFromJSON() failed [tai_list]");
             goto end;
         }
 
@@ -203,12 +203,12 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
 
         cJSON_ArrayForEach(tai_list_local, tai_list) {
             if (!cJSON_IsObject(tai_list_local)) {
-                ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [tai_list]");
+                log_error("OpenAPI_dccf_cond_parseFromJSON() failed [tai_list]");
                 goto end;
             }
             OpenAPI_tai_t *tai_listItem = OpenAPI_tai_parseFromJSON(tai_list_local);
             if (!tai_listItem) {
-                ogs_error("No tai_listItem");
+                log_error("No tai_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_listList, tai_listItem);
@@ -219,7 +219,7 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
     if (tai_range_list) {
         cJSON *tai_range_list_local = NULL;
         if (!cJSON_IsArray(tai_range_list)) {
-            ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [tai_range_list]");
+            log_error("OpenAPI_dccf_cond_parseFromJSON() failed [tai_range_list]");
             goto end;
         }
 
@@ -227,12 +227,12 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
 
         cJSON_ArrayForEach(tai_range_list_local, tai_range_list) {
             if (!cJSON_IsObject(tai_range_list_local)) {
-                ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [tai_range_list]");
+                log_error("OpenAPI_dccf_cond_parseFromJSON() failed [tai_range_list]");
                 goto end;
             }
             OpenAPI_tai_range_t *tai_range_listItem = OpenAPI_tai_range_parseFromJSON(tai_range_list_local);
             if (!tai_range_listItem) {
-                ogs_error("No tai_range_listItem");
+                log_error("No tai_range_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_range_listList, tai_range_listItem);
@@ -243,7 +243,7 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
     if (serving_nf_type_list) {
         cJSON *serving_nf_type_list_local = NULL;
         if (!cJSON_IsArray(serving_nf_type_list)) {
-            ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [serving_nf_type_list]");
+            log_error("OpenAPI_dccf_cond_parseFromJSON() failed [serving_nf_type_list]");
             goto end;
         }
 
@@ -252,19 +252,19 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
         cJSON_ArrayForEach(serving_nf_type_list_local, serving_nf_type_list) {
             OpenAPI_nf_type_e localEnum = OpenAPI_nf_type_NULL;
             if (!cJSON_IsString(serving_nf_type_list_local)) {
-                ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [serving_nf_type_list]");
+                log_error("OpenAPI_dccf_cond_parseFromJSON() failed [serving_nf_type_list]");
                 goto end;
             }
             localEnum = OpenAPI_nf_type_FromString(serving_nf_type_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"serving_nf_type_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"serving_nf_type_list\" is not supported. Ignoring it ...",
                          serving_nf_type_list_local->valuestring);
             } else {
                 OpenAPI_list_add(serving_nf_type_listList, (void *)localEnum);
             }
         }
         if (serving_nf_type_listList->count == 0) {
-            ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed: Expected serving_nf_type_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_dccf_cond_parseFromJSON() failed: Expected serving_nf_type_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -273,7 +273,7 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
     if (serving_nf_set_id_list) {
         cJSON *serving_nf_set_id_list_local = NULL;
         if (!cJSON_IsArray(serving_nf_set_id_list)) {
-            ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [serving_nf_set_id_list]");
+            log_error("OpenAPI_dccf_cond_parseFromJSON() failed [serving_nf_set_id_list]");
             goto end;
         }
 
@@ -283,7 +283,7 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_parseFromJSON(cJSON *dccf_condJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(serving_nf_set_id_list_local)) {
-                ogs_error("OpenAPI_dccf_cond_parseFromJSON() failed [serving_nf_set_id_list]");
+                log_error("OpenAPI_dccf_cond_parseFromJSON() failed [serving_nf_set_id_list]");
                 goto end;
             }
             OpenAPI_list_add(serving_nf_set_id_listList, ogs_strdup(serving_nf_set_id_list_local->valuestring));
@@ -333,10 +333,10 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_copy(OpenAPI_dccf_cond_t *dst, OpenAPI_dc
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dccf_cond_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dccf_cond_convertToJSON() failed");
+        log_error("OpenAPI_dccf_cond_convertToJSON() failed");
         return NULL;
     }
 
@@ -344,14 +344,14 @@ OpenAPI_dccf_cond_t *OpenAPI_dccf_cond_copy(OpenAPI_dccf_cond_t *dst, OpenAPI_dc
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

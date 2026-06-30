@@ -14,7 +14,7 @@ OpenAPI_atsss_capability_t *OpenAPI_atsss_capability_create(
 )
 {
     OpenAPI_atsss_capability_t *atsss_capability_local_var = ogs_malloc(sizeof(OpenAPI_atsss_capability_t));
-    ogs_assert(atsss_capability_local_var);
+    log_assert(atsss_capability_local_var);
 
     atsss_capability_local_var->is_atsss_ll = is_atsss_ll;
     atsss_capability_local_var->atsss_ll = atsss_ll;
@@ -42,28 +42,28 @@ cJSON *OpenAPI_atsss_capability_convertToJSON(OpenAPI_atsss_capability_t *atsss_
     OpenAPI_lnode_t *node = NULL;
 
     if (atsss_capability == NULL) {
-        ogs_error("OpenAPI_atsss_capability_convertToJSON() failed [AtsssCapability]");
+        log_error("OpenAPI_atsss_capability_convertToJSON() failed [AtsssCapability]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (atsss_capability->is_atsss_ll) {
     if (cJSON_AddBoolToObject(item, "atsssLL", atsss_capability->atsss_ll) == NULL) {
-        ogs_error("OpenAPI_atsss_capability_convertToJSON() failed [atsss_ll]");
+        log_error("OpenAPI_atsss_capability_convertToJSON() failed [atsss_ll]");
         goto end;
     }
     }
 
     if (atsss_capability->is_mptcp) {
     if (cJSON_AddBoolToObject(item, "mptcp", atsss_capability->mptcp) == NULL) {
-        ogs_error("OpenAPI_atsss_capability_convertToJSON() failed [mptcp]");
+        log_error("OpenAPI_atsss_capability_convertToJSON() failed [mptcp]");
         goto end;
     }
     }
 
     if (atsss_capability->is_rtt_without_pmf) {
     if (cJSON_AddBoolToObject(item, "rttWithoutPmf", atsss_capability->rtt_without_pmf) == NULL) {
-        ogs_error("OpenAPI_atsss_capability_convertToJSON() failed [rtt_without_pmf]");
+        log_error("OpenAPI_atsss_capability_convertToJSON() failed [rtt_without_pmf]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_atsss_capability_t *OpenAPI_atsss_capability_parseFromJSON(cJSON *atsss_
     atsss_ll = cJSON_GetObjectItemCaseSensitive(atsss_capabilityJSON, "atsssLL");
     if (atsss_ll) {
     if (!cJSON_IsBool(atsss_ll)) {
-        ogs_error("OpenAPI_atsss_capability_parseFromJSON() failed [atsss_ll]");
+        log_error("OpenAPI_atsss_capability_parseFromJSON() failed [atsss_ll]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_atsss_capability_t *OpenAPI_atsss_capability_parseFromJSON(cJSON *atsss_
     mptcp = cJSON_GetObjectItemCaseSensitive(atsss_capabilityJSON, "mptcp");
     if (mptcp) {
     if (!cJSON_IsBool(mptcp)) {
-        ogs_error("OpenAPI_atsss_capability_parseFromJSON() failed [mptcp]");
+        log_error("OpenAPI_atsss_capability_parseFromJSON() failed [mptcp]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_atsss_capability_t *OpenAPI_atsss_capability_parseFromJSON(cJSON *atsss_
     rtt_without_pmf = cJSON_GetObjectItemCaseSensitive(atsss_capabilityJSON, "rttWithoutPmf");
     if (rtt_without_pmf) {
     if (!cJSON_IsBool(rtt_without_pmf)) {
-        ogs_error("OpenAPI_atsss_capability_parseFromJSON() failed [rtt_without_pmf]");
+        log_error("OpenAPI_atsss_capability_parseFromJSON() failed [rtt_without_pmf]");
         goto end;
     }
     }
@@ -122,10 +122,10 @@ OpenAPI_atsss_capability_t *OpenAPI_atsss_capability_copy(OpenAPI_atsss_capabili
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_atsss_capability_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_atsss_capability_convertToJSON() failed");
+        log_error("OpenAPI_atsss_capability_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_atsss_capability_t *OpenAPI_atsss_capability_copy(OpenAPI_atsss_capabili
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

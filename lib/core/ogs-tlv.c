@@ -34,7 +34,7 @@ ogs_tlv_t *ogs_tlv_get(void)
     ogs_pool_alloc(&pool, &tlv);
 
     /* check for error */
-    ogs_assert(tlv);
+    log_assert(tlv);
 
     /* initialize tlv node */
     memset(tlv, 0, sizeof(ogs_tlv_t));
@@ -128,7 +128,7 @@ uint32_t ogs_tlv_calc_length(ogs_tlv_t *tlv)
             length += 1;
             break;
         default:
-            ogs_assert_if_reached();
+            log_assert_if_reached();
             break;
         }
 
@@ -175,7 +175,7 @@ static uint8_t *tlv_put_type(uint32_t type, uint8_t *pos, uint8_t mode)
         *(pos++) = type & 0xFF;
         break;
     default:
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         break;
     }
     return pos;
@@ -196,7 +196,7 @@ static uint8_t *tlv_put_length(uint32_t length, uint8_t *pos, uint8_t mode)
     case OGS_TLV_MODE_T1:
         break;
     default:
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         break;
     }
 
@@ -249,7 +249,7 @@ uint8_t *tlv_get_element(ogs_tlv_t *tlv, uint8_t *blk, uint8_t mode)
         tlv->length = 0;
         break;
     default:
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         break;
     }
 
@@ -268,7 +268,7 @@ uint8_t *tlv_get_element_fixed(ogs_tlv_t *tlv, uint8_t *blk, uint8_t mode, uint3
         tlv->length = fixed_length;
         break;
     default:
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         break;
     }
 
@@ -307,9 +307,9 @@ ogs_tlv_t *ogs_tlv_add(ogs_tlv_t *head, uint8_t mode,
     ogs_tlv_t *new = NULL;
 
     new = ogs_tlv_get();
-    ogs_assert(new);
+    log_assert(new);
     if(length != 0)
-        ogs_assert(value);
+        log_assert(value);
 
     new->mode = mode;
     new->type = type;
@@ -318,7 +318,7 @@ ogs_tlv_t *ogs_tlv_add(ogs_tlv_t *head, uint8_t mode,
     new->value = value;
 
     if (head != NULL && head->buff_allocated == true) {
-        ogs_assert((head->buff_ptr - head->buff + length) < head->buff_len);
+        log_assert((head->buff_ptr - head->buff + length) < head->buff_len);
 
         memcpy(head->buff_ptr, value, length);
         new->value = head->buff_ptr;
@@ -343,7 +343,7 @@ ogs_tlv_t *ogs_tlv_copy(void *buff, uint32_t buff_len, uint8_t mode,
     ogs_tlv_t *new = NULL;
 
     new = ogs_tlv_get();
-    ogs_assert(new);
+    log_assert(new);
 
     new->mode = mode;
     new->type = type;
@@ -366,10 +366,10 @@ ogs_tlv_t *ogs_tlv_embed(ogs_tlv_t *parent, uint8_t mode,
 {
     ogs_tlv_t *new = NULL, *root = NULL;
 
-    ogs_assert(parent);
+    log_assert(parent);
 
     new = ogs_tlv_get();
-    ogs_assert(new);
+    log_assert(new);
 
     new->mode = mode;
     new->type = type;
@@ -380,7 +380,7 @@ ogs_tlv_t *ogs_tlv_embed(ogs_tlv_t *parent, uint8_t mode,
     root = ogs_tlv_find_root(parent);
 
     if(root->buff_allocated == true) {
-        ogs_assert((root->buff_ptr - root->buff + length) < root->buff_len);
+        log_assert((root->buff_ptr - root->buff + length) < root->buff_len);
 
         memcpy(root->buff_ptr, value, length);
         new->value = root->buff_ptr;
@@ -414,7 +414,7 @@ uint32_t ogs_tlv_render(ogs_tlv_t *root, void *data, uint32_t length)
             pos = tlv_put_instance(curr->instance, pos, curr->mode);
 
             if ((pos - blk) + ogs_tlv_length(curr) > length)
-                ogs_assert_if_reached();
+                log_assert_if_reached();
 
             memcpy((char*)pos, (char*)curr->value, curr->length);
             pos += curr->length;
@@ -444,27 +444,27 @@ ogs_tlv_t *ogs_tlv_parse_block(uint32_t length, void *data, uint8_t mode)
 
     root = curr = ogs_tlv_get();
 
-    ogs_assert(curr);
+    log_assert(curr);
 
     pos = tlv_get_element(curr, pos, mode);
 
-    ogs_assert(pos);
+    log_assert(pos);
 
     while(pos - blk < length) {
         prev = curr;
 
         curr = ogs_tlv_get();
-        ogs_assert(curr);
+        log_assert(curr);
         prev->next = curr;
 
         pos = tlv_get_element(curr, pos, mode);
-        ogs_assert(pos);
+        log_assert(pos);
     }
 
     if (length != (pos - blk)) {
-        ogs_error("ogs_tlv_parse_block() failed[LEN:%d,MODE:%d]", length, mode);
-        ogs_error("POS[%p] BLK[%p] POS-BLK[%d]", pos, blk, (int)(pos - blk));
-        ogs_log_hexdump(OGS_LOG_FATAL, data, length);
+        log_error("ogs_tlv_parse_block() failed[LEN:%d,MODE:%d]", length, mode);
+        log_error("POS[%p] BLK[%p] POS-BLK[%d]", pos, blk, (int)(pos - blk));
+        log_hexdump(LOG_FATAL, data, length);
 
         ogs_tlv_free_all(root);
         return NULL;

@@ -112,7 +112,7 @@ int ogs_gettimeofday(struct timeval *tv)
     return 0;
 #else
     int rc = gettimeofday(tv, NULL);
-    ogs_assert(rc == 0);
+    log_assert(rc == 0);
     return 0;
 #endif
 }
@@ -123,7 +123,7 @@ ogs_time_t ogs_time_now(void)
     struct timeval tv;
 
     rc = ogs_gettimeofday(&tv);
-    ogs_assert(rc == 0);
+    log_assert(rc == 0);
 
     return ogs_time_from_sec(tv.tv_sec) + tv.tv_usec;
 }
@@ -186,7 +186,7 @@ uint32_t ogs_time_ntp32_now(void)
     struct timeval tv;
 
     rc = ogs_gettimeofday(&tv);
-    ogs_assert(rc == 0);
+    log_assert(rc == 0);
 
     return ogs_time_to_ntp32(ogs_time_from_sec(tv.tv_sec) + tv.tv_usec);
 }
@@ -220,7 +220,7 @@ int ogs_timezone(void)
     case TIME_ZONE_ID_DAYLIGHT:
         return (tz.Bias + tz.DaylightBias) * -60;
     default:
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         return 0;
     }
 #else
@@ -229,7 +229,7 @@ int ogs_timezone(void)
     int ret;
 
     ret = ogs_gettimeofday(&tv);
-    ogs_assert(ret == 0);
+    log_assert(ret == 0);
 
     ogs_localtime(tv.tv_sec, &tm);
 
@@ -274,7 +274,7 @@ ogs_time_t ogs_get_monotonic_time(void)
 
 void ogs_localtime(time_t s, struct tm *tm)
 {
-    ogs_assert(tm);
+    log_assert(tm);
     memset(tm, 0, sizeof(*tm));
 
 #if (HAVE_LOCALTIME_R)
@@ -289,7 +289,7 @@ void ogs_localtime(time_t s, struct tm *tm)
 
 void ogs_gmtime(time_t s, struct tm *tm)
 {
-    ogs_assert(tm);
+    log_assert(tm);
     memset(tm, 0, sizeof(*tm));
 
 #if (HAVE_LOCALTIME_R)

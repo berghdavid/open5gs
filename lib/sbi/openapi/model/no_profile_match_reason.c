@@ -8,7 +8,7 @@ OpenAPI_no_profile_match_reason_t *OpenAPI_no_profile_match_reason_create(
 )
 {
     OpenAPI_no_profile_match_reason_t *no_profile_match_reason_local_var = ogs_malloc(sizeof(OpenAPI_no_profile_match_reason_t));
-    ogs_assert(no_profile_match_reason_local_var);
+    log_assert(no_profile_match_reason_local_var);
 
 
     return no_profile_match_reason_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_no_profile_match_reason_convertToJSON(OpenAPI_no_profile_match_re
     OpenAPI_lnode_t *node = NULL;
 
     if (no_profile_match_reason == NULL) {
-        ogs_error("OpenAPI_no_profile_match_reason_convertToJSON() failed [NoProfileMatchReason]");
+        log_error("OpenAPI_no_profile_match_reason_convertToJSON() failed [NoProfileMatchReason]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_no_profile_match_reason_t *OpenAPI_no_profile_match_reason_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_no_profile_match_reason_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_no_profile_match_reason_convertToJSON() failed");
+        log_error("OpenAPI_no_profile_match_reason_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_no_profile_match_reason_t *OpenAPI_no_profile_match_reason_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -12,7 +12,7 @@ OpenAPI_status_info_t *OpenAPI_status_info_create(
 )
 {
     OpenAPI_status_info_t *status_info_local_var = ogs_malloc(sizeof(OpenAPI_status_info_t));
-    ogs_assert(status_info_local_var);
+    log_assert(status_info_local_var);
 
     status_info_local_var->resource_status = resource_status;
     status_info_local_var->cause = cause;
@@ -42,23 +42,23 @@ cJSON *OpenAPI_status_info_convertToJSON(OpenAPI_status_info_t *status_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (status_info == NULL) {
-        ogs_error("OpenAPI_status_info_convertToJSON() failed [StatusInfo]");
+        log_error("OpenAPI_status_info_convertToJSON() failed [StatusInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (status_info->resource_status == OpenAPI_resource_status_NULL) {
-        ogs_error("OpenAPI_status_info_convertToJSON() failed [resource_status]");
+        log_error("OpenAPI_status_info_convertToJSON() failed [resource_status]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "resourceStatus", OpenAPI_resource_status_ToString(status_info->resource_status)) == NULL) {
-        ogs_error("OpenAPI_status_info_convertToJSON() failed [resource_status]");
+        log_error("OpenAPI_status_info_convertToJSON() failed [resource_status]");
         goto end;
     }
 
     if (status_info->cause != OpenAPI_cause_NULL) {
     if (cJSON_AddStringToObject(item, "cause", OpenAPI_cause_ToString(status_info->cause)) == NULL) {
-        ogs_error("OpenAPI_status_info_convertToJSON() failed [cause]");
+        log_error("OpenAPI_status_info_convertToJSON() failed [cause]");
         goto end;
     }
     }
@@ -66,19 +66,19 @@ cJSON *OpenAPI_status_info_convertToJSON(OpenAPI_status_info_t *status_info)
     if (status_info->cn_assisted_ran_para) {
     cJSON *cn_assisted_ran_para_local_JSON = OpenAPI_cn_assisted_ran_para_convertToJSON(status_info->cn_assisted_ran_para);
     if (cn_assisted_ran_para_local_JSON == NULL) {
-        ogs_error("OpenAPI_status_info_convertToJSON() failed [cn_assisted_ran_para]");
+        log_error("OpenAPI_status_info_convertToJSON() failed [cn_assisted_ran_para]");
         goto end;
     }
     cJSON_AddItemToObject(item, "cnAssistedRanPara", cn_assisted_ran_para_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_status_info_convertToJSON() failed [cn_assisted_ran_para]");
+        log_error("OpenAPI_status_info_convertToJSON() failed [cn_assisted_ran_para]");
         goto end;
     }
     }
 
     if (status_info->an_type != OpenAPI_access_type_NULL) {
     if (cJSON_AddStringToObject(item, "anType", OpenAPI_access_type_ToString(status_info->an_type)) == NULL) {
-        ogs_error("OpenAPI_status_info_convertToJSON() failed [an_type]");
+        log_error("OpenAPI_status_info_convertToJSON() failed [an_type]");
         goto end;
     }
     }
@@ -101,11 +101,11 @@ OpenAPI_status_info_t *OpenAPI_status_info_parseFromJSON(cJSON *status_infoJSON)
     OpenAPI_access_type_e an_typeVariable = 0;
     resource_status = cJSON_GetObjectItemCaseSensitive(status_infoJSON, "resourceStatus");
     if (!resource_status) {
-        ogs_error("OpenAPI_status_info_parseFromJSON() failed [resource_status]");
+        log_error("OpenAPI_status_info_parseFromJSON() failed [resource_status]");
         goto end;
     }
     if (!cJSON_IsString(resource_status)) {
-        ogs_error("OpenAPI_status_info_parseFromJSON() failed [resource_status]");
+        log_error("OpenAPI_status_info_parseFromJSON() failed [resource_status]");
         goto end;
     }
     resource_statusVariable = OpenAPI_resource_status_FromString(resource_status->valuestring);
@@ -113,7 +113,7 @@ OpenAPI_status_info_t *OpenAPI_status_info_parseFromJSON(cJSON *status_infoJSON)
     cause = cJSON_GetObjectItemCaseSensitive(status_infoJSON, "cause");
     if (cause) {
     if (!cJSON_IsString(cause)) {
-        ogs_error("OpenAPI_status_info_parseFromJSON() failed [cause]");
+        log_error("OpenAPI_status_info_parseFromJSON() failed [cause]");
         goto end;
     }
     causeVariable = OpenAPI_cause_FromString(cause->valuestring);
@@ -123,7 +123,7 @@ OpenAPI_status_info_t *OpenAPI_status_info_parseFromJSON(cJSON *status_infoJSON)
     if (cn_assisted_ran_para) {
     cn_assisted_ran_para_local_nonprim = OpenAPI_cn_assisted_ran_para_parseFromJSON(cn_assisted_ran_para);
     if (!cn_assisted_ran_para_local_nonprim) {
-        ogs_error("OpenAPI_cn_assisted_ran_para_parseFromJSON failed [cn_assisted_ran_para]");
+        log_error("OpenAPI_cn_assisted_ran_para_parseFromJSON failed [cn_assisted_ran_para]");
         goto end;
     }
     }
@@ -131,7 +131,7 @@ OpenAPI_status_info_t *OpenAPI_status_info_parseFromJSON(cJSON *status_infoJSON)
     an_type = cJSON_GetObjectItemCaseSensitive(status_infoJSON, "anType");
     if (an_type) {
     if (!cJSON_IsString(an_type)) {
-        ogs_error("OpenAPI_status_info_parseFromJSON() failed [an_type]");
+        log_error("OpenAPI_status_info_parseFromJSON() failed [an_type]");
         goto end;
     }
     an_typeVariable = OpenAPI_access_type_FromString(an_type->valuestring);
@@ -158,10 +158,10 @@ OpenAPI_status_info_t *OpenAPI_status_info_copy(OpenAPI_status_info_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_status_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_status_info_convertToJSON() failed");
+        log_error("OpenAPI_status_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -169,14 +169,14 @@ OpenAPI_status_info_t *OpenAPI_status_info_copy(OpenAPI_status_info_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

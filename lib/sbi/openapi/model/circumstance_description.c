@@ -14,7 +14,7 @@ OpenAPI_circumstance_description_t *OpenAPI_circumstance_description_create(
 )
 {
     OpenAPI_circumstance_description_t *circumstance_description_local_var = ogs_malloc(sizeof(OpenAPI_circumstance_description_t));
-    ogs_assert(circumstance_description_local_var);
+    log_assert(circumstance_description_local_var);
 
     circumstance_description_local_var->is_freq = is_freq;
     circumstance_description_local_var->freq = freq;
@@ -50,21 +50,21 @@ cJSON *OpenAPI_circumstance_description_convertToJSON(OpenAPI_circumstance_descr
     OpenAPI_lnode_t *node = NULL;
 
     if (circumstance_description == NULL) {
-        ogs_error("OpenAPI_circumstance_description_convertToJSON() failed [CircumstanceDescription]");
+        log_error("OpenAPI_circumstance_description_convertToJSON() failed [CircumstanceDescription]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (circumstance_description->is_freq) {
     if (cJSON_AddNumberToObject(item, "freq", circumstance_description->freq) == NULL) {
-        ogs_error("OpenAPI_circumstance_description_convertToJSON() failed [freq]");
+        log_error("OpenAPI_circumstance_description_convertToJSON() failed [freq]");
         goto end;
     }
     }
 
     if (circumstance_description->tm) {
     if (cJSON_AddStringToObject(item, "tm", circumstance_description->tm) == NULL) {
-        ogs_error("OpenAPI_circumstance_description_convertToJSON() failed [tm]");
+        log_error("OpenAPI_circumstance_description_convertToJSON() failed [tm]");
         goto end;
     }
     }
@@ -72,19 +72,19 @@ cJSON *OpenAPI_circumstance_description_convertToJSON(OpenAPI_circumstance_descr
     if (circumstance_description->loc_area) {
     cJSON *loc_area_local_JSON = OpenAPI_network_area_info_convertToJSON(circumstance_description->loc_area);
     if (loc_area_local_JSON == NULL) {
-        ogs_error("OpenAPI_circumstance_description_convertToJSON() failed [loc_area]");
+        log_error("OpenAPI_circumstance_description_convertToJSON() failed [loc_area]");
         goto end;
     }
     cJSON_AddItemToObject(item, "locArea", loc_area_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_circumstance_description_convertToJSON() failed [loc_area]");
+        log_error("OpenAPI_circumstance_description_convertToJSON() failed [loc_area]");
         goto end;
     }
     }
 
     if (circumstance_description->is_vol) {
     if (cJSON_AddNumberToObject(item, "vol", circumstance_description->vol) == NULL) {
-        ogs_error("OpenAPI_circumstance_description_convertToJSON() failed [vol]");
+        log_error("OpenAPI_circumstance_description_convertToJSON() failed [vol]");
         goto end;
     }
     }
@@ -105,7 +105,7 @@ OpenAPI_circumstance_description_t *OpenAPI_circumstance_description_parseFromJS
     freq = cJSON_GetObjectItemCaseSensitive(circumstance_descriptionJSON, "freq");
     if (freq) {
     if (!cJSON_IsNumber(freq)) {
-        ogs_error("OpenAPI_circumstance_description_parseFromJSON() failed [freq]");
+        log_error("OpenAPI_circumstance_description_parseFromJSON() failed [freq]");
         goto end;
     }
     }
@@ -113,7 +113,7 @@ OpenAPI_circumstance_description_t *OpenAPI_circumstance_description_parseFromJS
     tm = cJSON_GetObjectItemCaseSensitive(circumstance_descriptionJSON, "tm");
     if (tm) {
     if (!cJSON_IsString(tm) && !cJSON_IsNull(tm)) {
-        ogs_error("OpenAPI_circumstance_description_parseFromJSON() failed [tm]");
+        log_error("OpenAPI_circumstance_description_parseFromJSON() failed [tm]");
         goto end;
     }
     }
@@ -122,7 +122,7 @@ OpenAPI_circumstance_description_t *OpenAPI_circumstance_description_parseFromJS
     if (loc_area) {
     loc_area_local_nonprim = OpenAPI_network_area_info_parseFromJSON(loc_area);
     if (!loc_area_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [loc_area]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [loc_area]");
         goto end;
     }
     }
@@ -130,7 +130,7 @@ OpenAPI_circumstance_description_t *OpenAPI_circumstance_description_parseFromJS
     vol = cJSON_GetObjectItemCaseSensitive(circumstance_descriptionJSON, "vol");
     if (vol) {
     if (!cJSON_IsNumber(vol)) {
-        ogs_error("OpenAPI_circumstance_description_parseFromJSON() failed [vol]");
+        log_error("OpenAPI_circumstance_description_parseFromJSON() failed [vol]");
         goto end;
     }
     }
@@ -158,10 +158,10 @@ OpenAPI_circumstance_description_t *OpenAPI_circumstance_description_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_circumstance_description_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_circumstance_description_convertToJSON() failed");
+        log_error("OpenAPI_circumstance_description_convertToJSON() failed");
         return NULL;
     }
 
@@ -169,14 +169,14 @@ OpenAPI_circumstance_description_t *OpenAPI_circumstance_description_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

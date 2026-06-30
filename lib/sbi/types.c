@@ -87,16 +87,16 @@ static struct service_desc_s service_desc[] = {
 
 OpenAPI_nf_type_e ogs_sbi_service_type_to_nf_type(ogs_sbi_service_type_e type)
 {
-    ogs_assert(type > OGS_SBI_SERVICE_TYPE_NULL &&
+    log_assert(type > OGS_SBI_SERVICE_TYPE_NULL &&
                 type < OGS_SBI_MAX_NUM_OF_SERVICE_TYPE);
     return service_desc[type].nf_type;
 }
 
 const char *ogs_sbi_service_type_to_name(ogs_sbi_service_type_e type)
 {
-    ogs_assert(type > OGS_SBI_SERVICE_TYPE_NULL &&
+    log_assert(type > OGS_SBI_SERVICE_TYPE_NULL &&
                 type < OGS_SBI_MAX_NUM_OF_SERVICE_TYPE);
-    ogs_assert(service_desc[type].service_name);
+    log_assert(service_desc[type].service_name);
     return service_desc[type].service_name;
 }
 
@@ -104,7 +104,7 @@ ogs_sbi_service_type_e ogs_sbi_service_type_from_name(const char *name)
 {
     int i;
 
-    ogs_assert(name);
+    log_assert(name);
 
     for (i = 0; i < OGS_SBI_MAX_NUM_OF_SERVICE_TYPE; i++) {
         if (service_desc[i].service_name &&
@@ -171,9 +171,9 @@ static struct app_error_desc_s app_error_desc[] = {
 
 const char *ogs_sbi_app_strerror(ogs_sbi_app_errno_e err)
 {
-    ogs_assert(err > OGS_SBI_APP_ERRNO_NULL &&
+    log_assert(err > OGS_SBI_APP_ERRNO_NULL &&
                 err < OGS_SBI_MAX_NUM_OF_APP_ERRNO);
-    ogs_assert(app_error_desc[err].app_strerror);
+    log_assert(app_error_desc[err].app_strerror);
     return app_error_desc[err].app_strerror;
 }
 
@@ -181,7 +181,7 @@ ogs_sbi_app_errno_e ogs_sbi_app_errno(const char *str)
 {
     int i;
 
-    ogs_assert(str);
+    log_assert(str);
 
     for (i = 0; i < OGS_SBI_MAX_NUM_OF_APP_ERRNO; i++) {
         if (app_error_desc[i].app_strerror &&

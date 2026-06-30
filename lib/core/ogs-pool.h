@@ -53,11 +53,11 @@ typedef int32_t ogs_pool_id_t;
     int i; \
     (pool)->name = #pool; \
     (pool)->free = malloc(sizeof(*(pool)->free) * _size); \
-    ogs_assert((pool)->free); \
+    log_assert((pool)->free); \
     (pool)->array = malloc(sizeof(*(pool)->array) * _size); \
-    ogs_assert((pool)->array); \
+    log_assert((pool)->array); \
     (pool)->index = malloc(sizeof(*(pool)->index) * _size); \
-    ogs_assert((pool)->index); \
+    log_assert((pool)->index); \
     (pool)->size = (pool)->avail = _size; \
     (pool)->head = (pool)->tail = 0; \
     for (i = 0; i < _size; i++) { \
@@ -66,7 +66,7 @@ typedef int32_t ogs_pool_id_t;
     } \
     \
     (pool)->id_hash = ogs_hash_make(); \
-    ogs_assert((pool)->id_hash); \
+    log_assert((pool)->id_hash); \
 } while (0)
 
 /*
@@ -75,13 +75,13 @@ typedef int32_t ogs_pool_id_t;
  */
 #define ogs_pool_final(pool) do { \
     if (((pool)->size != (pool)->avail)) \
-        ogs_error("%d in '%s[%d]' were not released.", \
+        log_error("%d in '%s[%d]' were not released.", \
                 (pool)->size - (pool)->avail, (pool)->name, (pool)->size); \
     free((pool)->free); \
     free((pool)->array); \
     free((pool)->index); \
     \
-    ogs_assert((pool)->id_hash); \
+    log_assert((pool)->id_hash); \
     ogs_hash_destroy((pool)->id_hash); \
 } while (0)
 
@@ -95,11 +95,11 @@ typedef int32_t ogs_pool_id_t;
     int i; \
     (pool)->name = #pool; \
     (pool)->free = ogs_malloc(sizeof(*(pool)->free) * _size); \
-    ogs_assert((pool)->free); \
+    log_assert((pool)->free); \
     (pool)->array = ogs_malloc(sizeof(*(pool)->array) * _size); \
-    ogs_assert((pool)->array); \
+    log_assert((pool)->array); \
     (pool)->index = ogs_malloc(sizeof(*(pool)->index) * _size); \
-    ogs_assert((pool)->index); \
+    log_assert((pool)->index); \
     (pool)->size = (pool)->avail = _size; \
     (pool)->head = (pool)->tail = 0; \
     for (i = 0; i < _size; i++) { \
@@ -108,7 +108,7 @@ typedef int32_t ogs_pool_id_t;
     } \
     \
     (pool)->id_hash = ogs_hash_make(); \
-    ogs_assert((pool)->id_hash); \
+    log_assert((pool)->id_hash); \
 } while (0)
 
 /*
@@ -119,13 +119,13 @@ typedef int32_t ogs_pool_id_t;
  */
 #define ogs_pool_destroy(pool) do { \
     if (((pool)->size != (pool)->avail)) \
-        ogs_error("%d in '%s[%d]' were not released.", \
+        log_error("%d in '%s[%d]' were not released.", \
                 (pool)->size - (pool)->avail, (pool)->name, (pool)->size); \
     ogs_free((pool)->free); \
     ogs_free((pool)->array); \
     ogs_free((pool)->index); \
     \
-    ogs_assert((pool)->id_hash); \
+    log_assert((pool)->id_hash); \
     ogs_hash_destroy((pool)->id_hash); \
 } while (0)
 
@@ -164,7 +164,7 @@ typedef int32_t ogs_pool_id_t;
 } while (0)
 
 #define ogs_pool_id_free(pool, node) do { \
-    ogs_assert(((node)->id) >= OGS_MIN_POOL_ID && \
+    log_assert(((node)->id) >= OGS_MIN_POOL_ID && \
             ((node)->id) <= OGS_MAX_POOL_ID); \
     ogs_hash_set((pool)->id_hash, \
             &((node)->id), sizeof(ogs_pool_id_t), NULL); \
@@ -199,7 +199,7 @@ typedef int32_t ogs_pool_id_t;
     int i, j; \
     for (i = 0; i < (pool)->size; i++) \
         for (j = i+1; j < (pool)->size; j++) \
-            ogs_assert(((pool)->array[i]) != ((pool)->array[j])); \
+            log_assert(((pool)->array[i]) != ((pool)->array[j])); \
 } while (0)
 
 #ifdef __cplusplus

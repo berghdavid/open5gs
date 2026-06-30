@@ -9,7 +9,7 @@ OpenAPI_hfc_node_id_t *OpenAPI_hfc_node_id_create(
 )
 {
     OpenAPI_hfc_node_id_t *hfc_node_id_local_var = ogs_malloc(sizeof(OpenAPI_hfc_node_id_t));
-    ogs_assert(hfc_node_id_local_var);
+    log_assert(hfc_node_id_local_var);
 
     hfc_node_id_local_var->hfc_nid = hfc_nid;
 
@@ -36,17 +36,17 @@ cJSON *OpenAPI_hfc_node_id_convertToJSON(OpenAPI_hfc_node_id_t *hfc_node_id)
     OpenAPI_lnode_t *node = NULL;
 
     if (hfc_node_id == NULL) {
-        ogs_error("OpenAPI_hfc_node_id_convertToJSON() failed [HfcNodeId]");
+        log_error("OpenAPI_hfc_node_id_convertToJSON() failed [HfcNodeId]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!hfc_node_id->hfc_nid) {
-        ogs_error("OpenAPI_hfc_node_id_convertToJSON() failed [hfc_nid]");
+        log_error("OpenAPI_hfc_node_id_convertToJSON() failed [hfc_nid]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "hfcNId", hfc_node_id->hfc_nid) == NULL) {
-        ogs_error("OpenAPI_hfc_node_id_convertToJSON() failed [hfc_nid]");
+        log_error("OpenAPI_hfc_node_id_convertToJSON() failed [hfc_nid]");
         goto end;
     }
 
@@ -61,11 +61,11 @@ OpenAPI_hfc_node_id_t *OpenAPI_hfc_node_id_parseFromJSON(cJSON *hfc_node_idJSON)
     cJSON *hfc_nid = NULL;
     hfc_nid = cJSON_GetObjectItemCaseSensitive(hfc_node_idJSON, "hfcNId");
     if (!hfc_nid) {
-        ogs_error("OpenAPI_hfc_node_id_parseFromJSON() failed [hfc_nid]");
+        log_error("OpenAPI_hfc_node_id_parseFromJSON() failed [hfc_nid]");
         goto end;
     }
     if (!cJSON_IsString(hfc_nid)) {
-        ogs_error("OpenAPI_hfc_node_id_parseFromJSON() failed [hfc_nid]");
+        log_error("OpenAPI_hfc_node_id_parseFromJSON() failed [hfc_nid]");
         goto end;
     }
 
@@ -83,10 +83,10 @@ OpenAPI_hfc_node_id_t *OpenAPI_hfc_node_id_copy(OpenAPI_hfc_node_id_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_hfc_node_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_hfc_node_id_convertToJSON() failed");
+        log_error("OpenAPI_hfc_node_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -94,14 +94,14 @@ OpenAPI_hfc_node_id_t *OpenAPI_hfc_node_id_copy(OpenAPI_hfc_node_id_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

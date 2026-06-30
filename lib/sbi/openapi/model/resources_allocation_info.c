@@ -11,7 +11,7 @@ OpenAPI_resources_allocation_info_t *OpenAPI_resources_allocation_info_create(
 )
 {
     OpenAPI_resources_allocation_info_t *resources_allocation_info_local_var = ogs_malloc(sizeof(OpenAPI_resources_allocation_info_t));
-    ogs_assert(resources_allocation_info_local_var);
+    log_assert(resources_allocation_info_local_var);
 
     resources_allocation_info_local_var->mc_resourc_status = mc_resourc_status;
     resources_allocation_info_local_var->flows = flows;
@@ -47,14 +47,14 @@ cJSON *OpenAPI_resources_allocation_info_convertToJSON(OpenAPI_resources_allocat
     OpenAPI_lnode_t *node = NULL;
 
     if (resources_allocation_info == NULL) {
-        ogs_error("OpenAPI_resources_allocation_info_convertToJSON() failed [ResourcesAllocationInfo]");
+        log_error("OpenAPI_resources_allocation_info_convertToJSON() failed [ResourcesAllocationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (resources_allocation_info->mc_resourc_status != OpenAPI_media_component_resources_status_NULL) {
     if (cJSON_AddStringToObject(item, "mcResourcStatus", OpenAPI_media_component_resources_status_ToString(resources_allocation_info->mc_resourc_status)) == NULL) {
-        ogs_error("OpenAPI_resources_allocation_info_convertToJSON() failed [mc_resourc_status]");
+        log_error("OpenAPI_resources_allocation_info_convertToJSON() failed [mc_resourc_status]");
         goto end;
     }
     }
@@ -62,13 +62,13 @@ cJSON *OpenAPI_resources_allocation_info_convertToJSON(OpenAPI_resources_allocat
     if (resources_allocation_info->flows) {
     cJSON *flowsList = cJSON_AddArrayToObject(item, "flows");
     if (flowsList == NULL) {
-        ogs_error("OpenAPI_resources_allocation_info_convertToJSON() failed [flows]");
+        log_error("OpenAPI_resources_allocation_info_convertToJSON() failed [flows]");
         goto end;
     }
     OpenAPI_list_for_each(resources_allocation_info->flows, node) {
         cJSON *itemLocal = OpenAPI_flows_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_resources_allocation_info_convertToJSON() failed [flows]");
+            log_error("OpenAPI_resources_allocation_info_convertToJSON() failed [flows]");
             goto end;
         }
         cJSON_AddItemToArray(flowsList, itemLocal);
@@ -77,7 +77,7 @@ cJSON *OpenAPI_resources_allocation_info_convertToJSON(OpenAPI_resources_allocat
 
     if (resources_allocation_info->alt_ser_req) {
     if (cJSON_AddStringToObject(item, "altSerReq", resources_allocation_info->alt_ser_req) == NULL) {
-        ogs_error("OpenAPI_resources_allocation_info_convertToJSON() failed [alt_ser_req]");
+        log_error("OpenAPI_resources_allocation_info_convertToJSON() failed [alt_ser_req]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_resources_allocation_info_t *OpenAPI_resources_allocation_info_parseFrom
     mc_resourc_status = cJSON_GetObjectItemCaseSensitive(resources_allocation_infoJSON, "mcResourcStatus");
     if (mc_resourc_status) {
     if (!cJSON_IsString(mc_resourc_status)) {
-        ogs_error("OpenAPI_resources_allocation_info_parseFromJSON() failed [mc_resourc_status]");
+        log_error("OpenAPI_resources_allocation_info_parseFromJSON() failed [mc_resourc_status]");
         goto end;
     }
     mc_resourc_statusVariable = OpenAPI_media_component_resources_status_FromString(mc_resourc_status->valuestring);
@@ -108,7 +108,7 @@ OpenAPI_resources_allocation_info_t *OpenAPI_resources_allocation_info_parseFrom
     if (flows) {
         cJSON *flows_local = NULL;
         if (!cJSON_IsArray(flows)) {
-            ogs_error("OpenAPI_resources_allocation_info_parseFromJSON() failed [flows]");
+            log_error("OpenAPI_resources_allocation_info_parseFromJSON() failed [flows]");
             goto end;
         }
 
@@ -116,12 +116,12 @@ OpenAPI_resources_allocation_info_t *OpenAPI_resources_allocation_info_parseFrom
 
         cJSON_ArrayForEach(flows_local, flows) {
             if (!cJSON_IsObject(flows_local)) {
-                ogs_error("OpenAPI_resources_allocation_info_parseFromJSON() failed [flows]");
+                log_error("OpenAPI_resources_allocation_info_parseFromJSON() failed [flows]");
                 goto end;
             }
             OpenAPI_flows_t *flowsItem = OpenAPI_flows_parseFromJSON(flows_local);
             if (!flowsItem) {
-                ogs_error("No flowsItem");
+                log_error("No flowsItem");
                 goto end;
             }
             OpenAPI_list_add(flowsList, flowsItem);
@@ -131,7 +131,7 @@ OpenAPI_resources_allocation_info_t *OpenAPI_resources_allocation_info_parseFrom
     alt_ser_req = cJSON_GetObjectItemCaseSensitive(resources_allocation_infoJSON, "altSerReq");
     if (alt_ser_req) {
     if (!cJSON_IsString(alt_ser_req) && !cJSON_IsNull(alt_ser_req)) {
-        ogs_error("OpenAPI_resources_allocation_info_parseFromJSON() failed [alt_ser_req]");
+        log_error("OpenAPI_resources_allocation_info_parseFromJSON() failed [alt_ser_req]");
         goto end;
     }
     }
@@ -159,10 +159,10 @@ OpenAPI_resources_allocation_info_t *OpenAPI_resources_allocation_info_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_resources_allocation_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_resources_allocation_info_convertToJSON() failed");
+        log_error("OpenAPI_resources_allocation_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -170,14 +170,14 @@ OpenAPI_resources_allocation_info_t *OpenAPI_resources_allocation_info_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

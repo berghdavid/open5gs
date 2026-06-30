@@ -25,13 +25,13 @@ int ogs_file_read_full(
     FILE *fp = NULL;
     size_t total_read = 0, amt;
 
-    ogs_assert(filename);
-    ogs_assert(buf);
-    ogs_assert(nbytes);
+    log_assert(filename);
+    log_assert(buf);
+    log_assert(nbytes);
 
     fp = fopen(filename, "rb");
     if (!fp) {
-        ogs_error("Cannot find file [%s]", filename);
+        log_error("Cannot find file [%s]", filename);
         return OGS_ERROR;
     }
 
@@ -45,7 +45,7 @@ int ogs_file_read_full(
     if (amt > 0)
         return OGS_OK;
 
-    ogs_error("Cannot read file [name:%s,amt:%d,total_read:%d]",
+    log_error("Cannot read file [name:%s,amt:%d,total_read:%d]",
             filename, (int)amt, (int)total_read);
     return OGS_ERROR;
 }

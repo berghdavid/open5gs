@@ -16,7 +16,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_create(
 )
 {
     OpenAPI_ue_camping_rep_t *ue_camping_rep_local_var = ogs_malloc(sizeof(OpenAPI_ue_camping_rep_t));
-    ogs_assert(ue_camping_rep_local_var);
+    log_assert(ue_camping_rep_local_var);
 
     ue_camping_rep_local_var->access_type = access_type;
     ue_camping_rep_local_var->rat_type = rat_type;
@@ -62,21 +62,21 @@ cJSON *OpenAPI_ue_camping_rep_convertToJSON(OpenAPI_ue_camping_rep_t *ue_camping
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_camping_rep == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [UeCampingRep]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [UeCampingRep]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ue_camping_rep->access_type != OpenAPI_access_type_NULL) {
     if (cJSON_AddStringToObject(item, "accessType", OpenAPI_access_type_ToString(ue_camping_rep->access_type)) == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [access_type]");
         goto end;
     }
     }
 
     if (ue_camping_rep->rat_type != OpenAPI_rat_type_NULL) {
     if (cJSON_AddStringToObject(item, "ratType", OpenAPI_rat_type_ToString(ue_camping_rep->rat_type)) == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [rat_type]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [rat_type]");
         goto end;
     }
     }
@@ -84,12 +84,12 @@ cJSON *OpenAPI_ue_camping_rep_convertToJSON(OpenAPI_ue_camping_rep_t *ue_camping
     if (ue_camping_rep->serv_nf_id) {
     cJSON *serv_nf_id_local_JSON = OpenAPI_serving_nf_identity_convertToJSON(ue_camping_rep->serv_nf_id);
     if (serv_nf_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [serv_nf_id]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [serv_nf_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servNfId", serv_nf_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [serv_nf_id]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [serv_nf_id]");
         goto end;
     }
     }
@@ -97,12 +97,12 @@ cJSON *OpenAPI_ue_camping_rep_convertToJSON(OpenAPI_ue_camping_rep_t *ue_camping
     if (ue_camping_rep->serving_network) {
     cJSON *serving_network_local_JSON = OpenAPI_plmn_id_nid_convertToJSON(ue_camping_rep->serving_network);
     if (serving_network_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [serving_network]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [serving_network]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servingNetwork", serving_network_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [serving_network]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [serving_network]");
         goto end;
     }
     }
@@ -110,33 +110,33 @@ cJSON *OpenAPI_ue_camping_rep_convertToJSON(OpenAPI_ue_camping_rep_t *ue_camping
     if (ue_camping_rep->user_location_info) {
     cJSON *user_location_info_local_JSON = OpenAPI_user_location_convertToJSON(ue_camping_rep->user_location_info);
     if (user_location_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [user_location_info]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [user_location_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "userLocationInfo", user_location_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [user_location_info]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [user_location_info]");
         goto end;
     }
     }
 
     if (ue_camping_rep->ue_time_zone) {
     if (cJSON_AddStringToObject(item, "ueTimeZone", ue_camping_rep->ue_time_zone) == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [ue_time_zone]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [ue_time_zone]");
         goto end;
     }
     }
 
     if (ue_camping_rep->net_loc_acc_supp != OpenAPI_net_loc_access_support_NULL) {
     if (cJSON_AddStringToObject(item, "netLocAccSupp", OpenAPI_net_loc_access_support_ToString(ue_camping_rep->net_loc_acc_supp)) == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [net_loc_acc_supp]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [net_loc_acc_supp]");
         goto end;
     }
     }
 
     if (ue_camping_rep->sat_backhaul_category != OpenAPI_satellite_backhaul_category_NULL) {
     if (cJSON_AddStringToObject(item, "satBackhaulCategory", OpenAPI_satellite_backhaul_category_ToString(ue_camping_rep->sat_backhaul_category)) == NULL) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed [sat_backhaul_category]");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed [sat_backhaul_category]");
         goto end;
     }
     }
@@ -167,7 +167,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_parseFromJSON(cJSON *ue_camping
     access_type = cJSON_GetObjectItemCaseSensitive(ue_camping_repJSON, "accessType");
     if (access_type) {
     if (!cJSON_IsString(access_type)) {
-        ogs_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [access_type]");
         goto end;
     }
     access_typeVariable = OpenAPI_access_type_FromString(access_type->valuestring);
@@ -176,7 +176,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_parseFromJSON(cJSON *ue_camping
     rat_type = cJSON_GetObjectItemCaseSensitive(ue_camping_repJSON, "ratType");
     if (rat_type) {
     if (!cJSON_IsString(rat_type)) {
-        ogs_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [rat_type]");
+        log_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [rat_type]");
         goto end;
     }
     rat_typeVariable = OpenAPI_rat_type_FromString(rat_type->valuestring);
@@ -186,7 +186,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_parseFromJSON(cJSON *ue_camping
     if (serv_nf_id) {
     serv_nf_id_local_nonprim = OpenAPI_serving_nf_identity_parseFromJSON(serv_nf_id);
     if (!serv_nf_id_local_nonprim) {
-        ogs_error("OpenAPI_serving_nf_identity_parseFromJSON failed [serv_nf_id]");
+        log_error("OpenAPI_serving_nf_identity_parseFromJSON failed [serv_nf_id]");
         goto end;
     }
     }
@@ -195,7 +195,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_parseFromJSON(cJSON *ue_camping
     if (serving_network) {
     serving_network_local_nonprim = OpenAPI_plmn_id_nid_parseFromJSON(serving_network);
     if (!serving_network_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_nid_parseFromJSON failed [serving_network]");
+        log_error("OpenAPI_plmn_id_nid_parseFromJSON failed [serving_network]");
         goto end;
     }
     }
@@ -204,7 +204,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_parseFromJSON(cJSON *ue_camping
     if (user_location_info) {
     user_location_info_local_nonprim = OpenAPI_user_location_parseFromJSON(user_location_info);
     if (!user_location_info_local_nonprim) {
-        ogs_error("OpenAPI_user_location_parseFromJSON failed [user_location_info]");
+        log_error("OpenAPI_user_location_parseFromJSON failed [user_location_info]");
         goto end;
     }
     }
@@ -212,7 +212,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_parseFromJSON(cJSON *ue_camping
     ue_time_zone = cJSON_GetObjectItemCaseSensitive(ue_camping_repJSON, "ueTimeZone");
     if (ue_time_zone) {
     if (!cJSON_IsString(ue_time_zone) && !cJSON_IsNull(ue_time_zone)) {
-        ogs_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [ue_time_zone]");
+        log_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [ue_time_zone]");
         goto end;
     }
     }
@@ -220,7 +220,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_parseFromJSON(cJSON *ue_camping
     net_loc_acc_supp = cJSON_GetObjectItemCaseSensitive(ue_camping_repJSON, "netLocAccSupp");
     if (net_loc_acc_supp) {
     if (!cJSON_IsString(net_loc_acc_supp)) {
-        ogs_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [net_loc_acc_supp]");
+        log_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [net_loc_acc_supp]");
         goto end;
     }
     net_loc_acc_suppVariable = OpenAPI_net_loc_access_support_FromString(net_loc_acc_supp->valuestring);
@@ -229,7 +229,7 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_parseFromJSON(cJSON *ue_camping
     sat_backhaul_category = cJSON_GetObjectItemCaseSensitive(ue_camping_repJSON, "satBackhaulCategory");
     if (sat_backhaul_category) {
     if (!cJSON_IsString(sat_backhaul_category)) {
-        ogs_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [sat_backhaul_category]");
+        log_error("OpenAPI_ue_camping_rep_parseFromJSON() failed [sat_backhaul_category]");
         goto end;
     }
     sat_backhaul_categoryVariable = OpenAPI_satellite_backhaul_category_FromString(sat_backhaul_category->valuestring);
@@ -268,10 +268,10 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_copy(OpenAPI_ue_camping_rep_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_camping_rep_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_camping_rep_convertToJSON() failed");
+        log_error("OpenAPI_ue_camping_rep_convertToJSON() failed");
         return NULL;
     }
 
@@ -279,14 +279,14 @@ OpenAPI_ue_camping_rep_t *OpenAPI_ue_camping_rep_copy(OpenAPI_ue_camping_rep_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

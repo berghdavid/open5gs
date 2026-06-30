@@ -11,7 +11,7 @@ OpenAPI_roaming_info_update_t *OpenAPI_roaming_info_update_create(
 )
 {
     OpenAPI_roaming_info_update_t *roaming_info_update_local_var = ogs_malloc(sizeof(OpenAPI_roaming_info_update_t));
-    ogs_assert(roaming_info_update_local_var);
+    log_assert(roaming_info_update_local_var);
 
     roaming_info_update_local_var->is_roaming = is_roaming;
     roaming_info_update_local_var->roaming = roaming;
@@ -40,30 +40,30 @@ cJSON *OpenAPI_roaming_info_update_convertToJSON(OpenAPI_roaming_info_update_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (roaming_info_update == NULL) {
-        ogs_error("OpenAPI_roaming_info_update_convertToJSON() failed [RoamingInfoUpdate]");
+        log_error("OpenAPI_roaming_info_update_convertToJSON() failed [RoamingInfoUpdate]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (roaming_info_update->is_roaming) {
     if (cJSON_AddBoolToObject(item, "roaming", roaming_info_update->roaming) == NULL) {
-        ogs_error("OpenAPI_roaming_info_update_convertToJSON() failed [roaming]");
+        log_error("OpenAPI_roaming_info_update_convertToJSON() failed [roaming]");
         goto end;
     }
     }
 
     if (!roaming_info_update->serving_plmn) {
-        ogs_error("OpenAPI_roaming_info_update_convertToJSON() failed [serving_plmn]");
+        log_error("OpenAPI_roaming_info_update_convertToJSON() failed [serving_plmn]");
         return NULL;
     }
     cJSON *serving_plmn_local_JSON = OpenAPI_plmn_id_convertToJSON(roaming_info_update->serving_plmn);
     if (serving_plmn_local_JSON == NULL) {
-        ogs_error("OpenAPI_roaming_info_update_convertToJSON() failed [serving_plmn]");
+        log_error("OpenAPI_roaming_info_update_convertToJSON() failed [serving_plmn]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servingPlmn", serving_plmn_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_roaming_info_update_convertToJSON() failed [serving_plmn]");
+        log_error("OpenAPI_roaming_info_update_convertToJSON() failed [serving_plmn]");
         goto end;
     }
 
@@ -81,19 +81,19 @@ OpenAPI_roaming_info_update_t *OpenAPI_roaming_info_update_parseFromJSON(cJSON *
     roaming = cJSON_GetObjectItemCaseSensitive(roaming_info_updateJSON, "roaming");
     if (roaming) {
     if (!cJSON_IsBool(roaming)) {
-        ogs_error("OpenAPI_roaming_info_update_parseFromJSON() failed [roaming]");
+        log_error("OpenAPI_roaming_info_update_parseFromJSON() failed [roaming]");
         goto end;
     }
     }
 
     serving_plmn = cJSON_GetObjectItemCaseSensitive(roaming_info_updateJSON, "servingPlmn");
     if (!serving_plmn) {
-        ogs_error("OpenAPI_roaming_info_update_parseFromJSON() failed [serving_plmn]");
+        log_error("OpenAPI_roaming_info_update_parseFromJSON() failed [serving_plmn]");
         goto end;
     }
     serving_plmn_local_nonprim = OpenAPI_plmn_id_parseFromJSON(serving_plmn);
     if (!serving_plmn_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [serving_plmn]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [serving_plmn]");
         goto end;
     }
 
@@ -117,10 +117,10 @@ OpenAPI_roaming_info_update_t *OpenAPI_roaming_info_update_copy(OpenAPI_roaming_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_roaming_info_update_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_roaming_info_update_convertToJSON() failed");
+        log_error("OpenAPI_roaming_info_update_convertToJSON() failed");
         return NULL;
     }
 
@@ -128,14 +128,14 @@ OpenAPI_roaming_info_update_t *OpenAPI_roaming_info_update_copy(OpenAPI_roaming_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

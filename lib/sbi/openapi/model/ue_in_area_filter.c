@@ -11,7 +11,7 @@ OpenAPI_ue_in_area_filter_t *OpenAPI_ue_in_area_filter_create(
 )
 {
     OpenAPI_ue_in_area_filter_t *ue_in_area_filter_local_var = ogs_malloc(sizeof(OpenAPI_ue_in_area_filter_t));
-    ogs_assert(ue_in_area_filter_local_var);
+    log_assert(ue_in_area_filter_local_var);
 
     ue_in_area_filter_local_var->ue_type = ue_type;
     ue_in_area_filter_local_var->is_aerial_srv_dnn_ind = is_aerial_srv_dnn_ind;
@@ -40,7 +40,7 @@ cJSON *OpenAPI_ue_in_area_filter_convertToJSON(OpenAPI_ue_in_area_filter_t *ue_i
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_in_area_filter == NULL) {
-        ogs_error("OpenAPI_ue_in_area_filter_convertToJSON() failed [UeInAreaFilter]");
+        log_error("OpenAPI_ue_in_area_filter_convertToJSON() failed [UeInAreaFilter]");
         return NULL;
     }
 
@@ -48,19 +48,19 @@ cJSON *OpenAPI_ue_in_area_filter_convertToJSON(OpenAPI_ue_in_area_filter_t *ue_i
     if (ue_in_area_filter->ue_type) {
     cJSON *ue_type_local_JSON = OpenAPI_ue_type_convertToJSON(ue_in_area_filter->ue_type);
     if (ue_type_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_in_area_filter_convertToJSON() failed [ue_type]");
+        log_error("OpenAPI_ue_in_area_filter_convertToJSON() failed [ue_type]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueType", ue_type_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_in_area_filter_convertToJSON() failed [ue_type]");
+        log_error("OpenAPI_ue_in_area_filter_convertToJSON() failed [ue_type]");
         goto end;
     }
     }
 
     if (ue_in_area_filter->is_aerial_srv_dnn_ind) {
     if (cJSON_AddBoolToObject(item, "aerialSrvDnnInd", ue_in_area_filter->aerial_srv_dnn_ind) == NULL) {
-        ogs_error("OpenAPI_ue_in_area_filter_convertToJSON() failed [aerial_srv_dnn_ind]");
+        log_error("OpenAPI_ue_in_area_filter_convertToJSON() failed [aerial_srv_dnn_ind]");
         goto end;
     }
     }
@@ -80,7 +80,7 @@ OpenAPI_ue_in_area_filter_t *OpenAPI_ue_in_area_filter_parseFromJSON(cJSON *ue_i
     if (ue_type) {
     ue_type_local_nonprim = OpenAPI_ue_type_parseFromJSON(ue_type);
     if (!ue_type_local_nonprim) {
-        ogs_error("OpenAPI_ue_type_parseFromJSON failed [ue_type]");
+        log_error("OpenAPI_ue_type_parseFromJSON failed [ue_type]");
         goto end;
     }
     }
@@ -88,7 +88,7 @@ OpenAPI_ue_in_area_filter_t *OpenAPI_ue_in_area_filter_parseFromJSON(cJSON *ue_i
     aerial_srv_dnn_ind = cJSON_GetObjectItemCaseSensitive(ue_in_area_filterJSON, "aerialSrvDnnInd");
     if (aerial_srv_dnn_ind) {
     if (!cJSON_IsBool(aerial_srv_dnn_ind)) {
-        ogs_error("OpenAPI_ue_in_area_filter_parseFromJSON() failed [aerial_srv_dnn_ind]");
+        log_error("OpenAPI_ue_in_area_filter_parseFromJSON() failed [aerial_srv_dnn_ind]");
         goto end;
     }
     }
@@ -113,10 +113,10 @@ OpenAPI_ue_in_area_filter_t *OpenAPI_ue_in_area_filter_copy(OpenAPI_ue_in_area_f
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_in_area_filter_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_in_area_filter_convertToJSON() failed");
+        log_error("OpenAPI_ue_in_area_filter_convertToJSON() failed");
         return NULL;
     }
 
@@ -124,14 +124,14 @@ OpenAPI_ue_in_area_filter_t *OpenAPI_ue_in_area_filter_copy(OpenAPI_ue_in_area_f
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

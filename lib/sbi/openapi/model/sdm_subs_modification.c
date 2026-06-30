@@ -10,7 +10,7 @@ OpenAPI_sdm_subs_modification_t *OpenAPI_sdm_subs_modification_create(
 )
 {
     OpenAPI_sdm_subs_modification_t *sdm_subs_modification_local_var = ogs_malloc(sizeof(OpenAPI_sdm_subs_modification_t));
-    ogs_assert(sdm_subs_modification_local_var);
+    log_assert(sdm_subs_modification_local_var);
 
     sdm_subs_modification_local_var->expires = expires;
     sdm_subs_modification_local_var->monitored_resource_uris = monitored_resource_uris;
@@ -45,14 +45,14 @@ cJSON *OpenAPI_sdm_subs_modification_convertToJSON(OpenAPI_sdm_subs_modification
     OpenAPI_lnode_t *node = NULL;
 
     if (sdm_subs_modification == NULL) {
-        ogs_error("OpenAPI_sdm_subs_modification_convertToJSON() failed [SdmSubsModification]");
+        log_error("OpenAPI_sdm_subs_modification_convertToJSON() failed [SdmSubsModification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (sdm_subs_modification->expires) {
     if (cJSON_AddStringToObject(item, "expires", sdm_subs_modification->expires) == NULL) {
-        ogs_error("OpenAPI_sdm_subs_modification_convertToJSON() failed [expires]");
+        log_error("OpenAPI_sdm_subs_modification_convertToJSON() failed [expires]");
         goto end;
     }
     }
@@ -60,12 +60,12 @@ cJSON *OpenAPI_sdm_subs_modification_convertToJSON(OpenAPI_sdm_subs_modification
     if (sdm_subs_modification->monitored_resource_uris) {
     cJSON *monitored_resource_urisList = cJSON_AddArrayToObject(item, "monitoredResourceUris");
     if (monitored_resource_urisList == NULL) {
-        ogs_error("OpenAPI_sdm_subs_modification_convertToJSON() failed [monitored_resource_uris]");
+        log_error("OpenAPI_sdm_subs_modification_convertToJSON() failed [monitored_resource_uris]");
         goto end;
     }
     OpenAPI_list_for_each(sdm_subs_modification->monitored_resource_uris, node) {
         if (cJSON_AddStringToObject(monitored_resource_urisList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_sdm_subs_modification_convertToJSON() failed [monitored_resource_uris]");
+            log_error("OpenAPI_sdm_subs_modification_convertToJSON() failed [monitored_resource_uris]");
             goto end;
         }
     }
@@ -85,7 +85,7 @@ OpenAPI_sdm_subs_modification_t *OpenAPI_sdm_subs_modification_parseFromJSON(cJS
     expires = cJSON_GetObjectItemCaseSensitive(sdm_subs_modificationJSON, "expires");
     if (expires) {
     if (!cJSON_IsString(expires) && !cJSON_IsNull(expires)) {
-        ogs_error("OpenAPI_sdm_subs_modification_parseFromJSON() failed [expires]");
+        log_error("OpenAPI_sdm_subs_modification_parseFromJSON() failed [expires]");
         goto end;
     }
     }
@@ -94,7 +94,7 @@ OpenAPI_sdm_subs_modification_t *OpenAPI_sdm_subs_modification_parseFromJSON(cJS
     if (monitored_resource_uris) {
         cJSON *monitored_resource_uris_local = NULL;
         if (!cJSON_IsArray(monitored_resource_uris)) {
-            ogs_error("OpenAPI_sdm_subs_modification_parseFromJSON() failed [monitored_resource_uris]");
+            log_error("OpenAPI_sdm_subs_modification_parseFromJSON() failed [monitored_resource_uris]");
             goto end;
         }
 
@@ -104,7 +104,7 @@ OpenAPI_sdm_subs_modification_t *OpenAPI_sdm_subs_modification_parseFromJSON(cJS
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(monitored_resource_uris_local)) {
-                ogs_error("OpenAPI_sdm_subs_modification_parseFromJSON() failed [monitored_resource_uris]");
+                log_error("OpenAPI_sdm_subs_modification_parseFromJSON() failed [monitored_resource_uris]");
                 goto end;
             }
             OpenAPI_list_add(monitored_resource_urisList, ogs_strdup(monitored_resource_uris_local->valuestring));
@@ -133,10 +133,10 @@ OpenAPI_sdm_subs_modification_t *OpenAPI_sdm_subs_modification_copy(OpenAPI_sdm_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sdm_subs_modification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sdm_subs_modification_convertToJSON() failed");
+        log_error("OpenAPI_sdm_subs_modification_convertToJSON() failed");
         return NULL;
     }
 
@@ -144,14 +144,14 @@ OpenAPI_sdm_subs_modification_t *OpenAPI_sdm_subs_modification_copy(OpenAPI_sdm_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

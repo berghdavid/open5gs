@@ -14,7 +14,7 @@ OpenAPI_nnwdaf_nf_status_t *OpenAPI_nnwdaf_nf_status_create(
 )
 {
     OpenAPI_nnwdaf_nf_status_t *nnwdaf_nf_status_local_var = ogs_malloc(sizeof(OpenAPI_nnwdaf_nf_status_t));
-    ogs_assert(nnwdaf_nf_status_local_var);
+    log_assert(nnwdaf_nf_status_local_var);
 
     nnwdaf_nf_status_local_var->is_status_registered = is_status_registered;
     nnwdaf_nf_status_local_var->status_registered = status_registered;
@@ -42,28 +42,28 @@ cJSON *OpenAPI_nnwdaf_nf_status_convertToJSON(OpenAPI_nnwdaf_nf_status_t *nnwdaf
     OpenAPI_lnode_t *node = NULL;
 
     if (nnwdaf_nf_status == NULL) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed [NnwdafNfStatus]");
+        log_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed [NnwdafNfStatus]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (nnwdaf_nf_status->is_status_registered) {
     if (cJSON_AddNumberToObject(item, "statusRegistered", nnwdaf_nf_status->status_registered) == NULL) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed [status_registered]");
+        log_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed [status_registered]");
         goto end;
     }
     }
 
     if (nnwdaf_nf_status->is_status_unregistered) {
     if (cJSON_AddNumberToObject(item, "statusUnregistered", nnwdaf_nf_status->status_unregistered) == NULL) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed [status_unregistered]");
+        log_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed [status_unregistered]");
         goto end;
     }
     }
 
     if (nnwdaf_nf_status->is_status_undiscoverable) {
     if (cJSON_AddNumberToObject(item, "statusUndiscoverable", nnwdaf_nf_status->status_undiscoverable) == NULL) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed [status_undiscoverable]");
+        log_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed [status_undiscoverable]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_nnwdaf_nf_status_t *OpenAPI_nnwdaf_nf_status_parseFromJSON(cJSON *nnwdaf
     status_registered = cJSON_GetObjectItemCaseSensitive(nnwdaf_nf_statusJSON, "statusRegistered");
     if (status_registered) {
     if (!cJSON_IsNumber(status_registered)) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_parseFromJSON() failed [status_registered]");
+        log_error("OpenAPI_nnwdaf_nf_status_parseFromJSON() failed [status_registered]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_nnwdaf_nf_status_t *OpenAPI_nnwdaf_nf_status_parseFromJSON(cJSON *nnwdaf
     status_unregistered = cJSON_GetObjectItemCaseSensitive(nnwdaf_nf_statusJSON, "statusUnregistered");
     if (status_unregistered) {
     if (!cJSON_IsNumber(status_unregistered)) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_parseFromJSON() failed [status_unregistered]");
+        log_error("OpenAPI_nnwdaf_nf_status_parseFromJSON() failed [status_unregistered]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_nnwdaf_nf_status_t *OpenAPI_nnwdaf_nf_status_parseFromJSON(cJSON *nnwdaf
     status_undiscoverable = cJSON_GetObjectItemCaseSensitive(nnwdaf_nf_statusJSON, "statusUndiscoverable");
     if (status_undiscoverable) {
     if (!cJSON_IsNumber(status_undiscoverable)) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_parseFromJSON() failed [status_undiscoverable]");
+        log_error("OpenAPI_nnwdaf_nf_status_parseFromJSON() failed [status_undiscoverable]");
         goto end;
     }
     }
@@ -122,10 +122,10 @@ OpenAPI_nnwdaf_nf_status_t *OpenAPI_nnwdaf_nf_status_copy(OpenAPI_nnwdaf_nf_stat
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nnwdaf_nf_status_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed");
+        log_error("OpenAPI_nnwdaf_nf_status_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_nnwdaf_nf_status_t *OpenAPI_nnwdaf_nf_status_copy(OpenAPI_nnwdaf_nf_stat
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

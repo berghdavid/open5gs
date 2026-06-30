@@ -10,7 +10,7 @@ OpenAPI_limit_id_to_monitoring_key_t *OpenAPI_limit_id_to_monitoring_key_create(
 )
 {
     OpenAPI_limit_id_to_monitoring_key_t *limit_id_to_monitoring_key_local_var = ogs_malloc(sizeof(OpenAPI_limit_id_to_monitoring_key_t));
-    ogs_assert(limit_id_to_monitoring_key_local_var);
+    log_assert(limit_id_to_monitoring_key_local_var);
 
     limit_id_to_monitoring_key_local_var->limit_id = limit_id;
     limit_id_to_monitoring_key_local_var->monkey = monkey;
@@ -45,29 +45,29 @@ cJSON *OpenAPI_limit_id_to_monitoring_key_convertToJSON(OpenAPI_limit_id_to_moni
     OpenAPI_lnode_t *node = NULL;
 
     if (limit_id_to_monitoring_key == NULL) {
-        ogs_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [LimitIdToMonitoringKey]");
+        log_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [LimitIdToMonitoringKey]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!limit_id_to_monitoring_key->limit_id) {
-        ogs_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [limit_id]");
+        log_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [limit_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "limitId", limit_id_to_monitoring_key->limit_id) == NULL) {
-        ogs_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [limit_id]");
+        log_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [limit_id]");
         goto end;
     }
 
     if (limit_id_to_monitoring_key->monkey) {
     cJSON *monkeyList = cJSON_AddArrayToObject(item, "monkey");
     if (monkeyList == NULL) {
-        ogs_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [monkey]");
+        log_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [monkey]");
         goto end;
     }
     OpenAPI_list_for_each(limit_id_to_monitoring_key->monkey, node) {
         if (cJSON_AddStringToObject(monkeyList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [monkey]");
+            log_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed [monkey]");
             goto end;
         }
     }
@@ -86,11 +86,11 @@ OpenAPI_limit_id_to_monitoring_key_t *OpenAPI_limit_id_to_monitoring_key_parseFr
     OpenAPI_list_t *monkeyList = NULL;
     limit_id = cJSON_GetObjectItemCaseSensitive(limit_id_to_monitoring_keyJSON, "limitId");
     if (!limit_id) {
-        ogs_error("OpenAPI_limit_id_to_monitoring_key_parseFromJSON() failed [limit_id]");
+        log_error("OpenAPI_limit_id_to_monitoring_key_parseFromJSON() failed [limit_id]");
         goto end;
     }
     if (!cJSON_IsString(limit_id)) {
-        ogs_error("OpenAPI_limit_id_to_monitoring_key_parseFromJSON() failed [limit_id]");
+        log_error("OpenAPI_limit_id_to_monitoring_key_parseFromJSON() failed [limit_id]");
         goto end;
     }
 
@@ -98,7 +98,7 @@ OpenAPI_limit_id_to_monitoring_key_t *OpenAPI_limit_id_to_monitoring_key_parseFr
     if (monkey) {
         cJSON *monkey_local = NULL;
         if (!cJSON_IsArray(monkey)) {
-            ogs_error("OpenAPI_limit_id_to_monitoring_key_parseFromJSON() failed [monkey]");
+            log_error("OpenAPI_limit_id_to_monitoring_key_parseFromJSON() failed [monkey]");
             goto end;
         }
 
@@ -108,7 +108,7 @@ OpenAPI_limit_id_to_monitoring_key_t *OpenAPI_limit_id_to_monitoring_key_parseFr
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(monkey_local)) {
-                ogs_error("OpenAPI_limit_id_to_monitoring_key_parseFromJSON() failed [monkey]");
+                log_error("OpenAPI_limit_id_to_monitoring_key_parseFromJSON() failed [monkey]");
                 goto end;
             }
             OpenAPI_list_add(monkeyList, ogs_strdup(monkey_local->valuestring));
@@ -137,10 +137,10 @@ OpenAPI_limit_id_to_monitoring_key_t *OpenAPI_limit_id_to_monitoring_key_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_limit_id_to_monitoring_key_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed");
+        log_error("OpenAPI_limit_id_to_monitoring_key_convertToJSON() failed");
         return NULL;
     }
 
@@ -148,14 +148,14 @@ OpenAPI_limit_id_to_monitoring_key_t *OpenAPI_limit_id_to_monitoring_key_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

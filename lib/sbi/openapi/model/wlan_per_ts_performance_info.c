@@ -19,7 +19,7 @@ OpenAPI_wlan_per_ts_performance_info_t *OpenAPI_wlan_per_ts_performance_info_cre
 )
 {
     OpenAPI_wlan_per_ts_performance_info_t *wlan_per_ts_performance_info_local_var = ogs_malloc(sizeof(OpenAPI_wlan_per_ts_performance_info_t));
-    ogs_assert(wlan_per_ts_performance_info_local_var);
+    log_assert(wlan_per_ts_performance_info_local_var);
 
     wlan_per_ts_performance_info_local_var->ts_start = ts_start;
     wlan_per_ts_performance_info_local_var->ts_duration = ts_duration;
@@ -60,35 +60,35 @@ cJSON *OpenAPI_wlan_per_ts_performance_info_convertToJSON(OpenAPI_wlan_per_ts_pe
     OpenAPI_lnode_t *node = NULL;
 
     if (wlan_per_ts_performance_info == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [WlanPerTsPerformanceInfo]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [WlanPerTsPerformanceInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!wlan_per_ts_performance_info->ts_start) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [ts_start]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [ts_start]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "tsStart", wlan_per_ts_performance_info->ts_start) == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [ts_start]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [ts_start]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "tsDuration", wlan_per_ts_performance_info->ts_duration) == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [ts_duration]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [ts_duration]");
         goto end;
     }
 
     if (wlan_per_ts_performance_info->is_rssi) {
     if (cJSON_AddNumberToObject(item, "rssi", wlan_per_ts_performance_info->rssi) == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [rssi]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [rssi]");
         goto end;
     }
     }
 
     if (wlan_per_ts_performance_info->is_rtt) {
     if (cJSON_AddNumberToObject(item, "rtt", wlan_per_ts_performance_info->rtt) == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [rtt]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [rtt]");
         goto end;
     }
     }
@@ -96,26 +96,26 @@ cJSON *OpenAPI_wlan_per_ts_performance_info_convertToJSON(OpenAPI_wlan_per_ts_pe
     if (wlan_per_ts_performance_info->traffic_info) {
     cJSON *traffic_info_local_JSON = OpenAPI_traffic_information_convertToJSON(wlan_per_ts_performance_info->traffic_info);
     if (traffic_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [traffic_info]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [traffic_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "trafficInfo", traffic_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [traffic_info]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [traffic_info]");
         goto end;
     }
     }
 
     if (wlan_per_ts_performance_info->is_number_of_ues) {
     if (cJSON_AddNumberToObject(item, "numberOfUes", wlan_per_ts_performance_info->number_of_ues) == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [number_of_ues]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [number_of_ues]");
         goto end;
     }
     }
 
     if (wlan_per_ts_performance_info->is_confidence) {
     if (cJSON_AddNumberToObject(item, "confidence", wlan_per_ts_performance_info->confidence) == NULL) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [confidence]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed [confidence]");
         goto end;
     }
     }
@@ -138,28 +138,28 @@ OpenAPI_wlan_per_ts_performance_info_t *OpenAPI_wlan_per_ts_performance_info_par
     cJSON *confidence = NULL;
     ts_start = cJSON_GetObjectItemCaseSensitive(wlan_per_ts_performance_infoJSON, "tsStart");
     if (!ts_start) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [ts_start]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [ts_start]");
         goto end;
     }
     if (!cJSON_IsString(ts_start) && !cJSON_IsNull(ts_start)) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [ts_start]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [ts_start]");
         goto end;
     }
 
     ts_duration = cJSON_GetObjectItemCaseSensitive(wlan_per_ts_performance_infoJSON, "tsDuration");
     if (!ts_duration) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [ts_duration]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [ts_duration]");
         goto end;
     }
     if (!cJSON_IsNumber(ts_duration)) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [ts_duration]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [ts_duration]");
         goto end;
     }
 
     rssi = cJSON_GetObjectItemCaseSensitive(wlan_per_ts_performance_infoJSON, "rssi");
     if (rssi) {
     if (!cJSON_IsNumber(rssi)) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [rssi]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [rssi]");
         goto end;
     }
     }
@@ -167,7 +167,7 @@ OpenAPI_wlan_per_ts_performance_info_t *OpenAPI_wlan_per_ts_performance_info_par
     rtt = cJSON_GetObjectItemCaseSensitive(wlan_per_ts_performance_infoJSON, "rtt");
     if (rtt) {
     if (!cJSON_IsNumber(rtt)) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [rtt]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [rtt]");
         goto end;
     }
     }
@@ -176,7 +176,7 @@ OpenAPI_wlan_per_ts_performance_info_t *OpenAPI_wlan_per_ts_performance_info_par
     if (traffic_info) {
     traffic_info_local_nonprim = OpenAPI_traffic_information_parseFromJSON(traffic_info);
     if (!traffic_info_local_nonprim) {
-        ogs_error("OpenAPI_traffic_information_parseFromJSON failed [traffic_info]");
+        log_error("OpenAPI_traffic_information_parseFromJSON failed [traffic_info]");
         goto end;
     }
     }
@@ -184,7 +184,7 @@ OpenAPI_wlan_per_ts_performance_info_t *OpenAPI_wlan_per_ts_performance_info_par
     number_of_ues = cJSON_GetObjectItemCaseSensitive(wlan_per_ts_performance_infoJSON, "numberOfUes");
     if (number_of_ues) {
     if (!cJSON_IsNumber(number_of_ues)) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [number_of_ues]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [number_of_ues]");
         goto end;
     }
     }
@@ -192,7 +192,7 @@ OpenAPI_wlan_per_ts_performance_info_t *OpenAPI_wlan_per_ts_performance_info_par
     confidence = cJSON_GetObjectItemCaseSensitive(wlan_per_ts_performance_infoJSON, "confidence");
     if (confidence) {
     if (!cJSON_IsNumber(confidence)) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [confidence]");
+        log_error("OpenAPI_wlan_per_ts_performance_info_parseFromJSON() failed [confidence]");
         goto end;
     }
     }
@@ -226,10 +226,10 @@ OpenAPI_wlan_per_ts_performance_info_t *OpenAPI_wlan_per_ts_performance_info_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_wlan_per_ts_performance_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed");
+        log_error("OpenAPI_wlan_per_ts_performance_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -237,14 +237,14 @@ OpenAPI_wlan_per_ts_performance_info_t *OpenAPI_wlan_per_ts_performance_info_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -22,7 +22,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
 )
 {
     OpenAPI_slice_info_for_ue_configuration_update_t *slice_info_for_ue_configuration_update_local_var = ogs_malloc(sizeof(OpenAPI_slice_info_for_ue_configuration_update_t));
-    ogs_assert(slice_info_for_ue_configuration_update_local_var);
+    log_assert(slice_info_for_ue_configuration_update_local_var);
 
     slice_info_for_ue_configuration_update_local_var->subscribed_nssai = subscribed_nssai;
     slice_info_for_ue_configuration_update_local_var->allowed_nssai_current_access = allowed_nssai_current_access;
@@ -94,7 +94,7 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
     OpenAPI_lnode_t *node = NULL;
 
     if (slice_info_for_ue_configuration_update == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [SliceInfoForUEConfigurationUpdate]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [SliceInfoForUEConfigurationUpdate]");
         return NULL;
     }
 
@@ -102,13 +102,13 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
     if (slice_info_for_ue_configuration_update->subscribed_nssai) {
     cJSON *subscribed_nssaiList = cJSON_AddArrayToObject(item, "subscribedNssai");
     if (subscribed_nssaiList == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [subscribed_nssai]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [subscribed_nssai]");
         goto end;
     }
     OpenAPI_list_for_each(slice_info_for_ue_configuration_update->subscribed_nssai, node) {
         cJSON *itemLocal = OpenAPI_subscribed_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [subscribed_nssai]");
+            log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [subscribed_nssai]");
             goto end;
         }
         cJSON_AddItemToArray(subscribed_nssaiList, itemLocal);
@@ -118,12 +118,12 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
     if (slice_info_for_ue_configuration_update->allowed_nssai_current_access) {
     cJSON *allowed_nssai_current_access_local_JSON = OpenAPI_allowed_nssai_convertToJSON(slice_info_for_ue_configuration_update->allowed_nssai_current_access);
     if (allowed_nssai_current_access_local_JSON == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [allowed_nssai_current_access]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [allowed_nssai_current_access]");
         goto end;
     }
     cJSON_AddItemToObject(item, "allowedNssaiCurrentAccess", allowed_nssai_current_access_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [allowed_nssai_current_access]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [allowed_nssai_current_access]");
         goto end;
     }
     }
@@ -131,19 +131,19 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
     if (slice_info_for_ue_configuration_update->allowed_nssai_other_access) {
     cJSON *allowed_nssai_other_access_local_JSON = OpenAPI_allowed_nssai_convertToJSON(slice_info_for_ue_configuration_update->allowed_nssai_other_access);
     if (allowed_nssai_other_access_local_JSON == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [allowed_nssai_other_access]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [allowed_nssai_other_access]");
         goto end;
     }
     cJSON_AddItemToObject(item, "allowedNssaiOtherAccess", allowed_nssai_other_access_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [allowed_nssai_other_access]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [allowed_nssai_other_access]");
         goto end;
     }
     }
 
     if (slice_info_for_ue_configuration_update->is_default_configured_snssai_ind) {
     if (cJSON_AddBoolToObject(item, "defaultConfiguredSnssaiInd", slice_info_for_ue_configuration_update->default_configured_snssai_ind) == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [default_configured_snssai_ind]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [default_configured_snssai_ind]");
         goto end;
     }
     }
@@ -151,13 +151,13 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
     if (slice_info_for_ue_configuration_update->requested_nssai) {
     cJSON *requested_nssaiList = cJSON_AddArrayToObject(item, "requestedNssai");
     if (requested_nssaiList == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [requested_nssai]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [requested_nssai]");
         goto end;
     }
     OpenAPI_list_for_each(slice_info_for_ue_configuration_update->requested_nssai, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [requested_nssai]");
+            log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [requested_nssai]");
             goto end;
         }
         cJSON_AddItemToArray(requested_nssaiList, itemLocal);
@@ -167,13 +167,13 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
     if (slice_info_for_ue_configuration_update->mapping_of_nssai) {
     cJSON *mapping_of_nssaiList = cJSON_AddArrayToObject(item, "mappingOfNssai");
     if (mapping_of_nssaiList == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [mapping_of_nssai]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [mapping_of_nssai]");
         goto end;
     }
     OpenAPI_list_for_each(slice_info_for_ue_configuration_update->mapping_of_nssai, node) {
         cJSON *itemLocal = OpenAPI_mapping_of_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [mapping_of_nssai]");
+            log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [mapping_of_nssai]");
             goto end;
         }
         cJSON_AddItemToArray(mapping_of_nssaiList, itemLocal);
@@ -182,14 +182,14 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
 
     if (slice_info_for_ue_configuration_update->is_ue_sup_nssrg_ind) {
     if (cJSON_AddBoolToObject(item, "ueSupNssrgInd", slice_info_for_ue_configuration_update->ue_sup_nssrg_ind) == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [ue_sup_nssrg_ind]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [ue_sup_nssrg_ind]");
         goto end;
     }
     }
 
     if (slice_info_for_ue_configuration_update->is_suppress_nssrg_ind) {
     if (cJSON_AddBoolToObject(item, "suppressNssrgInd", slice_info_for_ue_configuration_update->suppress_nssrg_ind) == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [suppress_nssrg_ind]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [suppress_nssrg_ind]");
         goto end;
     }
     }
@@ -197,13 +197,13 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
     if (slice_info_for_ue_configuration_update->rejected_nssai_ra) {
     cJSON *rejected_nssai_raList = cJSON_AddArrayToObject(item, "rejectedNssaiRa");
     if (rejected_nssai_raList == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [rejected_nssai_ra]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [rejected_nssai_ra]");
         goto end;
     }
     OpenAPI_list_for_each(slice_info_for_ue_configuration_update->rejected_nssai_ra, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [rejected_nssai_ra]");
+            log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [rejected_nssai_ra]");
             goto end;
         }
         cJSON_AddItemToArray(rejected_nssai_raList, itemLocal);
@@ -212,7 +212,7 @@ cJSON *OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(OpenAPI_slic
 
     if (slice_info_for_ue_configuration_update->is_nsag_supported) {
     if (cJSON_AddBoolToObject(item, "nsagSupported", slice_info_for_ue_configuration_update->nsag_supported) == NULL) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [nsag_supported]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed [nsag_supported]");
         goto end;
     }
     }
@@ -245,7 +245,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     if (subscribed_nssai) {
         cJSON *subscribed_nssai_local = NULL;
         if (!cJSON_IsArray(subscribed_nssai)) {
-            ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [subscribed_nssai]");
+            log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [subscribed_nssai]");
             goto end;
         }
 
@@ -253,12 +253,12 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
 
         cJSON_ArrayForEach(subscribed_nssai_local, subscribed_nssai) {
             if (!cJSON_IsObject(subscribed_nssai_local)) {
-                ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [subscribed_nssai]");
+                log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [subscribed_nssai]");
                 goto end;
             }
             OpenAPI_subscribed_snssai_t *subscribed_nssaiItem = OpenAPI_subscribed_snssai_parseFromJSON(subscribed_nssai_local);
             if (!subscribed_nssaiItem) {
-                ogs_error("No subscribed_nssaiItem");
+                log_error("No subscribed_nssaiItem");
                 goto end;
             }
             OpenAPI_list_add(subscribed_nssaiList, subscribed_nssaiItem);
@@ -269,7 +269,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     if (allowed_nssai_current_access) {
     allowed_nssai_current_access_local_nonprim = OpenAPI_allowed_nssai_parseFromJSON(allowed_nssai_current_access);
     if (!allowed_nssai_current_access_local_nonprim) {
-        ogs_error("OpenAPI_allowed_nssai_parseFromJSON failed [allowed_nssai_current_access]");
+        log_error("OpenAPI_allowed_nssai_parseFromJSON failed [allowed_nssai_current_access]");
         goto end;
     }
     }
@@ -278,7 +278,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     if (allowed_nssai_other_access) {
     allowed_nssai_other_access_local_nonprim = OpenAPI_allowed_nssai_parseFromJSON(allowed_nssai_other_access);
     if (!allowed_nssai_other_access_local_nonprim) {
-        ogs_error("OpenAPI_allowed_nssai_parseFromJSON failed [allowed_nssai_other_access]");
+        log_error("OpenAPI_allowed_nssai_parseFromJSON failed [allowed_nssai_other_access]");
         goto end;
     }
     }
@@ -286,7 +286,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     default_configured_snssai_ind = cJSON_GetObjectItemCaseSensitive(slice_info_for_ue_configuration_updateJSON, "defaultConfiguredSnssaiInd");
     if (default_configured_snssai_ind) {
     if (!cJSON_IsBool(default_configured_snssai_ind)) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [default_configured_snssai_ind]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [default_configured_snssai_ind]");
         goto end;
     }
     }
@@ -295,7 +295,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     if (requested_nssai) {
         cJSON *requested_nssai_local = NULL;
         if (!cJSON_IsArray(requested_nssai)) {
-            ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [requested_nssai]");
+            log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [requested_nssai]");
             goto end;
         }
 
@@ -303,12 +303,12 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
 
         cJSON_ArrayForEach(requested_nssai_local, requested_nssai) {
             if (!cJSON_IsObject(requested_nssai_local)) {
-                ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [requested_nssai]");
+                log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [requested_nssai]");
                 goto end;
             }
             OpenAPI_snssai_t *requested_nssaiItem = OpenAPI_snssai_parseFromJSON(requested_nssai_local);
             if (!requested_nssaiItem) {
-                ogs_error("No requested_nssaiItem");
+                log_error("No requested_nssaiItem");
                 goto end;
             }
             OpenAPI_list_add(requested_nssaiList, requested_nssaiItem);
@@ -319,7 +319,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     if (mapping_of_nssai) {
         cJSON *mapping_of_nssai_local = NULL;
         if (!cJSON_IsArray(mapping_of_nssai)) {
-            ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [mapping_of_nssai]");
+            log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [mapping_of_nssai]");
             goto end;
         }
 
@@ -327,12 +327,12 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
 
         cJSON_ArrayForEach(mapping_of_nssai_local, mapping_of_nssai) {
             if (!cJSON_IsObject(mapping_of_nssai_local)) {
-                ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [mapping_of_nssai]");
+                log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [mapping_of_nssai]");
                 goto end;
             }
             OpenAPI_mapping_of_snssai_t *mapping_of_nssaiItem = OpenAPI_mapping_of_snssai_parseFromJSON(mapping_of_nssai_local);
             if (!mapping_of_nssaiItem) {
-                ogs_error("No mapping_of_nssaiItem");
+                log_error("No mapping_of_nssaiItem");
                 goto end;
             }
             OpenAPI_list_add(mapping_of_nssaiList, mapping_of_nssaiItem);
@@ -342,7 +342,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     ue_sup_nssrg_ind = cJSON_GetObjectItemCaseSensitive(slice_info_for_ue_configuration_updateJSON, "ueSupNssrgInd");
     if (ue_sup_nssrg_ind) {
     if (!cJSON_IsBool(ue_sup_nssrg_ind)) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [ue_sup_nssrg_ind]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [ue_sup_nssrg_ind]");
         goto end;
     }
     }
@@ -350,7 +350,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     suppress_nssrg_ind = cJSON_GetObjectItemCaseSensitive(slice_info_for_ue_configuration_updateJSON, "suppressNssrgInd");
     if (suppress_nssrg_ind) {
     if (!cJSON_IsBool(suppress_nssrg_ind)) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [suppress_nssrg_ind]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [suppress_nssrg_ind]");
         goto end;
     }
     }
@@ -359,7 +359,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     if (rejected_nssai_ra) {
         cJSON *rejected_nssai_ra_local = NULL;
         if (!cJSON_IsArray(rejected_nssai_ra)) {
-            ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [rejected_nssai_ra]");
+            log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [rejected_nssai_ra]");
             goto end;
         }
 
@@ -367,12 +367,12 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
 
         cJSON_ArrayForEach(rejected_nssai_ra_local, rejected_nssai_ra) {
             if (!cJSON_IsObject(rejected_nssai_ra_local)) {
-                ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [rejected_nssai_ra]");
+                log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [rejected_nssai_ra]");
                 goto end;
             }
             OpenAPI_snssai_t *rejected_nssai_raItem = OpenAPI_snssai_parseFromJSON(rejected_nssai_ra_local);
             if (!rejected_nssai_raItem) {
-                ogs_error("No rejected_nssai_raItem");
+                log_error("No rejected_nssai_raItem");
                 goto end;
             }
             OpenAPI_list_add(rejected_nssai_raList, rejected_nssai_raItem);
@@ -382,7 +382,7 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     nsag_supported = cJSON_GetObjectItemCaseSensitive(slice_info_for_ue_configuration_updateJSON, "nsagSupported");
     if (nsag_supported) {
     if (!cJSON_IsBool(nsag_supported)) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [nsag_supported]");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_parseFromJSON() failed [nsag_supported]");
         goto end;
     }
     }
@@ -450,10 +450,10 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_slice_info_for_ue_configuration_update_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed");
+        log_error("OpenAPI_slice_info_for_ue_configuration_update_convertToJSON() failed");
         return NULL;
     }
 
@@ -461,14 +461,14 @@ OpenAPI_slice_info_for_ue_configuration_update_t *OpenAPI_slice_info_for_ue_conf
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

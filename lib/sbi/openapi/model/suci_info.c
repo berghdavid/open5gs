@@ -10,7 +10,7 @@ OpenAPI_suci_info_t *OpenAPI_suci_info_create(
 )
 {
     OpenAPI_suci_info_t *suci_info_local_var = ogs_malloc(sizeof(OpenAPI_suci_info_t));
-    ogs_assert(suci_info_local_var);
+    log_assert(suci_info_local_var);
 
     suci_info_local_var->routing_inds = routing_inds;
     suci_info_local_var->h_nw_pub_key_ids = h_nw_pub_key_ids;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_suci_info_convertToJSON(OpenAPI_suci_info_t *suci_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (suci_info == NULL) {
-        ogs_error("OpenAPI_suci_info_convertToJSON() failed [SuciInfo]");
+        log_error("OpenAPI_suci_info_convertToJSON() failed [SuciInfo]");
         return NULL;
     }
 
@@ -56,12 +56,12 @@ cJSON *OpenAPI_suci_info_convertToJSON(OpenAPI_suci_info_t *suci_info)
     if (suci_info->routing_inds) {
     cJSON *routing_indsList = cJSON_AddArrayToObject(item, "routingInds");
     if (routing_indsList == NULL) {
-        ogs_error("OpenAPI_suci_info_convertToJSON() failed [routing_inds]");
+        log_error("OpenAPI_suci_info_convertToJSON() failed [routing_inds]");
         goto end;
     }
     OpenAPI_list_for_each(suci_info->routing_inds, node) {
         if (cJSON_AddStringToObject(routing_indsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_suci_info_convertToJSON() failed [routing_inds]");
+            log_error("OpenAPI_suci_info_convertToJSON() failed [routing_inds]");
             goto end;
         }
     }
@@ -70,16 +70,16 @@ cJSON *OpenAPI_suci_info_convertToJSON(OpenAPI_suci_info_t *suci_info)
     if (suci_info->h_nw_pub_key_ids) {
     cJSON *h_nw_pub_key_idsList = cJSON_AddArrayToObject(item, "hNwPubKeyIds");
     if (h_nw_pub_key_idsList == NULL) {
-        ogs_error("OpenAPI_suci_info_convertToJSON() failed [h_nw_pub_key_ids]");
+        log_error("OpenAPI_suci_info_convertToJSON() failed [h_nw_pub_key_ids]");
         goto end;
     }
     OpenAPI_list_for_each(suci_info->h_nw_pub_key_ids, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_suci_info_convertToJSON() failed [h_nw_pub_key_ids]");
+            log_error("OpenAPI_suci_info_convertToJSON() failed [h_nw_pub_key_ids]");
             goto end;
         }
         if (cJSON_AddNumberToObject(h_nw_pub_key_idsList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_suci_info_convertToJSON() failed [h_nw_pub_key_ids]");
+            log_error("OpenAPI_suci_info_convertToJSON() failed [h_nw_pub_key_ids]");
             goto end;
         }
     }
@@ -101,7 +101,7 @@ OpenAPI_suci_info_t *OpenAPI_suci_info_parseFromJSON(cJSON *suci_infoJSON)
     if (routing_inds) {
         cJSON *routing_inds_local = NULL;
         if (!cJSON_IsArray(routing_inds)) {
-            ogs_error("OpenAPI_suci_info_parseFromJSON() failed [routing_inds]");
+            log_error("OpenAPI_suci_info_parseFromJSON() failed [routing_inds]");
             goto end;
         }
 
@@ -111,7 +111,7 @@ OpenAPI_suci_info_t *OpenAPI_suci_info_parseFromJSON(cJSON *suci_infoJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(routing_inds_local)) {
-                ogs_error("OpenAPI_suci_info_parseFromJSON() failed [routing_inds]");
+                log_error("OpenAPI_suci_info_parseFromJSON() failed [routing_inds]");
                 goto end;
             }
             OpenAPI_list_add(routing_indsList, ogs_strdup(routing_inds_local->valuestring));
@@ -122,7 +122,7 @@ OpenAPI_suci_info_t *OpenAPI_suci_info_parseFromJSON(cJSON *suci_infoJSON)
     if (h_nw_pub_key_ids) {
         cJSON *h_nw_pub_key_ids_local = NULL;
         if (!cJSON_IsArray(h_nw_pub_key_ids)) {
-            ogs_error("OpenAPI_suci_info_parseFromJSON() failed [h_nw_pub_key_ids]");
+            log_error("OpenAPI_suci_info_parseFromJSON() failed [h_nw_pub_key_ids]");
             goto end;
         }
 
@@ -132,12 +132,12 @@ OpenAPI_suci_info_t *OpenAPI_suci_info_parseFromJSON(cJSON *suci_infoJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(h_nw_pub_key_ids_local)) {
-                ogs_error("OpenAPI_suci_info_parseFromJSON() failed [h_nw_pub_key_ids]");
+                log_error("OpenAPI_suci_info_parseFromJSON() failed [h_nw_pub_key_ids]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_suci_info_parseFromJSON() failed [h_nw_pub_key_ids]");
+                log_error("OpenAPI_suci_info_parseFromJSON() failed [h_nw_pub_key_ids]");
                 goto end;
             }
             *localDouble = h_nw_pub_key_ids_local->valuedouble;
@@ -174,10 +174,10 @@ OpenAPI_suci_info_t *OpenAPI_suci_info_copy(OpenAPI_suci_info_t *dst, OpenAPI_su
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_suci_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_suci_info_convertToJSON() failed");
+        log_error("OpenAPI_suci_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -185,14 +185,14 @@ OpenAPI_suci_info_t *OpenAPI_suci_info_copy(OpenAPI_suci_info_t *dst, OpenAPI_su
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

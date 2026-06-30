@@ -13,7 +13,7 @@ OpenAPI_atom_t *OpenAPI_atom_create(
 )
 {
     OpenAPI_atom_t *atom_local_var = ogs_malloc(sizeof(OpenAPI_atom_t));
-    ogs_assert(atom_local_var);
+    log_assert(atom_local_var);
 
     atom_local_var->attr = attr;
     atom_local_var->is_value_null = is_value_null;
@@ -48,38 +48,38 @@ cJSON *OpenAPI_atom_convertToJSON(OpenAPI_atom_t *atom)
     OpenAPI_lnode_t *node = NULL;
 
     if (atom == NULL) {
-        ogs_error("OpenAPI_atom_convertToJSON() failed [Atom]");
+        log_error("OpenAPI_atom_convertToJSON() failed [Atom]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!atom->attr) {
-        ogs_error("OpenAPI_atom_convertToJSON() failed [attr]");
+        log_error("OpenAPI_atom_convertToJSON() failed [attr]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "attr", atom->attr) == NULL) {
-        ogs_error("OpenAPI_atom_convertToJSON() failed [attr]");
+        log_error("OpenAPI_atom_convertToJSON() failed [attr]");
         goto end;
     }
 
     if (!atom->value) {
-        ogs_error("OpenAPI_atom_convertToJSON() failed [value]");
+        log_error("OpenAPI_atom_convertToJSON() failed [value]");
         return NULL;
     }
     cJSON *value_object = OpenAPI_any_type_convertToJSON(atom->value);
     if (value_object == NULL) {
-        ogs_error("OpenAPI_atom_convertToJSON() failed [value]");
+        log_error("OpenAPI_atom_convertToJSON() failed [value]");
         goto end;
     }
     cJSON_AddItemToObject(item, "value", value_object);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_atom_convertToJSON() failed [value]");
+        log_error("OpenAPI_atom_convertToJSON() failed [value]");
         goto end;
     }
 
     if (atom->is_negative) {
     if (cJSON_AddBoolToObject(item, "negative", atom->negative) == NULL) {
-        ogs_error("OpenAPI_atom_convertToJSON() failed [negative]");
+        log_error("OpenAPI_atom_convertToJSON() failed [negative]");
         goto end;
     }
     }
@@ -98,17 +98,17 @@ OpenAPI_atom_t *OpenAPI_atom_parseFromJSON(cJSON *atomJSON)
     cJSON *negative = NULL;
     attr = cJSON_GetObjectItemCaseSensitive(atomJSON, "attr");
     if (!attr) {
-        ogs_error("OpenAPI_atom_parseFromJSON() failed [attr]");
+        log_error("OpenAPI_atom_parseFromJSON() failed [attr]");
         goto end;
     }
     if (!cJSON_IsString(attr)) {
-        ogs_error("OpenAPI_atom_parseFromJSON() failed [attr]");
+        log_error("OpenAPI_atom_parseFromJSON() failed [attr]");
         goto end;
     }
 
     value = cJSON_GetObjectItemCaseSensitive(atomJSON, "value");
     if (!value) {
-        ogs_error("OpenAPI_atom_parseFromJSON() failed [value]");
+        log_error("OpenAPI_atom_parseFromJSON() failed [value]");
         goto end;
     }
     value_local_object = OpenAPI_any_type_parseFromJSON(value);
@@ -116,7 +116,7 @@ OpenAPI_atom_t *OpenAPI_atom_parseFromJSON(cJSON *atomJSON)
     negative = cJSON_GetObjectItemCaseSensitive(atomJSON, "negative");
     if (negative) {
     if (!cJSON_IsBool(negative)) {
-        ogs_error("OpenAPI_atom_parseFromJSON() failed [negative]");
+        log_error("OpenAPI_atom_parseFromJSON() failed [negative]");
         goto end;
     }
     }
@@ -143,10 +143,10 @@ OpenAPI_atom_t *OpenAPI_atom_copy(OpenAPI_atom_t *dst, OpenAPI_atom_t *src)
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_atom_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_atom_convertToJSON() failed");
+        log_error("OpenAPI_atom_convertToJSON() failed");
         return NULL;
     }
 
@@ -154,14 +154,14 @@ OpenAPI_atom_t *OpenAPI_atom_copy(OpenAPI_atom_t *dst, OpenAPI_atom_t *src)
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

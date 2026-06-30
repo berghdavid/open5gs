@@ -12,7 +12,7 @@ OpenAPI_minor_location_qo_s_t *OpenAPI_minor_location_qo_s_create(
 )
 {
     OpenAPI_minor_location_qo_s_t *minor_location_qo_s_local_var = ogs_malloc(sizeof(OpenAPI_minor_location_qo_s_t));
-    ogs_assert(minor_location_qo_s_local_var);
+    log_assert(minor_location_qo_s_local_var);
 
     minor_location_qo_s_local_var->is_h_accuracy = is_h_accuracy;
     minor_location_qo_s_local_var->h_accuracy = h_accuracy;
@@ -38,21 +38,21 @@ cJSON *OpenAPI_minor_location_qo_s_convertToJSON(OpenAPI_minor_location_qo_s_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (minor_location_qo_s == NULL) {
-        ogs_error("OpenAPI_minor_location_qo_s_convertToJSON() failed [MinorLocationQoS]");
+        log_error("OpenAPI_minor_location_qo_s_convertToJSON() failed [MinorLocationQoS]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (minor_location_qo_s->is_h_accuracy) {
     if (cJSON_AddNumberToObject(item, "hAccuracy", minor_location_qo_s->h_accuracy) == NULL) {
-        ogs_error("OpenAPI_minor_location_qo_s_convertToJSON() failed [h_accuracy]");
+        log_error("OpenAPI_minor_location_qo_s_convertToJSON() failed [h_accuracy]");
         goto end;
     }
     }
 
     if (minor_location_qo_s->is_v_accuracy) {
     if (cJSON_AddNumberToObject(item, "vAccuracy", minor_location_qo_s->v_accuracy) == NULL) {
-        ogs_error("OpenAPI_minor_location_qo_s_convertToJSON() failed [v_accuracy]");
+        log_error("OpenAPI_minor_location_qo_s_convertToJSON() failed [v_accuracy]");
         goto end;
     }
     }
@@ -70,7 +70,7 @@ OpenAPI_minor_location_qo_s_t *OpenAPI_minor_location_qo_s_parseFromJSON(cJSON *
     h_accuracy = cJSON_GetObjectItemCaseSensitive(minor_location_qo_sJSON, "hAccuracy");
     if (h_accuracy) {
     if (!cJSON_IsNumber(h_accuracy)) {
-        ogs_error("OpenAPI_minor_location_qo_s_parseFromJSON() failed [h_accuracy]");
+        log_error("OpenAPI_minor_location_qo_s_parseFromJSON() failed [h_accuracy]");
         goto end;
     }
     }
@@ -78,7 +78,7 @@ OpenAPI_minor_location_qo_s_t *OpenAPI_minor_location_qo_s_parseFromJSON(cJSON *
     v_accuracy = cJSON_GetObjectItemCaseSensitive(minor_location_qo_sJSON, "vAccuracy");
     if (v_accuracy) {
     if (!cJSON_IsNumber(v_accuracy)) {
-        ogs_error("OpenAPI_minor_location_qo_s_parseFromJSON() failed [v_accuracy]");
+        log_error("OpenAPI_minor_location_qo_s_parseFromJSON() failed [v_accuracy]");
         goto end;
     }
     }
@@ -100,10 +100,10 @@ OpenAPI_minor_location_qo_s_t *OpenAPI_minor_location_qo_s_copy(OpenAPI_minor_lo
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_minor_location_qo_s_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_minor_location_qo_s_convertToJSON() failed");
+        log_error("OpenAPI_minor_location_qo_s_convertToJSON() failed");
         return NULL;
     }
 
@@ -111,14 +111,14 @@ OpenAPI_minor_location_qo_s_t *OpenAPI_minor_location_qo_s_copy(OpenAPI_minor_lo
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

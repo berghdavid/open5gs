@@ -10,7 +10,7 @@ OpenAPI_failure_event_info_t *OpenAPI_failure_event_info_create(
 )
 {
     OpenAPI_failure_event_info_t *failure_event_info_local_var = ogs_malloc(sizeof(OpenAPI_failure_event_info_t));
-    ogs_assert(failure_event_info_local_var);
+    log_assert(failure_event_info_local_var);
 
     failure_event_info_local_var->event = event;
     failure_event_info_local_var->failure_code = failure_code;
@@ -42,38 +42,38 @@ cJSON *OpenAPI_failure_event_info_convertToJSON(OpenAPI_failure_event_info_t *fa
     OpenAPI_lnode_t *node = NULL;
 
     if (failure_event_info == NULL) {
-        ogs_error("OpenAPI_failure_event_info_convertToJSON() failed [FailureEventInfo]");
+        log_error("OpenAPI_failure_event_info_convertToJSON() failed [FailureEventInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!failure_event_info->event) {
-        ogs_error("OpenAPI_failure_event_info_convertToJSON() failed [event]");
+        log_error("OpenAPI_failure_event_info_convertToJSON() failed [event]");
         return NULL;
     }
     cJSON *event_local_JSON = OpenAPI_nwdaf_event_convertToJSON(failure_event_info->event);
     if (event_local_JSON == NULL) {
-        ogs_error("OpenAPI_failure_event_info_convertToJSON() failed [event]");
+        log_error("OpenAPI_failure_event_info_convertToJSON() failed [event]");
         goto end;
     }
     cJSON_AddItemToObject(item, "event", event_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_failure_event_info_convertToJSON() failed [event]");
+        log_error("OpenAPI_failure_event_info_convertToJSON() failed [event]");
         goto end;
     }
 
     if (!failure_event_info->failure_code) {
-        ogs_error("OpenAPI_failure_event_info_convertToJSON() failed [failure_code]");
+        log_error("OpenAPI_failure_event_info_convertToJSON() failed [failure_code]");
         return NULL;
     }
     cJSON *failure_code_local_JSON = OpenAPI_nwdaf_failure_code_convertToJSON(failure_event_info->failure_code);
     if (failure_code_local_JSON == NULL) {
-        ogs_error("OpenAPI_failure_event_info_convertToJSON() failed [failure_code]");
+        log_error("OpenAPI_failure_event_info_convertToJSON() failed [failure_code]");
         goto end;
     }
     cJSON_AddItemToObject(item, "failureCode", failure_code_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_failure_event_info_convertToJSON() failed [failure_code]");
+        log_error("OpenAPI_failure_event_info_convertToJSON() failed [failure_code]");
         goto end;
     }
 
@@ -91,23 +91,23 @@ OpenAPI_failure_event_info_t *OpenAPI_failure_event_info_parseFromJSON(cJSON *fa
     OpenAPI_nwdaf_failure_code_t *failure_code_local_nonprim = NULL;
     event = cJSON_GetObjectItemCaseSensitive(failure_event_infoJSON, "event");
     if (!event) {
-        ogs_error("OpenAPI_failure_event_info_parseFromJSON() failed [event]");
+        log_error("OpenAPI_failure_event_info_parseFromJSON() failed [event]");
         goto end;
     }
     event_local_nonprim = OpenAPI_nwdaf_event_parseFromJSON(event);
     if (!event_local_nonprim) {
-        ogs_error("OpenAPI_nwdaf_event_parseFromJSON failed [event]");
+        log_error("OpenAPI_nwdaf_event_parseFromJSON failed [event]");
         goto end;
     }
 
     failure_code = cJSON_GetObjectItemCaseSensitive(failure_event_infoJSON, "failureCode");
     if (!failure_code) {
-        ogs_error("OpenAPI_failure_event_info_parseFromJSON() failed [failure_code]");
+        log_error("OpenAPI_failure_event_info_parseFromJSON() failed [failure_code]");
         goto end;
     }
     failure_code_local_nonprim = OpenAPI_nwdaf_failure_code_parseFromJSON(failure_code);
     if (!failure_code_local_nonprim) {
-        ogs_error("OpenAPI_nwdaf_failure_code_parseFromJSON failed [failure_code]");
+        log_error("OpenAPI_nwdaf_failure_code_parseFromJSON failed [failure_code]");
         goto end;
     }
 
@@ -134,10 +134,10 @@ OpenAPI_failure_event_info_t *OpenAPI_failure_event_info_copy(OpenAPI_failure_ev
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_failure_event_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_failure_event_info_convertToJSON() failed");
+        log_error("OpenAPI_failure_event_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -145,14 +145,14 @@ OpenAPI_failure_event_info_t *OpenAPI_failure_event_info_copy(OpenAPI_failure_ev
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

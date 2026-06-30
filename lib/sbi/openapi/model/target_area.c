@@ -12,7 +12,7 @@ OpenAPI_target_area_t *OpenAPI_target_area_create(
 )
 {
     OpenAPI_target_area_t *target_area_local_var = ogs_malloc(sizeof(OpenAPI_target_area_t));
-    ogs_assert(target_area_local_var);
+    log_assert(target_area_local_var);
 
     target_area_local_var->ta_list = ta_list;
     target_area_local_var->tai_range_list = tai_range_list;
@@ -52,7 +52,7 @@ cJSON *OpenAPI_target_area_convertToJSON(OpenAPI_target_area_t *target_area)
     OpenAPI_lnode_t *node = NULL;
 
     if (target_area == NULL) {
-        ogs_error("OpenAPI_target_area_convertToJSON() failed [TargetArea]");
+        log_error("OpenAPI_target_area_convertToJSON() failed [TargetArea]");
         return NULL;
     }
 
@@ -60,13 +60,13 @@ cJSON *OpenAPI_target_area_convertToJSON(OpenAPI_target_area_t *target_area)
     if (target_area->ta_list) {
     cJSON *ta_listList = cJSON_AddArrayToObject(item, "taList");
     if (ta_listList == NULL) {
-        ogs_error("OpenAPI_target_area_convertToJSON() failed [ta_list]");
+        log_error("OpenAPI_target_area_convertToJSON() failed [ta_list]");
         goto end;
     }
     OpenAPI_list_for_each(target_area->ta_list, node) {
         cJSON *itemLocal = OpenAPI_tai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_target_area_convertToJSON() failed [ta_list]");
+            log_error("OpenAPI_target_area_convertToJSON() failed [ta_list]");
             goto end;
         }
         cJSON_AddItemToArray(ta_listList, itemLocal);
@@ -76,13 +76,13 @@ cJSON *OpenAPI_target_area_convertToJSON(OpenAPI_target_area_t *target_area)
     if (target_area->tai_range_list) {
     cJSON *tai_range_listList = cJSON_AddArrayToObject(item, "taiRangeList");
     if (tai_range_listList == NULL) {
-        ogs_error("OpenAPI_target_area_convertToJSON() failed [tai_range_list]");
+        log_error("OpenAPI_target_area_convertToJSON() failed [tai_range_list]");
         goto end;
     }
     OpenAPI_list_for_each(target_area->tai_range_list, node) {
         cJSON *itemLocal = OpenAPI_tai_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_target_area_convertToJSON() failed [tai_range_list]");
+            log_error("OpenAPI_target_area_convertToJSON() failed [tai_range_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_range_listList, itemLocal);
@@ -91,7 +91,7 @@ cJSON *OpenAPI_target_area_convertToJSON(OpenAPI_target_area_t *target_area)
 
     if (target_area->is_any_ta) {
     if (cJSON_AddBoolToObject(item, "anyTa", target_area->any_ta) == NULL) {
-        ogs_error("OpenAPI_target_area_convertToJSON() failed [any_ta]");
+        log_error("OpenAPI_target_area_convertToJSON() failed [any_ta]");
         goto end;
     }
     }
@@ -113,7 +113,7 @@ OpenAPI_target_area_t *OpenAPI_target_area_parseFromJSON(cJSON *target_areaJSON)
     if (ta_list) {
         cJSON *ta_list_local = NULL;
         if (!cJSON_IsArray(ta_list)) {
-            ogs_error("OpenAPI_target_area_parseFromJSON() failed [ta_list]");
+            log_error("OpenAPI_target_area_parseFromJSON() failed [ta_list]");
             goto end;
         }
 
@@ -121,12 +121,12 @@ OpenAPI_target_area_t *OpenAPI_target_area_parseFromJSON(cJSON *target_areaJSON)
 
         cJSON_ArrayForEach(ta_list_local, ta_list) {
             if (!cJSON_IsObject(ta_list_local)) {
-                ogs_error("OpenAPI_target_area_parseFromJSON() failed [ta_list]");
+                log_error("OpenAPI_target_area_parseFromJSON() failed [ta_list]");
                 goto end;
             }
             OpenAPI_tai_t *ta_listItem = OpenAPI_tai_parseFromJSON(ta_list_local);
             if (!ta_listItem) {
-                ogs_error("No ta_listItem");
+                log_error("No ta_listItem");
                 goto end;
             }
             OpenAPI_list_add(ta_listList, ta_listItem);
@@ -137,7 +137,7 @@ OpenAPI_target_area_t *OpenAPI_target_area_parseFromJSON(cJSON *target_areaJSON)
     if (tai_range_list) {
         cJSON *tai_range_list_local = NULL;
         if (!cJSON_IsArray(tai_range_list)) {
-            ogs_error("OpenAPI_target_area_parseFromJSON() failed [tai_range_list]");
+            log_error("OpenAPI_target_area_parseFromJSON() failed [tai_range_list]");
             goto end;
         }
 
@@ -145,12 +145,12 @@ OpenAPI_target_area_t *OpenAPI_target_area_parseFromJSON(cJSON *target_areaJSON)
 
         cJSON_ArrayForEach(tai_range_list_local, tai_range_list) {
             if (!cJSON_IsObject(tai_range_list_local)) {
-                ogs_error("OpenAPI_target_area_parseFromJSON() failed [tai_range_list]");
+                log_error("OpenAPI_target_area_parseFromJSON() failed [tai_range_list]");
                 goto end;
             }
             OpenAPI_tai_range_t *tai_range_listItem = OpenAPI_tai_range_parseFromJSON(tai_range_list_local);
             if (!tai_range_listItem) {
-                ogs_error("No tai_range_listItem");
+                log_error("No tai_range_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_range_listList, tai_range_listItem);
@@ -160,7 +160,7 @@ OpenAPI_target_area_t *OpenAPI_target_area_parseFromJSON(cJSON *target_areaJSON)
     any_ta = cJSON_GetObjectItemCaseSensitive(target_areaJSON, "anyTa");
     if (any_ta) {
     if (!cJSON_IsBool(any_ta)) {
-        ogs_error("OpenAPI_target_area_parseFromJSON() failed [any_ta]");
+        log_error("OpenAPI_target_area_parseFromJSON() failed [any_ta]");
         goto end;
     }
     }
@@ -196,10 +196,10 @@ OpenAPI_target_area_t *OpenAPI_target_area_copy(OpenAPI_target_area_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_target_area_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_target_area_convertToJSON() failed");
+        log_error("OpenAPI_target_area_convertToJSON() failed");
         return NULL;
     }
 
@@ -207,14 +207,14 @@ OpenAPI_target_area_t *OpenAPI_target_area_copy(OpenAPI_target_area_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

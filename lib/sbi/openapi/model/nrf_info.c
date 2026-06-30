@@ -48,7 +48,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_create(
 )
 {
     OpenAPI_nrf_info_t *nrf_info_local_var = ogs_malloc(sizeof(OpenAPI_nrf_info_t));
-    ogs_assert(nrf_info_local_var);
+    log_assert(nrf_info_local_var);
 
     nrf_info_local_var->served_udr_info = served_udr_info;
     nrf_info_local_var->served_udr_info_list = served_udr_info_list;
@@ -510,7 +510,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (nrf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [NrfInfo]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [NrfInfo]");
         return NULL;
     }
 
@@ -518,7 +518,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_udr_info) {
     cJSON *served_udr_info = cJSON_AddObjectToObject(item, "servedUdrInfo");
     if (served_udr_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info]");
         goto end;
     }
     cJSON *localMapObject = served_udr_info;
@@ -526,18 +526,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_udr_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_udr_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -548,7 +548,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_udr_info_list) {
     cJSON *served_udr_info_list = cJSON_AddObjectToObject(item, "servedUdrInfoList");
     if (served_udr_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_udr_info_list;
@@ -556,18 +556,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_udr_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udr_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_udr_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -578,7 +578,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_udm_info) {
     cJSON *served_udm_info = cJSON_AddObjectToObject(item, "servedUdmInfo");
     if (served_udm_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info]");
         goto end;
     }
     cJSON *localMapObject = served_udm_info;
@@ -586,18 +586,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_udm_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_udm_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -608,7 +608,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_udm_info_list) {
     cJSON *served_udm_info_list = cJSON_AddObjectToObject(item, "servedUdmInfoList");
     if (served_udm_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_udm_info_list;
@@ -616,18 +616,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_udm_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udm_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_udm_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -638,7 +638,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_ausf_info) {
     cJSON *served_ausf_info = cJSON_AddObjectToObject(item, "servedAusfInfo");
     if (served_ausf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info]");
         goto end;
     }
     cJSON *localMapObject = served_ausf_info;
@@ -646,18 +646,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_ausf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_ausf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -668,7 +668,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_ausf_info_list) {
     cJSON *served_ausf_info_list = cJSON_AddObjectToObject(item, "servedAusfInfoList");
     if (served_ausf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_ausf_info_list;
@@ -676,18 +676,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_ausf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_ausf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_ausf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -698,7 +698,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_amf_info) {
     cJSON *served_amf_info = cJSON_AddObjectToObject(item, "servedAmfInfo");
     if (served_amf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info]");
         goto end;
     }
     cJSON *localMapObject = served_amf_info;
@@ -706,18 +706,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_amf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_amf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -728,7 +728,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_amf_info_list) {
     cJSON *served_amf_info_list = cJSON_AddObjectToObject(item, "servedAmfInfoList");
     if (served_amf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_amf_info_list;
@@ -736,18 +736,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_amf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_amf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_amf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -758,7 +758,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_smf_info) {
     cJSON *served_smf_info = cJSON_AddObjectToObject(item, "servedSmfInfo");
     if (served_smf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info]");
         goto end;
     }
     cJSON *localMapObject = served_smf_info;
@@ -766,18 +766,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_smf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_smf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -788,7 +788,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_smf_info_list) {
     cJSON *served_smf_info_list = cJSON_AddObjectToObject(item, "servedSmfInfoList");
     if (served_smf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_smf_info_list;
@@ -796,18 +796,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_smf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_smf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_smf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -818,7 +818,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_upf_info) {
     cJSON *served_upf_info = cJSON_AddObjectToObject(item, "servedUpfInfo");
     if (served_upf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info]");
         goto end;
     }
     cJSON *localMapObject = served_upf_info;
@@ -826,18 +826,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_upf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_upf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -848,7 +848,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_upf_info_list) {
     cJSON *served_upf_info_list = cJSON_AddObjectToObject(item, "servedUpfInfoList");
     if (served_upf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_upf_info_list;
@@ -856,18 +856,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_upf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_upf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_upf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -878,7 +878,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_pcf_info) {
     cJSON *served_pcf_info = cJSON_AddObjectToObject(item, "servedPcfInfo");
     if (served_pcf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info]");
         goto end;
     }
     cJSON *localMapObject = served_pcf_info;
@@ -886,18 +886,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_pcf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_pcf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -908,7 +908,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_pcf_info_list) {
     cJSON *served_pcf_info_list = cJSON_AddObjectToObject(item, "servedPcfInfoList");
     if (served_pcf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_pcf_info_list;
@@ -916,18 +916,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_pcf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_pcf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -938,7 +938,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_bsf_info) {
     cJSON *served_bsf_info = cJSON_AddObjectToObject(item, "servedBsfInfo");
     if (served_bsf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info]");
         goto end;
     }
     cJSON *localMapObject = served_bsf_info;
@@ -946,18 +946,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_bsf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -968,7 +968,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_bsf_info_list) {
     cJSON *served_bsf_info_list = cJSON_AddObjectToObject(item, "servedBsfInfoList");
     if (served_bsf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_bsf_info_list;
@@ -976,18 +976,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_bsf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_bsf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -998,7 +998,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_chf_info) {
     cJSON *served_chf_info = cJSON_AddObjectToObject(item, "servedChfInfo");
     if (served_chf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info]");
         goto end;
     }
     cJSON *localMapObject = served_chf_info;
@@ -1006,18 +1006,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_chf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_chf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1028,7 +1028,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_chf_info_list) {
     cJSON *served_chf_info_list = cJSON_AddObjectToObject(item, "servedChfInfoList");
     if (served_chf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_chf_info_list;
@@ -1036,18 +1036,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_chf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_chf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_chf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1058,7 +1058,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_nef_info) {
     cJSON *served_nef_info = cJSON_AddObjectToObject(item, "servedNefInfo");
     if (served_nef_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nef_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nef_info]");
         goto end;
     }
     cJSON *localMapObject = served_nef_info;
@@ -1066,18 +1066,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_nef_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nef_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nef_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nef_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nef_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_nef_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1088,7 +1088,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_nwdaf_info) {
     cJSON *served_nwdaf_info = cJSON_AddObjectToObject(item, "servedNwdafInfo");
     if (served_nwdaf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info]");
         goto end;
     }
     cJSON *localMapObject = served_nwdaf_info;
@@ -1096,18 +1096,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_nwdaf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_nwdaf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1118,7 +1118,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_nwdaf_info_list) {
     cJSON *served_nwdaf_info_list = cJSON_AddObjectToObject(item, "servedNwdafInfoList");
     if (served_nwdaf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_nwdaf_info_list;
@@ -1126,18 +1126,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_nwdaf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nwdaf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nwdaf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1148,7 +1148,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_pcscf_info_list) {
     cJSON *served_pcscf_info_list = cJSON_AddObjectToObject(item, "servedPcscfInfoList");
     if (served_pcscf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcscf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcscf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_pcscf_info_list;
@@ -1156,18 +1156,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_pcscf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcscf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcscf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcscf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_pcscf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_pcscf_info_list_value_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1178,7 +1178,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_gmlc_info) {
     cJSON *served_gmlc_info = cJSON_AddObjectToObject(item, "servedGmlcInfo");
     if (served_gmlc_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_gmlc_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_gmlc_info]");
         goto end;
     }
     cJSON *localMapObject = served_gmlc_info;
@@ -1186,18 +1186,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_gmlc_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_gmlc_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_gmlc_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_gmlc_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_gmlc_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1208,7 +1208,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_lmf_info) {
     cJSON *served_lmf_info = cJSON_AddObjectToObject(item, "servedLmfInfo");
     if (served_lmf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_lmf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_lmf_info]");
         goto end;
     }
     cJSON *localMapObject = served_lmf_info;
@@ -1216,18 +1216,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_lmf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_lmf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_lmf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_lmf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_lmf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_lmf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1238,7 +1238,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_nf_info) {
     cJSON *served_nf_info = cJSON_AddObjectToObject(item, "servedNfInfo");
     if (served_nf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nf_info]");
         goto end;
     }
     cJSON *localMapObject = served_nf_info;
@@ -1246,18 +1246,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_nf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1268,7 +1268,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_hss_info_list) {
     cJSON *served_hss_info_list = cJSON_AddObjectToObject(item, "servedHssInfoList");
     if (served_hss_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_hss_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_hss_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_hss_info_list;
@@ -1276,18 +1276,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_hss_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_hss_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_hss_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_hss_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_hss_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_hss_info_list_value_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1298,7 +1298,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_udsf_info) {
     cJSON *served_udsf_info = cJSON_AddObjectToObject(item, "servedUdsfInfo");
     if (served_udsf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info]");
         goto end;
     }
     cJSON *localMapObject = served_udsf_info;
@@ -1306,18 +1306,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_udsf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_udsf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1328,7 +1328,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_udsf_info_list) {
     cJSON *served_udsf_info_list = cJSON_AddObjectToObject(item, "servedUdsfInfoList");
     if (served_udsf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_udsf_info_list;
@@ -1336,18 +1336,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_udsf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_udsf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_udsf_info_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1358,7 +1358,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_scp_info_list) {
     cJSON *served_scp_info_list = cJSON_AddObjectToObject(item, "servedScpInfoList");
     if (served_scp_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_scp_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_scp_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_scp_info_list;
@@ -1366,18 +1366,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_scp_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_scp_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_scp_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_scp_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_scp_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_scp_info_list_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1388,7 +1388,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_sepp_info_list) {
     cJSON *served_sepp_info_list = cJSON_AddObjectToObject(item, "servedSeppInfoList");
     if (served_sepp_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_sepp_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_sepp_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_sepp_info_list;
@@ -1396,18 +1396,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_sepp_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_sepp_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_sepp_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_sepp_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_sepp_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_sepp_info_list_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1418,7 +1418,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_aanf_info_list) {
     cJSON *served_aanf_info_list = cJSON_AddObjectToObject(item, "servedAanfInfoList");
     if (served_aanf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_aanf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_aanf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_aanf_info_list;
@@ -1426,18 +1426,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_aanf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_aanf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_aanf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_aanf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_aanf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1448,7 +1448,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served5g_ddnmf_info) {
     cJSON *served5g_ddnmf_info = cJSON_AddObjectToObject(item, "served5gDdnmfInfo");
     if (served5g_ddnmf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served5g_ddnmf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served5g_ddnmf_info]");
         goto end;
     }
     cJSON *localMapObject = served5g_ddnmf_info;
@@ -1456,18 +1456,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served5g_ddnmf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served5g_ddnmf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served5g_ddnmf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served5g_ddnmf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served5g_ddnmf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_model_5_g_ddnmf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1478,7 +1478,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_mfaf_info_list) {
     cJSON *served_mfaf_info_list = cJSON_AddObjectToObject(item, "servedMfafInfoList");
     if (served_mfaf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mfaf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mfaf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_mfaf_info_list;
@@ -1486,18 +1486,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_mfaf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mfaf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mfaf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mfaf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mfaf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_mfaf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1508,7 +1508,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_easdf_info_list) {
     cJSON *served_easdf_info_list = cJSON_AddObjectToObject(item, "servedEasdfInfoList");
     if (served_easdf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_easdf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_easdf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_easdf_info_list;
@@ -1516,18 +1516,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_easdf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_easdf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_easdf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_easdf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_easdf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_easdf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1538,7 +1538,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_dccf_info_list) {
     cJSON *served_dccf_info_list = cJSON_AddObjectToObject(item, "servedDccfInfoList");
     if (served_dccf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_dccf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_dccf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_dccf_info_list;
@@ -1546,18 +1546,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_dccf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_dccf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_dccf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_dccf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_dccf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_dccf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1568,7 +1568,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_mb_smf_info_list) {
     cJSON *served_mb_smf_info_list = cJSON_AddObjectToObject(item, "servedMbSmfInfoList");
     if (served_mb_smf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_smf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_smf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_mb_smf_info_list;
@@ -1576,18 +1576,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_mb_smf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_smf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_smf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_smf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_smf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nrf_info_served_mb_smf_info_list_value_value_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1598,7 +1598,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_tsctsf_info_list) {
     cJSON *served_tsctsf_info_list = cJSON_AddObjectToObject(item, "servedTsctsfInfoList");
     if (served_tsctsf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_tsctsf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_tsctsf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_tsctsf_info_list;
@@ -1606,18 +1606,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_tsctsf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_tsctsf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_tsctsf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_tsctsf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_tsctsf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_tsctsf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1628,7 +1628,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_mb_upf_info_list) {
     cJSON *served_mb_upf_info_list = cJSON_AddObjectToObject(item, "servedMbUpfInfoList");
     if (served_mb_upf_info_list == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_upf_info_list]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_upf_info_list]");
         goto end;
     }
     cJSON *localMapObject = served_mb_upf_info_list;
@@ -1636,18 +1636,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_mb_upf_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_upf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_upf_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_upf_info_list]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_mb_upf_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_mb_upf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1658,7 +1658,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_trust_af_info) {
     cJSON *served_trust_af_info = cJSON_AddObjectToObject(item, "servedTrustAfInfo");
     if (served_trust_af_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_trust_af_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_trust_af_info]");
         goto end;
     }
     cJSON *localMapObject = served_trust_af_info;
@@ -1666,18 +1666,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_trust_af_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_trust_af_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_trust_af_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_trust_af_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_trust_af_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_trust_af_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1688,7 +1688,7 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
     if (nrf_info->served_nssaaf_info) {
     cJSON *served_nssaaf_info = cJSON_AddObjectToObject(item, "servedNssaafInfo");
     if (served_nssaaf_info == NULL) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nssaaf_info]");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nssaaf_info]");
         goto end;
     }
     cJSON *localMapObject = served_nssaaf_info;
@@ -1696,18 +1696,18 @@ cJSON *OpenAPI_nrf_info_convertToJSON(OpenAPI_nrf_info_t *nrf_info)
         OpenAPI_list_for_each(nrf_info->served_nssaaf_info, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nssaaf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nssaaf_info]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [served_nssaaf_info]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [served_nssaaf_info]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_nssaaf_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -1807,7 +1807,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_udr_info) {
         cJSON *served_udr_info_local_map = NULL;
         if (!cJSON_IsObject(served_udr_info) && !cJSON_IsNull(served_udr_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udr_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udr_info]");
             goto end;
         }
         if (cJSON_IsObject(served_udr_info)) {
@@ -1821,7 +1821,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_udr_infoList, localMapKeyPair);
@@ -1833,7 +1833,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_udr_info_list) {
         cJSON *served_udr_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_udr_info_list) && !cJSON_IsNull(served_udr_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udr_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udr_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_udr_info_list)) {
@@ -1849,7 +1849,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_udr_info_listList, localMapKeyPair);
@@ -1861,7 +1861,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_udm_info) {
         cJSON *served_udm_info_local_map = NULL;
         if (!cJSON_IsObject(served_udm_info) && !cJSON_IsNull(served_udm_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udm_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udm_info]");
             goto end;
         }
         if (cJSON_IsObject(served_udm_info)) {
@@ -1875,7 +1875,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_udm_infoList, localMapKeyPair);
@@ -1887,7 +1887,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_udm_info_list) {
         cJSON *served_udm_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_udm_info_list) && !cJSON_IsNull(served_udm_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udm_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udm_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_udm_info_list)) {
@@ -1903,7 +1903,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_udm_info_listList, localMapKeyPair);
@@ -1915,7 +1915,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_ausf_info) {
         cJSON *served_ausf_info_local_map = NULL;
         if (!cJSON_IsObject(served_ausf_info) && !cJSON_IsNull(served_ausf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_ausf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_ausf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_ausf_info)) {
@@ -1929,7 +1929,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_ausf_infoList, localMapKeyPair);
@@ -1941,7 +1941,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_ausf_info_list) {
         cJSON *served_ausf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_ausf_info_list) && !cJSON_IsNull(served_ausf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_ausf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_ausf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_ausf_info_list)) {
@@ -1957,7 +1957,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_ausf_info_listList, localMapKeyPair);
@@ -1969,7 +1969,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_amf_info) {
         cJSON *served_amf_info_local_map = NULL;
         if (!cJSON_IsObject(served_amf_info) && !cJSON_IsNull(served_amf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_amf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_amf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_amf_info)) {
@@ -1983,7 +1983,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_amf_infoList, localMapKeyPair);
@@ -1995,7 +1995,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_amf_info_list) {
         cJSON *served_amf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_amf_info_list) && !cJSON_IsNull(served_amf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_amf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_amf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_amf_info_list)) {
@@ -2011,7 +2011,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_amf_info_listList, localMapKeyPair);
@@ -2023,7 +2023,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_smf_info) {
         cJSON *served_smf_info_local_map = NULL;
         if (!cJSON_IsObject(served_smf_info) && !cJSON_IsNull(served_smf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_smf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_smf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_smf_info)) {
@@ -2037,7 +2037,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_smf_infoList, localMapKeyPair);
@@ -2049,7 +2049,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_smf_info_list) {
         cJSON *served_smf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_smf_info_list) && !cJSON_IsNull(served_smf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_smf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_smf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_smf_info_list)) {
@@ -2065,7 +2065,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_smf_info_listList, localMapKeyPair);
@@ -2077,7 +2077,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_upf_info) {
         cJSON *served_upf_info_local_map = NULL;
         if (!cJSON_IsObject(served_upf_info) && !cJSON_IsNull(served_upf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_upf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_upf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_upf_info)) {
@@ -2091,7 +2091,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_upf_infoList, localMapKeyPair);
@@ -2103,7 +2103,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_upf_info_list) {
         cJSON *served_upf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_upf_info_list) && !cJSON_IsNull(served_upf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_upf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_upf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_upf_info_list)) {
@@ -2119,7 +2119,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_upf_info_listList, localMapKeyPair);
@@ -2131,7 +2131,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_pcf_info) {
         cJSON *served_pcf_info_local_map = NULL;
         if (!cJSON_IsObject(served_pcf_info) && !cJSON_IsNull(served_pcf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_pcf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_pcf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_pcf_info)) {
@@ -2145,7 +2145,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_pcf_infoList, localMapKeyPair);
@@ -2157,7 +2157,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_pcf_info_list) {
         cJSON *served_pcf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_pcf_info_list) && !cJSON_IsNull(served_pcf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_pcf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_pcf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_pcf_info_list)) {
@@ -2173,7 +2173,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_pcf_info_listList, localMapKeyPair);
@@ -2185,7 +2185,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_bsf_info) {
         cJSON *served_bsf_info_local_map = NULL;
         if (!cJSON_IsObject(served_bsf_info) && !cJSON_IsNull(served_bsf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_bsf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_bsf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_bsf_info)) {
@@ -2199,7 +2199,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_bsf_infoList, localMapKeyPair);
@@ -2211,7 +2211,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_bsf_info_list) {
         cJSON *served_bsf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_bsf_info_list) && !cJSON_IsNull(served_bsf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_bsf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_bsf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_bsf_info_list)) {
@@ -2227,7 +2227,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_bsf_info_listList, localMapKeyPair);
@@ -2239,7 +2239,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_chf_info) {
         cJSON *served_chf_info_local_map = NULL;
         if (!cJSON_IsObject(served_chf_info) && !cJSON_IsNull(served_chf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_chf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_chf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_chf_info)) {
@@ -2253,7 +2253,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_chf_infoList, localMapKeyPair);
@@ -2265,7 +2265,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_chf_info_list) {
         cJSON *served_chf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_chf_info_list) && !cJSON_IsNull(served_chf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_chf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_chf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_chf_info_list)) {
@@ -2281,7 +2281,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_chf_info_listList, localMapKeyPair);
@@ -2293,7 +2293,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_nef_info) {
         cJSON *served_nef_info_local_map = NULL;
         if (!cJSON_IsObject(served_nef_info) && !cJSON_IsNull(served_nef_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nef_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nef_info]");
             goto end;
         }
         if (cJSON_IsObject(served_nef_info)) {
@@ -2307,7 +2307,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_nef_infoList, localMapKeyPair);
@@ -2319,7 +2319,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_nwdaf_info) {
         cJSON *served_nwdaf_info_local_map = NULL;
         if (!cJSON_IsObject(served_nwdaf_info) && !cJSON_IsNull(served_nwdaf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nwdaf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nwdaf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_nwdaf_info)) {
@@ -2333,7 +2333,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_nwdaf_infoList, localMapKeyPair);
@@ -2345,7 +2345,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_nwdaf_info_list) {
         cJSON *served_nwdaf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_nwdaf_info_list) && !cJSON_IsNull(served_nwdaf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nwdaf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nwdaf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_nwdaf_info_list)) {
@@ -2361,7 +2361,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_nwdaf_info_listList, localMapKeyPair);
@@ -2373,7 +2373,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_pcscf_info_list) {
         cJSON *served_pcscf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_pcscf_info_list) && !cJSON_IsNull(served_pcscf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_pcscf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_pcscf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_pcscf_info_list)) {
@@ -2389,7 +2389,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_pcscf_info_listList, localMapKeyPair);
@@ -2401,7 +2401,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_gmlc_info) {
         cJSON *served_gmlc_info_local_map = NULL;
         if (!cJSON_IsObject(served_gmlc_info) && !cJSON_IsNull(served_gmlc_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_gmlc_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_gmlc_info]");
             goto end;
         }
         if (cJSON_IsObject(served_gmlc_info)) {
@@ -2415,7 +2415,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_gmlc_infoList, localMapKeyPair);
@@ -2427,7 +2427,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_lmf_info) {
         cJSON *served_lmf_info_local_map = NULL;
         if (!cJSON_IsObject(served_lmf_info) && !cJSON_IsNull(served_lmf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_lmf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_lmf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_lmf_info)) {
@@ -2441,7 +2441,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_lmf_infoList, localMapKeyPair);
@@ -2453,7 +2453,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_nf_info) {
         cJSON *served_nf_info_local_map = NULL;
         if (!cJSON_IsObject(served_nf_info) && !cJSON_IsNull(served_nf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_nf_info)) {
@@ -2467,7 +2467,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_nf_infoList, localMapKeyPair);
@@ -2479,7 +2479,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_hss_info_list) {
         cJSON *served_hss_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_hss_info_list) && !cJSON_IsNull(served_hss_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_hss_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_hss_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_hss_info_list)) {
@@ -2495,7 +2495,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_hss_info_listList, localMapKeyPair);
@@ -2507,7 +2507,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_udsf_info) {
         cJSON *served_udsf_info_local_map = NULL;
         if (!cJSON_IsObject(served_udsf_info) && !cJSON_IsNull(served_udsf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udsf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udsf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_udsf_info)) {
@@ -2521,7 +2521,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_udsf_infoList, localMapKeyPair);
@@ -2533,7 +2533,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_udsf_info_list) {
         cJSON *served_udsf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_udsf_info_list) && !cJSON_IsNull(served_udsf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udsf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_udsf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_udsf_info_list)) {
@@ -2549,7 +2549,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_udsf_info_listList, localMapKeyPair);
@@ -2561,7 +2561,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_scp_info_list) {
         cJSON *served_scp_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_scp_info_list) && !cJSON_IsNull(served_scp_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_scp_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_scp_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_scp_info_list)) {
@@ -2575,7 +2575,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_scp_info_listList, localMapKeyPair);
@@ -2587,7 +2587,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_sepp_info_list) {
         cJSON *served_sepp_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_sepp_info_list) && !cJSON_IsNull(served_sepp_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_sepp_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_sepp_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_sepp_info_list)) {
@@ -2601,7 +2601,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_sepp_info_listList, localMapKeyPair);
@@ -2613,7 +2613,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_aanf_info_list) {
         cJSON *served_aanf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_aanf_info_list) && !cJSON_IsNull(served_aanf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_aanf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_aanf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_aanf_info_list)) {
@@ -2629,7 +2629,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_aanf_info_listList, localMapKeyPair);
@@ -2641,7 +2641,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served5g_ddnmf_info) {
         cJSON *served5g_ddnmf_info_local_map = NULL;
         if (!cJSON_IsObject(served5g_ddnmf_info) && !cJSON_IsNull(served5g_ddnmf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served5g_ddnmf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served5g_ddnmf_info]");
             goto end;
         }
         if (cJSON_IsObject(served5g_ddnmf_info)) {
@@ -2655,7 +2655,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served5g_ddnmf_infoList, localMapKeyPair);
@@ -2667,7 +2667,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_mfaf_info_list) {
         cJSON *served_mfaf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_mfaf_info_list) && !cJSON_IsNull(served_mfaf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_mfaf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_mfaf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_mfaf_info_list)) {
@@ -2681,7 +2681,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_mfaf_info_listList, localMapKeyPair);
@@ -2693,7 +2693,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_easdf_info_list) {
         cJSON *served_easdf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_easdf_info_list) && !cJSON_IsNull(served_easdf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_easdf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_easdf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_easdf_info_list)) {
@@ -2709,7 +2709,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_easdf_info_listList, localMapKeyPair);
@@ -2721,7 +2721,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_dccf_info_list) {
         cJSON *served_dccf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_dccf_info_list) && !cJSON_IsNull(served_dccf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_dccf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_dccf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_dccf_info_list)) {
@@ -2735,7 +2735,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_dccf_info_listList, localMapKeyPair);
@@ -2747,7 +2747,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_mb_smf_info_list) {
         cJSON *served_mb_smf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_mb_smf_info_list) && !cJSON_IsNull(served_mb_smf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_mb_smf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_mb_smf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_mb_smf_info_list)) {
@@ -2763,7 +2763,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_mb_smf_info_listList, localMapKeyPair);
@@ -2775,7 +2775,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_tsctsf_info_list) {
         cJSON *served_tsctsf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_tsctsf_info_list) && !cJSON_IsNull(served_tsctsf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_tsctsf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_tsctsf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_tsctsf_info_list)) {
@@ -2791,7 +2791,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_tsctsf_info_listList, localMapKeyPair);
@@ -2803,7 +2803,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_mb_upf_info_list) {
         cJSON *served_mb_upf_info_list_local_map = NULL;
         if (!cJSON_IsObject(served_mb_upf_info_list) && !cJSON_IsNull(served_mb_upf_info_list)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_mb_upf_info_list]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_mb_upf_info_list]");
             goto end;
         }
         if (cJSON_IsObject(served_mb_upf_info_list)) {
@@ -2819,7 +2819,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_mb_upf_info_listList, localMapKeyPair);
@@ -2831,7 +2831,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_trust_af_info) {
         cJSON *served_trust_af_info_local_map = NULL;
         if (!cJSON_IsObject(served_trust_af_info) && !cJSON_IsNull(served_trust_af_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_trust_af_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_trust_af_info]");
             goto end;
         }
         if (cJSON_IsObject(served_trust_af_info)) {
@@ -2845,7 +2845,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_trust_af_infoList, localMapKeyPair);
@@ -2857,7 +2857,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
     if (served_nssaaf_info) {
         cJSON *served_nssaaf_info_local_map = NULL;
         if (!cJSON_IsObject(served_nssaaf_info) && !cJSON_IsNull(served_nssaaf_info)) {
-            ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nssaaf_info]");
+            log_error("OpenAPI_nrf_info_parseFromJSON() failed [served_nssaaf_info]");
             goto end;
         }
         if (cJSON_IsObject(served_nssaaf_info)) {
@@ -2871,7 +2871,7 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_parseFromJSON(cJSON *nrf_infoJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(served_nssaaf_infoList, localMapKeyPair);
@@ -3332,10 +3332,10 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_copy(OpenAPI_nrf_info_t *dst, OpenAPI_nrf_i
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nrf_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nrf_info_convertToJSON() failed");
+        log_error("OpenAPI_nrf_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -3343,14 +3343,14 @@ OpenAPI_nrf_info_t *OpenAPI_nrf_info_copy(OpenAPI_nrf_info_t *dst, OpenAPI_nrf_i
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

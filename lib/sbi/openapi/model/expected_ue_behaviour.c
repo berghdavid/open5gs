@@ -25,7 +25,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_create(
 )
 {
     OpenAPI_expected_ue_behaviour_t *expected_ue_behaviour_local_var = ogs_malloc(sizeof(OpenAPI_expected_ue_behaviour_t));
-    ogs_assert(expected_ue_behaviour_local_var);
+    log_assert(expected_ue_behaviour_local_var);
 
     expected_ue_behaviour_local_var->af_instance_id = af_instance_id;
     expected_ue_behaviour_local_var->reference_id = reference_id;
@@ -103,46 +103,46 @@ cJSON *OpenAPI_expected_ue_behaviour_convertToJSON(OpenAPI_expected_ue_behaviour
     OpenAPI_lnode_t *node = NULL;
 
     if (expected_ue_behaviour == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [ExpectedUeBehaviour]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [ExpectedUeBehaviour]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!expected_ue_behaviour->af_instance_id) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [af_instance_id]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [af_instance_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "afInstanceId", expected_ue_behaviour->af_instance_id) == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [af_instance_id]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [af_instance_id]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "referenceId", expected_ue_behaviour->reference_id) == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [reference_id]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [reference_id]");
         goto end;
     }
 
     if (expected_ue_behaviour->stationary_indication) {
     cJSON *stationary_indication_local_JSON = OpenAPI_stationary_indication_rm_convertToJSON(expected_ue_behaviour->stationary_indication);
     if (stationary_indication_local_JSON == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [stationary_indication]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [stationary_indication]");
         goto end;
     }
     cJSON_AddItemToObject(item, "stationaryIndication", stationary_indication_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [stationary_indication]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [stationary_indication]");
         goto end;
     }
     }
 
     if (expected_ue_behaviour->is_communication_duration_time) {
     if (cJSON_AddNumberToObject(item, "communicationDurationTime", expected_ue_behaviour->communication_duration_time) == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [communication_duration_time]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [communication_duration_time]");
         goto end;
     }
     } else if (expected_ue_behaviour->is_communication_duration_time_null) {
         if (cJSON_AddNullToObject(item, "communicationDurationTime") == NULL) {
-            ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [communication_duration_time]");
+            log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [communication_duration_time]");
             goto end;
         }
     }
@@ -150,24 +150,24 @@ cJSON *OpenAPI_expected_ue_behaviour_convertToJSON(OpenAPI_expected_ue_behaviour
     if (expected_ue_behaviour->scheduled_communication_type) {
     cJSON *scheduled_communication_type_local_JSON = OpenAPI_scheduled_communication_type_rm_convertToJSON(expected_ue_behaviour->scheduled_communication_type);
     if (scheduled_communication_type_local_JSON == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [scheduled_communication_type]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [scheduled_communication_type]");
         goto end;
     }
     cJSON_AddItemToObject(item, "scheduledCommunicationType", scheduled_communication_type_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [scheduled_communication_type]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [scheduled_communication_type]");
         goto end;
     }
     }
 
     if (expected_ue_behaviour->is_periodic_time) {
     if (cJSON_AddNumberToObject(item, "periodicTime", expected_ue_behaviour->periodic_time) == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [periodic_time]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [periodic_time]");
         goto end;
     }
     } else if (expected_ue_behaviour->is_periodic_time_null) {
         if (cJSON_AddNullToObject(item, "periodicTime") == NULL) {
-            ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [periodic_time]");
+            log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [periodic_time]");
             goto end;
         }
     }
@@ -175,12 +175,12 @@ cJSON *OpenAPI_expected_ue_behaviour_convertToJSON(OpenAPI_expected_ue_behaviour
     if (expected_ue_behaviour->scheduled_communication_time) {
     cJSON *scheduled_communication_time_local_JSON = OpenAPI_scheduled_communication_time_rm_convertToJSON(expected_ue_behaviour->scheduled_communication_time);
     if (scheduled_communication_time_local_JSON == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [scheduled_communication_time]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [scheduled_communication_time]");
         goto end;
     }
     cJSON_AddItemToObject(item, "scheduledCommunicationTime", scheduled_communication_time_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [scheduled_communication_time]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [scheduled_communication_time]");
         goto end;
     }
     }
@@ -188,20 +188,20 @@ cJSON *OpenAPI_expected_ue_behaviour_convertToJSON(OpenAPI_expected_ue_behaviour
     if (expected_ue_behaviour->expected_umts) {
     cJSON *expected_umtsList = cJSON_AddArrayToObject(item, "expectedUmts");
     if (expected_umtsList == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [expected_umts]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [expected_umts]");
         goto end;
     }
     OpenAPI_list_for_each(expected_ue_behaviour->expected_umts, node) {
         cJSON *itemLocal = OpenAPI_location_area_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [expected_umts]");
+            log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [expected_umts]");
             goto end;
         }
         cJSON_AddItemToArray(expected_umtsList, itemLocal);
     }
     } else if (expected_ue_behaviour->is_expected_umts_null) {
         if (cJSON_AddNullToObject(item, "expectedUmts") == NULL) {
-            ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [expected_umts]");
+            log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [expected_umts]");
             goto end;
         }
     }
@@ -209,12 +209,12 @@ cJSON *OpenAPI_expected_ue_behaviour_convertToJSON(OpenAPI_expected_ue_behaviour
     if (expected_ue_behaviour->traffic_profile) {
     cJSON *traffic_profile_local_JSON = OpenAPI_traffic_profile_rm_convertToJSON(expected_ue_behaviour->traffic_profile);
     if (traffic_profile_local_JSON == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [traffic_profile]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [traffic_profile]");
         goto end;
     }
     cJSON_AddItemToObject(item, "trafficProfile", traffic_profile_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [traffic_profile]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [traffic_profile]");
         goto end;
     }
     }
@@ -222,26 +222,26 @@ cJSON *OpenAPI_expected_ue_behaviour_convertToJSON(OpenAPI_expected_ue_behaviour
     if (expected_ue_behaviour->battery_indication) {
     cJSON *battery_indication_local_JSON = OpenAPI_battery_indication_rm_convertToJSON(expected_ue_behaviour->battery_indication);
     if (battery_indication_local_JSON == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [battery_indication]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [battery_indication]");
         goto end;
     }
     cJSON_AddItemToObject(item, "batteryIndication", battery_indication_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [battery_indication]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [battery_indication]");
         goto end;
     }
     }
 
     if (expected_ue_behaviour->validity_time) {
     if (cJSON_AddStringToObject(item, "validityTime", expected_ue_behaviour->validity_time) == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [validity_time]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [validity_time]");
         goto end;
     }
     }
 
     if (expected_ue_behaviour->mtc_provider_information) {
     if (cJSON_AddStringToObject(item, "mtcProviderInformation", expected_ue_behaviour->mtc_provider_information) == NULL) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -274,21 +274,21 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     cJSON *mtc_provider_information = NULL;
     af_instance_id = cJSON_GetObjectItemCaseSensitive(expected_ue_behaviourJSON, "afInstanceId");
     if (!af_instance_id) {
-        ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [af_instance_id]");
+        log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [af_instance_id]");
         goto end;
     }
     if (!cJSON_IsString(af_instance_id)) {
-        ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [af_instance_id]");
+        log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [af_instance_id]");
         goto end;
     }
 
     reference_id = cJSON_GetObjectItemCaseSensitive(expected_ue_behaviourJSON, "referenceId");
     if (!reference_id) {
-        ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [reference_id]");
+        log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [reference_id]");
         goto end;
     }
     if (!cJSON_IsNumber(reference_id)) {
-        ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [reference_id]");
+        log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [reference_id]");
         goto end;
     }
 
@@ -296,7 +296,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     if (stationary_indication) {
     stationary_indication_local_nonprim = OpenAPI_stationary_indication_rm_parseFromJSON(stationary_indication);
     if (!stationary_indication_local_nonprim) {
-        ogs_error("OpenAPI_stationary_indication_rm_parseFromJSON failed [stationary_indication]");
+        log_error("OpenAPI_stationary_indication_rm_parseFromJSON failed [stationary_indication]");
         goto end;
     }
     }
@@ -305,7 +305,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     if (communication_duration_time) {
     if (!cJSON_IsNull(communication_duration_time)) {
     if (!cJSON_IsNumber(communication_duration_time)) {
-        ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [communication_duration_time]");
+        log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [communication_duration_time]");
         goto end;
     }
     }
@@ -315,7 +315,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     if (scheduled_communication_type) {
     scheduled_communication_type_local_nonprim = OpenAPI_scheduled_communication_type_rm_parseFromJSON(scheduled_communication_type);
     if (!scheduled_communication_type_local_nonprim) {
-        ogs_error("OpenAPI_scheduled_communication_type_rm_parseFromJSON failed [scheduled_communication_type]");
+        log_error("OpenAPI_scheduled_communication_type_rm_parseFromJSON failed [scheduled_communication_type]");
         goto end;
     }
     }
@@ -324,7 +324,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     if (periodic_time) {
     if (!cJSON_IsNull(periodic_time)) {
     if (!cJSON_IsNumber(periodic_time)) {
-        ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [periodic_time]");
+        log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [periodic_time]");
         goto end;
     }
     }
@@ -334,7 +334,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     if (scheduled_communication_time) {
     scheduled_communication_time_local_nonprim = OpenAPI_scheduled_communication_time_rm_parseFromJSON(scheduled_communication_time);
     if (!scheduled_communication_time_local_nonprim) {
-        ogs_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON failed [scheduled_communication_time]");
+        log_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON failed [scheduled_communication_time]");
         goto end;
     }
     }
@@ -344,7 +344,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     if (!cJSON_IsNull(expected_umts)) {
         cJSON *expected_umts_local = NULL;
         if (!cJSON_IsArray(expected_umts)) {
-            ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [expected_umts]");
+            log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [expected_umts]");
             goto end;
         }
 
@@ -352,12 +352,12 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
 
         cJSON_ArrayForEach(expected_umts_local, expected_umts) {
             if (!cJSON_IsObject(expected_umts_local)) {
-                ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [expected_umts]");
+                log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [expected_umts]");
                 goto end;
             }
             OpenAPI_location_area_t *expected_umtsItem = OpenAPI_location_area_parseFromJSON(expected_umts_local);
             if (!expected_umtsItem) {
-                ogs_error("No expected_umtsItem");
+                log_error("No expected_umtsItem");
                 goto end;
             }
             OpenAPI_list_add(expected_umtsList, expected_umtsItem);
@@ -369,7 +369,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     if (traffic_profile) {
     traffic_profile_local_nonprim = OpenAPI_traffic_profile_rm_parseFromJSON(traffic_profile);
     if (!traffic_profile_local_nonprim) {
-        ogs_error("OpenAPI_traffic_profile_rm_parseFromJSON failed [traffic_profile]");
+        log_error("OpenAPI_traffic_profile_rm_parseFromJSON failed [traffic_profile]");
         goto end;
     }
     }
@@ -378,7 +378,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     if (battery_indication) {
     battery_indication_local_nonprim = OpenAPI_battery_indication_rm_parseFromJSON(battery_indication);
     if (!battery_indication_local_nonprim) {
-        ogs_error("OpenAPI_battery_indication_rm_parseFromJSON failed [battery_indication]");
+        log_error("OpenAPI_battery_indication_rm_parseFromJSON failed [battery_indication]");
         goto end;
     }
     }
@@ -386,7 +386,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     validity_time = cJSON_GetObjectItemCaseSensitive(expected_ue_behaviourJSON, "validityTime");
     if (validity_time) {
     if (!cJSON_IsString(validity_time) && !cJSON_IsNull(validity_time)) {
-        ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [validity_time]");
+        log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [validity_time]");
         goto end;
     }
     }
@@ -394,7 +394,7 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_parseFromJSON(cJS
     mtc_provider_information = cJSON_GetObjectItemCaseSensitive(expected_ue_behaviourJSON, "mtcProviderInformation");
     if (mtc_provider_information) {
     if (!cJSON_IsString(mtc_provider_information) && !cJSON_IsNull(mtc_provider_information)) {
-        ogs_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_expected_ue_behaviour_parseFromJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -457,10 +457,10 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_copy(OpenAPI_expe
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_expected_ue_behaviour_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed");
+        log_error("OpenAPI_expected_ue_behaviour_convertToJSON() failed");
         return NULL;
     }
 
@@ -468,14 +468,14 @@ OpenAPI_expected_ue_behaviour_t *OpenAPI_expected_ue_behaviour_copy(OpenAPI_expe
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

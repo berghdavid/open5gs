@@ -36,7 +36,7 @@ OpenAPI_operator_specific_data_container_t *OpenAPI_operator_specific_data_conta
 )
 {
     OpenAPI_operator_specific_data_container_t *operator_specific_data_container_local_var = ogs_malloc(sizeof(OpenAPI_operator_specific_data_container_t));
-    ogs_assert(operator_specific_data_container_local_var);
+    log_assert(operator_specific_data_container_local_var);
 
     operator_specific_data_container_local_var->data_type = data_type;
     operator_specific_data_container_local_var->data_type_definition = data_type_definition;
@@ -82,45 +82,45 @@ cJSON *OpenAPI_operator_specific_data_container_convertToJSON(OpenAPI_operator_s
     OpenAPI_lnode_t *node = NULL;
 
     if (operator_specific_data_container == NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [OperatorSpecificDataContainer]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [OperatorSpecificDataContainer]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (operator_specific_data_container->data_type == OpenAPI_operator_specific_data_container_DATATYPE_NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [data_type]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [data_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "dataType", OpenAPI_data_typeoperator_specific_data_container_ToString(operator_specific_data_container->data_type)) == NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [data_type]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [data_type]");
         goto end;
     }
 
     if (operator_specific_data_container->data_type_definition) {
     if (cJSON_AddStringToObject(item, "dataTypeDefinition", operator_specific_data_container->data_type_definition) == NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [data_type_definition]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [data_type_definition]");
         goto end;
     }
     }
 
     if (!operator_specific_data_container->value) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [value]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [value]");
         return NULL;
     }
     cJSON *value_local_JSON = OpenAPI_operator_specific_data_container_value_convertToJSON(operator_specific_data_container->value);
     if (value_local_JSON == NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [value]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [value]");
         goto end;
     }
     cJSON_AddItemToObject(item, "value", value_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [value]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [value]");
         goto end;
     }
 
     if (operator_specific_data_container->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", operator_specific_data_container->supported_features) == NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -128,12 +128,12 @@ cJSON *OpenAPI_operator_specific_data_container_convertToJSON(OpenAPI_operator_s
     if (operator_specific_data_container->reset_ids) {
     cJSON *reset_idsList = cJSON_AddArrayToObject(item, "resetIds");
     if (reset_idsList == NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [reset_ids]");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [reset_ids]");
         goto end;
     }
     OpenAPI_list_for_each(operator_specific_data_container->reset_ids, node) {
         if (cJSON_AddStringToObject(reset_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [reset_ids]");
+            log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed [reset_ids]");
             goto end;
         }
     }
@@ -157,11 +157,11 @@ OpenAPI_operator_specific_data_container_t *OpenAPI_operator_specific_data_conta
     OpenAPI_list_t *reset_idsList = NULL;
     data_type = cJSON_GetObjectItemCaseSensitive(operator_specific_data_containerJSON, "dataType");
     if (!data_type) {
-        ogs_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [data_type]");
+        log_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [data_type]");
         goto end;
     }
     if (!cJSON_IsString(data_type)) {
-        ogs_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [data_type]");
+        log_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [data_type]");
         goto end;
     }
     data_typeVariable = OpenAPI_data_typeoperator_specific_data_container_FromString(data_type->valuestring);
@@ -169,26 +169,26 @@ OpenAPI_operator_specific_data_container_t *OpenAPI_operator_specific_data_conta
     data_type_definition = cJSON_GetObjectItemCaseSensitive(operator_specific_data_containerJSON, "dataTypeDefinition");
     if (data_type_definition) {
     if (!cJSON_IsString(data_type_definition) && !cJSON_IsNull(data_type_definition)) {
-        ogs_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [data_type_definition]");
+        log_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [data_type_definition]");
         goto end;
     }
     }
 
     value = cJSON_GetObjectItemCaseSensitive(operator_specific_data_containerJSON, "value");
     if (!value) {
-        ogs_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [value]");
+        log_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [value]");
         goto end;
     }
     value_local_nonprim = OpenAPI_operator_specific_data_container_value_parseFromJSON(value);
     if (!value_local_nonprim) {
-        ogs_error("OpenAPI_operator_specific_data_container_value_parseFromJSON failed [value]");
+        log_error("OpenAPI_operator_specific_data_container_value_parseFromJSON failed [value]");
         goto end;
     }
 
     supported_features = cJSON_GetObjectItemCaseSensitive(operator_specific_data_containerJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -197,7 +197,7 @@ OpenAPI_operator_specific_data_container_t *OpenAPI_operator_specific_data_conta
     if (reset_ids) {
         cJSON *reset_ids_local = NULL;
         if (!cJSON_IsArray(reset_ids)) {
-            ogs_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [reset_ids]");
+            log_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [reset_ids]");
             goto end;
         }
 
@@ -207,7 +207,7 @@ OpenAPI_operator_specific_data_container_t *OpenAPI_operator_specific_data_conta
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(reset_ids_local)) {
-                ogs_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [reset_ids]");
+                log_error("OpenAPI_operator_specific_data_container_parseFromJSON() failed [reset_ids]");
                 goto end;
             }
             OpenAPI_list_add(reset_idsList, ogs_strdup(reset_ids_local->valuestring));
@@ -243,10 +243,10 @@ OpenAPI_operator_specific_data_container_t *OpenAPI_operator_specific_data_conta
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_operator_specific_data_container_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_operator_specific_data_container_convertToJSON() failed");
+        log_error("OpenAPI_operator_specific_data_container_convertToJSON() failed");
         return NULL;
     }
 
@@ -254,14 +254,14 @@ OpenAPI_operator_specific_data_container_t *OpenAPI_operator_specific_data_conta
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

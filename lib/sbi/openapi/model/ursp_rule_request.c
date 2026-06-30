@@ -12,7 +12,7 @@ OpenAPI_ursp_rule_request_t *OpenAPI_ursp_rule_request_create(
 )
 {
     OpenAPI_ursp_rule_request_t *ursp_rule_request_local_var = ogs_malloc(sizeof(OpenAPI_ursp_rule_request_t));
-    ogs_assert(ursp_rule_request_local_var);
+    log_assert(ursp_rule_request_local_var);
 
     ursp_rule_request_local_var->traffic_desc = traffic_desc;
     ursp_rule_request_local_var->is_relat_precedence = is_relat_precedence;
@@ -49,7 +49,7 @@ cJSON *OpenAPI_ursp_rule_request_convertToJSON(OpenAPI_ursp_rule_request_t *ursp
     OpenAPI_lnode_t *node = NULL;
 
     if (ursp_rule_request == NULL) {
-        ogs_error("OpenAPI_ursp_rule_request_convertToJSON() failed [UrspRuleRequest]");
+        log_error("OpenAPI_ursp_rule_request_convertToJSON() failed [UrspRuleRequest]");
         return NULL;
     }
 
@@ -57,19 +57,19 @@ cJSON *OpenAPI_ursp_rule_request_convertToJSON(OpenAPI_ursp_rule_request_t *ursp
     if (ursp_rule_request->traffic_desc) {
     cJSON *traffic_desc_local_JSON = OpenAPI_traffic_descriptor_components_convertToJSON(ursp_rule_request->traffic_desc);
     if (traffic_desc_local_JSON == NULL) {
-        ogs_error("OpenAPI_ursp_rule_request_convertToJSON() failed [traffic_desc]");
+        log_error("OpenAPI_ursp_rule_request_convertToJSON() failed [traffic_desc]");
         goto end;
     }
     cJSON_AddItemToObject(item, "trafficDesc", traffic_desc_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ursp_rule_request_convertToJSON() failed [traffic_desc]");
+        log_error("OpenAPI_ursp_rule_request_convertToJSON() failed [traffic_desc]");
         goto end;
     }
     }
 
     if (ursp_rule_request->is_relat_precedence) {
     if (cJSON_AddNumberToObject(item, "relatPrecedence", ursp_rule_request->relat_precedence) == NULL) {
-        ogs_error("OpenAPI_ursp_rule_request_convertToJSON() failed [relat_precedence]");
+        log_error("OpenAPI_ursp_rule_request_convertToJSON() failed [relat_precedence]");
         goto end;
     }
     }
@@ -77,13 +77,13 @@ cJSON *OpenAPI_ursp_rule_request_convertToJSON(OpenAPI_ursp_rule_request_t *ursp
     if (ursp_rule_request->route_sel_param_sets) {
     cJSON *route_sel_param_setsList = cJSON_AddArrayToObject(item, "routeSelParamSets");
     if (route_sel_param_setsList == NULL) {
-        ogs_error("OpenAPI_ursp_rule_request_convertToJSON() failed [route_sel_param_sets]");
+        log_error("OpenAPI_ursp_rule_request_convertToJSON() failed [route_sel_param_sets]");
         goto end;
     }
     OpenAPI_list_for_each(ursp_rule_request->route_sel_param_sets, node) {
         cJSON *itemLocal = OpenAPI_route_selection_parameter_set_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_ursp_rule_request_convertToJSON() failed [route_sel_param_sets]");
+            log_error("OpenAPI_ursp_rule_request_convertToJSON() failed [route_sel_param_sets]");
             goto end;
         }
         cJSON_AddItemToArray(route_sel_param_setsList, itemLocal);
@@ -107,7 +107,7 @@ OpenAPI_ursp_rule_request_t *OpenAPI_ursp_rule_request_parseFromJSON(cJSON *ursp
     if (traffic_desc) {
     traffic_desc_local_nonprim = OpenAPI_traffic_descriptor_components_parseFromJSON(traffic_desc);
     if (!traffic_desc_local_nonprim) {
-        ogs_error("OpenAPI_traffic_descriptor_components_parseFromJSON failed [traffic_desc]");
+        log_error("OpenAPI_traffic_descriptor_components_parseFromJSON failed [traffic_desc]");
         goto end;
     }
     }
@@ -115,7 +115,7 @@ OpenAPI_ursp_rule_request_t *OpenAPI_ursp_rule_request_parseFromJSON(cJSON *ursp
     relat_precedence = cJSON_GetObjectItemCaseSensitive(ursp_rule_requestJSON, "relatPrecedence");
     if (relat_precedence) {
     if (!cJSON_IsNumber(relat_precedence)) {
-        ogs_error("OpenAPI_ursp_rule_request_parseFromJSON() failed [relat_precedence]");
+        log_error("OpenAPI_ursp_rule_request_parseFromJSON() failed [relat_precedence]");
         goto end;
     }
     }
@@ -124,7 +124,7 @@ OpenAPI_ursp_rule_request_t *OpenAPI_ursp_rule_request_parseFromJSON(cJSON *ursp
     if (route_sel_param_sets) {
         cJSON *route_sel_param_sets_local = NULL;
         if (!cJSON_IsArray(route_sel_param_sets)) {
-            ogs_error("OpenAPI_ursp_rule_request_parseFromJSON() failed [route_sel_param_sets]");
+            log_error("OpenAPI_ursp_rule_request_parseFromJSON() failed [route_sel_param_sets]");
             goto end;
         }
 
@@ -132,12 +132,12 @@ OpenAPI_ursp_rule_request_t *OpenAPI_ursp_rule_request_parseFromJSON(cJSON *ursp
 
         cJSON_ArrayForEach(route_sel_param_sets_local, route_sel_param_sets) {
             if (!cJSON_IsObject(route_sel_param_sets_local)) {
-                ogs_error("OpenAPI_ursp_rule_request_parseFromJSON() failed [route_sel_param_sets]");
+                log_error("OpenAPI_ursp_rule_request_parseFromJSON() failed [route_sel_param_sets]");
                 goto end;
             }
             OpenAPI_route_selection_parameter_set_t *route_sel_param_setsItem = OpenAPI_route_selection_parameter_set_parseFromJSON(route_sel_param_sets_local);
             if (!route_sel_param_setsItem) {
-                ogs_error("No route_sel_param_setsItem");
+                log_error("No route_sel_param_setsItem");
                 goto end;
             }
             OpenAPI_list_add(route_sel_param_setsList, route_sel_param_setsItem);
@@ -172,10 +172,10 @@ OpenAPI_ursp_rule_request_t *OpenAPI_ursp_rule_request_copy(OpenAPI_ursp_rule_re
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ursp_rule_request_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ursp_rule_request_convertToJSON() failed");
+        log_error("OpenAPI_ursp_rule_request_convertToJSON() failed");
         return NULL;
     }
 
@@ -183,14 +183,14 @@ OpenAPI_ursp_rule_request_t *OpenAPI_ursp_rule_request_copy(OpenAPI_ursp_rule_re
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -9,7 +9,7 @@ OpenAPI_message_waiting_data_t *OpenAPI_message_waiting_data_create(
 )
 {
     OpenAPI_message_waiting_data_t *message_waiting_data_local_var = ogs_malloc(sizeof(OpenAPI_message_waiting_data_t));
-    ogs_assert(message_waiting_data_local_var);
+    log_assert(message_waiting_data_local_var);
 
     message_waiting_data_local_var->mwd_list = mwd_list;
 
@@ -39,7 +39,7 @@ cJSON *OpenAPI_message_waiting_data_convertToJSON(OpenAPI_message_waiting_data_t
     OpenAPI_lnode_t *node = NULL;
 
     if (message_waiting_data == NULL) {
-        ogs_error("OpenAPI_message_waiting_data_convertToJSON() failed [MessageWaitingData]");
+        log_error("OpenAPI_message_waiting_data_convertToJSON() failed [MessageWaitingData]");
         return NULL;
     }
 
@@ -47,13 +47,13 @@ cJSON *OpenAPI_message_waiting_data_convertToJSON(OpenAPI_message_waiting_data_t
     if (message_waiting_data->mwd_list) {
     cJSON *mwd_listList = cJSON_AddArrayToObject(item, "mwdList");
     if (mwd_listList == NULL) {
-        ogs_error("OpenAPI_message_waiting_data_convertToJSON() failed [mwd_list]");
+        log_error("OpenAPI_message_waiting_data_convertToJSON() failed [mwd_list]");
         goto end;
     }
     OpenAPI_list_for_each(message_waiting_data->mwd_list, node) {
         cJSON *itemLocal = OpenAPI_smsc_data_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_message_waiting_data_convertToJSON() failed [mwd_list]");
+            log_error("OpenAPI_message_waiting_data_convertToJSON() failed [mwd_list]");
             goto end;
         }
         cJSON_AddItemToArray(mwd_listList, itemLocal);
@@ -74,7 +74,7 @@ OpenAPI_message_waiting_data_t *OpenAPI_message_waiting_data_parseFromJSON(cJSON
     if (mwd_list) {
         cJSON *mwd_list_local = NULL;
         if (!cJSON_IsArray(mwd_list)) {
-            ogs_error("OpenAPI_message_waiting_data_parseFromJSON() failed [mwd_list]");
+            log_error("OpenAPI_message_waiting_data_parseFromJSON() failed [mwd_list]");
             goto end;
         }
 
@@ -82,12 +82,12 @@ OpenAPI_message_waiting_data_t *OpenAPI_message_waiting_data_parseFromJSON(cJSON
 
         cJSON_ArrayForEach(mwd_list_local, mwd_list) {
             if (!cJSON_IsObject(mwd_list_local)) {
-                ogs_error("OpenAPI_message_waiting_data_parseFromJSON() failed [mwd_list]");
+                log_error("OpenAPI_message_waiting_data_parseFromJSON() failed [mwd_list]");
                 goto end;
             }
             OpenAPI_smsc_data_t *mwd_listItem = OpenAPI_smsc_data_parseFromJSON(mwd_list_local);
             if (!mwd_listItem) {
-                ogs_error("No mwd_listItem");
+                log_error("No mwd_listItem");
                 goto end;
             }
             OpenAPI_list_add(mwd_listList, mwd_listItem);
@@ -115,10 +115,10 @@ OpenAPI_message_waiting_data_t *OpenAPI_message_waiting_data_copy(OpenAPI_messag
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_message_waiting_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_message_waiting_data_convertToJSON() failed");
+        log_error("OpenAPI_message_waiting_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -126,14 +126,14 @@ OpenAPI_message_waiting_data_t *OpenAPI_message_waiting_data_copy(OpenAPI_messag
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

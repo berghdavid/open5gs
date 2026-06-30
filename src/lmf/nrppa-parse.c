@@ -34,8 +34,8 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
     uint16_t procedure_code;
     uint16_t transaction_id;
     
-    ogs_assert(pkbuf);
-    ogs_assert(pdu);
+    log_assert(pkbuf);
+    log_assert(pdu);
     
     memset(pdu, 0, sizeof(*pdu));
     pdu->message_type = NRPPA_MESSAGE_TYPE_ECID_MEASUREMENT_INITIATION_REQUEST;
@@ -44,23 +44,23 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
     len = pkbuf->len;
     
     if (len < 6) {
-        ogs_error("NRPPa PDU too short (%zu bytes)", len);
+        log_error("NRPPa PDU too short (%zu bytes)", len);
         return OGS_ERROR;
     }
     
-    ogs_info("Parsing NRPPa PDU (%zu bytes)", len);
-    ogs_log_hexdump(OGS_LOG_INFO, data, len);
+    log_info("Parsing NRPPa PDU (%zu bytes)", len);
+    log_hexdump(LOG_INFO, data, len);
     
     /* Parse APER-encoded wrapper header */
     pdu_choice = data[0] >> 5;
     procedure_code = data[1];
     transaction_id = data[4];
     
-    ogs_info("  PDU: choice=%u, procedure=%u, transaction=%u", 
+    log_info("  PDU: choice=%u, procedure=%u, transaction=%u", 
              pdu_choice, procedure_code, transaction_id);
     
     if (pdu_choice == 1 && procedure_code == 2) {  /* successfulOutcome */
-        ogs_info("E-CID Measurement Initiation Response (v17.2.0)");
+        log_info("E-CID Measurement Initiation Response (v17.2.0)");
         
         pdu->message_type = NRPPA_MESSAGE_TYPE_ECID_MEASUREMENT_INITIATION_RESPONSE;
         pdu->u.ecid_response.measurement_id = transaction_id;
@@ -78,7 +78,7 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
                               ((uint64_t)data[32] >> 4);
             
             pdu->u.ecid_response.serving_cell.ncgi = cell_id;
-            ogs_info("  Cell ID: %llx", (unsigned long long)cell_id);
+            log_info("  Cell ID: %llx", (unsigned long long)cell_id);
         }
         
         /* Extract SS-RSRP from ResultSS-RSRP-Item.valueSS-RSRP-Cell
@@ -97,10 +97,10 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
             int16_t rsrp_dbm = (int16_t)rsrp_raw - 156;
             
             pdu->u.ecid_response.serving_cell.rsrp = rsrp_dbm * 10;  /* 0.1 dBm units */
-            ogs_info("  SS-RSRP: value=%u (from cGI-NR), RSRP=%d dBm", 
+            log_info("  SS-RSRP: value=%u (from cGI-NR), RSRP=%d dBm", 
                     rsrp_raw, rsrp_dbm);
         } else {
-            ogs_warn("  SS-RSRP: response too short");
+            log_warn("  SS-RSRP: response too short");
             pdu->u.ecid_response.serving_cell.rsrp = -800;  /* Default -80 dBm */
         }
         
@@ -141,14 +141,14 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
                 /* Calculate approximate distance in meters */
                 uint32_t distance_m = ta_value * 156;  /* Approximate: TA × 156 meters */
                 
-                ogs_info("  NR-TADV: value=%u (distance ~%u meters)", 
+                log_info("  NR-TADV: value=%u (distance ~%u meters)", 
                         ta_value, distance_m);
             } else {
-                ogs_info("  NR-TADV: not found in response (searched bytes 59-%zu)", len - 5);
+                log_info("  NR-TADV: not found in response (searched bytes 59-%zu)", len - 5);
                 pdu->u.ecid_response.serving_cell.timing_advance = 0;
             }
         } else {
-            ogs_info("  NR-TADV: response too short (%zu bytes, need >64)", len);
+            log_info("  NR-TADV: response too short (%zu bytes, need >64)", len);
             pdu->u.ecid_response.serving_cell.timing_advance = 0;
         }
         
@@ -188,13 +188,13 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
                     /* For now, just extract azimuth */
                 }
                 
-                ogs_info("  UL-AoA: Azimuth=%u (%.1f degrees)", 
+                log_info("  UL-AoA: Azimuth=%u (%.1f degrees)", 
                         azimuth_raw, azimuth_raw / 10.0);
             } else {
                 /* AoA not found - check if it was expected */
-                ogs_info("  UL-AoA: not found in response");
-                ogs_info("    Note: AoA requires UE SRS transmission and gNB antenna array");
-                ogs_info("    Note: Check if LCS context or specific measurement type is needed");
+                log_info("  UL-AoA: not found in response");
+                log_info("    Note: AoA requires UE SRS transmission and gNB antenna array");
+                log_info("    Note: Check if LCS context or specific measurement type is needed");
                 pdu->u.ecid_response.serving_cell.angle_of_arrival = 0;
             }
         }
@@ -202,11 +202,11 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
         pdu->u.ecid_response.num_neighbor_cells = 0;
         pdu->u.ecid_response.measurement_timestamp = ogs_time_now() / 1000;
         
-        ogs_info("Response parsed successfully");
+        log_info("Response parsed successfully");
         rv = OGS_OK;
         
     } else if (pdu_choice == 2 && procedure_code == 2) {  /* unsuccessfulOutcome */
-        ogs_info("E-CID Measurement Initiation Failure");
+        log_info("E-CID Measurement Initiation Failure");
         
         pdu->message_type = NRPPA_MESSAGE_TYPE_ECID_MEASUREMENT_FAILURE_INDICATION;
         pdu->u.ecid_failure.measurement_id = transaction_id;
@@ -271,7 +271,7 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
                         if (cause_byte == 0x10) {
                             /* Wireshark shows: 0x10 → radioNetwork, requested-item-temporarily-not-available (2) */
                             pdu->u.ecid_failure.cause = 2;
-                            ogs_info("  Failure cause: radioNetwork, requested-item-temporarily-not-available (2) [from 0x10 at offset %d]", i+2);
+                            log_info("  Failure cause: radioNetwork, requested-item-temporarily-not-available (2) [from 0x10 at offset %d]", i+2);
                         } else {
                             /* Try to decode: lower 2 bits = choice, upper 6 bits = value */
                             uint8_t cause_choice = cause_byte & 0x03;
@@ -280,12 +280,12 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
                             if (cause_choice == 0) {
                                 /* radioNetwork: use value directly (may need adjustment based on PER encoding) */
                                 pdu->u.ecid_failure.cause = cause_value;
-                                ogs_info("  Failure cause: radioNetwork, value=%u (from byte 0x%02x at offset %d, may need PER decoding)",
+                                log_info("  Failure cause: radioNetwork, value=%u (from byte 0x%02x at offset %d, may need PER decoding)",
                                         pdu->u.ecid_failure.cause, cause_byte, i+2);
                             } else {
                                 /* Other choice types: encode as choice*100 + value */
                                 pdu->u.ecid_failure.cause = cause_choice * 100 + cause_value;
-                                ogs_info("  Failure cause: choice=%u, value=%u, encoded=%u (byte 0x%02x at offset %d)",
+                                log_info("  Failure cause: choice=%u, value=%u, encoded=%u (byte 0x%02x at offset %d)",
                                         cause_choice, cause_value, pdu->u.ecid_failure.cause, cause_byte, i+2);
                             }
                         }
@@ -296,16 +296,16 @@ int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu)
             
             if (pdu->u.ecid_failure.cause == 0 && len > 14) {
                 /* Fallback: try byte 14 (old method) */
-                ogs_warn("  Failure cause: Could not find id-Cause (0x40), trying fallback parsing");
+                log_warn("  Failure cause: Could not find id-Cause (0x40), trying fallback parsing");
                 pdu->u.ecid_failure.cause = data[14];
-                ogs_info("  Failure cause (fallback): %u", pdu->u.ecid_failure.cause);
+                log_info("  Failure cause (fallback): %u", pdu->u.ecid_failure.cause);
             }
         }
         
         rv = OGS_OK;
         
     } else {
-        ogs_error("Unexpected NRPPa PDU: choice=%u, procedure=%u", 
+        log_error("Unexpected NRPPa PDU: choice=%u, procedure=%u", 
                  pdu_choice, procedure_code);
         rv = OGS_ERROR;
     }

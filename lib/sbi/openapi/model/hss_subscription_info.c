@@ -9,7 +9,7 @@ OpenAPI_hss_subscription_info_t *OpenAPI_hss_subscription_info_create(
 )
 {
     OpenAPI_hss_subscription_info_t *hss_subscription_info_local_var = ogs_malloc(sizeof(OpenAPI_hss_subscription_info_t));
-    ogs_assert(hss_subscription_info_local_var);
+    log_assert(hss_subscription_info_local_var);
 
     hss_subscription_info_local_var->hss_subscription_list = hss_subscription_list;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_hss_subscription_info_convertToJSON(OpenAPI_hss_subscription_info
     OpenAPI_lnode_t *node = NULL;
 
     if (hss_subscription_info == NULL) {
-        ogs_error("OpenAPI_hss_subscription_info_convertToJSON() failed [HssSubscriptionInfo]");
+        log_error("OpenAPI_hss_subscription_info_convertToJSON() failed [HssSubscriptionInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!hss_subscription_info->hss_subscription_list) {
-        ogs_error("OpenAPI_hss_subscription_info_convertToJSON() failed [hss_subscription_list]");
+        log_error("OpenAPI_hss_subscription_info_convertToJSON() failed [hss_subscription_list]");
         return NULL;
     }
     cJSON *hss_subscription_listList = cJSON_AddArrayToObject(item, "hssSubscriptionList");
     if (hss_subscription_listList == NULL) {
-        ogs_error("OpenAPI_hss_subscription_info_convertToJSON() failed [hss_subscription_list]");
+        log_error("OpenAPI_hss_subscription_info_convertToJSON() failed [hss_subscription_list]");
         goto end;
     }
     OpenAPI_list_for_each(hss_subscription_info->hss_subscription_list, node) {
         cJSON *itemLocal = OpenAPI_hss_subscription_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_hss_subscription_info_convertToJSON() failed [hss_subscription_list]");
+            log_error("OpenAPI_hss_subscription_info_convertToJSON() failed [hss_subscription_list]");
             goto end;
         }
         cJSON_AddItemToArray(hss_subscription_listList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_hss_subscription_info_t *OpenAPI_hss_subscription_info_parseFromJSON(cJS
     OpenAPI_list_t *hss_subscription_listList = NULL;
     hss_subscription_list = cJSON_GetObjectItemCaseSensitive(hss_subscription_infoJSON, "hssSubscriptionList");
     if (!hss_subscription_list) {
-        ogs_error("OpenAPI_hss_subscription_info_parseFromJSON() failed [hss_subscription_list]");
+        log_error("OpenAPI_hss_subscription_info_parseFromJSON() failed [hss_subscription_list]");
         goto end;
     }
         cJSON *hss_subscription_list_local = NULL;
         if (!cJSON_IsArray(hss_subscription_list)) {
-            ogs_error("OpenAPI_hss_subscription_info_parseFromJSON() failed [hss_subscription_list]");
+            log_error("OpenAPI_hss_subscription_info_parseFromJSON() failed [hss_subscription_list]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_hss_subscription_info_t *OpenAPI_hss_subscription_info_parseFromJSON(cJS
 
         cJSON_ArrayForEach(hss_subscription_list_local, hss_subscription_list) {
             if (!cJSON_IsObject(hss_subscription_list_local)) {
-                ogs_error("OpenAPI_hss_subscription_info_parseFromJSON() failed [hss_subscription_list]");
+                log_error("OpenAPI_hss_subscription_info_parseFromJSON() failed [hss_subscription_list]");
                 goto end;
             }
             OpenAPI_hss_subscription_item_t *hss_subscription_listItem = OpenAPI_hss_subscription_item_parseFromJSON(hss_subscription_list_local);
             if (!hss_subscription_listItem) {
-                ogs_error("No hss_subscription_listItem");
+                log_error("No hss_subscription_listItem");
                 goto end;
             }
             OpenAPI_list_add(hss_subscription_listList, hss_subscription_listItem);
@@ -119,10 +119,10 @@ OpenAPI_hss_subscription_info_t *OpenAPI_hss_subscription_info_copy(OpenAPI_hss_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_hss_subscription_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_hss_subscription_info_convertToJSON() failed");
+        log_error("OpenAPI_hss_subscription_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_hss_subscription_info_t *OpenAPI_hss_subscription_info_copy(OpenAPI_hss_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

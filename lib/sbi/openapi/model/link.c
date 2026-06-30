@@ -9,7 +9,7 @@ OpenAPI_link_t *OpenAPI_link_create(
 )
 {
     OpenAPI_link_t *link_local_var = ogs_malloc(sizeof(OpenAPI_link_t));
-    ogs_assert(link_local_var);
+    log_assert(link_local_var);
 
     link_local_var->href = href;
 
@@ -36,14 +36,14 @@ cJSON *OpenAPI_link_convertToJSON(OpenAPI_link_t *link)
     OpenAPI_lnode_t *node = NULL;
 
     if (link == NULL) {
-        ogs_error("OpenAPI_link_convertToJSON() failed [Link]");
+        log_error("OpenAPI_link_convertToJSON() failed [Link]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (link->href) {
     if (cJSON_AddStringToObject(item, "href", link->href) == NULL) {
-        ogs_error("OpenAPI_link_convertToJSON() failed [href]");
+        log_error("OpenAPI_link_convertToJSON() failed [href]");
         goto end;
     }
     }
@@ -60,7 +60,7 @@ OpenAPI_link_t *OpenAPI_link_parseFromJSON(cJSON *linkJSON)
     href = cJSON_GetObjectItemCaseSensitive(linkJSON, "href");
     if (href) {
     if (!cJSON_IsString(href) && !cJSON_IsNull(href)) {
-        ogs_error("OpenAPI_link_parseFromJSON() failed [href]");
+        log_error("OpenAPI_link_parseFromJSON() failed [href]");
         goto end;
     }
     }
@@ -79,10 +79,10 @@ OpenAPI_link_t *OpenAPI_link_copy(OpenAPI_link_t *dst, OpenAPI_link_t *src)
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_link_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_link_convertToJSON() failed");
+        log_error("OpenAPI_link_convertToJSON() failed");
         return NULL;
     }
 
@@ -90,14 +90,14 @@ OpenAPI_link_t *OpenAPI_link_copy(OpenAPI_link_t *dst, OpenAPI_link_t *src)
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

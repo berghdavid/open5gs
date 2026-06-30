@@ -14,7 +14,7 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_create(
 )
 {
     OpenAPI_notification_data_t *notification_data_local_var = ogs_malloc(sizeof(OpenAPI_notification_data_t));
-    ogs_assert(notification_data_local_var);
+    log_assert(notification_data_local_var);
 
     notification_data_local_var->event = event;
     notification_data_local_var->nf_instance_uri = nf_instance_uri;
@@ -61,38 +61,38 @@ cJSON *OpenAPI_notification_data_convertToJSON(OpenAPI_notification_data_t *noti
     OpenAPI_lnode_t *node = NULL;
 
     if (notification_data == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [NotificationData]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [NotificationData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (notification_data->event == OpenAPI_notification_event_type_NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [event]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [event]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "event", OpenAPI_notification_event_type_ToString(notification_data->event)) == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [event]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [event]");
         goto end;
     }
 
     if (!notification_data->nf_instance_uri) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [nf_instance_uri]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [nf_instance_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "nfInstanceUri", notification_data->nf_instance_uri) == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [nf_instance_uri]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [nf_instance_uri]");
         goto end;
     }
 
     if (notification_data->nf_profile) {
     cJSON *nf_profile_local_JSON = OpenAPI_nf_profile_convertToJSON(notification_data->nf_profile);
     if (nf_profile_local_JSON == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [nf_profile]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [nf_profile]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nfProfile", nf_profile_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [nf_profile]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [nf_profile]");
         goto end;
     }
     }
@@ -100,13 +100,13 @@ cJSON *OpenAPI_notification_data_convertToJSON(OpenAPI_notification_data_t *noti
     if (notification_data->profile_changes) {
     cJSON *profile_changesList = cJSON_AddArrayToObject(item, "profileChanges");
     if (profile_changesList == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [profile_changes]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [profile_changes]");
         goto end;
     }
     OpenAPI_list_for_each(notification_data->profile_changes, node) {
         cJSON *itemLocal = OpenAPI_change_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_notification_data_convertToJSON() failed [profile_changes]");
+            log_error("OpenAPI_notification_data_convertToJSON() failed [profile_changes]");
             goto end;
         }
         cJSON_AddItemToArray(profile_changesList, itemLocal);
@@ -115,7 +115,7 @@ cJSON *OpenAPI_notification_data_convertToJSON(OpenAPI_notification_data_t *noti
 
     if (notification_data->condition_event != OpenAPI_condition_event_type_NULL) {
     if (cJSON_AddStringToObject(item, "conditionEvent", OpenAPI_condition_event_type_ToString(notification_data->condition_event)) == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [condition_event]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [condition_event]");
         goto end;
     }
     }
@@ -123,12 +123,12 @@ cJSON *OpenAPI_notification_data_convertToJSON(OpenAPI_notification_data_t *noti
     if (notification_data->subscription_context) {
     cJSON *subscription_context_local_JSON = OpenAPI_subscription_context_convertToJSON(notification_data->subscription_context);
     if (subscription_context_local_JSON == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [subscription_context]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [subscription_context]");
         goto end;
     }
     cJSON_AddItemToObject(item, "subscriptionContext", subscription_context_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed [subscription_context]");
+        log_error("OpenAPI_notification_data_convertToJSON() failed [subscription_context]");
         goto end;
     }
     }
@@ -154,22 +154,22 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_parseFromJSON(cJSON *noti
     OpenAPI_subscription_context_t *subscription_context_local_nonprim = NULL;
     event = cJSON_GetObjectItemCaseSensitive(notification_dataJSON, "event");
     if (!event) {
-        ogs_error("OpenAPI_notification_data_parseFromJSON() failed [event]");
+        log_error("OpenAPI_notification_data_parseFromJSON() failed [event]");
         goto end;
     }
     if (!cJSON_IsString(event)) {
-        ogs_error("OpenAPI_notification_data_parseFromJSON() failed [event]");
+        log_error("OpenAPI_notification_data_parseFromJSON() failed [event]");
         goto end;
     }
     eventVariable = OpenAPI_notification_event_type_FromString(event->valuestring);
 
     nf_instance_uri = cJSON_GetObjectItemCaseSensitive(notification_dataJSON, "nfInstanceUri");
     if (!nf_instance_uri) {
-        ogs_error("OpenAPI_notification_data_parseFromJSON() failed [nf_instance_uri]");
+        log_error("OpenAPI_notification_data_parseFromJSON() failed [nf_instance_uri]");
         goto end;
     }
     if (!cJSON_IsString(nf_instance_uri)) {
-        ogs_error("OpenAPI_notification_data_parseFromJSON() failed [nf_instance_uri]");
+        log_error("OpenAPI_notification_data_parseFromJSON() failed [nf_instance_uri]");
         goto end;
     }
 
@@ -177,7 +177,7 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_parseFromJSON(cJSON *noti
     if (nf_profile) {
     nf_profile_local_nonprim = OpenAPI_nf_profile_parseFromJSON(nf_profile);
     if (!nf_profile_local_nonprim) {
-        ogs_error("OpenAPI_nf_profile_parseFromJSON failed [nf_profile]");
+        log_error("OpenAPI_nf_profile_parseFromJSON failed [nf_profile]");
         goto end;
     }
     }
@@ -186,7 +186,7 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_parseFromJSON(cJSON *noti
     if (profile_changes) {
         cJSON *profile_changes_local = NULL;
         if (!cJSON_IsArray(profile_changes)) {
-            ogs_error("OpenAPI_notification_data_parseFromJSON() failed [profile_changes]");
+            log_error("OpenAPI_notification_data_parseFromJSON() failed [profile_changes]");
             goto end;
         }
 
@@ -194,12 +194,12 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_parseFromJSON(cJSON *noti
 
         cJSON_ArrayForEach(profile_changes_local, profile_changes) {
             if (!cJSON_IsObject(profile_changes_local)) {
-                ogs_error("OpenAPI_notification_data_parseFromJSON() failed [profile_changes]");
+                log_error("OpenAPI_notification_data_parseFromJSON() failed [profile_changes]");
                 goto end;
             }
             OpenAPI_change_item_t *profile_changesItem = OpenAPI_change_item_parseFromJSON(profile_changes_local);
             if (!profile_changesItem) {
-                ogs_error("No profile_changesItem");
+                log_error("No profile_changesItem");
                 goto end;
             }
             OpenAPI_list_add(profile_changesList, profile_changesItem);
@@ -209,7 +209,7 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_parseFromJSON(cJSON *noti
     condition_event = cJSON_GetObjectItemCaseSensitive(notification_dataJSON, "conditionEvent");
     if (condition_event) {
     if (!cJSON_IsString(condition_event)) {
-        ogs_error("OpenAPI_notification_data_parseFromJSON() failed [condition_event]");
+        log_error("OpenAPI_notification_data_parseFromJSON() failed [condition_event]");
         goto end;
     }
     condition_eventVariable = OpenAPI_condition_event_type_FromString(condition_event->valuestring);
@@ -219,7 +219,7 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_parseFromJSON(cJSON *noti
     if (subscription_context) {
     subscription_context_local_nonprim = OpenAPI_subscription_context_parseFromJSON(subscription_context);
     if (!subscription_context_local_nonprim) {
-        ogs_error("OpenAPI_subscription_context_parseFromJSON failed [subscription_context]");
+        log_error("OpenAPI_subscription_context_parseFromJSON failed [subscription_context]");
         goto end;
     }
     }
@@ -258,10 +258,10 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_copy(OpenAPI_notification
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_notification_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_notification_data_convertToJSON() failed");
+        log_error("OpenAPI_notification_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -269,14 +269,14 @@ OpenAPI_notification_data_t *OpenAPI_notification_data_copy(OpenAPI_notification
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

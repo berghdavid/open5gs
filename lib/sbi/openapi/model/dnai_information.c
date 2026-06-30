@@ -13,7 +13,7 @@ OpenAPI_dnai_information_t *OpenAPI_dnai_information_create(
 )
 {
     OpenAPI_dnai_information_t *dnai_information_local_var = ogs_malloc(sizeof(OpenAPI_dnai_information_t));
-    ogs_assert(dnai_information_local_var);
+    log_assert(dnai_information_local_var);
 
     dnai_information_local_var->dnai = dnai;
     dnai_information_local_var->is_no_dnai_change_ind = is_no_dnai_change_ind;
@@ -44,30 +44,30 @@ cJSON *OpenAPI_dnai_information_convertToJSON(OpenAPI_dnai_information_t *dnai_i
     OpenAPI_lnode_t *node = NULL;
 
     if (dnai_information == NULL) {
-        ogs_error("OpenAPI_dnai_information_convertToJSON() failed [DnaiInformation]");
+        log_error("OpenAPI_dnai_information_convertToJSON() failed [DnaiInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!dnai_information->dnai) {
-        ogs_error("OpenAPI_dnai_information_convertToJSON() failed [dnai]");
+        log_error("OpenAPI_dnai_information_convertToJSON() failed [dnai]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "dnai", dnai_information->dnai) == NULL) {
-        ogs_error("OpenAPI_dnai_information_convertToJSON() failed [dnai]");
+        log_error("OpenAPI_dnai_information_convertToJSON() failed [dnai]");
         goto end;
     }
 
     if (dnai_information->is_no_dnai_change_ind) {
     if (cJSON_AddBoolToObject(item, "noDnaiChangeInd", dnai_information->no_dnai_change_ind) == NULL) {
-        ogs_error("OpenAPI_dnai_information_convertToJSON() failed [no_dnai_change_ind]");
+        log_error("OpenAPI_dnai_information_convertToJSON() failed [no_dnai_change_ind]");
         goto end;
     }
     }
 
     if (dnai_information->is_no_local_psa_change_ind) {
     if (cJSON_AddBoolToObject(item, "noLocalPsaChangeInd", dnai_information->no_local_psa_change_ind) == NULL) {
-        ogs_error("OpenAPI_dnai_information_convertToJSON() failed [no_local_psa_change_ind]");
+        log_error("OpenAPI_dnai_information_convertToJSON() failed [no_local_psa_change_ind]");
         goto end;
     }
     }
@@ -85,18 +85,18 @@ OpenAPI_dnai_information_t *OpenAPI_dnai_information_parseFromJSON(cJSON *dnai_i
     cJSON *no_local_psa_change_ind = NULL;
     dnai = cJSON_GetObjectItemCaseSensitive(dnai_informationJSON, "dnai");
     if (!dnai) {
-        ogs_error("OpenAPI_dnai_information_parseFromJSON() failed [dnai]");
+        log_error("OpenAPI_dnai_information_parseFromJSON() failed [dnai]");
         goto end;
     }
     if (!cJSON_IsString(dnai)) {
-        ogs_error("OpenAPI_dnai_information_parseFromJSON() failed [dnai]");
+        log_error("OpenAPI_dnai_information_parseFromJSON() failed [dnai]");
         goto end;
     }
 
     no_dnai_change_ind = cJSON_GetObjectItemCaseSensitive(dnai_informationJSON, "noDnaiChangeInd");
     if (no_dnai_change_ind) {
     if (!cJSON_IsBool(no_dnai_change_ind)) {
-        ogs_error("OpenAPI_dnai_information_parseFromJSON() failed [no_dnai_change_ind]");
+        log_error("OpenAPI_dnai_information_parseFromJSON() failed [no_dnai_change_ind]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_dnai_information_t *OpenAPI_dnai_information_parseFromJSON(cJSON *dnai_i
     no_local_psa_change_ind = cJSON_GetObjectItemCaseSensitive(dnai_informationJSON, "noLocalPsaChangeInd");
     if (no_local_psa_change_ind) {
     if (!cJSON_IsBool(no_local_psa_change_ind)) {
-        ogs_error("OpenAPI_dnai_information_parseFromJSON() failed [no_local_psa_change_ind]");
+        log_error("OpenAPI_dnai_information_parseFromJSON() failed [no_local_psa_change_ind]");
         goto end;
     }
     }
@@ -127,10 +127,10 @@ OpenAPI_dnai_information_t *OpenAPI_dnai_information_copy(OpenAPI_dnai_informati
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dnai_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dnai_information_convertToJSON() failed");
+        log_error("OpenAPI_dnai_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -138,14 +138,14 @@ OpenAPI_dnai_information_t *OpenAPI_dnai_information_copy(OpenAPI_dnai_informati
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

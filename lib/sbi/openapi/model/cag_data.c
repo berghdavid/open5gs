@@ -10,7 +10,7 @@ OpenAPI_cag_data_t *OpenAPI_cag_data_create(
 )
 {
     OpenAPI_cag_data_t *cag_data_local_var = ogs_malloc(sizeof(OpenAPI_cag_data_t));
-    ogs_assert(cag_data_local_var);
+    log_assert(cag_data_local_var);
 
     cag_data_local_var->cag_infos = cag_infos;
     cag_data_local_var->provisioning_time = provisioning_time;
@@ -48,18 +48,18 @@ cJSON *OpenAPI_cag_data_convertToJSON(OpenAPI_cag_data_t *cag_data)
     OpenAPI_lnode_t *node = NULL;
 
     if (cag_data == NULL) {
-        ogs_error("OpenAPI_cag_data_convertToJSON() failed [CagData]");
+        log_error("OpenAPI_cag_data_convertToJSON() failed [CagData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!cag_data->cag_infos) {
-        ogs_error("OpenAPI_cag_data_convertToJSON() failed [cag_infos]");
+        log_error("OpenAPI_cag_data_convertToJSON() failed [cag_infos]");
         return NULL;
     }
     cJSON *cag_infos = cJSON_AddObjectToObject(item, "cagInfos");
     if (cag_infos == NULL) {
-        ogs_error("OpenAPI_cag_data_convertToJSON() failed [cag_infos]");
+        log_error("OpenAPI_cag_data_convertToJSON() failed [cag_infos]");
         goto end;
     }
     cJSON *localMapObject = cag_infos;
@@ -67,18 +67,18 @@ cJSON *OpenAPI_cag_data_convertToJSON(OpenAPI_cag_data_t *cag_data)
         OpenAPI_list_for_each(cag_data->cag_infos, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_cag_data_convertToJSON() failed [cag_infos]");
+                log_error("OpenAPI_cag_data_convertToJSON() failed [cag_infos]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_cag_data_convertToJSON() failed [cag_infos]");
+                log_error("OpenAPI_cag_data_convertToJSON() failed [cag_infos]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_cag_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_cag_data_convertToJSON() failed [inner]");
+                log_error("OpenAPI_cag_data_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -87,7 +87,7 @@ cJSON *OpenAPI_cag_data_convertToJSON(OpenAPI_cag_data_t *cag_data)
 
     if (cag_data->provisioning_time) {
     if (cJSON_AddStringToObject(item, "provisioningTime", cag_data->provisioning_time) == NULL) {
-        ogs_error("OpenAPI_cag_data_convertToJSON() failed [provisioning_time]");
+        log_error("OpenAPI_cag_data_convertToJSON() failed [provisioning_time]");
         goto end;
     }
     }
@@ -105,12 +105,12 @@ OpenAPI_cag_data_t *OpenAPI_cag_data_parseFromJSON(cJSON *cag_dataJSON)
     cJSON *provisioning_time = NULL;
     cag_infos = cJSON_GetObjectItemCaseSensitive(cag_dataJSON, "cagInfos");
     if (!cag_infos) {
-        ogs_error("OpenAPI_cag_data_parseFromJSON() failed [cag_infos]");
+        log_error("OpenAPI_cag_data_parseFromJSON() failed [cag_infos]");
         goto end;
     }
         cJSON *cag_infos_local_map = NULL;
         if (!cJSON_IsObject(cag_infos) && !cJSON_IsNull(cag_infos)) {
-            ogs_error("OpenAPI_cag_data_parseFromJSON() failed [cag_infos]");
+            log_error("OpenAPI_cag_data_parseFromJSON() failed [cag_infos]");
             goto end;
         }
         if (cJSON_IsObject(cag_infos)) {
@@ -124,7 +124,7 @@ OpenAPI_cag_data_t *OpenAPI_cag_data_parseFromJSON(cJSON *cag_dataJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_cag_data_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_cag_data_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(cag_infosList, localMapKeyPair);
@@ -134,7 +134,7 @@ OpenAPI_cag_data_t *OpenAPI_cag_data_parseFromJSON(cJSON *cag_dataJSON)
     provisioning_time = cJSON_GetObjectItemCaseSensitive(cag_dataJSON, "provisioningTime");
     if (provisioning_time) {
     if (!cJSON_IsString(provisioning_time) && !cJSON_IsNull(provisioning_time)) {
-        ogs_error("OpenAPI_cag_data_parseFromJSON() failed [provisioning_time]");
+        log_error("OpenAPI_cag_data_parseFromJSON() failed [provisioning_time]");
         goto end;
     }
     }
@@ -164,10 +164,10 @@ OpenAPI_cag_data_t *OpenAPI_cag_data_copy(OpenAPI_cag_data_t *dst, OpenAPI_cag_d
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_cag_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_cag_data_convertToJSON() failed");
+        log_error("OpenAPI_cag_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -175,14 +175,14 @@ OpenAPI_cag_data_t *OpenAPI_cag_data_copy(OpenAPI_cag_data_t *dst, OpenAPI_cag_d
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

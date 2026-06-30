@@ -9,7 +9,7 @@ OpenAPI_n32f_context_info_t *OpenAPI_n32f_context_info_create(
 )
 {
     OpenAPI_n32f_context_info_t *n32f_context_info_local_var = ogs_malloc(sizeof(OpenAPI_n32f_context_info_t));
-    ogs_assert(n32f_context_info_local_var);
+    log_assert(n32f_context_info_local_var);
 
     n32f_context_info_local_var->n32f_context_id = n32f_context_id;
 
@@ -36,17 +36,17 @@ cJSON *OpenAPI_n32f_context_info_convertToJSON(OpenAPI_n32f_context_info_t *n32f
     OpenAPI_lnode_t *node = NULL;
 
     if (n32f_context_info == NULL) {
-        ogs_error("OpenAPI_n32f_context_info_convertToJSON() failed [N32fContextInfo]");
+        log_error("OpenAPI_n32f_context_info_convertToJSON() failed [N32fContextInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!n32f_context_info->n32f_context_id) {
-        ogs_error("OpenAPI_n32f_context_info_convertToJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_n32f_context_info_convertToJSON() failed [n32f_context_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "n32fContextId", n32f_context_info->n32f_context_id) == NULL) {
-        ogs_error("OpenAPI_n32f_context_info_convertToJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_n32f_context_info_convertToJSON() failed [n32f_context_id]");
         goto end;
     }
 
@@ -61,11 +61,11 @@ OpenAPI_n32f_context_info_t *OpenAPI_n32f_context_info_parseFromJSON(cJSON *n32f
     cJSON *n32f_context_id = NULL;
     n32f_context_id = cJSON_GetObjectItemCaseSensitive(n32f_context_infoJSON, "n32fContextId");
     if (!n32f_context_id) {
-        ogs_error("OpenAPI_n32f_context_info_parseFromJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_n32f_context_info_parseFromJSON() failed [n32f_context_id]");
         goto end;
     }
     if (!cJSON_IsString(n32f_context_id)) {
-        ogs_error("OpenAPI_n32f_context_info_parseFromJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_n32f_context_info_parseFromJSON() failed [n32f_context_id]");
         goto end;
     }
 
@@ -83,10 +83,10 @@ OpenAPI_n32f_context_info_t *OpenAPI_n32f_context_info_copy(OpenAPI_n32f_context
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_n32f_context_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_n32f_context_info_convertToJSON() failed");
+        log_error("OpenAPI_n32f_context_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -94,14 +94,14 @@ OpenAPI_n32f_context_info_t *OpenAPI_n32f_context_info_copy(OpenAPI_n32f_context
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

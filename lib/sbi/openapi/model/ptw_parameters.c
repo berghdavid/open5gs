@@ -10,7 +10,7 @@ OpenAPI_ptw_parameters_t *OpenAPI_ptw_parameters_create(
 )
 {
     OpenAPI_ptw_parameters_t *ptw_parameters_local_var = ogs_malloc(sizeof(OpenAPI_ptw_parameters_t));
-    ogs_assert(ptw_parameters_local_var);
+    log_assert(ptw_parameters_local_var);
 
     ptw_parameters_local_var->operation_mode = operation_mode;
     ptw_parameters_local_var->ptw_value = ptw_value;
@@ -38,26 +38,26 @@ cJSON *OpenAPI_ptw_parameters_convertToJSON(OpenAPI_ptw_parameters_t *ptw_parame
     OpenAPI_lnode_t *node = NULL;
 
     if (ptw_parameters == NULL) {
-        ogs_error("OpenAPI_ptw_parameters_convertToJSON() failed [PtwParameters]");
+        log_error("OpenAPI_ptw_parameters_convertToJSON() failed [PtwParameters]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ptw_parameters->operation_mode == OpenAPI_operation_mode_NULL) {
-        ogs_error("OpenAPI_ptw_parameters_convertToJSON() failed [operation_mode]");
+        log_error("OpenAPI_ptw_parameters_convertToJSON() failed [operation_mode]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "operationMode", OpenAPI_operation_mode_ToString(ptw_parameters->operation_mode)) == NULL) {
-        ogs_error("OpenAPI_ptw_parameters_convertToJSON() failed [operation_mode]");
+        log_error("OpenAPI_ptw_parameters_convertToJSON() failed [operation_mode]");
         goto end;
     }
 
     if (!ptw_parameters->ptw_value) {
-        ogs_error("OpenAPI_ptw_parameters_convertToJSON() failed [ptw_value]");
+        log_error("OpenAPI_ptw_parameters_convertToJSON() failed [ptw_value]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ptwValue", ptw_parameters->ptw_value) == NULL) {
-        ogs_error("OpenAPI_ptw_parameters_convertToJSON() failed [ptw_value]");
+        log_error("OpenAPI_ptw_parameters_convertToJSON() failed [ptw_value]");
         goto end;
     }
 
@@ -74,22 +74,22 @@ OpenAPI_ptw_parameters_t *OpenAPI_ptw_parameters_parseFromJSON(cJSON *ptw_parame
     cJSON *ptw_value = NULL;
     operation_mode = cJSON_GetObjectItemCaseSensitive(ptw_parametersJSON, "operationMode");
     if (!operation_mode) {
-        ogs_error("OpenAPI_ptw_parameters_parseFromJSON() failed [operation_mode]");
+        log_error("OpenAPI_ptw_parameters_parseFromJSON() failed [operation_mode]");
         goto end;
     }
     if (!cJSON_IsString(operation_mode)) {
-        ogs_error("OpenAPI_ptw_parameters_parseFromJSON() failed [operation_mode]");
+        log_error("OpenAPI_ptw_parameters_parseFromJSON() failed [operation_mode]");
         goto end;
     }
     operation_modeVariable = OpenAPI_operation_mode_FromString(operation_mode->valuestring);
 
     ptw_value = cJSON_GetObjectItemCaseSensitive(ptw_parametersJSON, "ptwValue");
     if (!ptw_value) {
-        ogs_error("OpenAPI_ptw_parameters_parseFromJSON() failed [ptw_value]");
+        log_error("OpenAPI_ptw_parameters_parseFromJSON() failed [ptw_value]");
         goto end;
     }
     if (!cJSON_IsString(ptw_value)) {
-        ogs_error("OpenAPI_ptw_parameters_parseFromJSON() failed [ptw_value]");
+        log_error("OpenAPI_ptw_parameters_parseFromJSON() failed [ptw_value]");
         goto end;
     }
 
@@ -108,10 +108,10 @@ OpenAPI_ptw_parameters_t *OpenAPI_ptw_parameters_copy(OpenAPI_ptw_parameters_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ptw_parameters_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ptw_parameters_convertToJSON() failed");
+        log_error("OpenAPI_ptw_parameters_convertToJSON() failed");
         return NULL;
     }
 
@@ -119,14 +119,14 @@ OpenAPI_ptw_parameters_t *OpenAPI_ptw_parameters_copy(OpenAPI_ptw_parameters_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

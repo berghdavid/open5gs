@@ -10,7 +10,7 @@ OpenAPI_problem_details_add_info_t *OpenAPI_problem_details_add_info_create(
 )
 {
     OpenAPI_problem_details_add_info_t *problem_details_add_info_local_var = ogs_malloc(sizeof(OpenAPI_problem_details_add_info_t));
-    ogs_assert(problem_details_add_info_local_var);
+    log_assert(problem_details_add_info_local_var);
 
     problem_details_add_info_local_var->is_remote_error = is_remote_error;
     problem_details_add_info_local_var->remote_error = remote_error;
@@ -34,14 +34,14 @@ cJSON *OpenAPI_problem_details_add_info_convertToJSON(OpenAPI_problem_details_ad
     OpenAPI_lnode_t *node = NULL;
 
     if (problem_details_add_info == NULL) {
-        ogs_error("OpenAPI_problem_details_add_info_convertToJSON() failed [ProblemDetailsAddInfo]");
+        log_error("OpenAPI_problem_details_add_info_convertToJSON() failed [ProblemDetailsAddInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (problem_details_add_info->is_remote_error) {
     if (cJSON_AddBoolToObject(item, "remoteError", problem_details_add_info->remote_error) == NULL) {
-        ogs_error("OpenAPI_problem_details_add_info_convertToJSON() failed [remote_error]");
+        log_error("OpenAPI_problem_details_add_info_convertToJSON() failed [remote_error]");
         goto end;
     }
     }
@@ -58,7 +58,7 @@ OpenAPI_problem_details_add_info_t *OpenAPI_problem_details_add_info_parseFromJS
     remote_error = cJSON_GetObjectItemCaseSensitive(problem_details_add_infoJSON, "remoteError");
     if (remote_error) {
     if (!cJSON_IsBool(remote_error)) {
-        ogs_error("OpenAPI_problem_details_add_info_parseFromJSON() failed [remote_error]");
+        log_error("OpenAPI_problem_details_add_info_parseFromJSON() failed [remote_error]");
         goto end;
     }
     }
@@ -78,10 +78,10 @@ OpenAPI_problem_details_add_info_t *OpenAPI_problem_details_add_info_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_problem_details_add_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_problem_details_add_info_convertToJSON() failed");
+        log_error("OpenAPI_problem_details_add_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -89,14 +89,14 @@ OpenAPI_problem_details_add_info_t *OpenAPI_problem_details_add_info_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

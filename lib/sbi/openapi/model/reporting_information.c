@@ -22,7 +22,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_create(
 )
 {
     OpenAPI_reporting_information_t *reporting_information_local_var = ogs_malloc(sizeof(OpenAPI_reporting_information_t));
-    ogs_assert(reporting_information_local_var);
+    log_assert(reporting_information_local_var);
 
     reporting_information_local_var->is_imm_rep = is_imm_rep;
     reporting_information_local_var->imm_rep = imm_rep;
@@ -70,14 +70,14 @@ cJSON *OpenAPI_reporting_information_convertToJSON(OpenAPI_reporting_information
     OpenAPI_lnode_t *node = NULL;
 
     if (reporting_information == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [ReportingInformation]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [ReportingInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (reporting_information->is_imm_rep) {
     if (cJSON_AddBoolToObject(item, "immRep", reporting_information->imm_rep) == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [imm_rep]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [imm_rep]");
         goto end;
     }
     }
@@ -85,40 +85,40 @@ cJSON *OpenAPI_reporting_information_convertToJSON(OpenAPI_reporting_information
     if (reporting_information->notif_method) {
     cJSON *notif_method_local_JSON = OpenAPI_notification_method_1_convertToJSON(reporting_information->notif_method);
     if (notif_method_local_JSON == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [notif_method]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [notif_method]");
         goto end;
     }
     cJSON_AddItemToObject(item, "notifMethod", notif_method_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [notif_method]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [notif_method]");
         goto end;
     }
     }
 
     if (reporting_information->is_max_report_nbr) {
     if (cJSON_AddNumberToObject(item, "maxReportNbr", reporting_information->max_report_nbr) == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [max_report_nbr]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [max_report_nbr]");
         goto end;
     }
     }
 
     if (reporting_information->mon_dur) {
     if (cJSON_AddStringToObject(item, "monDur", reporting_information->mon_dur) == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [mon_dur]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [mon_dur]");
         goto end;
     }
     }
 
     if (reporting_information->is_rep_period) {
     if (cJSON_AddNumberToObject(item, "repPeriod", reporting_information->rep_period) == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [rep_period]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [rep_period]");
         goto end;
     }
     }
 
     if (reporting_information->is_samp_ratio) {
     if (cJSON_AddNumberToObject(item, "sampRatio", reporting_information->samp_ratio) == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [samp_ratio]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [samp_ratio]");
         goto end;
     }
     }
@@ -126,12 +126,12 @@ cJSON *OpenAPI_reporting_information_convertToJSON(OpenAPI_reporting_information
     if (reporting_information->partition_criteria != OpenAPI_partitioning_criteria_NULL) {
     cJSON *partition_criteriaList = cJSON_AddArrayToObject(item, "partitionCriteria");
     if (partition_criteriaList == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [partition_criteria]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [partition_criteria]");
         goto end;
     }
     OpenAPI_list_for_each(reporting_information->partition_criteria, node) {
         if (cJSON_AddStringToObject(partition_criteriaList, "", OpenAPI_partitioning_criteria_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_reporting_information_convertToJSON() failed [partition_criteria]");
+            log_error("OpenAPI_reporting_information_convertToJSON() failed [partition_criteria]");
             goto end;
         }
     }
@@ -139,14 +139,14 @@ cJSON *OpenAPI_reporting_information_convertToJSON(OpenAPI_reporting_information
 
     if (reporting_information->is_grp_rep_time) {
     if (cJSON_AddNumberToObject(item, "grpRepTime", reporting_information->grp_rep_time) == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [grp_rep_time]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [grp_rep_time]");
         goto end;
     }
     }
 
     if (reporting_information->notif_flag != OpenAPI_notification_flag_NULL) {
     if (cJSON_AddStringToObject(item, "notifFlag", OpenAPI_notification_flag_ToString(reporting_information->notif_flag)) == NULL) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed [notif_flag]");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed [notif_flag]");
         goto end;
     }
     }
@@ -174,7 +174,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     imm_rep = cJSON_GetObjectItemCaseSensitive(reporting_informationJSON, "immRep");
     if (imm_rep) {
     if (!cJSON_IsBool(imm_rep)) {
-        ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [imm_rep]");
+        log_error("OpenAPI_reporting_information_parseFromJSON() failed [imm_rep]");
         goto end;
     }
     }
@@ -183,7 +183,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     if (notif_method) {
     notif_method_local_nonprim = OpenAPI_notification_method_1_parseFromJSON(notif_method);
     if (!notif_method_local_nonprim) {
-        ogs_error("OpenAPI_notification_method_1_parseFromJSON failed [notif_method]");
+        log_error("OpenAPI_notification_method_1_parseFromJSON failed [notif_method]");
         goto end;
     }
     }
@@ -191,7 +191,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     max_report_nbr = cJSON_GetObjectItemCaseSensitive(reporting_informationJSON, "maxReportNbr");
     if (max_report_nbr) {
     if (!cJSON_IsNumber(max_report_nbr)) {
-        ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [max_report_nbr]");
+        log_error("OpenAPI_reporting_information_parseFromJSON() failed [max_report_nbr]");
         goto end;
     }
     }
@@ -199,7 +199,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     mon_dur = cJSON_GetObjectItemCaseSensitive(reporting_informationJSON, "monDur");
     if (mon_dur) {
     if (!cJSON_IsString(mon_dur) && !cJSON_IsNull(mon_dur)) {
-        ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [mon_dur]");
+        log_error("OpenAPI_reporting_information_parseFromJSON() failed [mon_dur]");
         goto end;
     }
     }
@@ -207,7 +207,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     rep_period = cJSON_GetObjectItemCaseSensitive(reporting_informationJSON, "repPeriod");
     if (rep_period) {
     if (!cJSON_IsNumber(rep_period)) {
-        ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [rep_period]");
+        log_error("OpenAPI_reporting_information_parseFromJSON() failed [rep_period]");
         goto end;
     }
     }
@@ -215,7 +215,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     samp_ratio = cJSON_GetObjectItemCaseSensitive(reporting_informationJSON, "sampRatio");
     if (samp_ratio) {
     if (!cJSON_IsNumber(samp_ratio)) {
-        ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [samp_ratio]");
+        log_error("OpenAPI_reporting_information_parseFromJSON() failed [samp_ratio]");
         goto end;
     }
     }
@@ -224,7 +224,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     if (partition_criteria) {
         cJSON *partition_criteria_local = NULL;
         if (!cJSON_IsArray(partition_criteria)) {
-            ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [partition_criteria]");
+            log_error("OpenAPI_reporting_information_parseFromJSON() failed [partition_criteria]");
             goto end;
         }
 
@@ -233,19 +233,19 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
         cJSON_ArrayForEach(partition_criteria_local, partition_criteria) {
             OpenAPI_partitioning_criteria_e localEnum = OpenAPI_partitioning_criteria_NULL;
             if (!cJSON_IsString(partition_criteria_local)) {
-                ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [partition_criteria]");
+                log_error("OpenAPI_reporting_information_parseFromJSON() failed [partition_criteria]");
                 goto end;
             }
             localEnum = OpenAPI_partitioning_criteria_FromString(partition_criteria_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"partition_criteria\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"partition_criteria\" is not supported. Ignoring it ...",
                          partition_criteria_local->valuestring);
             } else {
                 OpenAPI_list_add(partition_criteriaList, (void *)localEnum);
             }
         }
         if (partition_criteriaList->count == 0) {
-            ogs_error("OpenAPI_reporting_information_parseFromJSON() failed: Expected partition_criteriaList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_reporting_information_parseFromJSON() failed: Expected partition_criteriaList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -253,7 +253,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     grp_rep_time = cJSON_GetObjectItemCaseSensitive(reporting_informationJSON, "grpRepTime");
     if (grp_rep_time) {
     if (!cJSON_IsNumber(grp_rep_time)) {
-        ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [grp_rep_time]");
+        log_error("OpenAPI_reporting_information_parseFromJSON() failed [grp_rep_time]");
         goto end;
     }
     }
@@ -261,7 +261,7 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_parseFromJSON(cJS
     notif_flag = cJSON_GetObjectItemCaseSensitive(reporting_informationJSON, "notifFlag");
     if (notif_flag) {
     if (!cJSON_IsString(notif_flag)) {
-        ogs_error("OpenAPI_reporting_information_parseFromJSON() failed [notif_flag]");
+        log_error("OpenAPI_reporting_information_parseFromJSON() failed [notif_flag]");
         goto end;
     }
     notif_flagVariable = OpenAPI_notification_flag_FromString(notif_flag->valuestring);
@@ -302,10 +302,10 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_copy(OpenAPI_repo
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_reporting_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_reporting_information_convertToJSON() failed");
+        log_error("OpenAPI_reporting_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -313,14 +313,14 @@ OpenAPI_reporting_information_t *OpenAPI_reporting_information_copy(OpenAPI_repo
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

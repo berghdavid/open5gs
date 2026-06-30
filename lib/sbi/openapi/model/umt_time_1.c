@@ -10,7 +10,7 @@ OpenAPI_umt_time_1_t *OpenAPI_umt_time_1_create(
 )
 {
     OpenAPI_umt_time_1_t *umt_time_1_local_var = ogs_malloc(sizeof(OpenAPI_umt_time_1_t));
-    ogs_assert(umt_time_1_local_var);
+    log_assert(umt_time_1_local_var);
 
     umt_time_1_local_var->time_of_day = time_of_day;
     umt_time_1_local_var->day_of_week = day_of_week;
@@ -38,22 +38,22 @@ cJSON *OpenAPI_umt_time_1_convertToJSON(OpenAPI_umt_time_1_t *umt_time_1)
     OpenAPI_lnode_t *node = NULL;
 
     if (umt_time_1 == NULL) {
-        ogs_error("OpenAPI_umt_time_1_convertToJSON() failed [UmtTime_1]");
+        log_error("OpenAPI_umt_time_1_convertToJSON() failed [UmtTime_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!umt_time_1->time_of_day) {
-        ogs_error("OpenAPI_umt_time_1_convertToJSON() failed [time_of_day]");
+        log_error("OpenAPI_umt_time_1_convertToJSON() failed [time_of_day]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "timeOfDay", umt_time_1->time_of_day) == NULL) {
-        ogs_error("OpenAPI_umt_time_1_convertToJSON() failed [time_of_day]");
+        log_error("OpenAPI_umt_time_1_convertToJSON() failed [time_of_day]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "dayOfWeek", umt_time_1->day_of_week) == NULL) {
-        ogs_error("OpenAPI_umt_time_1_convertToJSON() failed [day_of_week]");
+        log_error("OpenAPI_umt_time_1_convertToJSON() failed [day_of_week]");
         goto end;
     }
 
@@ -69,21 +69,21 @@ OpenAPI_umt_time_1_t *OpenAPI_umt_time_1_parseFromJSON(cJSON *umt_time_1JSON)
     cJSON *day_of_week = NULL;
     time_of_day = cJSON_GetObjectItemCaseSensitive(umt_time_1JSON, "timeOfDay");
     if (!time_of_day) {
-        ogs_error("OpenAPI_umt_time_1_parseFromJSON() failed [time_of_day]");
+        log_error("OpenAPI_umt_time_1_parseFromJSON() failed [time_of_day]");
         goto end;
     }
     if (!cJSON_IsString(time_of_day)) {
-        ogs_error("OpenAPI_umt_time_1_parseFromJSON() failed [time_of_day]");
+        log_error("OpenAPI_umt_time_1_parseFromJSON() failed [time_of_day]");
         goto end;
     }
 
     day_of_week = cJSON_GetObjectItemCaseSensitive(umt_time_1JSON, "dayOfWeek");
     if (!day_of_week) {
-        ogs_error("OpenAPI_umt_time_1_parseFromJSON() failed [day_of_week]");
+        log_error("OpenAPI_umt_time_1_parseFromJSON() failed [day_of_week]");
         goto end;
     }
     if (!cJSON_IsNumber(day_of_week)) {
-        ogs_error("OpenAPI_umt_time_1_parseFromJSON() failed [day_of_week]");
+        log_error("OpenAPI_umt_time_1_parseFromJSON() failed [day_of_week]");
         goto end;
     }
 
@@ -103,10 +103,10 @@ OpenAPI_umt_time_1_t *OpenAPI_umt_time_1_copy(OpenAPI_umt_time_1_t *dst, OpenAPI
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_umt_time_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_umt_time_1_convertToJSON() failed");
+        log_error("OpenAPI_umt_time_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -114,14 +114,14 @@ OpenAPI_umt_time_1_t *OpenAPI_umt_time_1_copy(OpenAPI_umt_time_1_t *dst, OpenAPI
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

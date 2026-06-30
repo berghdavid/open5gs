@@ -26,7 +26,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_create(
 )
 {
     OpenAPI_charging_data_t *charging_data_local_var = ogs_malloc(sizeof(OpenAPI_charging_data_t));
-    ogs_assert(charging_data_local_var);
+    log_assert(charging_data_local_var);
 
     charging_data_local_var->chg_id = chg_id;
     charging_data_local_var->metering_method = metering_method;
@@ -82,93 +82,93 @@ cJSON *OpenAPI_charging_data_convertToJSON(OpenAPI_charging_data_t *charging_dat
     OpenAPI_lnode_t *node = NULL;
 
     if (charging_data == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [ChargingData]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [ChargingData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!charging_data->chg_id) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [chg_id]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [chg_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "chgId", charging_data->chg_id) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [chg_id]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [chg_id]");
         goto end;
     }
 
     if (charging_data->metering_method != OpenAPI_metering_method_NULL) {
     if (cJSON_AddStringToObject(item, "meteringMethod", OpenAPI_metering_method_ToString(charging_data->metering_method)) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [metering_method]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [metering_method]");
         goto end;
     }
     }
 
     if (charging_data->is_offline) {
     if (cJSON_AddBoolToObject(item, "offline", charging_data->offline) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [offline]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [offline]");
         goto end;
     }
     }
 
     if (charging_data->is_online) {
     if (cJSON_AddBoolToObject(item, "online", charging_data->online) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [online]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [online]");
         goto end;
     }
     }
 
     if (charging_data->is_sdf_handl) {
     if (cJSON_AddBoolToObject(item, "sdfHandl", charging_data->sdf_handl) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [sdf_handl]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [sdf_handl]");
         goto end;
     }
     }
 
     if (charging_data->is_rating_group) {
     if (cJSON_AddNumberToObject(item, "ratingGroup", charging_data->rating_group) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [rating_group]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [rating_group]");
         goto end;
     }
     }
 
     if (charging_data->reporting_level != OpenAPI_reporting_level_NULL) {
     if (cJSON_AddStringToObject(item, "reportingLevel", OpenAPI_reporting_level_ToString(charging_data->reporting_level)) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [reporting_level]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [reporting_level]");
         goto end;
     }
     }
 
     if (charging_data->is_service_id) {
     if (cJSON_AddNumberToObject(item, "serviceId", charging_data->service_id) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [service_id]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [service_id]");
         goto end;
     }
     }
 
     if (charging_data->sponsor_id) {
     if (cJSON_AddStringToObject(item, "sponsorId", charging_data->sponsor_id) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [sponsor_id]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [sponsor_id]");
         goto end;
     }
     }
 
     if (charging_data->app_svc_prov_id) {
     if (cJSON_AddStringToObject(item, "appSvcProvId", charging_data->app_svc_prov_id) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [app_svc_prov_id]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [app_svc_prov_id]");
         goto end;
     }
     }
 
     if (charging_data->is_af_charging_identifier) {
     if (cJSON_AddNumberToObject(item, "afChargingIdentifier", charging_data->af_charging_identifier) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [af_charging_identifier]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [af_charging_identifier]");
         goto end;
     }
     }
 
     if (charging_data->af_charg_id) {
     if (cJSON_AddStringToObject(item, "afChargId", charging_data->af_charg_id) == NULL) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed [af_charg_id]");
+        log_error("OpenAPI_charging_data_convertToJSON() failed [af_charg_id]");
         goto end;
     }
     }
@@ -197,18 +197,18 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     cJSON *af_charg_id = NULL;
     chg_id = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "chgId");
     if (!chg_id) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [chg_id]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [chg_id]");
         goto end;
     }
     if (!cJSON_IsString(chg_id)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [chg_id]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [chg_id]");
         goto end;
     }
 
     metering_method = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "meteringMethod");
     if (metering_method) {
     if (!cJSON_IsString(metering_method)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [metering_method]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [metering_method]");
         goto end;
     }
     metering_methodVariable = OpenAPI_metering_method_FromString(metering_method->valuestring);
@@ -217,7 +217,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     offline = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "offline");
     if (offline) {
     if (!cJSON_IsBool(offline)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [offline]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [offline]");
         goto end;
     }
     }
@@ -225,7 +225,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     online = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "online");
     if (online) {
     if (!cJSON_IsBool(online)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [online]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [online]");
         goto end;
     }
     }
@@ -233,7 +233,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     sdf_handl = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "sdfHandl");
     if (sdf_handl) {
     if (!cJSON_IsBool(sdf_handl)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [sdf_handl]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [sdf_handl]");
         goto end;
     }
     }
@@ -241,7 +241,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     rating_group = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "ratingGroup");
     if (rating_group) {
     if (!cJSON_IsNumber(rating_group)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [rating_group]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [rating_group]");
         goto end;
     }
     }
@@ -249,7 +249,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     reporting_level = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "reportingLevel");
     if (reporting_level) {
     if (!cJSON_IsString(reporting_level)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [reporting_level]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [reporting_level]");
         goto end;
     }
     reporting_levelVariable = OpenAPI_reporting_level_FromString(reporting_level->valuestring);
@@ -258,7 +258,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     service_id = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "serviceId");
     if (service_id) {
     if (!cJSON_IsNumber(service_id)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [service_id]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [service_id]");
         goto end;
     }
     }
@@ -266,7 +266,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     sponsor_id = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "sponsorId");
     if (sponsor_id) {
     if (!cJSON_IsString(sponsor_id) && !cJSON_IsNull(sponsor_id)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [sponsor_id]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [sponsor_id]");
         goto end;
     }
     }
@@ -274,7 +274,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     app_svc_prov_id = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "appSvcProvId");
     if (app_svc_prov_id) {
     if (!cJSON_IsString(app_svc_prov_id) && !cJSON_IsNull(app_svc_prov_id)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [app_svc_prov_id]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [app_svc_prov_id]");
         goto end;
     }
     }
@@ -282,7 +282,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     af_charging_identifier = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "afChargingIdentifier");
     if (af_charging_identifier) {
     if (!cJSON_IsNumber(af_charging_identifier)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [af_charging_identifier]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [af_charging_identifier]");
         goto end;
     }
     }
@@ -290,7 +290,7 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_parseFromJSON(cJSON *charging_dat
     af_charg_id = cJSON_GetObjectItemCaseSensitive(charging_dataJSON, "afChargId");
     if (af_charg_id) {
     if (!cJSON_IsString(af_charg_id) && !cJSON_IsNull(af_charg_id)) {
-        ogs_error("OpenAPI_charging_data_parseFromJSON() failed [af_charg_id]");
+        log_error("OpenAPI_charging_data_parseFromJSON() failed [af_charg_id]");
         goto end;
     }
     }
@@ -326,10 +326,10 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_copy(OpenAPI_charging_data_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_charging_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_charging_data_convertToJSON() failed");
+        log_error("OpenAPI_charging_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -337,14 +337,14 @@ OpenAPI_charging_data_t *OpenAPI_charging_data_copy(OpenAPI_charging_data_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

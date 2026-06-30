@@ -11,7 +11,7 @@ OpenAPI_user_data_congestion_info_t *OpenAPI_user_data_congestion_info_create(
 )
 {
     OpenAPI_user_data_congestion_info_t *user_data_congestion_info_local_var = ogs_malloc(sizeof(OpenAPI_user_data_congestion_info_t));
-    ogs_assert(user_data_congestion_info_local_var);
+    log_assert(user_data_congestion_info_local_var);
 
     user_data_congestion_info_local_var->network_area = network_area;
     user_data_congestion_info_local_var->congestion_info = congestion_info;
@@ -48,50 +48,50 @@ cJSON *OpenAPI_user_data_congestion_info_convertToJSON(OpenAPI_user_data_congest
     OpenAPI_lnode_t *node = NULL;
 
     if (user_data_congestion_info == NULL) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [UserDataCongestionInfo]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [UserDataCongestionInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!user_data_congestion_info->network_area) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [network_area]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [network_area]");
         return NULL;
     }
     cJSON *network_area_local_JSON = OpenAPI_network_area_info_convertToJSON(user_data_congestion_info->network_area);
     if (network_area_local_JSON == NULL) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [network_area]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [network_area]");
         goto end;
     }
     cJSON_AddItemToObject(item, "networkArea", network_area_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [network_area]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [network_area]");
         goto end;
     }
 
     if (!user_data_congestion_info->congestion_info) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [congestion_info]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [congestion_info]");
         return NULL;
     }
     cJSON *congestion_info_local_JSON = OpenAPI_congestion_info_convertToJSON(user_data_congestion_info->congestion_info);
     if (congestion_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [congestion_info]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [congestion_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "congestionInfo", congestion_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [congestion_info]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [congestion_info]");
         goto end;
     }
 
     if (user_data_congestion_info->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(user_data_congestion_info->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed [snssai]");
         goto end;
     }
     }
@@ -112,23 +112,23 @@ OpenAPI_user_data_congestion_info_t *OpenAPI_user_data_congestion_info_parseFrom
     OpenAPI_snssai_t *snssai_local_nonprim = NULL;
     network_area = cJSON_GetObjectItemCaseSensitive(user_data_congestion_infoJSON, "networkArea");
     if (!network_area) {
-        ogs_error("OpenAPI_user_data_congestion_info_parseFromJSON() failed [network_area]");
+        log_error("OpenAPI_user_data_congestion_info_parseFromJSON() failed [network_area]");
         goto end;
     }
     network_area_local_nonprim = OpenAPI_network_area_info_parseFromJSON(network_area);
     if (!network_area_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [network_area]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [network_area]");
         goto end;
     }
 
     congestion_info = cJSON_GetObjectItemCaseSensitive(user_data_congestion_infoJSON, "congestionInfo");
     if (!congestion_info) {
-        ogs_error("OpenAPI_user_data_congestion_info_parseFromJSON() failed [congestion_info]");
+        log_error("OpenAPI_user_data_congestion_info_parseFromJSON() failed [congestion_info]");
         goto end;
     }
     congestion_info_local_nonprim = OpenAPI_congestion_info_parseFromJSON(congestion_info);
     if (!congestion_info_local_nonprim) {
-        ogs_error("OpenAPI_congestion_info_parseFromJSON failed [congestion_info]");
+        log_error("OpenAPI_congestion_info_parseFromJSON failed [congestion_info]");
         goto end;
     }
 
@@ -136,7 +136,7 @@ OpenAPI_user_data_congestion_info_t *OpenAPI_user_data_congestion_info_parseFrom
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -169,10 +169,10 @@ OpenAPI_user_data_congestion_info_t *OpenAPI_user_data_congestion_info_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_user_data_congestion_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_user_data_congestion_info_convertToJSON() failed");
+        log_error("OpenAPI_user_data_congestion_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -180,14 +180,14 @@ OpenAPI_user_data_congestion_info_t *OpenAPI_user_data_congestion_info_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

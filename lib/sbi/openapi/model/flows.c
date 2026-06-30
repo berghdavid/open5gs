@@ -11,7 +11,7 @@ OpenAPI_flows_t *OpenAPI_flows_create(
 )
 {
     OpenAPI_flows_t *flows_local_var = ogs_malloc(sizeof(OpenAPI_flows_t));
-    ogs_assert(flows_local_var);
+    log_assert(flows_local_var);
 
     flows_local_var->cont_vers = cont_vers;
     flows_local_var->f_nums = f_nums;
@@ -50,7 +50,7 @@ cJSON *OpenAPI_flows_convertToJSON(OpenAPI_flows_t *flows)
     OpenAPI_lnode_t *node = NULL;
 
     if (flows == NULL) {
-        ogs_error("OpenAPI_flows_convertToJSON() failed [Flows]");
+        log_error("OpenAPI_flows_convertToJSON() failed [Flows]");
         return NULL;
     }
 
@@ -58,16 +58,16 @@ cJSON *OpenAPI_flows_convertToJSON(OpenAPI_flows_t *flows)
     if (flows->cont_vers) {
     cJSON *cont_versList = cJSON_AddArrayToObject(item, "contVers");
     if (cont_versList == NULL) {
-        ogs_error("OpenAPI_flows_convertToJSON() failed [cont_vers]");
+        log_error("OpenAPI_flows_convertToJSON() failed [cont_vers]");
         goto end;
     }
     OpenAPI_list_for_each(flows->cont_vers, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_flows_convertToJSON() failed [cont_vers]");
+            log_error("OpenAPI_flows_convertToJSON() failed [cont_vers]");
             goto end;
         }
         if (cJSON_AddNumberToObject(cont_versList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_flows_convertToJSON() failed [cont_vers]");
+            log_error("OpenAPI_flows_convertToJSON() failed [cont_vers]");
             goto end;
         }
     }
@@ -76,23 +76,23 @@ cJSON *OpenAPI_flows_convertToJSON(OpenAPI_flows_t *flows)
     if (flows->f_nums) {
     cJSON *f_numsList = cJSON_AddArrayToObject(item, "fNums");
     if (f_numsList == NULL) {
-        ogs_error("OpenAPI_flows_convertToJSON() failed [f_nums]");
+        log_error("OpenAPI_flows_convertToJSON() failed [f_nums]");
         goto end;
     }
     OpenAPI_list_for_each(flows->f_nums, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_flows_convertToJSON() failed [f_nums]");
+            log_error("OpenAPI_flows_convertToJSON() failed [f_nums]");
             goto end;
         }
         if (cJSON_AddNumberToObject(f_numsList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_flows_convertToJSON() failed [f_nums]");
+            log_error("OpenAPI_flows_convertToJSON() failed [f_nums]");
             goto end;
         }
     }
     }
 
     if (cJSON_AddNumberToObject(item, "medCompN", flows->med_comp_n) == NULL) {
-        ogs_error("OpenAPI_flows_convertToJSON() failed [med_comp_n]");
+        log_error("OpenAPI_flows_convertToJSON() failed [med_comp_n]");
         goto end;
     }
 
@@ -113,7 +113,7 @@ OpenAPI_flows_t *OpenAPI_flows_parseFromJSON(cJSON *flowsJSON)
     if (cont_vers) {
         cJSON *cont_vers_local = NULL;
         if (!cJSON_IsArray(cont_vers)) {
-            ogs_error("OpenAPI_flows_parseFromJSON() failed [cont_vers]");
+            log_error("OpenAPI_flows_parseFromJSON() failed [cont_vers]");
             goto end;
         }
 
@@ -123,12 +123,12 @@ OpenAPI_flows_t *OpenAPI_flows_parseFromJSON(cJSON *flowsJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(cont_vers_local)) {
-                ogs_error("OpenAPI_flows_parseFromJSON() failed [cont_vers]");
+                log_error("OpenAPI_flows_parseFromJSON() failed [cont_vers]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_flows_parseFromJSON() failed [cont_vers]");
+                log_error("OpenAPI_flows_parseFromJSON() failed [cont_vers]");
                 goto end;
             }
             *localDouble = cont_vers_local->valuedouble;
@@ -140,7 +140,7 @@ OpenAPI_flows_t *OpenAPI_flows_parseFromJSON(cJSON *flowsJSON)
     if (f_nums) {
         cJSON *f_nums_local = NULL;
         if (!cJSON_IsArray(f_nums)) {
-            ogs_error("OpenAPI_flows_parseFromJSON() failed [f_nums]");
+            log_error("OpenAPI_flows_parseFromJSON() failed [f_nums]");
             goto end;
         }
 
@@ -150,12 +150,12 @@ OpenAPI_flows_t *OpenAPI_flows_parseFromJSON(cJSON *flowsJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(f_nums_local)) {
-                ogs_error("OpenAPI_flows_parseFromJSON() failed [f_nums]");
+                log_error("OpenAPI_flows_parseFromJSON() failed [f_nums]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_flows_parseFromJSON() failed [f_nums]");
+                log_error("OpenAPI_flows_parseFromJSON() failed [f_nums]");
                 goto end;
             }
             *localDouble = f_nums_local->valuedouble;
@@ -165,11 +165,11 @@ OpenAPI_flows_t *OpenAPI_flows_parseFromJSON(cJSON *flowsJSON)
 
     med_comp_n = cJSON_GetObjectItemCaseSensitive(flowsJSON, "medCompN");
     if (!med_comp_n) {
-        ogs_error("OpenAPI_flows_parseFromJSON() failed [med_comp_n]");
+        log_error("OpenAPI_flows_parseFromJSON() failed [med_comp_n]");
         goto end;
     }
     if (!cJSON_IsNumber(med_comp_n)) {
-        ogs_error("OpenAPI_flows_parseFromJSON() failed [med_comp_n]");
+        log_error("OpenAPI_flows_parseFromJSON() failed [med_comp_n]");
         goto end;
     }
 
@@ -204,10 +204,10 @@ OpenAPI_flows_t *OpenAPI_flows_copy(OpenAPI_flows_t *dst, OpenAPI_flows_t *src)
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_flows_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_flows_convertToJSON() failed");
+        log_error("OpenAPI_flows_convertToJSON() failed");
         return NULL;
     }
 
@@ -215,14 +215,14 @@ OpenAPI_flows_t *OpenAPI_flows_copy(OpenAPI_flows_t *dst, OpenAPI_flows_t *src)
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

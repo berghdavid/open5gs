@@ -32,7 +32,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_create(
 )
 {
     OpenAPI_smf_registration_t *smf_registration_local_var = ogs_malloc(sizeof(OpenAPI_smf_registration_t));
-    ogs_assert(smf_registration_local_var);
+    log_assert(smf_registration_local_var);
 
     smf_registration_local_var->smf_instance_id = smf_instance_id;
     smf_registration_local_var->smf_set_id = smf_set_id;
@@ -145,93 +145,93 @@ cJSON *OpenAPI_smf_registration_convertToJSON(OpenAPI_smf_registration_t *smf_re
     OpenAPI_lnode_t *node = NULL;
 
     if (smf_registration == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [SmfRegistration]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [SmfRegistration]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!smf_registration->smf_instance_id) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [smf_instance_id]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [smf_instance_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "smfInstanceId", smf_registration->smf_instance_id) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [smf_instance_id]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [smf_instance_id]");
         goto end;
     }
 
     if (smf_registration->smf_set_id) {
     if (cJSON_AddStringToObject(item, "smfSetId", smf_registration->smf_set_id) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [smf_set_id]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [smf_set_id]");
         goto end;
     }
     }
 
     if (smf_registration->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", smf_registration->supported_features) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
 
     if (cJSON_AddNumberToObject(item, "pduSessionId", smf_registration->pdu_session_id) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [pdu_session_id]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [pdu_session_id]");
         goto end;
     }
 
     if (!smf_registration->single_nssai) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [single_nssai]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [single_nssai]");
         return NULL;
     }
     cJSON *single_nssai_local_JSON = OpenAPI_snssai_convertToJSON(smf_registration->single_nssai);
     if (single_nssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [single_nssai]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [single_nssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "singleNssai", single_nssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [single_nssai]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [single_nssai]");
         goto end;
     }
 
     if (smf_registration->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", smf_registration->dnn) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [dnn]");
         goto end;
     }
     }
 
     if (smf_registration->is_emergency_services) {
     if (cJSON_AddBoolToObject(item, "emergencyServices", smf_registration->emergency_services) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [emergency_services]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [emergency_services]");
         goto end;
     }
     }
 
     if (smf_registration->pcscf_restoration_callback_uri) {
     if (cJSON_AddStringToObject(item, "pcscfRestorationCallbackUri", smf_registration->pcscf_restoration_callback_uri) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [pcscf_restoration_callback_uri]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [pcscf_restoration_callback_uri]");
         goto end;
     }
     }
 
     if (!smf_registration->plmn_id) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [plmn_id]");
         return NULL;
     }
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(smf_registration->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [plmn_id]");
         goto end;
     }
 
     if (smf_registration->pgw_fqdn) {
     if (cJSON_AddStringToObject(item, "pgwFqdn", smf_registration->pgw_fqdn) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [pgw_fqdn]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [pgw_fqdn]");
         goto end;
     }
     }
@@ -239,40 +239,40 @@ cJSON *OpenAPI_smf_registration_convertToJSON(OpenAPI_smf_registration_t *smf_re
     if (smf_registration->pgw_ip_addr) {
     cJSON *pgw_ip_addr_local_JSON = OpenAPI_ip_address_convertToJSON(smf_registration->pgw_ip_addr);
     if (pgw_ip_addr_local_JSON == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [pgw_ip_addr]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [pgw_ip_addr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "pgwIpAddr", pgw_ip_addr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [pgw_ip_addr]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [pgw_ip_addr]");
         goto end;
     }
     }
 
     if (smf_registration->is_epdg_ind) {
     if (cJSON_AddBoolToObject(item, "epdgInd", smf_registration->epdg_ind) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [epdg_ind]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [epdg_ind]");
         goto end;
     }
     }
 
     if (smf_registration->dereg_callback_uri) {
     if (cJSON_AddStringToObject(item, "deregCallbackUri", smf_registration->dereg_callback_uri) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [dereg_callback_uri]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [dereg_callback_uri]");
         goto end;
     }
     }
 
     if (smf_registration->registration_reason != OpenAPI_registration_reason_NULL) {
     if (cJSON_AddStringToObject(item, "registrationReason", OpenAPI_registration_reason_ToString(smf_registration->registration_reason)) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [registration_reason]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [registration_reason]");
         goto end;
     }
     }
 
     if (smf_registration->registration_time) {
     if (cJSON_AddStringToObject(item, "registrationTime", smf_registration->registration_time) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [registration_time]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [registration_time]");
         goto end;
     }
     }
@@ -280,26 +280,26 @@ cJSON *OpenAPI_smf_registration_convertToJSON(OpenAPI_smf_registration_t *smf_re
     if (smf_registration->context_info) {
     cJSON *context_info_local_JSON = OpenAPI_context_info_convertToJSON(smf_registration->context_info);
     if (context_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [context_info]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [context_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "contextInfo", context_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [context_info]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [context_info]");
         goto end;
     }
     }
 
     if (smf_registration->pcf_id) {
     if (cJSON_AddStringToObject(item, "pcfId", smf_registration->pcf_id) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [pcf_id]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [pcf_id]");
         goto end;
     }
     }
 
     if (smf_registration->data_restoration_callback_uri) {
     if (cJSON_AddStringToObject(item, "dataRestorationCallbackUri", smf_registration->data_restoration_callback_uri) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [data_restoration_callback_uri]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [data_restoration_callback_uri]");
         goto end;
     }
     }
@@ -307,12 +307,12 @@ cJSON *OpenAPI_smf_registration_convertToJSON(OpenAPI_smf_registration_t *smf_re
     if (smf_registration->reset_ids) {
     cJSON *reset_idsList = cJSON_AddArrayToObject(item, "resetIds");
     if (reset_idsList == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [reset_ids]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [reset_ids]");
         goto end;
     }
     OpenAPI_list_for_each(smf_registration->reset_ids, node) {
         if (cJSON_AddStringToObject(reset_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_smf_registration_convertToJSON() failed [reset_ids]");
+            log_error("OpenAPI_smf_registration_convertToJSON() failed [reset_ids]");
             goto end;
         }
     }
@@ -320,14 +320,14 @@ cJSON *OpenAPI_smf_registration_convertToJSON(OpenAPI_smf_registration_t *smf_re
 
     if (smf_registration->is_udr_restart_ind) {
     if (cJSON_AddBoolToObject(item, "udrRestartInd", smf_registration->udr_restart_ind) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [udr_restart_ind]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [udr_restart_ind]");
         goto end;
     }
     }
 
     if (smf_registration->last_synchronization_time) {
     if (cJSON_AddStringToObject(item, "lastSynchronizationTime", smf_registration->last_synchronization_time) == NULL) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed [last_synchronization_time]");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed [last_synchronization_time]");
         goto end;
     }
     }
@@ -369,18 +369,18 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     cJSON *last_synchronization_time = NULL;
     smf_instance_id = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "smfInstanceId");
     if (!smf_instance_id) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [smf_instance_id]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [smf_instance_id]");
         goto end;
     }
     if (!cJSON_IsString(smf_instance_id)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [smf_instance_id]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [smf_instance_id]");
         goto end;
     }
 
     smf_set_id = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "smfSetId");
     if (smf_set_id) {
     if (!cJSON_IsString(smf_set_id) && !cJSON_IsNull(smf_set_id)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [smf_set_id]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [smf_set_id]");
         goto end;
     }
     }
@@ -388,36 +388,36 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     supported_features = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
 
     pdu_session_id = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "pduSessionId");
     if (!pdu_session_id) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [pdu_session_id]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [pdu_session_id]");
         goto end;
     }
     if (!cJSON_IsNumber(pdu_session_id)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [pdu_session_id]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [pdu_session_id]");
         goto end;
     }
 
     single_nssai = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "singleNssai");
     if (!single_nssai) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [single_nssai]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [single_nssai]");
         goto end;
     }
     single_nssai_local_nonprim = OpenAPI_snssai_parseFromJSON(single_nssai);
     if (!single_nssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [single_nssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [single_nssai]");
         goto end;
     }
 
     dnn = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -425,7 +425,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     emergency_services = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "emergencyServices");
     if (emergency_services) {
     if (!cJSON_IsBool(emergency_services)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [emergency_services]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [emergency_services]");
         goto end;
     }
     }
@@ -433,26 +433,26 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     pcscf_restoration_callback_uri = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "pcscfRestorationCallbackUri");
     if (pcscf_restoration_callback_uri) {
     if (!cJSON_IsString(pcscf_restoration_callback_uri) && !cJSON_IsNull(pcscf_restoration_callback_uri)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [pcscf_restoration_callback_uri]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [pcscf_restoration_callback_uri]");
         goto end;
     }
     }
 
     plmn_id = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "plmnId");
     if (!plmn_id) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [plmn_id]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [plmn_id]");
         goto end;
     }
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
 
     pgw_fqdn = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "pgwFqdn");
     if (pgw_fqdn) {
     if (!cJSON_IsString(pgw_fqdn) && !cJSON_IsNull(pgw_fqdn)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [pgw_fqdn]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [pgw_fqdn]");
         goto end;
     }
     }
@@ -461,7 +461,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     if (pgw_ip_addr) {
     pgw_ip_addr_local_nonprim = OpenAPI_ip_address_parseFromJSON(pgw_ip_addr);
     if (!pgw_ip_addr_local_nonprim) {
-        ogs_error("OpenAPI_ip_address_parseFromJSON failed [pgw_ip_addr]");
+        log_error("OpenAPI_ip_address_parseFromJSON failed [pgw_ip_addr]");
         goto end;
     }
     }
@@ -469,7 +469,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     epdg_ind = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "epdgInd");
     if (epdg_ind) {
     if (!cJSON_IsBool(epdg_ind)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [epdg_ind]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [epdg_ind]");
         goto end;
     }
     }
@@ -477,7 +477,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     dereg_callback_uri = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "deregCallbackUri");
     if (dereg_callback_uri) {
     if (!cJSON_IsString(dereg_callback_uri) && !cJSON_IsNull(dereg_callback_uri)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [dereg_callback_uri]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [dereg_callback_uri]");
         goto end;
     }
     }
@@ -485,7 +485,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     registration_reason = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "registrationReason");
     if (registration_reason) {
     if (!cJSON_IsString(registration_reason)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [registration_reason]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [registration_reason]");
         goto end;
     }
     registration_reasonVariable = OpenAPI_registration_reason_FromString(registration_reason->valuestring);
@@ -494,7 +494,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     registration_time = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "registrationTime");
     if (registration_time) {
     if (!cJSON_IsString(registration_time) && !cJSON_IsNull(registration_time)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [registration_time]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [registration_time]");
         goto end;
     }
     }
@@ -503,7 +503,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     if (context_info) {
     context_info_local_nonprim = OpenAPI_context_info_parseFromJSON(context_info);
     if (!context_info_local_nonprim) {
-        ogs_error("OpenAPI_context_info_parseFromJSON failed [context_info]");
+        log_error("OpenAPI_context_info_parseFromJSON failed [context_info]");
         goto end;
     }
     }
@@ -511,7 +511,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     pcf_id = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "pcfId");
     if (pcf_id) {
     if (!cJSON_IsString(pcf_id) && !cJSON_IsNull(pcf_id)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [pcf_id]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [pcf_id]");
         goto end;
     }
     }
@@ -519,7 +519,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     data_restoration_callback_uri = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "dataRestorationCallbackUri");
     if (data_restoration_callback_uri) {
     if (!cJSON_IsString(data_restoration_callback_uri) && !cJSON_IsNull(data_restoration_callback_uri)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [data_restoration_callback_uri]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [data_restoration_callback_uri]");
         goto end;
     }
     }
@@ -528,7 +528,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     if (reset_ids) {
         cJSON *reset_ids_local = NULL;
         if (!cJSON_IsArray(reset_ids)) {
-            ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [reset_ids]");
+            log_error("OpenAPI_smf_registration_parseFromJSON() failed [reset_ids]");
             goto end;
         }
 
@@ -538,7 +538,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(reset_ids_local)) {
-                ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [reset_ids]");
+                log_error("OpenAPI_smf_registration_parseFromJSON() failed [reset_ids]");
                 goto end;
             }
             OpenAPI_list_add(reset_idsList, ogs_strdup(reset_ids_local->valuestring));
@@ -548,7 +548,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     udr_restart_ind = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "udrRestartInd");
     if (udr_restart_ind) {
     if (!cJSON_IsBool(udr_restart_ind)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [udr_restart_ind]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [udr_restart_ind]");
         goto end;
     }
     }
@@ -556,7 +556,7 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_parseFromJSON(cJSON *smf_re
     last_synchronization_time = cJSON_GetObjectItemCaseSensitive(smf_registrationJSON, "lastSynchronizationTime");
     if (last_synchronization_time) {
     if (!cJSON_IsString(last_synchronization_time) && !cJSON_IsNull(last_synchronization_time)) {
-        ogs_error("OpenAPI_smf_registration_parseFromJSON() failed [last_synchronization_time]");
+        log_error("OpenAPI_smf_registration_parseFromJSON() failed [last_synchronization_time]");
         goto end;
     }
     }
@@ -622,10 +622,10 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_copy(OpenAPI_smf_registrati
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_smf_registration_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_smf_registration_convertToJSON() failed");
+        log_error("OpenAPI_smf_registration_convertToJSON() failed");
         return NULL;
     }
 
@@ -633,14 +633,14 @@ OpenAPI_smf_registration_t *OpenAPI_smf_registration_copy(OpenAPI_smf_registrati
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

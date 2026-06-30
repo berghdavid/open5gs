@@ -8,7 +8,7 @@ OpenAPI_location_accuracy_t *OpenAPI_location_accuracy_create(
 )
 {
     OpenAPI_location_accuracy_t *location_accuracy_local_var = ogs_malloc(sizeof(OpenAPI_location_accuracy_t));
-    ogs_assert(location_accuracy_local_var);
+    log_assert(location_accuracy_local_var);
 
 
     return location_accuracy_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_location_accuracy_convertToJSON(OpenAPI_location_accuracy_t *loca
     OpenAPI_lnode_t *node = NULL;
 
     if (location_accuracy == NULL) {
-        ogs_error("OpenAPI_location_accuracy_convertToJSON() failed [LocationAccuracy]");
+        log_error("OpenAPI_location_accuracy_convertToJSON() failed [LocationAccuracy]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_location_accuracy_t *OpenAPI_location_accuracy_copy(OpenAPI_location_acc
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_location_accuracy_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_location_accuracy_convertToJSON() failed");
+        log_error("OpenAPI_location_accuracy_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_location_accuracy_t *OpenAPI_location_accuracy_copy(OpenAPI_location_acc
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

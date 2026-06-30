@@ -12,7 +12,7 @@ OpenAPI_exception_t *OpenAPI_exception_create(
 )
 {
     OpenAPI_exception_t *exception_local_var = ogs_malloc(sizeof(OpenAPI_exception_t));
-    ogs_assert(exception_local_var);
+    log_assert(exception_local_var);
 
     exception_local_var->excep_id = excep_id;
     exception_local_var->is_excep_level = is_excep_level;
@@ -46,29 +46,29 @@ cJSON *OpenAPI_exception_convertToJSON(OpenAPI_exception_t *exception)
     OpenAPI_lnode_t *node = NULL;
 
     if (exception == NULL) {
-        ogs_error("OpenAPI_exception_convertToJSON() failed [Exception]");
+        log_error("OpenAPI_exception_convertToJSON() failed [Exception]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!exception->excep_id) {
-        ogs_error("OpenAPI_exception_convertToJSON() failed [excep_id]");
+        log_error("OpenAPI_exception_convertToJSON() failed [excep_id]");
         return NULL;
     }
     cJSON *excep_id_local_JSON = OpenAPI_exception_id_convertToJSON(exception->excep_id);
     if (excep_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_exception_convertToJSON() failed [excep_id]");
+        log_error("OpenAPI_exception_convertToJSON() failed [excep_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "excepId", excep_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_exception_convertToJSON() failed [excep_id]");
+        log_error("OpenAPI_exception_convertToJSON() failed [excep_id]");
         goto end;
     }
 
     if (exception->is_excep_level) {
     if (cJSON_AddNumberToObject(item, "excepLevel", exception->excep_level) == NULL) {
-        ogs_error("OpenAPI_exception_convertToJSON() failed [excep_level]");
+        log_error("OpenAPI_exception_convertToJSON() failed [excep_level]");
         goto end;
     }
     }
@@ -76,12 +76,12 @@ cJSON *OpenAPI_exception_convertToJSON(OpenAPI_exception_t *exception)
     if (exception->excep_trend) {
     cJSON *excep_trend_local_JSON = OpenAPI_exception_trend_convertToJSON(exception->excep_trend);
     if (excep_trend_local_JSON == NULL) {
-        ogs_error("OpenAPI_exception_convertToJSON() failed [excep_trend]");
+        log_error("OpenAPI_exception_convertToJSON() failed [excep_trend]");
         goto end;
     }
     cJSON_AddItemToObject(item, "excepTrend", excep_trend_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_exception_convertToJSON() failed [excep_trend]");
+        log_error("OpenAPI_exception_convertToJSON() failed [excep_trend]");
         goto end;
     }
     }
@@ -101,19 +101,19 @@ OpenAPI_exception_t *OpenAPI_exception_parseFromJSON(cJSON *exceptionJSON)
     OpenAPI_exception_trend_t *excep_trend_local_nonprim = NULL;
     excep_id = cJSON_GetObjectItemCaseSensitive(exceptionJSON, "excepId");
     if (!excep_id) {
-        ogs_error("OpenAPI_exception_parseFromJSON() failed [excep_id]");
+        log_error("OpenAPI_exception_parseFromJSON() failed [excep_id]");
         goto end;
     }
     excep_id_local_nonprim = OpenAPI_exception_id_parseFromJSON(excep_id);
     if (!excep_id_local_nonprim) {
-        ogs_error("OpenAPI_exception_id_parseFromJSON failed [excep_id]");
+        log_error("OpenAPI_exception_id_parseFromJSON failed [excep_id]");
         goto end;
     }
 
     excep_level = cJSON_GetObjectItemCaseSensitive(exceptionJSON, "excepLevel");
     if (excep_level) {
     if (!cJSON_IsNumber(excep_level)) {
-        ogs_error("OpenAPI_exception_parseFromJSON() failed [excep_level]");
+        log_error("OpenAPI_exception_parseFromJSON() failed [excep_level]");
         goto end;
     }
     }
@@ -122,7 +122,7 @@ OpenAPI_exception_t *OpenAPI_exception_parseFromJSON(cJSON *exceptionJSON)
     if (excep_trend) {
     excep_trend_local_nonprim = OpenAPI_exception_trend_parseFromJSON(excep_trend);
     if (!excep_trend_local_nonprim) {
-        ogs_error("OpenAPI_exception_trend_parseFromJSON failed [excep_trend]");
+        log_error("OpenAPI_exception_trend_parseFromJSON failed [excep_trend]");
         goto end;
     }
     }
@@ -152,10 +152,10 @@ OpenAPI_exception_t *OpenAPI_exception_copy(OpenAPI_exception_t *dst, OpenAPI_ex
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_exception_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_exception_convertToJSON() failed");
+        log_error("OpenAPI_exception_convertToJSON() failed");
         return NULL;
     }
 
@@ -163,14 +163,14 @@ OpenAPI_exception_t *OpenAPI_exception_copy(OpenAPI_exception_t *dst, OpenAPI_ex
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

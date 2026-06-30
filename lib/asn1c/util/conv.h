@@ -32,7 +32,7 @@ extern "C" {
 
 #define OGS_ASN_CLEAR_DATA(__dATA) \
     do { \
-        ogs_assert((__dATA)); \
+        log_assert((__dATA)); \
         if ((__dATA)->buf) { \
             FREEMEM((__dATA)->buf); \
             (__dATA)->buf = NULL; \
@@ -41,9 +41,9 @@ extern "C" {
     } while(0)
 #define OGS_ASN_STORE_DATA(__dST, __sRC) \
     do { \
-        ogs_assert((__sRC)); \
-        ogs_assert((__sRC)->buf); \
-        ogs_assert((__dST)); \
+        log_assert((__sRC)); \
+        log_assert((__sRC)->buf); \
+        log_assert((__dST)); \
         OGS_ASN_CLEAR_DATA(__dST); \
         (__dST)->size = (__sRC)->size; \
         (__dST)->buf = CALLOC((__dST)->size, sizeof(uint8_t)); \

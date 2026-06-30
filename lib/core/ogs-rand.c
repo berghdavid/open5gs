@@ -45,8 +45,8 @@ void ogs_random(void *buf, size_t buflen)
 #elif defined(HAVE_GETRANDOM)
     int rc = getrandom(buf, buflen, GRND_NONBLOCK);
     if (rc < 0) {
-        ogs_log_message(OGS_LOG_FATAL, ogs_errno, "getrandom() failed");
-        ogs_assert_if_reached();
+        log_error_msg(LOG_FATAL, ogs_errno, "getrandom() failed");
+        log_assert_if_reached();
     }
 #elif defined(HAVE_ARC4RANDOM_BUF)
     arc4random_buf(buf, buflen);
@@ -61,8 +61,8 @@ void ogs_random(void *buf, size_t buflen)
 
         if (fd == -1)
             if ((fd = open(OGS_DEV_RANDOM, O_RDONLY)) == -1) {
-                ogs_log_message(OGS_LOG_FATAL, ogs_errno, "open() failed");
-                ogs_assert_if_reached();
+                log_error_msg(LOG_FATAL, ogs_errno, "open() failed");
+                log_assert_if_reached();
             }
         
         do {
@@ -70,7 +70,7 @@ void ogs_random(void *buf, size_t buflen)
         } while (rc == -1 && errno == EINTR);
 
         if (rc < 0) {
-            ogs_log_message(OGS_LOG_ERROR, ogs_errno, "read() failed");
+            log_error_msg(LOG_ERROR, ogs_errno, "read() failed");
             close(fd);
             return;
         }

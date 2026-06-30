@@ -10,7 +10,7 @@ OpenAPI_plmn_route_selection_descriptor_t *OpenAPI_plmn_route_selection_descript
 )
 {
     OpenAPI_plmn_route_selection_descriptor_t *plmn_route_selection_descriptor_local_var = ogs_malloc(sizeof(OpenAPI_plmn_route_selection_descriptor_t));
-    ogs_assert(plmn_route_selection_descriptor_local_var);
+    log_assert(plmn_route_selection_descriptor_local_var);
 
     plmn_route_selection_descriptor_local_var->serving_plmn = serving_plmn;
     plmn_route_selection_descriptor_local_var->snssai_route_sel_descs = snssai_route_sel_descs;
@@ -45,36 +45,36 @@ cJSON *OpenAPI_plmn_route_selection_descriptor_convertToJSON(OpenAPI_plmn_route_
     OpenAPI_lnode_t *node = NULL;
 
     if (plmn_route_selection_descriptor == NULL) {
-        ogs_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [PlmnRouteSelectionDescriptor]");
+        log_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [PlmnRouteSelectionDescriptor]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!plmn_route_selection_descriptor->serving_plmn) {
-        ogs_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [serving_plmn]");
+        log_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [serving_plmn]");
         return NULL;
     }
     cJSON *serving_plmn_local_JSON = OpenAPI_plmn_id_1_convertToJSON(plmn_route_selection_descriptor->serving_plmn);
     if (serving_plmn_local_JSON == NULL) {
-        ogs_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [serving_plmn]");
+        log_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [serving_plmn]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servingPlmn", serving_plmn_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [serving_plmn]");
+        log_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [serving_plmn]");
         goto end;
     }
 
     if (plmn_route_selection_descriptor->snssai_route_sel_descs) {
     cJSON *snssai_route_sel_descsList = cJSON_AddArrayToObject(item, "snssaiRouteSelDescs");
     if (snssai_route_sel_descsList == NULL) {
-        ogs_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [snssai_route_sel_descs]");
+        log_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [snssai_route_sel_descs]");
         goto end;
     }
     OpenAPI_list_for_each(plmn_route_selection_descriptor->snssai_route_sel_descs, node) {
         cJSON *itemLocal = OpenAPI_snssai_route_selection_descriptor_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [snssai_route_sel_descs]");
+            log_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed [snssai_route_sel_descs]");
             goto end;
         }
         cJSON_AddItemToArray(snssai_route_sel_descsList, itemLocal);
@@ -95,12 +95,12 @@ OpenAPI_plmn_route_selection_descriptor_t *OpenAPI_plmn_route_selection_descript
     OpenAPI_list_t *snssai_route_sel_descsList = NULL;
     serving_plmn = cJSON_GetObjectItemCaseSensitive(plmn_route_selection_descriptorJSON, "servingPlmn");
     if (!serving_plmn) {
-        ogs_error("OpenAPI_plmn_route_selection_descriptor_parseFromJSON() failed [serving_plmn]");
+        log_error("OpenAPI_plmn_route_selection_descriptor_parseFromJSON() failed [serving_plmn]");
         goto end;
     }
     serving_plmn_local_nonprim = OpenAPI_plmn_id_1_parseFromJSON(serving_plmn);
     if (!serving_plmn_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_1_parseFromJSON failed [serving_plmn]");
+        log_error("OpenAPI_plmn_id_1_parseFromJSON failed [serving_plmn]");
         goto end;
     }
 
@@ -108,7 +108,7 @@ OpenAPI_plmn_route_selection_descriptor_t *OpenAPI_plmn_route_selection_descript
     if (snssai_route_sel_descs) {
         cJSON *snssai_route_sel_descs_local = NULL;
         if (!cJSON_IsArray(snssai_route_sel_descs)) {
-            ogs_error("OpenAPI_plmn_route_selection_descriptor_parseFromJSON() failed [snssai_route_sel_descs]");
+            log_error("OpenAPI_plmn_route_selection_descriptor_parseFromJSON() failed [snssai_route_sel_descs]");
             goto end;
         }
 
@@ -116,12 +116,12 @@ OpenAPI_plmn_route_selection_descriptor_t *OpenAPI_plmn_route_selection_descript
 
         cJSON_ArrayForEach(snssai_route_sel_descs_local, snssai_route_sel_descs) {
             if (!cJSON_IsObject(snssai_route_sel_descs_local)) {
-                ogs_error("OpenAPI_plmn_route_selection_descriptor_parseFromJSON() failed [snssai_route_sel_descs]");
+                log_error("OpenAPI_plmn_route_selection_descriptor_parseFromJSON() failed [snssai_route_sel_descs]");
                 goto end;
             }
             OpenAPI_snssai_route_selection_descriptor_t *snssai_route_sel_descsItem = OpenAPI_snssai_route_selection_descriptor_parseFromJSON(snssai_route_sel_descs_local);
             if (!snssai_route_sel_descsItem) {
-                ogs_error("No snssai_route_sel_descsItem");
+                log_error("No snssai_route_sel_descsItem");
                 goto end;
             }
             OpenAPI_list_add(snssai_route_sel_descsList, snssai_route_sel_descsItem);
@@ -154,10 +154,10 @@ OpenAPI_plmn_route_selection_descriptor_t *OpenAPI_plmn_route_selection_descript
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_plmn_route_selection_descriptor_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed");
+        log_error("OpenAPI_plmn_route_selection_descriptor_convertToJSON() failed");
         return NULL;
     }
 
@@ -165,14 +165,14 @@ OpenAPI_plmn_route_selection_descriptor_t *OpenAPI_plmn_route_selection_descript
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

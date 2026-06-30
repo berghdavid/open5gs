@@ -22,7 +22,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_create(
 )
 {
     OpenAPI_mbs_ext_problem_details_t *mbs_ext_problem_details_local_var = ogs_malloc(sizeof(OpenAPI_mbs_ext_problem_details_t));
-    ogs_assert(mbs_ext_problem_details_local_var);
+    log_assert(mbs_ext_problem_details_local_var);
 
     mbs_ext_problem_details_local_var->type = type;
     mbs_ext_problem_details_local_var->title = title;
@@ -112,49 +112,49 @@ cJSON *OpenAPI_mbs_ext_problem_details_convertToJSON(OpenAPI_mbs_ext_problem_det
     OpenAPI_lnode_t *node = NULL;
 
     if (mbs_ext_problem_details == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [MbsExtProblemDetails]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [MbsExtProblemDetails]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (mbs_ext_problem_details->type) {
     if (cJSON_AddStringToObject(item, "type", mbs_ext_problem_details->type) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [type]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [type]");
         goto end;
     }
     }
 
     if (mbs_ext_problem_details->title) {
     if (cJSON_AddStringToObject(item, "title", mbs_ext_problem_details->title) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [title]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [title]");
         goto end;
     }
     }
 
     if (mbs_ext_problem_details->is_status) {
     if (cJSON_AddNumberToObject(item, "status", mbs_ext_problem_details->status) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [status]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [status]");
         goto end;
     }
     }
 
     if (mbs_ext_problem_details->detail) {
     if (cJSON_AddStringToObject(item, "detail", mbs_ext_problem_details->detail) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [detail]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [detail]");
         goto end;
     }
     }
 
     if (mbs_ext_problem_details->instance) {
     if (cJSON_AddStringToObject(item, "instance", mbs_ext_problem_details->instance) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [instance]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [instance]");
         goto end;
     }
     }
 
     if (mbs_ext_problem_details->cause) {
     if (cJSON_AddStringToObject(item, "cause", mbs_ext_problem_details->cause) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [cause]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [cause]");
         goto end;
     }
     }
@@ -162,13 +162,13 @@ cJSON *OpenAPI_mbs_ext_problem_details_convertToJSON(OpenAPI_mbs_ext_problem_det
     if (mbs_ext_problem_details->invalid_params) {
     cJSON *invalid_paramsList = cJSON_AddArrayToObject(item, "invalidParams");
     if (invalid_paramsList == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [invalid_params]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [invalid_params]");
         goto end;
     }
     OpenAPI_list_for_each(mbs_ext_problem_details->invalid_params, node) {
         cJSON *itemLocal = OpenAPI_invalid_param_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [invalid_params]");
+            log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [invalid_params]");
             goto end;
         }
         cJSON_AddItemToArray(invalid_paramsList, itemLocal);
@@ -177,7 +177,7 @@ cJSON *OpenAPI_mbs_ext_problem_details_convertToJSON(OpenAPI_mbs_ext_problem_det
 
     if (mbs_ext_problem_details->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", mbs_ext_problem_details->supported_features) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -185,12 +185,12 @@ cJSON *OpenAPI_mbs_ext_problem_details_convertToJSON(OpenAPI_mbs_ext_problem_det
     if (mbs_ext_problem_details->access_token_error) {
     cJSON *access_token_error_local_JSON = OpenAPI_access_token_err_convertToJSON(mbs_ext_problem_details->access_token_error);
     if (access_token_error_local_JSON == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [access_token_error]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [access_token_error]");
         goto end;
     }
     cJSON_AddItemToObject(item, "accessTokenError", access_token_error_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [access_token_error]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [access_token_error]");
         goto end;
     }
     }
@@ -198,26 +198,26 @@ cJSON *OpenAPI_mbs_ext_problem_details_convertToJSON(OpenAPI_mbs_ext_problem_det
     if (mbs_ext_problem_details->access_token_request) {
     cJSON *access_token_request_local_JSON = OpenAPI_access_token_req_convertToJSON(mbs_ext_problem_details->access_token_request);
     if (access_token_request_local_JSON == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [access_token_request]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [access_token_request]");
         goto end;
     }
     cJSON_AddItemToObject(item, "accessTokenRequest", access_token_request_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [access_token_request]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [access_token_request]");
         goto end;
     }
     }
 
     if (mbs_ext_problem_details->nrf_id) {
     if (cJSON_AddStringToObject(item, "nrfId", mbs_ext_problem_details->nrf_id) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [nrf_id]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [nrf_id]");
         goto end;
     }
     }
 
     if (mbs_ext_problem_details->pcf_fqdn) {
     if (cJSON_AddStringToObject(item, "pcfFqdn", mbs_ext_problem_details->pcf_fqdn) == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [pcf_fqdn]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [pcf_fqdn]");
         goto end;
     }
     }
@@ -225,13 +225,13 @@ cJSON *OpenAPI_mbs_ext_problem_details_convertToJSON(OpenAPI_mbs_ext_problem_det
     if (mbs_ext_problem_details->pcf_ip_end_points) {
     cJSON *pcf_ip_end_pointsList = cJSON_AddArrayToObject(item, "pcfIpEndPoints");
     if (pcf_ip_end_pointsList == NULL) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [pcf_ip_end_points]");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [pcf_ip_end_points]");
         goto end;
     }
     OpenAPI_list_for_each(mbs_ext_problem_details->pcf_ip_end_points, node) {
         cJSON *itemLocal = OpenAPI_ip_end_point_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [pcf_ip_end_points]");
+            log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed [pcf_ip_end_points]");
             goto end;
         }
         cJSON_AddItemToArray(pcf_ip_end_pointsList, itemLocal);
@@ -266,7 +266,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     type = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "type");
     if (type) {
     if (!cJSON_IsString(type) && !cJSON_IsNull(type)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [type]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [type]");
         goto end;
     }
     }
@@ -274,7 +274,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     title = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "title");
     if (title) {
     if (!cJSON_IsString(title) && !cJSON_IsNull(title)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [title]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [title]");
         goto end;
     }
     }
@@ -282,7 +282,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     status = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "status");
     if (status) {
     if (!cJSON_IsNumber(status)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [status]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [status]");
         goto end;
     }
     }
@@ -290,7 +290,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     detail = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "detail");
     if (detail) {
     if (!cJSON_IsString(detail) && !cJSON_IsNull(detail)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [detail]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [detail]");
         goto end;
     }
     }
@@ -298,7 +298,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     instance = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "instance");
     if (instance) {
     if (!cJSON_IsString(instance) && !cJSON_IsNull(instance)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [instance]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [instance]");
         goto end;
     }
     }
@@ -306,7 +306,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     cause = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "cause");
     if (cause) {
     if (!cJSON_IsString(cause) && !cJSON_IsNull(cause)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [cause]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [cause]");
         goto end;
     }
     }
@@ -315,7 +315,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     if (invalid_params) {
         cJSON *invalid_params_local = NULL;
         if (!cJSON_IsArray(invalid_params)) {
-            ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [invalid_params]");
+            log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [invalid_params]");
             goto end;
         }
 
@@ -323,12 +323,12 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
 
         cJSON_ArrayForEach(invalid_params_local, invalid_params) {
             if (!cJSON_IsObject(invalid_params_local)) {
-                ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [invalid_params]");
+                log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [invalid_params]");
                 goto end;
             }
             OpenAPI_invalid_param_t *invalid_paramsItem = OpenAPI_invalid_param_parseFromJSON(invalid_params_local);
             if (!invalid_paramsItem) {
-                ogs_error("No invalid_paramsItem");
+                log_error("No invalid_paramsItem");
                 goto end;
             }
             OpenAPI_list_add(invalid_paramsList, invalid_paramsItem);
@@ -338,7 +338,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     supported_features = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -347,7 +347,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     if (access_token_error) {
     access_token_error_local_nonprim = OpenAPI_access_token_err_parseFromJSON(access_token_error);
     if (!access_token_error_local_nonprim) {
-        ogs_error("OpenAPI_access_token_err_parseFromJSON failed [access_token_error]");
+        log_error("OpenAPI_access_token_err_parseFromJSON failed [access_token_error]");
         goto end;
     }
     }
@@ -356,7 +356,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     if (access_token_request) {
     access_token_request_local_nonprim = OpenAPI_access_token_req_parseFromJSON(access_token_request);
     if (!access_token_request_local_nonprim) {
-        ogs_error("OpenAPI_access_token_req_parseFromJSON failed [access_token_request]");
+        log_error("OpenAPI_access_token_req_parseFromJSON failed [access_token_request]");
         goto end;
     }
     }
@@ -364,7 +364,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     nrf_id = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "nrfId");
     if (nrf_id) {
     if (!cJSON_IsString(nrf_id) && !cJSON_IsNull(nrf_id)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [nrf_id]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [nrf_id]");
         goto end;
     }
     }
@@ -372,7 +372,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     pcf_fqdn = cJSON_GetObjectItemCaseSensitive(mbs_ext_problem_detailsJSON, "pcfFqdn");
     if (pcf_fqdn) {
     if (!cJSON_IsString(pcf_fqdn) && !cJSON_IsNull(pcf_fqdn)) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [pcf_fqdn]");
+        log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [pcf_fqdn]");
         goto end;
     }
     }
@@ -381,7 +381,7 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
     if (pcf_ip_end_points) {
         cJSON *pcf_ip_end_points_local = NULL;
         if (!cJSON_IsArray(pcf_ip_end_points)) {
-            ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [pcf_ip_end_points]");
+            log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [pcf_ip_end_points]");
             goto end;
         }
 
@@ -389,12 +389,12 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_parseFromJSON
 
         cJSON_ArrayForEach(pcf_ip_end_points_local, pcf_ip_end_points) {
             if (!cJSON_IsObject(pcf_ip_end_points_local)) {
-                ogs_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [pcf_ip_end_points]");
+                log_error("OpenAPI_mbs_ext_problem_details_parseFromJSON() failed [pcf_ip_end_points]");
                 goto end;
             }
             OpenAPI_ip_end_point_t *pcf_ip_end_pointsItem = OpenAPI_ip_end_point_parseFromJSON(pcf_ip_end_points_local);
             if (!pcf_ip_end_pointsItem) {
-                ogs_error("No pcf_ip_end_pointsItem");
+                log_error("No pcf_ip_end_pointsItem");
                 goto end;
             }
             OpenAPI_list_add(pcf_ip_end_pointsList, pcf_ip_end_pointsItem);
@@ -450,10 +450,10 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_mbs_ext_problem_details_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed");
+        log_error("OpenAPI_mbs_ext_problem_details_convertToJSON() failed");
         return NULL;
     }
 
@@ -461,14 +461,14 @@ OpenAPI_mbs_ext_problem_details_t *OpenAPI_mbs_ext_problem_details_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -7,13 +7,13 @@ static OpenAPI_lnode_t *listEntry_create(void *data)
 {
     OpenAPI_lnode_t *created = NULL;
 
-    ogs_assert(data);
+    log_assert(data);
 
     created = ogs_malloc(sizeof(OpenAPI_lnode_t));
-    ogs_assert(created);
+    log_assert(created);
 
     if (created == NULL) {
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         return NULL;
     }
     created->data = data;
@@ -34,10 +34,10 @@ void OpenAPI_lnode_print(OpenAPI_lnode_t *listEntry, void *additionalData)
 OpenAPI_list_t *OpenAPI_list_create(void)
 {
     OpenAPI_list_t *createdList = ogs_malloc(sizeof(OpenAPI_list_t));
-    ogs_assert(createdList);
+    log_assert(createdList);
 
     if (createdList == NULL) {
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         return NULL;
     }
     createdList->first = NULL;
@@ -115,7 +115,7 @@ void OpenAPI_list_add(OpenAPI_list_t *list, void *dataToAddInList)
 {
     OpenAPI_lnode_t *newListEntry = listEntry_create(dataToAddInList);
     if (newListEntry == NULL) {
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         return;
     }
     if (list->first == NULL) {
@@ -143,7 +143,7 @@ void OpenAPI_list_insert_prev(OpenAPI_list_t *list, OpenAPI_lnode_t *lnode,
 {
     OpenAPI_lnode_t *newListEntry = listEntry_create(dataToAddInList);
     if (newListEntry == NULL) {
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         return;
     } else if (lnode->prev == NULL) {
         list->first = newListEntry;
@@ -214,7 +214,7 @@ char *OpenAPI_findStrInStrList(OpenAPI_list_t *strList, const char *str)
     }
 
     OpenAPI_list_for_each(strList, listEntry) {
-        ogs_assert(listEntry);
+        log_assert(listEntry);
         if (strstr((char*)listEntry->data, str) != NULL) {
             return (char*)listEntry->data;
         }
@@ -232,7 +232,7 @@ void OpenAPI_clear_and_free_string_list(OpenAPI_list_t *list)
     }
 
     OpenAPI_list_for_each(list, listEntry) {
-        ogs_assert(listEntry);
+        log_assert(listEntry);
         char *list_item = listEntry->data;
         ogs_free(list_item);
         list_item = NULL;

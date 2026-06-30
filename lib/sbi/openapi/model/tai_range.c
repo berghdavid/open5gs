@@ -11,7 +11,7 @@ OpenAPI_tai_range_t *OpenAPI_tai_range_create(
 )
 {
     OpenAPI_tai_range_t *tai_range_local_var = ogs_malloc(sizeof(OpenAPI_tai_range_t));
-    ogs_assert(tai_range_local_var);
+    log_assert(tai_range_local_var);
 
     tai_range_local_var->plmn_id = plmn_id;
     tai_range_local_var->tac_range_list = tac_range_list;
@@ -51,39 +51,39 @@ cJSON *OpenAPI_tai_range_convertToJSON(OpenAPI_tai_range_t *tai_range)
     OpenAPI_lnode_t *node = NULL;
 
     if (tai_range == NULL) {
-        ogs_error("OpenAPI_tai_range_convertToJSON() failed [TaiRange]");
+        log_error("OpenAPI_tai_range_convertToJSON() failed [TaiRange]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!tai_range->plmn_id) {
-        ogs_error("OpenAPI_tai_range_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_tai_range_convertToJSON() failed [plmn_id]");
         return NULL;
     }
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(tai_range->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_tai_range_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_tai_range_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_tai_range_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_tai_range_convertToJSON() failed [plmn_id]");
         goto end;
     }
 
     if (!tai_range->tac_range_list) {
-        ogs_error("OpenAPI_tai_range_convertToJSON() failed [tac_range_list]");
+        log_error("OpenAPI_tai_range_convertToJSON() failed [tac_range_list]");
         return NULL;
     }
     cJSON *tac_range_listList = cJSON_AddArrayToObject(item, "tacRangeList");
     if (tac_range_listList == NULL) {
-        ogs_error("OpenAPI_tai_range_convertToJSON() failed [tac_range_list]");
+        log_error("OpenAPI_tai_range_convertToJSON() failed [tac_range_list]");
         goto end;
     }
     OpenAPI_list_for_each(tai_range->tac_range_list, node) {
         cJSON *itemLocal = OpenAPI_tac_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_tai_range_convertToJSON() failed [tac_range_list]");
+            log_error("OpenAPI_tai_range_convertToJSON() failed [tac_range_list]");
             goto end;
         }
         cJSON_AddItemToArray(tac_range_listList, itemLocal);
@@ -91,7 +91,7 @@ cJSON *OpenAPI_tai_range_convertToJSON(OpenAPI_tai_range_t *tai_range)
 
     if (tai_range->nid) {
     if (cJSON_AddStringToObject(item, "nid", tai_range->nid) == NULL) {
-        ogs_error("OpenAPI_tai_range_convertToJSON() failed [nid]");
+        log_error("OpenAPI_tai_range_convertToJSON() failed [nid]");
         goto end;
     }
     }
@@ -111,23 +111,23 @@ OpenAPI_tai_range_t *OpenAPI_tai_range_parseFromJSON(cJSON *tai_rangeJSON)
     cJSON *nid = NULL;
     plmn_id = cJSON_GetObjectItemCaseSensitive(tai_rangeJSON, "plmnId");
     if (!plmn_id) {
-        ogs_error("OpenAPI_tai_range_parseFromJSON() failed [plmn_id]");
+        log_error("OpenAPI_tai_range_parseFromJSON() failed [plmn_id]");
         goto end;
     }
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
 
     tac_range_list = cJSON_GetObjectItemCaseSensitive(tai_rangeJSON, "tacRangeList");
     if (!tac_range_list) {
-        ogs_error("OpenAPI_tai_range_parseFromJSON() failed [tac_range_list]");
+        log_error("OpenAPI_tai_range_parseFromJSON() failed [tac_range_list]");
         goto end;
     }
         cJSON *tac_range_list_local = NULL;
         if (!cJSON_IsArray(tac_range_list)) {
-            ogs_error("OpenAPI_tai_range_parseFromJSON() failed [tac_range_list]");
+            log_error("OpenAPI_tai_range_parseFromJSON() failed [tac_range_list]");
             goto end;
         }
 
@@ -135,12 +135,12 @@ OpenAPI_tai_range_t *OpenAPI_tai_range_parseFromJSON(cJSON *tai_rangeJSON)
 
         cJSON_ArrayForEach(tac_range_list_local, tac_range_list) {
             if (!cJSON_IsObject(tac_range_list_local)) {
-                ogs_error("OpenAPI_tai_range_parseFromJSON() failed [tac_range_list]");
+                log_error("OpenAPI_tai_range_parseFromJSON() failed [tac_range_list]");
                 goto end;
             }
             OpenAPI_tac_range_t *tac_range_listItem = OpenAPI_tac_range_parseFromJSON(tac_range_list_local);
             if (!tac_range_listItem) {
-                ogs_error("No tac_range_listItem");
+                log_error("No tac_range_listItem");
                 goto end;
             }
             OpenAPI_list_add(tac_range_listList, tac_range_listItem);
@@ -149,7 +149,7 @@ OpenAPI_tai_range_t *OpenAPI_tai_range_parseFromJSON(cJSON *tai_rangeJSON)
     nid = cJSON_GetObjectItemCaseSensitive(tai_rangeJSON, "nid");
     if (nid) {
     if (!cJSON_IsString(nid) && !cJSON_IsNull(nid)) {
-        ogs_error("OpenAPI_tai_range_parseFromJSON() failed [nid]");
+        log_error("OpenAPI_tai_range_parseFromJSON() failed [nid]");
         goto end;
     }
     }
@@ -181,10 +181,10 @@ OpenAPI_tai_range_t *OpenAPI_tai_range_copy(OpenAPI_tai_range_t *dst, OpenAPI_ta
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_tai_range_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_tai_range_convertToJSON() failed");
+        log_error("OpenAPI_tai_range_convertToJSON() failed");
         return NULL;
     }
 
@@ -192,14 +192,14 @@ OpenAPI_tai_range_t *OpenAPI_tai_range_copy(OpenAPI_tai_range_t *dst, OpenAPI_ta
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

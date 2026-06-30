@@ -8,7 +8,7 @@ OpenAPI_wlan_ordering_criterion_t *OpenAPI_wlan_ordering_criterion_create(
 )
 {
     OpenAPI_wlan_ordering_criterion_t *wlan_ordering_criterion_local_var = ogs_malloc(sizeof(OpenAPI_wlan_ordering_criterion_t));
-    ogs_assert(wlan_ordering_criterion_local_var);
+    log_assert(wlan_ordering_criterion_local_var);
 
 
     return wlan_ordering_criterion_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_wlan_ordering_criterion_convertToJSON(OpenAPI_wlan_ordering_crite
     OpenAPI_lnode_t *node = NULL;
 
     if (wlan_ordering_criterion == NULL) {
-        ogs_error("OpenAPI_wlan_ordering_criterion_convertToJSON() failed [WlanOrderingCriterion]");
+        log_error("OpenAPI_wlan_ordering_criterion_convertToJSON() failed [WlanOrderingCriterion]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_wlan_ordering_criterion_t *OpenAPI_wlan_ordering_criterion_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_wlan_ordering_criterion_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_wlan_ordering_criterion_convertToJSON() failed");
+        log_error("OpenAPI_wlan_ordering_criterion_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_wlan_ordering_criterion_t *OpenAPI_wlan_ordering_criterion_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

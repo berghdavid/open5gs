@@ -40,8 +40,6 @@ int lmf_initialize(void)
     ogs_sbi_context_init(OpenAPI_nf_type_LMF);
     lmf_context_init();
 
-    rv = ogs_log_config_domain(
-            ogs_app()->logger.domain, ogs_app()->logger.level);
     if (rv != OGS_OK) return rv;
 
     rv = ogs_sbi_context_parse_config(APP_NAME, "nrf", "scp");
@@ -76,7 +74,7 @@ static void event_termination(void)
 
     /* Start holding timer */
     t_termination_holding = ogs_timer_add(ogs_app()->timer_mgr, NULL, NULL);
-    ogs_assert(t_termination_holding);
+    log_assert(t_termination_holding);
 #define TERMINATION_HOLDING_TIME ogs_time_from_msec(300)
     ogs_timer_start(t_termination_holding, TERMINATION_HOLDING_TIME);
 
@@ -120,7 +118,7 @@ static void lmf_main(void *data)
             lmf_event_t *e = NULL;
 
             rv = ogs_queue_trypop(ogs_app()->queue, (void**)&e);
-            ogs_assert(rv != OGS_ERROR);
+            log_assert(rv != LOG_ERROR);
 
             if (rv == OGS_DONE)
                 goto done;
@@ -128,7 +126,7 @@ static void lmf_main(void *data)
             if (rv == OGS_RETRY)
                 break;
 
-            ogs_assert(e);
+            log_assert(e);
             ogs_fsm_dispatch(&lmf_sm, e);
             ogs_event_free(e);
         }

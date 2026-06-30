@@ -10,7 +10,7 @@ OpenAPI_sor_update_info_t *OpenAPI_sor_update_info_create(
 )
 {
     OpenAPI_sor_update_info_t *sor_update_info_local_var = ogs_malloc(sizeof(OpenAPI_sor_update_info_t));
-    ogs_assert(sor_update_info_local_var);
+    log_assert(sor_update_info_local_var);
 
     sor_update_info_local_var->vplmn_id = vplmn_id;
     sor_update_info_local_var->supported_features = supported_features;
@@ -42,29 +42,29 @@ cJSON *OpenAPI_sor_update_info_convertToJSON(OpenAPI_sor_update_info_t *sor_upda
     OpenAPI_lnode_t *node = NULL;
 
     if (sor_update_info == NULL) {
-        ogs_error("OpenAPI_sor_update_info_convertToJSON() failed [SorUpdateInfo]");
+        log_error("OpenAPI_sor_update_info_convertToJSON() failed [SorUpdateInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!sor_update_info->vplmn_id) {
-        ogs_error("OpenAPI_sor_update_info_convertToJSON() failed [vplmn_id]");
+        log_error("OpenAPI_sor_update_info_convertToJSON() failed [vplmn_id]");
         return NULL;
     }
     cJSON *vplmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(sor_update_info->vplmn_id);
     if (vplmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_sor_update_info_convertToJSON() failed [vplmn_id]");
+        log_error("OpenAPI_sor_update_info_convertToJSON() failed [vplmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "vplmnId", vplmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sor_update_info_convertToJSON() failed [vplmn_id]");
+        log_error("OpenAPI_sor_update_info_convertToJSON() failed [vplmn_id]");
         goto end;
     }
 
     if (sor_update_info->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", sor_update_info->supported_features) == NULL) {
-        ogs_error("OpenAPI_sor_update_info_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_sor_update_info_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -82,19 +82,19 @@ OpenAPI_sor_update_info_t *OpenAPI_sor_update_info_parseFromJSON(cJSON *sor_upda
     cJSON *supported_features = NULL;
     vplmn_id = cJSON_GetObjectItemCaseSensitive(sor_update_infoJSON, "vplmnId");
     if (!vplmn_id) {
-        ogs_error("OpenAPI_sor_update_info_parseFromJSON() failed [vplmn_id]");
+        log_error("OpenAPI_sor_update_info_parseFromJSON() failed [vplmn_id]");
         goto end;
     }
     vplmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(vplmn_id);
     if (!vplmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [vplmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [vplmn_id]");
         goto end;
     }
 
     supported_features = cJSON_GetObjectItemCaseSensitive(sor_update_infoJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_sor_update_info_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_sor_update_info_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -118,10 +118,10 @@ OpenAPI_sor_update_info_t *OpenAPI_sor_update_info_copy(OpenAPI_sor_update_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sor_update_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sor_update_info_convertToJSON() failed");
+        log_error("OpenAPI_sor_update_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -129,14 +129,14 @@ OpenAPI_sor_update_info_t *OpenAPI_sor_update_info_copy(OpenAPI_sor_update_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

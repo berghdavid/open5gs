@@ -11,7 +11,7 @@ OpenAPI_nf_instance_info_t *OpenAPI_nf_instance_info_create(
 )
 {
     OpenAPI_nf_instance_info_t *nf_instance_info_local_var = ogs_malloc(sizeof(OpenAPI_nf_instance_info_t));
-    ogs_assert(nf_instance_info_local_var);
+    log_assert(nf_instance_info_local_var);
 
     nf_instance_info_local_var->nrf_disc_api_uri = nrf_disc_api_uri;
     nf_instance_info_local_var->preferred_search = preferred_search;
@@ -54,14 +54,14 @@ cJSON *OpenAPI_nf_instance_info_convertToJSON(OpenAPI_nf_instance_info_t *nf_ins
     OpenAPI_lnode_t *node = NULL;
 
     if (nf_instance_info == NULL) {
-        ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [NfInstanceInfo]");
+        log_error("OpenAPI_nf_instance_info_convertToJSON() failed [NfInstanceInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (nf_instance_info->nrf_disc_api_uri) {
     if (cJSON_AddStringToObject(item, "nrfDiscApiUri", nf_instance_info->nrf_disc_api_uri) == NULL) {
-        ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [nrf_disc_api_uri]");
+        log_error("OpenAPI_nf_instance_info_convertToJSON() failed [nrf_disc_api_uri]");
         goto end;
     }
     }
@@ -69,12 +69,12 @@ cJSON *OpenAPI_nf_instance_info_convertToJSON(OpenAPI_nf_instance_info_t *nf_ins
     if (nf_instance_info->preferred_search) {
     cJSON *preferred_search_local_JSON = OpenAPI_preferred_search_convertToJSON(nf_instance_info->preferred_search);
     if (preferred_search_local_JSON == NULL) {
-        ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [preferred_search]");
+        log_error("OpenAPI_nf_instance_info_convertToJSON() failed [preferred_search]");
         goto end;
     }
     cJSON_AddItemToObject(item, "preferredSearch", preferred_search_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [preferred_search]");
+        log_error("OpenAPI_nf_instance_info_convertToJSON() failed [preferred_search]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ cJSON *OpenAPI_nf_instance_info_convertToJSON(OpenAPI_nf_instance_info_t *nf_ins
     if (nf_instance_info->nrf_altered_priorities) {
     cJSON *nrf_altered_priorities = cJSON_AddObjectToObject(item, "nrfAlteredPriorities");
     if (nrf_altered_priorities == NULL) {
-        ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [nrf_altered_priorities]");
+        log_error("OpenAPI_nf_instance_info_convertToJSON() failed [nrf_altered_priorities]");
         goto end;
     }
     cJSON *localMapObject = nrf_altered_priorities;
@@ -90,19 +90,19 @@ cJSON *OpenAPI_nf_instance_info_convertToJSON(OpenAPI_nf_instance_info_t *nf_ins
         OpenAPI_list_for_each(nf_instance_info->nrf_altered_priorities, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [nrf_altered_priorities]");
+                log_error("OpenAPI_nf_instance_info_convertToJSON() failed [nrf_altered_priorities]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [nrf_altered_priorities]");
+                log_error("OpenAPI_nf_instance_info_convertToJSON() failed [nrf_altered_priorities]");
                 goto end;
             }
             if (localKeyValue->value == NULL) {
-                ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nf_instance_info_convertToJSON() failed [inner]");
                 goto end;
             }
             if (cJSON_AddNumberToObject(localMapObject, localKeyValue->key, *(double *)localKeyValue->value) == NULL) {
-                ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nf_instance_info_convertToJSON() failed [inner]");
                 goto end;
             }
         }
@@ -125,7 +125,7 @@ OpenAPI_nf_instance_info_t *OpenAPI_nf_instance_info_parseFromJSON(cJSON *nf_ins
     nrf_disc_api_uri = cJSON_GetObjectItemCaseSensitive(nf_instance_infoJSON, "nrfDiscApiUri");
     if (nrf_disc_api_uri) {
     if (!cJSON_IsString(nrf_disc_api_uri) && !cJSON_IsNull(nrf_disc_api_uri)) {
-        ogs_error("OpenAPI_nf_instance_info_parseFromJSON() failed [nrf_disc_api_uri]");
+        log_error("OpenAPI_nf_instance_info_parseFromJSON() failed [nrf_disc_api_uri]");
         goto end;
     }
     }
@@ -134,7 +134,7 @@ OpenAPI_nf_instance_info_t *OpenAPI_nf_instance_info_parseFromJSON(cJSON *nf_ins
     if (preferred_search) {
     preferred_search_local_nonprim = OpenAPI_preferred_search_parseFromJSON(preferred_search);
     if (!preferred_search_local_nonprim) {
-        ogs_error("OpenAPI_preferred_search_parseFromJSON failed [preferred_search]");
+        log_error("OpenAPI_preferred_search_parseFromJSON failed [preferred_search]");
         goto end;
     }
     }
@@ -143,7 +143,7 @@ OpenAPI_nf_instance_info_t *OpenAPI_nf_instance_info_parseFromJSON(cJSON *nf_ins
     if (nrf_altered_priorities) {
         cJSON *nrf_altered_priorities_local_map = NULL;
         if (!cJSON_IsObject(nrf_altered_priorities) && !cJSON_IsNull(nrf_altered_priorities)) {
-            ogs_error("OpenAPI_nf_instance_info_parseFromJSON() failed [nrf_altered_priorities]");
+            log_error("OpenAPI_nf_instance_info_parseFromJSON() failed [nrf_altered_priorities]");
             goto end;
         }
         if (cJSON_IsObject(nrf_altered_priorities)) {
@@ -154,12 +154,12 @@ OpenAPI_nf_instance_info_t *OpenAPI_nf_instance_info_parseFromJSON(cJSON *nf_ins
                 double *localDouble = NULL;
                 int *localInt = NULL;
                 if (!cJSON_IsNumber(localMapObject)) {
-                    ogs_error("OpenAPI_nf_instance_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nf_instance_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 localDouble = (double *)ogs_calloc(1, sizeof(double));
                 if (!localDouble) {
-                    ogs_error("OpenAPI_nf_instance_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nf_instance_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 *localDouble = localMapObject->valuedouble;
@@ -199,10 +199,10 @@ OpenAPI_nf_instance_info_t *OpenAPI_nf_instance_info_copy(OpenAPI_nf_instance_in
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nf_instance_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nf_instance_info_convertToJSON() failed");
+        log_error("OpenAPI_nf_instance_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -210,14 +210,14 @@ OpenAPI_nf_instance_info_t *OpenAPI_nf_instance_info_copy(OpenAPI_nf_instance_in
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

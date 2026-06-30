@@ -39,7 +39,6 @@ int ogs_app_initialize(
     } optarg;
 
     ogs_core_initialize();
-    ogs_app_setup_log();
 
     ogs_app_context_init();
     ogs_app_config_init();
@@ -70,7 +69,7 @@ int ogs_app_initialize(
             break;
         case '?':
         default:
-            ogs_assert_if_reached();
+            log_assert_if_reached();
             return OGS_ERROR;
         }
     }
@@ -99,30 +98,17 @@ int ogs_app_initialize(
      */
     if (optarg.log_file)
         ogs_app()->logger.file = optarg.log_file;
-        // TODO: Add file handler
 
     if (ogs_app()->logger.file) {
-        if (ogs_log_add_file(ogs_app()->logger.file) == NULL) {
-            ogs_fatal("cannot open log file : %s", 
-                    ogs_app()->logger.file);
-            return OGS_ERROR;
-        }
+        // TODO: Add file handler
     }
-
-    if (optarg.domain_mask)
-        ogs_app()->logger.domain = optarg.domain_mask;
 
     if (optarg.log_level) {
         ogs_app()->logger.level = optarg.log_level;
     }
     log_set_level_str(ogs_app()->logger.level);
 
-    rv = ogs_log_config_domain(
-            ogs_app()->logger.domain, ogs_app()->logger.level);
     if (rv != OGS_OK) return rv;
-
-    ogs_log_set_timestamp(ogs_app()->logger_default.timestamp,
-                          ogs_app()->logger.timestamp);
 
     /**************************************************************************
      * Stage 5 : Setup Database Module
@@ -141,19 +127,16 @@ int ogs_app_initialize(
      * Stage 7 : Print Banner
      */
     if (ogs_app()->version) {
-        ogs_log_print(OGS_LOG_INFO,
+        log_msg(LOG_INFO,
                 "Open5GS daemon %s\n\n", ogs_app()->version);
 
-        ogs_info("Configuration: '%s'", ogs_app()->file);
+        log_info("Configuration: '%s'", ogs_app()->file);
 
         if (ogs_app()->logger.file) {
-            ogs_info("File Logging: '%s'", ogs_app()->logger.file);
+            log_info("File Logging: '%s'", ogs_app()->logger.file);
 
             if (ogs_app()->logger.level)
-                ogs_info("LOG-LEVEL: '%s'", ogs_app()->logger.level);
-
-            if (ogs_app()->logger.domain)
-                ogs_info("LOG-DOMAIN: '%s'", ogs_app()->logger.domain);
+                log_info("LOG-LEVEL: '%s'", ogs_app()->logger.level);
         }
     }
 
@@ -161,11 +144,11 @@ int ogs_app_initialize(
      * Stage 8 : Queue, Timer and Poll
      */
     ogs_app()->queue = ogs_queue_create(ogs_app()->pool.event);
-    ogs_assert(ogs_app()->queue);
+    log_assert(ogs_app()->queue);
     ogs_app()->timer_mgr = ogs_timer_mgr_create(ogs_app()->pool.timer);
-    ogs_assert(ogs_app()->timer_mgr);
+    log_assert(ogs_app()->timer_mgr);
     ogs_app()->pollset = ogs_pollset_create(ogs_app()->pool.socket);
-    ogs_assert(ogs_app()->pollset);
+    log_assert(ogs_app()->pollset);
 
     return rv;
 }
@@ -186,74 +169,74 @@ static int read_config(void)
     yaml_parser_t parser;
     yaml_document_t *document = NULL;
 
-    ogs_assert(ogs_app()->file);
+    log_assert(ogs_app()->file);
 
     file = fopen(ogs_app()->file, "rb");
     if (!file) {
-        ogs_fatal("cannot open file `%s`", ogs_app()->file);
+        log_fatal("cannot open file `%s`", ogs_app()->file);
         return OGS_ERROR;
     }
 
-    ogs_assert(yaml_parser_initialize(&parser));
+    log_assert(yaml_parser_initialize(&parser));
     yaml_parser_set_input_file(&parser, file);
 
     document = calloc(1, sizeof(yaml_document_t));
     if (!yaml_parser_load(&parser, document)) {
-        ogs_fatal("Failed to parse configuration file '%s'", ogs_app()->file);
+        log_fatal("Failed to parse configuration file '%s'", ogs_app()->file);
         switch (parser.error) {
         case YAML_MEMORY_ERROR:
-            ogs_error("Memory error: Not enough memory for parsing");
+            log_error("Memory error: Not enough memory for parsing");
             break;
         case YAML_READER_ERROR:
             if (parser.problem_value != -1)
-                ogs_error("Reader error - %s: #%X at %zd", parser.problem,
+                log_error("Reader error - %s: #%X at %zd", parser.problem,
                     parser.problem_value, parser.problem_offset);
             else
-                ogs_error("Reader error - %s at %zd", parser.problem,
+                log_error("Reader error - %s at %zd", parser.problem,
                     parser.problem_offset);
             break;
         case YAML_SCANNER_ERROR:
             if (parser.context)
-                ogs_error("Scanner error - %s at line %zu, column %zu "
+                log_error("Scanner error - %s at line %zu, column %zu "
                         "%s at line %zu, column %zu", parser.context,
                         parser.context_mark.line+1,
                         parser.context_mark.column+1,
                         parser.problem, parser.problem_mark.line+1,
                         parser.problem_mark.column+1);
             else
-                ogs_error("Scanner error - %s at line %zu, column %zu",
+                log_error("Scanner error - %s at line %zu, column %zu",
                         parser.problem, parser.problem_mark.line+1,
                         parser.problem_mark.column+1);
             break;
         case YAML_PARSER_ERROR:
             if (parser.context)
-                ogs_error("Parser error - %s at line %zu, column %zu "
+                log_error("Parser error - %s at line %zu, column %zu "
                         "%s at line %zu, column %zu", parser.context,
                         parser.context_mark.line+1,
                         parser.context_mark.column+1,
                         parser.problem, parser.problem_mark.line+1,
                         parser.problem_mark.column+1);
             else
-                ogs_error("Parser error - %s at line %zu, column %zu",
+                log_error("Parser error - %s at line %zu, column %zu",
                         parser.problem, parser.problem_mark.line+1,
                         parser.problem_mark.column+1);
             break;
         default:
             /* Couldn't happen. */
-            ogs_assert_if_reached();
+            log_assert_if_reached();
             break;
         }
 
         free(document);
         yaml_parser_delete(&parser);
-        ogs_assert(!fclose(file));
+        log_assert(!fclose(file));
         return OGS_ERROR;
     }
 
     ogs_app()->document = document;
 
     yaml_parser_delete(&parser);
-    ogs_assert(!fclose(file));
+    log_assert(!fclose(file));
 
     return OGS_OK;
 }
@@ -287,39 +270,27 @@ static void parse_config_logger_file(ogs_yaml_iter_t *logger_iter,
     if (!strcmp(logger_key, "file") && ogs_yaml_iter_has_value(logger_iter)) {
         ogs_app()->logger.file = ogs_yaml_iter_value(logger_iter);
 
-        ogs_warn("Please change the configuration file as below.");
-        ogs_log_print(OGS_LOG_WARN, "\n<OLD Format>\n");
-        ogs_log_print(OGS_LOG_WARN, "logger:\n");
-        ogs_log_print(OGS_LOG_WARN, "  file: %s\n", ogs_app()->logger.file);
-        ogs_log_print(OGS_LOG_WARN, "\n<NEW Format>\n");
-        ogs_log_print(OGS_LOG_WARN, "logger:\n");
-        ogs_log_print(OGS_LOG_WARN, "  file:\n");
-        ogs_log_print(OGS_LOG_WARN, "    path: %s\n", ogs_app()->logger.file);
-        ogs_log_print(OGS_LOG_WARN, "\n\n\n");
+        log_warn("Please change the configuration file as below.");
+        log_warn("\n<OLD Format>\n");
+        log_warn("logger:\n");
+        log_warn("  file: %s\n", ogs_app()->logger.file);
+        log_warn("\n<NEW Format>\n");
+        log_warn("logger:\n");
+        log_warn("  file:\n");
+        log_warn("    path: %s\n", ogs_app()->logger.file);
+        log_warn("\n\n\n");
         return;
     }
 
     /* Current format:
      *   logger:
-     *     default:
-     *       timestamp: false
      *     file:
-     *       path: /var/log/open5gs/mme.log
-     *       timestamp: true */
+     *       path: /var/log/open5gs/mme.log */
     ogs_yaml_iter_recurse(logger_iter, &iter);
     while (ogs_yaml_iter_next(&iter)) {
         const char *key = ogs_yaml_iter_key(&iter);
-        ogs_assert(key);
-        if (!strcmp(key, "timestamp")) {
-            ogs_log_ts_e ts = ogs_yaml_iter_bool(&iter)
-                              ? OGS_LOG_TS_ENABLED
-                              : OGS_LOG_TS_DISABLED;
-            if (!strcmp(logger_key, "default")) {
-                ogs_app()->logger_default.timestamp = ts;
-            } else if (!strcmp(logger_key, "file")) {
-                ogs_app()->logger.timestamp = ts;
-            }
-        } else if (!strcmp(key, "path")) {
+        log_assert(key);
+        if (!strcmp(key, "path")) {
             if (!strcmp(logger_key, "file")) {
                 ogs_app()->logger.file = ogs_yaml_iter_value(&iter);
             }
@@ -334,7 +305,7 @@ static int parse_config(void)
     ogs_yaml_iter_t root_iter;
 
     document = ogs_app()->document;
-    ogs_assert(document);
+    log_assert(document);
 
     rv = context_prepare();
     if (rv != OGS_OK) return rv;
@@ -342,7 +313,7 @@ static int parse_config(void)
     ogs_yaml_iter_init(&root_iter, document);
     while (ogs_yaml_iter_next(&root_iter)) {
         const char *root_key = ogs_yaml_iter_key(&root_iter);
-        ogs_assert(root_key);
+        log_assert(root_key);
         if (!strcmp(root_key, "db_uri")) {
             ogs_app()->db_uri = ogs_yaml_iter_value(&root_iter);
         } else if (!strcmp(root_key, "logger")) {
@@ -350,26 +321,23 @@ static int parse_config(void)
             ogs_yaml_iter_recurse(&root_iter, &logger_iter);
             while (ogs_yaml_iter_next(&logger_iter)) {
                 const char *logger_key = ogs_yaml_iter_key(&logger_iter);
-                ogs_assert(logger_key);
+                log_assert(logger_key);
                 parse_config_logger_file(&logger_iter, logger_key);
                 if (!strcmp(logger_key, "level")) {
                     ogs_app()->logger.level =
-                        ogs_yaml_iter_value(&logger_iter);
-                } else if (!strcmp(logger_key, "domain")) {
-                    ogs_app()->logger.domain =
                         ogs_yaml_iter_value(&logger_iter);
                 }
             }
         } else if (!strcmp(root_key, "global")) {
             rv = ogs_app_parse_global_conf(&root_iter);
             if (rv != OGS_OK) {
-                ogs_error("ogs_global_conf_parse_config() failed");
+                log_error("ogs_global_conf_parse_config() failed");
                 return rv;
             }
         } else {
             rv = ogs_app_count_nf_conf_sections(root_key);
             if (rv != OGS_OK) {
-                ogs_error("ogs_app_count_nf_conf_sections() failed");
+                log_error("ogs_app_count_nf_conf_sections() failed");
                 return rv;
             }
         }
@@ -379,9 +347,4 @@ static int parse_config(void)
     if (rv != OGS_OK) return rv;
 
     return OGS_OK;
-}
-
-void ogs_app_setup_log(void)
-{
-    ogs_log_install_domain(&__ogs_app_domain, "app", ogs_core()->log.level);
 }

@@ -10,7 +10,7 @@ OpenAPI_ng_ap_cause_t *OpenAPI_ng_ap_cause_create(
 )
 {
     OpenAPI_ng_ap_cause_t *ng_ap_cause_local_var = ogs_malloc(sizeof(OpenAPI_ng_ap_cause_t));
-    ogs_assert(ng_ap_cause_local_var);
+    log_assert(ng_ap_cause_local_var);
 
     ng_ap_cause_local_var->group = group;
     ng_ap_cause_local_var->value = value;
@@ -34,18 +34,18 @@ cJSON *OpenAPI_ng_ap_cause_convertToJSON(OpenAPI_ng_ap_cause_t *ng_ap_cause)
     OpenAPI_lnode_t *node = NULL;
 
     if (ng_ap_cause == NULL) {
-        ogs_error("OpenAPI_ng_ap_cause_convertToJSON() failed [NgApCause]");
+        log_error("OpenAPI_ng_ap_cause_convertToJSON() failed [NgApCause]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "group", ng_ap_cause->group) == NULL) {
-        ogs_error("OpenAPI_ng_ap_cause_convertToJSON() failed [group]");
+        log_error("OpenAPI_ng_ap_cause_convertToJSON() failed [group]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "value", ng_ap_cause->value) == NULL) {
-        ogs_error("OpenAPI_ng_ap_cause_convertToJSON() failed [value]");
+        log_error("OpenAPI_ng_ap_cause_convertToJSON() failed [value]");
         goto end;
     }
 
@@ -61,21 +61,21 @@ OpenAPI_ng_ap_cause_t *OpenAPI_ng_ap_cause_parseFromJSON(cJSON *ng_ap_causeJSON)
     cJSON *value = NULL;
     group = cJSON_GetObjectItemCaseSensitive(ng_ap_causeJSON, "group");
     if (!group) {
-        ogs_error("OpenAPI_ng_ap_cause_parseFromJSON() failed [group]");
+        log_error("OpenAPI_ng_ap_cause_parseFromJSON() failed [group]");
         goto end;
     }
     if (!cJSON_IsNumber(group)) {
-        ogs_error("OpenAPI_ng_ap_cause_parseFromJSON() failed [group]");
+        log_error("OpenAPI_ng_ap_cause_parseFromJSON() failed [group]");
         goto end;
     }
 
     value = cJSON_GetObjectItemCaseSensitive(ng_ap_causeJSON, "value");
     if (!value) {
-        ogs_error("OpenAPI_ng_ap_cause_parseFromJSON() failed [value]");
+        log_error("OpenAPI_ng_ap_cause_parseFromJSON() failed [value]");
         goto end;
     }
     if (!cJSON_IsNumber(value)) {
-        ogs_error("OpenAPI_ng_ap_cause_parseFromJSON() failed [value]");
+        log_error("OpenAPI_ng_ap_cause_parseFromJSON() failed [value]");
         goto end;
     }
 
@@ -96,10 +96,10 @@ OpenAPI_ng_ap_cause_t *OpenAPI_ng_ap_cause_copy(OpenAPI_ng_ap_cause_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ng_ap_cause_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ng_ap_cause_convertToJSON() failed");
+        log_error("OpenAPI_ng_ap_cause_convertToJSON() failed");
         return NULL;
     }
 
@@ -107,14 +107,14 @@ OpenAPI_ng_ap_cause_t *OpenAPI_ng_ap_cause_copy(OpenAPI_ng_ap_cause_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

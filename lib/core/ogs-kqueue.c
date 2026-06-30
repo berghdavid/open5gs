@@ -60,23 +60,23 @@ struct kqueue_context_s {
 static void kqueue_init(ogs_pollset_t *pollset)
 {
     struct kqueue_context_s *context = NULL;
-    ogs_assert(pollset);
+    log_assert(pollset);
 
     context = ogs_calloc(1, sizeof *context);
-    ogs_assert(context);
+    log_assert(context);
     pollset->context = context;
 
     context->change_list = ogs_calloc(
         pollset->capacity, sizeof(struct kevent));
-    ogs_assert(context->change_list);
+    log_assert(context->change_list);
     context->event_list = ogs_calloc(
         pollset->capacity, sizeof(struct kevent));
-    ogs_assert(context->change_list);
+    log_assert(context->change_list);
     context->nchanges = 0;
     context->nevents = pollset->capacity;
 
     context->kqueue = kqueue();
-    ogs_assert(context->kqueue != -1);
+    log_assert(context->kqueue != -1);
 
     kqueue_notify_init(pollset);
 }
@@ -85,9 +85,9 @@ static void kqueue_cleanup(ogs_pollset_t *pollset)
 {
     struct kqueue_context_s *context = NULL;
 
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     ogs_free(context->change_list);
     ogs_free(context->event_list);
@@ -103,13 +103,13 @@ static int kqueue_set(ogs_poll_t *poll, int filter, int flags)
     struct kqueue_context_s *context = NULL;
     struct kevent *kev;
 
-    ogs_assert(poll);
+    log_assert(poll);
     pollset = poll->pollset;
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
-    ogs_assert(context->nchanges < pollset->capacity);
+    log_assert(context->nchanges < pollset->capacity);
 
     kev = &context->change_list[context->nchanges];
     memset(kev, 0, sizeof *kev);
@@ -146,22 +146,22 @@ static int kqueue_remove(ogs_poll_t *poll)
     struct kevent *kev;
     ogs_poll_t *last = NULL;
 
-    ogs_assert(poll);
+    log_assert(poll);
     pollset = poll->pollset;
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
-    ogs_assert(poll->index < context->nchanges);
+    log_assert(poll->index < context->nchanges);
 
     context->nchanges--;
     kev = &context->change_list[context->nchanges];
 
-    ogs_assert(kev);
+    log_assert(kev);
     context->change_list[poll->index] = *kev;
 
     last = kev->udata;
-    ogs_assert(last);
+    log_assert(last);
 
     last->index = poll->index;
 
@@ -190,9 +190,9 @@ static int kqueue_process(ogs_pollset_t *pollset, ogs_time_t timeout)
     struct timespec ts, *tp;
     int i, n;
 
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     if (timeout == OGS_INFINITE_TIME) {
         tp = NULL;
@@ -209,7 +209,7 @@ static int kqueue_process(ogs_pollset_t *pollset, ogs_time_t timeout)
     context->nchanges = 0;
 
     if (n < 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "kqueue failed");
+        log_error_msg(LOG_ERROR, ogs_socket_errno, "kqueue failed");
         return OGS_ERROR;
     } else if (n == 0) {
         return OGS_TIMEUP;
@@ -279,7 +279,7 @@ static int kqueue_process(ogs_pollset_t *pollset, ogs_time_t timeout)
 
             /* Other errors shouldn't occur. */
             default:
-                ogs_error("kevent() error : flags = 0x%x, errno = %d",
+                log_error("kevent() error : flags = 0x%x, errno = %d",
                         context->event_list[i].flags,
                         (int)context->event_list[i].data);
                 return OGS_ERROR;
@@ -291,7 +291,7 @@ static int kqueue_process(ogs_pollset_t *pollset, ogs_time_t timeout)
         } else if (context->event_list[i].filter == EVFILT_USER) {
             /* Nothing */
         } else {
-            ogs_warn("kevent() unknown filter = 0x%x\n",
+            log_warn("kevent() unknown filter = 0x%x\n",
                 context->event_list[i].filter);
         }
 
@@ -299,7 +299,7 @@ static int kqueue_process(ogs_pollset_t *pollset, ogs_time_t timeout)
             continue;
 
         poll = (ogs_poll_t *)context->event_list[i].udata;
-        ogs_assert(poll);
+        log_assert(poll);
 
         if (poll->handler) {
             poll->handler(when, poll->fd, poll->data);
@@ -317,11 +317,11 @@ static void kqueue_notify_init(ogs_pollset_t *pollset)
     struct kqueue_context_s *context = NULL;
     struct kevent kev;
     struct timespec timeout = { 0, 0 };
-    ogs_assert(pollset);
+    log_assert(pollset);
 
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     memset(&kev, 0, sizeof kev);
     kev.ident = NOTIFY_IDENT;
@@ -329,7 +329,7 @@ static void kqueue_notify_init(ogs_pollset_t *pollset)
     kev.flags = EV_ADD | EV_CLEAR;
 
     rc = kevent(context->kqueue, &kev, 1, NULL, 0, &timeout);
-    ogs_assert(rc != -1);
+    log_assert(rc != -1);
 }
 
 static int kqueue_notify_pollset(ogs_pollset_t *pollset)
@@ -338,11 +338,11 @@ static int kqueue_notify_pollset(ogs_pollset_t *pollset)
     struct kqueue_context_s *context = NULL;
     struct kevent kev;
     struct timespec timeout = { 0, 0 };
-    ogs_assert(pollset);
+    log_assert(pollset);
 
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     memset(&kev, 0, sizeof kev);
     kev.ident = NOTIFY_IDENT;
@@ -351,7 +351,7 @@ static int kqueue_notify_pollset(ogs_pollset_t *pollset)
 
     rc = kevent(context->kqueue, &kev, 1, NULL, 0, &timeout);
     if (rc == -1) {
-        ogs_warn("kevent() failed");
+        log_warn("kevent() failed");
         return OGS_ERROR;
     }
 

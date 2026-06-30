@@ -26,15 +26,15 @@ int lmf_amf_send_nrppa_measurement_request(lmf_location_request_t *location_requ
     int rv;
     ogs_sbi_discovery_option_t *discovery_option = NULL;
 
-    ogs_assert(location_request);
+    log_assert(location_request);
 
-    ogs_info("[%s] Sending NRPPa measurement request to AMF",
+    log_info("[%s] Sending NRPPa measurement request to AMF",
             location_request->supi ? location_request->supi : "Unknown");
 
     /* Build discovery option */
     discovery_option = ogs_sbi_discovery_option_new();
     if (!discovery_option) {
-        ogs_error("[%s] ogs_sbi_discovery_option_new() failed",
+        log_error("[%s] ogs_sbi_discovery_option_new() failed",
                 location_request->supi ? location_request->supi : "Unknown");
         return OGS_ERROR;
     }
@@ -65,17 +65,17 @@ int lmf_amf_send_nrppa_measurement_request(lmf_location_request_t *location_requ
             if (nf_instance && nf_instance->nf_type == OpenAPI_nf_type_AMF) {
                 ogs_sbi_discovery_option_set_target_nf_instance_id(
                         discovery_option, location_request->amf_id);
-                ogs_info("[%s] Using AMF ID (UUID) for discovery: %s",
+                log_info("[%s] Using AMF ID (UUID) for discovery: %s",
                         location_request->supi ? location_request->supi : "Unknown",
                         location_request->amf_id);
             } else {
-                ogs_warn("[%s] AMF ID '%s' not found in registered instances, "
+                log_warn("[%s] AMF ID '%s' not found in registered instances, "
                         "performing general AMF discovery",
                         location_request->supi ? location_request->supi : "Unknown",
                         location_request->amf_id);
             }
         } else {
-            ogs_warn("[%s] AMF ID '%s' is not a valid UUID format, "
+            log_warn("[%s] AMF ID '%s' is not a valid UUID format, "
                     "performing general AMF discovery",
                     location_request->supi ? location_request->supi : "Unknown",
                     location_request->amf_id);
@@ -83,7 +83,7 @@ int lmf_amf_send_nrppa_measurement_request(lmf_location_request_t *location_requ
     }
     
     if (!discovery_option->target_nf_instance_id) {
-        ogs_info("[%s] Discovering AMF via NRF (general discovery)",
+        log_info("[%s] Discovering AMF via NRF (general discovery)",
                 location_request->supi ? location_request->supi : "Unknown");
     }
 
@@ -94,11 +94,11 @@ int lmf_amf_send_nrppa_measurement_request(lmf_location_request_t *location_requ
             location_request, NULL);
 
     if (rv != OGS_OK) {
-        ogs_error("[%s] lmf_amf_sbi_discover_and_send() failed: %d",
+        log_error("[%s] lmf_amf_sbi_discover_and_send() failed: %d",
                 location_request->supi ? location_request->supi : "Unknown", rv);
         /* discovery_option is freed by ogs_sbi_xact_remove() in sbi-path.c */
     } else {
-        ogs_info("[%s] NRPPa measurement request sent to AMF, waiting for response",
+        log_info("[%s] NRPPa measurement request sent to AMF, waiting for response",
                 location_request->supi ? location_request->supi : "Unknown");
         /* discovery_option is freed by ogs_sbi_xact_remove() when transaction completes */
     }
@@ -111,15 +111,15 @@ int lmf_amf_send_location_info_request(lmf_location_request_t *location_request)
     int rv;
     ogs_sbi_discovery_option_t *discovery_option = NULL;
 
-    ogs_assert(location_request);
+    log_assert(location_request);
 
-    ogs_info("[%s] Sending location info request to AMF",
+    log_info("[%s] Sending location info request to AMF",
             location_request->supi ? location_request->supi : "Unknown");
 
     /* Build discovery option */
     discovery_option = ogs_sbi_discovery_option_new();
     if (!discovery_option) {
-        ogs_error("[%s] ogs_sbi_discovery_option_new() failed",
+        log_error("[%s] ogs_sbi_discovery_option_new() failed",
                 location_request->supi ? location_request->supi : "Unknown");
         return OGS_ERROR;
     }
@@ -146,17 +146,17 @@ int lmf_amf_send_location_info_request(lmf_location_request_t *location_request)
             if (nf_instance && nf_instance->nf_type == OpenAPI_nf_type_AMF) {
                 ogs_sbi_discovery_option_set_target_nf_instance_id(
                         discovery_option, location_request->amf_id);
-                ogs_info("[%s] Using AMF ID (UUID) for discovery: %s",
+                log_info("[%s] Using AMF ID (UUID) for discovery: %s",
                         location_request->supi ? location_request->supi : "Unknown",
                         location_request->amf_id);
             } else {
-                ogs_warn("[%s] AMF ID '%s' not found in registered instances, "
+                log_warn("[%s] AMF ID '%s' not found in registered instances, "
                         "performing general AMF discovery",
                         location_request->supi ? location_request->supi : "Unknown",
                         location_request->amf_id);
             }
         } else {
-            ogs_warn("[%s] AMF ID '%s' is not a valid UUID format, "
+            log_warn("[%s] AMF ID '%s' is not a valid UUID format, "
                     "performing general AMF discovery",
                     location_request->supi ? location_request->supi : "Unknown",
                     location_request->amf_id);
@@ -164,7 +164,7 @@ int lmf_amf_send_location_info_request(lmf_location_request_t *location_request)
     }
     
     if (!discovery_option->target_nf_instance_id) {
-        ogs_info("[%s] Discovering AMF via NRF (general discovery)",
+        log_info("[%s] Discovering AMF via NRF (general discovery)",
                 location_request->supi ? location_request->supi : "Unknown");
     }
 
@@ -175,11 +175,11 @@ int lmf_amf_send_location_info_request(lmf_location_request_t *location_request)
             location_request, NULL);
 
     if (rv != OGS_OK) {
-        ogs_error("[%s] lmf_amf_sbi_discover_and_send() failed: %d",
+        log_error("[%s] lmf_amf_sbi_discover_and_send() failed: %d",
                 location_request->supi ? location_request->supi : "Unknown", rv);
         /* discovery_option is freed by ogs_sbi_xact_remove() in sbi-path.c */
     } else {
-        ogs_info("[%s] Location info request sent to AMF, waiting for response",
+        log_info("[%s] Location info request sent to AMF, waiting for response",
                 location_request->supi ? location_request->supi : "Unknown");
         /* discovery_option is freed by ogs_sbi_xact_remove() when transaction completes */
     }
@@ -194,28 +194,28 @@ ogs_sbi_request_t *lmf_namf_build_location_info_request(
     ogs_sbi_request_t *request = NULL;
     int i;
 
-    ogs_assert(location_request);
-    ogs_assert(location_request->supi);
+    log_assert(location_request);
+    log_assert(location_request->supi);
 
-    ogs_info("[%s] Building location info request to AMF",
+    log_info("[%s] Building location info request to AMF",
             location_request->supi);
 
     memset(&message, 0, sizeof(message));
     message.h.method = ogs_strdup(OGS_SBI_HTTP_METHOD_GET);
-    ogs_assert(message.h.method);
+    log_assert(message.h.method);
     message.h.service.name = ogs_strdup(OGS_SBI_SERVICE_NAME_NAMF_COMM);
-    ogs_assert(message.h.service.name);
+    log_assert(message.h.service.name);
     message.h.api.version = ogs_strdup(OGS_SBI_API_V1);
-    ogs_assert(message.h.api.version);
+    log_assert(message.h.api.version);
     message.h.resource.component[0] = ogs_strdup(OGS_SBI_RESOURCE_NAME_UE_CONTEXTS);
-    ogs_assert(message.h.resource.component[0]);
+    log_assert(message.h.resource.component[0]);
     message.h.resource.component[1] = ogs_strdup(location_request->supi);
-    ogs_assert(message.h.resource.component[1]);
+    log_assert(message.h.resource.component[1]);
     message.h.resource.component[2] = ogs_strdup(OGS_SBI_RESOURCE_NAME_LOCATION_INFO);
-    ogs_assert(message.h.resource.component[2]);
+    log_assert(message.h.resource.component[2]);
 
     request = ogs_sbi_build_request(&message);
-    ogs_expect(request);
+    log_expect(request);
 
     if (!request)
         goto build_error;

@@ -11,7 +11,7 @@ OpenAPI_reachability_for_data_configuration_1_t *OpenAPI_reachability_for_data_c
 )
 {
     OpenAPI_reachability_for_data_configuration_1_t *reachability_for_data_configuration_1_local_var = ogs_malloc(sizeof(OpenAPI_reachability_for_data_configuration_1_t));
-    ogs_assert(reachability_for_data_configuration_1_local_var);
+    log_assert(reachability_for_data_configuration_1_local_var);
 
     reachability_for_data_configuration_1_local_var->report_cfg = report_cfg;
     reachability_for_data_configuration_1_local_var->is_min_interval = is_min_interval;
@@ -40,29 +40,29 @@ cJSON *OpenAPI_reachability_for_data_configuration_1_convertToJSON(OpenAPI_reach
     OpenAPI_lnode_t *node = NULL;
 
     if (reachability_for_data_configuration_1 == NULL) {
-        ogs_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [ReachabilityForDataConfiguration_1]");
+        log_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [ReachabilityForDataConfiguration_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!reachability_for_data_configuration_1->report_cfg) {
-        ogs_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [report_cfg]");
+        log_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [report_cfg]");
         return NULL;
     }
     cJSON *report_cfg_local_JSON = OpenAPI_reachability_for_data_report_config_convertToJSON(reachability_for_data_configuration_1->report_cfg);
     if (report_cfg_local_JSON == NULL) {
-        ogs_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [report_cfg]");
+        log_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [report_cfg]");
         goto end;
     }
     cJSON_AddItemToObject(item, "reportCfg", report_cfg_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [report_cfg]");
+        log_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [report_cfg]");
         goto end;
     }
 
     if (reachability_for_data_configuration_1->is_min_interval) {
     if (cJSON_AddNumberToObject(item, "minInterval", reachability_for_data_configuration_1->min_interval) == NULL) {
-        ogs_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [min_interval]");
+        log_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed [min_interval]");
         goto end;
     }
     }
@@ -80,19 +80,19 @@ OpenAPI_reachability_for_data_configuration_1_t *OpenAPI_reachability_for_data_c
     cJSON *min_interval = NULL;
     report_cfg = cJSON_GetObjectItemCaseSensitive(reachability_for_data_configuration_1JSON, "reportCfg");
     if (!report_cfg) {
-        ogs_error("OpenAPI_reachability_for_data_configuration_1_parseFromJSON() failed [report_cfg]");
+        log_error("OpenAPI_reachability_for_data_configuration_1_parseFromJSON() failed [report_cfg]");
         goto end;
     }
     report_cfg_local_nonprim = OpenAPI_reachability_for_data_report_config_parseFromJSON(report_cfg);
     if (!report_cfg_local_nonprim) {
-        ogs_error("OpenAPI_reachability_for_data_report_config_parseFromJSON failed [report_cfg]");
+        log_error("OpenAPI_reachability_for_data_report_config_parseFromJSON failed [report_cfg]");
         goto end;
     }
 
     min_interval = cJSON_GetObjectItemCaseSensitive(reachability_for_data_configuration_1JSON, "minInterval");
     if (min_interval) {
     if (!cJSON_IsNumber(min_interval)) {
-        ogs_error("OpenAPI_reachability_for_data_configuration_1_parseFromJSON() failed [min_interval]");
+        log_error("OpenAPI_reachability_for_data_configuration_1_parseFromJSON() failed [min_interval]");
         goto end;
     }
     }
@@ -117,10 +117,10 @@ OpenAPI_reachability_for_data_configuration_1_t *OpenAPI_reachability_for_data_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_reachability_for_data_configuration_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed");
+        log_error("OpenAPI_reachability_for_data_configuration_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -128,14 +128,14 @@ OpenAPI_reachability_for_data_configuration_1_t *OpenAPI_reachability_for_data_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

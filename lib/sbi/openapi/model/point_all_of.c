@@ -9,7 +9,7 @@ OpenAPI_point_all_of_t *OpenAPI_point_all_of_create(
 )
 {
     OpenAPI_point_all_of_t *point_all_of_local_var = ogs_malloc(sizeof(OpenAPI_point_all_of_t));
-    ogs_assert(point_all_of_local_var);
+    log_assert(point_all_of_local_var);
 
     point_all_of_local_var->point = point;
 
@@ -36,23 +36,23 @@ cJSON *OpenAPI_point_all_of_convertToJSON(OpenAPI_point_all_of_t *point_all_of)
     OpenAPI_lnode_t *node = NULL;
 
     if (point_all_of == NULL) {
-        ogs_error("OpenAPI_point_all_of_convertToJSON() failed [Point_allOf]");
+        log_error("OpenAPI_point_all_of_convertToJSON() failed [Point_allOf]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!point_all_of->point) {
-        ogs_error("OpenAPI_point_all_of_convertToJSON() failed [point]");
+        log_error("OpenAPI_point_all_of_convertToJSON() failed [point]");
         return NULL;
     }
     cJSON *point_local_JSON = OpenAPI_geographical_coordinates_convertToJSON(point_all_of->point);
     if (point_local_JSON == NULL) {
-        ogs_error("OpenAPI_point_all_of_convertToJSON() failed [point]");
+        log_error("OpenAPI_point_all_of_convertToJSON() failed [point]");
         goto end;
     }
     cJSON_AddItemToObject(item, "point", point_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_point_all_of_convertToJSON() failed [point]");
+        log_error("OpenAPI_point_all_of_convertToJSON() failed [point]");
         goto end;
     }
 
@@ -68,12 +68,12 @@ OpenAPI_point_all_of_t *OpenAPI_point_all_of_parseFromJSON(cJSON *point_all_ofJS
     OpenAPI_geographical_coordinates_t *point_local_nonprim = NULL;
     point = cJSON_GetObjectItemCaseSensitive(point_all_ofJSON, "point");
     if (!point) {
-        ogs_error("OpenAPI_point_all_of_parseFromJSON() failed [point]");
+        log_error("OpenAPI_point_all_of_parseFromJSON() failed [point]");
         goto end;
     }
     point_local_nonprim = OpenAPI_geographical_coordinates_parseFromJSON(point);
     if (!point_local_nonprim) {
-        ogs_error("OpenAPI_geographical_coordinates_parseFromJSON failed [point]");
+        log_error("OpenAPI_geographical_coordinates_parseFromJSON failed [point]");
         goto end;
     }
 
@@ -95,10 +95,10 @@ OpenAPI_point_all_of_t *OpenAPI_point_all_of_copy(OpenAPI_point_all_of_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_point_all_of_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_point_all_of_convertToJSON() failed");
+        log_error("OpenAPI_point_all_of_convertToJSON() failed");
         return NULL;
     }
 
@@ -106,14 +106,14 @@ OpenAPI_point_all_of_t *OpenAPI_point_all_of_copy(OpenAPI_point_all_of_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

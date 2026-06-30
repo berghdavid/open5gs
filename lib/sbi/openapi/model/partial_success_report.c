@@ -14,7 +14,7 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_create(
 )
 {
     OpenAPI_partial_success_report_t *partial_success_report_local_var = ogs_malloc(sizeof(OpenAPI_partial_success_report_t));
-    ogs_assert(partial_success_report_local_var);
+    log_assert(partial_success_report_local_var);
 
     partial_success_report_local_var->failure_cause = failure_cause;
     partial_success_report_local_var->rule_reports = rule_reports;
@@ -71,30 +71,30 @@ cJSON *OpenAPI_partial_success_report_convertToJSON(OpenAPI_partial_success_repo
     OpenAPI_lnode_t *node = NULL;
 
     if (partial_success_report == NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [PartialSuccessReport]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [PartialSuccessReport]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (partial_success_report->failure_cause == OpenAPI_failure_cause_NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [failure_cause]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [failure_cause]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "failureCause", OpenAPI_failure_cause_ToString(partial_success_report->failure_cause)) == NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [failure_cause]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [failure_cause]");
         goto end;
     }
 
     if (partial_success_report->rule_reports) {
     cJSON *rule_reportsList = cJSON_AddArrayToObject(item, "ruleReports");
     if (rule_reportsList == NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [rule_reports]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [rule_reports]");
         goto end;
     }
     OpenAPI_list_for_each(partial_success_report->rule_reports, node) {
         cJSON *itemLocal = OpenAPI_rule_report_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [rule_reports]");
+            log_error("OpenAPI_partial_success_report_convertToJSON() failed [rule_reports]");
             goto end;
         }
         cJSON_AddItemToArray(rule_reportsList, itemLocal);
@@ -104,13 +104,13 @@ cJSON *OpenAPI_partial_success_report_convertToJSON(OpenAPI_partial_success_repo
     if (partial_success_report->sess_rule_reports) {
     cJSON *sess_rule_reportsList = cJSON_AddArrayToObject(item, "sessRuleReports");
     if (sess_rule_reportsList == NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [sess_rule_reports]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [sess_rule_reports]");
         goto end;
     }
     OpenAPI_list_for_each(partial_success_report->sess_rule_reports, node) {
         cJSON *itemLocal = OpenAPI_session_rule_report_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [sess_rule_reports]");
+            log_error("OpenAPI_partial_success_report_convertToJSON() failed [sess_rule_reports]");
             goto end;
         }
         cJSON_AddItemToArray(sess_rule_reportsList, itemLocal);
@@ -120,12 +120,12 @@ cJSON *OpenAPI_partial_success_report_convertToJSON(OpenAPI_partial_success_repo
     if (partial_success_report->ue_camping_rep) {
     cJSON *ue_camping_rep_local_JSON = OpenAPI_ue_camping_rep_convertToJSON(partial_success_report->ue_camping_rep);
     if (ue_camping_rep_local_JSON == NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [ue_camping_rep]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [ue_camping_rep]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueCampingRep", ue_camping_rep_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [ue_camping_rep]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [ue_camping_rep]");
         goto end;
     }
     }
@@ -133,12 +133,12 @@ cJSON *OpenAPI_partial_success_report_convertToJSON(OpenAPI_partial_success_repo
     if (partial_success_report->policy_dec_failure_reports != OpenAPI_policy_decision_failure_code_NULL) {
     cJSON *policy_dec_failure_reportsList = cJSON_AddArrayToObject(item, "policyDecFailureReports");
     if (policy_dec_failure_reportsList == NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [policy_dec_failure_reports]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [policy_dec_failure_reports]");
         goto end;
     }
     OpenAPI_list_for_each(partial_success_report->policy_dec_failure_reports, node) {
         if (cJSON_AddStringToObject(policy_dec_failure_reportsList, "", OpenAPI_policy_decision_failure_code_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [policy_dec_failure_reports]");
+            log_error("OpenAPI_partial_success_report_convertToJSON() failed [policy_dec_failure_reports]");
             goto end;
         }
     }
@@ -147,13 +147,13 @@ cJSON *OpenAPI_partial_success_report_convertToJSON(OpenAPI_partial_success_repo
     if (partial_success_report->invalid_policy_decs) {
     cJSON *invalid_policy_decsList = cJSON_AddArrayToObject(item, "invalidPolicyDecs");
     if (invalid_policy_decsList == NULL) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [invalid_policy_decs]");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed [invalid_policy_decs]");
         goto end;
     }
     OpenAPI_list_for_each(partial_success_report->invalid_policy_decs, node) {
         cJSON *itemLocal = OpenAPI_invalid_param_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_partial_success_report_convertToJSON() failed [invalid_policy_decs]");
+            log_error("OpenAPI_partial_success_report_convertToJSON() failed [invalid_policy_decs]");
             goto end;
         }
         cJSON_AddItemToArray(invalid_policy_decsList, itemLocal);
@@ -182,11 +182,11 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
     OpenAPI_list_t *invalid_policy_decsList = NULL;
     failure_cause = cJSON_GetObjectItemCaseSensitive(partial_success_reportJSON, "failureCause");
     if (!failure_cause) {
-        ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [failure_cause]");
+        log_error("OpenAPI_partial_success_report_parseFromJSON() failed [failure_cause]");
         goto end;
     }
     if (!cJSON_IsString(failure_cause)) {
-        ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [failure_cause]");
+        log_error("OpenAPI_partial_success_report_parseFromJSON() failed [failure_cause]");
         goto end;
     }
     failure_causeVariable = OpenAPI_failure_cause_FromString(failure_cause->valuestring);
@@ -195,7 +195,7 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
     if (rule_reports) {
         cJSON *rule_reports_local = NULL;
         if (!cJSON_IsArray(rule_reports)) {
-            ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [rule_reports]");
+            log_error("OpenAPI_partial_success_report_parseFromJSON() failed [rule_reports]");
             goto end;
         }
 
@@ -203,12 +203,12 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
 
         cJSON_ArrayForEach(rule_reports_local, rule_reports) {
             if (!cJSON_IsObject(rule_reports_local)) {
-                ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [rule_reports]");
+                log_error("OpenAPI_partial_success_report_parseFromJSON() failed [rule_reports]");
                 goto end;
             }
             OpenAPI_rule_report_t *rule_reportsItem = OpenAPI_rule_report_parseFromJSON(rule_reports_local);
             if (!rule_reportsItem) {
-                ogs_error("No rule_reportsItem");
+                log_error("No rule_reportsItem");
                 goto end;
             }
             OpenAPI_list_add(rule_reportsList, rule_reportsItem);
@@ -219,7 +219,7 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
     if (sess_rule_reports) {
         cJSON *sess_rule_reports_local = NULL;
         if (!cJSON_IsArray(sess_rule_reports)) {
-            ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [sess_rule_reports]");
+            log_error("OpenAPI_partial_success_report_parseFromJSON() failed [sess_rule_reports]");
             goto end;
         }
 
@@ -227,12 +227,12 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
 
         cJSON_ArrayForEach(sess_rule_reports_local, sess_rule_reports) {
             if (!cJSON_IsObject(sess_rule_reports_local)) {
-                ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [sess_rule_reports]");
+                log_error("OpenAPI_partial_success_report_parseFromJSON() failed [sess_rule_reports]");
                 goto end;
             }
             OpenAPI_session_rule_report_t *sess_rule_reportsItem = OpenAPI_session_rule_report_parseFromJSON(sess_rule_reports_local);
             if (!sess_rule_reportsItem) {
-                ogs_error("No sess_rule_reportsItem");
+                log_error("No sess_rule_reportsItem");
                 goto end;
             }
             OpenAPI_list_add(sess_rule_reportsList, sess_rule_reportsItem);
@@ -243,7 +243,7 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
     if (ue_camping_rep) {
     ue_camping_rep_local_nonprim = OpenAPI_ue_camping_rep_parseFromJSON(ue_camping_rep);
     if (!ue_camping_rep_local_nonprim) {
-        ogs_error("OpenAPI_ue_camping_rep_parseFromJSON failed [ue_camping_rep]");
+        log_error("OpenAPI_ue_camping_rep_parseFromJSON failed [ue_camping_rep]");
         goto end;
     }
     }
@@ -252,7 +252,7 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
     if (policy_dec_failure_reports) {
         cJSON *policy_dec_failure_reports_local = NULL;
         if (!cJSON_IsArray(policy_dec_failure_reports)) {
-            ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [policy_dec_failure_reports]");
+            log_error("OpenAPI_partial_success_report_parseFromJSON() failed [policy_dec_failure_reports]");
             goto end;
         }
 
@@ -261,19 +261,19 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
         cJSON_ArrayForEach(policy_dec_failure_reports_local, policy_dec_failure_reports) {
             OpenAPI_policy_decision_failure_code_e localEnum = OpenAPI_policy_decision_failure_code_NULL;
             if (!cJSON_IsString(policy_dec_failure_reports_local)) {
-                ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [policy_dec_failure_reports]");
+                log_error("OpenAPI_partial_success_report_parseFromJSON() failed [policy_dec_failure_reports]");
                 goto end;
             }
             localEnum = OpenAPI_policy_decision_failure_code_FromString(policy_dec_failure_reports_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"policy_dec_failure_reports\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"policy_dec_failure_reports\" is not supported. Ignoring it ...",
                          policy_dec_failure_reports_local->valuestring);
             } else {
                 OpenAPI_list_add(policy_dec_failure_reportsList, (void *)localEnum);
             }
         }
         if (policy_dec_failure_reportsList->count == 0) {
-            ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed: Expected policy_dec_failure_reportsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_partial_success_report_parseFromJSON() failed: Expected policy_dec_failure_reportsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -282,7 +282,7 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
     if (invalid_policy_decs) {
         cJSON *invalid_policy_decs_local = NULL;
         if (!cJSON_IsArray(invalid_policy_decs)) {
-            ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [invalid_policy_decs]");
+            log_error("OpenAPI_partial_success_report_parseFromJSON() failed [invalid_policy_decs]");
             goto end;
         }
 
@@ -290,12 +290,12 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_parseFromJSON(c
 
         cJSON_ArrayForEach(invalid_policy_decs_local, invalid_policy_decs) {
             if (!cJSON_IsObject(invalid_policy_decs_local)) {
-                ogs_error("OpenAPI_partial_success_report_parseFromJSON() failed [invalid_policy_decs]");
+                log_error("OpenAPI_partial_success_report_parseFromJSON() failed [invalid_policy_decs]");
                 goto end;
             }
             OpenAPI_invalid_param_t *invalid_policy_decsItem = OpenAPI_invalid_param_parseFromJSON(invalid_policy_decs_local);
             if (!invalid_policy_decsItem) {
-                ogs_error("No invalid_policy_decsItem");
+                log_error("No invalid_policy_decsItem");
                 goto end;
             }
             OpenAPI_list_add(invalid_policy_decsList, invalid_policy_decsItem);
@@ -350,10 +350,10 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_copy(OpenAPI_pa
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_partial_success_report_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_partial_success_report_convertToJSON() failed");
+        log_error("OpenAPI_partial_success_report_convertToJSON() failed");
         return NULL;
     }
 
@@ -361,14 +361,14 @@ OpenAPI_partial_success_report_t *OpenAPI_partial_success_report_copy(OpenAPI_pa
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -33,7 +33,7 @@ OpenAPI_service_name_list_cond_t *OpenAPI_service_name_list_cond_create(
 )
 {
     OpenAPI_service_name_list_cond_t *service_name_list_cond_local_var = ogs_malloc(sizeof(OpenAPI_service_name_list_cond_t));
-    ogs_assert(service_name_list_cond_local_var);
+    log_assert(service_name_list_cond_local_var);
 
     service_name_list_cond_local_var->condition_type = condition_type;
     service_name_list_cond_local_var->service_name_list = service_name_list;
@@ -64,32 +64,32 @@ cJSON *OpenAPI_service_name_list_cond_convertToJSON(OpenAPI_service_name_list_co
     OpenAPI_lnode_t *node = NULL;
 
     if (service_name_list_cond == NULL) {
-        ogs_error("OpenAPI_service_name_list_cond_convertToJSON() failed [ServiceNameListCond]");
+        log_error("OpenAPI_service_name_list_cond_convertToJSON() failed [ServiceNameListCond]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (service_name_list_cond->condition_type == OpenAPI_service_name_list_cond_CONDITIONTYPE_NULL) {
-        ogs_error("OpenAPI_service_name_list_cond_convertToJSON() failed [condition_type]");
+        log_error("OpenAPI_service_name_list_cond_convertToJSON() failed [condition_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "conditionType", OpenAPI_condition_typeservice_name_list_cond_ToString(service_name_list_cond->condition_type)) == NULL) {
-        ogs_error("OpenAPI_service_name_list_cond_convertToJSON() failed [condition_type]");
+        log_error("OpenAPI_service_name_list_cond_convertToJSON() failed [condition_type]");
         goto end;
     }
 
     if (!service_name_list_cond->service_name_list) {
-        ogs_error("OpenAPI_service_name_list_cond_convertToJSON() failed [service_name_list]");
+        log_error("OpenAPI_service_name_list_cond_convertToJSON() failed [service_name_list]");
         return NULL;
     }
     cJSON *service_name_listList = cJSON_AddArrayToObject(item, "serviceNameList");
     if (service_name_listList == NULL) {
-        ogs_error("OpenAPI_service_name_list_cond_convertToJSON() failed [service_name_list]");
+        log_error("OpenAPI_service_name_list_cond_convertToJSON() failed [service_name_list]");
         goto end;
     }
     OpenAPI_list_for_each(service_name_list_cond->service_name_list, node) {
         if (cJSON_AddStringToObject(service_name_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_service_name_list_cond_convertToJSON() failed [service_name_list]");
+            log_error("OpenAPI_service_name_list_cond_convertToJSON() failed [service_name_list]");
             goto end;
         }
     }
@@ -108,23 +108,23 @@ OpenAPI_service_name_list_cond_t *OpenAPI_service_name_list_cond_parseFromJSON(c
     OpenAPI_list_t *service_name_listList = NULL;
     condition_type = cJSON_GetObjectItemCaseSensitive(service_name_list_condJSON, "conditionType");
     if (!condition_type) {
-        ogs_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [condition_type]");
+        log_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [condition_type]");
         goto end;
     }
     if (!cJSON_IsString(condition_type)) {
-        ogs_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [condition_type]");
+        log_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [condition_type]");
         goto end;
     }
     condition_typeVariable = OpenAPI_condition_typeservice_name_list_cond_FromString(condition_type->valuestring);
 
     service_name_list = cJSON_GetObjectItemCaseSensitive(service_name_list_condJSON, "serviceNameList");
     if (!service_name_list) {
-        ogs_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [service_name_list]");
+        log_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [service_name_list]");
         goto end;
     }
         cJSON *service_name_list_local = NULL;
         if (!cJSON_IsArray(service_name_list)) {
-            ogs_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [service_name_list]");
+            log_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [service_name_list]");
             goto end;
         }
 
@@ -134,7 +134,7 @@ OpenAPI_service_name_list_cond_t *OpenAPI_service_name_list_cond_parseFromJSON(c
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(service_name_list_local)) {
-                ogs_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [service_name_list]");
+                log_error("OpenAPI_service_name_list_cond_parseFromJSON() failed [service_name_list]");
                 goto end;
             }
             OpenAPI_list_add(service_name_listList, ogs_strdup(service_name_list_local->valuestring));
@@ -162,10 +162,10 @@ OpenAPI_service_name_list_cond_t *OpenAPI_service_name_list_cond_copy(OpenAPI_se
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_service_name_list_cond_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_service_name_list_cond_convertToJSON() failed");
+        log_error("OpenAPI_service_name_list_cond_convertToJSON() failed");
         return NULL;
     }
 
@@ -173,14 +173,14 @@ OpenAPI_service_name_list_cond_t *OpenAPI_service_name_list_cond_copy(OpenAPI_se
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

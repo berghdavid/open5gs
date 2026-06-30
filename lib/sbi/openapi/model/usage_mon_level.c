@@ -8,7 +8,7 @@ OpenAPI_usage_mon_level_t *OpenAPI_usage_mon_level_create(
 )
 {
     OpenAPI_usage_mon_level_t *usage_mon_level_local_var = ogs_malloc(sizeof(OpenAPI_usage_mon_level_t));
-    ogs_assert(usage_mon_level_local_var);
+    log_assert(usage_mon_level_local_var);
 
 
     return usage_mon_level_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_usage_mon_level_convertToJSON(OpenAPI_usage_mon_level_t *usage_mo
     OpenAPI_lnode_t *node = NULL;
 
     if (usage_mon_level == NULL) {
-        ogs_error("OpenAPI_usage_mon_level_convertToJSON() failed [UsageMonLevel]");
+        log_error("OpenAPI_usage_mon_level_convertToJSON() failed [UsageMonLevel]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_usage_mon_level_t *OpenAPI_usage_mon_level_copy(OpenAPI_usage_mon_level_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_usage_mon_level_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_usage_mon_level_convertToJSON() failed");
+        log_error("OpenAPI_usage_mon_level_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_usage_mon_level_t *OpenAPI_usage_mon_level_copy(OpenAPI_usage_mon_level_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

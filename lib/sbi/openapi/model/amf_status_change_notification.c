@@ -9,7 +9,7 @@ OpenAPI_amf_status_change_notification_t *OpenAPI_amf_status_change_notification
 )
 {
     OpenAPI_amf_status_change_notification_t *amf_status_change_notification_local_var = ogs_malloc(sizeof(OpenAPI_amf_status_change_notification_t));
-    ogs_assert(amf_status_change_notification_local_var);
+    log_assert(amf_status_change_notification_local_var);
 
     amf_status_change_notification_local_var->amf_status_info_list = amf_status_info_list;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_amf_status_change_notification_convertToJSON(OpenAPI_amf_status_c
     OpenAPI_lnode_t *node = NULL;
 
     if (amf_status_change_notification == NULL) {
-        ogs_error("OpenAPI_amf_status_change_notification_convertToJSON() failed [AmfStatusChangeNotification]");
+        log_error("OpenAPI_amf_status_change_notification_convertToJSON() failed [AmfStatusChangeNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!amf_status_change_notification->amf_status_info_list) {
-        ogs_error("OpenAPI_amf_status_change_notification_convertToJSON() failed [amf_status_info_list]");
+        log_error("OpenAPI_amf_status_change_notification_convertToJSON() failed [amf_status_info_list]");
         return NULL;
     }
     cJSON *amf_status_info_listList = cJSON_AddArrayToObject(item, "amfStatusInfoList");
     if (amf_status_info_listList == NULL) {
-        ogs_error("OpenAPI_amf_status_change_notification_convertToJSON() failed [amf_status_info_list]");
+        log_error("OpenAPI_amf_status_change_notification_convertToJSON() failed [amf_status_info_list]");
         goto end;
     }
     OpenAPI_list_for_each(amf_status_change_notification->amf_status_info_list, node) {
         cJSON *itemLocal = OpenAPI_amf_status_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_amf_status_change_notification_convertToJSON() failed [amf_status_info_list]");
+            log_error("OpenAPI_amf_status_change_notification_convertToJSON() failed [amf_status_info_list]");
             goto end;
         }
         cJSON_AddItemToArray(amf_status_info_listList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_amf_status_change_notification_t *OpenAPI_amf_status_change_notification
     OpenAPI_list_t *amf_status_info_listList = NULL;
     amf_status_info_list = cJSON_GetObjectItemCaseSensitive(amf_status_change_notificationJSON, "amfStatusInfoList");
     if (!amf_status_info_list) {
-        ogs_error("OpenAPI_amf_status_change_notification_parseFromJSON() failed [amf_status_info_list]");
+        log_error("OpenAPI_amf_status_change_notification_parseFromJSON() failed [amf_status_info_list]");
         goto end;
     }
         cJSON *amf_status_info_list_local = NULL;
         if (!cJSON_IsArray(amf_status_info_list)) {
-            ogs_error("OpenAPI_amf_status_change_notification_parseFromJSON() failed [amf_status_info_list]");
+            log_error("OpenAPI_amf_status_change_notification_parseFromJSON() failed [amf_status_info_list]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_amf_status_change_notification_t *OpenAPI_amf_status_change_notification
 
         cJSON_ArrayForEach(amf_status_info_list_local, amf_status_info_list) {
             if (!cJSON_IsObject(amf_status_info_list_local)) {
-                ogs_error("OpenAPI_amf_status_change_notification_parseFromJSON() failed [amf_status_info_list]");
+                log_error("OpenAPI_amf_status_change_notification_parseFromJSON() failed [amf_status_info_list]");
                 goto end;
             }
             OpenAPI_amf_status_info_t *amf_status_info_listItem = OpenAPI_amf_status_info_parseFromJSON(amf_status_info_list_local);
             if (!amf_status_info_listItem) {
-                ogs_error("No amf_status_info_listItem");
+                log_error("No amf_status_info_listItem");
                 goto end;
             }
             OpenAPI_list_add(amf_status_info_listList, amf_status_info_listItem);
@@ -119,10 +119,10 @@ OpenAPI_amf_status_change_notification_t *OpenAPI_amf_status_change_notification
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_amf_status_change_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_amf_status_change_notification_convertToJSON() failed");
+        log_error("OpenAPI_amf_status_change_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_amf_status_change_notification_t *OpenAPI_amf_status_change_notification
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

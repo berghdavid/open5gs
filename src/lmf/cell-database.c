@@ -31,7 +31,7 @@ static int max_num_of_cells = 0;
 
 void lmf_cell_database_init(void)
 {
-    ogs_assert(cell_database_initialized == 0);
+    log_assert(cell_database_initialized == 0);
 
     ogs_list_init(&cell_database_list);
 
@@ -43,7 +43,7 @@ void lmf_cell_database_init(void)
 
 void lmf_cell_database_final(void)
 {
-    ogs_assert(cell_database_initialized == 1);
+    log_assert(cell_database_initialized == 1);
 
     lmf_cell_database_remove_all();
 
@@ -59,24 +59,24 @@ int lmf_cell_database_parse_config(void)
     const char *root_key;
 
     document = ogs_app()->document;
-    ogs_assert(document);
+    log_assert(document);
 
     ogs_yaml_iter_init(&root_iter, document);
     while (ogs_yaml_iter_next(&root_iter)) {
         root_key = ogs_yaml_iter_key(&root_iter);
-        ogs_assert(root_key);
+        log_assert(root_key);
 
         if (!strcmp(root_key, "lmf")) {
             ogs_yaml_iter_recurse(&root_iter, &lmf_iter);
             while (ogs_yaml_iter_next(&lmf_iter)) {
                 const char *lmf_key = ogs_yaml_iter_key(&lmf_iter);
-                ogs_assert(lmf_key);
+                log_assert(lmf_key);
 
                 if (!strcmp(lmf_key, "cell_database")) {
                     ogs_yaml_iter_recurse(&lmf_iter, &cell_db_iter);
                     while (ogs_yaml_iter_next(&cell_db_iter)) {
                         const char *cell_key = ogs_yaml_iter_key(&cell_db_iter);
-                        ogs_assert(cell_key);
+                        log_assert(cell_key);
 
                         if (!strcmp(cell_key, "cells")) {
                             /* Parse cells array */
@@ -101,7 +101,7 @@ int lmf_cell_database_parse_config(void)
                                 ogs_yaml_iter_recurse(&cell_iter, &cell_item_iter);
                                 while (ogs_yaml_iter_next(&cell_item_iter)) {
                                     const char *item_key = ogs_yaml_iter_key(&cell_item_iter);
-                                    ogs_assert(item_key);
+                                    log_assert(item_key);
 
                                     if (!strcmp(item_key, "ncgi")) {
                                         const char *ncgi_str = ogs_yaml_iter_value(&cell_item_iter);
@@ -114,7 +114,7 @@ int lmf_cell_database_parse_config(void)
                                         ogs_yaml_iter_recurse(&cell_item_iter, &plmn_iter);
                                         while (ogs_yaml_iter_next(&plmn_iter)) {
                                             const char *plmn_key = ogs_yaml_iter_key(&plmn_iter);
-                                            ogs_assert(plmn_key);
+                                            log_assert(plmn_key);
                                             const char *plmn_val = ogs_yaml_iter_value(&plmn_iter);
 
                                             if (!strcmp(plmn_key, "mcc")) {
@@ -149,7 +149,7 @@ int lmf_cell_database_parse_config(void)
                                         ogs_yaml_iter_recurse(&cell_item_iter, &antenna_iter);
                                         while (ogs_yaml_iter_next(&antenna_iter)) {
                                             const char *antenna_key = ogs_yaml_iter_key(&antenna_iter);
-                                            ogs_assert(antenna_key);
+                                            log_assert(antenna_key);
                                             const char *antenna_val = ogs_yaml_iter_value(&antenna_iter);
 
                                             if (!strcmp(antenna_key, "azimuth")) {
@@ -185,7 +185,7 @@ int lmf_cell_database_parse_config(void)
                                         cell_info->antenna_beamwidth = antenna_beamwidth;
                                         cell_info->antenna_tilt = antenna_tilt;
 
-                                        ogs_info("Cell database: Added cell NCGI=%llx "
+                                        log_info("Cell database: Added cell NCGI=%llx "
                                                 "[PLMN:%06x,CELL:%llx] "
                                                 "lat=%.6f,lon=%.6f,alt=%.1f,radius=%um",
                                                 (unsigned long long)ncgi_value,
@@ -194,7 +194,7 @@ int lmf_cell_database_parse_config(void)
                                                 latitude, longitude, altitude, cell_radius);
                                     }
                                 } else {
-                                    ogs_warn("Cell database: Skipping cell (missing ncgi or position)");
+                                    log_warn("Cell database: Skipping cell (missing ncgi or position)");
                                 }
                             }
                         }
@@ -211,19 +211,19 @@ lmf_cell_info_t *lmf_cell_database_add(ogs_nr_cgi_t *ncgi)
 {
     lmf_cell_info_t *cell_info = NULL;
 
-    ogs_assert(ncgi);
+    log_assert(ncgi);
 
     /* Check if cell already exists */
     cell_info = lmf_cell_database_find_by_ncgi(ncgi);
     if (cell_info) {
-        ogs_warn("Cell database: Cell already exists [PLMN:%06x,CELL:%llx]",
+        log_warn("Cell database: Cell already exists [PLMN:%06x,CELL:%llx]",
                 ogs_plmn_id_hexdump(&ncgi->plmn_id),
                 (unsigned long long)ncgi->cell_id);
         return cell_info;
     }
 
     ogs_pool_alloc(&cell_info_pool, &cell_info);
-    ogs_assert(cell_info);
+    log_assert(cell_info);
     memset(cell_info, 0, sizeof(*cell_info));
 
     memcpy(&cell_info->ncgi, ncgi, sizeof(ogs_nr_cgi_t));
@@ -240,7 +240,7 @@ lmf_cell_info_t *lmf_cell_database_add(ogs_nr_cgi_t *ncgi)
 
 void lmf_cell_database_remove(lmf_cell_info_t *cell_info)
 {
-    ogs_assert(cell_info);
+    log_assert(cell_info);
 
     ogs_list_remove(&cell_database_list, cell_info);
     ogs_pool_free(&cell_info_pool, cell_info);
@@ -258,7 +258,7 @@ lmf_cell_info_t *lmf_cell_database_find_by_ncgi(ogs_nr_cgi_t *ncgi)
 {
     lmf_cell_info_t *cell_info = NULL;
 
-    ogs_assert(ncgi);
+    log_assert(ncgi);
 
     ogs_list_for_each(&cell_database_list, cell_info) {
         if (memcmp(&cell_info->ncgi.plmn_id, &ncgi->plmn_id, sizeof(ogs_plmn_id_t)) == 0 &&
@@ -288,10 +288,10 @@ int lmf_cell_get_position(ogs_nr_cgi_t *ncgi,
 {
     lmf_cell_info_t *cell_info = NULL;
 
-    ogs_assert(ncgi);
-    ogs_assert(latitude);
-    ogs_assert(longitude);
-    ogs_assert(altitude);
+    log_assert(ncgi);
+    log_assert(latitude);
+    log_assert(longitude);
+    log_assert(altitude);
 
     cell_info = lmf_cell_database_find_by_ncgi(ncgi);
     if (!cell_info) {
@@ -309,8 +309,8 @@ int lmf_cell_get_radius(ogs_nr_cgi_t *ncgi, uint32_t *radius)
 {
     lmf_cell_info_t *cell_info = NULL;
 
-    ogs_assert(ncgi);
-    ogs_assert(radius);
+    log_assert(ncgi);
+    log_assert(radius);
 
     cell_info = lmf_cell_database_find_by_ncgi(ncgi);
     if (!cell_info) {
@@ -327,10 +327,10 @@ int lmf_cell_get_antenna_config(ogs_nr_cgi_t *ncgi,
 {
     lmf_cell_info_t *cell_info = NULL;
 
-    ogs_assert(ncgi);
-    ogs_assert(azimuth);
-    ogs_assert(beamwidth);
-    ogs_assert(tilt);
+    log_assert(ncgi);
+    log_assert(azimuth);
+    log_assert(beamwidth);
+    log_assert(tilt);
 
     cell_info = lmf_cell_database_find_by_ncgi(ncgi);
     if (!cell_info) {

@@ -174,9 +174,9 @@ int ogs_aes_cmac_calculate(uint8_t *cmac, const uint8_t *key,
     uint32_t rk[OGS_AES_RKLENGTH(OGS_AES_MAX_KEY_BITS)];
     int nrounds;
 
-    ogs_assert(cmac);
-    ogs_assert(key);
-    ogs_assert(msg);
+    log_assert(cmac);
+    log_assert(key);
+    log_assert(msg);
 
     /* Step 1.  (K1,K2) := Generate_Subkey(K); */
     _generate_subkey(k1, k2, key);

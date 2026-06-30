@@ -9,7 +9,7 @@ OpenAPI_pro_se_information_t *OpenAPI_pro_se_information_create(
 )
 {
     OpenAPI_pro_se_information_t *pro_se_information_local_var = ogs_malloc(sizeof(OpenAPI_pro_se_information_t));
-    ogs_assert(pro_se_information_local_var);
+    log_assert(pro_se_information_local_var);
 
     pro_se_information_local_var->n2_pc5_pro_se_pol = n2_pc5_pro_se_pol;
 
@@ -36,7 +36,7 @@ cJSON *OpenAPI_pro_se_information_convertToJSON(OpenAPI_pro_se_information_t *pr
     OpenAPI_lnode_t *node = NULL;
 
     if (pro_se_information == NULL) {
-        ogs_error("OpenAPI_pro_se_information_convertToJSON() failed [ProSeInformation]");
+        log_error("OpenAPI_pro_se_information_convertToJSON() failed [ProSeInformation]");
         return NULL;
     }
 
@@ -44,12 +44,12 @@ cJSON *OpenAPI_pro_se_information_convertToJSON(OpenAPI_pro_se_information_t *pr
     if (pro_se_information->n2_pc5_pro_se_pol) {
     cJSON *n2_pc5_pro_se_pol_local_JSON = OpenAPI_n2_info_content_convertToJSON(pro_se_information->n2_pc5_pro_se_pol);
     if (n2_pc5_pro_se_pol_local_JSON == NULL) {
-        ogs_error("OpenAPI_pro_se_information_convertToJSON() failed [n2_pc5_pro_se_pol]");
+        log_error("OpenAPI_pro_se_information_convertToJSON() failed [n2_pc5_pro_se_pol]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n2Pc5ProSePol", n2_pc5_pro_se_pol_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pro_se_information_convertToJSON() failed [n2_pc5_pro_se_pol]");
+        log_error("OpenAPI_pro_se_information_convertToJSON() failed [n2_pc5_pro_se_pol]");
         goto end;
     }
     }
@@ -68,7 +68,7 @@ OpenAPI_pro_se_information_t *OpenAPI_pro_se_information_parseFromJSON(cJSON *pr
     if (n2_pc5_pro_se_pol) {
     n2_pc5_pro_se_pol_local_nonprim = OpenAPI_n2_info_content_parseFromJSON(n2_pc5_pro_se_pol);
     if (!n2_pc5_pro_se_pol_local_nonprim) {
-        ogs_error("OpenAPI_n2_info_content_parseFromJSON failed [n2_pc5_pro_se_pol]");
+        log_error("OpenAPI_n2_info_content_parseFromJSON failed [n2_pc5_pro_se_pol]");
         goto end;
     }
     }
@@ -91,10 +91,10 @@ OpenAPI_pro_se_information_t *OpenAPI_pro_se_information_copy(OpenAPI_pro_se_inf
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pro_se_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pro_se_information_convertToJSON() failed");
+        log_error("OpenAPI_pro_se_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -102,14 +102,14 @@ OpenAPI_pro_se_information_t *OpenAPI_pro_se_information_copy(OpenAPI_pro_se_inf
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

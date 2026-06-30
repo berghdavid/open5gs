@@ -21,7 +21,7 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_c
 )
 {
     OpenAPI_communication_characteristics_t *communication_characteristics_local_var = ogs_malloc(sizeof(OpenAPI_communication_characteristics_t));
-    ogs_assert(communication_characteristics_local_var);
+    log_assert(communication_characteristics_local_var);
 
     communication_characteristics_local_var->is_pp_subs_reg_timer_null = is_pp_subs_reg_timer_null;
     communication_characteristics_local_var->pp_subs_reg_timer = pp_subs_reg_timer;
@@ -76,7 +76,7 @@ cJSON *OpenAPI_communication_characteristics_convertToJSON(OpenAPI_communication
     OpenAPI_lnode_t *node = NULL;
 
     if (communication_characteristics == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [CommunicationCharacteristics]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [CommunicationCharacteristics]");
         return NULL;
     }
 
@@ -84,17 +84,17 @@ cJSON *OpenAPI_communication_characteristics_convertToJSON(OpenAPI_communication
     if (communication_characteristics->pp_subs_reg_timer) {
     cJSON *pp_subs_reg_timer_local_JSON = OpenAPI_pp_subs_reg_timer_convertToJSON(communication_characteristics->pp_subs_reg_timer);
     if (pp_subs_reg_timer_local_JSON == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_subs_reg_timer]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_subs_reg_timer]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ppSubsRegTimer", pp_subs_reg_timer_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_subs_reg_timer]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_subs_reg_timer]");
         goto end;
     }
     } else if (communication_characteristics->is_pp_subs_reg_timer_null) {
         if (cJSON_AddNullToObject(item, "ppSubsRegTimer") == NULL) {
-            ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_subs_reg_timer]");
+            log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_subs_reg_timer]");
             goto end;
         }
     }
@@ -102,29 +102,29 @@ cJSON *OpenAPI_communication_characteristics_convertToJSON(OpenAPI_communication
     if (communication_characteristics->pp_active_time) {
     cJSON *pp_active_time_local_JSON = OpenAPI_pp_active_time_convertToJSON(communication_characteristics->pp_active_time);
     if (pp_active_time_local_JSON == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_active_time]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_active_time]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ppActiveTime", pp_active_time_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_active_time]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_active_time]");
         goto end;
     }
     } else if (communication_characteristics->is_pp_active_time_null) {
         if (cJSON_AddNullToObject(item, "ppActiveTime") == NULL) {
-            ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_active_time]");
+            log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_active_time]");
             goto end;
         }
     }
 
     if (communication_characteristics->is_pp_dl_packet_count) {
     if (cJSON_AddNumberToObject(item, "ppDlPacketCount", communication_characteristics->pp_dl_packet_count) == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count]");
         goto end;
     }
     } else if (communication_characteristics->is_pp_dl_packet_count_null) {
         if (cJSON_AddNullToObject(item, "ppDlPacketCount") == NULL) {
-            ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count]");
+            log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count]");
             goto end;
         }
     }
@@ -132,17 +132,17 @@ cJSON *OpenAPI_communication_characteristics_convertToJSON(OpenAPI_communication
     if (communication_characteristics->pp_dl_packet_count_ext) {
     cJSON *pp_dl_packet_count_ext_local_JSON = OpenAPI_pp_dl_packet_count_ext_convertToJSON(communication_characteristics->pp_dl_packet_count_ext);
     if (pp_dl_packet_count_ext_local_JSON == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count_ext]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count_ext]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ppDlPacketCountExt", pp_dl_packet_count_ext_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count_ext]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count_ext]");
         goto end;
     }
     } else if (communication_characteristics->is_pp_dl_packet_count_ext_null) {
         if (cJSON_AddNullToObject(item, "ppDlPacketCountExt") == NULL) {
-            ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count_ext]");
+            log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_dl_packet_count_ext]");
             goto end;
         }
     }
@@ -150,17 +150,17 @@ cJSON *OpenAPI_communication_characteristics_convertToJSON(OpenAPI_communication
     if (communication_characteristics->pp_maximum_response_time) {
     cJSON *pp_maximum_response_time_local_JSON = OpenAPI_pp_maximum_response_time_convertToJSON(communication_characteristics->pp_maximum_response_time);
     if (pp_maximum_response_time_local_JSON == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_response_time]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_response_time]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ppMaximumResponseTime", pp_maximum_response_time_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_response_time]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_response_time]");
         goto end;
     }
     } else if (communication_characteristics->is_pp_maximum_response_time_null) {
         if (cJSON_AddNullToObject(item, "ppMaximumResponseTime") == NULL) {
-            ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_response_time]");
+            log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_response_time]");
             goto end;
         }
     }
@@ -168,17 +168,17 @@ cJSON *OpenAPI_communication_characteristics_convertToJSON(OpenAPI_communication
     if (communication_characteristics->pp_maximum_latency) {
     cJSON *pp_maximum_latency_local_JSON = OpenAPI_pp_maximum_latency_convertToJSON(communication_characteristics->pp_maximum_latency);
     if (pp_maximum_latency_local_JSON == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_latency]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_latency]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ppMaximumLatency", pp_maximum_latency_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_latency]");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_latency]");
         goto end;
     }
     } else if (communication_characteristics->is_pp_maximum_latency_null) {
         if (cJSON_AddNullToObject(item, "ppMaximumLatency") == NULL) {
-            ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_latency]");
+            log_error("OpenAPI_communication_characteristics_convertToJSON() failed [pp_maximum_latency]");
             goto end;
         }
     }
@@ -207,7 +207,7 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_p
     if (!cJSON_IsNull(pp_subs_reg_timer)) {
     pp_subs_reg_timer_local_nonprim = OpenAPI_pp_subs_reg_timer_parseFromJSON(pp_subs_reg_timer);
     if (!pp_subs_reg_timer_local_nonprim) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON failed [pp_subs_reg_timer]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON failed [pp_subs_reg_timer]");
         goto end;
     }
     }
@@ -218,7 +218,7 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_p
     if (!cJSON_IsNull(pp_active_time)) {
     pp_active_time_local_nonprim = OpenAPI_pp_active_time_parseFromJSON(pp_active_time);
     if (!pp_active_time_local_nonprim) {
-        ogs_error("OpenAPI_pp_active_time_parseFromJSON failed [pp_active_time]");
+        log_error("OpenAPI_pp_active_time_parseFromJSON failed [pp_active_time]");
         goto end;
     }
     }
@@ -228,7 +228,7 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_p
     if (pp_dl_packet_count) {
     if (!cJSON_IsNull(pp_dl_packet_count)) {
     if (!cJSON_IsNumber(pp_dl_packet_count)) {
-        ogs_error("OpenAPI_communication_characteristics_parseFromJSON() failed [pp_dl_packet_count]");
+        log_error("OpenAPI_communication_characteristics_parseFromJSON() failed [pp_dl_packet_count]");
         goto end;
     }
     }
@@ -239,7 +239,7 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_p
     if (!cJSON_IsNull(pp_dl_packet_count_ext)) {
     pp_dl_packet_count_ext_local_nonprim = OpenAPI_pp_dl_packet_count_ext_parseFromJSON(pp_dl_packet_count_ext);
     if (!pp_dl_packet_count_ext_local_nonprim) {
-        ogs_error("OpenAPI_pp_dl_packet_count_ext_parseFromJSON failed [pp_dl_packet_count_ext]");
+        log_error("OpenAPI_pp_dl_packet_count_ext_parseFromJSON failed [pp_dl_packet_count_ext]");
         goto end;
     }
     }
@@ -250,7 +250,7 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_p
     if (!cJSON_IsNull(pp_maximum_response_time)) {
     pp_maximum_response_time_local_nonprim = OpenAPI_pp_maximum_response_time_parseFromJSON(pp_maximum_response_time);
     if (!pp_maximum_response_time_local_nonprim) {
-        ogs_error("OpenAPI_pp_maximum_response_time_parseFromJSON failed [pp_maximum_response_time]");
+        log_error("OpenAPI_pp_maximum_response_time_parseFromJSON failed [pp_maximum_response_time]");
         goto end;
     }
     }
@@ -261,7 +261,7 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_p
     if (!cJSON_IsNull(pp_maximum_latency)) {
     pp_maximum_latency_local_nonprim = OpenAPI_pp_maximum_latency_parseFromJSON(pp_maximum_latency);
     if (!pp_maximum_latency_local_nonprim) {
-        ogs_error("OpenAPI_pp_maximum_latency_parseFromJSON failed [pp_maximum_latency]");
+        log_error("OpenAPI_pp_maximum_latency_parseFromJSON failed [pp_maximum_latency]");
         goto end;
     }
     }
@@ -313,10 +313,10 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_communication_characteristics_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_communication_characteristics_convertToJSON() failed");
+        log_error("OpenAPI_communication_characteristics_convertToJSON() failed");
         return NULL;
     }
 
@@ -324,14 +324,14 @@ OpenAPI_communication_characteristics_t *OpenAPI_communication_characteristics_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

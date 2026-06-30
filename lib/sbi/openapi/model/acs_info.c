@@ -11,7 +11,7 @@ OpenAPI_acs_info_t *OpenAPI_acs_info_create(
 )
 {
     OpenAPI_acs_info_t *acs_info_local_var = ogs_malloc(sizeof(OpenAPI_acs_info_t));
-    ogs_assert(acs_info_local_var);
+    log_assert(acs_info_local_var);
 
     acs_info_local_var->acs_url = acs_url;
     acs_info_local_var->acs_ipv4_addr = acs_ipv4_addr;
@@ -48,28 +48,28 @@ cJSON *OpenAPI_acs_info_convertToJSON(OpenAPI_acs_info_t *acs_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (acs_info == NULL) {
-        ogs_error("OpenAPI_acs_info_convertToJSON() failed [AcsInfo]");
+        log_error("OpenAPI_acs_info_convertToJSON() failed [AcsInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (acs_info->acs_url) {
     if (cJSON_AddStringToObject(item, "acsUrl", acs_info->acs_url) == NULL) {
-        ogs_error("OpenAPI_acs_info_convertToJSON() failed [acs_url]");
+        log_error("OpenAPI_acs_info_convertToJSON() failed [acs_url]");
         goto end;
     }
     }
 
     if (acs_info->acs_ipv4_addr) {
     if (cJSON_AddStringToObject(item, "acsIpv4Addr", acs_info->acs_ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_acs_info_convertToJSON() failed [acs_ipv4_addr]");
+        log_error("OpenAPI_acs_info_convertToJSON() failed [acs_ipv4_addr]");
         goto end;
     }
     }
 
     if (acs_info->acs_ipv6_addr) {
     if (cJSON_AddStringToObject(item, "acsIpv6Addr", acs_info->acs_ipv6_addr) == NULL) {
-        ogs_error("OpenAPI_acs_info_convertToJSON() failed [acs_ipv6_addr]");
+        log_error("OpenAPI_acs_info_convertToJSON() failed [acs_ipv6_addr]");
         goto end;
     }
     }
@@ -88,7 +88,7 @@ OpenAPI_acs_info_t *OpenAPI_acs_info_parseFromJSON(cJSON *acs_infoJSON)
     acs_url = cJSON_GetObjectItemCaseSensitive(acs_infoJSON, "acsUrl");
     if (acs_url) {
     if (!cJSON_IsString(acs_url) && !cJSON_IsNull(acs_url)) {
-        ogs_error("OpenAPI_acs_info_parseFromJSON() failed [acs_url]");
+        log_error("OpenAPI_acs_info_parseFromJSON() failed [acs_url]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_acs_info_t *OpenAPI_acs_info_parseFromJSON(cJSON *acs_infoJSON)
     acs_ipv4_addr = cJSON_GetObjectItemCaseSensitive(acs_infoJSON, "acsIpv4Addr");
     if (acs_ipv4_addr) {
     if (!cJSON_IsString(acs_ipv4_addr) && !cJSON_IsNull(acs_ipv4_addr)) {
-        ogs_error("OpenAPI_acs_info_parseFromJSON() failed [acs_ipv4_addr]");
+        log_error("OpenAPI_acs_info_parseFromJSON() failed [acs_ipv4_addr]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_acs_info_t *OpenAPI_acs_info_parseFromJSON(cJSON *acs_infoJSON)
     acs_ipv6_addr = cJSON_GetObjectItemCaseSensitive(acs_infoJSON, "acsIpv6Addr");
     if (acs_ipv6_addr) {
     if (!cJSON_IsString(acs_ipv6_addr) && !cJSON_IsNull(acs_ipv6_addr)) {
-        ogs_error("OpenAPI_acs_info_parseFromJSON() failed [acs_ipv6_addr]");
+        log_error("OpenAPI_acs_info_parseFromJSON() failed [acs_ipv6_addr]");
         goto end;
     }
     }
@@ -125,10 +125,10 @@ OpenAPI_acs_info_t *OpenAPI_acs_info_copy(OpenAPI_acs_info_t *dst, OpenAPI_acs_i
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_acs_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_acs_info_convertToJSON() failed");
+        log_error("OpenAPI_acs_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -136,14 +136,14 @@ OpenAPI_acs_info_t *OpenAPI_acs_info_copy(OpenAPI_acs_info_t *dst, OpenAPI_acs_i
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

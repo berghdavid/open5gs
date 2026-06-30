@@ -8,7 +8,7 @@ OpenAPI_event_report_mode_t *OpenAPI_event_report_mode_create(
 )
 {
     OpenAPI_event_report_mode_t *event_report_mode_local_var = ogs_malloc(sizeof(OpenAPI_event_report_mode_t));
-    ogs_assert(event_report_mode_local_var);
+    log_assert(event_report_mode_local_var);
 
 
     return event_report_mode_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_event_report_mode_convertToJSON(OpenAPI_event_report_mode_t *even
     OpenAPI_lnode_t *node = NULL;
 
     if (event_report_mode == NULL) {
-        ogs_error("OpenAPI_event_report_mode_convertToJSON() failed [EventReportMode]");
+        log_error("OpenAPI_event_report_mode_convertToJSON() failed [EventReportMode]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_event_report_mode_t *OpenAPI_event_report_mode_copy(OpenAPI_event_report
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_event_report_mode_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_event_report_mode_convertToJSON() failed");
+        log_error("OpenAPI_event_report_mode_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_event_report_mode_t *OpenAPI_event_report_mode_copy(OpenAPI_event_report
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

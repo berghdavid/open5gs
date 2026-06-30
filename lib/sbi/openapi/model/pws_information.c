@@ -16,7 +16,7 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_create(
 )
 {
     OpenAPI_pws_information_t *pws_information_local_var = ogs_malloc(sizeof(OpenAPI_pws_information_t));
-    ogs_assert(pws_information_local_var);
+    log_assert(pws_information_local_var);
 
     pws_information_local_var->message_identifier = message_identifier;
     pws_information_local_var->serial_number = serial_number;
@@ -65,46 +65,46 @@ cJSON *OpenAPI_pws_information_convertToJSON(OpenAPI_pws_information_t *pws_info
     OpenAPI_lnode_t *node = NULL;
 
     if (pws_information == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [PwsInformation]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [PwsInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "messageIdentifier", pws_information->message_identifier) == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [message_identifier]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [message_identifier]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "serialNumber", pws_information->serial_number) == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [serial_number]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [serial_number]");
         goto end;
     }
 
     if (!pws_information->pws_container) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [pws_container]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [pws_container]");
         return NULL;
     }
     cJSON *pws_container_local_JSON = OpenAPI_n2_info_content_convertToJSON(pws_information->pws_container);
     if (pws_container_local_JSON == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [pws_container]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [pws_container]");
         goto end;
     }
     cJSON_AddItemToObject(item, "pwsContainer", pws_container_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [pws_container]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [pws_container]");
         goto end;
     }
 
     if (pws_information->bc_empty_area_list) {
     cJSON *bc_empty_area_listList = cJSON_AddArrayToObject(item, "bcEmptyAreaList");
     if (bc_empty_area_listList == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [bc_empty_area_list]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [bc_empty_area_list]");
         goto end;
     }
     OpenAPI_list_for_each(pws_information->bc_empty_area_list, node) {
         cJSON *itemLocal = OpenAPI_global_ran_node_id_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pws_information_convertToJSON() failed [bc_empty_area_list]");
+            log_error("OpenAPI_pws_information_convertToJSON() failed [bc_empty_area_list]");
             goto end;
         }
         cJSON_AddItemToArray(bc_empty_area_listList, itemLocal);
@@ -113,21 +113,21 @@ cJSON *OpenAPI_pws_information_convertToJSON(OpenAPI_pws_information_t *pws_info
 
     if (pws_information->is_send_ran_response) {
     if (cJSON_AddBoolToObject(item, "sendRanResponse", pws_information->send_ran_response) == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [send_ran_response]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [send_ran_response]");
         goto end;
     }
     }
 
     if (pws_information->omc_id) {
     if (cJSON_AddStringToObject(item, "omcId", pws_information->omc_id) == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [omc_id]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [omc_id]");
         goto end;
     }
     }
 
     if (pws_information->nf_id) {
     if (cJSON_AddStringToObject(item, "nfId", pws_information->nf_id) == NULL) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed [nf_id]");
+        log_error("OpenAPI_pws_information_convertToJSON() failed [nf_id]");
         goto end;
     }
     }
@@ -151,32 +151,32 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_parseFromJSON(cJSON *pws_info
     cJSON *nf_id = NULL;
     message_identifier = cJSON_GetObjectItemCaseSensitive(pws_informationJSON, "messageIdentifier");
     if (!message_identifier) {
-        ogs_error("OpenAPI_pws_information_parseFromJSON() failed [message_identifier]");
+        log_error("OpenAPI_pws_information_parseFromJSON() failed [message_identifier]");
         goto end;
     }
     if (!cJSON_IsNumber(message_identifier)) {
-        ogs_error("OpenAPI_pws_information_parseFromJSON() failed [message_identifier]");
+        log_error("OpenAPI_pws_information_parseFromJSON() failed [message_identifier]");
         goto end;
     }
 
     serial_number = cJSON_GetObjectItemCaseSensitive(pws_informationJSON, "serialNumber");
     if (!serial_number) {
-        ogs_error("OpenAPI_pws_information_parseFromJSON() failed [serial_number]");
+        log_error("OpenAPI_pws_information_parseFromJSON() failed [serial_number]");
         goto end;
     }
     if (!cJSON_IsNumber(serial_number)) {
-        ogs_error("OpenAPI_pws_information_parseFromJSON() failed [serial_number]");
+        log_error("OpenAPI_pws_information_parseFromJSON() failed [serial_number]");
         goto end;
     }
 
     pws_container = cJSON_GetObjectItemCaseSensitive(pws_informationJSON, "pwsContainer");
     if (!pws_container) {
-        ogs_error("OpenAPI_pws_information_parseFromJSON() failed [pws_container]");
+        log_error("OpenAPI_pws_information_parseFromJSON() failed [pws_container]");
         goto end;
     }
     pws_container_local_nonprim = OpenAPI_n2_info_content_parseFromJSON(pws_container);
     if (!pws_container_local_nonprim) {
-        ogs_error("OpenAPI_n2_info_content_parseFromJSON failed [pws_container]");
+        log_error("OpenAPI_n2_info_content_parseFromJSON failed [pws_container]");
         goto end;
     }
 
@@ -184,7 +184,7 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_parseFromJSON(cJSON *pws_info
     if (bc_empty_area_list) {
         cJSON *bc_empty_area_list_local = NULL;
         if (!cJSON_IsArray(bc_empty_area_list)) {
-            ogs_error("OpenAPI_pws_information_parseFromJSON() failed [bc_empty_area_list]");
+            log_error("OpenAPI_pws_information_parseFromJSON() failed [bc_empty_area_list]");
             goto end;
         }
 
@@ -192,12 +192,12 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_parseFromJSON(cJSON *pws_info
 
         cJSON_ArrayForEach(bc_empty_area_list_local, bc_empty_area_list) {
             if (!cJSON_IsObject(bc_empty_area_list_local)) {
-                ogs_error("OpenAPI_pws_information_parseFromJSON() failed [bc_empty_area_list]");
+                log_error("OpenAPI_pws_information_parseFromJSON() failed [bc_empty_area_list]");
                 goto end;
             }
             OpenAPI_global_ran_node_id_t *bc_empty_area_listItem = OpenAPI_global_ran_node_id_parseFromJSON(bc_empty_area_list_local);
             if (!bc_empty_area_listItem) {
-                ogs_error("No bc_empty_area_listItem");
+                log_error("No bc_empty_area_listItem");
                 goto end;
             }
             OpenAPI_list_add(bc_empty_area_listList, bc_empty_area_listItem);
@@ -207,7 +207,7 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_parseFromJSON(cJSON *pws_info
     send_ran_response = cJSON_GetObjectItemCaseSensitive(pws_informationJSON, "sendRanResponse");
     if (send_ran_response) {
     if (!cJSON_IsBool(send_ran_response)) {
-        ogs_error("OpenAPI_pws_information_parseFromJSON() failed [send_ran_response]");
+        log_error("OpenAPI_pws_information_parseFromJSON() failed [send_ran_response]");
         goto end;
     }
     }
@@ -215,7 +215,7 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_parseFromJSON(cJSON *pws_info
     omc_id = cJSON_GetObjectItemCaseSensitive(pws_informationJSON, "omcId");
     if (omc_id) {
     if (!cJSON_IsString(omc_id) && !cJSON_IsNull(omc_id)) {
-        ogs_error("OpenAPI_pws_information_parseFromJSON() failed [omc_id]");
+        log_error("OpenAPI_pws_information_parseFromJSON() failed [omc_id]");
         goto end;
     }
     }
@@ -223,7 +223,7 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_parseFromJSON(cJSON *pws_info
     nf_id = cJSON_GetObjectItemCaseSensitive(pws_informationJSON, "nfId");
     if (nf_id) {
     if (!cJSON_IsString(nf_id) && !cJSON_IsNull(nf_id)) {
-        ogs_error("OpenAPI_pws_information_parseFromJSON() failed [nf_id]");
+        log_error("OpenAPI_pws_information_parseFromJSON() failed [nf_id]");
         goto end;
     }
     }
@@ -262,10 +262,10 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_copy(OpenAPI_pws_information_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pws_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pws_information_convertToJSON() failed");
+        log_error("OpenAPI_pws_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -273,14 +273,14 @@ OpenAPI_pws_information_t *OpenAPI_pws_information_copy(OpenAPI_pws_information_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -15,7 +15,7 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_c
 )
 {
     OpenAPI_ue_reg_status_update_req_data_t *ue_reg_status_update_req_data_local_var = ogs_malloc(sizeof(OpenAPI_ue_reg_status_update_req_data_t));
-    ogs_assert(ue_reg_status_update_req_data_local_var);
+    log_assert(ue_reg_status_update_req_data_local_var);
 
     ue_reg_status_update_req_data_local_var->transfer_status = transfer_status;
     ue_reg_status_update_req_data_local_var->to_release_session_list = to_release_session_list;
@@ -72,33 +72,33 @@ cJSON *OpenAPI_ue_reg_status_update_req_data_convertToJSON(OpenAPI_ue_reg_status
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_reg_status_update_req_data == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [UeRegStatusUpdateReqData]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [UeRegStatusUpdateReqData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ue_reg_status_update_req_data->transfer_status == OpenAPI_ue_context_transfer_status_NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [transfer_status]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [transfer_status]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "transferStatus", OpenAPI_ue_context_transfer_status_ToString(ue_reg_status_update_req_data->transfer_status)) == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [transfer_status]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [transfer_status]");
         goto end;
     }
 
     if (ue_reg_status_update_req_data->to_release_session_list) {
     cJSON *to_release_session_listList = cJSON_AddArrayToObject(item, "toReleaseSessionList");
     if (to_release_session_listList == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_list]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_list]");
         goto end;
     }
     OpenAPI_list_for_each(ue_reg_status_update_req_data->to_release_session_list, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_list]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_list]");
             goto end;
         }
         if (cJSON_AddNumberToObject(to_release_session_listList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_list]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_list]");
             goto end;
         }
     }
@@ -106,7 +106,7 @@ cJSON *OpenAPI_ue_reg_status_update_req_data_convertToJSON(OpenAPI_ue_reg_status
 
     if (ue_reg_status_update_req_data->is_pcf_reselected_ind) {
     if (cJSON_AddBoolToObject(item, "pcfReselectedInd", ue_reg_status_update_req_data->pcf_reselected_ind) == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [pcf_reselected_ind]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [pcf_reselected_ind]");
         goto end;
     }
     }
@@ -114,13 +114,13 @@ cJSON *OpenAPI_ue_reg_status_update_req_data_convertToJSON(OpenAPI_ue_reg_status
     if (ue_reg_status_update_req_data->smf_change_info_list) {
     cJSON *smf_change_info_listList = cJSON_AddArrayToObject(item, "smfChangeInfoList");
     if (smf_change_info_listList == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [smf_change_info_list]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [smf_change_info_list]");
         goto end;
     }
     OpenAPI_list_for_each(ue_reg_status_update_req_data->smf_change_info_list, node) {
         cJSON *itemLocal = OpenAPI_smf_change_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [smf_change_info_list]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [smf_change_info_list]");
             goto end;
         }
         cJSON_AddItemToArray(smf_change_info_listList, itemLocal);
@@ -130,12 +130,12 @@ cJSON *OpenAPI_ue_reg_status_update_req_data_convertToJSON(OpenAPI_ue_reg_status
     if (ue_reg_status_update_req_data->analytics_not_used_list) {
     cJSON *analytics_not_used_listList = cJSON_AddArrayToObject(item, "analyticsNotUsedList");
     if (analytics_not_used_listList == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [analytics_not_used_list]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [analytics_not_used_list]");
         goto end;
     }
     OpenAPI_list_for_each(ue_reg_status_update_req_data->analytics_not_used_list, node) {
         if (cJSON_AddStringToObject(analytics_not_used_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [analytics_not_used_list]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [analytics_not_used_list]");
             goto end;
         }
     }
@@ -144,13 +144,13 @@ cJSON *OpenAPI_ue_reg_status_update_req_data_convertToJSON(OpenAPI_ue_reg_status
     if (ue_reg_status_update_req_data->to_release_session_info) {
     cJSON *to_release_session_infoList = cJSON_AddArrayToObject(item, "toReleaseSessionInfo");
     if (to_release_session_infoList == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_info]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_info]");
         goto end;
     }
     OpenAPI_list_for_each(ue_reg_status_update_req_data->to_release_session_info, node) {
         cJSON *itemLocal = OpenAPI_release_session_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_info]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed [to_release_session_info]");
             goto end;
         }
         cJSON_AddItemToArray(to_release_session_infoList, itemLocal);
@@ -178,11 +178,11 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
     OpenAPI_list_t *to_release_session_infoList = NULL;
     transfer_status = cJSON_GetObjectItemCaseSensitive(ue_reg_status_update_req_dataJSON, "transferStatus");
     if (!transfer_status) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [transfer_status]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [transfer_status]");
         goto end;
     }
     if (!cJSON_IsString(transfer_status)) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [transfer_status]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [transfer_status]");
         goto end;
     }
     transfer_statusVariable = OpenAPI_ue_context_transfer_status_FromString(transfer_status->valuestring);
@@ -191,7 +191,7 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
     if (to_release_session_list) {
         cJSON *to_release_session_list_local = NULL;
         if (!cJSON_IsArray(to_release_session_list)) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_list]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_list]");
             goto end;
         }
 
@@ -201,12 +201,12 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(to_release_session_list_local)) {
-                ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_list]");
+                log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_list]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_list]");
+                log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_list]");
                 goto end;
             }
             *localDouble = to_release_session_list_local->valuedouble;
@@ -217,7 +217,7 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
     pcf_reselected_ind = cJSON_GetObjectItemCaseSensitive(ue_reg_status_update_req_dataJSON, "pcfReselectedInd");
     if (pcf_reselected_ind) {
     if (!cJSON_IsBool(pcf_reselected_ind)) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [pcf_reselected_ind]");
+        log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [pcf_reselected_ind]");
         goto end;
     }
     }
@@ -226,7 +226,7 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
     if (smf_change_info_list) {
         cJSON *smf_change_info_list_local = NULL;
         if (!cJSON_IsArray(smf_change_info_list)) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [smf_change_info_list]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [smf_change_info_list]");
             goto end;
         }
 
@@ -234,12 +234,12 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
 
         cJSON_ArrayForEach(smf_change_info_list_local, smf_change_info_list) {
             if (!cJSON_IsObject(smf_change_info_list_local)) {
-                ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [smf_change_info_list]");
+                log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [smf_change_info_list]");
                 goto end;
             }
             OpenAPI_smf_change_info_t *smf_change_info_listItem = OpenAPI_smf_change_info_parseFromJSON(smf_change_info_list_local);
             if (!smf_change_info_listItem) {
-                ogs_error("No smf_change_info_listItem");
+                log_error("No smf_change_info_listItem");
                 goto end;
             }
             OpenAPI_list_add(smf_change_info_listList, smf_change_info_listItem);
@@ -250,7 +250,7 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
     if (analytics_not_used_list) {
         cJSON *analytics_not_used_list_local = NULL;
         if (!cJSON_IsArray(analytics_not_used_list)) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [analytics_not_used_list]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [analytics_not_used_list]");
             goto end;
         }
 
@@ -260,7 +260,7 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(analytics_not_used_list_local)) {
-                ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [analytics_not_used_list]");
+                log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [analytics_not_used_list]");
                 goto end;
             }
             OpenAPI_list_add(analytics_not_used_listList, ogs_strdup(analytics_not_used_list_local->valuestring));
@@ -271,7 +271,7 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
     if (to_release_session_info) {
         cJSON *to_release_session_info_local = NULL;
         if (!cJSON_IsArray(to_release_session_info)) {
-            ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_info]");
+            log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_info]");
             goto end;
         }
 
@@ -279,12 +279,12 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_p
 
         cJSON_ArrayForEach(to_release_session_info_local, to_release_session_info) {
             if (!cJSON_IsObject(to_release_session_info_local)) {
-                ogs_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_info]");
+                log_error("OpenAPI_ue_reg_status_update_req_data_parseFromJSON() failed [to_release_session_info]");
                 goto end;
             }
             OpenAPI_release_session_info_t *to_release_session_infoItem = OpenAPI_release_session_info_parseFromJSON(to_release_session_info_local);
             if (!to_release_session_infoItem) {
-                ogs_error("No to_release_session_infoItem");
+                log_error("No to_release_session_infoItem");
                 goto end;
             }
             OpenAPI_list_add(to_release_session_infoList, to_release_session_infoItem);
@@ -339,10 +339,10 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_reg_status_update_req_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed");
+        log_error("OpenAPI_ue_reg_status_update_req_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -350,14 +350,14 @@ OpenAPI_ue_reg_status_update_req_data_t *OpenAPI_ue_reg_status_update_req_data_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

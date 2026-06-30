@@ -10,7 +10,7 @@ OpenAPI_bdt_data_patch_t *OpenAPI_bdt_data_patch_create(
 )
 {
     OpenAPI_bdt_data_patch_t *bdt_data_patch_local_var = ogs_malloc(sizeof(OpenAPI_bdt_data_patch_t));
-    ogs_assert(bdt_data_patch_local_var);
+    log_assert(bdt_data_patch_local_var);
 
     bdt_data_patch_local_var->trans_policy = trans_policy;
     bdt_data_patch_local_var->bdtp_status = bdtp_status;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_bdt_data_patch_convertToJSON(OpenAPI_bdt_data_patch_t *bdt_data_p
     OpenAPI_lnode_t *node = NULL;
 
     if (bdt_data_patch == NULL) {
-        ogs_error("OpenAPI_bdt_data_patch_convertToJSON() failed [BdtDataPatch]");
+        log_error("OpenAPI_bdt_data_patch_convertToJSON() failed [BdtDataPatch]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_bdt_data_patch_convertToJSON(OpenAPI_bdt_data_patch_t *bdt_data_p
     if (bdt_data_patch->trans_policy) {
     cJSON *trans_policy_local_JSON = OpenAPI_transfer_policy_convertToJSON(bdt_data_patch->trans_policy);
     if (trans_policy_local_JSON == NULL) {
-        ogs_error("OpenAPI_bdt_data_patch_convertToJSON() failed [trans_policy]");
+        log_error("OpenAPI_bdt_data_patch_convertToJSON() failed [trans_policy]");
         goto end;
     }
     cJSON_AddItemToObject(item, "transPolicy", trans_policy_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_bdt_data_patch_convertToJSON() failed [trans_policy]");
+        log_error("OpenAPI_bdt_data_patch_convertToJSON() failed [trans_policy]");
         goto end;
     }
     }
@@ -63,12 +63,12 @@ cJSON *OpenAPI_bdt_data_patch_convertToJSON(OpenAPI_bdt_data_patch_t *bdt_data_p
     if (bdt_data_patch->bdtp_status) {
     cJSON *bdtp_status_local_JSON = OpenAPI_bdt_policy_status_convertToJSON(bdt_data_patch->bdtp_status);
     if (bdtp_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_bdt_data_patch_convertToJSON() failed [bdtp_status]");
+        log_error("OpenAPI_bdt_data_patch_convertToJSON() failed [bdtp_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "bdtpStatus", bdtp_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_bdt_data_patch_convertToJSON() failed [bdtp_status]");
+        log_error("OpenAPI_bdt_data_patch_convertToJSON() failed [bdtp_status]");
         goto end;
     }
     }
@@ -89,7 +89,7 @@ OpenAPI_bdt_data_patch_t *OpenAPI_bdt_data_patch_parseFromJSON(cJSON *bdt_data_p
     if (trans_policy) {
     trans_policy_local_nonprim = OpenAPI_transfer_policy_parseFromJSON(trans_policy);
     if (!trans_policy_local_nonprim) {
-        ogs_error("OpenAPI_transfer_policy_parseFromJSON failed [trans_policy]");
+        log_error("OpenAPI_transfer_policy_parseFromJSON failed [trans_policy]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_bdt_data_patch_t *OpenAPI_bdt_data_patch_parseFromJSON(cJSON *bdt_data_p
     if (bdtp_status) {
     bdtp_status_local_nonprim = OpenAPI_bdt_policy_status_parseFromJSON(bdtp_status);
     if (!bdtp_status_local_nonprim) {
-        ogs_error("OpenAPI_bdt_policy_status_parseFromJSON failed [bdtp_status]");
+        log_error("OpenAPI_bdt_policy_status_parseFromJSON failed [bdtp_status]");
         goto end;
     }
     }
@@ -126,10 +126,10 @@ OpenAPI_bdt_data_patch_t *OpenAPI_bdt_data_patch_copy(OpenAPI_bdt_data_patch_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_bdt_data_patch_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_bdt_data_patch_convertToJSON() failed");
+        log_error("OpenAPI_bdt_data_patch_convertToJSON() failed");
         return NULL;
     }
 
@@ -137,14 +137,14 @@ OpenAPI_bdt_data_patch_t *OpenAPI_bdt_data_patch_copy(OpenAPI_bdt_data_patch_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

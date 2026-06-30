@@ -10,7 +10,7 @@ OpenAPI_ue_context_cancel_relocate_data_t *OpenAPI_ue_context_cancel_relocate_da
 )
 {
     OpenAPI_ue_context_cancel_relocate_data_t *ue_context_cancel_relocate_data_local_var = ogs_malloc(sizeof(OpenAPI_ue_context_cancel_relocate_data_t));
-    ogs_assert(ue_context_cancel_relocate_data_local_var);
+    log_assert(ue_context_cancel_relocate_data_local_var);
 
     ue_context_cancel_relocate_data_local_var->supi = supi;
     ue_context_cancel_relocate_data_local_var->relocation_cancel_request = relocation_cancel_request;
@@ -42,30 +42,30 @@ cJSON *OpenAPI_ue_context_cancel_relocate_data_convertToJSON(OpenAPI_ue_context_
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_context_cancel_relocate_data == NULL) {
-        ogs_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [UeContextCancelRelocateData]");
+        log_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [UeContextCancelRelocateData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ue_context_cancel_relocate_data->supi) {
     if (cJSON_AddStringToObject(item, "supi", ue_context_cancel_relocate_data->supi) == NULL) {
-        ogs_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [supi]");
+        log_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [supi]");
         goto end;
     }
     }
 
     if (!ue_context_cancel_relocate_data->relocation_cancel_request) {
-        ogs_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [relocation_cancel_request]");
+        log_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [relocation_cancel_request]");
         return NULL;
     }
     cJSON *relocation_cancel_request_local_JSON = OpenAPI_ref_to_binary_data_convertToJSON(ue_context_cancel_relocate_data->relocation_cancel_request);
     if (relocation_cancel_request_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [relocation_cancel_request]");
+        log_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [relocation_cancel_request]");
         goto end;
     }
     cJSON_AddItemToObject(item, "relocationCancelRequest", relocation_cancel_request_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [relocation_cancel_request]");
+        log_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed [relocation_cancel_request]");
         goto end;
     }
 
@@ -83,19 +83,19 @@ OpenAPI_ue_context_cancel_relocate_data_t *OpenAPI_ue_context_cancel_relocate_da
     supi = cJSON_GetObjectItemCaseSensitive(ue_context_cancel_relocate_dataJSON, "supi");
     if (supi) {
     if (!cJSON_IsString(supi) && !cJSON_IsNull(supi)) {
-        ogs_error("OpenAPI_ue_context_cancel_relocate_data_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_ue_context_cancel_relocate_data_parseFromJSON() failed [supi]");
         goto end;
     }
     }
 
     relocation_cancel_request = cJSON_GetObjectItemCaseSensitive(ue_context_cancel_relocate_dataJSON, "relocationCancelRequest");
     if (!relocation_cancel_request) {
-        ogs_error("OpenAPI_ue_context_cancel_relocate_data_parseFromJSON() failed [relocation_cancel_request]");
+        log_error("OpenAPI_ue_context_cancel_relocate_data_parseFromJSON() failed [relocation_cancel_request]");
         goto end;
     }
     relocation_cancel_request_local_nonprim = OpenAPI_ref_to_binary_data_parseFromJSON(relocation_cancel_request);
     if (!relocation_cancel_request_local_nonprim) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [relocation_cancel_request]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [relocation_cancel_request]");
         goto end;
     }
 
@@ -118,10 +118,10 @@ OpenAPI_ue_context_cancel_relocate_data_t *OpenAPI_ue_context_cancel_relocate_da
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_context_cancel_relocate_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed");
+        log_error("OpenAPI_ue_context_cancel_relocate_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -129,14 +129,14 @@ OpenAPI_ue_context_cancel_relocate_data_t *OpenAPI_ue_context_cancel_relocate_da
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

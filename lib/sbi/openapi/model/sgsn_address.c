@@ -10,7 +10,7 @@ OpenAPI_sgsn_address_t *OpenAPI_sgsn_address_create(
 )
 {
     OpenAPI_sgsn_address_t *sgsn_address_local_var = ogs_malloc(sizeof(OpenAPI_sgsn_address_t));
-    ogs_assert(sgsn_address_local_var);
+    log_assert(sgsn_address_local_var);
 
     sgsn_address_local_var->sgsn_ipv4_addr = sgsn_ipv4_addr;
     sgsn_address_local_var->sgsn_ipv6_addr = sgsn_ipv6_addr;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_sgsn_address_convertToJSON(OpenAPI_sgsn_address_t *sgsn_address)
     OpenAPI_lnode_t *node = NULL;
 
     if (sgsn_address == NULL) {
-        ogs_error("OpenAPI_sgsn_address_convertToJSON() failed [SgsnAddress]");
+        log_error("OpenAPI_sgsn_address_convertToJSON() failed [SgsnAddress]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (sgsn_address->sgsn_ipv4_addr) {
     if (cJSON_AddStringToObject(item, "sgsnIpv4Addr", sgsn_address->sgsn_ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_sgsn_address_convertToJSON() failed [sgsn_ipv4_addr]");
+        log_error("OpenAPI_sgsn_address_convertToJSON() failed [sgsn_ipv4_addr]");
         goto end;
     }
     }
 
     if (sgsn_address->sgsn_ipv6_addr) {
     if (cJSON_AddStringToObject(item, "sgsnIpv6Addr", sgsn_address->sgsn_ipv6_addr) == NULL) {
-        ogs_error("OpenAPI_sgsn_address_convertToJSON() failed [sgsn_ipv6_addr]");
+        log_error("OpenAPI_sgsn_address_convertToJSON() failed [sgsn_ipv6_addr]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_sgsn_address_t *OpenAPI_sgsn_address_parseFromJSON(cJSON *sgsn_addressJS
     sgsn_ipv4_addr = cJSON_GetObjectItemCaseSensitive(sgsn_addressJSON, "sgsnIpv4Addr");
     if (sgsn_ipv4_addr) {
     if (!cJSON_IsString(sgsn_ipv4_addr) && !cJSON_IsNull(sgsn_ipv4_addr)) {
-        ogs_error("OpenAPI_sgsn_address_parseFromJSON() failed [sgsn_ipv4_addr]");
+        log_error("OpenAPI_sgsn_address_parseFromJSON() failed [sgsn_ipv4_addr]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_sgsn_address_t *OpenAPI_sgsn_address_parseFromJSON(cJSON *sgsn_addressJS
     sgsn_ipv6_addr = cJSON_GetObjectItemCaseSensitive(sgsn_addressJSON, "sgsnIpv6Addr");
     if (sgsn_ipv6_addr) {
     if (!cJSON_IsString(sgsn_ipv6_addr) && !cJSON_IsNull(sgsn_ipv6_addr)) {
-        ogs_error("OpenAPI_sgsn_address_parseFromJSON() failed [sgsn_ipv6_addr]");
+        log_error("OpenAPI_sgsn_address_parseFromJSON() failed [sgsn_ipv6_addr]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_sgsn_address_t *OpenAPI_sgsn_address_copy(OpenAPI_sgsn_address_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sgsn_address_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sgsn_address_convertToJSON() failed");
+        log_error("OpenAPI_sgsn_address_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_sgsn_address_t *OpenAPI_sgsn_address_copy(OpenAPI_sgsn_address_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

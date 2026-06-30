@@ -11,7 +11,7 @@ OpenAPI_pcf_addressing_info_t *OpenAPI_pcf_addressing_info_create(
 )
 {
     OpenAPI_pcf_addressing_info_t *pcf_addressing_info_local_var = ogs_malloc(sizeof(OpenAPI_pcf_addressing_info_t));
-    ogs_assert(pcf_addressing_info_local_var);
+    log_assert(pcf_addressing_info_local_var);
 
     pcf_addressing_info_local_var->pcf_fqdn = pcf_fqdn;
     pcf_addressing_info_local_var->pcf_ip_end_points = pcf_ip_end_points;
@@ -51,14 +51,14 @@ cJSON *OpenAPI_pcf_addressing_info_convertToJSON(OpenAPI_pcf_addressing_info_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (pcf_addressing_info == NULL) {
-        ogs_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [PcfAddressingInfo]");
+        log_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [PcfAddressingInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (pcf_addressing_info->pcf_fqdn) {
     if (cJSON_AddStringToObject(item, "pcfFqdn", pcf_addressing_info->pcf_fqdn) == NULL) {
-        ogs_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [pcf_fqdn]");
+        log_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [pcf_fqdn]");
         goto end;
     }
     }
@@ -66,13 +66,13 @@ cJSON *OpenAPI_pcf_addressing_info_convertToJSON(OpenAPI_pcf_addressing_info_t *
     if (pcf_addressing_info->pcf_ip_end_points) {
     cJSON *pcf_ip_end_pointsList = cJSON_AddArrayToObject(item, "pcfIpEndPoints");
     if (pcf_ip_end_pointsList == NULL) {
-        ogs_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [pcf_ip_end_points]");
+        log_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [pcf_ip_end_points]");
         goto end;
     }
     OpenAPI_list_for_each(pcf_addressing_info->pcf_ip_end_points, node) {
         cJSON *itemLocal = OpenAPI_ip_end_point_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [pcf_ip_end_points]");
+            log_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [pcf_ip_end_points]");
             goto end;
         }
         cJSON_AddItemToArray(pcf_ip_end_pointsList, itemLocal);
@@ -81,7 +81,7 @@ cJSON *OpenAPI_pcf_addressing_info_convertToJSON(OpenAPI_pcf_addressing_info_t *
 
     if (pcf_addressing_info->binding_info) {
     if (cJSON_AddStringToObject(item, "bindingInfo", pcf_addressing_info->binding_info) == NULL) {
-        ogs_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [binding_info]");
+        log_error("OpenAPI_pcf_addressing_info_convertToJSON() failed [binding_info]");
         goto end;
     }
     }
@@ -101,7 +101,7 @@ OpenAPI_pcf_addressing_info_t *OpenAPI_pcf_addressing_info_parseFromJSON(cJSON *
     pcf_fqdn = cJSON_GetObjectItemCaseSensitive(pcf_addressing_infoJSON, "pcfFqdn");
     if (pcf_fqdn) {
     if (!cJSON_IsString(pcf_fqdn) && !cJSON_IsNull(pcf_fqdn)) {
-        ogs_error("OpenAPI_pcf_addressing_info_parseFromJSON() failed [pcf_fqdn]");
+        log_error("OpenAPI_pcf_addressing_info_parseFromJSON() failed [pcf_fqdn]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_pcf_addressing_info_t *OpenAPI_pcf_addressing_info_parseFromJSON(cJSON *
     if (pcf_ip_end_points) {
         cJSON *pcf_ip_end_points_local = NULL;
         if (!cJSON_IsArray(pcf_ip_end_points)) {
-            ogs_error("OpenAPI_pcf_addressing_info_parseFromJSON() failed [pcf_ip_end_points]");
+            log_error("OpenAPI_pcf_addressing_info_parseFromJSON() failed [pcf_ip_end_points]");
             goto end;
         }
 
@@ -118,12 +118,12 @@ OpenAPI_pcf_addressing_info_t *OpenAPI_pcf_addressing_info_parseFromJSON(cJSON *
 
         cJSON_ArrayForEach(pcf_ip_end_points_local, pcf_ip_end_points) {
             if (!cJSON_IsObject(pcf_ip_end_points_local)) {
-                ogs_error("OpenAPI_pcf_addressing_info_parseFromJSON() failed [pcf_ip_end_points]");
+                log_error("OpenAPI_pcf_addressing_info_parseFromJSON() failed [pcf_ip_end_points]");
                 goto end;
             }
             OpenAPI_ip_end_point_t *pcf_ip_end_pointsItem = OpenAPI_ip_end_point_parseFromJSON(pcf_ip_end_points_local);
             if (!pcf_ip_end_pointsItem) {
-                ogs_error("No pcf_ip_end_pointsItem");
+                log_error("No pcf_ip_end_pointsItem");
                 goto end;
             }
             OpenAPI_list_add(pcf_ip_end_pointsList, pcf_ip_end_pointsItem);
@@ -133,7 +133,7 @@ OpenAPI_pcf_addressing_info_t *OpenAPI_pcf_addressing_info_parseFromJSON(cJSON *
     binding_info = cJSON_GetObjectItemCaseSensitive(pcf_addressing_infoJSON, "bindingInfo");
     if (binding_info) {
     if (!cJSON_IsString(binding_info) && !cJSON_IsNull(binding_info)) {
-        ogs_error("OpenAPI_pcf_addressing_info_parseFromJSON() failed [binding_info]");
+        log_error("OpenAPI_pcf_addressing_info_parseFromJSON() failed [binding_info]");
         goto end;
     }
     }
@@ -161,10 +161,10 @@ OpenAPI_pcf_addressing_info_t *OpenAPI_pcf_addressing_info_copy(OpenAPI_pcf_addr
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pcf_addressing_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pcf_addressing_info_convertToJSON() failed");
+        log_error("OpenAPI_pcf_addressing_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -172,14 +172,14 @@ OpenAPI_pcf_addressing_info_t *OpenAPI_pcf_addressing_info_copy(OpenAPI_pcf_addr
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

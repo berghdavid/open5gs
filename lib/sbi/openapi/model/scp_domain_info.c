@@ -12,7 +12,7 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_create(
 )
 {
     OpenAPI_scp_domain_info_t *scp_domain_info_local_var = ogs_malloc(sizeof(OpenAPI_scp_domain_info_t));
-    ogs_assert(scp_domain_info_local_var);
+    log_assert(scp_domain_info_local_var);
 
     scp_domain_info_local_var->scp_fqdn = scp_fqdn;
     scp_domain_info_local_var->scp_ip_end_points = scp_ip_end_points;
@@ -63,14 +63,14 @@ cJSON *OpenAPI_scp_domain_info_convertToJSON(OpenAPI_scp_domain_info_t *scp_doma
     OpenAPI_lnode_t *node = NULL;
 
     if (scp_domain_info == NULL) {
-        ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [ScpDomainInfo]");
+        log_error("OpenAPI_scp_domain_info_convertToJSON() failed [ScpDomainInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (scp_domain_info->scp_fqdn) {
     if (cJSON_AddStringToObject(item, "scpFqdn", scp_domain_info->scp_fqdn) == NULL) {
-        ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_fqdn]");
+        log_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_fqdn]");
         goto end;
     }
     }
@@ -78,13 +78,13 @@ cJSON *OpenAPI_scp_domain_info_convertToJSON(OpenAPI_scp_domain_info_t *scp_doma
     if (scp_domain_info->scp_ip_end_points) {
     cJSON *scp_ip_end_pointsList = cJSON_AddArrayToObject(item, "scpIpEndPoints");
     if (scp_ip_end_pointsList == NULL) {
-        ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ip_end_points]");
+        log_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ip_end_points]");
         goto end;
     }
     OpenAPI_list_for_each(scp_domain_info->scp_ip_end_points, node) {
         cJSON *itemLocal = OpenAPI_ip_end_point_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ip_end_points]");
+            log_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ip_end_points]");
             goto end;
         }
         cJSON_AddItemToArray(scp_ip_end_pointsList, itemLocal);
@@ -93,7 +93,7 @@ cJSON *OpenAPI_scp_domain_info_convertToJSON(OpenAPI_scp_domain_info_t *scp_doma
 
     if (scp_domain_info->scp_prefix) {
     if (cJSON_AddStringToObject(item, "scpPrefix", scp_domain_info->scp_prefix) == NULL) {
-        ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_prefix]");
+        log_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_prefix]");
         goto end;
     }
     }
@@ -101,7 +101,7 @@ cJSON *OpenAPI_scp_domain_info_convertToJSON(OpenAPI_scp_domain_info_t *scp_doma
     if (scp_domain_info->scp_ports) {
     cJSON *scp_ports = cJSON_AddObjectToObject(item, "scpPorts");
     if (scp_ports == NULL) {
-        ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ports]");
+        log_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ports]");
         goto end;
     }
     cJSON *localMapObject = scp_ports;
@@ -109,19 +109,19 @@ cJSON *OpenAPI_scp_domain_info_convertToJSON(OpenAPI_scp_domain_info_t *scp_doma
         OpenAPI_list_for_each(scp_domain_info->scp_ports, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ports]");
+                log_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ports]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ports]");
+                log_error("OpenAPI_scp_domain_info_convertToJSON() failed [scp_ports]");
                 goto end;
             }
             if (localKeyValue->value == NULL) {
-                ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_scp_domain_info_convertToJSON() failed [inner]");
                 goto end;
             }
             if (cJSON_AddNumberToObject(localMapObject, localKeyValue->key, *(double *)localKeyValue->value) == NULL) {
-                ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_scp_domain_info_convertToJSON() failed [inner]");
                 goto end;
             }
         }
@@ -145,7 +145,7 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_parseFromJSON(cJSON *scp_doma
     scp_fqdn = cJSON_GetObjectItemCaseSensitive(scp_domain_infoJSON, "scpFqdn");
     if (scp_fqdn) {
     if (!cJSON_IsString(scp_fqdn) && !cJSON_IsNull(scp_fqdn)) {
-        ogs_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_fqdn]");
+        log_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_fqdn]");
         goto end;
     }
     }
@@ -154,7 +154,7 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_parseFromJSON(cJSON *scp_doma
     if (scp_ip_end_points) {
         cJSON *scp_ip_end_points_local = NULL;
         if (!cJSON_IsArray(scp_ip_end_points)) {
-            ogs_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_ip_end_points]");
+            log_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_ip_end_points]");
             goto end;
         }
 
@@ -162,12 +162,12 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_parseFromJSON(cJSON *scp_doma
 
         cJSON_ArrayForEach(scp_ip_end_points_local, scp_ip_end_points) {
             if (!cJSON_IsObject(scp_ip_end_points_local)) {
-                ogs_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_ip_end_points]");
+                log_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_ip_end_points]");
                 goto end;
             }
             OpenAPI_ip_end_point_t *scp_ip_end_pointsItem = OpenAPI_ip_end_point_parseFromJSON(scp_ip_end_points_local);
             if (!scp_ip_end_pointsItem) {
-                ogs_error("No scp_ip_end_pointsItem");
+                log_error("No scp_ip_end_pointsItem");
                 goto end;
             }
             OpenAPI_list_add(scp_ip_end_pointsList, scp_ip_end_pointsItem);
@@ -177,7 +177,7 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_parseFromJSON(cJSON *scp_doma
     scp_prefix = cJSON_GetObjectItemCaseSensitive(scp_domain_infoJSON, "scpPrefix");
     if (scp_prefix) {
     if (!cJSON_IsString(scp_prefix) && !cJSON_IsNull(scp_prefix)) {
-        ogs_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_prefix]");
+        log_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_prefix]");
         goto end;
     }
     }
@@ -186,7 +186,7 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_parseFromJSON(cJSON *scp_doma
     if (scp_ports) {
         cJSON *scp_ports_local_map = NULL;
         if (!cJSON_IsObject(scp_ports) && !cJSON_IsNull(scp_ports)) {
-            ogs_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_ports]");
+            log_error("OpenAPI_scp_domain_info_parseFromJSON() failed [scp_ports]");
             goto end;
         }
         if (cJSON_IsObject(scp_ports)) {
@@ -197,12 +197,12 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_parseFromJSON(cJSON *scp_doma
                 double *localDouble = NULL;
                 int *localInt = NULL;
                 if (!cJSON_IsNumber(localMapObject)) {
-                    ogs_error("OpenAPI_scp_domain_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_scp_domain_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 localDouble = (double *)ogs_calloc(1, sizeof(double));
                 if (!localDouble) {
-                    ogs_error("OpenAPI_scp_domain_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_scp_domain_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 *localDouble = localMapObject->valuedouble;
@@ -246,10 +246,10 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_copy(OpenAPI_scp_domain_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_scp_domain_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_scp_domain_info_convertToJSON() failed");
+        log_error("OpenAPI_scp_domain_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -257,14 +257,14 @@ OpenAPI_scp_domain_info_t *OpenAPI_scp_domain_info_copy(OpenAPI_scp_domain_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

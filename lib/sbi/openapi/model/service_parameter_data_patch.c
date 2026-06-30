@@ -17,7 +17,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_cre
 )
 {
     OpenAPI_service_parameter_data_patch_t *service_parameter_data_patch_local_var = ogs_malloc(sizeof(OpenAPI_service_parameter_data_patch_t));
-    ogs_assert(service_parameter_data_patch_local_var);
+    log_assert(service_parameter_data_patch_local_var);
 
     service_parameter_data_patch_local_var->param_over_pc5 = param_over_pc5;
     service_parameter_data_patch_local_var->param_over_uu = param_over_uu;
@@ -90,49 +90,49 @@ cJSON *OpenAPI_service_parameter_data_patch_convertToJSON(OpenAPI_service_parame
     OpenAPI_lnode_t *node = NULL;
 
     if (service_parameter_data_patch == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [ServiceParameterDataPatch]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [ServiceParameterDataPatch]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (service_parameter_data_patch->param_over_pc5) {
     if (cJSON_AddStringToObject(item, "paramOverPc5", service_parameter_data_patch->param_over_pc5) == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_over_pc5]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_over_pc5]");
         goto end;
     }
     }
 
     if (service_parameter_data_patch->param_over_uu) {
     if (cJSON_AddStringToObject(item, "paramOverUu", service_parameter_data_patch->param_over_uu) == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_over_uu]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_over_uu]");
         goto end;
     }
     }
 
     if (service_parameter_data_patch->param_for_pro_se_dd) {
     if (cJSON_AddStringToObject(item, "paramForProSeDd", service_parameter_data_patch->param_for_pro_se_dd) == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_for_pro_se_dd]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_for_pro_se_dd]");
         goto end;
     }
     }
 
     if (service_parameter_data_patch->param_for_pro_se_dc) {
     if (cJSON_AddStringToObject(item, "paramForProSeDc", service_parameter_data_patch->param_for_pro_se_dc) == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_for_pro_se_dc]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_for_pro_se_dc]");
         goto end;
     }
     }
 
     if (service_parameter_data_patch->param_for_pro_se_u2_n_rel_ue) {
     if (cJSON_AddStringToObject(item, "paramForProSeU2NRelUe", service_parameter_data_patch->param_for_pro_se_u2_n_rel_ue) == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_for_pro_se_u2_n_rel_ue]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_for_pro_se_u2_n_rel_ue]");
         goto end;
     }
     }
 
     if (service_parameter_data_patch->param_for_pro_se_rem_ue) {
     if (cJSON_AddStringToObject(item, "paramForProSeRemUe", service_parameter_data_patch->param_for_pro_se_rem_ue) == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_for_pro_se_rem_ue]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [param_for_pro_se_rem_ue]");
         goto end;
     }
     }
@@ -140,13 +140,13 @@ cJSON *OpenAPI_service_parameter_data_patch_convertToJSON(OpenAPI_service_parame
     if (service_parameter_data_patch->ursp_influence) {
     cJSON *ursp_influenceList = cJSON_AddArrayToObject(item, "urspInfluence");
     if (ursp_influenceList == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [ursp_influence]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [ursp_influence]");
         goto end;
     }
     OpenAPI_list_for_each(service_parameter_data_patch->ursp_influence, node) {
         cJSON *itemLocal = OpenAPI_ursp_rule_request_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [ursp_influence]");
+            log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [ursp_influence]");
             goto end;
         }
         cJSON_AddItemToArray(ursp_influenceList, itemLocal);
@@ -156,13 +156,13 @@ cJSON *OpenAPI_service_parameter_data_patch_convertToJSON(OpenAPI_service_parame
     if (service_parameter_data_patch->delivery_events) {
     cJSON *delivery_eventsList = cJSON_AddArrayToObject(item, "deliveryEvents");
     if (delivery_eventsList == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [delivery_events]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [delivery_events]");
         goto end;
     }
     OpenAPI_list_for_each(service_parameter_data_patch->delivery_events, node) {
         cJSON *itemLocal = OpenAPI_event_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [delivery_events]");
+            log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [delivery_events]");
             goto end;
         }
         cJSON_AddItemToArray(delivery_eventsList, itemLocal);
@@ -171,7 +171,7 @@ cJSON *OpenAPI_service_parameter_data_patch_convertToJSON(OpenAPI_service_parame
 
     if (service_parameter_data_patch->polic_deliv_notif_uri) {
     if (cJSON_AddStringToObject(item, "policDelivNotifUri", service_parameter_data_patch->polic_deliv_notif_uri) == NULL) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [polic_deliv_notif_uri]");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed [polic_deliv_notif_uri]");
         goto end;
     }
     }
@@ -198,7 +198,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     param_over_pc5 = cJSON_GetObjectItemCaseSensitive(service_parameter_data_patchJSON, "paramOverPc5");
     if (param_over_pc5) {
     if (!cJSON_IsString(param_over_pc5) && !cJSON_IsNull(param_over_pc5)) {
-        ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_over_pc5]");
+        log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_over_pc5]");
         goto end;
     }
     }
@@ -206,7 +206,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     param_over_uu = cJSON_GetObjectItemCaseSensitive(service_parameter_data_patchJSON, "paramOverUu");
     if (param_over_uu) {
     if (!cJSON_IsString(param_over_uu) && !cJSON_IsNull(param_over_uu)) {
-        ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_over_uu]");
+        log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_over_uu]");
         goto end;
     }
     }
@@ -214,7 +214,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     param_for_pro_se_dd = cJSON_GetObjectItemCaseSensitive(service_parameter_data_patchJSON, "paramForProSeDd");
     if (param_for_pro_se_dd) {
     if (!cJSON_IsString(param_for_pro_se_dd) && !cJSON_IsNull(param_for_pro_se_dd)) {
-        ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_for_pro_se_dd]");
+        log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_for_pro_se_dd]");
         goto end;
     }
     }
@@ -222,7 +222,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     param_for_pro_se_dc = cJSON_GetObjectItemCaseSensitive(service_parameter_data_patchJSON, "paramForProSeDc");
     if (param_for_pro_se_dc) {
     if (!cJSON_IsString(param_for_pro_se_dc) && !cJSON_IsNull(param_for_pro_se_dc)) {
-        ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_for_pro_se_dc]");
+        log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_for_pro_se_dc]");
         goto end;
     }
     }
@@ -230,7 +230,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     param_for_pro_se_u2_n_rel_ue = cJSON_GetObjectItemCaseSensitive(service_parameter_data_patchJSON, "paramForProSeU2NRelUe");
     if (param_for_pro_se_u2_n_rel_ue) {
     if (!cJSON_IsString(param_for_pro_se_u2_n_rel_ue) && !cJSON_IsNull(param_for_pro_se_u2_n_rel_ue)) {
-        ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_for_pro_se_u2_n_rel_ue]");
+        log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_for_pro_se_u2_n_rel_ue]");
         goto end;
     }
     }
@@ -238,7 +238,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     param_for_pro_se_rem_ue = cJSON_GetObjectItemCaseSensitive(service_parameter_data_patchJSON, "paramForProSeRemUe");
     if (param_for_pro_se_rem_ue) {
     if (!cJSON_IsString(param_for_pro_se_rem_ue) && !cJSON_IsNull(param_for_pro_se_rem_ue)) {
-        ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_for_pro_se_rem_ue]");
+        log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [param_for_pro_se_rem_ue]");
         goto end;
     }
     }
@@ -247,7 +247,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     if (ursp_influence) {
         cJSON *ursp_influence_local = NULL;
         if (!cJSON_IsArray(ursp_influence)) {
-            ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [ursp_influence]");
+            log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [ursp_influence]");
             goto end;
         }
 
@@ -255,12 +255,12 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
 
         cJSON_ArrayForEach(ursp_influence_local, ursp_influence) {
             if (!cJSON_IsObject(ursp_influence_local)) {
-                ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [ursp_influence]");
+                log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [ursp_influence]");
                 goto end;
             }
             OpenAPI_ursp_rule_request_t *ursp_influenceItem = OpenAPI_ursp_rule_request_parseFromJSON(ursp_influence_local);
             if (!ursp_influenceItem) {
-                ogs_error("No ursp_influenceItem");
+                log_error("No ursp_influenceItem");
                 goto end;
             }
             OpenAPI_list_add(ursp_influenceList, ursp_influenceItem);
@@ -271,7 +271,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     if (delivery_events) {
         cJSON *delivery_events_local = NULL;
         if (!cJSON_IsArray(delivery_events)) {
-            ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [delivery_events]");
+            log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [delivery_events]");
             goto end;
         }
 
@@ -279,12 +279,12 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
 
         cJSON_ArrayForEach(delivery_events_local, delivery_events) {
             if (!cJSON_IsObject(delivery_events_local)) {
-                ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [delivery_events]");
+                log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [delivery_events]");
                 goto end;
             }
             OpenAPI_event_t *delivery_eventsItem = OpenAPI_event_parseFromJSON(delivery_events_local);
             if (!delivery_eventsItem) {
-                ogs_error("No delivery_eventsItem");
+                log_error("No delivery_eventsItem");
                 goto end;
             }
             OpenAPI_list_add(delivery_eventsList, delivery_eventsItem);
@@ -294,7 +294,7 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_par
     polic_deliv_notif_uri = cJSON_GetObjectItemCaseSensitive(service_parameter_data_patchJSON, "policDelivNotifUri");
     if (polic_deliv_notif_uri) {
     if (!cJSON_IsString(polic_deliv_notif_uri) && !cJSON_IsNull(polic_deliv_notif_uri)) {
-        ogs_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [polic_deliv_notif_uri]");
+        log_error("OpenAPI_service_parameter_data_patch_parseFromJSON() failed [polic_deliv_notif_uri]");
         goto end;
     }
     }
@@ -335,10 +335,10 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_service_parameter_data_patch_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed");
+        log_error("OpenAPI_service_parameter_data_patch_convertToJSON() failed");
         return NULL;
     }
 
@@ -346,14 +346,14 @@ OpenAPI_service_parameter_data_patch_t *OpenAPI_service_parameter_data_patch_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

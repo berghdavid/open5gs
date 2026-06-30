@@ -30,7 +30,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_create(
 )
 {
     OpenAPI_loc_context_data_t *loc_context_data_local_var = ogs_malloc(sizeof(OpenAPI_loc_context_data_t));
-    ogs_assert(loc_context_data_local_var);
+    log_assert(loc_context_data_local_var);
 
     loc_context_data_local_var->amf_id = amf_id;
     loc_context_data_local_var->location_qo_s = location_qo_s;
@@ -157,29 +157,29 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
     OpenAPI_lnode_t *node = NULL;
 
     if (loc_context_data == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [LocContextData]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [LocContextData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!loc_context_data->amf_id) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [amf_id]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [amf_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "amfId", loc_context_data->amf_id) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [amf_id]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [amf_id]");
         goto end;
     }
 
     if (loc_context_data->location_qo_s) {
     cJSON *location_qo_s_local_JSON = OpenAPI_location_qo_s_convertToJSON(loc_context_data->location_qo_s);
     if (location_qo_s_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [location_qo_s]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [location_qo_s]");
         goto end;
     }
     cJSON_AddItemToObject(item, "locationQoS", location_qo_s_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [location_qo_s]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [location_qo_s]");
         goto end;
     }
     }
@@ -187,13 +187,13 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
     if (loc_context_data->supported_gad_shapes) {
     cJSON *supported_gad_shapesList = cJSON_AddArrayToObject(item, "supportedGADShapes");
     if (supported_gad_shapesList == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [supported_gad_shapes]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [supported_gad_shapes]");
         goto end;
     }
     OpenAPI_list_for_each(loc_context_data->supported_gad_shapes, node) {
         cJSON *itemLocal = OpenAPI_supported_gad_shapes_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [supported_gad_shapes]");
+            log_error("OpenAPI_loc_context_data_convertToJSON() failed [supported_gad_shapes]");
             goto end;
         }
         cJSON_AddItemToArray(supported_gad_shapesList, itemLocal);
@@ -202,60 +202,60 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
 
     if (loc_context_data->supi) {
     if (cJSON_AddStringToObject(item, "supi", loc_context_data->supi) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [supi]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [supi]");
         goto end;
     }
     }
 
     if (loc_context_data->gpsi) {
     if (cJSON_AddStringToObject(item, "gpsi", loc_context_data->gpsi) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [gpsi]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [gpsi]");
         goto end;
     }
     }
 
     if (!loc_context_data->ldr_type) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_type]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_type]");
         return NULL;
     }
     cJSON *ldr_type_local_JSON = OpenAPI_ldr_type_convertToJSON(loc_context_data->ldr_type);
     if (ldr_type_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_type]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_type]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ldrType", ldr_type_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_type]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_type]");
         goto end;
     }
 
     if (!loc_context_data->hgmlc_call_back_uri) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [hgmlc_call_back_uri]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [hgmlc_call_back_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "hgmlcCallBackURI", loc_context_data->hgmlc_call_back_uri) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [hgmlc_call_back_uri]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [hgmlc_call_back_uri]");
         goto end;
     }
 
     if (!loc_context_data->ldr_reference) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_reference]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_reference]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ldrReference", loc_context_data->ldr_reference) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_reference]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ldr_reference]");
         goto end;
     }
 
     if (loc_context_data->periodic_event_info) {
     cJSON *periodic_event_info_local_JSON = OpenAPI_periodic_event_info_convertToJSON(loc_context_data->periodic_event_info);
     if (periodic_event_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [periodic_event_info]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [periodic_event_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "periodicEventInfo", periodic_event_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [periodic_event_info]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [periodic_event_info]");
         goto end;
     }
     }
@@ -263,12 +263,12 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
     if (loc_context_data->area_event_info) {
     cJSON *area_event_info_local_JSON = OpenAPI_area_event_info_convertToJSON(loc_context_data->area_event_info);
     if (area_event_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [area_event_info]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [area_event_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "areaEventInfo", area_event_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [area_event_info]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [area_event_info]");
         goto end;
     }
     }
@@ -276,40 +276,40 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
     if (loc_context_data->motion_event_info) {
     cJSON *motion_event_info_local_JSON = OpenAPI_motion_event_info_convertToJSON(loc_context_data->motion_event_info);
     if (motion_event_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [motion_event_info]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [motion_event_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "motionEventInfo", motion_event_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [motion_event_info]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [motion_event_info]");
         goto end;
     }
     }
 
     if (!loc_context_data->event_report_message) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [event_report_message]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [event_report_message]");
         return NULL;
     }
     cJSON *event_report_message_local_JSON = OpenAPI_event_report_message_convertToJSON(loc_context_data->event_report_message);
     if (event_report_message_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [event_report_message]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [event_report_message]");
         goto end;
     }
     cJSON_AddItemToObject(item, "eventReportMessage", event_report_message_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [event_report_message]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [event_report_message]");
         goto end;
     }
 
     if (loc_context_data->event_reporting_status) {
     cJSON *event_reporting_status_local_JSON = OpenAPI_event_reporting_status_convertToJSON(loc_context_data->event_reporting_status);
     if (event_reporting_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [event_reporting_status]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [event_reporting_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "eventReportingStatus", event_reporting_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [event_reporting_status]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [event_reporting_status]");
         goto end;
     }
     }
@@ -317,19 +317,19 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
     if (loc_context_data->ue_location_info) {
     cJSON *ue_location_info_local_JSON = OpenAPI_ue_location_info_convertToJSON(loc_context_data->ue_location_info);
     if (ue_location_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ue_location_info]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ue_location_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueLocationInfo", ue_location_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ue_location_info]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ue_location_info]");
         goto end;
     }
     }
 
     if (loc_context_data->is_c_io_t5_gs_optimisation) {
     if (cJSON_AddBoolToObject(item, "cIoT5GSOptimisation", loc_context_data->c_io_t5_gs_optimisation) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [c_io_t5_gs_optimisation]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [c_io_t5_gs_optimisation]");
         goto end;
     }
     }
@@ -337,12 +337,12 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
     if (loc_context_data->ecgi) {
     cJSON *ecgi_local_JSON = OpenAPI_ecgi_convertToJSON(loc_context_data->ecgi);
     if (ecgi_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ecgi]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ecgi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ecgi", ecgi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ecgi]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ecgi]");
         goto end;
     }
     }
@@ -350,12 +350,12 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
     if (loc_context_data->ncgi) {
     cJSON *ncgi_local_JSON = OpenAPI_ncgi_convertToJSON(loc_context_data->ncgi);
     if (ncgi_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ncgi]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ncgi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ncgi", ncgi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ncgi]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ncgi]");
         goto end;
     }
     }
@@ -363,33 +363,33 @@ cJSON *OpenAPI_loc_context_data_convertToJSON(OpenAPI_loc_context_data_t *loc_co
     if (loc_context_data->guami) {
     cJSON *guami_local_JSON = OpenAPI_guami_convertToJSON(loc_context_data->guami);
     if (guami_local_JSON == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [guami]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [guami]");
         goto end;
     }
     cJSON_AddItemToObject(item, "guami", guami_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [guami]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [guami]");
         goto end;
     }
     }
 
     if (loc_context_data->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", loc_context_data->supported_features) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
 
     if (loc_context_data->ue_positioning_cap) {
     if (cJSON_AddStringToObject(item, "uePositioningCap", loc_context_data->ue_positioning_cap) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [ue_positioning_cap]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [ue_positioning_cap]");
         goto end;
     }
     }
 
     if (loc_context_data->scheduled_loc_time) {
     if (cJSON_AddStringToObject(item, "scheduledLocTime", loc_context_data->scheduled_loc_time) == NULL) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed [scheduled_loc_time]");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed [scheduled_loc_time]");
         goto end;
     }
     }
@@ -437,11 +437,11 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     cJSON *scheduled_loc_time = NULL;
     amf_id = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "amfId");
     if (!amf_id) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [amf_id]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [amf_id]");
         goto end;
     }
     if (!cJSON_IsString(amf_id)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [amf_id]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [amf_id]");
         goto end;
     }
 
@@ -449,7 +449,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (location_qo_s) {
     location_qo_s_local_nonprim = OpenAPI_location_qo_s_parseFromJSON(location_qo_s);
     if (!location_qo_s_local_nonprim) {
-        ogs_error("OpenAPI_location_qo_s_parseFromJSON failed [location_qo_s]");
+        log_error("OpenAPI_location_qo_s_parseFromJSON failed [location_qo_s]");
         goto end;
     }
     }
@@ -458,7 +458,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (supported_gad_shapes) {
         cJSON *supported_gad_shapes_local = NULL;
         if (!cJSON_IsArray(supported_gad_shapes)) {
-            ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [supported_gad_shapes]");
+            log_error("OpenAPI_loc_context_data_parseFromJSON() failed [supported_gad_shapes]");
             goto end;
         }
 
@@ -466,12 +466,12 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
 
         cJSON_ArrayForEach(supported_gad_shapes_local, supported_gad_shapes) {
             if (!cJSON_IsObject(supported_gad_shapes_local)) {
-                ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [supported_gad_shapes]");
+                log_error("OpenAPI_loc_context_data_parseFromJSON() failed [supported_gad_shapes]");
                 goto end;
             }
             OpenAPI_supported_gad_shapes_t *supported_gad_shapesItem = OpenAPI_supported_gad_shapes_parseFromJSON(supported_gad_shapes_local);
             if (!supported_gad_shapesItem) {
-                ogs_error("No supported_gad_shapesItem");
+                log_error("No supported_gad_shapesItem");
                 goto end;
             }
             OpenAPI_list_add(supported_gad_shapesList, supported_gad_shapesItem);
@@ -481,7 +481,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     supi = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "supi");
     if (supi) {
     if (!cJSON_IsString(supi) && !cJSON_IsNull(supi)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [supi]");
         goto end;
     }
     }
@@ -489,39 +489,39 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     gpsi = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "gpsi");
     if (gpsi) {
     if (!cJSON_IsString(gpsi) && !cJSON_IsNull(gpsi)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [gpsi]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [gpsi]");
         goto end;
     }
     }
 
     ldr_type = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "ldrType");
     if (!ldr_type) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [ldr_type]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [ldr_type]");
         goto end;
     }
     ldr_type_local_nonprim = OpenAPI_ldr_type_parseFromJSON(ldr_type);
     if (!ldr_type_local_nonprim) {
-        ogs_error("OpenAPI_ldr_type_parseFromJSON failed [ldr_type]");
+        log_error("OpenAPI_ldr_type_parseFromJSON failed [ldr_type]");
         goto end;
     }
 
     hgmlc_call_back_uri = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "hgmlcCallBackURI");
     if (!hgmlc_call_back_uri) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [hgmlc_call_back_uri]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [hgmlc_call_back_uri]");
         goto end;
     }
     if (!cJSON_IsString(hgmlc_call_back_uri)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [hgmlc_call_back_uri]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [hgmlc_call_back_uri]");
         goto end;
     }
 
     ldr_reference = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "ldrReference");
     if (!ldr_reference) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [ldr_reference]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [ldr_reference]");
         goto end;
     }
     if (!cJSON_IsString(ldr_reference)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [ldr_reference]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [ldr_reference]");
         goto end;
     }
 
@@ -529,7 +529,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (periodic_event_info) {
     periodic_event_info_local_nonprim = OpenAPI_periodic_event_info_parseFromJSON(periodic_event_info);
     if (!periodic_event_info_local_nonprim) {
-        ogs_error("OpenAPI_periodic_event_info_parseFromJSON failed [periodic_event_info]");
+        log_error("OpenAPI_periodic_event_info_parseFromJSON failed [periodic_event_info]");
         goto end;
     }
     }
@@ -538,7 +538,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (area_event_info) {
     area_event_info_local_nonprim = OpenAPI_area_event_info_parseFromJSON(area_event_info);
     if (!area_event_info_local_nonprim) {
-        ogs_error("OpenAPI_area_event_info_parseFromJSON failed [area_event_info]");
+        log_error("OpenAPI_area_event_info_parseFromJSON failed [area_event_info]");
         goto end;
     }
     }
@@ -547,19 +547,19 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (motion_event_info) {
     motion_event_info_local_nonprim = OpenAPI_motion_event_info_parseFromJSON(motion_event_info);
     if (!motion_event_info_local_nonprim) {
-        ogs_error("OpenAPI_motion_event_info_parseFromJSON failed [motion_event_info]");
+        log_error("OpenAPI_motion_event_info_parseFromJSON failed [motion_event_info]");
         goto end;
     }
     }
 
     event_report_message = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "eventReportMessage");
     if (!event_report_message) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [event_report_message]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [event_report_message]");
         goto end;
     }
     event_report_message_local_nonprim = OpenAPI_event_report_message_parseFromJSON(event_report_message);
     if (!event_report_message_local_nonprim) {
-        ogs_error("OpenAPI_event_report_message_parseFromJSON failed [event_report_message]");
+        log_error("OpenAPI_event_report_message_parseFromJSON failed [event_report_message]");
         goto end;
     }
 
@@ -567,7 +567,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (event_reporting_status) {
     event_reporting_status_local_nonprim = OpenAPI_event_reporting_status_parseFromJSON(event_reporting_status);
     if (!event_reporting_status_local_nonprim) {
-        ogs_error("OpenAPI_event_reporting_status_parseFromJSON failed [event_reporting_status]");
+        log_error("OpenAPI_event_reporting_status_parseFromJSON failed [event_reporting_status]");
         goto end;
     }
     }
@@ -576,7 +576,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (ue_location_info) {
     ue_location_info_local_nonprim = OpenAPI_ue_location_info_parseFromJSON(ue_location_info);
     if (!ue_location_info_local_nonprim) {
-        ogs_error("OpenAPI_ue_location_info_parseFromJSON failed [ue_location_info]");
+        log_error("OpenAPI_ue_location_info_parseFromJSON failed [ue_location_info]");
         goto end;
     }
     }
@@ -584,7 +584,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     c_io_t5_gs_optimisation = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "cIoT5GSOptimisation");
     if (c_io_t5_gs_optimisation) {
     if (!cJSON_IsBool(c_io_t5_gs_optimisation)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [c_io_t5_gs_optimisation]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [c_io_t5_gs_optimisation]");
         goto end;
     }
     }
@@ -593,7 +593,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (ecgi) {
     ecgi_local_nonprim = OpenAPI_ecgi_parseFromJSON(ecgi);
     if (!ecgi_local_nonprim) {
-        ogs_error("OpenAPI_ecgi_parseFromJSON failed [ecgi]");
+        log_error("OpenAPI_ecgi_parseFromJSON failed [ecgi]");
         goto end;
     }
     }
@@ -602,7 +602,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (ncgi) {
     ncgi_local_nonprim = OpenAPI_ncgi_parseFromJSON(ncgi);
     if (!ncgi_local_nonprim) {
-        ogs_error("OpenAPI_ncgi_parseFromJSON failed [ncgi]");
+        log_error("OpenAPI_ncgi_parseFromJSON failed [ncgi]");
         goto end;
     }
     }
@@ -611,7 +611,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     if (guami) {
     guami_local_nonprim = OpenAPI_guami_parseFromJSON(guami);
     if (!guami_local_nonprim) {
-        ogs_error("OpenAPI_guami_parseFromJSON failed [guami]");
+        log_error("OpenAPI_guami_parseFromJSON failed [guami]");
         goto end;
     }
     }
@@ -619,7 +619,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     supported_features = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -627,7 +627,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     ue_positioning_cap = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "uePositioningCap");
     if (ue_positioning_cap) {
     if (!cJSON_IsString(ue_positioning_cap) && !cJSON_IsNull(ue_positioning_cap)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [ue_positioning_cap]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [ue_positioning_cap]");
         goto end;
     }
     }
@@ -635,7 +635,7 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_parseFromJSON(cJSON *loc_co
     scheduled_loc_time = cJSON_GetObjectItemCaseSensitive(loc_context_dataJSON, "scheduledLocTime");
     if (scheduled_loc_time) {
     if (!cJSON_IsString(scheduled_loc_time) && !cJSON_IsNull(scheduled_loc_time)) {
-        ogs_error("OpenAPI_loc_context_data_parseFromJSON() failed [scheduled_loc_time]");
+        log_error("OpenAPI_loc_context_data_parseFromJSON() failed [scheduled_loc_time]");
         goto end;
     }
     }
@@ -726,10 +726,10 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_copy(OpenAPI_loc_context_da
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_loc_context_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_loc_context_data_convertToJSON() failed");
+        log_error("OpenAPI_loc_context_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -737,14 +737,14 @@ OpenAPI_loc_context_data_t *OpenAPI_loc_context_data_copy(OpenAPI_loc_context_da
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

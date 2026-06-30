@@ -10,7 +10,7 @@ OpenAPI_query_parameter_t *OpenAPI_query_parameter_create(
 )
 {
     OpenAPI_query_parameter_t *query_parameter_local_var = ogs_malloc(sizeof(OpenAPI_query_parameter_t));
-    ogs_assert(query_parameter_local_var);
+    log_assert(query_parameter_local_var);
 
     query_parameter_local_var->name = name;
     query_parameter_local_var->value = value;
@@ -42,26 +42,26 @@ cJSON *OpenAPI_query_parameter_convertToJSON(OpenAPI_query_parameter_t *query_pa
     OpenAPI_lnode_t *node = NULL;
 
     if (query_parameter == NULL) {
-        ogs_error("OpenAPI_query_parameter_convertToJSON() failed [QueryParameter]");
+        log_error("OpenAPI_query_parameter_convertToJSON() failed [QueryParameter]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!query_parameter->name) {
-        ogs_error("OpenAPI_query_parameter_convertToJSON() failed [name]");
+        log_error("OpenAPI_query_parameter_convertToJSON() failed [name]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "name", query_parameter->name) == NULL) {
-        ogs_error("OpenAPI_query_parameter_convertToJSON() failed [name]");
+        log_error("OpenAPI_query_parameter_convertToJSON() failed [name]");
         goto end;
     }
 
     if (!query_parameter->value) {
-        ogs_error("OpenAPI_query_parameter_convertToJSON() failed [value]");
+        log_error("OpenAPI_query_parameter_convertToJSON() failed [value]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "value", query_parameter->value) == NULL) {
-        ogs_error("OpenAPI_query_parameter_convertToJSON() failed [value]");
+        log_error("OpenAPI_query_parameter_convertToJSON() failed [value]");
         goto end;
     }
 
@@ -77,21 +77,21 @@ OpenAPI_query_parameter_t *OpenAPI_query_parameter_parseFromJSON(cJSON *query_pa
     cJSON *value = NULL;
     name = cJSON_GetObjectItemCaseSensitive(query_parameterJSON, "name");
     if (!name) {
-        ogs_error("OpenAPI_query_parameter_parseFromJSON() failed [name]");
+        log_error("OpenAPI_query_parameter_parseFromJSON() failed [name]");
         goto end;
     }
     if (!cJSON_IsString(name)) {
-        ogs_error("OpenAPI_query_parameter_parseFromJSON() failed [name]");
+        log_error("OpenAPI_query_parameter_parseFromJSON() failed [name]");
         goto end;
     }
 
     value = cJSON_GetObjectItemCaseSensitive(query_parameterJSON, "value");
     if (!value) {
-        ogs_error("OpenAPI_query_parameter_parseFromJSON() failed [value]");
+        log_error("OpenAPI_query_parameter_parseFromJSON() failed [value]");
         goto end;
     }
     if (!cJSON_IsString(value)) {
-        ogs_error("OpenAPI_query_parameter_parseFromJSON() failed [value]");
+        log_error("OpenAPI_query_parameter_parseFromJSON() failed [value]");
         goto end;
     }
 
@@ -110,10 +110,10 @@ OpenAPI_query_parameter_t *OpenAPI_query_parameter_copy(OpenAPI_query_parameter_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_query_parameter_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_query_parameter_convertToJSON() failed");
+        log_error("OpenAPI_query_parameter_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_query_parameter_t *OpenAPI_query_parameter_copy(OpenAPI_query_parameter_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

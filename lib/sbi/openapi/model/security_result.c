@@ -10,7 +10,7 @@ OpenAPI_security_result_t *OpenAPI_security_result_create(
 )
 {
     OpenAPI_security_result_t *security_result_local_var = ogs_malloc(sizeof(OpenAPI_security_result_t));
-    ogs_assert(security_result_local_var);
+    log_assert(security_result_local_var);
 
     security_result_local_var->integrity_protection_result = integrity_protection_result;
     security_result_local_var->confidentiality_protection_result = confidentiality_protection_result;
@@ -34,21 +34,21 @@ cJSON *OpenAPI_security_result_convertToJSON(OpenAPI_security_result_t *security
     OpenAPI_lnode_t *node = NULL;
 
     if (security_result == NULL) {
-        ogs_error("OpenAPI_security_result_convertToJSON() failed [SecurityResult]");
+        log_error("OpenAPI_security_result_convertToJSON() failed [SecurityResult]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (security_result->integrity_protection_result != OpenAPI_protection_result_NULL) {
     if (cJSON_AddStringToObject(item, "integrityProtectionResult", OpenAPI_protection_result_ToString(security_result->integrity_protection_result)) == NULL) {
-        ogs_error("OpenAPI_security_result_convertToJSON() failed [integrity_protection_result]");
+        log_error("OpenAPI_security_result_convertToJSON() failed [integrity_protection_result]");
         goto end;
     }
     }
 
     if (security_result->confidentiality_protection_result != OpenAPI_protection_result_NULL) {
     if (cJSON_AddStringToObject(item, "confidentialityProtectionResult", OpenAPI_protection_result_ToString(security_result->confidentiality_protection_result)) == NULL) {
-        ogs_error("OpenAPI_security_result_convertToJSON() failed [confidentiality_protection_result]");
+        log_error("OpenAPI_security_result_convertToJSON() failed [confidentiality_protection_result]");
         goto end;
     }
     }
@@ -68,7 +68,7 @@ OpenAPI_security_result_t *OpenAPI_security_result_parseFromJSON(cJSON *security
     integrity_protection_result = cJSON_GetObjectItemCaseSensitive(security_resultJSON, "integrityProtectionResult");
     if (integrity_protection_result) {
     if (!cJSON_IsString(integrity_protection_result)) {
-        ogs_error("OpenAPI_security_result_parseFromJSON() failed [integrity_protection_result]");
+        log_error("OpenAPI_security_result_parseFromJSON() failed [integrity_protection_result]");
         goto end;
     }
     integrity_protection_resultVariable = OpenAPI_protection_result_FromString(integrity_protection_result->valuestring);
@@ -77,7 +77,7 @@ OpenAPI_security_result_t *OpenAPI_security_result_parseFromJSON(cJSON *security
     confidentiality_protection_result = cJSON_GetObjectItemCaseSensitive(security_resultJSON, "confidentialityProtectionResult");
     if (confidentiality_protection_result) {
     if (!cJSON_IsString(confidentiality_protection_result)) {
-        ogs_error("OpenAPI_security_result_parseFromJSON() failed [confidentiality_protection_result]");
+        log_error("OpenAPI_security_result_parseFromJSON() failed [confidentiality_protection_result]");
         goto end;
     }
     confidentiality_protection_resultVariable = OpenAPI_protection_result_FromString(confidentiality_protection_result->valuestring);
@@ -98,10 +98,10 @@ OpenAPI_security_result_t *OpenAPI_security_result_copy(OpenAPI_security_result_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_security_result_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_security_result_convertToJSON() failed");
+        log_error("OpenAPI_security_result_convertToJSON() failed");
         return NULL;
     }
 
@@ -109,14 +109,14 @@ OpenAPI_security_result_t *OpenAPI_security_result_copy(OpenAPI_security_result_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

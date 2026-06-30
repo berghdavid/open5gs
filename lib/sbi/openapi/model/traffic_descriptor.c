@@ -11,7 +11,7 @@ OpenAPI_traffic_descriptor_t *OpenAPI_traffic_descriptor_create(
 )
 {
     OpenAPI_traffic_descriptor_t *traffic_descriptor_local_var = ogs_malloc(sizeof(OpenAPI_traffic_descriptor_t));
-    ogs_assert(traffic_descriptor_local_var);
+    log_assert(traffic_descriptor_local_var);
 
     traffic_descriptor_local_var->dnn = dnn;
     traffic_descriptor_local_var->s_nssai = s_nssai;
@@ -51,14 +51,14 @@ cJSON *OpenAPI_traffic_descriptor_convertToJSON(OpenAPI_traffic_descriptor_t *tr
     OpenAPI_lnode_t *node = NULL;
 
     if (traffic_descriptor == NULL) {
-        ogs_error("OpenAPI_traffic_descriptor_convertToJSON() failed [TrafficDescriptor]");
+        log_error("OpenAPI_traffic_descriptor_convertToJSON() failed [TrafficDescriptor]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (traffic_descriptor->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", traffic_descriptor->dnn) == NULL) {
-        ogs_error("OpenAPI_traffic_descriptor_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_traffic_descriptor_convertToJSON() failed [dnn]");
         goto end;
     }
     }
@@ -66,12 +66,12 @@ cJSON *OpenAPI_traffic_descriptor_convertToJSON(OpenAPI_traffic_descriptor_t *tr
     if (traffic_descriptor->s_nssai) {
     cJSON *s_nssai_local_JSON = OpenAPI_snssai_convertToJSON(traffic_descriptor->s_nssai);
     if (s_nssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_traffic_descriptor_convertToJSON() failed [s_nssai]");
+        log_error("OpenAPI_traffic_descriptor_convertToJSON() failed [s_nssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "sNssai", s_nssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_traffic_descriptor_convertToJSON() failed [s_nssai]");
+        log_error("OpenAPI_traffic_descriptor_convertToJSON() failed [s_nssai]");
         goto end;
     }
     }
@@ -79,13 +79,13 @@ cJSON *OpenAPI_traffic_descriptor_convertToJSON(OpenAPI_traffic_descriptor_t *tr
     if (traffic_descriptor->ddd_traffic_descriptor_list) {
     cJSON *ddd_traffic_descriptor_listList = cJSON_AddArrayToObject(item, "dddTrafficDescriptorList");
     if (ddd_traffic_descriptor_listList == NULL) {
-        ogs_error("OpenAPI_traffic_descriptor_convertToJSON() failed [ddd_traffic_descriptor_list]");
+        log_error("OpenAPI_traffic_descriptor_convertToJSON() failed [ddd_traffic_descriptor_list]");
         goto end;
     }
     OpenAPI_list_for_each(traffic_descriptor->ddd_traffic_descriptor_list, node) {
         cJSON *itemLocal = OpenAPI_ddd_traffic_descriptor_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_traffic_descriptor_convertToJSON() failed [ddd_traffic_descriptor_list]");
+            log_error("OpenAPI_traffic_descriptor_convertToJSON() failed [ddd_traffic_descriptor_list]");
             goto end;
         }
         cJSON_AddItemToArray(ddd_traffic_descriptor_listList, itemLocal);
@@ -108,7 +108,7 @@ OpenAPI_traffic_descriptor_t *OpenAPI_traffic_descriptor_parseFromJSON(cJSON *tr
     dnn = cJSON_GetObjectItemCaseSensitive(traffic_descriptorJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_traffic_descriptor_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_traffic_descriptor_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -117,7 +117,7 @@ OpenAPI_traffic_descriptor_t *OpenAPI_traffic_descriptor_parseFromJSON(cJSON *tr
     if (s_nssai) {
     s_nssai_local_nonprim = OpenAPI_snssai_parseFromJSON(s_nssai);
     if (!s_nssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [s_nssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [s_nssai]");
         goto end;
     }
     }
@@ -126,7 +126,7 @@ OpenAPI_traffic_descriptor_t *OpenAPI_traffic_descriptor_parseFromJSON(cJSON *tr
     if (ddd_traffic_descriptor_list) {
         cJSON *ddd_traffic_descriptor_list_local = NULL;
         if (!cJSON_IsArray(ddd_traffic_descriptor_list)) {
-            ogs_error("OpenAPI_traffic_descriptor_parseFromJSON() failed [ddd_traffic_descriptor_list]");
+            log_error("OpenAPI_traffic_descriptor_parseFromJSON() failed [ddd_traffic_descriptor_list]");
             goto end;
         }
 
@@ -134,12 +134,12 @@ OpenAPI_traffic_descriptor_t *OpenAPI_traffic_descriptor_parseFromJSON(cJSON *tr
 
         cJSON_ArrayForEach(ddd_traffic_descriptor_list_local, ddd_traffic_descriptor_list) {
             if (!cJSON_IsObject(ddd_traffic_descriptor_list_local)) {
-                ogs_error("OpenAPI_traffic_descriptor_parseFromJSON() failed [ddd_traffic_descriptor_list]");
+                log_error("OpenAPI_traffic_descriptor_parseFromJSON() failed [ddd_traffic_descriptor_list]");
                 goto end;
             }
             OpenAPI_ddd_traffic_descriptor_t *ddd_traffic_descriptor_listItem = OpenAPI_ddd_traffic_descriptor_parseFromJSON(ddd_traffic_descriptor_list_local);
             if (!ddd_traffic_descriptor_listItem) {
-                ogs_error("No ddd_traffic_descriptor_listItem");
+                log_error("No ddd_traffic_descriptor_listItem");
                 goto end;
             }
             OpenAPI_list_add(ddd_traffic_descriptor_listList, ddd_traffic_descriptor_listItem);
@@ -173,10 +173,10 @@ OpenAPI_traffic_descriptor_t *OpenAPI_traffic_descriptor_copy(OpenAPI_traffic_de
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_traffic_descriptor_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_traffic_descriptor_convertToJSON() failed");
+        log_error("OpenAPI_traffic_descriptor_convertToJSON() failed");
         return NULL;
     }
 
@@ -184,14 +184,14 @@ OpenAPI_traffic_descriptor_t *OpenAPI_traffic_descriptor_copy(OpenAPI_traffic_de
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

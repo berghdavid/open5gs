@@ -20,7 +20,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_create(
 )
 {
     OpenAPI_pcf_info_t *pcf_info_local_var = ogs_malloc(sizeof(OpenAPI_pcf_info_t));
-    ogs_assert(pcf_info_local_var);
+    log_assert(pcf_info_local_var);
 
     pcf_info_local_var->group_id = group_id;
     pcf_info_local_var->dnn_list = dnn_list;
@@ -95,14 +95,14 @@ cJSON *OpenAPI_pcf_info_convertToJSON(OpenAPI_pcf_info_t *pcf_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (pcf_info == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [PcfInfo]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [PcfInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (pcf_info->group_id) {
     if (cJSON_AddStringToObject(item, "groupId", pcf_info->group_id) == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [group_id]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [group_id]");
         goto end;
     }
     }
@@ -110,12 +110,12 @@ cJSON *OpenAPI_pcf_info_convertToJSON(OpenAPI_pcf_info_t *pcf_info)
     if (pcf_info->dnn_list) {
     cJSON *dnn_listList = cJSON_AddArrayToObject(item, "dnnList");
     if (dnn_listList == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [dnn_list]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [dnn_list]");
         goto end;
     }
     OpenAPI_list_for_each(pcf_info->dnn_list, node) {
         if (cJSON_AddStringToObject(dnn_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_pcf_info_convertToJSON() failed [dnn_list]");
+            log_error("OpenAPI_pcf_info_convertToJSON() failed [dnn_list]");
             goto end;
         }
     }
@@ -124,13 +124,13 @@ cJSON *OpenAPI_pcf_info_convertToJSON(OpenAPI_pcf_info_t *pcf_info)
     if (pcf_info->supi_ranges) {
     cJSON *supi_rangesList = cJSON_AddArrayToObject(item, "supiRanges");
     if (supi_rangesList == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [supi_ranges]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [supi_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(pcf_info->supi_ranges, node) {
         cJSON *itemLocal = OpenAPI_supi_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pcf_info_convertToJSON() failed [supi_ranges]");
+            log_error("OpenAPI_pcf_info_convertToJSON() failed [supi_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(supi_rangesList, itemLocal);
@@ -140,13 +140,13 @@ cJSON *OpenAPI_pcf_info_convertToJSON(OpenAPI_pcf_info_t *pcf_info)
     if (pcf_info->gpsi_ranges) {
     cJSON *gpsi_rangesList = cJSON_AddArrayToObject(item, "gpsiRanges");
     if (gpsi_rangesList == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [gpsi_ranges]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [gpsi_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(pcf_info->gpsi_ranges, node) {
         cJSON *itemLocal = OpenAPI_identity_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pcf_info_convertToJSON() failed [gpsi_ranges]");
+            log_error("OpenAPI_pcf_info_convertToJSON() failed [gpsi_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(gpsi_rangesList, itemLocal);
@@ -155,28 +155,28 @@ cJSON *OpenAPI_pcf_info_convertToJSON(OpenAPI_pcf_info_t *pcf_info)
 
     if (pcf_info->rx_diam_host) {
     if (cJSON_AddStringToObject(item, "rxDiamHost", pcf_info->rx_diam_host) == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [rx_diam_host]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [rx_diam_host]");
         goto end;
     }
     }
 
     if (pcf_info->rx_diam_realm) {
     if (cJSON_AddStringToObject(item, "rxDiamRealm", pcf_info->rx_diam_realm) == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [rx_diam_realm]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [rx_diam_realm]");
         goto end;
     }
     }
 
     if (pcf_info->is_v2x_support_ind) {
     if (cJSON_AddBoolToObject(item, "v2xSupportInd", pcf_info->v2x_support_ind) == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [v2x_support_ind]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [v2x_support_ind]");
         goto end;
     }
     }
 
     if (pcf_info->is_prose_support_ind) {
     if (cJSON_AddBoolToObject(item, "proseSupportInd", pcf_info->prose_support_ind) == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [prose_support_ind]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [prose_support_ind]");
         goto end;
     }
     }
@@ -184,12 +184,12 @@ cJSON *OpenAPI_pcf_info_convertToJSON(OpenAPI_pcf_info_t *pcf_info)
     if (pcf_info->prose_capability) {
     cJSON *prose_capability_local_JSON = OpenAPI_pro_se_capability_convertToJSON(pcf_info->prose_capability);
     if (prose_capability_local_JSON == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [prose_capability]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [prose_capability]");
         goto end;
     }
     cJSON_AddItemToObject(item, "proseCapability", prose_capability_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [prose_capability]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [prose_capability]");
         goto end;
     }
     }
@@ -197,12 +197,12 @@ cJSON *OpenAPI_pcf_info_convertToJSON(OpenAPI_pcf_info_t *pcf_info)
     if (pcf_info->v2x_capability) {
     cJSON *v2x_capability_local_JSON = OpenAPI_v2x_capability_convertToJSON(pcf_info->v2x_capability);
     if (v2x_capability_local_JSON == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [v2x_capability]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [v2x_capability]");
         goto end;
     }
     cJSON_AddItemToObject(item, "v2xCapability", v2x_capability_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed [v2x_capability]");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed [v2x_capability]");
         goto end;
     }
     }
@@ -233,7 +233,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     group_id = cJSON_GetObjectItemCaseSensitive(pcf_infoJSON, "groupId");
     if (group_id) {
     if (!cJSON_IsString(group_id) && !cJSON_IsNull(group_id)) {
-        ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [group_id]");
+        log_error("OpenAPI_pcf_info_parseFromJSON() failed [group_id]");
         goto end;
     }
     }
@@ -242,7 +242,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     if (dnn_list) {
         cJSON *dnn_list_local = NULL;
         if (!cJSON_IsArray(dnn_list)) {
-            ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [dnn_list]");
+            log_error("OpenAPI_pcf_info_parseFromJSON() failed [dnn_list]");
             goto end;
         }
 
@@ -252,7 +252,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(dnn_list_local)) {
-                ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [dnn_list]");
+                log_error("OpenAPI_pcf_info_parseFromJSON() failed [dnn_list]");
                 goto end;
             }
             OpenAPI_list_add(dnn_listList, ogs_strdup(dnn_list_local->valuestring));
@@ -263,7 +263,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     if (supi_ranges) {
         cJSON *supi_ranges_local = NULL;
         if (!cJSON_IsArray(supi_ranges)) {
-            ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [supi_ranges]");
+            log_error("OpenAPI_pcf_info_parseFromJSON() failed [supi_ranges]");
             goto end;
         }
 
@@ -271,12 +271,12 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
 
         cJSON_ArrayForEach(supi_ranges_local, supi_ranges) {
             if (!cJSON_IsObject(supi_ranges_local)) {
-                ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [supi_ranges]");
+                log_error("OpenAPI_pcf_info_parseFromJSON() failed [supi_ranges]");
                 goto end;
             }
             OpenAPI_supi_range_t *supi_rangesItem = OpenAPI_supi_range_parseFromJSON(supi_ranges_local);
             if (!supi_rangesItem) {
-                ogs_error("No supi_rangesItem");
+                log_error("No supi_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(supi_rangesList, supi_rangesItem);
@@ -287,7 +287,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     if (gpsi_ranges) {
         cJSON *gpsi_ranges_local = NULL;
         if (!cJSON_IsArray(gpsi_ranges)) {
-            ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [gpsi_ranges]");
+            log_error("OpenAPI_pcf_info_parseFromJSON() failed [gpsi_ranges]");
             goto end;
         }
 
@@ -295,12 +295,12 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
 
         cJSON_ArrayForEach(gpsi_ranges_local, gpsi_ranges) {
             if (!cJSON_IsObject(gpsi_ranges_local)) {
-                ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [gpsi_ranges]");
+                log_error("OpenAPI_pcf_info_parseFromJSON() failed [gpsi_ranges]");
                 goto end;
             }
             OpenAPI_identity_range_t *gpsi_rangesItem = OpenAPI_identity_range_parseFromJSON(gpsi_ranges_local);
             if (!gpsi_rangesItem) {
-                ogs_error("No gpsi_rangesItem");
+                log_error("No gpsi_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(gpsi_rangesList, gpsi_rangesItem);
@@ -310,7 +310,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     rx_diam_host = cJSON_GetObjectItemCaseSensitive(pcf_infoJSON, "rxDiamHost");
     if (rx_diam_host) {
     if (!cJSON_IsString(rx_diam_host) && !cJSON_IsNull(rx_diam_host)) {
-        ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [rx_diam_host]");
+        log_error("OpenAPI_pcf_info_parseFromJSON() failed [rx_diam_host]");
         goto end;
     }
     }
@@ -318,7 +318,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     rx_diam_realm = cJSON_GetObjectItemCaseSensitive(pcf_infoJSON, "rxDiamRealm");
     if (rx_diam_realm) {
     if (!cJSON_IsString(rx_diam_realm) && !cJSON_IsNull(rx_diam_realm)) {
-        ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [rx_diam_realm]");
+        log_error("OpenAPI_pcf_info_parseFromJSON() failed [rx_diam_realm]");
         goto end;
     }
     }
@@ -326,7 +326,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     v2x_support_ind = cJSON_GetObjectItemCaseSensitive(pcf_infoJSON, "v2xSupportInd");
     if (v2x_support_ind) {
     if (!cJSON_IsBool(v2x_support_ind)) {
-        ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [v2x_support_ind]");
+        log_error("OpenAPI_pcf_info_parseFromJSON() failed [v2x_support_ind]");
         goto end;
     }
     }
@@ -334,7 +334,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     prose_support_ind = cJSON_GetObjectItemCaseSensitive(pcf_infoJSON, "proseSupportInd");
     if (prose_support_ind) {
     if (!cJSON_IsBool(prose_support_ind)) {
-        ogs_error("OpenAPI_pcf_info_parseFromJSON() failed [prose_support_ind]");
+        log_error("OpenAPI_pcf_info_parseFromJSON() failed [prose_support_ind]");
         goto end;
     }
     }
@@ -343,7 +343,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     if (prose_capability) {
     prose_capability_local_nonprim = OpenAPI_pro_se_capability_parseFromJSON(prose_capability);
     if (!prose_capability_local_nonprim) {
-        ogs_error("OpenAPI_pro_se_capability_parseFromJSON failed [prose_capability]");
+        log_error("OpenAPI_pro_se_capability_parseFromJSON failed [prose_capability]");
         goto end;
     }
     }
@@ -352,7 +352,7 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_parseFromJSON(cJSON *pcf_infoJSON)
     if (v2x_capability) {
     v2x_capability_local_nonprim = OpenAPI_v2x_capability_parseFromJSON(v2x_capability);
     if (!v2x_capability_local_nonprim) {
-        ogs_error("OpenAPI_v2x_capability_parseFromJSON failed [v2x_capability]");
+        log_error("OpenAPI_v2x_capability_parseFromJSON failed [v2x_capability]");
         goto end;
     }
     }
@@ -411,10 +411,10 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_copy(OpenAPI_pcf_info_t *dst, OpenAPI_pcf_i
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pcf_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pcf_info_convertToJSON() failed");
+        log_error("OpenAPI_pcf_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -422,14 +422,14 @@ OpenAPI_pcf_info_t *OpenAPI_pcf_info_copy(OpenAPI_pcf_info_t *dst, OpenAPI_pcf_i
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

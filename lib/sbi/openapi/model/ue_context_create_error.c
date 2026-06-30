@@ -11,7 +11,7 @@ OpenAPI_ue_context_create_error_t *OpenAPI_ue_context_create_error_create(
 )
 {
     OpenAPI_ue_context_create_error_t *ue_context_create_error_local_var = ogs_malloc(sizeof(OpenAPI_ue_context_create_error_t));
-    ogs_assert(ue_context_create_error_local_var);
+    log_assert(ue_context_create_error_local_var);
 
     ue_context_create_error_local_var->error = error;
     ue_context_create_error_local_var->ngap_cause = ngap_cause;
@@ -48,35 +48,35 @@ cJSON *OpenAPI_ue_context_create_error_convertToJSON(OpenAPI_ue_context_create_e
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_context_create_error == NULL) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed [UeContextCreateError]");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed [UeContextCreateError]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!ue_context_create_error->error) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed [error]");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed [error]");
         return NULL;
     }
     cJSON *error_local_JSON = OpenAPI_problem_details_convertToJSON(ue_context_create_error->error);
     if (error_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed [error]");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed [error]");
         goto end;
     }
     cJSON_AddItemToObject(item, "error", error_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed [error]");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed [error]");
         goto end;
     }
 
     if (ue_context_create_error->ngap_cause) {
     cJSON *ngap_cause_local_JSON = OpenAPI_ng_ap_cause_convertToJSON(ue_context_create_error->ngap_cause);
     if (ngap_cause_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed [ngap_cause]");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed [ngap_cause]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ngapCause", ngap_cause_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed [ngap_cause]");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed [ngap_cause]");
         goto end;
     }
     }
@@ -84,12 +84,12 @@ cJSON *OpenAPI_ue_context_create_error_convertToJSON(OpenAPI_ue_context_create_e
     if (ue_context_create_error->target_to_source_failure_data) {
     cJSON *target_to_source_failure_data_local_JSON = OpenAPI_n2_info_content_convertToJSON(ue_context_create_error->target_to_source_failure_data);
     if (target_to_source_failure_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed [target_to_source_failure_data]");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed [target_to_source_failure_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "targetToSourceFailureData", target_to_source_failure_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed [target_to_source_failure_data]");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed [target_to_source_failure_data]");
         goto end;
     }
     }
@@ -110,12 +110,12 @@ OpenAPI_ue_context_create_error_t *OpenAPI_ue_context_create_error_parseFromJSON
     OpenAPI_n2_info_content_t *target_to_source_failure_data_local_nonprim = NULL;
     error = cJSON_GetObjectItemCaseSensitive(ue_context_create_errorJSON, "error");
     if (!error) {
-        ogs_error("OpenAPI_ue_context_create_error_parseFromJSON() failed [error]");
+        log_error("OpenAPI_ue_context_create_error_parseFromJSON() failed [error]");
         goto end;
     }
     error_local_nonprim = OpenAPI_problem_details_parseFromJSON(error);
     if (!error_local_nonprim) {
-        ogs_error("OpenAPI_problem_details_parseFromJSON failed [error]");
+        log_error("OpenAPI_problem_details_parseFromJSON failed [error]");
         goto end;
     }
 
@@ -123,7 +123,7 @@ OpenAPI_ue_context_create_error_t *OpenAPI_ue_context_create_error_parseFromJSON
     if (ngap_cause) {
     ngap_cause_local_nonprim = OpenAPI_ng_ap_cause_parseFromJSON(ngap_cause);
     if (!ngap_cause_local_nonprim) {
-        ogs_error("OpenAPI_ng_ap_cause_parseFromJSON failed [ngap_cause]");
+        log_error("OpenAPI_ng_ap_cause_parseFromJSON failed [ngap_cause]");
         goto end;
     }
     }
@@ -132,7 +132,7 @@ OpenAPI_ue_context_create_error_t *OpenAPI_ue_context_create_error_parseFromJSON
     if (target_to_source_failure_data) {
     target_to_source_failure_data_local_nonprim = OpenAPI_n2_info_content_parseFromJSON(target_to_source_failure_data);
     if (!target_to_source_failure_data_local_nonprim) {
-        ogs_error("OpenAPI_n2_info_content_parseFromJSON failed [target_to_source_failure_data]");
+        log_error("OpenAPI_n2_info_content_parseFromJSON failed [target_to_source_failure_data]");
         goto end;
     }
     }
@@ -165,10 +165,10 @@ OpenAPI_ue_context_create_error_t *OpenAPI_ue_context_create_error_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_context_create_error_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_context_create_error_convertToJSON() failed");
+        log_error("OpenAPI_ue_context_create_error_convertToJSON() failed");
         return NULL;
     }
 
@@ -176,14 +176,14 @@ OpenAPI_ue_context_create_error_t *OpenAPI_ue_context_create_error_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

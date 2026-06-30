@@ -11,7 +11,7 @@ OpenAPI_ip_addr_t *OpenAPI_ip_addr_create(
 )
 {
     OpenAPI_ip_addr_t *ip_addr_local_var = ogs_malloc(sizeof(OpenAPI_ip_addr_t));
-    ogs_assert(ip_addr_local_var);
+    log_assert(ip_addr_local_var);
 
     ip_addr_local_var->ipv4_addr = ipv4_addr;
     ip_addr_local_var->ipv6_addr = ipv6_addr;
@@ -48,28 +48,28 @@ cJSON *OpenAPI_ip_addr_convertToJSON(OpenAPI_ip_addr_t *ip_addr)
     OpenAPI_lnode_t *node = NULL;
 
     if (ip_addr == NULL) {
-        ogs_error("OpenAPI_ip_addr_convertToJSON() failed [IpAddr]");
+        log_error("OpenAPI_ip_addr_convertToJSON() failed [IpAddr]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ip_addr->ipv4_addr) {
     if (cJSON_AddStringToObject(item, "ipv4Addr", ip_addr->ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_ip_addr_convertToJSON() failed [ipv4_addr]");
+        log_error("OpenAPI_ip_addr_convertToJSON() failed [ipv4_addr]");
         goto end;
     }
     }
 
     if (ip_addr->ipv6_addr) {
     if (cJSON_AddStringToObject(item, "ipv6Addr", ip_addr->ipv6_addr) == NULL) {
-        ogs_error("OpenAPI_ip_addr_convertToJSON() failed [ipv6_addr]");
+        log_error("OpenAPI_ip_addr_convertToJSON() failed [ipv6_addr]");
         goto end;
     }
     }
 
     if (ip_addr->ipv6_prefix) {
     if (cJSON_AddStringToObject(item, "ipv6Prefix", ip_addr->ipv6_prefix) == NULL) {
-        ogs_error("OpenAPI_ip_addr_convertToJSON() failed [ipv6_prefix]");
+        log_error("OpenAPI_ip_addr_convertToJSON() failed [ipv6_prefix]");
         goto end;
     }
     }
@@ -88,7 +88,7 @@ OpenAPI_ip_addr_t *OpenAPI_ip_addr_parseFromJSON(cJSON *ip_addrJSON)
     ipv4_addr = cJSON_GetObjectItemCaseSensitive(ip_addrJSON, "ipv4Addr");
     if (ipv4_addr) {
     if (!cJSON_IsString(ipv4_addr) && !cJSON_IsNull(ipv4_addr)) {
-        ogs_error("OpenAPI_ip_addr_parseFromJSON() failed [ipv4_addr]");
+        log_error("OpenAPI_ip_addr_parseFromJSON() failed [ipv4_addr]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_ip_addr_t *OpenAPI_ip_addr_parseFromJSON(cJSON *ip_addrJSON)
     ipv6_addr = cJSON_GetObjectItemCaseSensitive(ip_addrJSON, "ipv6Addr");
     if (ipv6_addr) {
     if (!cJSON_IsString(ipv6_addr) && !cJSON_IsNull(ipv6_addr)) {
-        ogs_error("OpenAPI_ip_addr_parseFromJSON() failed [ipv6_addr]");
+        log_error("OpenAPI_ip_addr_parseFromJSON() failed [ipv6_addr]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_ip_addr_t *OpenAPI_ip_addr_parseFromJSON(cJSON *ip_addrJSON)
     ipv6_prefix = cJSON_GetObjectItemCaseSensitive(ip_addrJSON, "ipv6Prefix");
     if (ipv6_prefix) {
     if (!cJSON_IsString(ipv6_prefix) && !cJSON_IsNull(ipv6_prefix)) {
-        ogs_error("OpenAPI_ip_addr_parseFromJSON() failed [ipv6_prefix]");
+        log_error("OpenAPI_ip_addr_parseFromJSON() failed [ipv6_prefix]");
         goto end;
     }
     }
@@ -125,10 +125,10 @@ OpenAPI_ip_addr_t *OpenAPI_ip_addr_copy(OpenAPI_ip_addr_t *dst, OpenAPI_ip_addr_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ip_addr_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ip_addr_convertToJSON() failed");
+        log_error("OpenAPI_ip_addr_convertToJSON() failed");
         return NULL;
     }
 
@@ -136,14 +136,14 @@ OpenAPI_ip_addr_t *OpenAPI_ip_addr_copy(OpenAPI_ip_addr_t *dst, OpenAPI_ip_addr_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

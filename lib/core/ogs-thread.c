@@ -31,8 +31,8 @@ static ogs_inline DWORD ogs_thread_join(ogs_thread_id_t thread)
 {
     DWORD ret = WaitForSingleObject(thread, INFINITE);
     if (!CloseHandle (thread)) {
-        ogs_log_message(
-            OGS_LOG_ERROR, ogs_errno, "Couldn't close thread handle");
+        log_error_msg(
+            LOG_ERROR, ogs_errno, "Couldn't close thread handle");
     }
 
     return ret;
@@ -54,7 +54,7 @@ typedef struct ogs_thread_s {
 static void *thread_worker(void *arg)
 {
     ogs_thread_t *thread = arg;
-    ogs_assert(thread);
+    log_assert(thread);
 
     ogs_thread_mutex_lock(&thread->mutex);
 
@@ -63,13 +63,13 @@ static void *thread_worker(void *arg)
 
     ogs_thread_mutex_unlock(&thread->mutex);
 
-    ogs_debug("[%p] worker signal", thread);
+    log_debug("[%p] worker signal", thread);
     thread->func(thread->data);
 
     ogs_thread_mutex_lock(&thread->mutex);
     thread->running = false;
     ogs_thread_mutex_unlock(&thread->mutex);
-    ogs_debug("[%p] worker done", thread);
+    log_debug("[%p] worker done", thread);
 
     return NULL;
 }
@@ -78,7 +78,7 @@ ogs_thread_t *ogs_thread_create(void (*func)(void *), void *data)
 {
     ogs_thread_t *thread = ogs_calloc(1, sizeof *thread);
     if (!thread) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
@@ -101,7 +101,7 @@ ogs_thread_t *ogs_thread_create(void (*func)(void *), void *data)
 
     ogs_thread_cond_wait(&thread->cond, &thread->mutex);
     ogs_thread_mutex_unlock(&thread->mutex);
-    ogs_debug("[%p] thread started", thread);
+    log_debug("[%p] thread started", thread);
 
     return thread;
 }
@@ -109,9 +109,9 @@ ogs_thread_t *ogs_thread_create(void (*func)(void *), void *data)
 void ogs_thread_destroy(ogs_thread_t *thread)
 {
     const ogs_time_t deadline = ogs_get_monotonic_time() + 5 * 1000 * 1000;
-    ogs_assert(thread);
+    log_assert(thread);
 
-    ogs_debug("[%p] thread running(%d)", thread, thread->running);
+    log_debug("[%p] thread running(%d)", thread, thread->running);
     while(ogs_get_monotonic_time() <= deadline) {
         /* wait 5 seconds */
         ogs_thread_mutex_lock(&thread->mutex);
@@ -123,20 +123,20 @@ void ogs_thread_destroy(ogs_thread_t *thread)
         ogs_usleep(1000);
     }
 
-    ogs_debug("[%p] thread destroy", thread);
+    log_debug("[%p] thread destroy", thread);
     ogs_thread_mutex_lock(&thread->mutex);
     if (thread->running) {
-        ogs_fatal("thread still running after 3 seconds");
-        ogs_assert_if_reached();
+        log_fatal("thread still running after 3 seconds");
+        log_assert_if_reached();
     }
     ogs_thread_mutex_unlock(&thread->mutex);
 
     ogs_thread_join(thread->id);
-    ogs_debug("[%p] thread join", thread);
+    log_debug("[%p] thread join", thread);
 
     ogs_thread_cond_destroy(&thread->cond);
     ogs_thread_mutex_destroy(&thread->mutex);
 
     ogs_free(thread);
-    ogs_debug("[%p] thread done", thread);
+    log_debug("[%p] thread done", thread);
 }

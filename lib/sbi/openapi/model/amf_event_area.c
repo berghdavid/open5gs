@@ -12,7 +12,7 @@ OpenAPI_amf_event_area_t *OpenAPI_amf_event_area_create(
 )
 {
     OpenAPI_amf_event_area_t *amf_event_area_local_var = ogs_malloc(sizeof(OpenAPI_amf_event_area_t));
-    ogs_assert(amf_event_area_local_var);
+    log_assert(amf_event_area_local_var);
 
     amf_event_area_local_var->presence_info = presence_info;
     amf_event_area_local_var->ladn_info = ladn_info;
@@ -54,7 +54,7 @@ cJSON *OpenAPI_amf_event_area_convertToJSON(OpenAPI_amf_event_area_t *amf_event_
     OpenAPI_lnode_t *node = NULL;
 
     if (amf_event_area == NULL) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed [AmfEventArea]");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed [AmfEventArea]");
         return NULL;
     }
 
@@ -62,12 +62,12 @@ cJSON *OpenAPI_amf_event_area_convertToJSON(OpenAPI_amf_event_area_t *amf_event_
     if (amf_event_area->presence_info) {
     cJSON *presence_info_local_JSON = OpenAPI_presence_info_convertToJSON(amf_event_area->presence_info);
     if (presence_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed [presence_info]");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed [presence_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "presenceInfo", presence_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed [presence_info]");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed [presence_info]");
         goto end;
     }
     }
@@ -75,12 +75,12 @@ cJSON *OpenAPI_amf_event_area_convertToJSON(OpenAPI_amf_event_area_t *amf_event_
     if (amf_event_area->ladn_info) {
     cJSON *ladn_info_local_JSON = OpenAPI_ladn_info_convertToJSON(amf_event_area->ladn_info);
     if (ladn_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed [ladn_info]");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed [ladn_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ladnInfo", ladn_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed [ladn_info]");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed [ladn_info]");
         goto end;
     }
     }
@@ -88,19 +88,19 @@ cJSON *OpenAPI_amf_event_area_convertToJSON(OpenAPI_amf_event_area_t *amf_event_
     if (amf_event_area->s_nssai) {
     cJSON *s_nssai_local_JSON = OpenAPI_snssai_convertToJSON(amf_event_area->s_nssai);
     if (s_nssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed [s_nssai]");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed [s_nssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "sNssai", s_nssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed [s_nssai]");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed [s_nssai]");
         goto end;
     }
     }
 
     if (amf_event_area->nsi_id) {
     if (cJSON_AddStringToObject(item, "nsiId", amf_event_area->nsi_id) == NULL) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed [nsi_id]");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed [nsi_id]");
         goto end;
     }
     }
@@ -124,7 +124,7 @@ OpenAPI_amf_event_area_t *OpenAPI_amf_event_area_parseFromJSON(cJSON *amf_event_
     if (presence_info) {
     presence_info_local_nonprim = OpenAPI_presence_info_parseFromJSON(presence_info);
     if (!presence_info_local_nonprim) {
-        ogs_error("OpenAPI_presence_info_parseFromJSON failed [presence_info]");
+        log_error("OpenAPI_presence_info_parseFromJSON failed [presence_info]");
         goto end;
     }
     }
@@ -133,7 +133,7 @@ OpenAPI_amf_event_area_t *OpenAPI_amf_event_area_parseFromJSON(cJSON *amf_event_
     if (ladn_info) {
     ladn_info_local_nonprim = OpenAPI_ladn_info_parseFromJSON(ladn_info);
     if (!ladn_info_local_nonprim) {
-        ogs_error("OpenAPI_ladn_info_parseFromJSON failed [ladn_info]");
+        log_error("OpenAPI_ladn_info_parseFromJSON failed [ladn_info]");
         goto end;
     }
     }
@@ -142,7 +142,7 @@ OpenAPI_amf_event_area_t *OpenAPI_amf_event_area_parseFromJSON(cJSON *amf_event_
     if (s_nssai) {
     s_nssai_local_nonprim = OpenAPI_snssai_parseFromJSON(s_nssai);
     if (!s_nssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [s_nssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [s_nssai]");
         goto end;
     }
     }
@@ -150,7 +150,7 @@ OpenAPI_amf_event_area_t *OpenAPI_amf_event_area_parseFromJSON(cJSON *amf_event_
     nsi_id = cJSON_GetObjectItemCaseSensitive(amf_event_areaJSON, "nsiId");
     if (nsi_id) {
     if (!cJSON_IsString(nsi_id) && !cJSON_IsNull(nsi_id)) {
-        ogs_error("OpenAPI_amf_event_area_parseFromJSON() failed [nsi_id]");
+        log_error("OpenAPI_amf_event_area_parseFromJSON() failed [nsi_id]");
         goto end;
     }
     }
@@ -184,10 +184,10 @@ OpenAPI_amf_event_area_t *OpenAPI_amf_event_area_copy(OpenAPI_amf_event_area_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_amf_event_area_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_amf_event_area_convertToJSON() failed");
+        log_error("OpenAPI_amf_event_area_convertToJSON() failed");
         return NULL;
     }
 
@@ -195,14 +195,14 @@ OpenAPI_amf_event_area_t *OpenAPI_amf_event_area_copy(OpenAPI_amf_event_area_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

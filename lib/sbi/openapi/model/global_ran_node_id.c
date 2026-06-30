@@ -16,7 +16,7 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_create(
 )
 {
     OpenAPI_global_ran_node_id_t *global_ran_node_id_local_var = ogs_malloc(sizeof(OpenAPI_global_ran_node_id_t));
-    ogs_assert(global_ran_node_id_local_var);
+    log_assert(global_ran_node_id_local_var);
 
     global_ran_node_id_local_var->plmn_id = plmn_id;
     global_ran_node_id_local_var->n3_iwf_id = n3_iwf_id;
@@ -78,29 +78,29 @@ cJSON *OpenAPI_global_ran_node_id_convertToJSON(OpenAPI_global_ran_node_id_t *gl
     OpenAPI_lnode_t *node = NULL;
 
     if (global_ran_node_id == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [GlobalRanNodeId]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [GlobalRanNodeId]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!global_ran_node_id->plmn_id) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [plmn_id]");
         return NULL;
     }
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(global_ran_node_id->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [plmn_id]");
         goto end;
     }
 
     if (global_ran_node_id->n3_iwf_id) {
     if (cJSON_AddStringToObject(item, "n3IwfId", global_ran_node_id->n3_iwf_id) == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [n3_iwf_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [n3_iwf_id]");
         goto end;
     }
     }
@@ -108,47 +108,47 @@ cJSON *OpenAPI_global_ran_node_id_convertToJSON(OpenAPI_global_ran_node_id_t *gl
     if (global_ran_node_id->g_nb_id) {
     cJSON *g_nb_id_local_JSON = OpenAPI_gnb_id_convertToJSON(global_ran_node_id->g_nb_id);
     if (g_nb_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [g_nb_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [g_nb_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "gNbId", g_nb_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [g_nb_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [g_nb_id]");
         goto end;
     }
     }
 
     if (global_ran_node_id->nge_nb_id) {
     if (cJSON_AddStringToObject(item, "ngeNbId", global_ran_node_id->nge_nb_id) == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [nge_nb_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [nge_nb_id]");
         goto end;
     }
     }
 
     if (global_ran_node_id->wagf_id) {
     if (cJSON_AddStringToObject(item, "wagfId", global_ran_node_id->wagf_id) == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [wagf_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [wagf_id]");
         goto end;
     }
     }
 
     if (global_ran_node_id->tngf_id) {
     if (cJSON_AddStringToObject(item, "tngfId", global_ran_node_id->tngf_id) == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [tngf_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [tngf_id]");
         goto end;
     }
     }
 
     if (global_ran_node_id->nid) {
     if (cJSON_AddStringToObject(item, "nid", global_ran_node_id->nid) == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [nid]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [nid]");
         goto end;
     }
     }
 
     if (global_ran_node_id->e_nb_id) {
     if (cJSON_AddStringToObject(item, "eNbId", global_ran_node_id->e_nb_id) == NULL) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed [e_nb_id]");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed [e_nb_id]");
         goto end;
     }
     }
@@ -173,19 +173,19 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_parseFromJSON(cJSON *gl
     cJSON *e_nb_id = NULL;
     plmn_id = cJSON_GetObjectItemCaseSensitive(global_ran_node_idJSON, "plmnId");
     if (!plmn_id) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [plmn_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [plmn_id]");
         goto end;
     }
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
 
     n3_iwf_id = cJSON_GetObjectItemCaseSensitive(global_ran_node_idJSON, "n3IwfId");
     if (n3_iwf_id) {
     if (!cJSON_IsString(n3_iwf_id) && !cJSON_IsNull(n3_iwf_id)) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [n3_iwf_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [n3_iwf_id]");
         goto end;
     }
     }
@@ -194,7 +194,7 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_parseFromJSON(cJSON *gl
     if (g_nb_id) {
     g_nb_id_local_nonprim = OpenAPI_gnb_id_parseFromJSON(g_nb_id);
     if (!g_nb_id_local_nonprim) {
-        ogs_error("OpenAPI_gnb_id_parseFromJSON failed [g_nb_id]");
+        log_error("OpenAPI_gnb_id_parseFromJSON failed [g_nb_id]");
         goto end;
     }
     }
@@ -202,7 +202,7 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_parseFromJSON(cJSON *gl
     nge_nb_id = cJSON_GetObjectItemCaseSensitive(global_ran_node_idJSON, "ngeNbId");
     if (nge_nb_id) {
     if (!cJSON_IsString(nge_nb_id) && !cJSON_IsNull(nge_nb_id)) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [nge_nb_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [nge_nb_id]");
         goto end;
     }
     }
@@ -210,7 +210,7 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_parseFromJSON(cJSON *gl
     wagf_id = cJSON_GetObjectItemCaseSensitive(global_ran_node_idJSON, "wagfId");
     if (wagf_id) {
     if (!cJSON_IsString(wagf_id) && !cJSON_IsNull(wagf_id)) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [wagf_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [wagf_id]");
         goto end;
     }
     }
@@ -218,7 +218,7 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_parseFromJSON(cJSON *gl
     tngf_id = cJSON_GetObjectItemCaseSensitive(global_ran_node_idJSON, "tngfId");
     if (tngf_id) {
     if (!cJSON_IsString(tngf_id) && !cJSON_IsNull(tngf_id)) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [tngf_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [tngf_id]");
         goto end;
     }
     }
@@ -226,7 +226,7 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_parseFromJSON(cJSON *gl
     nid = cJSON_GetObjectItemCaseSensitive(global_ran_node_idJSON, "nid");
     if (nid) {
     if (!cJSON_IsString(nid) && !cJSON_IsNull(nid)) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [nid]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [nid]");
         goto end;
     }
     }
@@ -234,7 +234,7 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_parseFromJSON(cJSON *gl
     e_nb_id = cJSON_GetObjectItemCaseSensitive(global_ran_node_idJSON, "eNbId");
     if (e_nb_id) {
     if (!cJSON_IsString(e_nb_id) && !cJSON_IsNull(e_nb_id)) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [e_nb_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON() failed [e_nb_id]");
         goto end;
     }
     }
@@ -268,10 +268,10 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_copy(OpenAPI_global_ran
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_global_ran_node_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_global_ran_node_id_convertToJSON() failed");
+        log_error("OpenAPI_global_ran_node_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -279,14 +279,14 @@ OpenAPI_global_ran_node_id_t *OpenAPI_global_ran_node_id_copy(OpenAPI_global_ran
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

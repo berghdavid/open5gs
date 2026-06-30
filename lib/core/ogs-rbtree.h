@@ -66,7 +66,7 @@ void ogs_rbtree_delete(ogs_rbtree_t *tree, void *rb_node);
 static ogs_inline void *ogs_rbtree_min(const ogs_rbnode_t *rb_node)
 {
     const ogs_rbnode_t *node = rb_node;
-    ogs_assert(node);
+    log_assert(node);
 
     while (node->left)
         node = node->left;
@@ -77,7 +77,7 @@ static ogs_inline void *ogs_rbtree_min(const ogs_rbnode_t *rb_node)
 static ogs_inline void *ogs_rbtree_max(const void *rb_node)
 {
     const ogs_rbnode_t *node = (const ogs_rbnode_t *)rb_node;
-    ogs_assert(node);
+    log_assert(node);
 
     while (node->right)
         node = node->right;

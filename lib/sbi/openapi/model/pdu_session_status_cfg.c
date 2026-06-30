@@ -9,7 +9,7 @@ OpenAPI_pdu_session_status_cfg_t *OpenAPI_pdu_session_status_cfg_create(
 )
 {
     OpenAPI_pdu_session_status_cfg_t *pdu_session_status_cfg_local_var = ogs_malloc(sizeof(OpenAPI_pdu_session_status_cfg_t));
-    ogs_assert(pdu_session_status_cfg_local_var);
+    log_assert(pdu_session_status_cfg_local_var);
 
     pdu_session_status_cfg_local_var->dnn = dnn;
 
@@ -36,14 +36,14 @@ cJSON *OpenAPI_pdu_session_status_cfg_convertToJSON(OpenAPI_pdu_session_status_c
     OpenAPI_lnode_t *node = NULL;
 
     if (pdu_session_status_cfg == NULL) {
-        ogs_error("OpenAPI_pdu_session_status_cfg_convertToJSON() failed [PduSessionStatusCfg]");
+        log_error("OpenAPI_pdu_session_status_cfg_convertToJSON() failed [PduSessionStatusCfg]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (pdu_session_status_cfg->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", pdu_session_status_cfg->dnn) == NULL) {
-        ogs_error("OpenAPI_pdu_session_status_cfg_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_pdu_session_status_cfg_convertToJSON() failed [dnn]");
         goto end;
     }
     }
@@ -60,7 +60,7 @@ OpenAPI_pdu_session_status_cfg_t *OpenAPI_pdu_session_status_cfg_parseFromJSON(c
     dnn = cJSON_GetObjectItemCaseSensitive(pdu_session_status_cfgJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_pdu_session_status_cfg_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_pdu_session_status_cfg_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -79,10 +79,10 @@ OpenAPI_pdu_session_status_cfg_t *OpenAPI_pdu_session_status_cfg_copy(OpenAPI_pd
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pdu_session_status_cfg_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pdu_session_status_cfg_convertToJSON() failed");
+        log_error("OpenAPI_pdu_session_status_cfg_convertToJSON() failed");
         return NULL;
     }
 
@@ -90,14 +90,14 @@ OpenAPI_pdu_session_status_cfg_t *OpenAPI_pdu_session_status_cfg_copy(OpenAPI_pd
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -9,7 +9,7 @@ OpenAPI_ce_mode_b_ind_t *OpenAPI_ce_mode_b_ind_create(
 )
 {
     OpenAPI_ce_mode_b_ind_t *ce_mode_b_ind_local_var = ogs_malloc(sizeof(OpenAPI_ce_mode_b_ind_t));
-    ogs_assert(ce_mode_b_ind_local_var);
+    log_assert(ce_mode_b_ind_local_var);
 
     ce_mode_b_ind_local_var->ce_mode_b_support_ind = ce_mode_b_support_ind;
 
@@ -32,13 +32,13 @@ cJSON *OpenAPI_ce_mode_b_ind_convertToJSON(OpenAPI_ce_mode_b_ind_t *ce_mode_b_in
     OpenAPI_lnode_t *node = NULL;
 
     if (ce_mode_b_ind == NULL) {
-        ogs_error("OpenAPI_ce_mode_b_ind_convertToJSON() failed [CeModeBInd]");
+        log_error("OpenAPI_ce_mode_b_ind_convertToJSON() failed [CeModeBInd]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddBoolToObject(item, "ceModeBSupportInd", ce_mode_b_ind->ce_mode_b_support_ind) == NULL) {
-        ogs_error("OpenAPI_ce_mode_b_ind_convertToJSON() failed [ce_mode_b_support_ind]");
+        log_error("OpenAPI_ce_mode_b_ind_convertToJSON() failed [ce_mode_b_support_ind]");
         goto end;
     }
 
@@ -53,11 +53,11 @@ OpenAPI_ce_mode_b_ind_t *OpenAPI_ce_mode_b_ind_parseFromJSON(cJSON *ce_mode_b_in
     cJSON *ce_mode_b_support_ind = NULL;
     ce_mode_b_support_ind = cJSON_GetObjectItemCaseSensitive(ce_mode_b_indJSON, "ceModeBSupportInd");
     if (!ce_mode_b_support_ind) {
-        ogs_error("OpenAPI_ce_mode_b_ind_parseFromJSON() failed [ce_mode_b_support_ind]");
+        log_error("OpenAPI_ce_mode_b_ind_parseFromJSON() failed [ce_mode_b_support_ind]");
         goto end;
     }
     if (!cJSON_IsBool(ce_mode_b_support_ind)) {
-        ogs_error("OpenAPI_ce_mode_b_ind_parseFromJSON() failed [ce_mode_b_support_ind]");
+        log_error("OpenAPI_ce_mode_b_ind_parseFromJSON() failed [ce_mode_b_support_ind]");
         goto end;
     }
 
@@ -76,10 +76,10 @@ OpenAPI_ce_mode_b_ind_t *OpenAPI_ce_mode_b_ind_copy(OpenAPI_ce_mode_b_ind_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ce_mode_b_ind_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ce_mode_b_ind_convertToJSON() failed");
+        log_error("OpenAPI_ce_mode_b_ind_convertToJSON() failed");
         return NULL;
     }
 
@@ -87,14 +87,14 @@ OpenAPI_ce_mode_b_ind_t *OpenAPI_ce_mode_b_ind_copy(OpenAPI_ce_mode_b_ind_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

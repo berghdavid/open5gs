@@ -20,7 +20,7 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_create(
 )
 {
     OpenAPI_pro_se_capability_t *pro_se_capability_local_var = ogs_malloc(sizeof(OpenAPI_pro_se_capability_t));
-    ogs_assert(pro_se_capability_local_var);
+    log_assert(pro_se_capability_local_var);
 
     pro_se_capability_local_var->is_prose_direct_discovey = is_prose_direct_discovey;
     pro_se_capability_local_var->prose_direct_discovey = prose_direct_discovey;
@@ -54,49 +54,49 @@ cJSON *OpenAPI_pro_se_capability_convertToJSON(OpenAPI_pro_se_capability_t *pro_
     OpenAPI_lnode_t *node = NULL;
 
     if (pro_se_capability == NULL) {
-        ogs_error("OpenAPI_pro_se_capability_convertToJSON() failed [ProSeCapability]");
+        log_error("OpenAPI_pro_se_capability_convertToJSON() failed [ProSeCapability]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (pro_se_capability->is_prose_direct_discovey) {
     if (cJSON_AddBoolToObject(item, "proseDirectDiscovey", pro_se_capability->prose_direct_discovey) == NULL) {
-        ogs_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_direct_discovey]");
+        log_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_direct_discovey]");
         goto end;
     }
     }
 
     if (pro_se_capability->is_prose_direct_communication) {
     if (cJSON_AddBoolToObject(item, "proseDirectCommunication", pro_se_capability->prose_direct_communication) == NULL) {
-        ogs_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_direct_communication]");
+        log_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_direct_communication]");
         goto end;
     }
     }
 
     if (pro_se_capability->is_prose_l2_ueto_network_relay) {
     if (cJSON_AddBoolToObject(item, "proseL2UetoNetworkRelay", pro_se_capability->prose_l2_ueto_network_relay) == NULL) {
-        ogs_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_l2_ueto_network_relay]");
+        log_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_l2_ueto_network_relay]");
         goto end;
     }
     }
 
     if (pro_se_capability->is_prose_l3_ueto_network_relay) {
     if (cJSON_AddBoolToObject(item, "proseL3UetoNetworkRelay", pro_se_capability->prose_l3_ueto_network_relay) == NULL) {
-        ogs_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_l3_ueto_network_relay]");
+        log_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_l3_ueto_network_relay]");
         goto end;
     }
     }
 
     if (pro_se_capability->is_prose_l2_remote_ue) {
     if (cJSON_AddBoolToObject(item, "proseL2RemoteUe", pro_se_capability->prose_l2_remote_ue) == NULL) {
-        ogs_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_l2_remote_ue]");
+        log_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_l2_remote_ue]");
         goto end;
     }
     }
 
     if (pro_se_capability->is_prose_l3_remote_ue) {
     if (cJSON_AddBoolToObject(item, "proseL3RemoteUe", pro_se_capability->prose_l3_remote_ue) == NULL) {
-        ogs_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_l3_remote_ue]");
+        log_error("OpenAPI_pro_se_capability_convertToJSON() failed [prose_l3_remote_ue]");
         goto end;
     }
     }
@@ -118,7 +118,7 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_parseFromJSON(cJSON *pro_
     prose_direct_discovey = cJSON_GetObjectItemCaseSensitive(pro_se_capabilityJSON, "proseDirectDiscovey");
     if (prose_direct_discovey) {
     if (!cJSON_IsBool(prose_direct_discovey)) {
-        ogs_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_direct_discovey]");
+        log_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_direct_discovey]");
         goto end;
     }
     }
@@ -126,7 +126,7 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_parseFromJSON(cJSON *pro_
     prose_direct_communication = cJSON_GetObjectItemCaseSensitive(pro_se_capabilityJSON, "proseDirectCommunication");
     if (prose_direct_communication) {
     if (!cJSON_IsBool(prose_direct_communication)) {
-        ogs_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_direct_communication]");
+        log_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_direct_communication]");
         goto end;
     }
     }
@@ -134,7 +134,7 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_parseFromJSON(cJSON *pro_
     prose_l2_ueto_network_relay = cJSON_GetObjectItemCaseSensitive(pro_se_capabilityJSON, "proseL2UetoNetworkRelay");
     if (prose_l2_ueto_network_relay) {
     if (!cJSON_IsBool(prose_l2_ueto_network_relay)) {
-        ogs_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_l2_ueto_network_relay]");
+        log_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_l2_ueto_network_relay]");
         goto end;
     }
     }
@@ -142,7 +142,7 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_parseFromJSON(cJSON *pro_
     prose_l3_ueto_network_relay = cJSON_GetObjectItemCaseSensitive(pro_se_capabilityJSON, "proseL3UetoNetworkRelay");
     if (prose_l3_ueto_network_relay) {
     if (!cJSON_IsBool(prose_l3_ueto_network_relay)) {
-        ogs_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_l3_ueto_network_relay]");
+        log_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_l3_ueto_network_relay]");
         goto end;
     }
     }
@@ -150,7 +150,7 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_parseFromJSON(cJSON *pro_
     prose_l2_remote_ue = cJSON_GetObjectItemCaseSensitive(pro_se_capabilityJSON, "proseL2RemoteUe");
     if (prose_l2_remote_ue) {
     if (!cJSON_IsBool(prose_l2_remote_ue)) {
-        ogs_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_l2_remote_ue]");
+        log_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_l2_remote_ue]");
         goto end;
     }
     }
@@ -158,7 +158,7 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_parseFromJSON(cJSON *pro_
     prose_l3_remote_ue = cJSON_GetObjectItemCaseSensitive(pro_se_capabilityJSON, "proseL3RemoteUe");
     if (prose_l3_remote_ue) {
     if (!cJSON_IsBool(prose_l3_remote_ue)) {
-        ogs_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_l3_remote_ue]");
+        log_error("OpenAPI_pro_se_capability_parseFromJSON() failed [prose_l3_remote_ue]");
         goto end;
     }
     }
@@ -188,10 +188,10 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_copy(OpenAPI_pro_se_capab
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pro_se_capability_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pro_se_capability_convertToJSON() failed");
+        log_error("OpenAPI_pro_se_capability_convertToJSON() failed");
         return NULL;
     }
 
@@ -199,14 +199,14 @@ OpenAPI_pro_se_capability_t *OpenAPI_pro_se_capability_copy(OpenAPI_pro_se_capab
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

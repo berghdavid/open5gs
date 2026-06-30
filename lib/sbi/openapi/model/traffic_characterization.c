@@ -20,7 +20,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_create(
 )
 {
     OpenAPI_traffic_characterization_t *traffic_characterization_local_var = ogs_malloc(sizeof(OpenAPI_traffic_characterization_t));
-    ogs_assert(traffic_characterization_local_var);
+    log_assert(traffic_characterization_local_var);
 
     traffic_characterization_local_var->dnn = dnn;
     traffic_characterization_local_var->snssai = snssai;
@@ -73,14 +73,14 @@ cJSON *OpenAPI_traffic_characterization_convertToJSON(OpenAPI_traffic_characteri
     OpenAPI_lnode_t *node = NULL;
 
     if (traffic_characterization == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [TrafficCharacterization]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [TrafficCharacterization]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (traffic_characterization->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", traffic_characterization->dnn) == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [dnn]");
         goto end;
     }
     }
@@ -88,19 +88,19 @@ cJSON *OpenAPI_traffic_characterization_convertToJSON(OpenAPI_traffic_characteri
     if (traffic_characterization->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(traffic_characterization->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [snssai]");
         goto end;
     }
     }
 
     if (traffic_characterization->app_id) {
     if (cJSON_AddStringToObject(item, "appId", traffic_characterization->app_id) == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [app_id]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [app_id]");
         goto end;
     }
     }
@@ -108,13 +108,13 @@ cJSON *OpenAPI_traffic_characterization_convertToJSON(OpenAPI_traffic_characteri
     if (traffic_characterization->f_descs) {
     cJSON *f_descsList = cJSON_AddArrayToObject(item, "fDescs");
     if (f_descsList == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [f_descs]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [f_descs]");
         goto end;
     }
     OpenAPI_list_for_each(traffic_characterization->f_descs, node) {
         cJSON *itemLocal = OpenAPI_ip_eth_flow_description_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [f_descs]");
+            log_error("OpenAPI_traffic_characterization_convertToJSON() failed [f_descs]");
             goto end;
         }
         cJSON_AddItemToArray(f_descsList, itemLocal);
@@ -123,28 +123,28 @@ cJSON *OpenAPI_traffic_characterization_convertToJSON(OpenAPI_traffic_characteri
 
     if (traffic_characterization->is_ul_vol) {
     if (cJSON_AddNumberToObject(item, "ulVol", traffic_characterization->ul_vol) == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [ul_vol]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [ul_vol]");
         goto end;
     }
     }
 
     if (traffic_characterization->is_ul_vol_variance) {
     if (cJSON_AddNumberToObject(item, "ulVolVariance", traffic_characterization->ul_vol_variance) == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [ul_vol_variance]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [ul_vol_variance]");
         goto end;
     }
     }
 
     if (traffic_characterization->is_dl_vol) {
     if (cJSON_AddNumberToObject(item, "dlVol", traffic_characterization->dl_vol) == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [dl_vol]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [dl_vol]");
         goto end;
     }
     }
 
     if (traffic_characterization->is_dl_vol_variance) {
     if (cJSON_AddNumberToObject(item, "dlVolVariance", traffic_characterization->dl_vol_variance) == NULL) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed [dl_vol_variance]");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed [dl_vol_variance]");
         goto end;
     }
     }
@@ -170,7 +170,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
     dnn = cJSON_GetObjectItemCaseSensitive(traffic_characterizationJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_traffic_characterization_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_traffic_characterization_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -179,7 +179,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -187,7 +187,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
     app_id = cJSON_GetObjectItemCaseSensitive(traffic_characterizationJSON, "appId");
     if (app_id) {
     if (!cJSON_IsString(app_id) && !cJSON_IsNull(app_id)) {
-        ogs_error("OpenAPI_traffic_characterization_parseFromJSON() failed [app_id]");
+        log_error("OpenAPI_traffic_characterization_parseFromJSON() failed [app_id]");
         goto end;
     }
     }
@@ -196,7 +196,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
     if (f_descs) {
         cJSON *f_descs_local = NULL;
         if (!cJSON_IsArray(f_descs)) {
-            ogs_error("OpenAPI_traffic_characterization_parseFromJSON() failed [f_descs]");
+            log_error("OpenAPI_traffic_characterization_parseFromJSON() failed [f_descs]");
             goto end;
         }
 
@@ -204,12 +204,12 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
 
         cJSON_ArrayForEach(f_descs_local, f_descs) {
             if (!cJSON_IsObject(f_descs_local)) {
-                ogs_error("OpenAPI_traffic_characterization_parseFromJSON() failed [f_descs]");
+                log_error("OpenAPI_traffic_characterization_parseFromJSON() failed [f_descs]");
                 goto end;
             }
             OpenAPI_ip_eth_flow_description_t *f_descsItem = OpenAPI_ip_eth_flow_description_parseFromJSON(f_descs_local);
             if (!f_descsItem) {
-                ogs_error("No f_descsItem");
+                log_error("No f_descsItem");
                 goto end;
             }
             OpenAPI_list_add(f_descsList, f_descsItem);
@@ -219,7 +219,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
     ul_vol = cJSON_GetObjectItemCaseSensitive(traffic_characterizationJSON, "ulVol");
     if (ul_vol) {
     if (!cJSON_IsNumber(ul_vol)) {
-        ogs_error("OpenAPI_traffic_characterization_parseFromJSON() failed [ul_vol]");
+        log_error("OpenAPI_traffic_characterization_parseFromJSON() failed [ul_vol]");
         goto end;
     }
     }
@@ -227,7 +227,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
     ul_vol_variance = cJSON_GetObjectItemCaseSensitive(traffic_characterizationJSON, "ulVolVariance");
     if (ul_vol_variance) {
     if (!cJSON_IsNumber(ul_vol_variance)) {
-        ogs_error("OpenAPI_traffic_characterization_parseFromJSON() failed [ul_vol_variance]");
+        log_error("OpenAPI_traffic_characterization_parseFromJSON() failed [ul_vol_variance]");
         goto end;
     }
     }
@@ -235,7 +235,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
     dl_vol = cJSON_GetObjectItemCaseSensitive(traffic_characterizationJSON, "dlVol");
     if (dl_vol) {
     if (!cJSON_IsNumber(dl_vol)) {
-        ogs_error("OpenAPI_traffic_characterization_parseFromJSON() failed [dl_vol]");
+        log_error("OpenAPI_traffic_characterization_parseFromJSON() failed [dl_vol]");
         goto end;
     }
     }
@@ -243,7 +243,7 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_parseFromJS
     dl_vol_variance = cJSON_GetObjectItemCaseSensitive(traffic_characterizationJSON, "dlVolVariance");
     if (dl_vol_variance) {
     if (!cJSON_IsNumber(dl_vol_variance)) {
-        ogs_error("OpenAPI_traffic_characterization_parseFromJSON() failed [dl_vol_variance]");
+        log_error("OpenAPI_traffic_characterization_parseFromJSON() failed [dl_vol_variance]");
         goto end;
     }
     }
@@ -284,10 +284,10 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_traffic_characterization_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_traffic_characterization_convertToJSON() failed");
+        log_error("OpenAPI_traffic_characterization_convertToJSON() failed");
         return NULL;
     }
 
@@ -295,14 +295,14 @@ OpenAPI_traffic_characterization_t *OpenAPI_traffic_characterization_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

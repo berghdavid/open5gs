@@ -10,7 +10,7 @@ OpenAPI_app_detection_report_t *OpenAPI_app_detection_report_create(
 )
 {
     OpenAPI_app_detection_report_t *app_detection_report_local_var = ogs_malloc(sizeof(OpenAPI_app_detection_report_t));
-    ogs_assert(app_detection_report_local_var);
+    log_assert(app_detection_report_local_var);
 
     app_detection_report_local_var->ad_notif_type = ad_notif_type;
     app_detection_report_local_var->af_app_id = af_app_id;
@@ -38,26 +38,26 @@ cJSON *OpenAPI_app_detection_report_convertToJSON(OpenAPI_app_detection_report_t
     OpenAPI_lnode_t *node = NULL;
 
     if (app_detection_report == NULL) {
-        ogs_error("OpenAPI_app_detection_report_convertToJSON() failed [AppDetectionReport]");
+        log_error("OpenAPI_app_detection_report_convertToJSON() failed [AppDetectionReport]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (app_detection_report->ad_notif_type == OpenAPI_app_detection_notif_type_NULL) {
-        ogs_error("OpenAPI_app_detection_report_convertToJSON() failed [ad_notif_type]");
+        log_error("OpenAPI_app_detection_report_convertToJSON() failed [ad_notif_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "adNotifType", OpenAPI_app_detection_notif_type_ToString(app_detection_report->ad_notif_type)) == NULL) {
-        ogs_error("OpenAPI_app_detection_report_convertToJSON() failed [ad_notif_type]");
+        log_error("OpenAPI_app_detection_report_convertToJSON() failed [ad_notif_type]");
         goto end;
     }
 
     if (!app_detection_report->af_app_id) {
-        ogs_error("OpenAPI_app_detection_report_convertToJSON() failed [af_app_id]");
+        log_error("OpenAPI_app_detection_report_convertToJSON() failed [af_app_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "afAppId", app_detection_report->af_app_id) == NULL) {
-        ogs_error("OpenAPI_app_detection_report_convertToJSON() failed [af_app_id]");
+        log_error("OpenAPI_app_detection_report_convertToJSON() failed [af_app_id]");
         goto end;
     }
 
@@ -74,22 +74,22 @@ OpenAPI_app_detection_report_t *OpenAPI_app_detection_report_parseFromJSON(cJSON
     cJSON *af_app_id = NULL;
     ad_notif_type = cJSON_GetObjectItemCaseSensitive(app_detection_reportJSON, "adNotifType");
     if (!ad_notif_type) {
-        ogs_error("OpenAPI_app_detection_report_parseFromJSON() failed [ad_notif_type]");
+        log_error("OpenAPI_app_detection_report_parseFromJSON() failed [ad_notif_type]");
         goto end;
     }
     if (!cJSON_IsString(ad_notif_type)) {
-        ogs_error("OpenAPI_app_detection_report_parseFromJSON() failed [ad_notif_type]");
+        log_error("OpenAPI_app_detection_report_parseFromJSON() failed [ad_notif_type]");
         goto end;
     }
     ad_notif_typeVariable = OpenAPI_app_detection_notif_type_FromString(ad_notif_type->valuestring);
 
     af_app_id = cJSON_GetObjectItemCaseSensitive(app_detection_reportJSON, "afAppId");
     if (!af_app_id) {
-        ogs_error("OpenAPI_app_detection_report_parseFromJSON() failed [af_app_id]");
+        log_error("OpenAPI_app_detection_report_parseFromJSON() failed [af_app_id]");
         goto end;
     }
     if (!cJSON_IsString(af_app_id)) {
-        ogs_error("OpenAPI_app_detection_report_parseFromJSON() failed [af_app_id]");
+        log_error("OpenAPI_app_detection_report_parseFromJSON() failed [af_app_id]");
         goto end;
     }
 
@@ -108,10 +108,10 @@ OpenAPI_app_detection_report_t *OpenAPI_app_detection_report_copy(OpenAPI_app_de
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_app_detection_report_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_app_detection_report_convertToJSON() failed");
+        log_error("OpenAPI_app_detection_report_convertToJSON() failed");
         return NULL;
     }
 
@@ -119,14 +119,14 @@ OpenAPI_app_detection_report_t *OpenAPI_app_detection_report_copy(OpenAPI_app_de
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

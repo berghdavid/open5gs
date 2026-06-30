@@ -14,7 +14,7 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_create(
 )
 {
     OpenAPI_chf_info_t *chf_info_local_var = ogs_malloc(sizeof(OpenAPI_chf_info_t));
-    ogs_assert(chf_info_local_var);
+    log_assert(chf_info_local_var);
 
     chf_info_local_var->supi_range_list = supi_range_list;
     chf_info_local_var->gpsi_range_list = gpsi_range_list;
@@ -75,7 +75,7 @@ cJSON *OpenAPI_chf_info_convertToJSON(OpenAPI_chf_info_t *chf_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (chf_info == NULL) {
-        ogs_error("OpenAPI_chf_info_convertToJSON() failed [ChfInfo]");
+        log_error("OpenAPI_chf_info_convertToJSON() failed [ChfInfo]");
         return NULL;
     }
 
@@ -83,13 +83,13 @@ cJSON *OpenAPI_chf_info_convertToJSON(OpenAPI_chf_info_t *chf_info)
     if (chf_info->supi_range_list) {
     cJSON *supi_range_listList = cJSON_AddArrayToObject(item, "supiRangeList");
     if (supi_range_listList == NULL) {
-        ogs_error("OpenAPI_chf_info_convertToJSON() failed [supi_range_list]");
+        log_error("OpenAPI_chf_info_convertToJSON() failed [supi_range_list]");
         goto end;
     }
     OpenAPI_list_for_each(chf_info->supi_range_list, node) {
         cJSON *itemLocal = OpenAPI_supi_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_chf_info_convertToJSON() failed [supi_range_list]");
+            log_error("OpenAPI_chf_info_convertToJSON() failed [supi_range_list]");
             goto end;
         }
         cJSON_AddItemToArray(supi_range_listList, itemLocal);
@@ -99,13 +99,13 @@ cJSON *OpenAPI_chf_info_convertToJSON(OpenAPI_chf_info_t *chf_info)
     if (chf_info->gpsi_range_list) {
     cJSON *gpsi_range_listList = cJSON_AddArrayToObject(item, "gpsiRangeList");
     if (gpsi_range_listList == NULL) {
-        ogs_error("OpenAPI_chf_info_convertToJSON() failed [gpsi_range_list]");
+        log_error("OpenAPI_chf_info_convertToJSON() failed [gpsi_range_list]");
         goto end;
     }
     OpenAPI_list_for_each(chf_info->gpsi_range_list, node) {
         cJSON *itemLocal = OpenAPI_identity_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_chf_info_convertToJSON() failed [gpsi_range_list]");
+            log_error("OpenAPI_chf_info_convertToJSON() failed [gpsi_range_list]");
             goto end;
         }
         cJSON_AddItemToArray(gpsi_range_listList, itemLocal);
@@ -115,13 +115,13 @@ cJSON *OpenAPI_chf_info_convertToJSON(OpenAPI_chf_info_t *chf_info)
     if (chf_info->plmn_range_list) {
     cJSON *plmn_range_listList = cJSON_AddArrayToObject(item, "plmnRangeList");
     if (plmn_range_listList == NULL) {
-        ogs_error("OpenAPI_chf_info_convertToJSON() failed [plmn_range_list]");
+        log_error("OpenAPI_chf_info_convertToJSON() failed [plmn_range_list]");
         goto end;
     }
     OpenAPI_list_for_each(chf_info->plmn_range_list, node) {
         cJSON *itemLocal = OpenAPI_plmn_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_chf_info_convertToJSON() failed [plmn_range_list]");
+            log_error("OpenAPI_chf_info_convertToJSON() failed [plmn_range_list]");
             goto end;
         }
         cJSON_AddItemToArray(plmn_range_listList, itemLocal);
@@ -130,21 +130,21 @@ cJSON *OpenAPI_chf_info_convertToJSON(OpenAPI_chf_info_t *chf_info)
 
     if (chf_info->group_id) {
     if (cJSON_AddStringToObject(item, "groupId", chf_info->group_id) == NULL) {
-        ogs_error("OpenAPI_chf_info_convertToJSON() failed [group_id]");
+        log_error("OpenAPI_chf_info_convertToJSON() failed [group_id]");
         goto end;
     }
     }
 
     if (chf_info->primary_chf_instance) {
     if (cJSON_AddStringToObject(item, "primaryChfInstance", chf_info->primary_chf_instance) == NULL) {
-        ogs_error("OpenAPI_chf_info_convertToJSON() failed [primary_chf_instance]");
+        log_error("OpenAPI_chf_info_convertToJSON() failed [primary_chf_instance]");
         goto end;
     }
     }
 
     if (chf_info->secondary_chf_instance) {
     if (cJSON_AddStringToObject(item, "secondaryChfInstance", chf_info->secondary_chf_instance) == NULL) {
-        ogs_error("OpenAPI_chf_info_convertToJSON() failed [secondary_chf_instance]");
+        log_error("OpenAPI_chf_info_convertToJSON() failed [secondary_chf_instance]");
         goto end;
     }
     }
@@ -170,7 +170,7 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
     if (supi_range_list) {
         cJSON *supi_range_list_local = NULL;
         if (!cJSON_IsArray(supi_range_list)) {
-            ogs_error("OpenAPI_chf_info_parseFromJSON() failed [supi_range_list]");
+            log_error("OpenAPI_chf_info_parseFromJSON() failed [supi_range_list]");
             goto end;
         }
 
@@ -178,12 +178,12 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
 
         cJSON_ArrayForEach(supi_range_list_local, supi_range_list) {
             if (!cJSON_IsObject(supi_range_list_local)) {
-                ogs_error("OpenAPI_chf_info_parseFromJSON() failed [supi_range_list]");
+                log_error("OpenAPI_chf_info_parseFromJSON() failed [supi_range_list]");
                 goto end;
             }
             OpenAPI_supi_range_t *supi_range_listItem = OpenAPI_supi_range_parseFromJSON(supi_range_list_local);
             if (!supi_range_listItem) {
-                ogs_error("No supi_range_listItem");
+                log_error("No supi_range_listItem");
                 goto end;
             }
             OpenAPI_list_add(supi_range_listList, supi_range_listItem);
@@ -194,7 +194,7 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
     if (gpsi_range_list) {
         cJSON *gpsi_range_list_local = NULL;
         if (!cJSON_IsArray(gpsi_range_list)) {
-            ogs_error("OpenAPI_chf_info_parseFromJSON() failed [gpsi_range_list]");
+            log_error("OpenAPI_chf_info_parseFromJSON() failed [gpsi_range_list]");
             goto end;
         }
 
@@ -202,12 +202,12 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
 
         cJSON_ArrayForEach(gpsi_range_list_local, gpsi_range_list) {
             if (!cJSON_IsObject(gpsi_range_list_local)) {
-                ogs_error("OpenAPI_chf_info_parseFromJSON() failed [gpsi_range_list]");
+                log_error("OpenAPI_chf_info_parseFromJSON() failed [gpsi_range_list]");
                 goto end;
             }
             OpenAPI_identity_range_t *gpsi_range_listItem = OpenAPI_identity_range_parseFromJSON(gpsi_range_list_local);
             if (!gpsi_range_listItem) {
-                ogs_error("No gpsi_range_listItem");
+                log_error("No gpsi_range_listItem");
                 goto end;
             }
             OpenAPI_list_add(gpsi_range_listList, gpsi_range_listItem);
@@ -218,7 +218,7 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
     if (plmn_range_list) {
         cJSON *plmn_range_list_local = NULL;
         if (!cJSON_IsArray(plmn_range_list)) {
-            ogs_error("OpenAPI_chf_info_parseFromJSON() failed [plmn_range_list]");
+            log_error("OpenAPI_chf_info_parseFromJSON() failed [plmn_range_list]");
             goto end;
         }
 
@@ -226,12 +226,12 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
 
         cJSON_ArrayForEach(plmn_range_list_local, plmn_range_list) {
             if (!cJSON_IsObject(plmn_range_list_local)) {
-                ogs_error("OpenAPI_chf_info_parseFromJSON() failed [plmn_range_list]");
+                log_error("OpenAPI_chf_info_parseFromJSON() failed [plmn_range_list]");
                 goto end;
             }
             OpenAPI_plmn_range_t *plmn_range_listItem = OpenAPI_plmn_range_parseFromJSON(plmn_range_list_local);
             if (!plmn_range_listItem) {
-                ogs_error("No plmn_range_listItem");
+                log_error("No plmn_range_listItem");
                 goto end;
             }
             OpenAPI_list_add(plmn_range_listList, plmn_range_listItem);
@@ -241,7 +241,7 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
     group_id = cJSON_GetObjectItemCaseSensitive(chf_infoJSON, "groupId");
     if (group_id) {
     if (!cJSON_IsString(group_id) && !cJSON_IsNull(group_id)) {
-        ogs_error("OpenAPI_chf_info_parseFromJSON() failed [group_id]");
+        log_error("OpenAPI_chf_info_parseFromJSON() failed [group_id]");
         goto end;
     }
     }
@@ -249,7 +249,7 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
     primary_chf_instance = cJSON_GetObjectItemCaseSensitive(chf_infoJSON, "primaryChfInstance");
     if (primary_chf_instance) {
     if (!cJSON_IsString(primary_chf_instance) && !cJSON_IsNull(primary_chf_instance)) {
-        ogs_error("OpenAPI_chf_info_parseFromJSON() failed [primary_chf_instance]");
+        log_error("OpenAPI_chf_info_parseFromJSON() failed [primary_chf_instance]");
         goto end;
     }
     }
@@ -257,7 +257,7 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_parseFromJSON(cJSON *chf_infoJSON)
     secondary_chf_instance = cJSON_GetObjectItemCaseSensitive(chf_infoJSON, "secondaryChfInstance");
     if (secondary_chf_instance) {
     if (!cJSON_IsString(secondary_chf_instance) && !cJSON_IsNull(secondary_chf_instance)) {
-        ogs_error("OpenAPI_chf_info_parseFromJSON() failed [secondary_chf_instance]");
+        log_error("OpenAPI_chf_info_parseFromJSON() failed [secondary_chf_instance]");
         goto end;
     }
     }
@@ -302,10 +302,10 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_copy(OpenAPI_chf_info_t *dst, OpenAPI_chf_i
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_chf_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_chf_info_convertToJSON() failed");
+        log_error("OpenAPI_chf_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -313,14 +313,14 @@ OpenAPI_chf_info_t *OpenAPI_chf_info_copy(OpenAPI_chf_info_t *dst, OpenAPI_chf_i
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

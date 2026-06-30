@@ -11,7 +11,7 @@ OpenAPI_nudm_amf_info_t *OpenAPI_nudm_amf_info_create(
 )
 {
     OpenAPI_nudm_amf_info_t *nudm_amf_info_local_var = ogs_malloc(sizeof(OpenAPI_nudm_amf_info_t));
-    ogs_assert(nudm_amf_info_local_var);
+    log_assert(nudm_amf_info_local_var);
 
     nudm_amf_info_local_var->amf_instance_id = amf_instance_id;
     nudm_amf_info_local_var->guami = guami;
@@ -44,38 +44,38 @@ cJSON *OpenAPI_nudm_amf_info_convertToJSON(OpenAPI_nudm_amf_info_t *nudm_amf_inf
     OpenAPI_lnode_t *node = NULL;
 
     if (nudm_amf_info == NULL) {
-        ogs_error("OpenAPI_nudm_amf_info_convertToJSON() failed [NudmAmfInfo]");
+        log_error("OpenAPI_nudm_amf_info_convertToJSON() failed [NudmAmfInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!nudm_amf_info->amf_instance_id) {
-        ogs_error("OpenAPI_nudm_amf_info_convertToJSON() failed [amf_instance_id]");
+        log_error("OpenAPI_nudm_amf_info_convertToJSON() failed [amf_instance_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "amfInstanceId", nudm_amf_info->amf_instance_id) == NULL) {
-        ogs_error("OpenAPI_nudm_amf_info_convertToJSON() failed [amf_instance_id]");
+        log_error("OpenAPI_nudm_amf_info_convertToJSON() failed [amf_instance_id]");
         goto end;
     }
 
     if (!nudm_amf_info->guami) {
-        ogs_error("OpenAPI_nudm_amf_info_convertToJSON() failed [guami]");
+        log_error("OpenAPI_nudm_amf_info_convertToJSON() failed [guami]");
         return NULL;
     }
     cJSON *guami_local_JSON = OpenAPI_guami_convertToJSON(nudm_amf_info->guami);
     if (guami_local_JSON == NULL) {
-        ogs_error("OpenAPI_nudm_amf_info_convertToJSON() failed [guami]");
+        log_error("OpenAPI_nudm_amf_info_convertToJSON() failed [guami]");
         goto end;
     }
     cJSON_AddItemToObject(item, "guami", guami_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_nudm_amf_info_convertToJSON() failed [guami]");
+        log_error("OpenAPI_nudm_amf_info_convertToJSON() failed [guami]");
         goto end;
     }
 
     if (nudm_amf_info->access_type != OpenAPI_access_type_NULL) {
     if (cJSON_AddStringToObject(item, "accessType", OpenAPI_access_type_ToString(nudm_amf_info->access_type)) == NULL) {
-        ogs_error("OpenAPI_nudm_amf_info_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_nudm_amf_info_convertToJSON() failed [access_type]");
         goto end;
     }
     }
@@ -95,29 +95,29 @@ OpenAPI_nudm_amf_info_t *OpenAPI_nudm_amf_info_parseFromJSON(cJSON *nudm_amf_inf
     OpenAPI_access_type_e access_typeVariable = 0;
     amf_instance_id = cJSON_GetObjectItemCaseSensitive(nudm_amf_infoJSON, "amfInstanceId");
     if (!amf_instance_id) {
-        ogs_error("OpenAPI_nudm_amf_info_parseFromJSON() failed [amf_instance_id]");
+        log_error("OpenAPI_nudm_amf_info_parseFromJSON() failed [amf_instance_id]");
         goto end;
     }
     if (!cJSON_IsString(amf_instance_id)) {
-        ogs_error("OpenAPI_nudm_amf_info_parseFromJSON() failed [amf_instance_id]");
+        log_error("OpenAPI_nudm_amf_info_parseFromJSON() failed [amf_instance_id]");
         goto end;
     }
 
     guami = cJSON_GetObjectItemCaseSensitive(nudm_amf_infoJSON, "guami");
     if (!guami) {
-        ogs_error("OpenAPI_nudm_amf_info_parseFromJSON() failed [guami]");
+        log_error("OpenAPI_nudm_amf_info_parseFromJSON() failed [guami]");
         goto end;
     }
     guami_local_nonprim = OpenAPI_guami_parseFromJSON(guami);
     if (!guami_local_nonprim) {
-        ogs_error("OpenAPI_guami_parseFromJSON failed [guami]");
+        log_error("OpenAPI_guami_parseFromJSON failed [guami]");
         goto end;
     }
 
     access_type = cJSON_GetObjectItemCaseSensitive(nudm_amf_infoJSON, "accessType");
     if (access_type) {
     if (!cJSON_IsString(access_type)) {
-        ogs_error("OpenAPI_nudm_amf_info_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_nudm_amf_info_parseFromJSON() failed [access_type]");
         goto end;
     }
     access_typeVariable = OpenAPI_access_type_FromString(access_type->valuestring);
@@ -143,10 +143,10 @@ OpenAPI_nudm_amf_info_t *OpenAPI_nudm_amf_info_copy(OpenAPI_nudm_amf_info_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nudm_amf_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nudm_amf_info_convertToJSON() failed");
+        log_error("OpenAPI_nudm_amf_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -154,14 +154,14 @@ OpenAPI_nudm_amf_info_t *OpenAPI_nudm_amf_info_copy(OpenAPI_nudm_amf_info_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

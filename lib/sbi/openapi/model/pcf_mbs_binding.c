@@ -16,7 +16,7 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_create(
 )
 {
     OpenAPI_pcf_mbs_binding_t *pcf_mbs_binding_local_var = ogs_malloc(sizeof(OpenAPI_pcf_mbs_binding_t));
-    ogs_assert(pcf_mbs_binding_local_var);
+    log_assert(pcf_mbs_binding_local_var);
 
     pcf_mbs_binding_local_var->mbs_session_id = mbs_session_id;
     pcf_mbs_binding_local_var->pcf_fqdn = pcf_fqdn;
@@ -77,29 +77,29 @@ cJSON *OpenAPI_pcf_mbs_binding_convertToJSON(OpenAPI_pcf_mbs_binding_t *pcf_mbs_
     OpenAPI_lnode_t *node = NULL;
 
     if (pcf_mbs_binding == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [PcfMbsBinding]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [PcfMbsBinding]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!pcf_mbs_binding->mbs_session_id) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [mbs_session_id]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [mbs_session_id]");
         return NULL;
     }
     cJSON *mbs_session_id_local_JSON = OpenAPI_mbs_session_id_convertToJSON(pcf_mbs_binding->mbs_session_id);
     if (mbs_session_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [mbs_session_id]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [mbs_session_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "mbsSessionId", mbs_session_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [mbs_session_id]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [mbs_session_id]");
         goto end;
     }
 
     if (pcf_mbs_binding->pcf_fqdn) {
     if (cJSON_AddStringToObject(item, "pcfFqdn", pcf_mbs_binding->pcf_fqdn) == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_fqdn]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_fqdn]");
         goto end;
     }
     }
@@ -107,13 +107,13 @@ cJSON *OpenAPI_pcf_mbs_binding_convertToJSON(OpenAPI_pcf_mbs_binding_t *pcf_mbs_
     if (pcf_mbs_binding->pcf_ip_end_points) {
     cJSON *pcf_ip_end_pointsList = cJSON_AddArrayToObject(item, "pcfIpEndPoints");
     if (pcf_ip_end_pointsList == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_ip_end_points]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_ip_end_points]");
         goto end;
     }
     OpenAPI_list_for_each(pcf_mbs_binding->pcf_ip_end_points, node) {
         cJSON *itemLocal = OpenAPI_ip_end_point_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_ip_end_points]");
+            log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_ip_end_points]");
             goto end;
         }
         cJSON_AddItemToArray(pcf_ip_end_pointsList, itemLocal);
@@ -122,35 +122,35 @@ cJSON *OpenAPI_pcf_mbs_binding_convertToJSON(OpenAPI_pcf_mbs_binding_t *pcf_mbs_
 
     if (pcf_mbs_binding->pcf_id) {
     if (cJSON_AddStringToObject(item, "pcfId", pcf_mbs_binding->pcf_id) == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_id]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_id]");
         goto end;
     }
     }
 
     if (pcf_mbs_binding->pcf_set_id) {
     if (cJSON_AddStringToObject(item, "pcfSetId", pcf_mbs_binding->pcf_set_id) == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_set_id]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [pcf_set_id]");
         goto end;
     }
     }
 
     if (pcf_mbs_binding->bind_level != OpenAPI_binding_level_NULL) {
     if (cJSON_AddStringToObject(item, "bindLevel", OpenAPI_binding_level_ToString(pcf_mbs_binding->bind_level)) == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [bind_level]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [bind_level]");
         goto end;
     }
     }
 
     if (pcf_mbs_binding->recovery_time) {
     if (cJSON_AddStringToObject(item, "recoveryTime", pcf_mbs_binding->recovery_time) == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [recovery_time]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [recovery_time]");
         goto end;
     }
     }
 
     if (pcf_mbs_binding->supp_feat) {
     if (cJSON_AddStringToObject(item, "suppFeat", pcf_mbs_binding->supp_feat) == NULL) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [supp_feat]");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed [supp_feat]");
         goto end;
     }
     }
@@ -176,19 +176,19 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_parseFromJSON(cJSON *pcf_mbs_
     cJSON *supp_feat = NULL;
     mbs_session_id = cJSON_GetObjectItemCaseSensitive(pcf_mbs_bindingJSON, "mbsSessionId");
     if (!mbs_session_id) {
-        ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [mbs_session_id]");
+        log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [mbs_session_id]");
         goto end;
     }
     mbs_session_id_local_nonprim = OpenAPI_mbs_session_id_parseFromJSON(mbs_session_id);
     if (!mbs_session_id_local_nonprim) {
-        ogs_error("OpenAPI_mbs_session_id_parseFromJSON failed [mbs_session_id]");
+        log_error("OpenAPI_mbs_session_id_parseFromJSON failed [mbs_session_id]");
         goto end;
     }
 
     pcf_fqdn = cJSON_GetObjectItemCaseSensitive(pcf_mbs_bindingJSON, "pcfFqdn");
     if (pcf_fqdn) {
     if (!cJSON_IsString(pcf_fqdn) && !cJSON_IsNull(pcf_fqdn)) {
-        ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_fqdn]");
+        log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_fqdn]");
         goto end;
     }
     }
@@ -197,7 +197,7 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_parseFromJSON(cJSON *pcf_mbs_
     if (pcf_ip_end_points) {
         cJSON *pcf_ip_end_points_local = NULL;
         if (!cJSON_IsArray(pcf_ip_end_points)) {
-            ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_ip_end_points]");
+            log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_ip_end_points]");
             goto end;
         }
 
@@ -205,12 +205,12 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_parseFromJSON(cJSON *pcf_mbs_
 
         cJSON_ArrayForEach(pcf_ip_end_points_local, pcf_ip_end_points) {
             if (!cJSON_IsObject(pcf_ip_end_points_local)) {
-                ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_ip_end_points]");
+                log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_ip_end_points]");
                 goto end;
             }
             OpenAPI_ip_end_point_t *pcf_ip_end_pointsItem = OpenAPI_ip_end_point_parseFromJSON(pcf_ip_end_points_local);
             if (!pcf_ip_end_pointsItem) {
-                ogs_error("No pcf_ip_end_pointsItem");
+                log_error("No pcf_ip_end_pointsItem");
                 goto end;
             }
             OpenAPI_list_add(pcf_ip_end_pointsList, pcf_ip_end_pointsItem);
@@ -220,7 +220,7 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_parseFromJSON(cJSON *pcf_mbs_
     pcf_id = cJSON_GetObjectItemCaseSensitive(pcf_mbs_bindingJSON, "pcfId");
     if (pcf_id) {
     if (!cJSON_IsString(pcf_id) && !cJSON_IsNull(pcf_id)) {
-        ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_id]");
+        log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_id]");
         goto end;
     }
     }
@@ -228,7 +228,7 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_parseFromJSON(cJSON *pcf_mbs_
     pcf_set_id = cJSON_GetObjectItemCaseSensitive(pcf_mbs_bindingJSON, "pcfSetId");
     if (pcf_set_id) {
     if (!cJSON_IsString(pcf_set_id) && !cJSON_IsNull(pcf_set_id)) {
-        ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_set_id]");
+        log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [pcf_set_id]");
         goto end;
     }
     }
@@ -236,7 +236,7 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_parseFromJSON(cJSON *pcf_mbs_
     bind_level = cJSON_GetObjectItemCaseSensitive(pcf_mbs_bindingJSON, "bindLevel");
     if (bind_level) {
     if (!cJSON_IsString(bind_level)) {
-        ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [bind_level]");
+        log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [bind_level]");
         goto end;
     }
     bind_levelVariable = OpenAPI_binding_level_FromString(bind_level->valuestring);
@@ -245,7 +245,7 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_parseFromJSON(cJSON *pcf_mbs_
     recovery_time = cJSON_GetObjectItemCaseSensitive(pcf_mbs_bindingJSON, "recoveryTime");
     if (recovery_time) {
     if (!cJSON_IsString(recovery_time) && !cJSON_IsNull(recovery_time)) {
-        ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [recovery_time]");
+        log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [recovery_time]");
         goto end;
     }
     }
@@ -253,7 +253,7 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_parseFromJSON(cJSON *pcf_mbs_
     supp_feat = cJSON_GetObjectItemCaseSensitive(pcf_mbs_bindingJSON, "suppFeat");
     if (supp_feat) {
     if (!cJSON_IsString(supp_feat) && !cJSON_IsNull(supp_feat)) {
-        ogs_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [supp_feat]");
+        log_error("OpenAPI_pcf_mbs_binding_parseFromJSON() failed [supp_feat]");
         goto end;
     }
     }
@@ -290,10 +290,10 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_copy(OpenAPI_pcf_mbs_binding_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pcf_mbs_binding_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed");
+        log_error("OpenAPI_pcf_mbs_binding_convertToJSON() failed");
         return NULL;
     }
 
@@ -301,14 +301,14 @@ OpenAPI_pcf_mbs_binding_t *OpenAPI_pcf_mbs_binding_copy(OpenAPI_pcf_mbs_binding_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

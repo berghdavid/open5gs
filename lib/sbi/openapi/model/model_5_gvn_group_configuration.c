@@ -15,7 +15,7 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
 )
 {
     OpenAPI_model_5_gvn_group_configuration_t *model_5_gvn_group_configuration_local_var = ogs_malloc(sizeof(OpenAPI_model_5_gvn_group_configuration_t));
-    ogs_assert(model_5_gvn_group_configuration_local_var);
+    log_assert(model_5_gvn_group_configuration_local_var);
 
     model_5_gvn_group_configuration_local_var->_5g_vn_group_data = _5g_vn_group_data;
     model_5_gvn_group_configuration_local_var->members = members;
@@ -67,7 +67,7 @@ cJSON *OpenAPI_model_5_gvn_group_configuration_convertToJSON(OpenAPI_model_5_gvn
     OpenAPI_lnode_t *node = NULL;
 
     if (model_5_gvn_group_configuration == NULL) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [5GVnGroupConfiguration]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [5GVnGroupConfiguration]");
         return NULL;
     }
 
@@ -75,12 +75,12 @@ cJSON *OpenAPI_model_5_gvn_group_configuration_convertToJSON(OpenAPI_model_5_gvn
     if (model_5_gvn_group_configuration->_5g_vn_group_data) {
     cJSON *_5g_vn_group_data_local_JSON = OpenAPI_model_5_gvn_group_data_convertToJSON(model_5_gvn_group_configuration->_5g_vn_group_data);
     if (_5g_vn_group_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [_5g_vn_group_data]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [_5g_vn_group_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "5gVnGroupData", _5g_vn_group_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [_5g_vn_group_data]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [_5g_vn_group_data]");
         goto end;
     }
     }
@@ -88,12 +88,12 @@ cJSON *OpenAPI_model_5_gvn_group_configuration_convertToJSON(OpenAPI_model_5_gvn
     if (model_5_gvn_group_configuration->members) {
     cJSON *membersList = cJSON_AddArrayToObject(item, "members");
     if (membersList == NULL) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [members]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [members]");
         goto end;
     }
     OpenAPI_list_for_each(model_5_gvn_group_configuration->members, node) {
         if (cJSON_AddStringToObject(membersList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [members]");
+            log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [members]");
             goto end;
         }
     }
@@ -101,28 +101,28 @@ cJSON *OpenAPI_model_5_gvn_group_configuration_convertToJSON(OpenAPI_model_5_gvn
 
     if (model_5_gvn_group_configuration->is_reference_id) {
     if (cJSON_AddNumberToObject(item, "referenceId", model_5_gvn_group_configuration->reference_id) == NULL) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [reference_id]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [reference_id]");
         goto end;
     }
     }
 
     if (model_5_gvn_group_configuration->af_instance_id) {
     if (cJSON_AddStringToObject(item, "afInstanceId", model_5_gvn_group_configuration->af_instance_id) == NULL) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [af_instance_id]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [af_instance_id]");
         goto end;
     }
     }
 
     if (model_5_gvn_group_configuration->internal_group_identifier) {
     if (cJSON_AddStringToObject(item, "internalGroupIdentifier", model_5_gvn_group_configuration->internal_group_identifier) == NULL) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [internal_group_identifier]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [internal_group_identifier]");
         goto end;
     }
     }
 
     if (model_5_gvn_group_configuration->mtc_provider_information) {
     if (cJSON_AddStringToObject(item, "mtcProviderInformation", model_5_gvn_group_configuration->mtc_provider_information) == NULL) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -147,7 +147,7 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
     if (_5g_vn_group_data) {
     _5g_vn_group_data_local_nonprim = OpenAPI_model_5_gvn_group_data_parseFromJSON(_5g_vn_group_data);
     if (!_5g_vn_group_data_local_nonprim) {
-        ogs_error("OpenAPI_model_5_gvn_group_data_parseFromJSON failed [_5g_vn_group_data]");
+        log_error("OpenAPI_model_5_gvn_group_data_parseFromJSON failed [_5g_vn_group_data]");
         goto end;
     }
     }
@@ -156,7 +156,7 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
     if (members) {
         cJSON *members_local = NULL;
         if (!cJSON_IsArray(members)) {
-            ogs_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [members]");
+            log_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [members]");
             goto end;
         }
 
@@ -166,7 +166,7 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(members_local)) {
-                ogs_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [members]");
+                log_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [members]");
                 goto end;
             }
             OpenAPI_list_add(membersList, ogs_strdup(members_local->valuestring));
@@ -176,7 +176,7 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
     reference_id = cJSON_GetObjectItemCaseSensitive(model_5_gvn_group_configurationJSON, "referenceId");
     if (reference_id) {
     if (!cJSON_IsNumber(reference_id)) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [reference_id]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [reference_id]");
         goto end;
     }
     }
@@ -184,7 +184,7 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
     af_instance_id = cJSON_GetObjectItemCaseSensitive(model_5_gvn_group_configurationJSON, "afInstanceId");
     if (af_instance_id) {
     if (!cJSON_IsString(af_instance_id) && !cJSON_IsNull(af_instance_id)) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [af_instance_id]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [af_instance_id]");
         goto end;
     }
     }
@@ -192,7 +192,7 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
     internal_group_identifier = cJSON_GetObjectItemCaseSensitive(model_5_gvn_group_configurationJSON, "internalGroupIdentifier");
     if (internal_group_identifier) {
     if (!cJSON_IsString(internal_group_identifier) && !cJSON_IsNull(internal_group_identifier)) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [internal_group_identifier]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [internal_group_identifier]");
         goto end;
     }
     }
@@ -200,7 +200,7 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
     mtc_provider_information = cJSON_GetObjectItemCaseSensitive(model_5_gvn_group_configurationJSON, "mtcProviderInformation");
     if (mtc_provider_information) {
     if (!cJSON_IsString(mtc_provider_information) && !cJSON_IsNull(mtc_provider_information)) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_model_5_gvn_group_configuration_parseFromJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -236,10 +236,10 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_model_5_gvn_group_configuration_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed");
+        log_error("OpenAPI_model_5_gvn_group_configuration_convertToJSON() failed");
         return NULL;
     }
 
@@ -247,14 +247,14 @@ OpenAPI_model_5_gvn_group_configuration_t *OpenAPI_model_5_gvn_group_configurati
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

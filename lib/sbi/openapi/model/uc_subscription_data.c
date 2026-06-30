@@ -9,7 +9,7 @@ OpenAPI_uc_subscription_data_t *OpenAPI_uc_subscription_data_create(
 )
 {
     OpenAPI_uc_subscription_data_t *uc_subscription_data_local_var = ogs_malloc(sizeof(OpenAPI_uc_subscription_data_t));
-    ogs_assert(uc_subscription_data_local_var);
+    log_assert(uc_subscription_data_local_var);
 
     uc_subscription_data_local_var->user_consent_per_purpose_list = user_consent_per_purpose_list;
 
@@ -41,7 +41,7 @@ cJSON *OpenAPI_uc_subscription_data_convertToJSON(OpenAPI_uc_subscription_data_t
     OpenAPI_lnode_t *node = NULL;
 
     if (uc_subscription_data == NULL) {
-        ogs_error("OpenAPI_uc_subscription_data_convertToJSON() failed [UcSubscriptionData]");
+        log_error("OpenAPI_uc_subscription_data_convertToJSON() failed [UcSubscriptionData]");
         return NULL;
     }
 
@@ -49,7 +49,7 @@ cJSON *OpenAPI_uc_subscription_data_convertToJSON(OpenAPI_uc_subscription_data_t
     if (uc_subscription_data->user_consent_per_purpose_list != OpenAPI_user_consent_NULL) {
     cJSON *user_consent_per_purpose_list = cJSON_AddObjectToObject(item, "userConsentPerPurposeList");
     if (user_consent_per_purpose_list == NULL) {
-        ogs_error("OpenAPI_uc_subscription_data_convertToJSON() failed [user_consent_per_purpose_list]");
+        log_error("OpenAPI_uc_subscription_data_convertToJSON() failed [user_consent_per_purpose_list]");
         goto end;
     }
     cJSON *localMapObject = user_consent_per_purpose_list;
@@ -57,15 +57,15 @@ cJSON *OpenAPI_uc_subscription_data_convertToJSON(OpenAPI_uc_subscription_data_t
         OpenAPI_list_for_each(uc_subscription_data->user_consent_per_purpose_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_uc_subscription_data_convertToJSON() failed [user_consent_per_purpose_list]");
+                log_error("OpenAPI_uc_subscription_data_convertToJSON() failed [user_consent_per_purpose_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_uc_subscription_data_convertToJSON() failed [user_consent_per_purpose_list]");
+                log_error("OpenAPI_uc_subscription_data_convertToJSON() failed [user_consent_per_purpose_list]");
                 goto end;
             }
             if (cJSON_AddStringToObject(localMapObject, localKeyValue->key, OpenAPI_user_consent_ToString((intptr_t)localKeyValue->value)) == NULL) {
-                ogs_error("OpenAPI_uc_subscription_data_convertToJSON() failed [user_consent_per_purpose_list]");
+                log_error("OpenAPI_uc_subscription_data_convertToJSON() failed [user_consent_per_purpose_list]");
                 goto end;
             }
         }
@@ -86,7 +86,7 @@ OpenAPI_uc_subscription_data_t *OpenAPI_uc_subscription_data_parseFromJSON(cJSON
     if (user_consent_per_purpose_list) {
         cJSON *user_consent_per_purpose_list_local_map = NULL;
         if (!cJSON_IsObject(user_consent_per_purpose_list) && !cJSON_IsNull(user_consent_per_purpose_list)) {
-            ogs_error("OpenAPI_uc_subscription_data_parseFromJSON() failed [user_consent_per_purpose_list]");
+            log_error("OpenAPI_uc_subscription_data_parseFromJSON() failed [user_consent_per_purpose_list]");
             goto end;
         }
         if (cJSON_IsObject(user_consent_per_purpose_list)) {
@@ -95,7 +95,7 @@ OpenAPI_uc_subscription_data_t *OpenAPI_uc_subscription_data_parseFromJSON(cJSON
             cJSON_ArrayForEach(user_consent_per_purpose_list_local_map, user_consent_per_purpose_list) {
                 cJSON *localMapObject = user_consent_per_purpose_list_local_map;
                 if (!cJSON_IsString(localMapObject)) {
-                    ogs_error("OpenAPI_uc_subscription_data_parseFromJSON() failed [user_consent_per_purpose_list]");
+                    log_error("OpenAPI_uc_subscription_data_parseFromJSON() failed [user_consent_per_purpose_list]");
                     goto end;
                 }
                 localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), (void *)OpenAPI_user_consent_FromString(localMapObject->string));
@@ -127,10 +127,10 @@ OpenAPI_uc_subscription_data_t *OpenAPI_uc_subscription_data_copy(OpenAPI_uc_sub
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_uc_subscription_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_uc_subscription_data_convertToJSON() failed");
+        log_error("OpenAPI_uc_subscription_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -138,14 +138,14 @@ OpenAPI_uc_subscription_data_t *OpenAPI_uc_subscription_data_copy(OpenAPI_uc_sub
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

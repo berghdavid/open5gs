@@ -12,7 +12,7 @@ OpenAPI_uncertainty_ellipsoid_t *OpenAPI_uncertainty_ellipsoid_create(
 )
 {
     OpenAPI_uncertainty_ellipsoid_t *uncertainty_ellipsoid_local_var = ogs_malloc(sizeof(OpenAPI_uncertainty_ellipsoid_t));
-    ogs_assert(uncertainty_ellipsoid_local_var);
+    log_assert(uncertainty_ellipsoid_local_var);
 
     uncertainty_ellipsoid_local_var->semi_major = semi_major;
     uncertainty_ellipsoid_local_var->semi_minor = semi_minor;
@@ -38,28 +38,28 @@ cJSON *OpenAPI_uncertainty_ellipsoid_convertToJSON(OpenAPI_uncertainty_ellipsoid
     OpenAPI_lnode_t *node = NULL;
 
     if (uncertainty_ellipsoid == NULL) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [UncertaintyEllipsoid]");
+        log_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [UncertaintyEllipsoid]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "semiMajor", uncertainty_ellipsoid->semi_major) == NULL) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [semi_major]");
+        log_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [semi_major]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "semiMinor", uncertainty_ellipsoid->semi_minor) == NULL) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [semi_minor]");
+        log_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [semi_minor]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "vertical", uncertainty_ellipsoid->vertical) == NULL) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [vertical]");
+        log_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [vertical]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "orientationMajor", uncertainty_ellipsoid->orientation_major) == NULL) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [orientation_major]");
+        log_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed [orientation_major]");
         goto end;
     }
 
@@ -77,41 +77,41 @@ OpenAPI_uncertainty_ellipsoid_t *OpenAPI_uncertainty_ellipsoid_parseFromJSON(cJS
     cJSON *orientation_major = NULL;
     semi_major = cJSON_GetObjectItemCaseSensitive(uncertainty_ellipsoidJSON, "semiMajor");
     if (!semi_major) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [semi_major]");
+        log_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [semi_major]");
         goto end;
     }
     if (!cJSON_IsNumber(semi_major)) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [semi_major]");
+        log_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [semi_major]");
         goto end;
     }
 
     semi_minor = cJSON_GetObjectItemCaseSensitive(uncertainty_ellipsoidJSON, "semiMinor");
     if (!semi_minor) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [semi_minor]");
+        log_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [semi_minor]");
         goto end;
     }
     if (!cJSON_IsNumber(semi_minor)) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [semi_minor]");
+        log_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [semi_minor]");
         goto end;
     }
 
     vertical = cJSON_GetObjectItemCaseSensitive(uncertainty_ellipsoidJSON, "vertical");
     if (!vertical) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [vertical]");
+        log_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [vertical]");
         goto end;
     }
     if (!cJSON_IsNumber(vertical)) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [vertical]");
+        log_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [vertical]");
         goto end;
     }
 
     orientation_major = cJSON_GetObjectItemCaseSensitive(uncertainty_ellipsoidJSON, "orientationMajor");
     if (!orientation_major) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [orientation_major]");
+        log_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [orientation_major]");
         goto end;
     }
     if (!cJSON_IsNumber(orientation_major)) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [orientation_major]");
+        log_error("OpenAPI_uncertainty_ellipsoid_parseFromJSON() failed [orientation_major]");
         goto end;
     }
 
@@ -136,10 +136,10 @@ OpenAPI_uncertainty_ellipsoid_t *OpenAPI_uncertainty_ellipsoid_copy(OpenAPI_unce
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_uncertainty_ellipsoid_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed");
+        log_error("OpenAPI_uncertainty_ellipsoid_convertToJSON() failed");
         return NULL;
     }
 
@@ -147,14 +147,14 @@ OpenAPI_uncertainty_ellipsoid_t *OpenAPI_uncertainty_ellipsoid_copy(OpenAPI_unce
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

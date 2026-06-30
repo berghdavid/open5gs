@@ -12,7 +12,7 @@ OpenAPI_event_reporting_status_t *OpenAPI_event_reporting_status_create(
 )
 {
     OpenAPI_event_reporting_status_t *event_reporting_status_local_var = ogs_malloc(sizeof(OpenAPI_event_reporting_status_t));
-    ogs_assert(event_reporting_status_local_var);
+    log_assert(event_reporting_status_local_var);
 
     event_reporting_status_local_var->is_event_report_counter = is_event_report_counter;
     event_reporting_status_local_var->event_report_counter = event_report_counter;
@@ -38,21 +38,21 @@ cJSON *OpenAPI_event_reporting_status_convertToJSON(OpenAPI_event_reporting_stat
     OpenAPI_lnode_t *node = NULL;
 
     if (event_reporting_status == NULL) {
-        ogs_error("OpenAPI_event_reporting_status_convertToJSON() failed [EventReportingStatus]");
+        log_error("OpenAPI_event_reporting_status_convertToJSON() failed [EventReportingStatus]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (event_reporting_status->is_event_report_counter) {
     if (cJSON_AddNumberToObject(item, "eventReportCounter", event_reporting_status->event_report_counter) == NULL) {
-        ogs_error("OpenAPI_event_reporting_status_convertToJSON() failed [event_report_counter]");
+        log_error("OpenAPI_event_reporting_status_convertToJSON() failed [event_report_counter]");
         goto end;
     }
     }
 
     if (event_reporting_status->is_event_report_duration) {
     if (cJSON_AddNumberToObject(item, "eventReportDuration", event_reporting_status->event_report_duration) == NULL) {
-        ogs_error("OpenAPI_event_reporting_status_convertToJSON() failed [event_report_duration]");
+        log_error("OpenAPI_event_reporting_status_convertToJSON() failed [event_report_duration]");
         goto end;
     }
     }
@@ -70,7 +70,7 @@ OpenAPI_event_reporting_status_t *OpenAPI_event_reporting_status_parseFromJSON(c
     event_report_counter = cJSON_GetObjectItemCaseSensitive(event_reporting_statusJSON, "eventReportCounter");
     if (event_report_counter) {
     if (!cJSON_IsNumber(event_report_counter)) {
-        ogs_error("OpenAPI_event_reporting_status_parseFromJSON() failed [event_report_counter]");
+        log_error("OpenAPI_event_reporting_status_parseFromJSON() failed [event_report_counter]");
         goto end;
     }
     }
@@ -78,7 +78,7 @@ OpenAPI_event_reporting_status_t *OpenAPI_event_reporting_status_parseFromJSON(c
     event_report_duration = cJSON_GetObjectItemCaseSensitive(event_reporting_statusJSON, "eventReportDuration");
     if (event_report_duration) {
     if (!cJSON_IsNumber(event_report_duration)) {
-        ogs_error("OpenAPI_event_reporting_status_parseFromJSON() failed [event_report_duration]");
+        log_error("OpenAPI_event_reporting_status_parseFromJSON() failed [event_report_duration]");
         goto end;
     }
     }
@@ -100,10 +100,10 @@ OpenAPI_event_reporting_status_t *OpenAPI_event_reporting_status_copy(OpenAPI_ev
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_event_reporting_status_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_event_reporting_status_convertToJSON() failed");
+        log_error("OpenAPI_event_reporting_status_convertToJSON() failed");
         return NULL;
     }
 
@@ -111,14 +111,14 @@ OpenAPI_event_reporting_status_t *OpenAPI_event_reporting_status_copy(OpenAPI_ev
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

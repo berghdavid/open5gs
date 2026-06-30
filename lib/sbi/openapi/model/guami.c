@@ -10,7 +10,7 @@ OpenAPI_guami_t *OpenAPI_guami_create(
 )
 {
     OpenAPI_guami_t *guami_local_var = ogs_malloc(sizeof(OpenAPI_guami_t));
-    ogs_assert(guami_local_var);
+    log_assert(guami_local_var);
 
     guami_local_var->plmn_id = plmn_id;
     guami_local_var->amf_id = amf_id;
@@ -42,32 +42,32 @@ cJSON *OpenAPI_guami_convertToJSON(OpenAPI_guami_t *guami)
     OpenAPI_lnode_t *node = NULL;
 
     if (guami == NULL) {
-        ogs_error("OpenAPI_guami_convertToJSON() failed [Guami]");
+        log_error("OpenAPI_guami_convertToJSON() failed [Guami]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!guami->plmn_id) {
-        ogs_error("OpenAPI_guami_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_guami_convertToJSON() failed [plmn_id]");
         return NULL;
     }
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_nid_convertToJSON(guami->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_guami_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_guami_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_guami_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_guami_convertToJSON() failed [plmn_id]");
         goto end;
     }
 
     if (!guami->amf_id) {
-        ogs_error("OpenAPI_guami_convertToJSON() failed [amf_id]");
+        log_error("OpenAPI_guami_convertToJSON() failed [amf_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "amfId", guami->amf_id) == NULL) {
-        ogs_error("OpenAPI_guami_convertToJSON() failed [amf_id]");
+        log_error("OpenAPI_guami_convertToJSON() failed [amf_id]");
         goto end;
     }
 
@@ -84,22 +84,22 @@ OpenAPI_guami_t *OpenAPI_guami_parseFromJSON(cJSON *guamiJSON)
     cJSON *amf_id = NULL;
     plmn_id = cJSON_GetObjectItemCaseSensitive(guamiJSON, "plmnId");
     if (!plmn_id) {
-        ogs_error("OpenAPI_guami_parseFromJSON() failed [plmn_id]");
+        log_error("OpenAPI_guami_parseFromJSON() failed [plmn_id]");
         goto end;
     }
     plmn_id_local_nonprim = OpenAPI_plmn_id_nid_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_nid_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_nid_parseFromJSON failed [plmn_id]");
         goto end;
     }
 
     amf_id = cJSON_GetObjectItemCaseSensitive(guamiJSON, "amfId");
     if (!amf_id) {
-        ogs_error("OpenAPI_guami_parseFromJSON() failed [amf_id]");
+        log_error("OpenAPI_guami_parseFromJSON() failed [amf_id]");
         goto end;
     }
     if (!cJSON_IsString(amf_id)) {
-        ogs_error("OpenAPI_guami_parseFromJSON() failed [amf_id]");
+        log_error("OpenAPI_guami_parseFromJSON() failed [amf_id]");
         goto end;
     }
 
@@ -122,10 +122,10 @@ OpenAPI_guami_t *OpenAPI_guami_copy(OpenAPI_guami_t *dst, OpenAPI_guami_t *src)
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_guami_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_guami_convertToJSON() failed");
+        log_error("OpenAPI_guami_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_guami_t *OpenAPI_guami_copy(OpenAPI_guami_t *dst, OpenAPI_guami_t *src)
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

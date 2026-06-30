@@ -10,7 +10,7 @@ OpenAPI_sm_context_released_data_t *OpenAPI_sm_context_released_data_create(
 )
 {
     OpenAPI_sm_context_released_data_t *sm_context_released_data_local_var = ogs_malloc(sizeof(OpenAPI_sm_context_released_data_t));
-    ogs_assert(sm_context_released_data_local_var);
+    log_assert(sm_context_released_data_local_var);
 
     sm_context_released_data_local_var->small_data_rate_status = small_data_rate_status;
     sm_context_released_data_local_var->apn_rate_status = apn_rate_status;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_sm_context_released_data_convertToJSON(OpenAPI_sm_context_release
     OpenAPI_lnode_t *node = NULL;
 
     if (sm_context_released_data == NULL) {
-        ogs_error("OpenAPI_sm_context_released_data_convertToJSON() failed [SmContextReleasedData]");
+        log_error("OpenAPI_sm_context_released_data_convertToJSON() failed [SmContextReleasedData]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_sm_context_released_data_convertToJSON(OpenAPI_sm_context_release
     if (sm_context_released_data->small_data_rate_status) {
     cJSON *small_data_rate_status_local_JSON = OpenAPI_small_data_rate_status_convertToJSON(sm_context_released_data->small_data_rate_status);
     if (small_data_rate_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_sm_context_released_data_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_sm_context_released_data_convertToJSON() failed [small_data_rate_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smallDataRateStatus", small_data_rate_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sm_context_released_data_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_sm_context_released_data_convertToJSON() failed [small_data_rate_status]");
         goto end;
     }
     }
@@ -63,12 +63,12 @@ cJSON *OpenAPI_sm_context_released_data_convertToJSON(OpenAPI_sm_context_release
     if (sm_context_released_data->apn_rate_status) {
     cJSON *apn_rate_status_local_JSON = OpenAPI_apn_rate_status_convertToJSON(sm_context_released_data->apn_rate_status);
     if (apn_rate_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_sm_context_released_data_convertToJSON() failed [apn_rate_status]");
+        log_error("OpenAPI_sm_context_released_data_convertToJSON() failed [apn_rate_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "apnRateStatus", apn_rate_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sm_context_released_data_convertToJSON() failed [apn_rate_status]");
+        log_error("OpenAPI_sm_context_released_data_convertToJSON() failed [apn_rate_status]");
         goto end;
     }
     }
@@ -89,7 +89,7 @@ OpenAPI_sm_context_released_data_t *OpenAPI_sm_context_released_data_parseFromJS
     if (small_data_rate_status) {
     small_data_rate_status_local_nonprim = OpenAPI_small_data_rate_status_parseFromJSON(small_data_rate_status);
     if (!small_data_rate_status_local_nonprim) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON failed [small_data_rate_status]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON failed [small_data_rate_status]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_sm_context_released_data_t *OpenAPI_sm_context_released_data_parseFromJS
     if (apn_rate_status) {
     apn_rate_status_local_nonprim = OpenAPI_apn_rate_status_parseFromJSON(apn_rate_status);
     if (!apn_rate_status_local_nonprim) {
-        ogs_error("OpenAPI_apn_rate_status_parseFromJSON failed [apn_rate_status]");
+        log_error("OpenAPI_apn_rate_status_parseFromJSON failed [apn_rate_status]");
         goto end;
     }
     }
@@ -126,10 +126,10 @@ OpenAPI_sm_context_released_data_t *OpenAPI_sm_context_released_data_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sm_context_released_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sm_context_released_data_convertToJSON() failed");
+        log_error("OpenAPI_sm_context_released_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -137,14 +137,14 @@ OpenAPI_sm_context_released_data_t *OpenAPI_sm_context_released_data_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

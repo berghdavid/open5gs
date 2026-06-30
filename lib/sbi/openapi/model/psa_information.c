@@ -12,7 +12,7 @@ OpenAPI_psa_information_t *OpenAPI_psa_information_create(
 )
 {
     OpenAPI_psa_information_t *psa_information_local_var = ogs_malloc(sizeof(OpenAPI_psa_information_t));
-    ogs_assert(psa_information_local_var);
+    log_assert(psa_information_local_var);
 
     psa_information_local_var->psa_ind = psa_ind;
     psa_information_local_var->dnai_list = dnai_list;
@@ -53,14 +53,14 @@ cJSON *OpenAPI_psa_information_convertToJSON(OpenAPI_psa_information_t *psa_info
     OpenAPI_lnode_t *node = NULL;
 
     if (psa_information == NULL) {
-        ogs_error("OpenAPI_psa_information_convertToJSON() failed [PsaInformation]");
+        log_error("OpenAPI_psa_information_convertToJSON() failed [PsaInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (psa_information->psa_ind != OpenAPI_psa_indication_NULL) {
     if (cJSON_AddStringToObject(item, "psaInd", OpenAPI_psa_indication_ToString(psa_information->psa_ind)) == NULL) {
-        ogs_error("OpenAPI_psa_information_convertToJSON() failed [psa_ind]");
+        log_error("OpenAPI_psa_information_convertToJSON() failed [psa_ind]");
         goto end;
     }
     }
@@ -68,12 +68,12 @@ cJSON *OpenAPI_psa_information_convertToJSON(OpenAPI_psa_information_t *psa_info
     if (psa_information->dnai_list) {
     cJSON *dnai_listList = cJSON_AddArrayToObject(item, "dnaiList");
     if (dnai_listList == NULL) {
-        ogs_error("OpenAPI_psa_information_convertToJSON() failed [dnai_list]");
+        log_error("OpenAPI_psa_information_convertToJSON() failed [dnai_list]");
         goto end;
     }
     OpenAPI_list_for_each(psa_information->dnai_list, node) {
         if (cJSON_AddStringToObject(dnai_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_psa_information_convertToJSON() failed [dnai_list]");
+            log_error("OpenAPI_psa_information_convertToJSON() failed [dnai_list]");
             goto end;
         }
     }
@@ -81,14 +81,14 @@ cJSON *OpenAPI_psa_information_convertToJSON(OpenAPI_psa_information_t *psa_info
 
     if (psa_information->ue_ipv6_prefix) {
     if (cJSON_AddStringToObject(item, "ueIpv6Prefix", psa_information->ue_ipv6_prefix) == NULL) {
-        ogs_error("OpenAPI_psa_information_convertToJSON() failed [ue_ipv6_prefix]");
+        log_error("OpenAPI_psa_information_convertToJSON() failed [ue_ipv6_prefix]");
         goto end;
     }
     }
 
     if (psa_information->psa_upf_id) {
     if (cJSON_AddStringToObject(item, "psaUpfId", psa_information->psa_upf_id) == NULL) {
-        ogs_error("OpenAPI_psa_information_convertToJSON() failed [psa_upf_id]");
+        log_error("OpenAPI_psa_information_convertToJSON() failed [psa_upf_id]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_psa_information_t *OpenAPI_psa_information_parseFromJSON(cJSON *psa_info
     psa_ind = cJSON_GetObjectItemCaseSensitive(psa_informationJSON, "psaInd");
     if (psa_ind) {
     if (!cJSON_IsString(psa_ind)) {
-        ogs_error("OpenAPI_psa_information_parseFromJSON() failed [psa_ind]");
+        log_error("OpenAPI_psa_information_parseFromJSON() failed [psa_ind]");
         goto end;
     }
     psa_indVariable = OpenAPI_psa_indication_FromString(psa_ind->valuestring);
@@ -120,7 +120,7 @@ OpenAPI_psa_information_t *OpenAPI_psa_information_parseFromJSON(cJSON *psa_info
     if (dnai_list) {
         cJSON *dnai_list_local = NULL;
         if (!cJSON_IsArray(dnai_list)) {
-            ogs_error("OpenAPI_psa_information_parseFromJSON() failed [dnai_list]");
+            log_error("OpenAPI_psa_information_parseFromJSON() failed [dnai_list]");
             goto end;
         }
 
@@ -130,7 +130,7 @@ OpenAPI_psa_information_t *OpenAPI_psa_information_parseFromJSON(cJSON *psa_info
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(dnai_list_local)) {
-                ogs_error("OpenAPI_psa_information_parseFromJSON() failed [dnai_list]");
+                log_error("OpenAPI_psa_information_parseFromJSON() failed [dnai_list]");
                 goto end;
             }
             OpenAPI_list_add(dnai_listList, ogs_strdup(dnai_list_local->valuestring));
@@ -140,7 +140,7 @@ OpenAPI_psa_information_t *OpenAPI_psa_information_parseFromJSON(cJSON *psa_info
     ue_ipv6_prefix = cJSON_GetObjectItemCaseSensitive(psa_informationJSON, "ueIpv6Prefix");
     if (ue_ipv6_prefix) {
     if (!cJSON_IsString(ue_ipv6_prefix) && !cJSON_IsNull(ue_ipv6_prefix)) {
-        ogs_error("OpenAPI_psa_information_parseFromJSON() failed [ue_ipv6_prefix]");
+        log_error("OpenAPI_psa_information_parseFromJSON() failed [ue_ipv6_prefix]");
         goto end;
     }
     }
@@ -148,7 +148,7 @@ OpenAPI_psa_information_t *OpenAPI_psa_information_parseFromJSON(cJSON *psa_info
     psa_upf_id = cJSON_GetObjectItemCaseSensitive(psa_informationJSON, "psaUpfId");
     if (psa_upf_id) {
     if (!cJSON_IsString(psa_upf_id) && !cJSON_IsNull(psa_upf_id)) {
-        ogs_error("OpenAPI_psa_information_parseFromJSON() failed [psa_upf_id]");
+        log_error("OpenAPI_psa_information_parseFromJSON() failed [psa_upf_id]");
         goto end;
     }
     }
@@ -177,10 +177,10 @@ OpenAPI_psa_information_t *OpenAPI_psa_information_copy(OpenAPI_psa_information_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_psa_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_psa_information_convertToJSON() failed");
+        log_error("OpenAPI_psa_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -188,14 +188,14 @@ OpenAPI_psa_information_t *OpenAPI_psa_information_copy(OpenAPI_psa_information_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

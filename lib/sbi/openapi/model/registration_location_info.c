@@ -13,7 +13,7 @@ OpenAPI_registration_location_info_t *OpenAPI_registration_location_info_create(
 )
 {
     OpenAPI_registration_location_info_t *registration_location_info_local_var = ogs_malloc(sizeof(OpenAPI_registration_location_info_t));
-    ogs_assert(registration_location_info_local_var);
+    log_assert(registration_location_info_local_var);
 
     registration_location_info_local_var->amf_instance_id = amf_instance_id;
     registration_location_info_local_var->guami = guami;
@@ -60,29 +60,29 @@ cJSON *OpenAPI_registration_location_info_convertToJSON(OpenAPI_registration_loc
     OpenAPI_lnode_t *node = NULL;
 
     if (registration_location_info == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [RegistrationLocationInfo]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [RegistrationLocationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!registration_location_info->amf_instance_id) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [amf_instance_id]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [amf_instance_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "amfInstanceId", registration_location_info->amf_instance_id) == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [amf_instance_id]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [amf_instance_id]");
         goto end;
     }
 
     if (registration_location_info->guami) {
     cJSON *guami_local_JSON = OpenAPI_guami_convertToJSON(registration_location_info->guami);
     if (guami_local_JSON == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [guami]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [guami]");
         goto end;
     }
     cJSON_AddItemToObject(item, "guami", guami_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [guami]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [guami]");
         goto end;
     }
     }
@@ -90,12 +90,12 @@ cJSON *OpenAPI_registration_location_info_convertToJSON(OpenAPI_registration_loc
     if (registration_location_info->plmn_id) {
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(registration_location_info->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [plmn_id]");
         goto end;
     }
     }
@@ -103,28 +103,28 @@ cJSON *OpenAPI_registration_location_info_convertToJSON(OpenAPI_registration_loc
     if (registration_location_info->vgmlc_address) {
     cJSON *vgmlc_address_local_JSON = OpenAPI_vgmlc_address_convertToJSON(registration_location_info->vgmlc_address);
     if (vgmlc_address_local_JSON == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [vgmlc_address]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [vgmlc_address]");
         goto end;
     }
     cJSON_AddItemToObject(item, "vgmlcAddress", vgmlc_address_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [vgmlc_address]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [vgmlc_address]");
         goto end;
     }
     }
 
     if (registration_location_info->access_type_list == OpenAPI_access_type_NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [access_type_list]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [access_type_list]");
         return NULL;
     }
     cJSON *access_type_listList = cJSON_AddArrayToObject(item, "accessTypeList");
     if (access_type_listList == NULL) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [access_type_list]");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed [access_type_list]");
         goto end;
     }
     OpenAPI_list_for_each(registration_location_info->access_type_list, node) {
         if (cJSON_AddStringToObject(access_type_listList, "", OpenAPI_access_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_registration_location_info_convertToJSON() failed [access_type_list]");
+            log_error("OpenAPI_registration_location_info_convertToJSON() failed [access_type_list]");
             goto end;
         }
     }
@@ -148,11 +148,11 @@ OpenAPI_registration_location_info_t *OpenAPI_registration_location_info_parseFr
     OpenAPI_list_t *access_type_listList = NULL;
     amf_instance_id = cJSON_GetObjectItemCaseSensitive(registration_location_infoJSON, "amfInstanceId");
     if (!amf_instance_id) {
-        ogs_error("OpenAPI_registration_location_info_parseFromJSON() failed [amf_instance_id]");
+        log_error("OpenAPI_registration_location_info_parseFromJSON() failed [amf_instance_id]");
         goto end;
     }
     if (!cJSON_IsString(amf_instance_id)) {
-        ogs_error("OpenAPI_registration_location_info_parseFromJSON() failed [amf_instance_id]");
+        log_error("OpenAPI_registration_location_info_parseFromJSON() failed [amf_instance_id]");
         goto end;
     }
 
@@ -160,7 +160,7 @@ OpenAPI_registration_location_info_t *OpenAPI_registration_location_info_parseFr
     if (guami) {
     guami_local_nonprim = OpenAPI_guami_parseFromJSON(guami);
     if (!guami_local_nonprim) {
-        ogs_error("OpenAPI_guami_parseFromJSON failed [guami]");
+        log_error("OpenAPI_guami_parseFromJSON failed [guami]");
         goto end;
     }
     }
@@ -169,7 +169,7 @@ OpenAPI_registration_location_info_t *OpenAPI_registration_location_info_parseFr
     if (plmn_id) {
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
     }
@@ -178,19 +178,19 @@ OpenAPI_registration_location_info_t *OpenAPI_registration_location_info_parseFr
     if (vgmlc_address) {
     vgmlc_address_local_nonprim = OpenAPI_vgmlc_address_parseFromJSON(vgmlc_address);
     if (!vgmlc_address_local_nonprim) {
-        ogs_error("OpenAPI_vgmlc_address_parseFromJSON failed [vgmlc_address]");
+        log_error("OpenAPI_vgmlc_address_parseFromJSON failed [vgmlc_address]");
         goto end;
     }
     }
 
     access_type_list = cJSON_GetObjectItemCaseSensitive(registration_location_infoJSON, "accessTypeList");
     if (!access_type_list) {
-        ogs_error("OpenAPI_registration_location_info_parseFromJSON() failed [access_type_list]");
+        log_error("OpenAPI_registration_location_info_parseFromJSON() failed [access_type_list]");
         goto end;
     }
         cJSON *access_type_list_local = NULL;
         if (!cJSON_IsArray(access_type_list)) {
-            ogs_error("OpenAPI_registration_location_info_parseFromJSON() failed [access_type_list]");
+            log_error("OpenAPI_registration_location_info_parseFromJSON() failed [access_type_list]");
             goto end;
         }
 
@@ -199,19 +199,19 @@ OpenAPI_registration_location_info_t *OpenAPI_registration_location_info_parseFr
         cJSON_ArrayForEach(access_type_list_local, access_type_list) {
             OpenAPI_access_type_e localEnum = OpenAPI_access_type_NULL;
             if (!cJSON_IsString(access_type_list_local)) {
-                ogs_error("OpenAPI_registration_location_info_parseFromJSON() failed [access_type_list]");
+                log_error("OpenAPI_registration_location_info_parseFromJSON() failed [access_type_list]");
                 goto end;
             }
             localEnum = OpenAPI_access_type_FromString(access_type_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"access_type_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"access_type_list\" is not supported. Ignoring it ...",
                          access_type_list_local->valuestring);
             } else {
                 OpenAPI_list_add(access_type_listList, (void *)localEnum);
             }
         }
         if (access_type_listList->count == 0) {
-            ogs_error("OpenAPI_registration_location_info_parseFromJSON() failed: Expected access_type_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_registration_location_info_parseFromJSON() failed: Expected access_type_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
 
@@ -249,10 +249,10 @@ OpenAPI_registration_location_info_t *OpenAPI_registration_location_info_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_registration_location_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_registration_location_info_convertToJSON() failed");
+        log_error("OpenAPI_registration_location_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -260,14 +260,14 @@ OpenAPI_registration_location_info_t *OpenAPI_registration_location_info_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

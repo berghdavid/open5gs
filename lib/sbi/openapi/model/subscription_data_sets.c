@@ -25,7 +25,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_create(
 )
 {
     OpenAPI_subscription_data_sets_t *subscription_data_sets_local_var = ogs_malloc(sizeof(OpenAPI_subscription_data_sets_t));
-    ogs_assert(subscription_data_sets_local_var);
+    log_assert(subscription_data_sets_local_var);
 
     subscription_data_sets_local_var->am_data = am_data;
     subscription_data_sets_local_var->smf_sel_data = smf_sel_data;
@@ -128,7 +128,7 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     OpenAPI_lnode_t *node = NULL;
 
     if (subscription_data_sets == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [SubscriptionDataSets]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [SubscriptionDataSets]");
         return NULL;
     }
 
@@ -136,12 +136,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->am_data) {
     cJSON *am_data_local_JSON = OpenAPI_access_and_mobility_subscription_data_convertToJSON(subscription_data_sets->am_data);
     if (am_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [am_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [am_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "amData", am_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [am_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [am_data]");
         goto end;
     }
     }
@@ -149,12 +149,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->smf_sel_data) {
     cJSON *smf_sel_data_local_JSON = OpenAPI_smf_selection_subscription_data_convertToJSON(subscription_data_sets->smf_sel_data);
     if (smf_sel_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [smf_sel_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [smf_sel_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smfSelData", smf_sel_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [smf_sel_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [smf_sel_data]");
         goto end;
     }
     }
@@ -162,12 +162,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->uec_amf_data) {
     cJSON *uec_amf_data_local_JSON = OpenAPI_ue_context_in_amf_data_convertToJSON(subscription_data_sets->uec_amf_data);
     if (uec_amf_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_amf_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_amf_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "uecAmfData", uec_amf_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_amf_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_amf_data]");
         goto end;
     }
     }
@@ -175,12 +175,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->uec_smf_data) {
     cJSON *uec_smf_data_local_JSON = OpenAPI_ue_context_in_smf_data_convertToJSON(subscription_data_sets->uec_smf_data);
     if (uec_smf_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_smf_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_smf_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "uecSmfData", uec_smf_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_smf_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_smf_data]");
         goto end;
     }
     }
@@ -188,12 +188,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->uec_smsf_data) {
     cJSON *uec_smsf_data_local_JSON = OpenAPI_ue_context_in_smsf_data_convertToJSON(subscription_data_sets->uec_smsf_data);
     if (uec_smsf_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_smsf_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_smsf_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "uecSmsfData", uec_smsf_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_smsf_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uec_smsf_data]");
         goto end;
     }
     }
@@ -201,12 +201,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->sms_subs_data) {
     cJSON *sms_subs_data_local_JSON = OpenAPI_sms_subscription_data_convertToJSON(subscription_data_sets->sms_subs_data);
     if (sms_subs_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sms_subs_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sms_subs_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smsSubsData", sms_subs_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sms_subs_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sms_subs_data]");
         goto end;
     }
     }
@@ -214,12 +214,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->sm_data) {
     cJSON *sm_data_local_JSON = OpenAPI_sm_subs_data_convertToJSON(subscription_data_sets->sm_data);
     if (sm_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sm_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sm_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smData", sm_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sm_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sm_data]");
         goto end;
     }
     }
@@ -227,17 +227,17 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->trace_data) {
     cJSON *trace_data_local_JSON = OpenAPI_trace_data_convertToJSON(subscription_data_sets->trace_data);
     if (trace_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [trace_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [trace_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "traceData", trace_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [trace_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [trace_data]");
         goto end;
     }
     } else if (subscription_data_sets->is_trace_data_null) {
         if (cJSON_AddNullToObject(item, "traceData") == NULL) {
-            ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [trace_data]");
+            log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [trace_data]");
             goto end;
         }
     }
@@ -245,12 +245,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->sms_mng_data) {
     cJSON *sms_mng_data_local_JSON = OpenAPI_sms_management_subscription_data_convertToJSON(subscription_data_sets->sms_mng_data);
     if (sms_mng_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sms_mng_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sms_mng_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smsMngData", sms_mng_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sms_mng_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [sms_mng_data]");
         goto end;
     }
     }
@@ -258,12 +258,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->lcs_privacy_data) {
     cJSON *lcs_privacy_data_local_JSON = OpenAPI_lcs_privacy_data_convertToJSON(subscription_data_sets->lcs_privacy_data);
     if (lcs_privacy_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_privacy_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_privacy_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "lcsPrivacyData", lcs_privacy_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_privacy_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_privacy_data]");
         goto end;
     }
     }
@@ -271,12 +271,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->lcs_mo_data) {
     cJSON *lcs_mo_data_local_JSON = OpenAPI_lcs_mo_data_convertToJSON(subscription_data_sets->lcs_mo_data);
     if (lcs_mo_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_mo_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_mo_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "lcsMoData", lcs_mo_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_mo_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_mo_data]");
         goto end;
     }
     }
@@ -284,12 +284,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->v2x_data) {
     cJSON *v2x_data_local_JSON = OpenAPI_v2x_subscription_data_convertToJSON(subscription_data_sets->v2x_data);
     if (v2x_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [v2x_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [v2x_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "v2xData", v2x_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [v2x_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [v2x_data]");
         goto end;
     }
     }
@@ -297,12 +297,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->lcs_broadcast_assistance_types_data) {
     cJSON *lcs_broadcast_assistance_types_data_local_JSON = OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON(subscription_data_sets->lcs_broadcast_assistance_types_data);
     if (lcs_broadcast_assistance_types_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_broadcast_assistance_types_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_broadcast_assistance_types_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "lcsBroadcastAssistanceTypesData", lcs_broadcast_assistance_types_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_broadcast_assistance_types_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [lcs_broadcast_assistance_types_data]");
         goto end;
     }
     }
@@ -310,12 +310,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->prose_data) {
     cJSON *prose_data_local_JSON = OpenAPI_prose_subscription_data_convertToJSON(subscription_data_sets->prose_data);
     if (prose_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [prose_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [prose_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "proseData", prose_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [prose_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [prose_data]");
         goto end;
     }
     }
@@ -323,12 +323,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->mbs_data) {
     cJSON *mbs_data_local_JSON = OpenAPI_mbs_subscription_data_convertToJSON(subscription_data_sets->mbs_data);
     if (mbs_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [mbs_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [mbs_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "mbsData", mbs_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [mbs_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [mbs_data]");
         goto end;
     }
     }
@@ -336,12 +336,12 @@ cJSON *OpenAPI_subscription_data_sets_convertToJSON(OpenAPI_subscription_data_se
     if (subscription_data_sets->uc_data) {
     cJSON *uc_data_local_JSON = OpenAPI_uc_subscription_data_convertToJSON(subscription_data_sets->uc_data);
     if (uc_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uc_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uc_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ucData", uc_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uc_data]");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed [uc_data]");
         goto end;
     }
     }
@@ -390,7 +390,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (am_data) {
     am_data_local_nonprim = OpenAPI_access_and_mobility_subscription_data_parseFromJSON(am_data);
     if (!am_data_local_nonprim) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_parseFromJSON failed [am_data]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_parseFromJSON failed [am_data]");
         goto end;
     }
     }
@@ -399,7 +399,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (smf_sel_data) {
     smf_sel_data_local_nonprim = OpenAPI_smf_selection_subscription_data_parseFromJSON(smf_sel_data);
     if (!smf_sel_data_local_nonprim) {
-        ogs_error("OpenAPI_smf_selection_subscription_data_parseFromJSON failed [smf_sel_data]");
+        log_error("OpenAPI_smf_selection_subscription_data_parseFromJSON failed [smf_sel_data]");
         goto end;
     }
     }
@@ -408,7 +408,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (uec_amf_data) {
     uec_amf_data_local_nonprim = OpenAPI_ue_context_in_amf_data_parseFromJSON(uec_amf_data);
     if (!uec_amf_data_local_nonprim) {
-        ogs_error("OpenAPI_ue_context_in_amf_data_parseFromJSON failed [uec_amf_data]");
+        log_error("OpenAPI_ue_context_in_amf_data_parseFromJSON failed [uec_amf_data]");
         goto end;
     }
     }
@@ -417,7 +417,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (uec_smf_data) {
     uec_smf_data_local_nonprim = OpenAPI_ue_context_in_smf_data_parseFromJSON(uec_smf_data);
     if (!uec_smf_data_local_nonprim) {
-        ogs_error("OpenAPI_ue_context_in_smf_data_parseFromJSON failed [uec_smf_data]");
+        log_error("OpenAPI_ue_context_in_smf_data_parseFromJSON failed [uec_smf_data]");
         goto end;
     }
     }
@@ -426,7 +426,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (uec_smsf_data) {
     uec_smsf_data_local_nonprim = OpenAPI_ue_context_in_smsf_data_parseFromJSON(uec_smsf_data);
     if (!uec_smsf_data_local_nonprim) {
-        ogs_error("OpenAPI_ue_context_in_smsf_data_parseFromJSON failed [uec_smsf_data]");
+        log_error("OpenAPI_ue_context_in_smsf_data_parseFromJSON failed [uec_smsf_data]");
         goto end;
     }
     }
@@ -435,7 +435,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (sms_subs_data) {
     sms_subs_data_local_nonprim = OpenAPI_sms_subscription_data_parseFromJSON(sms_subs_data);
     if (!sms_subs_data_local_nonprim) {
-        ogs_error("OpenAPI_sms_subscription_data_parseFromJSON failed [sms_subs_data]");
+        log_error("OpenAPI_sms_subscription_data_parseFromJSON failed [sms_subs_data]");
         goto end;
     }
     }
@@ -444,7 +444,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (sm_data) {
     sm_data_local_nonprim = OpenAPI_sm_subs_data_parseFromJSON(sm_data);
     if (!sm_data_local_nonprim) {
-        ogs_error("OpenAPI_sm_subs_data_parseFromJSON failed [sm_data]");
+        log_error("OpenAPI_sm_subs_data_parseFromJSON failed [sm_data]");
         goto end;
     }
     }
@@ -454,7 +454,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (!cJSON_IsNull(trace_data)) {
     trace_data_local_nonprim = OpenAPI_trace_data_parseFromJSON(trace_data);
     if (!trace_data_local_nonprim) {
-        ogs_error("OpenAPI_trace_data_parseFromJSON failed [trace_data]");
+        log_error("OpenAPI_trace_data_parseFromJSON failed [trace_data]");
         goto end;
     }
     }
@@ -464,7 +464,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (sms_mng_data) {
     sms_mng_data_local_nonprim = OpenAPI_sms_management_subscription_data_parseFromJSON(sms_mng_data);
     if (!sms_mng_data_local_nonprim) {
-        ogs_error("OpenAPI_sms_management_subscription_data_parseFromJSON failed [sms_mng_data]");
+        log_error("OpenAPI_sms_management_subscription_data_parseFromJSON failed [sms_mng_data]");
         goto end;
     }
     }
@@ -473,7 +473,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (lcs_privacy_data) {
     lcs_privacy_data_local_nonprim = OpenAPI_lcs_privacy_data_parseFromJSON(lcs_privacy_data);
     if (!lcs_privacy_data_local_nonprim) {
-        ogs_error("OpenAPI_lcs_privacy_data_parseFromJSON failed [lcs_privacy_data]");
+        log_error("OpenAPI_lcs_privacy_data_parseFromJSON failed [lcs_privacy_data]");
         goto end;
     }
     }
@@ -482,7 +482,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (lcs_mo_data) {
     lcs_mo_data_local_nonprim = OpenAPI_lcs_mo_data_parseFromJSON(lcs_mo_data);
     if (!lcs_mo_data_local_nonprim) {
-        ogs_error("OpenAPI_lcs_mo_data_parseFromJSON failed [lcs_mo_data]");
+        log_error("OpenAPI_lcs_mo_data_parseFromJSON failed [lcs_mo_data]");
         goto end;
     }
     }
@@ -491,7 +491,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (v2x_data) {
     v2x_data_local_nonprim = OpenAPI_v2x_subscription_data_parseFromJSON(v2x_data);
     if (!v2x_data_local_nonprim) {
-        ogs_error("OpenAPI_v2x_subscription_data_parseFromJSON failed [v2x_data]");
+        log_error("OpenAPI_v2x_subscription_data_parseFromJSON failed [v2x_data]");
         goto end;
     }
     }
@@ -500,7 +500,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (lcs_broadcast_assistance_types_data) {
     lcs_broadcast_assistance_types_data_local_nonprim = OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON(lcs_broadcast_assistance_types_data);
     if (!lcs_broadcast_assistance_types_data_local_nonprim) {
-        ogs_error("OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON failed [lcs_broadcast_assistance_types_data]");
+        log_error("OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON failed [lcs_broadcast_assistance_types_data]");
         goto end;
     }
     }
@@ -509,7 +509,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (prose_data) {
     prose_data_local_nonprim = OpenAPI_prose_subscription_data_parseFromJSON(prose_data);
     if (!prose_data_local_nonprim) {
-        ogs_error("OpenAPI_prose_subscription_data_parseFromJSON failed [prose_data]");
+        log_error("OpenAPI_prose_subscription_data_parseFromJSON failed [prose_data]");
         goto end;
     }
     }
@@ -518,7 +518,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (mbs_data) {
     mbs_data_local_nonprim = OpenAPI_mbs_subscription_data_parseFromJSON(mbs_data);
     if (!mbs_data_local_nonprim) {
-        ogs_error("OpenAPI_mbs_subscription_data_parseFromJSON failed [mbs_data]");
+        log_error("OpenAPI_mbs_subscription_data_parseFromJSON failed [mbs_data]");
         goto end;
     }
     }
@@ -527,7 +527,7 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_parseFromJSON(c
     if (uc_data) {
     uc_data_local_nonprim = OpenAPI_uc_subscription_data_parseFromJSON(uc_data);
     if (!uc_data_local_nonprim) {
-        ogs_error("OpenAPI_uc_subscription_data_parseFromJSON failed [uc_data]");
+        log_error("OpenAPI_uc_subscription_data_parseFromJSON failed [uc_data]");
         goto end;
     }
     }
@@ -626,10 +626,10 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_copy(OpenAPI_su
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_subscription_data_sets_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_subscription_data_sets_convertToJSON() failed");
+        log_error("OpenAPI_subscription_data_sets_convertToJSON() failed");
         return NULL;
     }
 
@@ -637,14 +637,14 @@ OpenAPI_subscription_data_sets_t *OpenAPI_subscription_data_sets_copy(OpenAPI_su
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

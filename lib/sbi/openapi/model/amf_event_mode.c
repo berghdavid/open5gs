@@ -18,7 +18,7 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_create(
 )
 {
     OpenAPI_amf_event_mode_t *amf_event_mode_local_var = ogs_malloc(sizeof(OpenAPI_amf_event_mode_t));
-    ogs_assert(amf_event_mode_local_var);
+    log_assert(amf_event_mode_local_var);
 
     amf_event_mode_local_var->trigger = trigger;
     amf_event_mode_local_var->is_max_reports = is_max_reports;
@@ -62,50 +62,50 @@ cJSON *OpenAPI_amf_event_mode_convertToJSON(OpenAPI_amf_event_mode_t *amf_event_
     OpenAPI_lnode_t *node = NULL;
 
     if (amf_event_mode == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [AmfEventMode]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [AmfEventMode]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!amf_event_mode->trigger) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [trigger]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [trigger]");
         return NULL;
     }
     cJSON *trigger_local_JSON = OpenAPI_amf_event_trigger_convertToJSON(amf_event_mode->trigger);
     if (trigger_local_JSON == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [trigger]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [trigger]");
         goto end;
     }
     cJSON_AddItemToObject(item, "trigger", trigger_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [trigger]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [trigger]");
         goto end;
     }
 
     if (amf_event_mode->is_max_reports) {
     if (cJSON_AddNumberToObject(item, "maxReports", amf_event_mode->max_reports) == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [max_reports]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [max_reports]");
         goto end;
     }
     }
 
     if (amf_event_mode->expiry) {
     if (cJSON_AddStringToObject(item, "expiry", amf_event_mode->expiry) == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [expiry]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [expiry]");
         goto end;
     }
     }
 
     if (amf_event_mode->is_rep_period) {
     if (cJSON_AddNumberToObject(item, "repPeriod", amf_event_mode->rep_period) == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [rep_period]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [rep_period]");
         goto end;
     }
     }
 
     if (amf_event_mode->is_samp_ratio) {
     if (cJSON_AddNumberToObject(item, "sampRatio", amf_event_mode->samp_ratio) == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [samp_ratio]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [samp_ratio]");
         goto end;
     }
     }
@@ -113,12 +113,12 @@ cJSON *OpenAPI_amf_event_mode_convertToJSON(OpenAPI_amf_event_mode_t *amf_event_
     if (amf_event_mode->partitioning_criteria != OpenAPI_partitioning_criteria_NULL) {
     cJSON *partitioning_criteriaList = cJSON_AddArrayToObject(item, "partitioningCriteria");
     if (partitioning_criteriaList == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [partitioning_criteria]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [partitioning_criteria]");
         goto end;
     }
     OpenAPI_list_for_each(amf_event_mode->partitioning_criteria, node) {
         if (cJSON_AddStringToObject(partitioning_criteriaList, "", OpenAPI_partitioning_criteria_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [partitioning_criteria]");
+            log_error("OpenAPI_amf_event_mode_convertToJSON() failed [partitioning_criteria]");
             goto end;
         }
     }
@@ -126,7 +126,7 @@ cJSON *OpenAPI_amf_event_mode_convertToJSON(OpenAPI_amf_event_mode_t *amf_event_
 
     if (amf_event_mode->notif_flag != OpenAPI_notification_flag_NULL) {
     if (cJSON_AddStringToObject(item, "notifFlag", OpenAPI_notification_flag_ToString(amf_event_mode->notif_flag)) == NULL) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed [notif_flag]");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed [notif_flag]");
         goto end;
     }
     }
@@ -151,19 +151,19 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_parseFromJSON(cJSON *amf_event_
     OpenAPI_notification_flag_e notif_flagVariable = 0;
     trigger = cJSON_GetObjectItemCaseSensitive(amf_event_modeJSON, "trigger");
     if (!trigger) {
-        ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed [trigger]");
+        log_error("OpenAPI_amf_event_mode_parseFromJSON() failed [trigger]");
         goto end;
     }
     trigger_local_nonprim = OpenAPI_amf_event_trigger_parseFromJSON(trigger);
     if (!trigger_local_nonprim) {
-        ogs_error("OpenAPI_amf_event_trigger_parseFromJSON failed [trigger]");
+        log_error("OpenAPI_amf_event_trigger_parseFromJSON failed [trigger]");
         goto end;
     }
 
     max_reports = cJSON_GetObjectItemCaseSensitive(amf_event_modeJSON, "maxReports");
     if (max_reports) {
     if (!cJSON_IsNumber(max_reports)) {
-        ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed [max_reports]");
+        log_error("OpenAPI_amf_event_mode_parseFromJSON() failed [max_reports]");
         goto end;
     }
     }
@@ -171,7 +171,7 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_parseFromJSON(cJSON *amf_event_
     expiry = cJSON_GetObjectItemCaseSensitive(amf_event_modeJSON, "expiry");
     if (expiry) {
     if (!cJSON_IsString(expiry) && !cJSON_IsNull(expiry)) {
-        ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed [expiry]");
+        log_error("OpenAPI_amf_event_mode_parseFromJSON() failed [expiry]");
         goto end;
     }
     }
@@ -179,7 +179,7 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_parseFromJSON(cJSON *amf_event_
     rep_period = cJSON_GetObjectItemCaseSensitive(amf_event_modeJSON, "repPeriod");
     if (rep_period) {
     if (!cJSON_IsNumber(rep_period)) {
-        ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed [rep_period]");
+        log_error("OpenAPI_amf_event_mode_parseFromJSON() failed [rep_period]");
         goto end;
     }
     }
@@ -187,7 +187,7 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_parseFromJSON(cJSON *amf_event_
     samp_ratio = cJSON_GetObjectItemCaseSensitive(amf_event_modeJSON, "sampRatio");
     if (samp_ratio) {
     if (!cJSON_IsNumber(samp_ratio)) {
-        ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed [samp_ratio]");
+        log_error("OpenAPI_amf_event_mode_parseFromJSON() failed [samp_ratio]");
         goto end;
     }
     }
@@ -196,7 +196,7 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_parseFromJSON(cJSON *amf_event_
     if (partitioning_criteria) {
         cJSON *partitioning_criteria_local = NULL;
         if (!cJSON_IsArray(partitioning_criteria)) {
-            ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed [partitioning_criteria]");
+            log_error("OpenAPI_amf_event_mode_parseFromJSON() failed [partitioning_criteria]");
             goto end;
         }
 
@@ -205,19 +205,19 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_parseFromJSON(cJSON *amf_event_
         cJSON_ArrayForEach(partitioning_criteria_local, partitioning_criteria) {
             OpenAPI_partitioning_criteria_e localEnum = OpenAPI_partitioning_criteria_NULL;
             if (!cJSON_IsString(partitioning_criteria_local)) {
-                ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed [partitioning_criteria]");
+                log_error("OpenAPI_amf_event_mode_parseFromJSON() failed [partitioning_criteria]");
                 goto end;
             }
             localEnum = OpenAPI_partitioning_criteria_FromString(partitioning_criteria_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"partitioning_criteria\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"partitioning_criteria\" is not supported. Ignoring it ...",
                          partitioning_criteria_local->valuestring);
             } else {
                 OpenAPI_list_add(partitioning_criteriaList, (void *)localEnum);
             }
         }
         if (partitioning_criteriaList->count == 0) {
-            ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed: Expected partitioning_criteriaList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_amf_event_mode_parseFromJSON() failed: Expected partitioning_criteriaList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -225,7 +225,7 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_parseFromJSON(cJSON *amf_event_
     notif_flag = cJSON_GetObjectItemCaseSensitive(amf_event_modeJSON, "notifFlag");
     if (notif_flag) {
     if (!cJSON_IsString(notif_flag)) {
-        ogs_error("OpenAPI_amf_event_mode_parseFromJSON() failed [notif_flag]");
+        log_error("OpenAPI_amf_event_mode_parseFromJSON() failed [notif_flag]");
         goto end;
     }
     notif_flagVariable = OpenAPI_notification_flag_FromString(notif_flag->valuestring);
@@ -262,10 +262,10 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_copy(OpenAPI_amf_event_mode_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_amf_event_mode_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_amf_event_mode_convertToJSON() failed");
+        log_error("OpenAPI_amf_event_mode_convertToJSON() failed");
         return NULL;
     }
 
@@ -273,14 +273,14 @@ OpenAPI_amf_event_mode_t *OpenAPI_amf_event_mode_copy(OpenAPI_amf_event_mode_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

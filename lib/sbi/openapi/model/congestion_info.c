@@ -15,7 +15,7 @@ OpenAPI_congestion_info_t *OpenAPI_congestion_info_create(
 )
 {
     OpenAPI_congestion_info_t *congestion_info_local_var = ogs_malloc(sizeof(OpenAPI_congestion_info_t));
-    ogs_assert(congestion_info_local_var);
+    log_assert(congestion_info_local_var);
 
     congestion_info_local_var->cong_type = cong_type;
     congestion_info_local_var->time_intev = time_intev;
@@ -70,59 +70,59 @@ cJSON *OpenAPI_congestion_info_convertToJSON(OpenAPI_congestion_info_t *congesti
     OpenAPI_lnode_t *node = NULL;
 
     if (congestion_info == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [CongestionInfo]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [CongestionInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!congestion_info->cong_type) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [cong_type]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [cong_type]");
         return NULL;
     }
     cJSON *cong_type_local_JSON = OpenAPI_congestion_type_convertToJSON(congestion_info->cong_type);
     if (cong_type_local_JSON == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [cong_type]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [cong_type]");
         goto end;
     }
     cJSON_AddItemToObject(item, "congType", cong_type_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [cong_type]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [cong_type]");
         goto end;
     }
 
     if (!congestion_info->time_intev) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [time_intev]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [time_intev]");
         return NULL;
     }
     cJSON *time_intev_local_JSON = OpenAPI_time_window_convertToJSON(congestion_info->time_intev);
     if (time_intev_local_JSON == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [time_intev]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [time_intev]");
         goto end;
     }
     cJSON_AddItemToObject(item, "timeIntev", time_intev_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [time_intev]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [time_intev]");
         goto end;
     }
 
     if (!congestion_info->nsi) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [nsi]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [nsi]");
         return NULL;
     }
     cJSON *nsi_local_JSON = OpenAPI_threshold_level_convertToJSON(congestion_info->nsi);
     if (nsi_local_JSON == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [nsi]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [nsi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nsi", nsi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [nsi]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [nsi]");
         goto end;
     }
 
     if (congestion_info->is_confidence) {
     if (cJSON_AddNumberToObject(item, "confidence", congestion_info->confidence) == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [confidence]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [confidence]");
         goto end;
     }
     }
@@ -130,13 +130,13 @@ cJSON *OpenAPI_congestion_info_convertToJSON(OpenAPI_congestion_info_t *congesti
     if (congestion_info->top_app_list_ul) {
     cJSON *top_app_list_ulList = cJSON_AddArrayToObject(item, "topAppListUl");
     if (top_app_list_ulList == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [top_app_list_ul]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [top_app_list_ul]");
         goto end;
     }
     OpenAPI_list_for_each(congestion_info->top_app_list_ul, node) {
         cJSON *itemLocal = OpenAPI_top_application_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_congestion_info_convertToJSON() failed [top_app_list_ul]");
+            log_error("OpenAPI_congestion_info_convertToJSON() failed [top_app_list_ul]");
             goto end;
         }
         cJSON_AddItemToArray(top_app_list_ulList, itemLocal);
@@ -146,13 +146,13 @@ cJSON *OpenAPI_congestion_info_convertToJSON(OpenAPI_congestion_info_t *congesti
     if (congestion_info->top_app_list_dl) {
     cJSON *top_app_list_dlList = cJSON_AddArrayToObject(item, "topAppListDl");
     if (top_app_list_dlList == NULL) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed [top_app_list_dl]");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed [top_app_list_dl]");
         goto end;
     }
     OpenAPI_list_for_each(congestion_info->top_app_list_dl, node) {
         cJSON *itemLocal = OpenAPI_top_application_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_congestion_info_convertToJSON() failed [top_app_list_dl]");
+            log_error("OpenAPI_congestion_info_convertToJSON() failed [top_app_list_dl]");
             goto end;
         }
         cJSON_AddItemToArray(top_app_list_dlList, itemLocal);
@@ -180,41 +180,41 @@ OpenAPI_congestion_info_t *OpenAPI_congestion_info_parseFromJSON(cJSON *congesti
     OpenAPI_list_t *top_app_list_dlList = NULL;
     cong_type = cJSON_GetObjectItemCaseSensitive(congestion_infoJSON, "congType");
     if (!cong_type) {
-        ogs_error("OpenAPI_congestion_info_parseFromJSON() failed [cong_type]");
+        log_error("OpenAPI_congestion_info_parseFromJSON() failed [cong_type]");
         goto end;
     }
     cong_type_local_nonprim = OpenAPI_congestion_type_parseFromJSON(cong_type);
     if (!cong_type_local_nonprim) {
-        ogs_error("OpenAPI_congestion_type_parseFromJSON failed [cong_type]");
+        log_error("OpenAPI_congestion_type_parseFromJSON failed [cong_type]");
         goto end;
     }
 
     time_intev = cJSON_GetObjectItemCaseSensitive(congestion_infoJSON, "timeIntev");
     if (!time_intev) {
-        ogs_error("OpenAPI_congestion_info_parseFromJSON() failed [time_intev]");
+        log_error("OpenAPI_congestion_info_parseFromJSON() failed [time_intev]");
         goto end;
     }
     time_intev_local_nonprim = OpenAPI_time_window_parseFromJSON(time_intev);
     if (!time_intev_local_nonprim) {
-        ogs_error("OpenAPI_time_window_parseFromJSON failed [time_intev]");
+        log_error("OpenAPI_time_window_parseFromJSON failed [time_intev]");
         goto end;
     }
 
     nsi = cJSON_GetObjectItemCaseSensitive(congestion_infoJSON, "nsi");
     if (!nsi) {
-        ogs_error("OpenAPI_congestion_info_parseFromJSON() failed [nsi]");
+        log_error("OpenAPI_congestion_info_parseFromJSON() failed [nsi]");
         goto end;
     }
     nsi_local_nonprim = OpenAPI_threshold_level_parseFromJSON(nsi);
     if (!nsi_local_nonprim) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON failed [nsi]");
+        log_error("OpenAPI_threshold_level_parseFromJSON failed [nsi]");
         goto end;
     }
 
     confidence = cJSON_GetObjectItemCaseSensitive(congestion_infoJSON, "confidence");
     if (confidence) {
     if (!cJSON_IsNumber(confidence)) {
-        ogs_error("OpenAPI_congestion_info_parseFromJSON() failed [confidence]");
+        log_error("OpenAPI_congestion_info_parseFromJSON() failed [confidence]");
         goto end;
     }
     }
@@ -223,7 +223,7 @@ OpenAPI_congestion_info_t *OpenAPI_congestion_info_parseFromJSON(cJSON *congesti
     if (top_app_list_ul) {
         cJSON *top_app_list_ul_local = NULL;
         if (!cJSON_IsArray(top_app_list_ul)) {
-            ogs_error("OpenAPI_congestion_info_parseFromJSON() failed [top_app_list_ul]");
+            log_error("OpenAPI_congestion_info_parseFromJSON() failed [top_app_list_ul]");
             goto end;
         }
 
@@ -231,12 +231,12 @@ OpenAPI_congestion_info_t *OpenAPI_congestion_info_parseFromJSON(cJSON *congesti
 
         cJSON_ArrayForEach(top_app_list_ul_local, top_app_list_ul) {
             if (!cJSON_IsObject(top_app_list_ul_local)) {
-                ogs_error("OpenAPI_congestion_info_parseFromJSON() failed [top_app_list_ul]");
+                log_error("OpenAPI_congestion_info_parseFromJSON() failed [top_app_list_ul]");
                 goto end;
             }
             OpenAPI_top_application_t *top_app_list_ulItem = OpenAPI_top_application_parseFromJSON(top_app_list_ul_local);
             if (!top_app_list_ulItem) {
-                ogs_error("No top_app_list_ulItem");
+                log_error("No top_app_list_ulItem");
                 goto end;
             }
             OpenAPI_list_add(top_app_list_ulList, top_app_list_ulItem);
@@ -247,7 +247,7 @@ OpenAPI_congestion_info_t *OpenAPI_congestion_info_parseFromJSON(cJSON *congesti
     if (top_app_list_dl) {
         cJSON *top_app_list_dl_local = NULL;
         if (!cJSON_IsArray(top_app_list_dl)) {
-            ogs_error("OpenAPI_congestion_info_parseFromJSON() failed [top_app_list_dl]");
+            log_error("OpenAPI_congestion_info_parseFromJSON() failed [top_app_list_dl]");
             goto end;
         }
 
@@ -255,12 +255,12 @@ OpenAPI_congestion_info_t *OpenAPI_congestion_info_parseFromJSON(cJSON *congesti
 
         cJSON_ArrayForEach(top_app_list_dl_local, top_app_list_dl) {
             if (!cJSON_IsObject(top_app_list_dl_local)) {
-                ogs_error("OpenAPI_congestion_info_parseFromJSON() failed [top_app_list_dl]");
+                log_error("OpenAPI_congestion_info_parseFromJSON() failed [top_app_list_dl]");
                 goto end;
             }
             OpenAPI_top_application_t *top_app_list_dlItem = OpenAPI_top_application_parseFromJSON(top_app_list_dl_local);
             if (!top_app_list_dlItem) {
-                ogs_error("No top_app_list_dlItem");
+                log_error("No top_app_list_dlItem");
                 goto end;
             }
             OpenAPI_list_add(top_app_list_dlList, top_app_list_dlItem);
@@ -313,10 +313,10 @@ OpenAPI_congestion_info_t *OpenAPI_congestion_info_copy(OpenAPI_congestion_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_congestion_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_congestion_info_convertToJSON() failed");
+        log_error("OpenAPI_congestion_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -324,14 +324,14 @@ OpenAPI_congestion_info_t *OpenAPI_congestion_info_copy(OpenAPI_congestion_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

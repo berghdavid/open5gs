@@ -17,7 +17,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_c
 )
 {
     OpenAPI_data_restoration_notification_t *data_restoration_notification_local_var = ogs_malloc(sizeof(OpenAPI_data_restoration_notification_t));
-    ogs_assert(data_restoration_notification_local_var);
+    log_assert(data_restoration_notification_local_var);
 
     data_restoration_notification_local_var->last_replication_time = last_replication_time;
     data_restoration_notification_local_var->recovery_time = recovery_time;
@@ -99,21 +99,21 @@ cJSON *OpenAPI_data_restoration_notification_convertToJSON(OpenAPI_data_restorat
     OpenAPI_lnode_t *node = NULL;
 
     if (data_restoration_notification == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [DataRestorationNotification]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [DataRestorationNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (data_restoration_notification->last_replication_time) {
     if (cJSON_AddStringToObject(item, "lastReplicationTime", data_restoration_notification->last_replication_time) == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [last_replication_time]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [last_replication_time]");
         goto end;
     }
     }
 
     if (data_restoration_notification->recovery_time) {
     if (cJSON_AddStringToObject(item, "recoveryTime", data_restoration_notification->recovery_time) == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [recovery_time]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [recovery_time]");
         goto end;
     }
     }
@@ -121,12 +121,12 @@ cJSON *OpenAPI_data_restoration_notification_convertToJSON(OpenAPI_data_restorat
     if (data_restoration_notification->plmn_id) {
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(data_restoration_notification->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [plmn_id]");
         goto end;
     }
     }
@@ -134,13 +134,13 @@ cJSON *OpenAPI_data_restoration_notification_convertToJSON(OpenAPI_data_restorat
     if (data_restoration_notification->supi_ranges) {
     cJSON *supi_rangesList = cJSON_AddArrayToObject(item, "supiRanges");
     if (supi_rangesList == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [supi_ranges]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [supi_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(data_restoration_notification->supi_ranges, node) {
         cJSON *itemLocal = OpenAPI_supi_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [supi_ranges]");
+            log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [supi_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(supi_rangesList, itemLocal);
@@ -150,13 +150,13 @@ cJSON *OpenAPI_data_restoration_notification_convertToJSON(OpenAPI_data_restorat
     if (data_restoration_notification->gpsi_ranges) {
     cJSON *gpsi_rangesList = cJSON_AddArrayToObject(item, "gpsiRanges");
     if (gpsi_rangesList == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [gpsi_ranges]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [gpsi_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(data_restoration_notification->gpsi_ranges, node) {
         cJSON *itemLocal = OpenAPI_identity_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [gpsi_ranges]");
+            log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [gpsi_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(gpsi_rangesList, itemLocal);
@@ -166,12 +166,12 @@ cJSON *OpenAPI_data_restoration_notification_convertToJSON(OpenAPI_data_restorat
     if (data_restoration_notification->reset_ids) {
     cJSON *reset_idsList = cJSON_AddArrayToObject(item, "resetIds");
     if (reset_idsList == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [reset_ids]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [reset_ids]");
         goto end;
     }
     OpenAPI_list_for_each(data_restoration_notification->reset_ids, node) {
         if (cJSON_AddStringToObject(reset_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [reset_ids]");
+            log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [reset_ids]");
             goto end;
         }
     }
@@ -180,13 +180,13 @@ cJSON *OpenAPI_data_restoration_notification_convertToJSON(OpenAPI_data_restorat
     if (data_restoration_notification->s_nssai_list) {
     cJSON *s_nssai_listList = cJSON_AddArrayToObject(item, "sNssaiList");
     if (s_nssai_listList == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [s_nssai_list]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [s_nssai_list]");
         goto end;
     }
     OpenAPI_list_for_each(data_restoration_notification->s_nssai_list, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [s_nssai_list]");
+            log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [s_nssai_list]");
             goto end;
         }
         cJSON_AddItemToArray(s_nssai_listList, itemLocal);
@@ -196,12 +196,12 @@ cJSON *OpenAPI_data_restoration_notification_convertToJSON(OpenAPI_data_restorat
     if (data_restoration_notification->dnn_list) {
     cJSON *dnn_listList = cJSON_AddArrayToObject(item, "dnnList");
     if (dnn_listList == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [dnn_list]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [dnn_list]");
         goto end;
     }
     OpenAPI_list_for_each(data_restoration_notification->dnn_list, node) {
         if (cJSON_AddStringToObject(dnn_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [dnn_list]");
+            log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [dnn_list]");
             goto end;
         }
     }
@@ -209,7 +209,7 @@ cJSON *OpenAPI_data_restoration_notification_convertToJSON(OpenAPI_data_restorat
 
     if (data_restoration_notification->udm_group_id) {
     if (cJSON_AddStringToObject(item, "udmGroupId", data_restoration_notification->udm_group_id) == NULL) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed [udm_group_id]");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed [udm_group_id]");
         goto end;
     }
     }
@@ -240,7 +240,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     last_replication_time = cJSON_GetObjectItemCaseSensitive(data_restoration_notificationJSON, "lastReplicationTime");
     if (last_replication_time) {
     if (!cJSON_IsString(last_replication_time) && !cJSON_IsNull(last_replication_time)) {
-        ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [last_replication_time]");
+        log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [last_replication_time]");
         goto end;
     }
     }
@@ -248,7 +248,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     recovery_time = cJSON_GetObjectItemCaseSensitive(data_restoration_notificationJSON, "recoveryTime");
     if (recovery_time) {
     if (!cJSON_IsString(recovery_time) && !cJSON_IsNull(recovery_time)) {
-        ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [recovery_time]");
+        log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [recovery_time]");
         goto end;
     }
     }
@@ -257,7 +257,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     if (plmn_id) {
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
     }
@@ -266,7 +266,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     if (supi_ranges) {
         cJSON *supi_ranges_local = NULL;
         if (!cJSON_IsArray(supi_ranges)) {
-            ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [supi_ranges]");
+            log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [supi_ranges]");
             goto end;
         }
 
@@ -274,12 +274,12 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
 
         cJSON_ArrayForEach(supi_ranges_local, supi_ranges) {
             if (!cJSON_IsObject(supi_ranges_local)) {
-                ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [supi_ranges]");
+                log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [supi_ranges]");
                 goto end;
             }
             OpenAPI_supi_range_t *supi_rangesItem = OpenAPI_supi_range_parseFromJSON(supi_ranges_local);
             if (!supi_rangesItem) {
-                ogs_error("No supi_rangesItem");
+                log_error("No supi_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(supi_rangesList, supi_rangesItem);
@@ -290,7 +290,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     if (gpsi_ranges) {
         cJSON *gpsi_ranges_local = NULL;
         if (!cJSON_IsArray(gpsi_ranges)) {
-            ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [gpsi_ranges]");
+            log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [gpsi_ranges]");
             goto end;
         }
 
@@ -298,12 +298,12 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
 
         cJSON_ArrayForEach(gpsi_ranges_local, gpsi_ranges) {
             if (!cJSON_IsObject(gpsi_ranges_local)) {
-                ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [gpsi_ranges]");
+                log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [gpsi_ranges]");
                 goto end;
             }
             OpenAPI_identity_range_t *gpsi_rangesItem = OpenAPI_identity_range_parseFromJSON(gpsi_ranges_local);
             if (!gpsi_rangesItem) {
-                ogs_error("No gpsi_rangesItem");
+                log_error("No gpsi_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(gpsi_rangesList, gpsi_rangesItem);
@@ -314,7 +314,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     if (reset_ids) {
         cJSON *reset_ids_local = NULL;
         if (!cJSON_IsArray(reset_ids)) {
-            ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [reset_ids]");
+            log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [reset_ids]");
             goto end;
         }
 
@@ -324,7 +324,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(reset_ids_local)) {
-                ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [reset_ids]");
+                log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [reset_ids]");
                 goto end;
             }
             OpenAPI_list_add(reset_idsList, ogs_strdup(reset_ids_local->valuestring));
@@ -335,7 +335,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     if (s_nssai_list) {
         cJSON *s_nssai_list_local = NULL;
         if (!cJSON_IsArray(s_nssai_list)) {
-            ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [s_nssai_list]");
+            log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [s_nssai_list]");
             goto end;
         }
 
@@ -343,12 +343,12 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
 
         cJSON_ArrayForEach(s_nssai_list_local, s_nssai_list) {
             if (!cJSON_IsObject(s_nssai_list_local)) {
-                ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [s_nssai_list]");
+                log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [s_nssai_list]");
                 goto end;
             }
             OpenAPI_snssai_t *s_nssai_listItem = OpenAPI_snssai_parseFromJSON(s_nssai_list_local);
             if (!s_nssai_listItem) {
-                ogs_error("No s_nssai_listItem");
+                log_error("No s_nssai_listItem");
                 goto end;
             }
             OpenAPI_list_add(s_nssai_listList, s_nssai_listItem);
@@ -359,7 +359,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     if (dnn_list) {
         cJSON *dnn_list_local = NULL;
         if (!cJSON_IsArray(dnn_list)) {
-            ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [dnn_list]");
+            log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [dnn_list]");
             goto end;
         }
 
@@ -369,7 +369,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(dnn_list_local)) {
-                ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [dnn_list]");
+                log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [dnn_list]");
                 goto end;
             }
             OpenAPI_list_add(dnn_listList, ogs_strdup(dnn_list_local->valuestring));
@@ -379,7 +379,7 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_p
     udm_group_id = cJSON_GetObjectItemCaseSensitive(data_restoration_notificationJSON, "udmGroupId");
     if (udm_group_id) {
     if (!cJSON_IsString(udm_group_id) && !cJSON_IsNull(udm_group_id)) {
-        ogs_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [udm_group_id]");
+        log_error("OpenAPI_data_restoration_notification_parseFromJSON() failed [udm_group_id]");
         goto end;
     }
     }
@@ -445,10 +445,10 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_data_restoration_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_data_restoration_notification_convertToJSON() failed");
+        log_error("OpenAPI_data_restoration_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -456,14 +456,14 @@ OpenAPI_data_restoration_notification_t *OpenAPI_data_restoration_notification_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

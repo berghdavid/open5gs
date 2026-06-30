@@ -60,24 +60,24 @@ struct epoll_context_s {
 static void epoll_init(ogs_pollset_t *pollset)
 {
     struct epoll_context_s *context = NULL;
-    ogs_assert(pollset);
+    log_assert(pollset);
 
     context = ogs_calloc(1, sizeof *context);
-    ogs_assert(context);
+    log_assert(context);
     pollset->context = context;
 
     context->event_list = ogs_calloc(
             pollset->capacity, sizeof(struct epoll_event));
-    ogs_assert(context->event_list);
+    log_assert(context->event_list);
 
     context->map_hash = ogs_hash_make();
-    ogs_assert(context->map_hash);
+    log_assert(context->map_hash);
 
     context->epfd = epoll_create(pollset->capacity);
     if (context->epfd < 0) {
-        ogs_log_message(OGS_LOG_FATAL, ogs_errno,
+        log_error_msg(LOG_FATAL, ogs_errno,
                 "epoll_create() failed [%d]", pollset->capacity);
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         return;
     }
 
@@ -88,9 +88,9 @@ static void epoll_cleanup(ogs_pollset_t *pollset)
 {
     struct epoll_context_s *context = NULL;
 
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     ogs_notify_final(pollset);
     close(context->epfd);
@@ -108,17 +108,17 @@ static int epoll_add(ogs_poll_t *poll)
     struct epoll_map_s *map = NULL;
     struct epoll_event ee;
 
-    ogs_assert(poll);
+    log_assert(poll);
     pollset = poll->pollset;
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     map = ogs_hash_get(context->map_hash, &poll->fd, sizeof(poll->fd));
     if (!map) {
         map = ogs_calloc(1, sizeof(*map));
         if (!map) {
-            ogs_error("ogs_calloc() failed");
+            log_error("ogs_calloc() failed");
             return OGS_ERROR;
         }
 
@@ -144,7 +144,7 @@ static int epoll_add(ogs_poll_t *poll)
 
     rv = epoll_ctl(context->epfd, op, poll->fd, &ee);
     if (rv < 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                 "epoll_ctl[%d] failed", op);
         return OGS_ERROR;
     }
@@ -160,14 +160,14 @@ static int epoll_remove(ogs_poll_t *poll)
     struct epoll_map_s *map = NULL;
     struct epoll_event ee;
 
-    ogs_assert(poll);
+    log_assert(poll);
     pollset = poll->pollset;
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     map = ogs_hash_get(context->map_hash, &poll->fd, sizeof(poll->fd));
-    ogs_assert(map);
+    log_assert(map);
 
     if (poll->when & OGS_POLLIN)
         map->read = NULL;
@@ -195,7 +195,7 @@ static int epoll_remove(ogs_poll_t *poll)
 
     rv = epoll_ctl(context->epfd, op, poll->fd, &ee);
     if (rv < 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                 "epoll_remove[%d] failed", op);
         return OGS_ERROR;
     }
@@ -209,16 +209,16 @@ static int epoll_process(ogs_pollset_t *pollset, ogs_time_t timeout)
     int num_of_poll;
     int i;
 
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     num_of_poll = epoll_wait(context->epfd, context->event_list,
             pollset->capacity,
             timeout == OGS_INFINITE_TIME ? OGS_INFINITE_TIME :
                 ogs_time_to_msec(timeout));
     if (num_of_poll < 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "epoll failed");
+        log_error_msg(LOG_ERROR, ogs_socket_errno, "epoll failed");
         return OGS_ERROR;
     } else if (num_of_poll == 0) {
         return OGS_TIMEUP;
@@ -252,7 +252,7 @@ static int epoll_process(ogs_pollset_t *pollset, ogs_time_t timeout)
             continue;
 
         fd = context->event_list[i].data.fd;
-        ogs_assert(fd != INVALID_SOCKET);
+        log_assert(fd != INVALID_SOCKET);
 
         map = ogs_hash_get(context->map_hash, &fd, sizeof(fd));
         if (!map) continue;

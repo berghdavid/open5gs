@@ -12,7 +12,7 @@ OpenAPI_nwdaf_capability_t *OpenAPI_nwdaf_capability_create(
 )
 {
     OpenAPI_nwdaf_capability_t *nwdaf_capability_local_var = ogs_malloc(sizeof(OpenAPI_nwdaf_capability_t));
-    ogs_assert(nwdaf_capability_local_var);
+    log_assert(nwdaf_capability_local_var);
 
     nwdaf_capability_local_var->is_analytics_aggregation = is_analytics_aggregation;
     nwdaf_capability_local_var->analytics_aggregation = analytics_aggregation;
@@ -38,21 +38,21 @@ cJSON *OpenAPI_nwdaf_capability_convertToJSON(OpenAPI_nwdaf_capability_t *nwdaf_
     OpenAPI_lnode_t *node = NULL;
 
     if (nwdaf_capability == NULL) {
-        ogs_error("OpenAPI_nwdaf_capability_convertToJSON() failed [NwdafCapability]");
+        log_error("OpenAPI_nwdaf_capability_convertToJSON() failed [NwdafCapability]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (nwdaf_capability->is_analytics_aggregation) {
     if (cJSON_AddBoolToObject(item, "analyticsAggregation", nwdaf_capability->analytics_aggregation) == NULL) {
-        ogs_error("OpenAPI_nwdaf_capability_convertToJSON() failed [analytics_aggregation]");
+        log_error("OpenAPI_nwdaf_capability_convertToJSON() failed [analytics_aggregation]");
         goto end;
     }
     }
 
     if (nwdaf_capability->is_analytics_metadata_provisioning) {
     if (cJSON_AddBoolToObject(item, "analyticsMetadataProvisioning", nwdaf_capability->analytics_metadata_provisioning) == NULL) {
-        ogs_error("OpenAPI_nwdaf_capability_convertToJSON() failed [analytics_metadata_provisioning]");
+        log_error("OpenAPI_nwdaf_capability_convertToJSON() failed [analytics_metadata_provisioning]");
         goto end;
     }
     }
@@ -70,7 +70,7 @@ OpenAPI_nwdaf_capability_t *OpenAPI_nwdaf_capability_parseFromJSON(cJSON *nwdaf_
     analytics_aggregation = cJSON_GetObjectItemCaseSensitive(nwdaf_capabilityJSON, "analyticsAggregation");
     if (analytics_aggregation) {
     if (!cJSON_IsBool(analytics_aggregation)) {
-        ogs_error("OpenAPI_nwdaf_capability_parseFromJSON() failed [analytics_aggregation]");
+        log_error("OpenAPI_nwdaf_capability_parseFromJSON() failed [analytics_aggregation]");
         goto end;
     }
     }
@@ -78,7 +78,7 @@ OpenAPI_nwdaf_capability_t *OpenAPI_nwdaf_capability_parseFromJSON(cJSON *nwdaf_
     analytics_metadata_provisioning = cJSON_GetObjectItemCaseSensitive(nwdaf_capabilityJSON, "analyticsMetadataProvisioning");
     if (analytics_metadata_provisioning) {
     if (!cJSON_IsBool(analytics_metadata_provisioning)) {
-        ogs_error("OpenAPI_nwdaf_capability_parseFromJSON() failed [analytics_metadata_provisioning]");
+        log_error("OpenAPI_nwdaf_capability_parseFromJSON() failed [analytics_metadata_provisioning]");
         goto end;
     }
     }
@@ -100,10 +100,10 @@ OpenAPI_nwdaf_capability_t *OpenAPI_nwdaf_capability_copy(OpenAPI_nwdaf_capabili
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nwdaf_capability_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nwdaf_capability_convertToJSON() failed");
+        log_error("OpenAPI_nwdaf_capability_convertToJSON() failed");
         return NULL;
     }
 
@@ -111,14 +111,14 @@ OpenAPI_nwdaf_capability_t *OpenAPI_nwdaf_capability_copy(OpenAPI_nwdaf_capabili
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

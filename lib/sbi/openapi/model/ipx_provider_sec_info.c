@@ -11,7 +11,7 @@ OpenAPI_ipx_provider_sec_info_t *OpenAPI_ipx_provider_sec_info_create(
 )
 {
     OpenAPI_ipx_provider_sec_info_t *ipx_provider_sec_info_local_var = ogs_malloc(sizeof(OpenAPI_ipx_provider_sec_info_t));
-    ogs_assert(ipx_provider_sec_info_local_var);
+    log_assert(ipx_provider_sec_info_local_var);
 
     ipx_provider_sec_info_local_var->ipx_provider_id = ipx_provider_id;
     ipx_provider_sec_info_local_var->raw_public_key_list = raw_public_key_list;
@@ -54,29 +54,29 @@ cJSON *OpenAPI_ipx_provider_sec_info_convertToJSON(OpenAPI_ipx_provider_sec_info
     OpenAPI_lnode_t *node = NULL;
 
     if (ipx_provider_sec_info == NULL) {
-        ogs_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [IpxProviderSecInfo]");
+        log_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [IpxProviderSecInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!ipx_provider_sec_info->ipx_provider_id) {
-        ogs_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [ipx_provider_id]");
+        log_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [ipx_provider_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ipxProviderId", ipx_provider_sec_info->ipx_provider_id) == NULL) {
-        ogs_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [ipx_provider_id]");
+        log_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [ipx_provider_id]");
         goto end;
     }
 
     if (ipx_provider_sec_info->raw_public_key_list) {
     cJSON *raw_public_key_listList = cJSON_AddArrayToObject(item, "rawPublicKeyList");
     if (raw_public_key_listList == NULL) {
-        ogs_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [raw_public_key_list]");
+        log_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [raw_public_key_list]");
         goto end;
     }
     OpenAPI_list_for_each(ipx_provider_sec_info->raw_public_key_list, node) {
         if (cJSON_AddStringToObject(raw_public_key_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [raw_public_key_list]");
+            log_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [raw_public_key_list]");
             goto end;
         }
     }
@@ -85,12 +85,12 @@ cJSON *OpenAPI_ipx_provider_sec_info_convertToJSON(OpenAPI_ipx_provider_sec_info
     if (ipx_provider_sec_info->certificate_list) {
     cJSON *certificate_listList = cJSON_AddArrayToObject(item, "certificateList");
     if (certificate_listList == NULL) {
-        ogs_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [certificate_list]");
+        log_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [certificate_list]");
         goto end;
     }
     OpenAPI_list_for_each(ipx_provider_sec_info->certificate_list, node) {
         if (cJSON_AddStringToObject(certificate_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [certificate_list]");
+            log_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed [certificate_list]");
             goto end;
         }
     }
@@ -111,11 +111,11 @@ OpenAPI_ipx_provider_sec_info_t *OpenAPI_ipx_provider_sec_info_parseFromJSON(cJS
     OpenAPI_list_t *certificate_listList = NULL;
     ipx_provider_id = cJSON_GetObjectItemCaseSensitive(ipx_provider_sec_infoJSON, "ipxProviderId");
     if (!ipx_provider_id) {
-        ogs_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [ipx_provider_id]");
+        log_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [ipx_provider_id]");
         goto end;
     }
     if (!cJSON_IsString(ipx_provider_id)) {
-        ogs_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [ipx_provider_id]");
+        log_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [ipx_provider_id]");
         goto end;
     }
 
@@ -123,7 +123,7 @@ OpenAPI_ipx_provider_sec_info_t *OpenAPI_ipx_provider_sec_info_parseFromJSON(cJS
     if (raw_public_key_list) {
         cJSON *raw_public_key_list_local = NULL;
         if (!cJSON_IsArray(raw_public_key_list)) {
-            ogs_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [raw_public_key_list]");
+            log_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [raw_public_key_list]");
             goto end;
         }
 
@@ -133,7 +133,7 @@ OpenAPI_ipx_provider_sec_info_t *OpenAPI_ipx_provider_sec_info_parseFromJSON(cJS
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(raw_public_key_list_local)) {
-                ogs_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [raw_public_key_list]");
+                log_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [raw_public_key_list]");
                 goto end;
             }
             OpenAPI_list_add(raw_public_key_listList, ogs_strdup(raw_public_key_list_local->valuestring));
@@ -144,7 +144,7 @@ OpenAPI_ipx_provider_sec_info_t *OpenAPI_ipx_provider_sec_info_parseFromJSON(cJS
     if (certificate_list) {
         cJSON *certificate_list_local = NULL;
         if (!cJSON_IsArray(certificate_list)) {
-            ogs_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [certificate_list]");
+            log_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [certificate_list]");
             goto end;
         }
 
@@ -154,7 +154,7 @@ OpenAPI_ipx_provider_sec_info_t *OpenAPI_ipx_provider_sec_info_parseFromJSON(cJS
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(certificate_list_local)) {
-                ogs_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [certificate_list]");
+                log_error("OpenAPI_ipx_provider_sec_info_parseFromJSON() failed [certificate_list]");
                 goto end;
             }
             OpenAPI_list_add(certificate_listList, ogs_strdup(certificate_list_local->valuestring));
@@ -191,10 +191,10 @@ OpenAPI_ipx_provider_sec_info_t *OpenAPI_ipx_provider_sec_info_copy(OpenAPI_ipx_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ipx_provider_sec_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed");
+        log_error("OpenAPI_ipx_provider_sec_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -202,14 +202,14 @@ OpenAPI_ipx_provider_sec_info_t *OpenAPI_ipx_provider_sec_info_copy(OpenAPI_ipx_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

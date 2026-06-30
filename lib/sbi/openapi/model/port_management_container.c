@@ -10,7 +10,7 @@ OpenAPI_port_management_container_t *OpenAPI_port_management_container_create(
 )
 {
     OpenAPI_port_management_container_t *port_management_container_local_var = ogs_malloc(sizeof(OpenAPI_port_management_container_t));
-    ogs_assert(port_management_container_local_var);
+    log_assert(port_management_container_local_var);
 
     port_management_container_local_var->port_man_cont = port_man_cont;
     port_management_container_local_var->port_num = port_num;
@@ -38,22 +38,22 @@ cJSON *OpenAPI_port_management_container_convertToJSON(OpenAPI_port_management_c
     OpenAPI_lnode_t *node = NULL;
 
     if (port_management_container == NULL) {
-        ogs_error("OpenAPI_port_management_container_convertToJSON() failed [PortManagementContainer]");
+        log_error("OpenAPI_port_management_container_convertToJSON() failed [PortManagementContainer]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!port_management_container->port_man_cont) {
-        ogs_error("OpenAPI_port_management_container_convertToJSON() failed [port_man_cont]");
+        log_error("OpenAPI_port_management_container_convertToJSON() failed [port_man_cont]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "portManCont", port_management_container->port_man_cont) == NULL) {
-        ogs_error("OpenAPI_port_management_container_convertToJSON() failed [port_man_cont]");
+        log_error("OpenAPI_port_management_container_convertToJSON() failed [port_man_cont]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "portNum", port_management_container->port_num) == NULL) {
-        ogs_error("OpenAPI_port_management_container_convertToJSON() failed [port_num]");
+        log_error("OpenAPI_port_management_container_convertToJSON() failed [port_num]");
         goto end;
     }
 
@@ -69,21 +69,21 @@ OpenAPI_port_management_container_t *OpenAPI_port_management_container_parseFrom
     cJSON *port_num = NULL;
     port_man_cont = cJSON_GetObjectItemCaseSensitive(port_management_containerJSON, "portManCont");
     if (!port_man_cont) {
-        ogs_error("OpenAPI_port_management_container_parseFromJSON() failed [port_man_cont]");
+        log_error("OpenAPI_port_management_container_parseFromJSON() failed [port_man_cont]");
         goto end;
     }
     if (!cJSON_IsString(port_man_cont)) {
-        ogs_error("OpenAPI_port_management_container_parseFromJSON() failed [port_man_cont]");
+        log_error("OpenAPI_port_management_container_parseFromJSON() failed [port_man_cont]");
         goto end;
     }
 
     port_num = cJSON_GetObjectItemCaseSensitive(port_management_containerJSON, "portNum");
     if (!port_num) {
-        ogs_error("OpenAPI_port_management_container_parseFromJSON() failed [port_num]");
+        log_error("OpenAPI_port_management_container_parseFromJSON() failed [port_num]");
         goto end;
     }
     if (!cJSON_IsNumber(port_num)) {
-        ogs_error("OpenAPI_port_management_container_parseFromJSON() failed [port_num]");
+        log_error("OpenAPI_port_management_container_parseFromJSON() failed [port_num]");
         goto end;
     }
 
@@ -103,10 +103,10 @@ OpenAPI_port_management_container_t *OpenAPI_port_management_container_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_port_management_container_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_port_management_container_convertToJSON() failed");
+        log_error("OpenAPI_port_management_container_convertToJSON() failed");
         return NULL;
     }
 
@@ -114,14 +114,14 @@ OpenAPI_port_management_container_t *OpenAPI_port_management_container_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

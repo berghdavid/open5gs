@@ -9,7 +9,7 @@ OpenAPI_model_5_mbs_authorization_info_t *OpenAPI_model_5_mbs_authorization_info
 )
 {
     OpenAPI_model_5_mbs_authorization_info_t *model_5_mbs_authorization_info_local_var = ogs_malloc(sizeof(OpenAPI_model_5_mbs_authorization_info_t));
-    ogs_assert(model_5_mbs_authorization_info_local_var);
+    log_assert(model_5_mbs_authorization_info_local_var);
 
     model_5_mbs_authorization_info_local_var->_5mbs_session_ids = _5mbs_session_ids;
 
@@ -39,7 +39,7 @@ cJSON *OpenAPI_model_5_mbs_authorization_info_convertToJSON(OpenAPI_model_5_mbs_
     OpenAPI_lnode_t *node = NULL;
 
     if (model_5_mbs_authorization_info == NULL) {
-        ogs_error("OpenAPI_model_5_mbs_authorization_info_convertToJSON() failed [5MbsAuthorizationInfo]");
+        log_error("OpenAPI_model_5_mbs_authorization_info_convertToJSON() failed [5MbsAuthorizationInfo]");
         return NULL;
     }
 
@@ -47,13 +47,13 @@ cJSON *OpenAPI_model_5_mbs_authorization_info_convertToJSON(OpenAPI_model_5_mbs_
     if (model_5_mbs_authorization_info->_5mbs_session_ids) {
     cJSON *_5mbs_session_idsList = cJSON_AddArrayToObject(item, "5mbsSessionIds");
     if (_5mbs_session_idsList == NULL) {
-        ogs_error("OpenAPI_model_5_mbs_authorization_info_convertToJSON() failed [_5mbs_session_ids]");
+        log_error("OpenAPI_model_5_mbs_authorization_info_convertToJSON() failed [_5mbs_session_ids]");
         goto end;
     }
     OpenAPI_list_for_each(model_5_mbs_authorization_info->_5mbs_session_ids, node) {
         cJSON *itemLocal = OpenAPI_mbs_session_id_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_model_5_mbs_authorization_info_convertToJSON() failed [_5mbs_session_ids]");
+            log_error("OpenAPI_model_5_mbs_authorization_info_convertToJSON() failed [_5mbs_session_ids]");
             goto end;
         }
         cJSON_AddItemToArray(_5mbs_session_idsList, itemLocal);
@@ -74,7 +74,7 @@ OpenAPI_model_5_mbs_authorization_info_t *OpenAPI_model_5_mbs_authorization_info
     if (_5mbs_session_ids) {
         cJSON *_5mbs_session_ids_local = NULL;
         if (!cJSON_IsArray(_5mbs_session_ids)) {
-            ogs_error("OpenAPI_model_5_mbs_authorization_info_parseFromJSON() failed [_5mbs_session_ids]");
+            log_error("OpenAPI_model_5_mbs_authorization_info_parseFromJSON() failed [_5mbs_session_ids]");
             goto end;
         }
 
@@ -82,12 +82,12 @@ OpenAPI_model_5_mbs_authorization_info_t *OpenAPI_model_5_mbs_authorization_info
 
         cJSON_ArrayForEach(_5mbs_session_ids_local, _5mbs_session_ids) {
             if (!cJSON_IsObject(_5mbs_session_ids_local)) {
-                ogs_error("OpenAPI_model_5_mbs_authorization_info_parseFromJSON() failed [_5mbs_session_ids]");
+                log_error("OpenAPI_model_5_mbs_authorization_info_parseFromJSON() failed [_5mbs_session_ids]");
                 goto end;
             }
             OpenAPI_mbs_session_id_t *_5mbs_session_idsItem = OpenAPI_mbs_session_id_parseFromJSON(_5mbs_session_ids_local);
             if (!_5mbs_session_idsItem) {
-                ogs_error("No _5mbs_session_idsItem");
+                log_error("No _5mbs_session_idsItem");
                 goto end;
             }
             OpenAPI_list_add(_5mbs_session_idsList, _5mbs_session_idsItem);
@@ -115,10 +115,10 @@ OpenAPI_model_5_mbs_authorization_info_t *OpenAPI_model_5_mbs_authorization_info
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_model_5_mbs_authorization_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_model_5_mbs_authorization_info_convertToJSON() failed");
+        log_error("OpenAPI_model_5_mbs_authorization_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -126,14 +126,14 @@ OpenAPI_model_5_mbs_authorization_info_t *OpenAPI_model_5_mbs_authorization_info
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

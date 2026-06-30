@@ -20,7 +20,7 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_create(
 )
 {
     OpenAPI_motion_event_info_t *motion_event_info_local_var = ogs_malloc(sizeof(OpenAPI_motion_event_info_t));
-    ogs_assert(motion_event_info_local_var);
+    log_assert(motion_event_info_local_var);
 
     motion_event_info_local_var->linear_distance = linear_distance;
     motion_event_info_local_var->occurrence_info = occurrence_info;
@@ -58,60 +58,60 @@ cJSON *OpenAPI_motion_event_info_convertToJSON(OpenAPI_motion_event_info_t *moti
     OpenAPI_lnode_t *node = NULL;
 
     if (motion_event_info == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [MotionEventInfo]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [MotionEventInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "linearDistance", motion_event_info->linear_distance) == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [linear_distance]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [linear_distance]");
         goto end;
     }
 
     if (motion_event_info->occurrence_info) {
     cJSON *occurrence_info_local_JSON = OpenAPI_occurrence_info_convertToJSON(motion_event_info->occurrence_info);
     if (occurrence_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [occurrence_info]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [occurrence_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "occurrenceInfo", occurrence_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [occurrence_info]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [occurrence_info]");
         goto end;
     }
     }
 
     if (motion_event_info->is_minimum_interval) {
     if (cJSON_AddNumberToObject(item, "minimumInterval", motion_event_info->minimum_interval) == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [minimum_interval]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [minimum_interval]");
         goto end;
     }
     }
 
     if (motion_event_info->is_maximum_interval) {
     if (cJSON_AddNumberToObject(item, "maximumInterval", motion_event_info->maximum_interval) == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [maximum_interval]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [maximum_interval]");
         goto end;
     }
     }
 
     if (motion_event_info->is_sampling_interval) {
     if (cJSON_AddNumberToObject(item, "samplingInterval", motion_event_info->sampling_interval) == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [sampling_interval]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [sampling_interval]");
         goto end;
     }
     }
 
     if (motion_event_info->is_reporting_duration) {
     if (cJSON_AddNumberToObject(item, "reportingDuration", motion_event_info->reporting_duration) == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [reporting_duration]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [reporting_duration]");
         goto end;
     }
     }
 
     if (motion_event_info->is_reporting_location_req) {
     if (cJSON_AddBoolToObject(item, "reportingLocationReq", motion_event_info->reporting_location_req) == NULL) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed [reporting_location_req]");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed [reporting_location_req]");
         goto end;
     }
     }
@@ -134,11 +134,11 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_parseFromJSON(cJSON *moti
     cJSON *reporting_location_req = NULL;
     linear_distance = cJSON_GetObjectItemCaseSensitive(motion_event_infoJSON, "linearDistance");
     if (!linear_distance) {
-        ogs_error("OpenAPI_motion_event_info_parseFromJSON() failed [linear_distance]");
+        log_error("OpenAPI_motion_event_info_parseFromJSON() failed [linear_distance]");
         goto end;
     }
     if (!cJSON_IsNumber(linear_distance)) {
-        ogs_error("OpenAPI_motion_event_info_parseFromJSON() failed [linear_distance]");
+        log_error("OpenAPI_motion_event_info_parseFromJSON() failed [linear_distance]");
         goto end;
     }
 
@@ -146,7 +146,7 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_parseFromJSON(cJSON *moti
     if (occurrence_info) {
     occurrence_info_local_nonprim = OpenAPI_occurrence_info_parseFromJSON(occurrence_info);
     if (!occurrence_info_local_nonprim) {
-        ogs_error("OpenAPI_occurrence_info_parseFromJSON failed [occurrence_info]");
+        log_error("OpenAPI_occurrence_info_parseFromJSON failed [occurrence_info]");
         goto end;
     }
     }
@@ -154,7 +154,7 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_parseFromJSON(cJSON *moti
     minimum_interval = cJSON_GetObjectItemCaseSensitive(motion_event_infoJSON, "minimumInterval");
     if (minimum_interval) {
     if (!cJSON_IsNumber(minimum_interval)) {
-        ogs_error("OpenAPI_motion_event_info_parseFromJSON() failed [minimum_interval]");
+        log_error("OpenAPI_motion_event_info_parseFromJSON() failed [minimum_interval]");
         goto end;
     }
     }
@@ -162,7 +162,7 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_parseFromJSON(cJSON *moti
     maximum_interval = cJSON_GetObjectItemCaseSensitive(motion_event_infoJSON, "maximumInterval");
     if (maximum_interval) {
     if (!cJSON_IsNumber(maximum_interval)) {
-        ogs_error("OpenAPI_motion_event_info_parseFromJSON() failed [maximum_interval]");
+        log_error("OpenAPI_motion_event_info_parseFromJSON() failed [maximum_interval]");
         goto end;
     }
     }
@@ -170,7 +170,7 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_parseFromJSON(cJSON *moti
     sampling_interval = cJSON_GetObjectItemCaseSensitive(motion_event_infoJSON, "samplingInterval");
     if (sampling_interval) {
     if (!cJSON_IsNumber(sampling_interval)) {
-        ogs_error("OpenAPI_motion_event_info_parseFromJSON() failed [sampling_interval]");
+        log_error("OpenAPI_motion_event_info_parseFromJSON() failed [sampling_interval]");
         goto end;
     }
     }
@@ -178,7 +178,7 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_parseFromJSON(cJSON *moti
     reporting_duration = cJSON_GetObjectItemCaseSensitive(motion_event_infoJSON, "reportingDuration");
     if (reporting_duration) {
     if (!cJSON_IsNumber(reporting_duration)) {
-        ogs_error("OpenAPI_motion_event_info_parseFromJSON() failed [reporting_duration]");
+        log_error("OpenAPI_motion_event_info_parseFromJSON() failed [reporting_duration]");
         goto end;
     }
     }
@@ -186,7 +186,7 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_parseFromJSON(cJSON *moti
     reporting_location_req = cJSON_GetObjectItemCaseSensitive(motion_event_infoJSON, "reportingLocationReq");
     if (reporting_location_req) {
     if (!cJSON_IsBool(reporting_location_req)) {
-        ogs_error("OpenAPI_motion_event_info_parseFromJSON() failed [reporting_location_req]");
+        log_error("OpenAPI_motion_event_info_parseFromJSON() failed [reporting_location_req]");
         goto end;
     }
     }
@@ -221,10 +221,10 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_copy(OpenAPI_motion_event
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_motion_event_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_motion_event_info_convertToJSON() failed");
+        log_error("OpenAPI_motion_event_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -232,14 +232,14 @@ OpenAPI_motion_event_info_t *OpenAPI_motion_event_info_copy(OpenAPI_motion_event
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

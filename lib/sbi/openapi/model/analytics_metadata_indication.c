@@ -12,7 +12,7 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_c
 )
 {
     OpenAPI_analytics_metadata_indication_t *analytics_metadata_indication_local_var = ogs_malloc(sizeof(OpenAPI_analytics_metadata_indication_t));
-    ogs_assert(analytics_metadata_indication_local_var);
+    log_assert(analytics_metadata_indication_local_var);
 
     analytics_metadata_indication_local_var->data_window = data_window;
     analytics_metadata_indication_local_var->data_stat_props = data_stat_props;
@@ -60,7 +60,7 @@ cJSON *OpenAPI_analytics_metadata_indication_convertToJSON(OpenAPI_analytics_met
     OpenAPI_lnode_t *node = NULL;
 
     if (analytics_metadata_indication == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [AnalyticsMetadataIndication]");
+        log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [AnalyticsMetadataIndication]");
         return NULL;
     }
 
@@ -68,12 +68,12 @@ cJSON *OpenAPI_analytics_metadata_indication_convertToJSON(OpenAPI_analytics_met
     if (analytics_metadata_indication->data_window) {
     cJSON *data_window_local_JSON = OpenAPI_time_window_convertToJSON(analytics_metadata_indication->data_window);
     if (data_window_local_JSON == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [data_window]");
+        log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [data_window]");
         goto end;
     }
     cJSON_AddItemToObject(item, "dataWindow", data_window_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [data_window]");
+        log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [data_window]");
         goto end;
     }
     }
@@ -81,13 +81,13 @@ cJSON *OpenAPI_analytics_metadata_indication_convertToJSON(OpenAPI_analytics_met
     if (analytics_metadata_indication->data_stat_props) {
     cJSON *data_stat_propsList = cJSON_AddArrayToObject(item, "dataStatProps");
     if (data_stat_propsList == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [data_stat_props]");
+        log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [data_stat_props]");
         goto end;
     }
     OpenAPI_list_for_each(analytics_metadata_indication->data_stat_props, node) {
         cJSON *itemLocal = OpenAPI_dataset_statistical_property_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [data_stat_props]");
+            log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [data_stat_props]");
             goto end;
         }
         cJSON_AddItemToArray(data_stat_propsList, itemLocal);
@@ -97,12 +97,12 @@ cJSON *OpenAPI_analytics_metadata_indication_convertToJSON(OpenAPI_analytics_met
     if (analytics_metadata_indication->strategy) {
     cJSON *strategy_local_JSON = OpenAPI_output_strategy_convertToJSON(analytics_metadata_indication->strategy);
     if (strategy_local_JSON == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [strategy]");
+        log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [strategy]");
         goto end;
     }
     cJSON_AddItemToObject(item, "strategy", strategy_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [strategy]");
+        log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [strategy]");
         goto end;
     }
     }
@@ -110,12 +110,12 @@ cJSON *OpenAPI_analytics_metadata_indication_convertToJSON(OpenAPI_analytics_met
     if (analytics_metadata_indication->aggr_nwdaf_ids) {
     cJSON *aggr_nwdaf_idsList = cJSON_AddArrayToObject(item, "aggrNwdafIds");
     if (aggr_nwdaf_idsList == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [aggr_nwdaf_ids]");
+        log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [aggr_nwdaf_ids]");
         goto end;
     }
     OpenAPI_list_for_each(analytics_metadata_indication->aggr_nwdaf_ids, node) {
         if (cJSON_AddStringToObject(aggr_nwdaf_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [aggr_nwdaf_ids]");
+            log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed [aggr_nwdaf_ids]");
             goto end;
         }
     }
@@ -141,7 +141,7 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_p
     if (data_window) {
     data_window_local_nonprim = OpenAPI_time_window_parseFromJSON(data_window);
     if (!data_window_local_nonprim) {
-        ogs_error("OpenAPI_time_window_parseFromJSON failed [data_window]");
+        log_error("OpenAPI_time_window_parseFromJSON failed [data_window]");
         goto end;
     }
     }
@@ -150,7 +150,7 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_p
     if (data_stat_props) {
         cJSON *data_stat_props_local = NULL;
         if (!cJSON_IsArray(data_stat_props)) {
-            ogs_error("OpenAPI_analytics_metadata_indication_parseFromJSON() failed [data_stat_props]");
+            log_error("OpenAPI_analytics_metadata_indication_parseFromJSON() failed [data_stat_props]");
             goto end;
         }
 
@@ -158,12 +158,12 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_p
 
         cJSON_ArrayForEach(data_stat_props_local, data_stat_props) {
             if (!cJSON_IsObject(data_stat_props_local)) {
-                ogs_error("OpenAPI_analytics_metadata_indication_parseFromJSON() failed [data_stat_props]");
+                log_error("OpenAPI_analytics_metadata_indication_parseFromJSON() failed [data_stat_props]");
                 goto end;
             }
             OpenAPI_dataset_statistical_property_t *data_stat_propsItem = OpenAPI_dataset_statistical_property_parseFromJSON(data_stat_props_local);
             if (!data_stat_propsItem) {
-                ogs_error("No data_stat_propsItem");
+                log_error("No data_stat_propsItem");
                 goto end;
             }
             OpenAPI_list_add(data_stat_propsList, data_stat_propsItem);
@@ -174,7 +174,7 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_p
     if (strategy) {
     strategy_local_nonprim = OpenAPI_output_strategy_parseFromJSON(strategy);
     if (!strategy_local_nonprim) {
-        ogs_error("OpenAPI_output_strategy_parseFromJSON failed [strategy]");
+        log_error("OpenAPI_output_strategy_parseFromJSON failed [strategy]");
         goto end;
     }
     }
@@ -183,7 +183,7 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_p
     if (aggr_nwdaf_ids) {
         cJSON *aggr_nwdaf_ids_local = NULL;
         if (!cJSON_IsArray(aggr_nwdaf_ids)) {
-            ogs_error("OpenAPI_analytics_metadata_indication_parseFromJSON() failed [aggr_nwdaf_ids]");
+            log_error("OpenAPI_analytics_metadata_indication_parseFromJSON() failed [aggr_nwdaf_ids]");
             goto end;
         }
 
@@ -193,7 +193,7 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_p
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(aggr_nwdaf_ids_local)) {
-                ogs_error("OpenAPI_analytics_metadata_indication_parseFromJSON() failed [aggr_nwdaf_ids]");
+                log_error("OpenAPI_analytics_metadata_indication_parseFromJSON() failed [aggr_nwdaf_ids]");
                 goto end;
             }
             OpenAPI_list_add(aggr_nwdaf_idsList, ogs_strdup(aggr_nwdaf_ids_local->valuestring));
@@ -239,10 +239,10 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_analytics_metadata_indication_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed");
+        log_error("OpenAPI_analytics_metadata_indication_convertToJSON() failed");
         return NULL;
     }
 
@@ -250,14 +250,14 @@ OpenAPI_analytics_metadata_indication_t *OpenAPI_analytics_metadata_indication_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -10,7 +10,7 @@ OpenAPI_frame_route_info_1_t *OpenAPI_frame_route_info_1_create(
 )
 {
     OpenAPI_frame_route_info_1_t *frame_route_info_1_local_var = ogs_malloc(sizeof(OpenAPI_frame_route_info_1_t));
-    ogs_assert(frame_route_info_1_local_var);
+    log_assert(frame_route_info_1_local_var);
 
     frame_route_info_1_local_var->ipv4_mask = ipv4_mask;
     frame_route_info_1_local_var->ipv6_prefix = ipv6_prefix;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_frame_route_info_1_convertToJSON(OpenAPI_frame_route_info_1_t *fr
     OpenAPI_lnode_t *node = NULL;
 
     if (frame_route_info_1 == NULL) {
-        ogs_error("OpenAPI_frame_route_info_1_convertToJSON() failed [FrameRouteInfo_1]");
+        log_error("OpenAPI_frame_route_info_1_convertToJSON() failed [FrameRouteInfo_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (frame_route_info_1->ipv4_mask) {
     if (cJSON_AddStringToObject(item, "ipv4Mask", frame_route_info_1->ipv4_mask) == NULL) {
-        ogs_error("OpenAPI_frame_route_info_1_convertToJSON() failed [ipv4_mask]");
+        log_error("OpenAPI_frame_route_info_1_convertToJSON() failed [ipv4_mask]");
         goto end;
     }
     }
 
     if (frame_route_info_1->ipv6_prefix) {
     if (cJSON_AddStringToObject(item, "ipv6Prefix", frame_route_info_1->ipv6_prefix) == NULL) {
-        ogs_error("OpenAPI_frame_route_info_1_convertToJSON() failed [ipv6_prefix]");
+        log_error("OpenAPI_frame_route_info_1_convertToJSON() failed [ipv6_prefix]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_frame_route_info_1_t *OpenAPI_frame_route_info_1_parseFromJSON(cJSON *fr
     ipv4_mask = cJSON_GetObjectItemCaseSensitive(frame_route_info_1JSON, "ipv4Mask");
     if (ipv4_mask) {
     if (!cJSON_IsString(ipv4_mask) && !cJSON_IsNull(ipv4_mask)) {
-        ogs_error("OpenAPI_frame_route_info_1_parseFromJSON() failed [ipv4_mask]");
+        log_error("OpenAPI_frame_route_info_1_parseFromJSON() failed [ipv4_mask]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_frame_route_info_1_t *OpenAPI_frame_route_info_1_parseFromJSON(cJSON *fr
     ipv6_prefix = cJSON_GetObjectItemCaseSensitive(frame_route_info_1JSON, "ipv6Prefix");
     if (ipv6_prefix) {
     if (!cJSON_IsString(ipv6_prefix) && !cJSON_IsNull(ipv6_prefix)) {
-        ogs_error("OpenAPI_frame_route_info_1_parseFromJSON() failed [ipv6_prefix]");
+        log_error("OpenAPI_frame_route_info_1_parseFromJSON() failed [ipv6_prefix]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_frame_route_info_1_t *OpenAPI_frame_route_info_1_copy(OpenAPI_frame_rout
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_frame_route_info_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_frame_route_info_1_convertToJSON() failed");
+        log_error("OpenAPI_frame_route_info_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_frame_route_info_1_t *OpenAPI_frame_route_info_1_copy(OpenAPI_frame_rout
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

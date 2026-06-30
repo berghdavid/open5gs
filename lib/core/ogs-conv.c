@@ -198,13 +198,13 @@ char *ogs_uint64_to_string(uint64_t x)
 
     str = ogs_uint64_to_0string(x);
     if (!str) {
-        ogs_error("ogs_uint64_to_0string[%lld] failed", (long long)x);
+        log_error("ogs_uint64_to_0string[%lld] failed", (long long)x);
         return NULL;
     }
 
     p = ogs_left_trimcharacter(str, '0');
     if (!p) {
-        ogs_error("ogs_left_trimcharacter[%s] failld", str);
+        log_error("ogs_left_trimcharacter[%s] failld", str);
         return NULL;
     }
 
@@ -218,7 +218,7 @@ ogs_uint24_t ogs_uint24_from_string(char *str, int base)
 {
     ogs_uint24_t x;
 
-    ogs_assert(str);
+    log_assert(str);
 
     x.v = ogs_uint64_from_string(str, base);
     return x;
@@ -228,7 +228,7 @@ uint64_t ogs_uint64_from_string(char *str, int base)
 {
     uint64_t x;
 
-    ogs_assert(str);
+    log_assert(str);
 
     if (strlen(str) == 0)
         return 0;
@@ -238,9 +238,9 @@ uint64_t ogs_uint64_from_string(char *str, int base)
 
     if ((errno == ERANGE && (x == LONG_MAX || x == LONG_MIN)) ||
             (errno != 0 && x == 0)) {
-        ogs_log_message(OGS_LOG_FATAL, ogs_errno, "strtoll()) failed [%lld]",
+        log_error_msg(LOG_FATAL, ogs_errno, "strtoll()) failed [%lld]",
                 (long long)x);
-        ogs_assert_if_reached();
+        log_assert_if_reached();
     }
 
     return x;
@@ -250,7 +250,7 @@ double *ogs_alloc_double(double value)
 {
     double *mem = (double *)ogs_calloc(1, sizeof(double));
     if (!mem) {
-        ogs_error("No memory");
+        log_error("No memory");
         return NULL;
     }
 

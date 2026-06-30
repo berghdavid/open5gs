@@ -10,7 +10,7 @@ OpenAPI_area_of_interest_event_state_t *OpenAPI_area_of_interest_event_state_cre
 )
 {
     OpenAPI_area_of_interest_event_state_t *area_of_interest_event_state_local_var = ogs_malloc(sizeof(OpenAPI_area_of_interest_event_state_t));
-    ogs_assert(area_of_interest_event_state_local_var);
+    log_assert(area_of_interest_event_state_local_var);
 
     area_of_interest_event_state_local_var->presence = presence;
     area_of_interest_event_state_local_var->individual_pra_id_list = individual_pra_id_list;
@@ -41,29 +41,29 @@ cJSON *OpenAPI_area_of_interest_event_state_convertToJSON(OpenAPI_area_of_intere
     OpenAPI_lnode_t *node = NULL;
 
     if (area_of_interest_event_state == NULL) {
-        ogs_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [AreaOfInterestEventState]");
+        log_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [AreaOfInterestEventState]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (area_of_interest_event_state->presence == OpenAPI_presence_state_NULL) {
-        ogs_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [presence]");
+        log_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [presence]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "presence", OpenAPI_presence_state_ToString(area_of_interest_event_state->presence)) == NULL) {
-        ogs_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [presence]");
+        log_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [presence]");
         goto end;
     }
 
     if (area_of_interest_event_state->individual_pra_id_list) {
     cJSON *individual_pra_id_listList = cJSON_AddArrayToObject(item, "individualPraIdList");
     if (individual_pra_id_listList == NULL) {
-        ogs_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [individual_pra_id_list]");
+        log_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [individual_pra_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(area_of_interest_event_state->individual_pra_id_list, node) {
         if (cJSON_AddStringToObject(individual_pra_id_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [individual_pra_id_list]");
+            log_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed [individual_pra_id_list]");
             goto end;
         }
     }
@@ -83,11 +83,11 @@ OpenAPI_area_of_interest_event_state_t *OpenAPI_area_of_interest_event_state_par
     OpenAPI_list_t *individual_pra_id_listList = NULL;
     presence = cJSON_GetObjectItemCaseSensitive(area_of_interest_event_stateJSON, "presence");
     if (!presence) {
-        ogs_error("OpenAPI_area_of_interest_event_state_parseFromJSON() failed [presence]");
+        log_error("OpenAPI_area_of_interest_event_state_parseFromJSON() failed [presence]");
         goto end;
     }
     if (!cJSON_IsString(presence)) {
-        ogs_error("OpenAPI_area_of_interest_event_state_parseFromJSON() failed [presence]");
+        log_error("OpenAPI_area_of_interest_event_state_parseFromJSON() failed [presence]");
         goto end;
     }
     presenceVariable = OpenAPI_presence_state_FromString(presence->valuestring);
@@ -96,7 +96,7 @@ OpenAPI_area_of_interest_event_state_t *OpenAPI_area_of_interest_event_state_par
     if (individual_pra_id_list) {
         cJSON *individual_pra_id_list_local = NULL;
         if (!cJSON_IsArray(individual_pra_id_list)) {
-            ogs_error("OpenAPI_area_of_interest_event_state_parseFromJSON() failed [individual_pra_id_list]");
+            log_error("OpenAPI_area_of_interest_event_state_parseFromJSON() failed [individual_pra_id_list]");
             goto end;
         }
 
@@ -106,7 +106,7 @@ OpenAPI_area_of_interest_event_state_t *OpenAPI_area_of_interest_event_state_par
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(individual_pra_id_list_local)) {
-                ogs_error("OpenAPI_area_of_interest_event_state_parseFromJSON() failed [individual_pra_id_list]");
+                log_error("OpenAPI_area_of_interest_event_state_parseFromJSON() failed [individual_pra_id_list]");
                 goto end;
             }
             OpenAPI_list_add(individual_pra_id_listList, ogs_strdup(individual_pra_id_list_local->valuestring));
@@ -135,10 +135,10 @@ OpenAPI_area_of_interest_event_state_t *OpenAPI_area_of_interest_event_state_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_area_of_interest_event_state_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed");
+        log_error("OpenAPI_area_of_interest_event_state_convertToJSON() failed");
         return NULL;
     }
 
@@ -146,14 +146,14 @@ OpenAPI_area_of_interest_event_state_t *OpenAPI_area_of_interest_event_state_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -13,7 +13,7 @@ OpenAPI_nsi_information_t *OpenAPI_nsi_information_create(
 )
 {
     OpenAPI_nsi_information_t *nsi_information_local_var = ogs_malloc(sizeof(OpenAPI_nsi_information_t));
-    ogs_assert(nsi_information_local_var);
+    log_assert(nsi_information_local_var);
 
     nsi_information_local_var->nrf_id = nrf_id;
     nsi_information_local_var->nsi_id = nsi_id;
@@ -66,37 +66,37 @@ cJSON *OpenAPI_nsi_information_convertToJSON(OpenAPI_nsi_information_t *nsi_info
     OpenAPI_lnode_t *node = NULL;
 
     if (nsi_information == NULL) {
-        ogs_error("OpenAPI_nsi_information_convertToJSON() failed [NsiInformation]");
+        log_error("OpenAPI_nsi_information_convertToJSON() failed [NsiInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!nsi_information->nrf_id) {
-        ogs_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_id]");
+        log_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "nrfId", nsi_information->nrf_id) == NULL) {
-        ogs_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_id]");
+        log_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_id]");
         goto end;
     }
 
     if (nsi_information->nsi_id) {
     if (cJSON_AddStringToObject(item, "nsiId", nsi_information->nsi_id) == NULL) {
-        ogs_error("OpenAPI_nsi_information_convertToJSON() failed [nsi_id]");
+        log_error("OpenAPI_nsi_information_convertToJSON() failed [nsi_id]");
         goto end;
     }
     }
 
     if (nsi_information->nrf_nf_mgt_uri) {
     if (cJSON_AddStringToObject(item, "nrfNfMgtUri", nsi_information->nrf_nf_mgt_uri) == NULL) {
-        ogs_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_nf_mgt_uri]");
+        log_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_nf_mgt_uri]");
         goto end;
     }
     }
 
     if (nsi_information->nrf_access_token_uri) {
     if (cJSON_AddStringToObject(item, "nrfAccessTokenUri", nsi_information->nrf_access_token_uri) == NULL) {
-        ogs_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_access_token_uri]");
+        log_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_access_token_uri]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ cJSON *OpenAPI_nsi_information_convertToJSON(OpenAPI_nsi_information_t *nsi_info
     if (nsi_information->nrf_oauth2_required) {
     cJSON *nrf_oauth2_required = cJSON_AddObjectToObject(item, "nrfOauth2Required");
     if (nrf_oauth2_required == NULL) {
-        ogs_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_oauth2_required]");
+        log_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_oauth2_required]");
         goto end;
     }
     cJSON *localMapObject = nrf_oauth2_required;
@@ -112,15 +112,15 @@ cJSON *OpenAPI_nsi_information_convertToJSON(OpenAPI_nsi_information_t *nsi_info
         OpenAPI_list_for_each(nsi_information->nrf_oauth2_required, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_oauth2_required]");
+                log_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_oauth2_required]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_oauth2_required]");
+                log_error("OpenAPI_nsi_information_convertToJSON() failed [nrf_oauth2_required]");
                 goto end;
             }
             if (cJSON_AddBoolToObject(localMapObject, localKeyValue->key, (uintptr_t)localKeyValue->value) == NULL) {
-                ogs_error("OpenAPI_nsi_information_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nsi_information_convertToJSON() failed [inner]");
                 goto end;
             }
         }
@@ -143,18 +143,18 @@ OpenAPI_nsi_information_t *OpenAPI_nsi_information_parseFromJSON(cJSON *nsi_info
     OpenAPI_list_t *nrf_oauth2_requiredList = NULL;
     nrf_id = cJSON_GetObjectItemCaseSensitive(nsi_informationJSON, "nrfId");
     if (!nrf_id) {
-        ogs_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_id]");
+        log_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_id]");
         goto end;
     }
     if (!cJSON_IsString(nrf_id)) {
-        ogs_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_id]");
+        log_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_id]");
         goto end;
     }
 
     nsi_id = cJSON_GetObjectItemCaseSensitive(nsi_informationJSON, "nsiId");
     if (nsi_id) {
     if (!cJSON_IsString(nsi_id) && !cJSON_IsNull(nsi_id)) {
-        ogs_error("OpenAPI_nsi_information_parseFromJSON() failed [nsi_id]");
+        log_error("OpenAPI_nsi_information_parseFromJSON() failed [nsi_id]");
         goto end;
     }
     }
@@ -162,7 +162,7 @@ OpenAPI_nsi_information_t *OpenAPI_nsi_information_parseFromJSON(cJSON *nsi_info
     nrf_nf_mgt_uri = cJSON_GetObjectItemCaseSensitive(nsi_informationJSON, "nrfNfMgtUri");
     if (nrf_nf_mgt_uri) {
     if (!cJSON_IsString(nrf_nf_mgt_uri) && !cJSON_IsNull(nrf_nf_mgt_uri)) {
-        ogs_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_nf_mgt_uri]");
+        log_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_nf_mgt_uri]");
         goto end;
     }
     }
@@ -170,7 +170,7 @@ OpenAPI_nsi_information_t *OpenAPI_nsi_information_parseFromJSON(cJSON *nsi_info
     nrf_access_token_uri = cJSON_GetObjectItemCaseSensitive(nsi_informationJSON, "nrfAccessTokenUri");
     if (nrf_access_token_uri) {
     if (!cJSON_IsString(nrf_access_token_uri) && !cJSON_IsNull(nrf_access_token_uri)) {
-        ogs_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_access_token_uri]");
+        log_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_access_token_uri]");
         goto end;
     }
     }
@@ -179,7 +179,7 @@ OpenAPI_nsi_information_t *OpenAPI_nsi_information_parseFromJSON(cJSON *nsi_info
     if (nrf_oauth2_required) {
         cJSON *nrf_oauth2_required_local_map = NULL;
         if (!cJSON_IsObject(nrf_oauth2_required) && !cJSON_IsNull(nrf_oauth2_required)) {
-            ogs_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_oauth2_required]");
+            log_error("OpenAPI_nsi_information_parseFromJSON() failed [nrf_oauth2_required]");
             goto end;
         }
         if (cJSON_IsObject(nrf_oauth2_required)) {
@@ -190,12 +190,12 @@ OpenAPI_nsi_information_t *OpenAPI_nsi_information_parseFromJSON(cJSON *nsi_info
                 double *localDouble = NULL;
                 int *localInt = NULL;
                 if (!cJSON_IsBool(localMapObject)) {
-                    ogs_error("OpenAPI_nsi_information_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nsi_information_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 localInt = (int *)ogs_calloc(1, sizeof(int));
                 if (!localInt) {
-                    ogs_error("OpenAPI_nsi_information_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nsi_information_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 *localInt = localMapObject->valueint;
@@ -233,10 +233,10 @@ OpenAPI_nsi_information_t *OpenAPI_nsi_information_copy(OpenAPI_nsi_information_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nsi_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nsi_information_convertToJSON() failed");
+        log_error("OpenAPI_nsi_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -244,14 +244,14 @@ OpenAPI_nsi_information_t *OpenAPI_nsi_information_copy(OpenAPI_nsi_information_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

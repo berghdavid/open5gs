@@ -11,7 +11,7 @@ OpenAPI_scheduled_communication_time_rm_t *OpenAPI_scheduled_communication_time_
 )
 {
     OpenAPI_scheduled_communication_time_rm_t *scheduled_communication_time_rm_local_var = ogs_malloc(sizeof(OpenAPI_scheduled_communication_time_rm_t));
-    ogs_assert(scheduled_communication_time_rm_local_var);
+    log_assert(scheduled_communication_time_rm_local_var);
 
     scheduled_communication_time_rm_local_var->days_of_week = days_of_week;
     scheduled_communication_time_rm_local_var->time_of_day_start = time_of_day_start;
@@ -51,7 +51,7 @@ cJSON *OpenAPI_scheduled_communication_time_rm_convertToJSON(OpenAPI_scheduled_c
     OpenAPI_lnode_t *node = NULL;
 
     if (scheduled_communication_time_rm == NULL) {
-        ogs_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [ScheduledCommunicationTimeRm]");
+        log_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [ScheduledCommunicationTimeRm]");
         return NULL;
     }
 
@@ -59,16 +59,16 @@ cJSON *OpenAPI_scheduled_communication_time_rm_convertToJSON(OpenAPI_scheduled_c
     if (scheduled_communication_time_rm->days_of_week) {
     cJSON *days_of_weekList = cJSON_AddArrayToObject(item, "daysOfWeek");
     if (days_of_weekList == NULL) {
-        ogs_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [days_of_week]");
+        log_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [days_of_week]");
         goto end;
     }
     OpenAPI_list_for_each(scheduled_communication_time_rm->days_of_week, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [days_of_week]");
+            log_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [days_of_week]");
             goto end;
         }
         if (cJSON_AddNumberToObject(days_of_weekList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [days_of_week]");
+            log_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [days_of_week]");
             goto end;
         }
     }
@@ -76,14 +76,14 @@ cJSON *OpenAPI_scheduled_communication_time_rm_convertToJSON(OpenAPI_scheduled_c
 
     if (scheduled_communication_time_rm->time_of_day_start) {
     if (cJSON_AddStringToObject(item, "timeOfDayStart", scheduled_communication_time_rm->time_of_day_start) == NULL) {
-        ogs_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [time_of_day_start]");
+        log_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [time_of_day_start]");
         goto end;
     }
     }
 
     if (scheduled_communication_time_rm->time_of_day_end) {
     if (cJSON_AddStringToObject(item, "timeOfDayEnd", scheduled_communication_time_rm->time_of_day_end) == NULL) {
-        ogs_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [time_of_day_end]");
+        log_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed [time_of_day_end]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_scheduled_communication_time_rm_t *OpenAPI_scheduled_communication_time_
     if (days_of_week) {
         cJSON *days_of_week_local = NULL;
         if (!cJSON_IsArray(days_of_week)) {
-            ogs_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [days_of_week]");
+            log_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [days_of_week]");
             goto end;
         }
 
@@ -114,12 +114,12 @@ OpenAPI_scheduled_communication_time_rm_t *OpenAPI_scheduled_communication_time_
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(days_of_week_local)) {
-                ogs_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [days_of_week]");
+                log_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [days_of_week]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [days_of_week]");
+                log_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [days_of_week]");
                 goto end;
             }
             *localDouble = days_of_week_local->valuedouble;
@@ -130,7 +130,7 @@ OpenAPI_scheduled_communication_time_rm_t *OpenAPI_scheduled_communication_time_
     time_of_day_start = cJSON_GetObjectItemCaseSensitive(scheduled_communication_time_rmJSON, "timeOfDayStart");
     if (time_of_day_start) {
     if (!cJSON_IsString(time_of_day_start) && !cJSON_IsNull(time_of_day_start)) {
-        ogs_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [time_of_day_start]");
+        log_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [time_of_day_start]");
         goto end;
     }
     }
@@ -138,7 +138,7 @@ OpenAPI_scheduled_communication_time_rm_t *OpenAPI_scheduled_communication_time_
     time_of_day_end = cJSON_GetObjectItemCaseSensitive(scheduled_communication_time_rmJSON, "timeOfDayEnd");
     if (time_of_day_end) {
     if (!cJSON_IsString(time_of_day_end) && !cJSON_IsNull(time_of_day_end)) {
-        ogs_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [time_of_day_end]");
+        log_error("OpenAPI_scheduled_communication_time_rm_parseFromJSON() failed [time_of_day_end]");
         goto end;
     }
     }
@@ -166,10 +166,10 @@ OpenAPI_scheduled_communication_time_rm_t *OpenAPI_scheduled_communication_time_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_scheduled_communication_time_rm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed");
+        log_error("OpenAPI_scheduled_communication_time_rm_convertToJSON() failed");
         return NULL;
     }
 
@@ -177,14 +177,14 @@ OpenAPI_scheduled_communication_time_rm_t *OpenAPI_scheduled_communication_time_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

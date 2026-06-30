@@ -20,7 +20,7 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_create(
 )
 {
     OpenAPI_area_event_info_t *area_event_info_local_var = ogs_malloc(sizeof(OpenAPI_area_event_info_t));
-    ogs_assert(area_event_info_local_var);
+    log_assert(area_event_info_local_var);
 
     area_event_info_local_var->area_definition = area_definition;
     area_event_info_local_var->occurrence_info = occurrence_info;
@@ -65,24 +65,24 @@ cJSON *OpenAPI_area_event_info_convertToJSON(OpenAPI_area_event_info_t *area_eve
     OpenAPI_lnode_t *node = NULL;
 
     if (area_event_info == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [AreaEventInfo]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [AreaEventInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!area_event_info->area_definition) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [area_definition]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [area_definition]");
         return NULL;
     }
     cJSON *area_definitionList = cJSON_AddArrayToObject(item, "areaDefinition");
     if (area_definitionList == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [area_definition]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [area_definition]");
         goto end;
     }
     OpenAPI_list_for_each(area_event_info->area_definition, node) {
         cJSON *itemLocal = OpenAPI_reporting_area_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_area_event_info_convertToJSON() failed [area_definition]");
+            log_error("OpenAPI_area_event_info_convertToJSON() failed [area_definition]");
             goto end;
         }
         cJSON_AddItemToArray(area_definitionList, itemLocal);
@@ -91,47 +91,47 @@ cJSON *OpenAPI_area_event_info_convertToJSON(OpenAPI_area_event_info_t *area_eve
     if (area_event_info->occurrence_info) {
     cJSON *occurrence_info_local_JSON = OpenAPI_occurrence_info_convertToJSON(area_event_info->occurrence_info);
     if (occurrence_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [occurrence_info]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [occurrence_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "occurrenceInfo", occurrence_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [occurrence_info]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [occurrence_info]");
         goto end;
     }
     }
 
     if (area_event_info->is_minimum_interval) {
     if (cJSON_AddNumberToObject(item, "minimumInterval", area_event_info->minimum_interval) == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [minimum_interval]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [minimum_interval]");
         goto end;
     }
     }
 
     if (area_event_info->is_maximum_interval) {
     if (cJSON_AddNumberToObject(item, "maximumInterval", area_event_info->maximum_interval) == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [maximum_interval]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [maximum_interval]");
         goto end;
     }
     }
 
     if (area_event_info->is_sampling_interval) {
     if (cJSON_AddNumberToObject(item, "samplingInterval", area_event_info->sampling_interval) == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [sampling_interval]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [sampling_interval]");
         goto end;
     }
     }
 
     if (area_event_info->is_reporting_duration) {
     if (cJSON_AddNumberToObject(item, "reportingDuration", area_event_info->reporting_duration) == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [reporting_duration]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [reporting_duration]");
         goto end;
     }
     }
 
     if (area_event_info->is_reporting_location_req) {
     if (cJSON_AddBoolToObject(item, "reportingLocationReq", area_event_info->reporting_location_req) == NULL) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed [reporting_location_req]");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed [reporting_location_req]");
         goto end;
     }
     }
@@ -155,12 +155,12 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_parseFromJSON(cJSON *area_eve
     cJSON *reporting_location_req = NULL;
     area_definition = cJSON_GetObjectItemCaseSensitive(area_event_infoJSON, "areaDefinition");
     if (!area_definition) {
-        ogs_error("OpenAPI_area_event_info_parseFromJSON() failed [area_definition]");
+        log_error("OpenAPI_area_event_info_parseFromJSON() failed [area_definition]");
         goto end;
     }
         cJSON *area_definition_local = NULL;
         if (!cJSON_IsArray(area_definition)) {
-            ogs_error("OpenAPI_area_event_info_parseFromJSON() failed [area_definition]");
+            log_error("OpenAPI_area_event_info_parseFromJSON() failed [area_definition]");
             goto end;
         }
 
@@ -168,12 +168,12 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_parseFromJSON(cJSON *area_eve
 
         cJSON_ArrayForEach(area_definition_local, area_definition) {
             if (!cJSON_IsObject(area_definition_local)) {
-                ogs_error("OpenAPI_area_event_info_parseFromJSON() failed [area_definition]");
+                log_error("OpenAPI_area_event_info_parseFromJSON() failed [area_definition]");
                 goto end;
             }
             OpenAPI_reporting_area_t *area_definitionItem = OpenAPI_reporting_area_parseFromJSON(area_definition_local);
             if (!area_definitionItem) {
-                ogs_error("No area_definitionItem");
+                log_error("No area_definitionItem");
                 goto end;
             }
             OpenAPI_list_add(area_definitionList, area_definitionItem);
@@ -183,7 +183,7 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_parseFromJSON(cJSON *area_eve
     if (occurrence_info) {
     occurrence_info_local_nonprim = OpenAPI_occurrence_info_parseFromJSON(occurrence_info);
     if (!occurrence_info_local_nonprim) {
-        ogs_error("OpenAPI_occurrence_info_parseFromJSON failed [occurrence_info]");
+        log_error("OpenAPI_occurrence_info_parseFromJSON failed [occurrence_info]");
         goto end;
     }
     }
@@ -191,7 +191,7 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_parseFromJSON(cJSON *area_eve
     minimum_interval = cJSON_GetObjectItemCaseSensitive(area_event_infoJSON, "minimumInterval");
     if (minimum_interval) {
     if (!cJSON_IsNumber(minimum_interval)) {
-        ogs_error("OpenAPI_area_event_info_parseFromJSON() failed [minimum_interval]");
+        log_error("OpenAPI_area_event_info_parseFromJSON() failed [minimum_interval]");
         goto end;
     }
     }
@@ -199,7 +199,7 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_parseFromJSON(cJSON *area_eve
     maximum_interval = cJSON_GetObjectItemCaseSensitive(area_event_infoJSON, "maximumInterval");
     if (maximum_interval) {
     if (!cJSON_IsNumber(maximum_interval)) {
-        ogs_error("OpenAPI_area_event_info_parseFromJSON() failed [maximum_interval]");
+        log_error("OpenAPI_area_event_info_parseFromJSON() failed [maximum_interval]");
         goto end;
     }
     }
@@ -207,7 +207,7 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_parseFromJSON(cJSON *area_eve
     sampling_interval = cJSON_GetObjectItemCaseSensitive(area_event_infoJSON, "samplingInterval");
     if (sampling_interval) {
     if (!cJSON_IsNumber(sampling_interval)) {
-        ogs_error("OpenAPI_area_event_info_parseFromJSON() failed [sampling_interval]");
+        log_error("OpenAPI_area_event_info_parseFromJSON() failed [sampling_interval]");
         goto end;
     }
     }
@@ -215,7 +215,7 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_parseFromJSON(cJSON *area_eve
     reporting_duration = cJSON_GetObjectItemCaseSensitive(area_event_infoJSON, "reportingDuration");
     if (reporting_duration) {
     if (!cJSON_IsNumber(reporting_duration)) {
-        ogs_error("OpenAPI_area_event_info_parseFromJSON() failed [reporting_duration]");
+        log_error("OpenAPI_area_event_info_parseFromJSON() failed [reporting_duration]");
         goto end;
     }
     }
@@ -223,7 +223,7 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_parseFromJSON(cJSON *area_eve
     reporting_location_req = cJSON_GetObjectItemCaseSensitive(area_event_infoJSON, "reportingLocationReq");
     if (reporting_location_req) {
     if (!cJSON_IsBool(reporting_location_req)) {
-        ogs_error("OpenAPI_area_event_info_parseFromJSON() failed [reporting_location_req]");
+        log_error("OpenAPI_area_event_info_parseFromJSON() failed [reporting_location_req]");
         goto end;
     }
     }
@@ -264,10 +264,10 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_copy(OpenAPI_area_event_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_area_event_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_area_event_info_convertToJSON() failed");
+        log_error("OpenAPI_area_event_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -275,14 +275,14 @@ OpenAPI_area_event_info_t *OpenAPI_area_event_info_copy(OpenAPI_area_event_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

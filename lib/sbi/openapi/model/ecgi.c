@@ -11,7 +11,7 @@ OpenAPI_ecgi_t *OpenAPI_ecgi_create(
 )
 {
     OpenAPI_ecgi_t *ecgi_local_var = ogs_malloc(sizeof(OpenAPI_ecgi_t));
-    ogs_assert(ecgi_local_var);
+    log_assert(ecgi_local_var);
 
     ecgi_local_var->plmn_id = plmn_id;
     ecgi_local_var->eutra_cell_id = eutra_cell_id;
@@ -48,38 +48,38 @@ cJSON *OpenAPI_ecgi_convertToJSON(OpenAPI_ecgi_t *ecgi)
     OpenAPI_lnode_t *node = NULL;
 
     if (ecgi == NULL) {
-        ogs_error("OpenAPI_ecgi_convertToJSON() failed [Ecgi]");
+        log_error("OpenAPI_ecgi_convertToJSON() failed [Ecgi]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!ecgi->plmn_id) {
-        ogs_error("OpenAPI_ecgi_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_ecgi_convertToJSON() failed [plmn_id]");
         return NULL;
     }
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(ecgi->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_ecgi_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_ecgi_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ecgi_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_ecgi_convertToJSON() failed [plmn_id]");
         goto end;
     }
 
     if (!ecgi->eutra_cell_id) {
-        ogs_error("OpenAPI_ecgi_convertToJSON() failed [eutra_cell_id]");
+        log_error("OpenAPI_ecgi_convertToJSON() failed [eutra_cell_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "eutraCellId", ecgi->eutra_cell_id) == NULL) {
-        ogs_error("OpenAPI_ecgi_convertToJSON() failed [eutra_cell_id]");
+        log_error("OpenAPI_ecgi_convertToJSON() failed [eutra_cell_id]");
         goto end;
     }
 
     if (ecgi->nid) {
     if (cJSON_AddStringToObject(item, "nid", ecgi->nid) == NULL) {
-        ogs_error("OpenAPI_ecgi_convertToJSON() failed [nid]");
+        log_error("OpenAPI_ecgi_convertToJSON() failed [nid]");
         goto end;
     }
     }
@@ -98,29 +98,29 @@ OpenAPI_ecgi_t *OpenAPI_ecgi_parseFromJSON(cJSON *ecgiJSON)
     cJSON *nid = NULL;
     plmn_id = cJSON_GetObjectItemCaseSensitive(ecgiJSON, "plmnId");
     if (!plmn_id) {
-        ogs_error("OpenAPI_ecgi_parseFromJSON() failed [plmn_id]");
+        log_error("OpenAPI_ecgi_parseFromJSON() failed [plmn_id]");
         goto end;
     }
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
 
     eutra_cell_id = cJSON_GetObjectItemCaseSensitive(ecgiJSON, "eutraCellId");
     if (!eutra_cell_id) {
-        ogs_error("OpenAPI_ecgi_parseFromJSON() failed [eutra_cell_id]");
+        log_error("OpenAPI_ecgi_parseFromJSON() failed [eutra_cell_id]");
         goto end;
     }
     if (!cJSON_IsString(eutra_cell_id)) {
-        ogs_error("OpenAPI_ecgi_parseFromJSON() failed [eutra_cell_id]");
+        log_error("OpenAPI_ecgi_parseFromJSON() failed [eutra_cell_id]");
         goto end;
     }
 
     nid = cJSON_GetObjectItemCaseSensitive(ecgiJSON, "nid");
     if (nid) {
     if (!cJSON_IsString(nid) && !cJSON_IsNull(nid)) {
-        ogs_error("OpenAPI_ecgi_parseFromJSON() failed [nid]");
+        log_error("OpenAPI_ecgi_parseFromJSON() failed [nid]");
         goto end;
     }
     }
@@ -145,10 +145,10 @@ OpenAPI_ecgi_t *OpenAPI_ecgi_copy(OpenAPI_ecgi_t *dst, OpenAPI_ecgi_t *src)
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ecgi_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ecgi_convertToJSON() failed");
+        log_error("OpenAPI_ecgi_convertToJSON() failed");
         return NULL;
     }
 
@@ -156,14 +156,14 @@ OpenAPI_ecgi_t *OpenAPI_ecgi_copy(OpenAPI_ecgi_t *dst, OpenAPI_ecgi_t *src)
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

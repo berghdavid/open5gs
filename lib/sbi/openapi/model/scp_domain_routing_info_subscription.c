@@ -13,7 +13,7 @@ OpenAPI_scp_domain_routing_info_subscription_t *OpenAPI_scp_domain_routing_info_
 )
 {
     OpenAPI_scp_domain_routing_info_subscription_t *scp_domain_routing_info_subscription_local_var = ogs_malloc(sizeof(OpenAPI_scp_domain_routing_info_subscription_t));
-    ogs_assert(scp_domain_routing_info_subscription_local_var);
+    log_assert(scp_domain_routing_info_subscription_local_var);
 
     scp_domain_routing_info_subscription_local_var->callback_uri = callback_uri;
     scp_domain_routing_info_subscription_local_var->validity_time = validity_time;
@@ -52,37 +52,37 @@ cJSON *OpenAPI_scp_domain_routing_info_subscription_convertToJSON(OpenAPI_scp_do
     OpenAPI_lnode_t *node = NULL;
 
     if (scp_domain_routing_info_subscription == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [ScpDomainRoutingInfoSubscription]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [ScpDomainRoutingInfoSubscription]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!scp_domain_routing_info_subscription->callback_uri) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [callback_uri]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [callback_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "callbackUri", scp_domain_routing_info_subscription->callback_uri) == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [callback_uri]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [callback_uri]");
         goto end;
     }
 
     if (scp_domain_routing_info_subscription->validity_time) {
     if (cJSON_AddStringToObject(item, "validityTime", scp_domain_routing_info_subscription->validity_time) == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [validity_time]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [validity_time]");
         goto end;
     }
     }
 
     if (scp_domain_routing_info_subscription->req_instance_id) {
     if (cJSON_AddStringToObject(item, "reqInstanceId", scp_domain_routing_info_subscription->req_instance_id) == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [req_instance_id]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [req_instance_id]");
         goto end;
     }
     }
 
     if (scp_domain_routing_info_subscription->is_local_ind) {
     if (cJSON_AddBoolToObject(item, "localInd", scp_domain_routing_info_subscription->local_ind) == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [local_ind]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed [local_ind]");
         goto end;
     }
     }
@@ -101,18 +101,18 @@ OpenAPI_scp_domain_routing_info_subscription_t *OpenAPI_scp_domain_routing_info_
     cJSON *local_ind = NULL;
     callback_uri = cJSON_GetObjectItemCaseSensitive(scp_domain_routing_info_subscriptionJSON, "callbackUri");
     if (!callback_uri) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [callback_uri]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [callback_uri]");
         goto end;
     }
     if (!cJSON_IsString(callback_uri)) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [callback_uri]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [callback_uri]");
         goto end;
     }
 
     validity_time = cJSON_GetObjectItemCaseSensitive(scp_domain_routing_info_subscriptionJSON, "validityTime");
     if (validity_time) {
     if (!cJSON_IsString(validity_time) && !cJSON_IsNull(validity_time)) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [validity_time]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [validity_time]");
         goto end;
     }
     }
@@ -120,7 +120,7 @@ OpenAPI_scp_domain_routing_info_subscription_t *OpenAPI_scp_domain_routing_info_
     req_instance_id = cJSON_GetObjectItemCaseSensitive(scp_domain_routing_info_subscriptionJSON, "reqInstanceId");
     if (req_instance_id) {
     if (!cJSON_IsString(req_instance_id) && !cJSON_IsNull(req_instance_id)) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [req_instance_id]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [req_instance_id]");
         goto end;
     }
     }
@@ -128,7 +128,7 @@ OpenAPI_scp_domain_routing_info_subscription_t *OpenAPI_scp_domain_routing_info_
     local_ind = cJSON_GetObjectItemCaseSensitive(scp_domain_routing_info_subscriptionJSON, "localInd");
     if (local_ind) {
     if (!cJSON_IsBool(local_ind)) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [local_ind]");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_parseFromJSON() failed [local_ind]");
         goto end;
     }
     }
@@ -151,10 +151,10 @@ OpenAPI_scp_domain_routing_info_subscription_t *OpenAPI_scp_domain_routing_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_scp_domain_routing_info_subscription_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed");
+        log_error("OpenAPI_scp_domain_routing_info_subscription_convertToJSON() failed");
         return NULL;
     }
 
@@ -162,14 +162,14 @@ OpenAPI_scp_domain_routing_info_subscription_t *OpenAPI_scp_domain_routing_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

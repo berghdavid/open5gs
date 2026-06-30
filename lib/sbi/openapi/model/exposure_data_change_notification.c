@@ -12,7 +12,7 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
 )
 {
     OpenAPI_exposure_data_change_notification_t *exposure_data_change_notification_local_var = ogs_malloc(sizeof(OpenAPI_exposure_data_change_notification_t));
-    ogs_assert(exposure_data_change_notification_local_var);
+    log_assert(exposure_data_change_notification_local_var);
 
     exposure_data_change_notification_local_var->ue_id = ue_id;
     exposure_data_change_notification_local_var->access_and_mobility_data = access_and_mobility_data;
@@ -60,14 +60,14 @@ cJSON *OpenAPI_exposure_data_change_notification_convertToJSON(OpenAPI_exposure_
     OpenAPI_lnode_t *node = NULL;
 
     if (exposure_data_change_notification == NULL) {
-        ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [ExposureDataChangeNotification]");
+        log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [ExposureDataChangeNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (exposure_data_change_notification->ue_id) {
     if (cJSON_AddStringToObject(item, "ueId", exposure_data_change_notification->ue_id) == NULL) {
-        ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [ue_id]");
+        log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [ue_id]");
         goto end;
     }
     }
@@ -75,12 +75,12 @@ cJSON *OpenAPI_exposure_data_change_notification_convertToJSON(OpenAPI_exposure_
     if (exposure_data_change_notification->access_and_mobility_data) {
     cJSON *access_and_mobility_data_local_JSON = OpenAPI_access_and_mobility_data_convertToJSON(exposure_data_change_notification->access_and_mobility_data);
     if (access_and_mobility_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [access_and_mobility_data]");
+        log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [access_and_mobility_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "accessAndMobilityData", access_and_mobility_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [access_and_mobility_data]");
+        log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [access_and_mobility_data]");
         goto end;
     }
     }
@@ -88,13 +88,13 @@ cJSON *OpenAPI_exposure_data_change_notification_convertToJSON(OpenAPI_exposure_
     if (exposure_data_change_notification->pdu_session_management_data) {
     cJSON *pdu_session_management_dataList = cJSON_AddArrayToObject(item, "pduSessionManagementData");
     if (pdu_session_management_dataList == NULL) {
-        ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [pdu_session_management_data]");
+        log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [pdu_session_management_data]");
         goto end;
     }
     OpenAPI_list_for_each(exposure_data_change_notification->pdu_session_management_data, node) {
         cJSON *itemLocal = OpenAPI_pdu_session_management_data_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [pdu_session_management_data]");
+            log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [pdu_session_management_data]");
             goto end;
         }
         cJSON_AddItemToArray(pdu_session_management_dataList, itemLocal);
@@ -104,12 +104,12 @@ cJSON *OpenAPI_exposure_data_change_notification_convertToJSON(OpenAPI_exposure_
     if (exposure_data_change_notification->del_resources) {
     cJSON *del_resourcesList = cJSON_AddArrayToObject(item, "delResources");
     if (del_resourcesList == NULL) {
-        ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [del_resources]");
+        log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [del_resources]");
         goto end;
     }
     OpenAPI_list_for_each(exposure_data_change_notification->del_resources, node) {
         if (cJSON_AddStringToObject(del_resourcesList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [del_resources]");
+            log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed [del_resources]");
             goto end;
         }
     }
@@ -133,7 +133,7 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
     ue_id = cJSON_GetObjectItemCaseSensitive(exposure_data_change_notificationJSON, "ueId");
     if (ue_id) {
     if (!cJSON_IsString(ue_id) && !cJSON_IsNull(ue_id)) {
-        ogs_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [ue_id]");
+        log_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [ue_id]");
         goto end;
     }
     }
@@ -142,7 +142,7 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
     if (access_and_mobility_data) {
     access_and_mobility_data_local_nonprim = OpenAPI_access_and_mobility_data_parseFromJSON(access_and_mobility_data);
     if (!access_and_mobility_data_local_nonprim) {
-        ogs_error("OpenAPI_access_and_mobility_data_parseFromJSON failed [access_and_mobility_data]");
+        log_error("OpenAPI_access_and_mobility_data_parseFromJSON failed [access_and_mobility_data]");
         goto end;
     }
     }
@@ -151,7 +151,7 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
     if (pdu_session_management_data) {
         cJSON *pdu_session_management_data_local = NULL;
         if (!cJSON_IsArray(pdu_session_management_data)) {
-            ogs_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [pdu_session_management_data]");
+            log_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [pdu_session_management_data]");
             goto end;
         }
 
@@ -159,12 +159,12 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
 
         cJSON_ArrayForEach(pdu_session_management_data_local, pdu_session_management_data) {
             if (!cJSON_IsObject(pdu_session_management_data_local)) {
-                ogs_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [pdu_session_management_data]");
+                log_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [pdu_session_management_data]");
                 goto end;
             }
             OpenAPI_pdu_session_management_data_t *pdu_session_management_dataItem = OpenAPI_pdu_session_management_data_parseFromJSON(pdu_session_management_data_local);
             if (!pdu_session_management_dataItem) {
-                ogs_error("No pdu_session_management_dataItem");
+                log_error("No pdu_session_management_dataItem");
                 goto end;
             }
             OpenAPI_list_add(pdu_session_management_dataList, pdu_session_management_dataItem);
@@ -175,7 +175,7 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
     if (del_resources) {
         cJSON *del_resources_local = NULL;
         if (!cJSON_IsArray(del_resources)) {
-            ogs_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [del_resources]");
+            log_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [del_resources]");
             goto end;
         }
 
@@ -185,7 +185,7 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(del_resources_local)) {
-                ogs_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [del_resources]");
+                log_error("OpenAPI_exposure_data_change_notification_parseFromJSON() failed [del_resources]");
                 goto end;
             }
             OpenAPI_list_add(del_resourcesList, ogs_strdup(del_resources_local->valuestring));
@@ -227,10 +227,10 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_exposure_data_change_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed");
+        log_error("OpenAPI_exposure_data_change_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -238,14 +238,14 @@ OpenAPI_exposure_data_change_notification_t *OpenAPI_exposure_data_change_notifi
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

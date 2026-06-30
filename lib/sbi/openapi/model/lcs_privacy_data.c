@@ -11,7 +11,7 @@ OpenAPI_lcs_privacy_data_t *OpenAPI_lcs_privacy_data_create(
 )
 {
     OpenAPI_lcs_privacy_data_t *lcs_privacy_data_local_var = ogs_malloc(sizeof(OpenAPI_lcs_privacy_data_t));
-    ogs_assert(lcs_privacy_data_local_var);
+    log_assert(lcs_privacy_data_local_var);
 
     lcs_privacy_data_local_var->lpi = lpi;
     lcs_privacy_data_local_var->unrelated_class = unrelated_class;
@@ -51,7 +51,7 @@ cJSON *OpenAPI_lcs_privacy_data_convertToJSON(OpenAPI_lcs_privacy_data_t *lcs_pr
     OpenAPI_lnode_t *node = NULL;
 
     if (lcs_privacy_data == NULL) {
-        ogs_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [LcsPrivacyData]");
+        log_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [LcsPrivacyData]");
         return NULL;
     }
 
@@ -59,12 +59,12 @@ cJSON *OpenAPI_lcs_privacy_data_convertToJSON(OpenAPI_lcs_privacy_data_t *lcs_pr
     if (lcs_privacy_data->lpi) {
     cJSON *lpi_local_JSON = OpenAPI_lpi_convertToJSON(lcs_privacy_data->lpi);
     if (lpi_local_JSON == NULL) {
-        ogs_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [lpi]");
+        log_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [lpi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "lpi", lpi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [lpi]");
+        log_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [lpi]");
         goto end;
     }
     }
@@ -72,12 +72,12 @@ cJSON *OpenAPI_lcs_privacy_data_convertToJSON(OpenAPI_lcs_privacy_data_t *lcs_pr
     if (lcs_privacy_data->unrelated_class) {
     cJSON *unrelated_class_local_JSON = OpenAPI_unrelated_class_convertToJSON(lcs_privacy_data->unrelated_class);
     if (unrelated_class_local_JSON == NULL) {
-        ogs_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [unrelated_class]");
+        log_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [unrelated_class]");
         goto end;
     }
     cJSON_AddItemToObject(item, "unrelatedClass", unrelated_class_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [unrelated_class]");
+        log_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [unrelated_class]");
         goto end;
     }
     }
@@ -85,13 +85,13 @@ cJSON *OpenAPI_lcs_privacy_data_convertToJSON(OpenAPI_lcs_privacy_data_t *lcs_pr
     if (lcs_privacy_data->plmn_operator_classes) {
     cJSON *plmn_operator_classesList = cJSON_AddArrayToObject(item, "plmnOperatorClasses");
     if (plmn_operator_classesList == NULL) {
-        ogs_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [plmn_operator_classes]");
+        log_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [plmn_operator_classes]");
         goto end;
     }
     OpenAPI_list_for_each(lcs_privacy_data->plmn_operator_classes, node) {
         cJSON *itemLocal = OpenAPI_plmn_operator_class_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [plmn_operator_classes]");
+            log_error("OpenAPI_lcs_privacy_data_convertToJSON() failed [plmn_operator_classes]");
             goto end;
         }
         cJSON_AddItemToArray(plmn_operator_classesList, itemLocal);
@@ -116,7 +116,7 @@ OpenAPI_lcs_privacy_data_t *OpenAPI_lcs_privacy_data_parseFromJSON(cJSON *lcs_pr
     if (lpi) {
     lpi_local_nonprim = OpenAPI_lpi_parseFromJSON(lpi);
     if (!lpi_local_nonprim) {
-        ogs_error("OpenAPI_lpi_parseFromJSON failed [lpi]");
+        log_error("OpenAPI_lpi_parseFromJSON failed [lpi]");
         goto end;
     }
     }
@@ -125,7 +125,7 @@ OpenAPI_lcs_privacy_data_t *OpenAPI_lcs_privacy_data_parseFromJSON(cJSON *lcs_pr
     if (unrelated_class) {
     unrelated_class_local_nonprim = OpenAPI_unrelated_class_parseFromJSON(unrelated_class);
     if (!unrelated_class_local_nonprim) {
-        ogs_error("OpenAPI_unrelated_class_parseFromJSON failed [unrelated_class]");
+        log_error("OpenAPI_unrelated_class_parseFromJSON failed [unrelated_class]");
         goto end;
     }
     }
@@ -134,7 +134,7 @@ OpenAPI_lcs_privacy_data_t *OpenAPI_lcs_privacy_data_parseFromJSON(cJSON *lcs_pr
     if (plmn_operator_classes) {
         cJSON *plmn_operator_classes_local = NULL;
         if (!cJSON_IsArray(plmn_operator_classes)) {
-            ogs_error("OpenAPI_lcs_privacy_data_parseFromJSON() failed [plmn_operator_classes]");
+            log_error("OpenAPI_lcs_privacy_data_parseFromJSON() failed [plmn_operator_classes]");
             goto end;
         }
 
@@ -142,12 +142,12 @@ OpenAPI_lcs_privacy_data_t *OpenAPI_lcs_privacy_data_parseFromJSON(cJSON *lcs_pr
 
         cJSON_ArrayForEach(plmn_operator_classes_local, plmn_operator_classes) {
             if (!cJSON_IsObject(plmn_operator_classes_local)) {
-                ogs_error("OpenAPI_lcs_privacy_data_parseFromJSON() failed [plmn_operator_classes]");
+                log_error("OpenAPI_lcs_privacy_data_parseFromJSON() failed [plmn_operator_classes]");
                 goto end;
             }
             OpenAPI_plmn_operator_class_t *plmn_operator_classesItem = OpenAPI_plmn_operator_class_parseFromJSON(plmn_operator_classes_local);
             if (!plmn_operator_classesItem) {
-                ogs_error("No plmn_operator_classesItem");
+                log_error("No plmn_operator_classesItem");
                 goto end;
             }
             OpenAPI_list_add(plmn_operator_classesList, plmn_operator_classesItem);
@@ -185,10 +185,10 @@ OpenAPI_lcs_privacy_data_t *OpenAPI_lcs_privacy_data_copy(OpenAPI_lcs_privacy_da
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_lcs_privacy_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_lcs_privacy_data_convertToJSON() failed");
+        log_error("OpenAPI_lcs_privacy_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -196,14 +196,14 @@ OpenAPI_lcs_privacy_data_t *OpenAPI_lcs_privacy_data_copy(OpenAPI_lcs_privacy_da
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

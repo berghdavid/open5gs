@@ -12,7 +12,7 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_create(
 )
 {
     OpenAPI_wireline_area_1_t *wireline_area_1_local_var = ogs_malloc(sizeof(OpenAPI_wireline_area_1_t));
-    ogs_assert(wireline_area_1_local_var);
+    log_assert(wireline_area_1_local_var);
 
     wireline_area_1_local_var->global_line_ids = global_line_ids;
     wireline_area_1_local_var->hfc_n_ids = hfc_n_ids;
@@ -60,7 +60,7 @@ cJSON *OpenAPI_wireline_area_1_convertToJSON(OpenAPI_wireline_area_1_t *wireline
     OpenAPI_lnode_t *node = NULL;
 
     if (wireline_area_1 == NULL) {
-        ogs_error("OpenAPI_wireline_area_1_convertToJSON() failed [WirelineArea_1]");
+        log_error("OpenAPI_wireline_area_1_convertToJSON() failed [WirelineArea_1]");
         return NULL;
     }
 
@@ -68,12 +68,12 @@ cJSON *OpenAPI_wireline_area_1_convertToJSON(OpenAPI_wireline_area_1_t *wireline
     if (wireline_area_1->global_line_ids) {
     cJSON *global_line_idsList = cJSON_AddArrayToObject(item, "globalLineIds");
     if (global_line_idsList == NULL) {
-        ogs_error("OpenAPI_wireline_area_1_convertToJSON() failed [global_line_ids]");
+        log_error("OpenAPI_wireline_area_1_convertToJSON() failed [global_line_ids]");
         goto end;
     }
     OpenAPI_list_for_each(wireline_area_1->global_line_ids, node) {
         if (cJSON_AddStringToObject(global_line_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_wireline_area_1_convertToJSON() failed [global_line_ids]");
+            log_error("OpenAPI_wireline_area_1_convertToJSON() failed [global_line_ids]");
             goto end;
         }
     }
@@ -82,12 +82,12 @@ cJSON *OpenAPI_wireline_area_1_convertToJSON(OpenAPI_wireline_area_1_t *wireline
     if (wireline_area_1->hfc_n_ids) {
     cJSON *hfc_n_idsList = cJSON_AddArrayToObject(item, "hfcNIds");
     if (hfc_n_idsList == NULL) {
-        ogs_error("OpenAPI_wireline_area_1_convertToJSON() failed [hfc_n_ids]");
+        log_error("OpenAPI_wireline_area_1_convertToJSON() failed [hfc_n_ids]");
         goto end;
     }
     OpenAPI_list_for_each(wireline_area_1->hfc_n_ids, node) {
         if (cJSON_AddStringToObject(hfc_n_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_wireline_area_1_convertToJSON() failed [hfc_n_ids]");
+            log_error("OpenAPI_wireline_area_1_convertToJSON() failed [hfc_n_ids]");
             goto end;
         }
     }
@@ -95,14 +95,14 @@ cJSON *OpenAPI_wireline_area_1_convertToJSON(OpenAPI_wireline_area_1_t *wireline
 
     if (wireline_area_1->area_code_b) {
     if (cJSON_AddStringToObject(item, "areaCodeB", wireline_area_1->area_code_b) == NULL) {
-        ogs_error("OpenAPI_wireline_area_1_convertToJSON() failed [area_code_b]");
+        log_error("OpenAPI_wireline_area_1_convertToJSON() failed [area_code_b]");
         goto end;
     }
     }
 
     if (wireline_area_1->area_code_c) {
     if (cJSON_AddStringToObject(item, "areaCodeC", wireline_area_1->area_code_c) == NULL) {
-        ogs_error("OpenAPI_wireline_area_1_convertToJSON() failed [area_code_c]");
+        log_error("OpenAPI_wireline_area_1_convertToJSON() failed [area_code_c]");
         goto end;
     }
     }
@@ -125,7 +125,7 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_parseFromJSON(cJSON *wireline
     if (global_line_ids) {
         cJSON *global_line_ids_local = NULL;
         if (!cJSON_IsArray(global_line_ids)) {
-            ogs_error("OpenAPI_wireline_area_1_parseFromJSON() failed [global_line_ids]");
+            log_error("OpenAPI_wireline_area_1_parseFromJSON() failed [global_line_ids]");
             goto end;
         }
 
@@ -135,7 +135,7 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_parseFromJSON(cJSON *wireline
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(global_line_ids_local)) {
-                ogs_error("OpenAPI_wireline_area_1_parseFromJSON() failed [global_line_ids]");
+                log_error("OpenAPI_wireline_area_1_parseFromJSON() failed [global_line_ids]");
                 goto end;
             }
             OpenAPI_list_add(global_line_idsList, ogs_strdup(global_line_ids_local->valuestring));
@@ -146,7 +146,7 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_parseFromJSON(cJSON *wireline
     if (hfc_n_ids) {
         cJSON *hfc_n_ids_local = NULL;
         if (!cJSON_IsArray(hfc_n_ids)) {
-            ogs_error("OpenAPI_wireline_area_1_parseFromJSON() failed [hfc_n_ids]");
+            log_error("OpenAPI_wireline_area_1_parseFromJSON() failed [hfc_n_ids]");
             goto end;
         }
 
@@ -156,7 +156,7 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_parseFromJSON(cJSON *wireline
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(hfc_n_ids_local)) {
-                ogs_error("OpenAPI_wireline_area_1_parseFromJSON() failed [hfc_n_ids]");
+                log_error("OpenAPI_wireline_area_1_parseFromJSON() failed [hfc_n_ids]");
                 goto end;
             }
             OpenAPI_list_add(hfc_n_idsList, ogs_strdup(hfc_n_ids_local->valuestring));
@@ -166,7 +166,7 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_parseFromJSON(cJSON *wireline
     area_code_b = cJSON_GetObjectItemCaseSensitive(wireline_area_1JSON, "areaCodeB");
     if (area_code_b) {
     if (!cJSON_IsString(area_code_b) && !cJSON_IsNull(area_code_b)) {
-        ogs_error("OpenAPI_wireline_area_1_parseFromJSON() failed [area_code_b]");
+        log_error("OpenAPI_wireline_area_1_parseFromJSON() failed [area_code_b]");
         goto end;
     }
     }
@@ -174,7 +174,7 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_parseFromJSON(cJSON *wireline
     area_code_c = cJSON_GetObjectItemCaseSensitive(wireline_area_1JSON, "areaCodeC");
     if (area_code_c) {
     if (!cJSON_IsString(area_code_c) && !cJSON_IsNull(area_code_c)) {
-        ogs_error("OpenAPI_wireline_area_1_parseFromJSON() failed [area_code_c]");
+        log_error("OpenAPI_wireline_area_1_parseFromJSON() failed [area_code_c]");
         goto end;
     }
     }
@@ -210,10 +210,10 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_copy(OpenAPI_wireline_area_1_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_wireline_area_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_wireline_area_1_convertToJSON() failed");
+        log_error("OpenAPI_wireline_area_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -221,14 +221,14 @@ OpenAPI_wireline_area_1_t *OpenAPI_wireline_area_1_copy(OpenAPI_wireline_area_1_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

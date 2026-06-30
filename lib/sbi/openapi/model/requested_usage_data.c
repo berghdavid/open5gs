@@ -11,7 +11,7 @@ OpenAPI_requested_usage_data_t *OpenAPI_requested_usage_data_create(
 )
 {
     OpenAPI_requested_usage_data_t *requested_usage_data_local_var = ogs_malloc(sizeof(OpenAPI_requested_usage_data_t));
-    ogs_assert(requested_usage_data_local_var);
+    log_assert(requested_usage_data_local_var);
 
     requested_usage_data_local_var->ref_um_ids = ref_um_ids;
     requested_usage_data_local_var->is_all_um_ids = is_all_um_ids;
@@ -43,7 +43,7 @@ cJSON *OpenAPI_requested_usage_data_convertToJSON(OpenAPI_requested_usage_data_t
     OpenAPI_lnode_t *node = NULL;
 
     if (requested_usage_data == NULL) {
-        ogs_error("OpenAPI_requested_usage_data_convertToJSON() failed [RequestedUsageData]");
+        log_error("OpenAPI_requested_usage_data_convertToJSON() failed [RequestedUsageData]");
         return NULL;
     }
 
@@ -51,12 +51,12 @@ cJSON *OpenAPI_requested_usage_data_convertToJSON(OpenAPI_requested_usage_data_t
     if (requested_usage_data->ref_um_ids) {
     cJSON *ref_um_idsList = cJSON_AddArrayToObject(item, "refUmIds");
     if (ref_um_idsList == NULL) {
-        ogs_error("OpenAPI_requested_usage_data_convertToJSON() failed [ref_um_ids]");
+        log_error("OpenAPI_requested_usage_data_convertToJSON() failed [ref_um_ids]");
         goto end;
     }
     OpenAPI_list_for_each(requested_usage_data->ref_um_ids, node) {
         if (cJSON_AddStringToObject(ref_um_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_requested_usage_data_convertToJSON() failed [ref_um_ids]");
+            log_error("OpenAPI_requested_usage_data_convertToJSON() failed [ref_um_ids]");
             goto end;
         }
     }
@@ -64,7 +64,7 @@ cJSON *OpenAPI_requested_usage_data_convertToJSON(OpenAPI_requested_usage_data_t
 
     if (requested_usage_data->is_all_um_ids) {
     if (cJSON_AddBoolToObject(item, "allUmIds", requested_usage_data->all_um_ids) == NULL) {
-        ogs_error("OpenAPI_requested_usage_data_convertToJSON() failed [all_um_ids]");
+        log_error("OpenAPI_requested_usage_data_convertToJSON() failed [all_um_ids]");
         goto end;
     }
     }
@@ -84,7 +84,7 @@ OpenAPI_requested_usage_data_t *OpenAPI_requested_usage_data_parseFromJSON(cJSON
     if (ref_um_ids) {
         cJSON *ref_um_ids_local = NULL;
         if (!cJSON_IsArray(ref_um_ids)) {
-            ogs_error("OpenAPI_requested_usage_data_parseFromJSON() failed [ref_um_ids]");
+            log_error("OpenAPI_requested_usage_data_parseFromJSON() failed [ref_um_ids]");
             goto end;
         }
 
@@ -94,7 +94,7 @@ OpenAPI_requested_usage_data_t *OpenAPI_requested_usage_data_parseFromJSON(cJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ref_um_ids_local)) {
-                ogs_error("OpenAPI_requested_usage_data_parseFromJSON() failed [ref_um_ids]");
+                log_error("OpenAPI_requested_usage_data_parseFromJSON() failed [ref_um_ids]");
                 goto end;
             }
             OpenAPI_list_add(ref_um_idsList, ogs_strdup(ref_um_ids_local->valuestring));
@@ -104,7 +104,7 @@ OpenAPI_requested_usage_data_t *OpenAPI_requested_usage_data_parseFromJSON(cJSON
     all_um_ids = cJSON_GetObjectItemCaseSensitive(requested_usage_dataJSON, "allUmIds");
     if (all_um_ids) {
     if (!cJSON_IsBool(all_um_ids)) {
-        ogs_error("OpenAPI_requested_usage_data_parseFromJSON() failed [all_um_ids]");
+        log_error("OpenAPI_requested_usage_data_parseFromJSON() failed [all_um_ids]");
         goto end;
     }
     }
@@ -132,10 +132,10 @@ OpenAPI_requested_usage_data_t *OpenAPI_requested_usage_data_copy(OpenAPI_reques
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_requested_usage_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_requested_usage_data_convertToJSON() failed");
+        log_error("OpenAPI_requested_usage_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -143,14 +143,14 @@ OpenAPI_requested_usage_data_t *OpenAPI_requested_usage_data_copy(OpenAPI_reques
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

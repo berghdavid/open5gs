@@ -14,7 +14,7 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_create(
 )
 {
     OpenAPI_sec_param_exch_rsp_data_t *sec_param_exch_rsp_data_local_var = ogs_malloc(sizeof(OpenAPI_sec_param_exch_rsp_data_t));
-    ogs_assert(sec_param_exch_rsp_data_local_var);
+    log_assert(sec_param_exch_rsp_data_local_var);
 
     sec_param_exch_rsp_data_local_var->n32f_context_id = n32f_context_id;
     sec_param_exch_rsp_data_local_var->selected_jwe_cipher_suite = selected_jwe_cipher_suite;
@@ -69,30 +69,30 @@ cJSON *OpenAPI_sec_param_exch_rsp_data_convertToJSON(OpenAPI_sec_param_exch_rsp_
     OpenAPI_lnode_t *node = NULL;
 
     if (sec_param_exch_rsp_data == NULL) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [SecParamExchRspData]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [SecParamExchRspData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!sec_param_exch_rsp_data->n32f_context_id) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [n32f_context_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "n32fContextId", sec_param_exch_rsp_data->n32f_context_id) == NULL) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [n32f_context_id]");
         goto end;
     }
 
     if (sec_param_exch_rsp_data->selected_jwe_cipher_suite) {
     if (cJSON_AddStringToObject(item, "selectedJweCipherSuite", sec_param_exch_rsp_data->selected_jwe_cipher_suite) == NULL) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [selected_jwe_cipher_suite]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [selected_jwe_cipher_suite]");
         goto end;
     }
     }
 
     if (sec_param_exch_rsp_data->selected_jws_cipher_suite) {
     if (cJSON_AddStringToObject(item, "selectedJwsCipherSuite", sec_param_exch_rsp_data->selected_jws_cipher_suite) == NULL) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [selected_jws_cipher_suite]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [selected_jws_cipher_suite]");
         goto end;
     }
     }
@@ -100,12 +100,12 @@ cJSON *OpenAPI_sec_param_exch_rsp_data_convertToJSON(OpenAPI_sec_param_exch_rsp_
     if (sec_param_exch_rsp_data->sel_protection_policy_info) {
     cJSON *sel_protection_policy_info_local_JSON = OpenAPI_protection_policy_convertToJSON(sec_param_exch_rsp_data->sel_protection_policy_info);
     if (sel_protection_policy_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [sel_protection_policy_info]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [sel_protection_policy_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "selProtectionPolicyInfo", sel_protection_policy_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [sel_protection_policy_info]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [sel_protection_policy_info]");
         goto end;
     }
     }
@@ -113,13 +113,13 @@ cJSON *OpenAPI_sec_param_exch_rsp_data_convertToJSON(OpenAPI_sec_param_exch_rsp_
     if (sec_param_exch_rsp_data->ipx_provider_sec_info_list) {
     cJSON *ipx_provider_sec_info_listList = cJSON_AddArrayToObject(item, "ipxProviderSecInfoList");
     if (ipx_provider_sec_info_listList == NULL) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [ipx_provider_sec_info_list]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [ipx_provider_sec_info_list]");
         goto end;
     }
     OpenAPI_list_for_each(sec_param_exch_rsp_data->ipx_provider_sec_info_list, node) {
         cJSON *itemLocal = OpenAPI_ipx_provider_sec_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [ipx_provider_sec_info_list]");
+            log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [ipx_provider_sec_info_list]");
             goto end;
         }
         cJSON_AddItemToArray(ipx_provider_sec_info_listList, itemLocal);
@@ -128,7 +128,7 @@ cJSON *OpenAPI_sec_param_exch_rsp_data_convertToJSON(OpenAPI_sec_param_exch_rsp_
 
     if (sec_param_exch_rsp_data->sender) {
     if (cJSON_AddStringToObject(item, "sender", sec_param_exch_rsp_data->sender) == NULL) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [sender]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed [sender]");
         goto end;
     }
     }
@@ -151,18 +151,18 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_parseFromJSON
     cJSON *sender = NULL;
     n32f_context_id = cJSON_GetObjectItemCaseSensitive(sec_param_exch_rsp_dataJSON, "n32fContextId");
     if (!n32f_context_id) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [n32f_context_id]");
         goto end;
     }
     if (!cJSON_IsString(n32f_context_id)) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [n32f_context_id]");
         goto end;
     }
 
     selected_jwe_cipher_suite = cJSON_GetObjectItemCaseSensitive(sec_param_exch_rsp_dataJSON, "selectedJweCipherSuite");
     if (selected_jwe_cipher_suite) {
     if (!cJSON_IsString(selected_jwe_cipher_suite) && !cJSON_IsNull(selected_jwe_cipher_suite)) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [selected_jwe_cipher_suite]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [selected_jwe_cipher_suite]");
         goto end;
     }
     }
@@ -170,7 +170,7 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_parseFromJSON
     selected_jws_cipher_suite = cJSON_GetObjectItemCaseSensitive(sec_param_exch_rsp_dataJSON, "selectedJwsCipherSuite");
     if (selected_jws_cipher_suite) {
     if (!cJSON_IsString(selected_jws_cipher_suite) && !cJSON_IsNull(selected_jws_cipher_suite)) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [selected_jws_cipher_suite]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [selected_jws_cipher_suite]");
         goto end;
     }
     }
@@ -179,7 +179,7 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_parseFromJSON
     if (sel_protection_policy_info) {
     sel_protection_policy_info_local_nonprim = OpenAPI_protection_policy_parseFromJSON(sel_protection_policy_info);
     if (!sel_protection_policy_info_local_nonprim) {
-        ogs_error("OpenAPI_protection_policy_parseFromJSON failed [sel_protection_policy_info]");
+        log_error("OpenAPI_protection_policy_parseFromJSON failed [sel_protection_policy_info]");
         goto end;
     }
     }
@@ -188,7 +188,7 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_parseFromJSON
     if (ipx_provider_sec_info_list) {
         cJSON *ipx_provider_sec_info_list_local = NULL;
         if (!cJSON_IsArray(ipx_provider_sec_info_list)) {
-            ogs_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [ipx_provider_sec_info_list]");
+            log_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [ipx_provider_sec_info_list]");
             goto end;
         }
 
@@ -196,12 +196,12 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_parseFromJSON
 
         cJSON_ArrayForEach(ipx_provider_sec_info_list_local, ipx_provider_sec_info_list) {
             if (!cJSON_IsObject(ipx_provider_sec_info_list_local)) {
-                ogs_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [ipx_provider_sec_info_list]");
+                log_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [ipx_provider_sec_info_list]");
                 goto end;
             }
             OpenAPI_ipx_provider_sec_info_t *ipx_provider_sec_info_listItem = OpenAPI_ipx_provider_sec_info_parseFromJSON(ipx_provider_sec_info_list_local);
             if (!ipx_provider_sec_info_listItem) {
-                ogs_error("No ipx_provider_sec_info_listItem");
+                log_error("No ipx_provider_sec_info_listItem");
                 goto end;
             }
             OpenAPI_list_add(ipx_provider_sec_info_listList, ipx_provider_sec_info_listItem);
@@ -211,7 +211,7 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_parseFromJSON
     sender = cJSON_GetObjectItemCaseSensitive(sec_param_exch_rsp_dataJSON, "sender");
     if (sender) {
     if (!cJSON_IsString(sender) && !cJSON_IsNull(sender)) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [sender]");
+        log_error("OpenAPI_sec_param_exch_rsp_data_parseFromJSON() failed [sender]");
         goto end;
     }
     }
@@ -246,10 +246,10 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sec_param_exch_rsp_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed");
+        log_error("OpenAPI_sec_param_exch_rsp_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -257,14 +257,14 @@ OpenAPI_sec_param_exch_rsp_data_t *OpenAPI_sec_param_exch_rsp_data_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

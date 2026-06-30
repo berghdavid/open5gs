@@ -12,7 +12,7 @@ OpenAPI_vn_group_data_t *OpenAPI_vn_group_data_create(
 )
 {
     OpenAPI_vn_group_data_t *vn_group_data_local_var = ogs_malloc(sizeof(OpenAPI_vn_group_data_t));
-    ogs_assert(vn_group_data_local_var);
+    log_assert(vn_group_data_local_var);
 
     vn_group_data_local_var->pdu_session_types = pdu_session_types;
     vn_group_data_local_var->dnn = dnn;
@@ -57,7 +57,7 @@ cJSON *OpenAPI_vn_group_data_convertToJSON(OpenAPI_vn_group_data_t *vn_group_dat
     OpenAPI_lnode_t *node = NULL;
 
     if (vn_group_data == NULL) {
-        ogs_error("OpenAPI_vn_group_data_convertToJSON() failed [VnGroupData]");
+        log_error("OpenAPI_vn_group_data_convertToJSON() failed [VnGroupData]");
         return NULL;
     }
 
@@ -65,19 +65,19 @@ cJSON *OpenAPI_vn_group_data_convertToJSON(OpenAPI_vn_group_data_t *vn_group_dat
     if (vn_group_data->pdu_session_types) {
     cJSON *pdu_session_types_local_JSON = OpenAPI_pdu_session_types_convertToJSON(vn_group_data->pdu_session_types);
     if (pdu_session_types_local_JSON == NULL) {
-        ogs_error("OpenAPI_vn_group_data_convertToJSON() failed [pdu_session_types]");
+        log_error("OpenAPI_vn_group_data_convertToJSON() failed [pdu_session_types]");
         goto end;
     }
     cJSON_AddItemToObject(item, "pduSessionTypes", pdu_session_types_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_vn_group_data_convertToJSON() failed [pdu_session_types]");
+        log_error("OpenAPI_vn_group_data_convertToJSON() failed [pdu_session_types]");
         goto end;
     }
     }
 
     if (vn_group_data->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", vn_group_data->dnn) == NULL) {
-        ogs_error("OpenAPI_vn_group_data_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_vn_group_data_convertToJSON() failed [dnn]");
         goto end;
     }
     }
@@ -85,12 +85,12 @@ cJSON *OpenAPI_vn_group_data_convertToJSON(OpenAPI_vn_group_data_t *vn_group_dat
     if (vn_group_data->single_nssai) {
     cJSON *single_nssai_local_JSON = OpenAPI_snssai_convertToJSON(vn_group_data->single_nssai);
     if (single_nssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_vn_group_data_convertToJSON() failed [single_nssai]");
+        log_error("OpenAPI_vn_group_data_convertToJSON() failed [single_nssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "singleNssai", single_nssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_vn_group_data_convertToJSON() failed [single_nssai]");
+        log_error("OpenAPI_vn_group_data_convertToJSON() failed [single_nssai]");
         goto end;
     }
     }
@@ -98,13 +98,13 @@ cJSON *OpenAPI_vn_group_data_convertToJSON(OpenAPI_vn_group_data_t *vn_group_dat
     if (vn_group_data->app_descriptors) {
     cJSON *app_descriptorsList = cJSON_AddArrayToObject(item, "appDescriptors");
     if (app_descriptorsList == NULL) {
-        ogs_error("OpenAPI_vn_group_data_convertToJSON() failed [app_descriptors]");
+        log_error("OpenAPI_vn_group_data_convertToJSON() failed [app_descriptors]");
         goto end;
     }
     OpenAPI_list_for_each(vn_group_data->app_descriptors, node) {
         cJSON *itemLocal = OpenAPI_app_descriptor_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_vn_group_data_convertToJSON() failed [app_descriptors]");
+            log_error("OpenAPI_vn_group_data_convertToJSON() failed [app_descriptors]");
             goto end;
         }
         cJSON_AddItemToArray(app_descriptorsList, itemLocal);
@@ -130,7 +130,7 @@ OpenAPI_vn_group_data_t *OpenAPI_vn_group_data_parseFromJSON(cJSON *vn_group_dat
     if (pdu_session_types) {
     pdu_session_types_local_nonprim = OpenAPI_pdu_session_types_parseFromJSON(pdu_session_types);
     if (!pdu_session_types_local_nonprim) {
-        ogs_error("OpenAPI_pdu_session_types_parseFromJSON failed [pdu_session_types]");
+        log_error("OpenAPI_pdu_session_types_parseFromJSON failed [pdu_session_types]");
         goto end;
     }
     }
@@ -138,7 +138,7 @@ OpenAPI_vn_group_data_t *OpenAPI_vn_group_data_parseFromJSON(cJSON *vn_group_dat
     dnn = cJSON_GetObjectItemCaseSensitive(vn_group_dataJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_vn_group_data_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_vn_group_data_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -147,7 +147,7 @@ OpenAPI_vn_group_data_t *OpenAPI_vn_group_data_parseFromJSON(cJSON *vn_group_dat
     if (single_nssai) {
     single_nssai_local_nonprim = OpenAPI_snssai_parseFromJSON(single_nssai);
     if (!single_nssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [single_nssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [single_nssai]");
         goto end;
     }
     }
@@ -156,7 +156,7 @@ OpenAPI_vn_group_data_t *OpenAPI_vn_group_data_parseFromJSON(cJSON *vn_group_dat
     if (app_descriptors) {
         cJSON *app_descriptors_local = NULL;
         if (!cJSON_IsArray(app_descriptors)) {
-            ogs_error("OpenAPI_vn_group_data_parseFromJSON() failed [app_descriptors]");
+            log_error("OpenAPI_vn_group_data_parseFromJSON() failed [app_descriptors]");
             goto end;
         }
 
@@ -164,12 +164,12 @@ OpenAPI_vn_group_data_t *OpenAPI_vn_group_data_parseFromJSON(cJSON *vn_group_dat
 
         cJSON_ArrayForEach(app_descriptors_local, app_descriptors) {
             if (!cJSON_IsObject(app_descriptors_local)) {
-                ogs_error("OpenAPI_vn_group_data_parseFromJSON() failed [app_descriptors]");
+                log_error("OpenAPI_vn_group_data_parseFromJSON() failed [app_descriptors]");
                 goto end;
             }
             OpenAPI_app_descriptor_t *app_descriptorsItem = OpenAPI_app_descriptor_parseFromJSON(app_descriptors_local);
             if (!app_descriptorsItem) {
-                ogs_error("No app_descriptorsItem");
+                log_error("No app_descriptorsItem");
                 goto end;
             }
             OpenAPI_list_add(app_descriptorsList, app_descriptorsItem);
@@ -208,10 +208,10 @@ OpenAPI_vn_group_data_t *OpenAPI_vn_group_data_copy(OpenAPI_vn_group_data_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_vn_group_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_vn_group_data_convertToJSON() failed");
+        log_error("OpenAPI_vn_group_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -219,14 +219,14 @@ OpenAPI_vn_group_data_t *OpenAPI_vn_group_data_copy(OpenAPI_vn_group_data_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

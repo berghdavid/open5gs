@@ -26,10 +26,10 @@ int app_initialize(const char *const argv[])
 
     rv = lmf_initialize();
     if (rv != OGS_OK) {
-        ogs_error("Failed to initialize LMF");
+        log_error("Failed to initialize LMF");
         return rv;
     }
-    ogs_info("LMF initialize...done");
+    log_info("LMF initialize...done");
 
     return OGS_OK;
 }
@@ -37,6 +37,6 @@ int app_initialize(const char *const argv[])
 void app_terminate(void)
 {
     lmf_terminate();
-    ogs_info("LMF terminate...done");
+    log_info("LMF terminate...done");
 }
 

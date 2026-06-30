@@ -8,7 +8,7 @@ OpenAPI_traffic_profile_rm_t *OpenAPI_traffic_profile_rm_create(
 )
 {
     OpenAPI_traffic_profile_rm_t *traffic_profile_rm_local_var = ogs_malloc(sizeof(OpenAPI_traffic_profile_rm_t));
-    ogs_assert(traffic_profile_rm_local_var);
+    log_assert(traffic_profile_rm_local_var);
 
 
     return traffic_profile_rm_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_traffic_profile_rm_convertToJSON(OpenAPI_traffic_profile_rm_t *tr
     OpenAPI_lnode_t *node = NULL;
 
     if (traffic_profile_rm == NULL) {
-        ogs_error("OpenAPI_traffic_profile_rm_convertToJSON() failed [TrafficProfileRm]");
+        log_error("OpenAPI_traffic_profile_rm_convertToJSON() failed [TrafficProfileRm]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_traffic_profile_rm_t *OpenAPI_traffic_profile_rm_copy(OpenAPI_traffic_pr
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_traffic_profile_rm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_traffic_profile_rm_convertToJSON() failed");
+        log_error("OpenAPI_traffic_profile_rm_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_traffic_profile_rm_t *OpenAPI_traffic_profile_rm_copy(OpenAPI_traffic_pr
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

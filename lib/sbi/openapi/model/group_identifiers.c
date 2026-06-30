@@ -11,7 +11,7 @@ OpenAPI_group_identifiers_t *OpenAPI_group_identifiers_create(
 )
 {
     OpenAPI_group_identifiers_t *group_identifiers_local_var = ogs_malloc(sizeof(OpenAPI_group_identifiers_t));
-    ogs_assert(group_identifiers_local_var);
+    log_assert(group_identifiers_local_var);
 
     group_identifiers_local_var->ext_group_id = ext_group_id;
     group_identifiers_local_var->int_group_id = int_group_id;
@@ -51,21 +51,21 @@ cJSON *OpenAPI_group_identifiers_convertToJSON(OpenAPI_group_identifiers_t *grou
     OpenAPI_lnode_t *node = NULL;
 
     if (group_identifiers == NULL) {
-        ogs_error("OpenAPI_group_identifiers_convertToJSON() failed [GroupIdentifiers]");
+        log_error("OpenAPI_group_identifiers_convertToJSON() failed [GroupIdentifiers]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (group_identifiers->ext_group_id) {
     if (cJSON_AddStringToObject(item, "extGroupId", group_identifiers->ext_group_id) == NULL) {
-        ogs_error("OpenAPI_group_identifiers_convertToJSON() failed [ext_group_id]");
+        log_error("OpenAPI_group_identifiers_convertToJSON() failed [ext_group_id]");
         goto end;
     }
     }
 
     if (group_identifiers->int_group_id) {
     if (cJSON_AddStringToObject(item, "intGroupId", group_identifiers->int_group_id) == NULL) {
-        ogs_error("OpenAPI_group_identifiers_convertToJSON() failed [int_group_id]");
+        log_error("OpenAPI_group_identifiers_convertToJSON() failed [int_group_id]");
         goto end;
     }
     }
@@ -73,13 +73,13 @@ cJSON *OpenAPI_group_identifiers_convertToJSON(OpenAPI_group_identifiers_t *grou
     if (group_identifiers->ue_id_list) {
     cJSON *ue_id_listList = cJSON_AddArrayToObject(item, "ueIdList");
     if (ue_id_listList == NULL) {
-        ogs_error("OpenAPI_group_identifiers_convertToJSON() failed [ue_id_list]");
+        log_error("OpenAPI_group_identifiers_convertToJSON() failed [ue_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(group_identifiers->ue_id_list, node) {
         cJSON *itemLocal = OpenAPI_ue_id_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_group_identifiers_convertToJSON() failed [ue_id_list]");
+            log_error("OpenAPI_group_identifiers_convertToJSON() failed [ue_id_list]");
             goto end;
         }
         cJSON_AddItemToArray(ue_id_listList, itemLocal);
@@ -101,7 +101,7 @@ OpenAPI_group_identifiers_t *OpenAPI_group_identifiers_parseFromJSON(cJSON *grou
     ext_group_id = cJSON_GetObjectItemCaseSensitive(group_identifiersJSON, "extGroupId");
     if (ext_group_id) {
     if (!cJSON_IsString(ext_group_id) && !cJSON_IsNull(ext_group_id)) {
-        ogs_error("OpenAPI_group_identifiers_parseFromJSON() failed [ext_group_id]");
+        log_error("OpenAPI_group_identifiers_parseFromJSON() failed [ext_group_id]");
         goto end;
     }
     }
@@ -109,7 +109,7 @@ OpenAPI_group_identifiers_t *OpenAPI_group_identifiers_parseFromJSON(cJSON *grou
     int_group_id = cJSON_GetObjectItemCaseSensitive(group_identifiersJSON, "intGroupId");
     if (int_group_id) {
     if (!cJSON_IsString(int_group_id) && !cJSON_IsNull(int_group_id)) {
-        ogs_error("OpenAPI_group_identifiers_parseFromJSON() failed [int_group_id]");
+        log_error("OpenAPI_group_identifiers_parseFromJSON() failed [int_group_id]");
         goto end;
     }
     }
@@ -118,7 +118,7 @@ OpenAPI_group_identifiers_t *OpenAPI_group_identifiers_parseFromJSON(cJSON *grou
     if (ue_id_list) {
         cJSON *ue_id_list_local = NULL;
         if (!cJSON_IsArray(ue_id_list)) {
-            ogs_error("OpenAPI_group_identifiers_parseFromJSON() failed [ue_id_list]");
+            log_error("OpenAPI_group_identifiers_parseFromJSON() failed [ue_id_list]");
             goto end;
         }
 
@@ -126,12 +126,12 @@ OpenAPI_group_identifiers_t *OpenAPI_group_identifiers_parseFromJSON(cJSON *grou
 
         cJSON_ArrayForEach(ue_id_list_local, ue_id_list) {
             if (!cJSON_IsObject(ue_id_list_local)) {
-                ogs_error("OpenAPI_group_identifiers_parseFromJSON() failed [ue_id_list]");
+                log_error("OpenAPI_group_identifiers_parseFromJSON() failed [ue_id_list]");
                 goto end;
             }
             OpenAPI_ue_id_t *ue_id_listItem = OpenAPI_ue_id_parseFromJSON(ue_id_list_local);
             if (!ue_id_listItem) {
-                ogs_error("No ue_id_listItem");
+                log_error("No ue_id_listItem");
                 goto end;
             }
             OpenAPI_list_add(ue_id_listList, ue_id_listItem);
@@ -161,10 +161,10 @@ OpenAPI_group_identifiers_t *OpenAPI_group_identifiers_copy(OpenAPI_group_identi
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_group_identifiers_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_group_identifiers_convertToJSON() failed");
+        log_error("OpenAPI_group_identifiers_convertToJSON() failed");
         return NULL;
     }
 
@@ -172,14 +172,14 @@ OpenAPI_group_identifiers_t *OpenAPI_group_identifiers_copy(OpenAPI_group_identi
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

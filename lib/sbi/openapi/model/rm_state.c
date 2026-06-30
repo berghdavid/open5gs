@@ -8,7 +8,7 @@ OpenAPI_rm_state_t *OpenAPI_rm_state_create(
 )
 {
     OpenAPI_rm_state_t *rm_state_local_var = ogs_malloc(sizeof(OpenAPI_rm_state_t));
-    ogs_assert(rm_state_local_var);
+    log_assert(rm_state_local_var);
 
 
     return rm_state_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_rm_state_convertToJSON(OpenAPI_rm_state_t *rm_state)
     OpenAPI_lnode_t *node = NULL;
 
     if (rm_state == NULL) {
-        ogs_error("OpenAPI_rm_state_convertToJSON() failed [RmState]");
+        log_error("OpenAPI_rm_state_convertToJSON() failed [RmState]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_rm_state_t *OpenAPI_rm_state_copy(OpenAPI_rm_state_t *dst, OpenAPI_rm_st
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_rm_state_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_rm_state_convertToJSON() failed");
+        log_error("OpenAPI_rm_state_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_rm_state_t *OpenAPI_rm_state_copy(OpenAPI_rm_state_t *dst, OpenAPI_rm_st
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

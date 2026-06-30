@@ -9,7 +9,7 @@ OpenAPI_lcs_broadcast_assistance_types_data_t *OpenAPI_lcs_broadcast_assistance_
 )
 {
     OpenAPI_lcs_broadcast_assistance_types_data_t *lcs_broadcast_assistance_types_data_local_var = ogs_malloc(sizeof(OpenAPI_lcs_broadcast_assistance_types_data_t));
-    ogs_assert(lcs_broadcast_assistance_types_data_local_var);
+    log_assert(lcs_broadcast_assistance_types_data_local_var);
 
     lcs_broadcast_assistance_types_data_local_var->location_assistance_type = location_assistance_type;
 
@@ -36,18 +36,18 @@ cJSON *OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON(OpenAPI_lcs_bro
     OpenAPI_lnode_t *node = NULL;
 
     if (lcs_broadcast_assistance_types_data == NULL) {
-        ogs_error("OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON() failed [LcsBroadcastAssistanceTypesData]");
+        log_error("OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON() failed [LcsBroadcastAssistanceTypesData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!lcs_broadcast_assistance_types_data->location_assistance_type) {
-        ogs_error("OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON() failed [location_assistance_type]");
+        log_error("OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON() failed [location_assistance_type]");
         return NULL;
     }
     char* encoded_str_location_assistance_type = OpenAPI_base64encode(lcs_broadcast_assistance_types_data->location_assistance_type->data,lcs_broadcast_assistance_types_data->location_assistance_type->len);
     if (cJSON_AddStringToObject(item, "locationAssistanceType", encoded_str_location_assistance_type) == NULL) {
-        ogs_error("OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON() failed [location_assistance_type]");
+        log_error("OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON() failed [location_assistance_type]");
         goto end;
     }
     ogs_free(encoded_str_location_assistance_type);
@@ -64,18 +64,18 @@ OpenAPI_lcs_broadcast_assistance_types_data_t *OpenAPI_lcs_broadcast_assistance_
     OpenAPI_binary_t *decoded_str_location_assistance_type = NULL;
     location_assistance_type = cJSON_GetObjectItemCaseSensitive(lcs_broadcast_assistance_types_dataJSON, "locationAssistanceType");
     if (!location_assistance_type) {
-        ogs_error("OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON() failed [location_assistance_type]");
+        log_error("OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON() failed [location_assistance_type]");
         goto end;
     }
     decoded_str_location_assistance_type = ogs_malloc(sizeof(OpenAPI_binary_t));
-    ogs_assert(decoded_str_location_assistance_type);
+    log_assert(decoded_str_location_assistance_type);
     if (!cJSON_IsString(location_assistance_type)) {
-        ogs_error("OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON() failed [location_assistance_type]");
+        log_error("OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON() failed [location_assistance_type]");
         goto end;
     }
     decoded_str_location_assistance_type->data = OpenAPI_base64decode(location_assistance_type->valuestring, strlen(location_assistance_type->valuestring), &decoded_str_location_assistance_type->len);
     if (!decoded_str_location_assistance_type->data) {
-        ogs_error("OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON() failed [location_assistance_type]");
+        log_error("OpenAPI_lcs_broadcast_assistance_types_data_parseFromJSON() failed [location_assistance_type]");
         goto end;
     }
 
@@ -93,10 +93,10 @@ OpenAPI_lcs_broadcast_assistance_types_data_t *OpenAPI_lcs_broadcast_assistance_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON() failed");
+        log_error("OpenAPI_lcs_broadcast_assistance_types_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -104,14 +104,14 @@ OpenAPI_lcs_broadcast_assistance_types_data_t *OpenAPI_lcs_broadcast_assistance_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -39,7 +39,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_create(
 )
 {
     OpenAPI_policy_association_request_t *policy_association_request_local_var = ogs_malloc(sizeof(OpenAPI_policy_association_request_t));
-    ogs_assert(policy_association_request_local_var);
+    log_assert(policy_association_request_local_var);
 
     policy_association_request_local_var->notification_uri = notification_uri;
     policy_association_request_local_var->alt_notif_ipv4_addrs = alt_notif_ipv4_addrs;
@@ -226,29 +226,29 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     OpenAPI_lnode_t *node = NULL;
 
     if (policy_association_request == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [PolicyAssociationRequest]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [PolicyAssociationRequest]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!policy_association_request->notification_uri) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [notification_uri]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [notification_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "notificationUri", policy_association_request->notification_uri) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [notification_uri]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [notification_uri]");
         goto end;
     }
 
     if (policy_association_request->alt_notif_ipv4_addrs) {
     cJSON *alt_notif_ipv4_addrsList = cJSON_AddArrayToObject(item, "altNotifIpv4Addrs");
     if (alt_notif_ipv4_addrsList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_ipv4_addrs]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_ipv4_addrs]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->alt_notif_ipv4_addrs, node) {
         if (cJSON_AddStringToObject(alt_notif_ipv4_addrsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_ipv4_addrs]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_ipv4_addrs]");
             goto end;
         }
     }
@@ -257,12 +257,12 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->alt_notif_ipv6_addrs) {
     cJSON *alt_notif_ipv6_addrsList = cJSON_AddArrayToObject(item, "altNotifIpv6Addrs");
     if (alt_notif_ipv6_addrsList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_ipv6_addrs]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_ipv6_addrs]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->alt_notif_ipv6_addrs, node) {
         if (cJSON_AddStringToObject(alt_notif_ipv6_addrsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_ipv6_addrs]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_ipv6_addrs]");
             goto end;
         }
     }
@@ -271,36 +271,36 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->alt_notif_fqdns) {
     cJSON *alt_notif_fqdnsList = cJSON_AddArrayToObject(item, "altNotifFqdns");
     if (alt_notif_fqdnsList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_fqdns]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_fqdns]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->alt_notif_fqdns, node) {
         if (cJSON_AddStringToObject(alt_notif_fqdnsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_fqdns]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [alt_notif_fqdns]");
             goto end;
         }
     }
     }
 
     if (!policy_association_request->supi) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [supi]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [supi]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "supi", policy_association_request->supi) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [supi]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [supi]");
         goto end;
     }
 
     if (policy_association_request->gpsi) {
     if (cJSON_AddStringToObject(item, "gpsi", policy_association_request->gpsi) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [gpsi]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [gpsi]");
         goto end;
     }
     }
 
     if (policy_association_request->access_type != OpenAPI_access_type_NULL) {
     if (cJSON_AddStringToObject(item, "accessType", OpenAPI_access_type_ToString(policy_association_request->access_type)) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [access_type]");
         goto end;
     }
     }
@@ -308,12 +308,12 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->access_types != OpenAPI_access_type_NULL) {
     cJSON *access_typesList = cJSON_AddArrayToObject(item, "accessTypes");
     if (access_typesList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [access_types]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [access_types]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->access_types, node) {
         if (cJSON_AddStringToObject(access_typesList, "", OpenAPI_access_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [access_types]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [access_types]");
             goto end;
         }
     }
@@ -321,7 +321,7 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
 
     if (policy_association_request->pei) {
     if (cJSON_AddStringToObject(item, "pei", policy_association_request->pei) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [pei]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [pei]");
         goto end;
     }
     }
@@ -329,19 +329,19 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->user_loc) {
     cJSON *user_loc_local_JSON = OpenAPI_user_location_convertToJSON(policy_association_request->user_loc);
     if (user_loc_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [user_loc]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [user_loc]");
         goto end;
     }
     cJSON_AddItemToObject(item, "userLoc", user_loc_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [user_loc]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [user_loc]");
         goto end;
     }
     }
 
     if (policy_association_request->time_zone) {
     if (cJSON_AddStringToObject(item, "timeZone", policy_association_request->time_zone) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [time_zone]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [time_zone]");
         goto end;
     }
     }
@@ -349,19 +349,19 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->serving_plmn) {
     cJSON *serving_plmn_local_JSON = OpenAPI_plmn_id_nid_convertToJSON(policy_association_request->serving_plmn);
     if (serving_plmn_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [serving_plmn]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [serving_plmn]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servingPlmn", serving_plmn_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [serving_plmn]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [serving_plmn]");
         goto end;
     }
     }
 
     if (policy_association_request->rat_type != OpenAPI_rat_type_NULL) {
     if (cJSON_AddStringToObject(item, "ratType", OpenAPI_rat_type_ToString(policy_association_request->rat_type)) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [rat_type]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [rat_type]");
         goto end;
     }
     }
@@ -369,12 +369,12 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->rat_types != OpenAPI_rat_type_NULL) {
     cJSON *rat_typesList = cJSON_AddArrayToObject(item, "ratTypes");
     if (rat_typesList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [rat_types]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [rat_types]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->rat_types, node) {
         if (cJSON_AddStringToObject(rat_typesList, "", OpenAPI_rat_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [rat_types]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [rat_types]");
             goto end;
         }
     }
@@ -383,12 +383,12 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->group_ids) {
     cJSON *group_idsList = cJSON_AddArrayToObject(item, "groupIds");
     if (group_idsList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [group_ids]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [group_ids]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->group_ids, node) {
         if (cJSON_AddStringToObject(group_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [group_ids]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [group_ids]");
             goto end;
         }
     }
@@ -397,12 +397,12 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->serv_area_res) {
     cJSON *serv_area_res_local_JSON = OpenAPI_service_area_restriction_convertToJSON(policy_association_request->serv_area_res);
     if (serv_area_res_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [serv_area_res]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [serv_area_res]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servAreaRes", serv_area_res_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [serv_area_res]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [serv_area_res]");
         goto end;
     }
     }
@@ -410,19 +410,19 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->wl_serv_area_res) {
     cJSON *wl_serv_area_res_local_JSON = OpenAPI_wireline_service_area_restriction_convertToJSON(policy_association_request->wl_serv_area_res);
     if (wl_serv_area_res_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [wl_serv_area_res]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [wl_serv_area_res]");
         goto end;
     }
     cJSON_AddItemToObject(item, "wlServAreaRes", wl_serv_area_res_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [wl_serv_area_res]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [wl_serv_area_res]");
         goto end;
     }
     }
 
     if (policy_association_request->is_rfsp) {
     if (cJSON_AddNumberToObject(item, "rfsp", policy_association_request->rfsp) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [rfsp]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [rfsp]");
         goto end;
     }
     }
@@ -430,12 +430,12 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->ue_ambr) {
     cJSON *ue_ambr_local_JSON = OpenAPI_ambr_convertToJSON(policy_association_request->ue_ambr);
     if (ue_ambr_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [ue_ambr]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [ue_ambr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueAmbr", ue_ambr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [ue_ambr]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [ue_ambr]");
         goto end;
     }
     }
@@ -443,13 +443,13 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->ue_slice_mbrs) {
     cJSON *ue_slice_mbrsList = cJSON_AddArrayToObject(item, "ueSliceMbrs");
     if (ue_slice_mbrsList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [ue_slice_mbrs]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [ue_slice_mbrs]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->ue_slice_mbrs, node) {
         cJSON *itemLocal = OpenAPI_ue_slice_mbr_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [ue_slice_mbrs]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [ue_slice_mbrs]");
             goto end;
         }
         cJSON_AddItemToArray(ue_slice_mbrsList, itemLocal);
@@ -459,13 +459,13 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->allowed_snssais) {
     cJSON *allowed_snssaisList = cJSON_AddArrayToObject(item, "allowedSnssais");
     if (allowed_snssaisList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [allowed_snssais]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [allowed_snssais]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->allowed_snssais, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [allowed_snssais]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [allowed_snssais]");
             goto end;
         }
         cJSON_AddItemToArray(allowed_snssaisList, itemLocal);
@@ -475,13 +475,13 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->target_snssais) {
     cJSON *target_snssaisList = cJSON_AddArrayToObject(item, "targetSnssais");
     if (target_snssaisList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [target_snssais]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [target_snssais]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->target_snssais, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [target_snssais]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [target_snssais]");
             goto end;
         }
         cJSON_AddItemToArray(target_snssaisList, itemLocal);
@@ -491,13 +491,13 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->mapping_snssais) {
     cJSON *mapping_snssaisList = cJSON_AddArrayToObject(item, "mappingSnssais");
     if (mapping_snssaisList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [mapping_snssais]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [mapping_snssais]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->mapping_snssais, node) {
         cJSON *itemLocal = OpenAPI_mapping_of_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [mapping_snssais]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [mapping_snssais]");
             goto end;
         }
         cJSON_AddItemToArray(mapping_snssaisList, itemLocal);
@@ -507,13 +507,13 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->n3g_allowed_snssais) {
     cJSON *n3g_allowed_snssaisList = cJSON_AddArrayToObject(item, "n3gAllowedSnssais");
     if (n3g_allowed_snssaisList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [n3g_allowed_snssais]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [n3g_allowed_snssais]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->n3g_allowed_snssais, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [n3g_allowed_snssais]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [n3g_allowed_snssais]");
             goto end;
         }
         cJSON_AddItemToArray(n3g_allowed_snssaisList, itemLocal);
@@ -523,19 +523,19 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->guami) {
     cJSON *guami_local_JSON = OpenAPI_guami_convertToJSON(policy_association_request->guami);
     if (guami_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [guami]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [guami]");
         goto end;
     }
     cJSON_AddItemToObject(item, "guami", guami_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [guami]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [guami]");
         goto end;
     }
     }
 
     if (policy_association_request->service_name) {
     if (cJSON_AddStringToObject(item, "serviceName", policy_association_request->service_name) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [service_name]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [service_name]");
         goto end;
     }
     }
@@ -543,17 +543,17 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->trace_req) {
     cJSON *trace_req_local_JSON = OpenAPI_trace_data_convertToJSON(policy_association_request->trace_req);
     if (trace_req_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [trace_req]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [trace_req]");
         goto end;
     }
     cJSON_AddItemToObject(item, "traceReq", trace_req_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [trace_req]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [trace_req]");
         goto end;
     }
     } else if (policy_association_request->is_trace_req_null) {
         if (cJSON_AddNullToObject(item, "traceReq") == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [trace_req]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [trace_req]");
             goto end;
         }
     }
@@ -561,13 +561,13 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     if (policy_association_request->nwdaf_datas) {
     cJSON *nwdaf_datasList = cJSON_AddArrayToObject(item, "nwdafDatas");
     if (nwdaf_datasList == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [nwdaf_datas]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [nwdaf_datas]");
         goto end;
     }
     OpenAPI_list_for_each(policy_association_request->nwdaf_datas, node) {
         cJSON *itemLocal = OpenAPI_nwdaf_data_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [nwdaf_datas]");
+            log_error("OpenAPI_policy_association_request_convertToJSON() failed [nwdaf_datas]");
             goto end;
         }
         cJSON_AddItemToArray(nwdaf_datasList, itemLocal);
@@ -575,11 +575,11 @@ cJSON *OpenAPI_policy_association_request_convertToJSON(OpenAPI_policy_associati
     }
 
     if (!policy_association_request->supp_feat) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [supp_feat]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [supp_feat]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "suppFeat", policy_association_request->supp_feat) == NULL) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed [supp_feat]");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed [supp_feat]");
         goto end;
     }
 
@@ -643,11 +643,11 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     cJSON *supp_feat = NULL;
     notification_uri = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "notificationUri");
     if (!notification_uri) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [notification_uri]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [notification_uri]");
         goto end;
     }
     if (!cJSON_IsString(notification_uri)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [notification_uri]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [notification_uri]");
         goto end;
     }
 
@@ -655,7 +655,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (alt_notif_ipv4_addrs) {
         cJSON *alt_notif_ipv4_addrs_local = NULL;
         if (!cJSON_IsArray(alt_notif_ipv4_addrs)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_ipv4_addrs]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_ipv4_addrs]");
             goto end;
         }
 
@@ -665,7 +665,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(alt_notif_ipv4_addrs_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_ipv4_addrs]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_ipv4_addrs]");
                 goto end;
             }
             OpenAPI_list_add(alt_notif_ipv4_addrsList, ogs_strdup(alt_notif_ipv4_addrs_local->valuestring));
@@ -676,7 +676,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (alt_notif_ipv6_addrs) {
         cJSON *alt_notif_ipv6_addrs_local = NULL;
         if (!cJSON_IsArray(alt_notif_ipv6_addrs)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_ipv6_addrs]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_ipv6_addrs]");
             goto end;
         }
 
@@ -686,7 +686,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(alt_notif_ipv6_addrs_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_ipv6_addrs]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_ipv6_addrs]");
                 goto end;
             }
             OpenAPI_list_add(alt_notif_ipv6_addrsList, ogs_strdup(alt_notif_ipv6_addrs_local->valuestring));
@@ -697,7 +697,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (alt_notif_fqdns) {
         cJSON *alt_notif_fqdns_local = NULL;
         if (!cJSON_IsArray(alt_notif_fqdns)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_fqdns]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_fqdns]");
             goto end;
         }
 
@@ -707,7 +707,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(alt_notif_fqdns_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_fqdns]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [alt_notif_fqdns]");
                 goto end;
             }
             OpenAPI_list_add(alt_notif_fqdnsList, ogs_strdup(alt_notif_fqdns_local->valuestring));
@@ -716,18 +716,18 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
 
     supi = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "supi");
     if (!supi) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [supi]");
         goto end;
     }
     if (!cJSON_IsString(supi)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [supi]");
         goto end;
     }
 
     gpsi = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "gpsi");
     if (gpsi) {
     if (!cJSON_IsString(gpsi) && !cJSON_IsNull(gpsi)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [gpsi]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [gpsi]");
         goto end;
     }
     }
@@ -735,7 +735,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     access_type = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "accessType");
     if (access_type) {
     if (!cJSON_IsString(access_type)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [access_type]");
         goto end;
     }
     access_typeVariable = OpenAPI_access_type_FromString(access_type->valuestring);
@@ -745,7 +745,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (access_types) {
         cJSON *access_types_local = NULL;
         if (!cJSON_IsArray(access_types)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [access_types]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [access_types]");
             goto end;
         }
 
@@ -754,19 +754,19 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
         cJSON_ArrayForEach(access_types_local, access_types) {
             OpenAPI_access_type_e localEnum = OpenAPI_access_type_NULL;
             if (!cJSON_IsString(access_types_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [access_types]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [access_types]");
                 goto end;
             }
             localEnum = OpenAPI_access_type_FromString(access_types_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"access_types\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"access_types\" is not supported. Ignoring it ...",
                          access_types_local->valuestring);
             } else {
                 OpenAPI_list_add(access_typesList, (void *)localEnum);
             }
         }
         if (access_typesList->count == 0) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed: Expected access_typesList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed: Expected access_typesList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -774,7 +774,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     pei = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "pei");
     if (pei) {
     if (!cJSON_IsString(pei) && !cJSON_IsNull(pei)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [pei]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [pei]");
         goto end;
     }
     }
@@ -783,7 +783,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (user_loc) {
     user_loc_local_nonprim = OpenAPI_user_location_parseFromJSON(user_loc);
     if (!user_loc_local_nonprim) {
-        ogs_error("OpenAPI_user_location_parseFromJSON failed [user_loc]");
+        log_error("OpenAPI_user_location_parseFromJSON failed [user_loc]");
         goto end;
     }
     }
@@ -791,7 +791,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     time_zone = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "timeZone");
     if (time_zone) {
     if (!cJSON_IsString(time_zone) && !cJSON_IsNull(time_zone)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [time_zone]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [time_zone]");
         goto end;
     }
     }
@@ -800,7 +800,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (serving_plmn) {
     serving_plmn_local_nonprim = OpenAPI_plmn_id_nid_parseFromJSON(serving_plmn);
     if (!serving_plmn_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_nid_parseFromJSON failed [serving_plmn]");
+        log_error("OpenAPI_plmn_id_nid_parseFromJSON failed [serving_plmn]");
         goto end;
     }
     }
@@ -808,7 +808,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     rat_type = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "ratType");
     if (rat_type) {
     if (!cJSON_IsString(rat_type)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [rat_type]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [rat_type]");
         goto end;
     }
     rat_typeVariable = OpenAPI_rat_type_FromString(rat_type->valuestring);
@@ -818,7 +818,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (rat_types) {
         cJSON *rat_types_local = NULL;
         if (!cJSON_IsArray(rat_types)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [rat_types]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [rat_types]");
             goto end;
         }
 
@@ -827,19 +827,19 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
         cJSON_ArrayForEach(rat_types_local, rat_types) {
             OpenAPI_rat_type_e localEnum = OpenAPI_rat_type_NULL;
             if (!cJSON_IsString(rat_types_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [rat_types]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [rat_types]");
                 goto end;
             }
             localEnum = OpenAPI_rat_type_FromString(rat_types_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"rat_types\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"rat_types\" is not supported. Ignoring it ...",
                          rat_types_local->valuestring);
             } else {
                 OpenAPI_list_add(rat_typesList, (void *)localEnum);
             }
         }
         if (rat_typesList->count == 0) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed: Expected rat_typesList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed: Expected rat_typesList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -848,7 +848,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (group_ids) {
         cJSON *group_ids_local = NULL;
         if (!cJSON_IsArray(group_ids)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [group_ids]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [group_ids]");
             goto end;
         }
 
@@ -858,7 +858,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(group_ids_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [group_ids]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [group_ids]");
                 goto end;
             }
             OpenAPI_list_add(group_idsList, ogs_strdup(group_ids_local->valuestring));
@@ -869,7 +869,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (serv_area_res) {
     serv_area_res_local_nonprim = OpenAPI_service_area_restriction_parseFromJSON(serv_area_res);
     if (!serv_area_res_local_nonprim) {
-        ogs_error("OpenAPI_service_area_restriction_parseFromJSON failed [serv_area_res]");
+        log_error("OpenAPI_service_area_restriction_parseFromJSON failed [serv_area_res]");
         goto end;
     }
     }
@@ -878,7 +878,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (wl_serv_area_res) {
     wl_serv_area_res_local_nonprim = OpenAPI_wireline_service_area_restriction_parseFromJSON(wl_serv_area_res);
     if (!wl_serv_area_res_local_nonprim) {
-        ogs_error("OpenAPI_wireline_service_area_restriction_parseFromJSON failed [wl_serv_area_res]");
+        log_error("OpenAPI_wireline_service_area_restriction_parseFromJSON failed [wl_serv_area_res]");
         goto end;
     }
     }
@@ -886,7 +886,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     rfsp = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "rfsp");
     if (rfsp) {
     if (!cJSON_IsNumber(rfsp)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [rfsp]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [rfsp]");
         goto end;
     }
     }
@@ -895,7 +895,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (ue_ambr) {
     ue_ambr_local_nonprim = OpenAPI_ambr_parseFromJSON(ue_ambr);
     if (!ue_ambr_local_nonprim) {
-        ogs_error("OpenAPI_ambr_parseFromJSON failed [ue_ambr]");
+        log_error("OpenAPI_ambr_parseFromJSON failed [ue_ambr]");
         goto end;
     }
     }
@@ -904,7 +904,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (ue_slice_mbrs) {
         cJSON *ue_slice_mbrs_local = NULL;
         if (!cJSON_IsArray(ue_slice_mbrs)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [ue_slice_mbrs]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [ue_slice_mbrs]");
             goto end;
         }
 
@@ -912,12 +912,12 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
 
         cJSON_ArrayForEach(ue_slice_mbrs_local, ue_slice_mbrs) {
             if (!cJSON_IsObject(ue_slice_mbrs_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [ue_slice_mbrs]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [ue_slice_mbrs]");
                 goto end;
             }
             OpenAPI_ue_slice_mbr_t *ue_slice_mbrsItem = OpenAPI_ue_slice_mbr_parseFromJSON(ue_slice_mbrs_local);
             if (!ue_slice_mbrsItem) {
-                ogs_error("No ue_slice_mbrsItem");
+                log_error("No ue_slice_mbrsItem");
                 goto end;
             }
             OpenAPI_list_add(ue_slice_mbrsList, ue_slice_mbrsItem);
@@ -928,7 +928,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (allowed_snssais) {
         cJSON *allowed_snssais_local = NULL;
         if (!cJSON_IsArray(allowed_snssais)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [allowed_snssais]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [allowed_snssais]");
             goto end;
         }
 
@@ -936,12 +936,12 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
 
         cJSON_ArrayForEach(allowed_snssais_local, allowed_snssais) {
             if (!cJSON_IsObject(allowed_snssais_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [allowed_snssais]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [allowed_snssais]");
                 goto end;
             }
             OpenAPI_snssai_t *allowed_snssaisItem = OpenAPI_snssai_parseFromJSON(allowed_snssais_local);
             if (!allowed_snssaisItem) {
-                ogs_error("No allowed_snssaisItem");
+                log_error("No allowed_snssaisItem");
                 goto end;
             }
             OpenAPI_list_add(allowed_snssaisList, allowed_snssaisItem);
@@ -952,7 +952,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (target_snssais) {
         cJSON *target_snssais_local = NULL;
         if (!cJSON_IsArray(target_snssais)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [target_snssais]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [target_snssais]");
             goto end;
         }
 
@@ -960,12 +960,12 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
 
         cJSON_ArrayForEach(target_snssais_local, target_snssais) {
             if (!cJSON_IsObject(target_snssais_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [target_snssais]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [target_snssais]");
                 goto end;
             }
             OpenAPI_snssai_t *target_snssaisItem = OpenAPI_snssai_parseFromJSON(target_snssais_local);
             if (!target_snssaisItem) {
-                ogs_error("No target_snssaisItem");
+                log_error("No target_snssaisItem");
                 goto end;
             }
             OpenAPI_list_add(target_snssaisList, target_snssaisItem);
@@ -976,7 +976,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (mapping_snssais) {
         cJSON *mapping_snssais_local = NULL;
         if (!cJSON_IsArray(mapping_snssais)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [mapping_snssais]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [mapping_snssais]");
             goto end;
         }
 
@@ -984,12 +984,12 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
 
         cJSON_ArrayForEach(mapping_snssais_local, mapping_snssais) {
             if (!cJSON_IsObject(mapping_snssais_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [mapping_snssais]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [mapping_snssais]");
                 goto end;
             }
             OpenAPI_mapping_of_snssai_t *mapping_snssaisItem = OpenAPI_mapping_of_snssai_parseFromJSON(mapping_snssais_local);
             if (!mapping_snssaisItem) {
-                ogs_error("No mapping_snssaisItem");
+                log_error("No mapping_snssaisItem");
                 goto end;
             }
             OpenAPI_list_add(mapping_snssaisList, mapping_snssaisItem);
@@ -1000,7 +1000,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (n3g_allowed_snssais) {
         cJSON *n3g_allowed_snssais_local = NULL;
         if (!cJSON_IsArray(n3g_allowed_snssais)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [n3g_allowed_snssais]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [n3g_allowed_snssais]");
             goto end;
         }
 
@@ -1008,12 +1008,12 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
 
         cJSON_ArrayForEach(n3g_allowed_snssais_local, n3g_allowed_snssais) {
             if (!cJSON_IsObject(n3g_allowed_snssais_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [n3g_allowed_snssais]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [n3g_allowed_snssais]");
                 goto end;
             }
             OpenAPI_snssai_t *n3g_allowed_snssaisItem = OpenAPI_snssai_parseFromJSON(n3g_allowed_snssais_local);
             if (!n3g_allowed_snssaisItem) {
-                ogs_error("No n3g_allowed_snssaisItem");
+                log_error("No n3g_allowed_snssaisItem");
                 goto end;
             }
             OpenAPI_list_add(n3g_allowed_snssaisList, n3g_allowed_snssaisItem);
@@ -1024,7 +1024,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (guami) {
     guami_local_nonprim = OpenAPI_guami_parseFromJSON(guami);
     if (!guami_local_nonprim) {
-        ogs_error("OpenAPI_guami_parseFromJSON failed [guami]");
+        log_error("OpenAPI_guami_parseFromJSON failed [guami]");
         goto end;
     }
     }
@@ -1032,7 +1032,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     service_name = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "serviceName");
     if (service_name) {
     if (!cJSON_IsString(service_name) && !cJSON_IsNull(service_name)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [service_name]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [service_name]");
         goto end;
     }
     }
@@ -1042,7 +1042,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (!cJSON_IsNull(trace_req)) {
     trace_req_local_nonprim = OpenAPI_trace_data_parseFromJSON(trace_req);
     if (!trace_req_local_nonprim) {
-        ogs_error("OpenAPI_trace_data_parseFromJSON failed [trace_req]");
+        log_error("OpenAPI_trace_data_parseFromJSON failed [trace_req]");
         goto end;
     }
     }
@@ -1052,7 +1052,7 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
     if (nwdaf_datas) {
         cJSON *nwdaf_datas_local = NULL;
         if (!cJSON_IsArray(nwdaf_datas)) {
-            ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [nwdaf_datas]");
+            log_error("OpenAPI_policy_association_request_parseFromJSON() failed [nwdaf_datas]");
             goto end;
         }
 
@@ -1060,12 +1060,12 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
 
         cJSON_ArrayForEach(nwdaf_datas_local, nwdaf_datas) {
             if (!cJSON_IsObject(nwdaf_datas_local)) {
-                ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [nwdaf_datas]");
+                log_error("OpenAPI_policy_association_request_parseFromJSON() failed [nwdaf_datas]");
                 goto end;
             }
             OpenAPI_nwdaf_data_t *nwdaf_datasItem = OpenAPI_nwdaf_data_parseFromJSON(nwdaf_datas_local);
             if (!nwdaf_datasItem) {
-                ogs_error("No nwdaf_datasItem");
+                log_error("No nwdaf_datasItem");
                 goto end;
             }
             OpenAPI_list_add(nwdaf_datasList, nwdaf_datasItem);
@@ -1074,11 +1074,11 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_parseFr
 
     supp_feat = cJSON_GetObjectItemCaseSensitive(policy_association_requestJSON, "suppFeat");
     if (!supp_feat) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [supp_feat]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [supp_feat]");
         goto end;
     }
     if (!cJSON_IsString(supp_feat)) {
-        ogs_error("OpenAPI_policy_association_request_parseFromJSON() failed [supp_feat]");
+        log_error("OpenAPI_policy_association_request_parseFromJSON() failed [supp_feat]");
         goto end;
     }
 
@@ -1232,10 +1232,10 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_policy_association_request_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_policy_association_request_convertToJSON() failed");
+        log_error("OpenAPI_policy_association_request_convertToJSON() failed");
         return NULL;
     }
 
@@ -1243,14 +1243,14 @@ OpenAPI_policy_association_request_t *OpenAPI_policy_association_request_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -14,7 +14,7 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_create(
 )
 {
     OpenAPI_plmn_restriction_t *plmn_restriction_local_var = ogs_malloc(sizeof(OpenAPI_plmn_restriction_t));
-    ogs_assert(plmn_restriction_local_var);
+    log_assert(plmn_restriction_local_var);
 
     plmn_restriction_local_var->rat_restrictions = rat_restrictions;
     plmn_restriction_local_var->forbidden_areas = forbidden_areas;
@@ -69,7 +69,7 @@ cJSON *OpenAPI_plmn_restriction_convertToJSON(OpenAPI_plmn_restriction_t *plmn_r
     OpenAPI_lnode_t *node = NULL;
 
     if (plmn_restriction == NULL) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [PlmnRestriction]");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed [PlmnRestriction]");
         return NULL;
     }
 
@@ -77,12 +77,12 @@ cJSON *OpenAPI_plmn_restriction_convertToJSON(OpenAPI_plmn_restriction_t *plmn_r
     if (plmn_restriction->rat_restrictions != OpenAPI_rat_type_NULL) {
     cJSON *rat_restrictionsList = cJSON_AddArrayToObject(item, "ratRestrictions");
     if (rat_restrictionsList == NULL) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [rat_restrictions]");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed [rat_restrictions]");
         goto end;
     }
     OpenAPI_list_for_each(plmn_restriction->rat_restrictions, node) {
         if (cJSON_AddStringToObject(rat_restrictionsList, "", OpenAPI_rat_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [rat_restrictions]");
+            log_error("OpenAPI_plmn_restriction_convertToJSON() failed [rat_restrictions]");
             goto end;
         }
     }
@@ -91,13 +91,13 @@ cJSON *OpenAPI_plmn_restriction_convertToJSON(OpenAPI_plmn_restriction_t *plmn_r
     if (plmn_restriction->forbidden_areas) {
     cJSON *forbidden_areasList = cJSON_AddArrayToObject(item, "forbiddenAreas");
     if (forbidden_areasList == NULL) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [forbidden_areas]");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed [forbidden_areas]");
         goto end;
     }
     OpenAPI_list_for_each(plmn_restriction->forbidden_areas, node) {
         cJSON *itemLocal = OpenAPI_area_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [forbidden_areas]");
+            log_error("OpenAPI_plmn_restriction_convertToJSON() failed [forbidden_areas]");
             goto end;
         }
         cJSON_AddItemToArray(forbidden_areasList, itemLocal);
@@ -107,12 +107,12 @@ cJSON *OpenAPI_plmn_restriction_convertToJSON(OpenAPI_plmn_restriction_t *plmn_r
     if (plmn_restriction->service_area_restriction) {
     cJSON *service_area_restriction_local_JSON = OpenAPI_service_area_restriction_convertToJSON(plmn_restriction->service_area_restriction);
     if (service_area_restriction_local_JSON == NULL) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [service_area_restriction]");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed [service_area_restriction]");
         goto end;
     }
     cJSON_AddItemToObject(item, "serviceAreaRestriction", service_area_restriction_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [service_area_restriction]");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed [service_area_restriction]");
         goto end;
     }
     }
@@ -120,12 +120,12 @@ cJSON *OpenAPI_plmn_restriction_convertToJSON(OpenAPI_plmn_restriction_t *plmn_r
     if (plmn_restriction->core_network_type_restrictions != OpenAPI_core_network_type_NULL) {
     cJSON *core_network_type_restrictionsList = cJSON_AddArrayToObject(item, "coreNetworkTypeRestrictions");
     if (core_network_type_restrictionsList == NULL) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [core_network_type_restrictions]");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed [core_network_type_restrictions]");
         goto end;
     }
     OpenAPI_list_for_each(plmn_restriction->core_network_type_restrictions, node) {
         if (cJSON_AddStringToObject(core_network_type_restrictionsList, "", OpenAPI_core_network_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [core_network_type_restrictions]");
+            log_error("OpenAPI_plmn_restriction_convertToJSON() failed [core_network_type_restrictions]");
             goto end;
         }
     }
@@ -134,12 +134,12 @@ cJSON *OpenAPI_plmn_restriction_convertToJSON(OpenAPI_plmn_restriction_t *plmn_r
     if (plmn_restriction->primary_rat_restrictions != OpenAPI_rat_type_NULL) {
     cJSON *primary_rat_restrictionsList = cJSON_AddArrayToObject(item, "primaryRatRestrictions");
     if (primary_rat_restrictionsList == NULL) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [primary_rat_restrictions]");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed [primary_rat_restrictions]");
         goto end;
     }
     OpenAPI_list_for_each(plmn_restriction->primary_rat_restrictions, node) {
         if (cJSON_AddStringToObject(primary_rat_restrictionsList, "", OpenAPI_rat_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [primary_rat_restrictions]");
+            log_error("OpenAPI_plmn_restriction_convertToJSON() failed [primary_rat_restrictions]");
             goto end;
         }
     }
@@ -148,12 +148,12 @@ cJSON *OpenAPI_plmn_restriction_convertToJSON(OpenAPI_plmn_restriction_t *plmn_r
     if (plmn_restriction->secondary_rat_restrictions != OpenAPI_rat_type_NULL) {
     cJSON *secondary_rat_restrictionsList = cJSON_AddArrayToObject(item, "secondaryRatRestrictions");
     if (secondary_rat_restrictionsList == NULL) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [secondary_rat_restrictions]");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed [secondary_rat_restrictions]");
         goto end;
     }
     OpenAPI_list_for_each(plmn_restriction->secondary_rat_restrictions, node) {
         if (cJSON_AddStringToObject(secondary_rat_restrictionsList, "", OpenAPI_rat_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed [secondary_rat_restrictions]");
+            log_error("OpenAPI_plmn_restriction_convertToJSON() failed [secondary_rat_restrictions]");
             goto end;
         }
     }
@@ -183,7 +183,7 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
     if (rat_restrictions) {
         cJSON *rat_restrictions_local = NULL;
         if (!cJSON_IsArray(rat_restrictions)) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [rat_restrictions]");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [rat_restrictions]");
             goto end;
         }
 
@@ -192,19 +192,19 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
         cJSON_ArrayForEach(rat_restrictions_local, rat_restrictions) {
             OpenAPI_rat_type_e localEnum = OpenAPI_rat_type_NULL;
             if (!cJSON_IsString(rat_restrictions_local)) {
-                ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [rat_restrictions]");
+                log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [rat_restrictions]");
                 goto end;
             }
             localEnum = OpenAPI_rat_type_FromString(rat_restrictions_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"rat_restrictions\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"rat_restrictions\" is not supported. Ignoring it ...",
                          rat_restrictions_local->valuestring);
             } else {
                 OpenAPI_list_add(rat_restrictionsList, (void *)localEnum);
             }
         }
         if (rat_restrictionsList->count == 0) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed: Expected rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed: Expected rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -213,7 +213,7 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
     if (forbidden_areas) {
         cJSON *forbidden_areas_local = NULL;
         if (!cJSON_IsArray(forbidden_areas)) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [forbidden_areas]");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [forbidden_areas]");
             goto end;
         }
 
@@ -221,12 +221,12 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
 
         cJSON_ArrayForEach(forbidden_areas_local, forbidden_areas) {
             if (!cJSON_IsObject(forbidden_areas_local)) {
-                ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [forbidden_areas]");
+                log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [forbidden_areas]");
                 goto end;
             }
             OpenAPI_area_t *forbidden_areasItem = OpenAPI_area_parseFromJSON(forbidden_areas_local);
             if (!forbidden_areasItem) {
-                ogs_error("No forbidden_areasItem");
+                log_error("No forbidden_areasItem");
                 goto end;
             }
             OpenAPI_list_add(forbidden_areasList, forbidden_areasItem);
@@ -237,7 +237,7 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
     if (service_area_restriction) {
     service_area_restriction_local_nonprim = OpenAPI_service_area_restriction_parseFromJSON(service_area_restriction);
     if (!service_area_restriction_local_nonprim) {
-        ogs_error("OpenAPI_service_area_restriction_parseFromJSON failed [service_area_restriction]");
+        log_error("OpenAPI_service_area_restriction_parseFromJSON failed [service_area_restriction]");
         goto end;
     }
     }
@@ -246,7 +246,7 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
     if (core_network_type_restrictions) {
         cJSON *core_network_type_restrictions_local = NULL;
         if (!cJSON_IsArray(core_network_type_restrictions)) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [core_network_type_restrictions]");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [core_network_type_restrictions]");
             goto end;
         }
 
@@ -255,19 +255,19 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
         cJSON_ArrayForEach(core_network_type_restrictions_local, core_network_type_restrictions) {
             OpenAPI_core_network_type_e localEnum = OpenAPI_core_network_type_NULL;
             if (!cJSON_IsString(core_network_type_restrictions_local)) {
-                ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [core_network_type_restrictions]");
+                log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [core_network_type_restrictions]");
                 goto end;
             }
             localEnum = OpenAPI_core_network_type_FromString(core_network_type_restrictions_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"core_network_type_restrictions\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"core_network_type_restrictions\" is not supported. Ignoring it ...",
                          core_network_type_restrictions_local->valuestring);
             } else {
                 OpenAPI_list_add(core_network_type_restrictionsList, (void *)localEnum);
             }
         }
         if (core_network_type_restrictionsList->count == 0) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed: Expected core_network_type_restrictionsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed: Expected core_network_type_restrictionsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -276,7 +276,7 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
     if (primary_rat_restrictions) {
         cJSON *primary_rat_restrictions_local = NULL;
         if (!cJSON_IsArray(primary_rat_restrictions)) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [primary_rat_restrictions]");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [primary_rat_restrictions]");
             goto end;
         }
 
@@ -285,19 +285,19 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
         cJSON_ArrayForEach(primary_rat_restrictions_local, primary_rat_restrictions) {
             OpenAPI_rat_type_e localEnum = OpenAPI_rat_type_NULL;
             if (!cJSON_IsString(primary_rat_restrictions_local)) {
-                ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [primary_rat_restrictions]");
+                log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [primary_rat_restrictions]");
                 goto end;
             }
             localEnum = OpenAPI_rat_type_FromString(primary_rat_restrictions_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"primary_rat_restrictions\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"primary_rat_restrictions\" is not supported. Ignoring it ...",
                          primary_rat_restrictions_local->valuestring);
             } else {
                 OpenAPI_list_add(primary_rat_restrictionsList, (void *)localEnum);
             }
         }
         if (primary_rat_restrictionsList->count == 0) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed: Expected primary_rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed: Expected primary_rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -306,7 +306,7 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
     if (secondary_rat_restrictions) {
         cJSON *secondary_rat_restrictions_local = NULL;
         if (!cJSON_IsArray(secondary_rat_restrictions)) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [secondary_rat_restrictions]");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [secondary_rat_restrictions]");
             goto end;
         }
 
@@ -315,19 +315,19 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_parseFromJSON(cJSON *plmn_r
         cJSON_ArrayForEach(secondary_rat_restrictions_local, secondary_rat_restrictions) {
             OpenAPI_rat_type_e localEnum = OpenAPI_rat_type_NULL;
             if (!cJSON_IsString(secondary_rat_restrictions_local)) {
-                ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed [secondary_rat_restrictions]");
+                log_error("OpenAPI_plmn_restriction_parseFromJSON() failed [secondary_rat_restrictions]");
                 goto end;
             }
             localEnum = OpenAPI_rat_type_FromString(secondary_rat_restrictions_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"secondary_rat_restrictions\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"secondary_rat_restrictions\" is not supported. Ignoring it ...",
                          secondary_rat_restrictions_local->valuestring);
             } else {
                 OpenAPI_list_add(secondary_rat_restrictionsList, (void *)localEnum);
             }
         }
         if (secondary_rat_restrictionsList->count == 0) {
-            ogs_error("OpenAPI_plmn_restriction_parseFromJSON() failed: Expected secondary_rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_plmn_restriction_parseFromJSON() failed: Expected secondary_rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -378,10 +378,10 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_copy(OpenAPI_plmn_restricti
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_plmn_restriction_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_plmn_restriction_convertToJSON() failed");
+        log_error("OpenAPI_plmn_restriction_convertToJSON() failed");
         return NULL;
     }
 
@@ -389,14 +389,14 @@ OpenAPI_plmn_restriction_t *OpenAPI_plmn_restriction_copy(OpenAPI_plmn_restricti
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

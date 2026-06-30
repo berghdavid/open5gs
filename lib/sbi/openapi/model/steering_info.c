@@ -10,7 +10,7 @@ OpenAPI_steering_info_t *OpenAPI_steering_info_create(
 )
 {
     OpenAPI_steering_info_t *steering_info_local_var = ogs_malloc(sizeof(OpenAPI_steering_info_t));
-    ogs_assert(steering_info_local_var);
+    log_assert(steering_info_local_var);
 
     steering_info_local_var->plmn_id = plmn_id;
     steering_info_local_var->access_tech_list = access_tech_list;
@@ -45,36 +45,36 @@ cJSON *OpenAPI_steering_info_convertToJSON(OpenAPI_steering_info_t *steering_inf
     OpenAPI_lnode_t *node = NULL;
 
     if (steering_info == NULL) {
-        ogs_error("OpenAPI_steering_info_convertToJSON() failed [SteeringInfo]");
+        log_error("OpenAPI_steering_info_convertToJSON() failed [SteeringInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!steering_info->plmn_id) {
-        ogs_error("OpenAPI_steering_info_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_steering_info_convertToJSON() failed [plmn_id]");
         return NULL;
     }
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(steering_info->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_steering_info_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_steering_info_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_steering_info_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_steering_info_convertToJSON() failed [plmn_id]");
         goto end;
     }
 
     if (steering_info->access_tech_list) {
     cJSON *access_tech_listList = cJSON_AddArrayToObject(item, "accessTechList");
     if (access_tech_listList == NULL) {
-        ogs_error("OpenAPI_steering_info_convertToJSON() failed [access_tech_list]");
+        log_error("OpenAPI_steering_info_convertToJSON() failed [access_tech_list]");
         goto end;
     }
     OpenAPI_list_for_each(steering_info->access_tech_list, node) {
         cJSON *itemLocal = OpenAPI_access_tech_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_steering_info_convertToJSON() failed [access_tech_list]");
+            log_error("OpenAPI_steering_info_convertToJSON() failed [access_tech_list]");
             goto end;
         }
         cJSON_AddItemToArray(access_tech_listList, itemLocal);
@@ -95,12 +95,12 @@ OpenAPI_steering_info_t *OpenAPI_steering_info_parseFromJSON(cJSON *steering_inf
     OpenAPI_list_t *access_tech_listList = NULL;
     plmn_id = cJSON_GetObjectItemCaseSensitive(steering_infoJSON, "plmnId");
     if (!plmn_id) {
-        ogs_error("OpenAPI_steering_info_parseFromJSON() failed [plmn_id]");
+        log_error("OpenAPI_steering_info_parseFromJSON() failed [plmn_id]");
         goto end;
     }
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
 
@@ -108,7 +108,7 @@ OpenAPI_steering_info_t *OpenAPI_steering_info_parseFromJSON(cJSON *steering_inf
     if (access_tech_list) {
         cJSON *access_tech_list_local = NULL;
         if (!cJSON_IsArray(access_tech_list)) {
-            ogs_error("OpenAPI_steering_info_parseFromJSON() failed [access_tech_list]");
+            log_error("OpenAPI_steering_info_parseFromJSON() failed [access_tech_list]");
             goto end;
         }
 
@@ -116,12 +116,12 @@ OpenAPI_steering_info_t *OpenAPI_steering_info_parseFromJSON(cJSON *steering_inf
 
         cJSON_ArrayForEach(access_tech_list_local, access_tech_list) {
             if (!cJSON_IsObject(access_tech_list_local)) {
-                ogs_error("OpenAPI_steering_info_parseFromJSON() failed [access_tech_list]");
+                log_error("OpenAPI_steering_info_parseFromJSON() failed [access_tech_list]");
                 goto end;
             }
             OpenAPI_access_tech_t *access_tech_listItem = OpenAPI_access_tech_parseFromJSON(access_tech_list_local);
             if (!access_tech_listItem) {
-                ogs_error("No access_tech_listItem");
+                log_error("No access_tech_listItem");
                 goto end;
             }
             OpenAPI_list_add(access_tech_listList, access_tech_listItem);
@@ -154,10 +154,10 @@ OpenAPI_steering_info_t *OpenAPI_steering_info_copy(OpenAPI_steering_info_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_steering_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_steering_info_convertToJSON() failed");
+        log_error("OpenAPI_steering_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -165,14 +165,14 @@ OpenAPI_steering_info_t *OpenAPI_steering_info_copy(OpenAPI_steering_info_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -51,12 +51,12 @@ static void ogs_kdf_common(const uint8_t *key, uint32_t key_size,
     int i = 0, pos;
     uint8_t *s = NULL;
 
-    ogs_assert(key);
-    ogs_assert(key_size);
-    ogs_assert(fc);
-    ogs_assert(param[0].buf);
-    ogs_assert(param[0].len);
-    ogs_assert(output);
+    log_assert(key);
+    log_assert(key_size);
+    log_assert(fc);
+    log_assert(param[0].buf);
+    log_assert(param[0].len);
+    log_assert(output);
 
     pos = 1; /* FC Value */
 
@@ -66,7 +66,7 @@ static void ogs_kdf_common(const uint8_t *key, uint32_t key_size,
     }
 
     s = ogs_calloc(1, pos);
-    ogs_assert(s);
+    log_assert(s);
 
     /* Copy buffer from param */
     pos = 0;
@@ -95,11 +95,11 @@ void ogs_kdf_kausf(
     kdf_param_t param;
     uint8_t key[OGS_KEY_LEN*2];
 
-    ogs_assert(ck);
-    ogs_assert(ik);
-    ogs_assert(serving_network_name);
-    ogs_assert(autn);
-    ogs_assert(kausf);
+    log_assert(ck);
+    log_assert(ik);
+    log_assert(serving_network_name);
+    log_assert(autn);
+    log_assert(kausf);
 
     memcpy(key, ck, OGS_KEY_LEN);
     memcpy(key+OGS_KEY_LEN, ik, OGS_KEY_LEN);
@@ -125,12 +125,12 @@ void ogs_kdf_xres_star(
     uint8_t key[OGS_KEY_LEN*2];
     uint8_t output[OGS_SHA256_DIGEST_SIZE];
 
-    ogs_assert(ck);
-    ogs_assert(ik);
-    ogs_assert(serving_network_name);
-    ogs_assert(rand);
-    ogs_assert(xres);
-    ogs_assert(xres_len);
+    log_assert(ck);
+    log_assert(ik);
+    log_assert(serving_network_name);
+    log_assert(rand);
+    log_assert(xres);
+    log_assert(xres_len);
 
     memcpy(key, ck, OGS_KEY_LEN);
     memcpy(key+OGS_KEY_LEN, ik, OGS_KEY_LEN);
@@ -155,9 +155,9 @@ void ogs_kdf_hxres_star(uint8_t *rand, uint8_t *xres_star, uint8_t *hxres_star)
     uint8_t message[OGS_RAND_LEN + OGS_KEY_LEN];
     uint8_t output[OGS_SHA256_DIGEST_SIZE];
 
-    ogs_assert(rand);
-    ogs_assert(xres_star);
-    ogs_assert(hxres_star);
+    log_assert(rand);
+    log_assert(xres_star);
+    log_assert(hxres_star);
 
     memcpy(message, rand, OGS_RAND_LEN);
     memcpy(message+OGS_RAND_LEN, xres_star, OGS_KEY_LEN);
@@ -172,9 +172,9 @@ void ogs_kdf_kseaf(char *serving_network_name, const uint8_t *kausf, uint8_t *ks
 {
     kdf_param_t param;
 
-    ogs_assert(serving_network_name);
-    ogs_assert(kausf);
-    ogs_assert(kseaf);
+    log_assert(serving_network_name);
+    log_assert(kausf);
+    log_assert(kseaf);
 
     memset(param, 0, sizeof(param));
     param[0].buf = (uint8_t *)serving_network_name;
@@ -191,16 +191,16 @@ void ogs_kdf_kamf(const char *supi, const uint8_t *abba, uint8_t abba_len,
     kdf_param_t param;
     char *val;
 
-    ogs_assert(supi);
-    ogs_assert(abba);
-    ogs_assert(abba_len);
-    ogs_assert(kseaf);
-    ogs_assert(kamf);
+    log_assert(supi);
+    log_assert(abba);
+    log_assert(abba_len);
+    log_assert(kseaf);
+    log_assert(kamf);
 
     val = ogs_id_get_value(supi);
     memset(param, 0, sizeof(param));
     param[0].buf = (const uint8_t*) val;
-    ogs_assert(param[0].buf);
+    log_assert(param[0].buf);
     param[0].len = strlen(val);
     param[1].buf = abba;
     param[1].len = abba_len;
@@ -218,8 +218,8 @@ void ogs_kdf_nas_5gs(uint8_t algorithm_type_distinguishers,
     kdf_param_t param;
     uint8_t output[OGS_SHA256_DIGEST_SIZE];
 
-    ogs_assert(kamf);
-    ogs_assert(knas);
+    log_assert(kamf);
+    log_assert(knas);
 
     memset(param, 0, sizeof(param));
     param[0].buf = &algorithm_type_distinguishers;
@@ -238,8 +238,8 @@ void ogs_kdf_kgnb_and_kn3iwf(const uint8_t *kamf, uint32_t ul_count,
 {
     kdf_param_t param;
 
-    ogs_assert(kamf);
-    ogs_assert(kgnb);
+    log_assert(kamf);
+    log_assert(kgnb);
 
     memset(param, 0, sizeof(param));
     ul_count = htobe32(ul_count);
@@ -257,8 +257,8 @@ void ogs_kdf_nh_gnb(const uint8_t *kamf, uint8_t *sync_input, uint8_t *kgnb)
 {
     kdf_param_t param;
 
-    ogs_assert(kamf);
-    ogs_assert(kgnb);
+    log_assert(kamf);
+    log_assert(kgnb);
 
     memset(param, 0, sizeof(param));
     param[0].buf = sync_input;
@@ -282,13 +282,13 @@ void ogs_kdf_ansi_x963(
     uint32_t counter = 0;
     size_t counter_len = sizeof(counter);
 
-    ogs_assert(z);
-    ogs_assert(info);
-    ogs_assert(ek);
-    ogs_assert(icb);
-    ogs_assert(mk);
+    log_assert(z);
+    log_assert(info);
+    log_assert(ek);
+    log_assert(icb);
+    log_assert(mk);
 
-    ogs_assert((z_len+counter_len+info_len) <= (ECC_BYTES+4+ECC_BYTES+1));
+    log_assert((z_len+counter_len+info_len) <= (ECC_BYTES+4+ECC_BYTES+1));
 
     memcpy(input, z, z_len);
     counter = htobe32(1);
@@ -316,11 +316,11 @@ void ogs_auc_kasme(const uint8_t *ck, const uint8_t *ik,
     uint8_t key[OGS_KEY_LEN*2];
     uint8_t sqn_xor_ak[OGS_SQN_XOR_AK_LEN];
 
-    ogs_assert(ck);
-    ogs_assert(ik);
-    ogs_assert(plmn_id);
-    ogs_assert(sqn);
-    ogs_assert(ak);
+    log_assert(ck);
+    log_assert(ik);
+    log_assert(plmn_id);
+    log_assert(sqn);
+    log_assert(ak);
 
     memcpy(key, ck, OGS_KEY_LEN);
     memcpy(key + OGS_KEY_LEN, ik, OGS_KEY_LEN);
@@ -425,9 +425,9 @@ void ogs_kdf_kasme_idle_mobility(
     kdf_param_t param;
     uint8_t key[OGS_KEY_LEN*2];
 
-    ogs_assert(ck);
-    ogs_assert(ik);
-    ogs_assert(kasme);
+    log_assert(ck);
+    log_assert(ik);
+    log_assert(kasme);
 
     memcpy(key, ck, OGS_KEY_LEN);
     memcpy(key+OGS_KEY_LEN, ik, OGS_KEY_LEN);
@@ -469,9 +469,9 @@ void ogs_kdf_hash_mme(
     uint8_t key[32];
     uint8_t output[OGS_SHA256_DIGEST_SIZE];
 
-    ogs_assert(message);
-    ogs_assert(message_len);
-    ogs_assert(hash_mme);
+    log_assert(message);
+    log_assert(message_len);
+    log_assert(hash_mme);
 
     memset(key, 0, 32);
     ogs_hmac_sha256(key, 32, message, message_len,
@@ -499,10 +499,10 @@ void ogs_auc_sqn(
      */
     uint8_t amf[2] = { 0, 0 };
 
-    ogs_assert(opc);
-    ogs_assert(k);
-    ogs_assert(rand);
-    ogs_assert(conc_sqn_ms);
+    log_assert(opc);
+    log_assert(k);
+    log_assert(rand);
+    log_assert(conc_sqn_ms);
 
     milenage_f2345(opc, k, rand, NULL, NULL, NULL, NULL, ak);
     for (i = 0; i < OGS_SQN_LEN; i++)

@@ -11,7 +11,7 @@ OpenAPI_ec_restriction_data_wb_t *OpenAPI_ec_restriction_data_wb_create(
 )
 {
     OpenAPI_ec_restriction_data_wb_t *ec_restriction_data_wb_local_var = ogs_malloc(sizeof(OpenAPI_ec_restriction_data_wb_t));
-    ogs_assert(ec_restriction_data_wb_local_var);
+    log_assert(ec_restriction_data_wb_local_var);
 
     ec_restriction_data_wb_local_var->is_ec_mode_a_restricted = is_ec_mode_a_restricted;
     ec_restriction_data_wb_local_var->ec_mode_a_restricted = ec_mode_a_restricted;
@@ -36,20 +36,20 @@ cJSON *OpenAPI_ec_restriction_data_wb_convertToJSON(OpenAPI_ec_restriction_data_
     OpenAPI_lnode_t *node = NULL;
 
     if (ec_restriction_data_wb == NULL) {
-        ogs_error("OpenAPI_ec_restriction_data_wb_convertToJSON() failed [EcRestrictionDataWb]");
+        log_error("OpenAPI_ec_restriction_data_wb_convertToJSON() failed [EcRestrictionDataWb]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ec_restriction_data_wb->is_ec_mode_a_restricted) {
     if (cJSON_AddBoolToObject(item, "ecModeARestricted", ec_restriction_data_wb->ec_mode_a_restricted) == NULL) {
-        ogs_error("OpenAPI_ec_restriction_data_wb_convertToJSON() failed [ec_mode_a_restricted]");
+        log_error("OpenAPI_ec_restriction_data_wb_convertToJSON() failed [ec_mode_a_restricted]");
         goto end;
     }
     }
 
     if (cJSON_AddBoolToObject(item, "ecModeBRestricted", ec_restriction_data_wb->ec_mode_b_restricted) == NULL) {
-        ogs_error("OpenAPI_ec_restriction_data_wb_convertToJSON() failed [ec_mode_b_restricted]");
+        log_error("OpenAPI_ec_restriction_data_wb_convertToJSON() failed [ec_mode_b_restricted]");
         goto end;
     }
 
@@ -66,18 +66,18 @@ OpenAPI_ec_restriction_data_wb_t *OpenAPI_ec_restriction_data_wb_parseFromJSON(c
     ec_mode_a_restricted = cJSON_GetObjectItemCaseSensitive(ec_restriction_data_wbJSON, "ecModeARestricted");
     if (ec_mode_a_restricted) {
     if (!cJSON_IsBool(ec_mode_a_restricted)) {
-        ogs_error("OpenAPI_ec_restriction_data_wb_parseFromJSON() failed [ec_mode_a_restricted]");
+        log_error("OpenAPI_ec_restriction_data_wb_parseFromJSON() failed [ec_mode_a_restricted]");
         goto end;
     }
     }
 
     ec_mode_b_restricted = cJSON_GetObjectItemCaseSensitive(ec_restriction_data_wbJSON, "ecModeBRestricted");
     if (!ec_mode_b_restricted) {
-        ogs_error("OpenAPI_ec_restriction_data_wb_parseFromJSON() failed [ec_mode_b_restricted]");
+        log_error("OpenAPI_ec_restriction_data_wb_parseFromJSON() failed [ec_mode_b_restricted]");
         goto end;
     }
     if (!cJSON_IsBool(ec_mode_b_restricted)) {
-        ogs_error("OpenAPI_ec_restriction_data_wb_parseFromJSON() failed [ec_mode_b_restricted]");
+        log_error("OpenAPI_ec_restriction_data_wb_parseFromJSON() failed [ec_mode_b_restricted]");
         goto end;
     }
 
@@ -98,10 +98,10 @@ OpenAPI_ec_restriction_data_wb_t *OpenAPI_ec_restriction_data_wb_copy(OpenAPI_ec
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ec_restriction_data_wb_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ec_restriction_data_wb_convertToJSON() failed");
+        log_error("OpenAPI_ec_restriction_data_wb_convertToJSON() failed");
         return NULL;
     }
 
@@ -109,14 +109,14 @@ OpenAPI_ec_restriction_data_wb_t *OpenAPI_ec_restriction_data_wb_copy(OpenAPI_ec
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

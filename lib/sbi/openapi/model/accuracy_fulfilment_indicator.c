@@ -8,7 +8,7 @@ OpenAPI_accuracy_fulfilment_indicator_t *OpenAPI_accuracy_fulfilment_indicator_c
 )
 {
     OpenAPI_accuracy_fulfilment_indicator_t *accuracy_fulfilment_indicator_local_var = ogs_malloc(sizeof(OpenAPI_accuracy_fulfilment_indicator_t));
-    ogs_assert(accuracy_fulfilment_indicator_local_var);
+    log_assert(accuracy_fulfilment_indicator_local_var);
 
 
     return accuracy_fulfilment_indicator_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_accuracy_fulfilment_indicator_convertToJSON(OpenAPI_accuracy_fulf
     OpenAPI_lnode_t *node = NULL;
 
     if (accuracy_fulfilment_indicator == NULL) {
-        ogs_error("OpenAPI_accuracy_fulfilment_indicator_convertToJSON() failed [AccuracyFulfilmentIndicator]");
+        log_error("OpenAPI_accuracy_fulfilment_indicator_convertToJSON() failed [AccuracyFulfilmentIndicator]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_accuracy_fulfilment_indicator_t *OpenAPI_accuracy_fulfilment_indicator_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_accuracy_fulfilment_indicator_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_accuracy_fulfilment_indicator_convertToJSON() failed");
+        log_error("OpenAPI_accuracy_fulfilment_indicator_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_accuracy_fulfilment_indicator_t *OpenAPI_accuracy_fulfilment_indicator_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

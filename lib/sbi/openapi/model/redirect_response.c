@@ -11,7 +11,7 @@ OpenAPI_redirect_response_t *OpenAPI_redirect_response_create(
 )
 {
     OpenAPI_redirect_response_t *redirect_response_local_var = ogs_malloc(sizeof(OpenAPI_redirect_response_t));
-    ogs_assert(redirect_response_local_var);
+    log_assert(redirect_response_local_var);
 
     redirect_response_local_var->cause = cause;
     redirect_response_local_var->target_scp = target_scp;
@@ -48,28 +48,28 @@ cJSON *OpenAPI_redirect_response_convertToJSON(OpenAPI_redirect_response_t *redi
     OpenAPI_lnode_t *node = NULL;
 
     if (redirect_response == NULL) {
-        ogs_error("OpenAPI_redirect_response_convertToJSON() failed [RedirectResponse]");
+        log_error("OpenAPI_redirect_response_convertToJSON() failed [RedirectResponse]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (redirect_response->cause) {
     if (cJSON_AddStringToObject(item, "cause", redirect_response->cause) == NULL) {
-        ogs_error("OpenAPI_redirect_response_convertToJSON() failed [cause]");
+        log_error("OpenAPI_redirect_response_convertToJSON() failed [cause]");
         goto end;
     }
     }
 
     if (redirect_response->target_scp) {
     if (cJSON_AddStringToObject(item, "targetScp", redirect_response->target_scp) == NULL) {
-        ogs_error("OpenAPI_redirect_response_convertToJSON() failed [target_scp]");
+        log_error("OpenAPI_redirect_response_convertToJSON() failed [target_scp]");
         goto end;
     }
     }
 
     if (redirect_response->target_sepp) {
     if (cJSON_AddStringToObject(item, "targetSepp", redirect_response->target_sepp) == NULL) {
-        ogs_error("OpenAPI_redirect_response_convertToJSON() failed [target_sepp]");
+        log_error("OpenAPI_redirect_response_convertToJSON() failed [target_sepp]");
         goto end;
     }
     }
@@ -88,7 +88,7 @@ OpenAPI_redirect_response_t *OpenAPI_redirect_response_parseFromJSON(cJSON *redi
     cause = cJSON_GetObjectItemCaseSensitive(redirect_responseJSON, "cause");
     if (cause) {
     if (!cJSON_IsString(cause) && !cJSON_IsNull(cause)) {
-        ogs_error("OpenAPI_redirect_response_parseFromJSON() failed [cause]");
+        log_error("OpenAPI_redirect_response_parseFromJSON() failed [cause]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_redirect_response_t *OpenAPI_redirect_response_parseFromJSON(cJSON *redi
     target_scp = cJSON_GetObjectItemCaseSensitive(redirect_responseJSON, "targetScp");
     if (target_scp) {
     if (!cJSON_IsString(target_scp) && !cJSON_IsNull(target_scp)) {
-        ogs_error("OpenAPI_redirect_response_parseFromJSON() failed [target_scp]");
+        log_error("OpenAPI_redirect_response_parseFromJSON() failed [target_scp]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_redirect_response_t *OpenAPI_redirect_response_parseFromJSON(cJSON *redi
     target_sepp = cJSON_GetObjectItemCaseSensitive(redirect_responseJSON, "targetSepp");
     if (target_sepp) {
     if (!cJSON_IsString(target_sepp) && !cJSON_IsNull(target_sepp)) {
-        ogs_error("OpenAPI_redirect_response_parseFromJSON() failed [target_sepp]");
+        log_error("OpenAPI_redirect_response_parseFromJSON() failed [target_sepp]");
         goto end;
     }
     }
@@ -125,10 +125,10 @@ OpenAPI_redirect_response_t *OpenAPI_redirect_response_copy(OpenAPI_redirect_res
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_redirect_response_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_redirect_response_convertToJSON() failed");
+        log_error("OpenAPI_redirect_response_convertToJSON() failed");
         return NULL;
     }
 
@@ -136,14 +136,14 @@ OpenAPI_redirect_response_t *OpenAPI_redirect_response_copy(OpenAPI_redirect_res
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

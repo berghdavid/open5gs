@@ -60,7 +60,7 @@ static OpenAPI_any_type_t *any_create(cJSON *json) {
 OpenAPI_any_type_t *OpenAPI_any_type_create(cJSON *json) {
     OpenAPI_any_type_t *any_type_local_var =
         any_create(cJSON_Duplicate(json, true));
-    ogs_assert(any_type_local_var);
+    log_assert(any_type_local_var);
 
     return any_type_local_var;
 }
@@ -73,13 +73,13 @@ cJSON *OpenAPI_any_type_convertToJSON(OpenAPI_any_type_t *any_type) {
     cJSON *item = NULL;
 
     if (any_type == NULL) {
-        ogs_error("OpenAPI_any_type_convertToJSON() failed [AnyType]");
+        log_error("OpenAPI_any_type_convertToJSON() failed [AnyType]");
         return NULL;
     }
 
     item = cJSON_Duplicate(any_type->json, true);
     if (item == NULL) {
-        ogs_error("OpenAPI_any_type_convertToJSON() failed [AnyType]");
+        log_error("OpenAPI_any_type_convertToJSON() failed [AnyType]");
         return NULL;
     }
 

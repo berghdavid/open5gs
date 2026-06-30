@@ -16,7 +16,7 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_create(
 )
 {
     OpenAPI_eth_flow_description_t *eth_flow_description_local_var = ogs_malloc(sizeof(OpenAPI_eth_flow_description_t));
-    ogs_assert(eth_flow_description_local_var);
+    log_assert(eth_flow_description_local_var);
 
     eth_flow_description_local_var->dest_mac_addr = dest_mac_addr;
     eth_flow_description_local_var->eth_type = eth_type;
@@ -77,44 +77,44 @@ cJSON *OpenAPI_eth_flow_description_convertToJSON(OpenAPI_eth_flow_description_t
     OpenAPI_lnode_t *node = NULL;
 
     if (eth_flow_description == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [EthFlowDescription]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [EthFlowDescription]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (eth_flow_description->dest_mac_addr) {
     if (cJSON_AddStringToObject(item, "destMacAddr", eth_flow_description->dest_mac_addr) == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [dest_mac_addr]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [dest_mac_addr]");
         goto end;
     }
     }
 
     if (!eth_flow_description->eth_type) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [eth_type]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [eth_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ethType", eth_flow_description->eth_type) == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [eth_type]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [eth_type]");
         goto end;
     }
 
     if (eth_flow_description->f_desc) {
     if (cJSON_AddStringToObject(item, "fDesc", eth_flow_description->f_desc) == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [f_desc]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [f_desc]");
         goto end;
     }
     }
 
     if (eth_flow_description->f_dir != OpenAPI_flow_direction_NULL) {
     if (cJSON_AddStringToObject(item, "fDir", OpenAPI_flow_direction_ToString(eth_flow_description->f_dir)) == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [f_dir]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [f_dir]");
         goto end;
     }
     }
 
     if (eth_flow_description->source_mac_addr) {
     if (cJSON_AddStringToObject(item, "sourceMacAddr", eth_flow_description->source_mac_addr) == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [source_mac_addr]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [source_mac_addr]");
         goto end;
     }
     }
@@ -122,12 +122,12 @@ cJSON *OpenAPI_eth_flow_description_convertToJSON(OpenAPI_eth_flow_description_t
     if (eth_flow_description->vlan_tags) {
     cJSON *vlan_tagsList = cJSON_AddArrayToObject(item, "vlanTags");
     if (vlan_tagsList == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [vlan_tags]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [vlan_tags]");
         goto end;
     }
     OpenAPI_list_for_each(eth_flow_description->vlan_tags, node) {
         if (cJSON_AddStringToObject(vlan_tagsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [vlan_tags]");
+            log_error("OpenAPI_eth_flow_description_convertToJSON() failed [vlan_tags]");
             goto end;
         }
     }
@@ -135,14 +135,14 @@ cJSON *OpenAPI_eth_flow_description_convertToJSON(OpenAPI_eth_flow_description_t
 
     if (eth_flow_description->src_mac_addr_end) {
     if (cJSON_AddStringToObject(item, "srcMacAddrEnd", eth_flow_description->src_mac_addr_end) == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [src_mac_addr_end]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [src_mac_addr_end]");
         goto end;
     }
     }
 
     if (eth_flow_description->dest_mac_addr_end) {
     if (cJSON_AddStringToObject(item, "destMacAddrEnd", eth_flow_description->dest_mac_addr_end) == NULL) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed [dest_mac_addr_end]");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed [dest_mac_addr_end]");
         goto end;
     }
     }
@@ -168,25 +168,25 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_parseFromJSON(cJSON
     dest_mac_addr = cJSON_GetObjectItemCaseSensitive(eth_flow_descriptionJSON, "destMacAddr");
     if (dest_mac_addr) {
     if (!cJSON_IsString(dest_mac_addr) && !cJSON_IsNull(dest_mac_addr)) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [dest_mac_addr]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [dest_mac_addr]");
         goto end;
     }
     }
 
     eth_type = cJSON_GetObjectItemCaseSensitive(eth_flow_descriptionJSON, "ethType");
     if (!eth_type) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [eth_type]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [eth_type]");
         goto end;
     }
     if (!cJSON_IsString(eth_type)) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [eth_type]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [eth_type]");
         goto end;
     }
 
     f_desc = cJSON_GetObjectItemCaseSensitive(eth_flow_descriptionJSON, "fDesc");
     if (f_desc) {
     if (!cJSON_IsString(f_desc) && !cJSON_IsNull(f_desc)) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [f_desc]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [f_desc]");
         goto end;
     }
     }
@@ -194,7 +194,7 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_parseFromJSON(cJSON
     f_dir = cJSON_GetObjectItemCaseSensitive(eth_flow_descriptionJSON, "fDir");
     if (f_dir) {
     if (!cJSON_IsString(f_dir)) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [f_dir]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [f_dir]");
         goto end;
     }
     f_dirVariable = OpenAPI_flow_direction_FromString(f_dir->valuestring);
@@ -203,7 +203,7 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_parseFromJSON(cJSON
     source_mac_addr = cJSON_GetObjectItemCaseSensitive(eth_flow_descriptionJSON, "sourceMacAddr");
     if (source_mac_addr) {
     if (!cJSON_IsString(source_mac_addr) && !cJSON_IsNull(source_mac_addr)) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [source_mac_addr]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [source_mac_addr]");
         goto end;
     }
     }
@@ -212,7 +212,7 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_parseFromJSON(cJSON
     if (vlan_tags) {
         cJSON *vlan_tags_local = NULL;
         if (!cJSON_IsArray(vlan_tags)) {
-            ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [vlan_tags]");
+            log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [vlan_tags]");
             goto end;
         }
 
@@ -222,7 +222,7 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_parseFromJSON(cJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(vlan_tags_local)) {
-                ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [vlan_tags]");
+                log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [vlan_tags]");
                 goto end;
             }
             OpenAPI_list_add(vlan_tagsList, ogs_strdup(vlan_tags_local->valuestring));
@@ -232,7 +232,7 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_parseFromJSON(cJSON
     src_mac_addr_end = cJSON_GetObjectItemCaseSensitive(eth_flow_descriptionJSON, "srcMacAddrEnd");
     if (src_mac_addr_end) {
     if (!cJSON_IsString(src_mac_addr_end) && !cJSON_IsNull(src_mac_addr_end)) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [src_mac_addr_end]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [src_mac_addr_end]");
         goto end;
     }
     }
@@ -240,7 +240,7 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_parseFromJSON(cJSON
     dest_mac_addr_end = cJSON_GetObjectItemCaseSensitive(eth_flow_descriptionJSON, "destMacAddrEnd");
     if (dest_mac_addr_end) {
     if (!cJSON_IsString(dest_mac_addr_end) && !cJSON_IsNull(dest_mac_addr_end)) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON() failed [dest_mac_addr_end]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON() failed [dest_mac_addr_end]");
         goto end;
     }
     }
@@ -273,10 +273,10 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_copy(OpenAPI_eth_fl
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_eth_flow_description_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_eth_flow_description_convertToJSON() failed");
+        log_error("OpenAPI_eth_flow_description_convertToJSON() failed");
         return NULL;
     }
 
@@ -284,14 +284,14 @@ OpenAPI_eth_flow_description_t *OpenAPI_eth_flow_description_copy(OpenAPI_eth_fl
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

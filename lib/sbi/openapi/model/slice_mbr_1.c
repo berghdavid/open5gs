@@ -10,7 +10,7 @@ OpenAPI_slice_mbr_1_t *OpenAPI_slice_mbr_1_create(
 )
 {
     OpenAPI_slice_mbr_1_t *slice_mbr_1_local_var = ogs_malloc(sizeof(OpenAPI_slice_mbr_1_t));
-    ogs_assert(slice_mbr_1_local_var);
+    log_assert(slice_mbr_1_local_var);
 
     slice_mbr_1_local_var->uplink = uplink;
     slice_mbr_1_local_var->downlink = downlink;
@@ -42,26 +42,26 @@ cJSON *OpenAPI_slice_mbr_1_convertToJSON(OpenAPI_slice_mbr_1_t *slice_mbr_1)
     OpenAPI_lnode_t *node = NULL;
 
     if (slice_mbr_1 == NULL) {
-        ogs_error("OpenAPI_slice_mbr_1_convertToJSON() failed [SliceMbr_1]");
+        log_error("OpenAPI_slice_mbr_1_convertToJSON() failed [SliceMbr_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!slice_mbr_1->uplink) {
-        ogs_error("OpenAPI_slice_mbr_1_convertToJSON() failed [uplink]");
+        log_error("OpenAPI_slice_mbr_1_convertToJSON() failed [uplink]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "uplink", slice_mbr_1->uplink) == NULL) {
-        ogs_error("OpenAPI_slice_mbr_1_convertToJSON() failed [uplink]");
+        log_error("OpenAPI_slice_mbr_1_convertToJSON() failed [uplink]");
         goto end;
     }
 
     if (!slice_mbr_1->downlink) {
-        ogs_error("OpenAPI_slice_mbr_1_convertToJSON() failed [downlink]");
+        log_error("OpenAPI_slice_mbr_1_convertToJSON() failed [downlink]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "downlink", slice_mbr_1->downlink) == NULL) {
-        ogs_error("OpenAPI_slice_mbr_1_convertToJSON() failed [downlink]");
+        log_error("OpenAPI_slice_mbr_1_convertToJSON() failed [downlink]");
         goto end;
     }
 
@@ -77,21 +77,21 @@ OpenAPI_slice_mbr_1_t *OpenAPI_slice_mbr_1_parseFromJSON(cJSON *slice_mbr_1JSON)
     cJSON *downlink = NULL;
     uplink = cJSON_GetObjectItemCaseSensitive(slice_mbr_1JSON, "uplink");
     if (!uplink) {
-        ogs_error("OpenAPI_slice_mbr_1_parseFromJSON() failed [uplink]");
+        log_error("OpenAPI_slice_mbr_1_parseFromJSON() failed [uplink]");
         goto end;
     }
     if (!cJSON_IsString(uplink)) {
-        ogs_error("OpenAPI_slice_mbr_1_parseFromJSON() failed [uplink]");
+        log_error("OpenAPI_slice_mbr_1_parseFromJSON() failed [uplink]");
         goto end;
     }
 
     downlink = cJSON_GetObjectItemCaseSensitive(slice_mbr_1JSON, "downlink");
     if (!downlink) {
-        ogs_error("OpenAPI_slice_mbr_1_parseFromJSON() failed [downlink]");
+        log_error("OpenAPI_slice_mbr_1_parseFromJSON() failed [downlink]");
         goto end;
     }
     if (!cJSON_IsString(downlink)) {
-        ogs_error("OpenAPI_slice_mbr_1_parseFromJSON() failed [downlink]");
+        log_error("OpenAPI_slice_mbr_1_parseFromJSON() failed [downlink]");
         goto end;
     }
 
@@ -110,10 +110,10 @@ OpenAPI_slice_mbr_1_t *OpenAPI_slice_mbr_1_copy(OpenAPI_slice_mbr_1_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_slice_mbr_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_slice_mbr_1_convertToJSON() failed");
+        log_error("OpenAPI_slice_mbr_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_slice_mbr_1_t *OpenAPI_slice_mbr_1_copy(OpenAPI_slice_mbr_1_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

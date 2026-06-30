@@ -12,7 +12,7 @@ OpenAPI_redirect_information_t *OpenAPI_redirect_information_create(
 )
 {
     OpenAPI_redirect_information_t *redirect_information_local_var = ogs_malloc(sizeof(OpenAPI_redirect_information_t));
-    ogs_assert(redirect_information_local_var);
+    log_assert(redirect_information_local_var);
 
     redirect_information_local_var->is_redirect_enabled = is_redirect_enabled;
     redirect_information_local_var->redirect_enabled = redirect_enabled;
@@ -42,28 +42,28 @@ cJSON *OpenAPI_redirect_information_convertToJSON(OpenAPI_redirect_information_t
     OpenAPI_lnode_t *node = NULL;
 
     if (redirect_information == NULL) {
-        ogs_error("OpenAPI_redirect_information_convertToJSON() failed [RedirectInformation]");
+        log_error("OpenAPI_redirect_information_convertToJSON() failed [RedirectInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (redirect_information->is_redirect_enabled) {
     if (cJSON_AddBoolToObject(item, "redirectEnabled", redirect_information->redirect_enabled) == NULL) {
-        ogs_error("OpenAPI_redirect_information_convertToJSON() failed [redirect_enabled]");
+        log_error("OpenAPI_redirect_information_convertToJSON() failed [redirect_enabled]");
         goto end;
     }
     }
 
     if (redirect_information->redirect_address_type != OpenAPI_redirect_address_type_NULL) {
     if (cJSON_AddStringToObject(item, "redirectAddressType", OpenAPI_redirect_address_type_ToString(redirect_information->redirect_address_type)) == NULL) {
-        ogs_error("OpenAPI_redirect_information_convertToJSON() failed [redirect_address_type]");
+        log_error("OpenAPI_redirect_information_convertToJSON() failed [redirect_address_type]");
         goto end;
     }
     }
 
     if (redirect_information->redirect_server_address) {
     if (cJSON_AddStringToObject(item, "redirectServerAddress", redirect_information->redirect_server_address) == NULL) {
-        ogs_error("OpenAPI_redirect_information_convertToJSON() failed [redirect_server_address]");
+        log_error("OpenAPI_redirect_information_convertToJSON() failed [redirect_server_address]");
         goto end;
     }
     }
@@ -83,7 +83,7 @@ OpenAPI_redirect_information_t *OpenAPI_redirect_information_parseFromJSON(cJSON
     redirect_enabled = cJSON_GetObjectItemCaseSensitive(redirect_informationJSON, "redirectEnabled");
     if (redirect_enabled) {
     if (!cJSON_IsBool(redirect_enabled)) {
-        ogs_error("OpenAPI_redirect_information_parseFromJSON() failed [redirect_enabled]");
+        log_error("OpenAPI_redirect_information_parseFromJSON() failed [redirect_enabled]");
         goto end;
     }
     }
@@ -91,7 +91,7 @@ OpenAPI_redirect_information_t *OpenAPI_redirect_information_parseFromJSON(cJSON
     redirect_address_type = cJSON_GetObjectItemCaseSensitive(redirect_informationJSON, "redirectAddressType");
     if (redirect_address_type) {
     if (!cJSON_IsString(redirect_address_type)) {
-        ogs_error("OpenAPI_redirect_information_parseFromJSON() failed [redirect_address_type]");
+        log_error("OpenAPI_redirect_information_parseFromJSON() failed [redirect_address_type]");
         goto end;
     }
     redirect_address_typeVariable = OpenAPI_redirect_address_type_FromString(redirect_address_type->valuestring);
@@ -100,7 +100,7 @@ OpenAPI_redirect_information_t *OpenAPI_redirect_information_parseFromJSON(cJSON
     redirect_server_address = cJSON_GetObjectItemCaseSensitive(redirect_informationJSON, "redirectServerAddress");
     if (redirect_server_address) {
     if (!cJSON_IsString(redirect_server_address) && !cJSON_IsNull(redirect_server_address)) {
-        ogs_error("OpenAPI_redirect_information_parseFromJSON() failed [redirect_server_address]");
+        log_error("OpenAPI_redirect_information_parseFromJSON() failed [redirect_server_address]");
         goto end;
     }
     }
@@ -122,10 +122,10 @@ OpenAPI_redirect_information_t *OpenAPI_redirect_information_copy(OpenAPI_redire
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_redirect_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_redirect_information_convertToJSON() failed");
+        log_error("OpenAPI_redirect_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_redirect_information_t *OpenAPI_redirect_information_copy(OpenAPI_redire
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

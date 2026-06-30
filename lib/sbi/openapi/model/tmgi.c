@@ -10,7 +10,7 @@ OpenAPI_tmgi_t *OpenAPI_tmgi_create(
 )
 {
     OpenAPI_tmgi_t *tmgi_local_var = ogs_malloc(sizeof(OpenAPI_tmgi_t));
-    ogs_assert(tmgi_local_var);
+    log_assert(tmgi_local_var);
 
     tmgi_local_var->mbs_service_id = mbs_service_id;
     tmgi_local_var->plmn_id = plmn_id;
@@ -42,32 +42,32 @@ cJSON *OpenAPI_tmgi_convertToJSON(OpenAPI_tmgi_t *tmgi)
     OpenAPI_lnode_t *node = NULL;
 
     if (tmgi == NULL) {
-        ogs_error("OpenAPI_tmgi_convertToJSON() failed [Tmgi]");
+        log_error("OpenAPI_tmgi_convertToJSON() failed [Tmgi]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!tmgi->mbs_service_id) {
-        ogs_error("OpenAPI_tmgi_convertToJSON() failed [mbs_service_id]");
+        log_error("OpenAPI_tmgi_convertToJSON() failed [mbs_service_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "mbsServiceId", tmgi->mbs_service_id) == NULL) {
-        ogs_error("OpenAPI_tmgi_convertToJSON() failed [mbs_service_id]");
+        log_error("OpenAPI_tmgi_convertToJSON() failed [mbs_service_id]");
         goto end;
     }
 
     if (!tmgi->plmn_id) {
-        ogs_error("OpenAPI_tmgi_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_tmgi_convertToJSON() failed [plmn_id]");
         return NULL;
     }
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(tmgi->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_tmgi_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_tmgi_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_tmgi_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_tmgi_convertToJSON() failed [plmn_id]");
         goto end;
     }
 
@@ -84,22 +84,22 @@ OpenAPI_tmgi_t *OpenAPI_tmgi_parseFromJSON(cJSON *tmgiJSON)
     OpenAPI_plmn_id_t *plmn_id_local_nonprim = NULL;
     mbs_service_id = cJSON_GetObjectItemCaseSensitive(tmgiJSON, "mbsServiceId");
     if (!mbs_service_id) {
-        ogs_error("OpenAPI_tmgi_parseFromJSON() failed [mbs_service_id]");
+        log_error("OpenAPI_tmgi_parseFromJSON() failed [mbs_service_id]");
         goto end;
     }
     if (!cJSON_IsString(mbs_service_id)) {
-        ogs_error("OpenAPI_tmgi_parseFromJSON() failed [mbs_service_id]");
+        log_error("OpenAPI_tmgi_parseFromJSON() failed [mbs_service_id]");
         goto end;
     }
 
     plmn_id = cJSON_GetObjectItemCaseSensitive(tmgiJSON, "plmnId");
     if (!plmn_id) {
-        ogs_error("OpenAPI_tmgi_parseFromJSON() failed [plmn_id]");
+        log_error("OpenAPI_tmgi_parseFromJSON() failed [plmn_id]");
         goto end;
     }
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
 
@@ -122,10 +122,10 @@ OpenAPI_tmgi_t *OpenAPI_tmgi_copy(OpenAPI_tmgi_t *dst, OpenAPI_tmgi_t *src)
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_tmgi_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_tmgi_convertToJSON() failed");
+        log_error("OpenAPI_tmgi_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_tmgi_t *OpenAPI_tmgi_copy(OpenAPI_tmgi_t *dst, OpenAPI_tmgi_t *src)
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -10,7 +10,7 @@ OpenAPI_key_amf_t *OpenAPI_key_amf_create(
 )
 {
     OpenAPI_key_amf_t *key_amf_local_var = ogs_malloc(sizeof(OpenAPI_key_amf_t));
-    ogs_assert(key_amf_local_var);
+    log_assert(key_amf_local_var);
 
     key_amf_local_var->key_type = key_type;
     key_amf_local_var->key_val = key_val;
@@ -38,26 +38,26 @@ cJSON *OpenAPI_key_amf_convertToJSON(OpenAPI_key_amf_t *key_amf)
     OpenAPI_lnode_t *node = NULL;
 
     if (key_amf == NULL) {
-        ogs_error("OpenAPI_key_amf_convertToJSON() failed [KeyAmf]");
+        log_error("OpenAPI_key_amf_convertToJSON() failed [KeyAmf]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (key_amf->key_type == OpenAPI_key_amf_type_NULL) {
-        ogs_error("OpenAPI_key_amf_convertToJSON() failed [key_type]");
+        log_error("OpenAPI_key_amf_convertToJSON() failed [key_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "keyType", OpenAPI_key_amf_type_ToString(key_amf->key_type)) == NULL) {
-        ogs_error("OpenAPI_key_amf_convertToJSON() failed [key_type]");
+        log_error("OpenAPI_key_amf_convertToJSON() failed [key_type]");
         goto end;
     }
 
     if (!key_amf->key_val) {
-        ogs_error("OpenAPI_key_amf_convertToJSON() failed [key_val]");
+        log_error("OpenAPI_key_amf_convertToJSON() failed [key_val]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "keyVal", key_amf->key_val) == NULL) {
-        ogs_error("OpenAPI_key_amf_convertToJSON() failed [key_val]");
+        log_error("OpenAPI_key_amf_convertToJSON() failed [key_val]");
         goto end;
     }
 
@@ -74,22 +74,22 @@ OpenAPI_key_amf_t *OpenAPI_key_amf_parseFromJSON(cJSON *key_amfJSON)
     cJSON *key_val = NULL;
     key_type = cJSON_GetObjectItemCaseSensitive(key_amfJSON, "keyType");
     if (!key_type) {
-        ogs_error("OpenAPI_key_amf_parseFromJSON() failed [key_type]");
+        log_error("OpenAPI_key_amf_parseFromJSON() failed [key_type]");
         goto end;
     }
     if (!cJSON_IsString(key_type)) {
-        ogs_error("OpenAPI_key_amf_parseFromJSON() failed [key_type]");
+        log_error("OpenAPI_key_amf_parseFromJSON() failed [key_type]");
         goto end;
     }
     key_typeVariable = OpenAPI_key_amf_type_FromString(key_type->valuestring);
 
     key_val = cJSON_GetObjectItemCaseSensitive(key_amfJSON, "keyVal");
     if (!key_val) {
-        ogs_error("OpenAPI_key_amf_parseFromJSON() failed [key_val]");
+        log_error("OpenAPI_key_amf_parseFromJSON() failed [key_val]");
         goto end;
     }
     if (!cJSON_IsString(key_val)) {
-        ogs_error("OpenAPI_key_amf_parseFromJSON() failed [key_val]");
+        log_error("OpenAPI_key_amf_parseFromJSON() failed [key_val]");
         goto end;
     }
 
@@ -108,10 +108,10 @@ OpenAPI_key_amf_t *OpenAPI_key_amf_copy(OpenAPI_key_amf_t *dst, OpenAPI_key_amf_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_key_amf_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_key_amf_convertToJSON() failed");
+        log_error("OpenAPI_key_amf_convertToJSON() failed");
         return NULL;
     }
 
@@ -119,14 +119,14 @@ OpenAPI_key_amf_t *OpenAPI_key_amf_copy(OpenAPI_key_amf_t *dst, OpenAPI_key_amf_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

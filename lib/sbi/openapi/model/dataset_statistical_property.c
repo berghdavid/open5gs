@@ -8,7 +8,7 @@ OpenAPI_dataset_statistical_property_t *OpenAPI_dataset_statistical_property_cre
 )
 {
     OpenAPI_dataset_statistical_property_t *dataset_statistical_property_local_var = ogs_malloc(sizeof(OpenAPI_dataset_statistical_property_t));
-    ogs_assert(dataset_statistical_property_local_var);
+    log_assert(dataset_statistical_property_local_var);
 
 
     return dataset_statistical_property_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_dataset_statistical_property_convertToJSON(OpenAPI_dataset_statis
     OpenAPI_lnode_t *node = NULL;
 
     if (dataset_statistical_property == NULL) {
-        ogs_error("OpenAPI_dataset_statistical_property_convertToJSON() failed [DatasetStatisticalProperty]");
+        log_error("OpenAPI_dataset_statistical_property_convertToJSON() failed [DatasetStatisticalProperty]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_dataset_statistical_property_t *OpenAPI_dataset_statistical_property_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dataset_statistical_property_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dataset_statistical_property_convertToJSON() failed");
+        log_error("OpenAPI_dataset_statistical_property_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_dataset_statistical_property_t *OpenAPI_dataset_statistical_property_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

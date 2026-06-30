@@ -9,7 +9,7 @@ OpenAPI_mnpf_info_t *OpenAPI_mnpf_info_create(
 )
 {
     OpenAPI_mnpf_info_t *mnpf_info_local_var = ogs_malloc(sizeof(OpenAPI_mnpf_info_t));
-    ogs_assert(mnpf_info_local_var);
+    log_assert(mnpf_info_local_var);
 
     mnpf_info_local_var->msisdn_ranges = msisdn_ranges;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_mnpf_info_convertToJSON(OpenAPI_mnpf_info_t *mnpf_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (mnpf_info == NULL) {
-        ogs_error("OpenAPI_mnpf_info_convertToJSON() failed [MnpfInfo]");
+        log_error("OpenAPI_mnpf_info_convertToJSON() failed [MnpfInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!mnpf_info->msisdn_ranges) {
-        ogs_error("OpenAPI_mnpf_info_convertToJSON() failed [msisdn_ranges]");
+        log_error("OpenAPI_mnpf_info_convertToJSON() failed [msisdn_ranges]");
         return NULL;
     }
     cJSON *msisdn_rangesList = cJSON_AddArrayToObject(item, "msisdnRanges");
     if (msisdn_rangesList == NULL) {
-        ogs_error("OpenAPI_mnpf_info_convertToJSON() failed [msisdn_ranges]");
+        log_error("OpenAPI_mnpf_info_convertToJSON() failed [msisdn_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(mnpf_info->msisdn_ranges, node) {
         cJSON *itemLocal = OpenAPI_identity_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mnpf_info_convertToJSON() failed [msisdn_ranges]");
+            log_error("OpenAPI_mnpf_info_convertToJSON() failed [msisdn_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(msisdn_rangesList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_mnpf_info_t *OpenAPI_mnpf_info_parseFromJSON(cJSON *mnpf_infoJSON)
     OpenAPI_list_t *msisdn_rangesList = NULL;
     msisdn_ranges = cJSON_GetObjectItemCaseSensitive(mnpf_infoJSON, "msisdnRanges");
     if (!msisdn_ranges) {
-        ogs_error("OpenAPI_mnpf_info_parseFromJSON() failed [msisdn_ranges]");
+        log_error("OpenAPI_mnpf_info_parseFromJSON() failed [msisdn_ranges]");
         goto end;
     }
         cJSON *msisdn_ranges_local = NULL;
         if (!cJSON_IsArray(msisdn_ranges)) {
-            ogs_error("OpenAPI_mnpf_info_parseFromJSON() failed [msisdn_ranges]");
+            log_error("OpenAPI_mnpf_info_parseFromJSON() failed [msisdn_ranges]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_mnpf_info_t *OpenAPI_mnpf_info_parseFromJSON(cJSON *mnpf_infoJSON)
 
         cJSON_ArrayForEach(msisdn_ranges_local, msisdn_ranges) {
             if (!cJSON_IsObject(msisdn_ranges_local)) {
-                ogs_error("OpenAPI_mnpf_info_parseFromJSON() failed [msisdn_ranges]");
+                log_error("OpenAPI_mnpf_info_parseFromJSON() failed [msisdn_ranges]");
                 goto end;
             }
             OpenAPI_identity_range_t *msisdn_rangesItem = OpenAPI_identity_range_parseFromJSON(msisdn_ranges_local);
             if (!msisdn_rangesItem) {
-                ogs_error("No msisdn_rangesItem");
+                log_error("No msisdn_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(msisdn_rangesList, msisdn_rangesItem);
@@ -119,10 +119,10 @@ OpenAPI_mnpf_info_t *OpenAPI_mnpf_info_copy(OpenAPI_mnpf_info_t *dst, OpenAPI_mn
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_mnpf_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_mnpf_info_convertToJSON() failed");
+        log_error("OpenAPI_mnpf_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_mnpf_info_t *OpenAPI_mnpf_info_copy(OpenAPI_mnpf_info_t *dst, OpenAPI_mn
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

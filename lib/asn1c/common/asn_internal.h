@@ -46,8 +46,8 @@ static ogs_inline void *ogs_asn_malloc(size_t size, const char *file_line)
 {
     void *ptr = ogs_malloc(size);
     if (!ptr) {
-        ogs_fatal("asn_malloc() failed in `%s`", file_line);
-        ogs_assert_if_reached();
+        log_fatal("asn_malloc() failed in `%s`", file_line);
+        log_assert_if_reached();
     }
 
     return ptr;
@@ -57,8 +57,8 @@ static ogs_inline void *ogs_asn_calloc(
 {
     void *ptr = ogs_calloc(nmemb, size);
     if (!ptr) {
-        ogs_fatal("asn_calloc() failed in `%s`", file_line);
-        ogs_assert_if_reached();
+        log_fatal("asn_calloc() failed in `%s`", file_line);
+        log_assert_if_reached();
     }
 
     return ptr;
@@ -68,8 +68,8 @@ static ogs_inline void *ogs_asn_realloc(
 {
     void *ptr = ogs_realloc(oldptr, size);
     if (!ptr) {
-        ogs_fatal("asn_realloc() failed in `%s`", file_line);
-        ogs_assert_if_reached();
+        log_fatal("asn_realloc() failed in `%s`", file_line);
+        log_assert_if_reached();
     }
 
     return ptr;

@@ -51,11 +51,11 @@ extern "C" {
 #endif
 
 #if defined(__GNUC__)
-#define ogs_likely(x) __builtin_expect (!!(x), 1)
-#define ogs_unlikely(x) __builtin_expect (!!(x), 0)
+#define likely(x) __builtin_expect (!!(x), 1)
+#define unlikely(x) __builtin_expect (!!(x), 0)
 #else
-#define ogs_likely(v) v
-#define ogs_unlikely(v) v
+#define likely(v) v
+#define unlikely(v) v
 #endif
 
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
@@ -216,9 +216,9 @@ static ogs_inline ogs_uint24_t ogs_htobe24(ogs_uint24_t x)
 
 #define OGS_OBJECT_REF(__oBJ) \
     ((__oBJ)->reference_count)++, \
-    ogs_debug("[REF] %d", ((__oBJ)->reference_count))
+    log_debug("[REF] %d", ((__oBJ)->reference_count))
 #define OGS_OBJECT_UNREF(__oBJ) \
-    ogs_debug("[UNREF] %d", ((__oBJ)->reference_count)), \
+    log_debug("[UNREF] %d", ((__oBJ)->reference_count)), \
     ((__oBJ)->reference_count)--
 #define OGS_OBJECT_IS_REF(__oBJ) ((__oBJ)->reference_count > 1)
 

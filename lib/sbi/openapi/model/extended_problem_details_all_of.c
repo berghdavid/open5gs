@@ -9,7 +9,7 @@ OpenAPI_extended_problem_details_all_of_t *OpenAPI_extended_problem_details_all_
 )
 {
     OpenAPI_extended_problem_details_all_of_t *extended_problem_details_all_of_local_var = ogs_malloc(sizeof(OpenAPI_extended_problem_details_all_of_t));
-    ogs_assert(extended_problem_details_all_of_local_var);
+    log_assert(extended_problem_details_all_of_local_var);
 
     extended_problem_details_all_of_local_var->acceptable_serv_info = acceptable_serv_info;
 
@@ -36,7 +36,7 @@ cJSON *OpenAPI_extended_problem_details_all_of_convertToJSON(OpenAPI_extended_pr
     OpenAPI_lnode_t *node = NULL;
 
     if (extended_problem_details_all_of == NULL) {
-        ogs_error("OpenAPI_extended_problem_details_all_of_convertToJSON() failed [ExtendedProblemDetails_allOf]");
+        log_error("OpenAPI_extended_problem_details_all_of_convertToJSON() failed [ExtendedProblemDetails_allOf]");
         return NULL;
     }
 
@@ -44,12 +44,12 @@ cJSON *OpenAPI_extended_problem_details_all_of_convertToJSON(OpenAPI_extended_pr
     if (extended_problem_details_all_of->acceptable_serv_info) {
     cJSON *acceptable_serv_info_local_JSON = OpenAPI_acceptable_service_info_convertToJSON(extended_problem_details_all_of->acceptable_serv_info);
     if (acceptable_serv_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_extended_problem_details_all_of_convertToJSON() failed [acceptable_serv_info]");
+        log_error("OpenAPI_extended_problem_details_all_of_convertToJSON() failed [acceptable_serv_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "acceptableServInfo", acceptable_serv_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_extended_problem_details_all_of_convertToJSON() failed [acceptable_serv_info]");
+        log_error("OpenAPI_extended_problem_details_all_of_convertToJSON() failed [acceptable_serv_info]");
         goto end;
     }
     }
@@ -68,7 +68,7 @@ OpenAPI_extended_problem_details_all_of_t *OpenAPI_extended_problem_details_all_
     if (acceptable_serv_info) {
     acceptable_serv_info_local_nonprim = OpenAPI_acceptable_service_info_parseFromJSON(acceptable_serv_info);
     if (!acceptable_serv_info_local_nonprim) {
-        ogs_error("OpenAPI_acceptable_service_info_parseFromJSON failed [acceptable_serv_info]");
+        log_error("OpenAPI_acceptable_service_info_parseFromJSON failed [acceptable_serv_info]");
         goto end;
     }
     }
@@ -91,10 +91,10 @@ OpenAPI_extended_problem_details_all_of_t *OpenAPI_extended_problem_details_all_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_extended_problem_details_all_of_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_extended_problem_details_all_of_convertToJSON() failed");
+        log_error("OpenAPI_extended_problem_details_all_of_convertToJSON() failed");
         return NULL;
     }
 
@@ -102,14 +102,14 @@ OpenAPI_extended_problem_details_all_of_t *OpenAPI_extended_problem_details_all_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

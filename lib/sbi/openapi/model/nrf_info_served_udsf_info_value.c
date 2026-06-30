@@ -11,7 +11,7 @@ OpenAPI_nrf_info_served_udsf_info_value_t *OpenAPI_nrf_info_served_udsf_info_val
 )
 {
     OpenAPI_nrf_info_served_udsf_info_value_t *nrf_info_served_udsf_info_value_local_var = ogs_malloc(sizeof(OpenAPI_nrf_info_served_udsf_info_value_t));
-    ogs_assert(nrf_info_served_udsf_info_value_local_var);
+    log_assert(nrf_info_served_udsf_info_value_local_var);
 
     nrf_info_served_udsf_info_value_local_var->group_id = group_id;
     nrf_info_served_udsf_info_value_local_var->supi_ranges = supi_ranges;
@@ -57,14 +57,14 @@ cJSON *OpenAPI_nrf_info_served_udsf_info_value_convertToJSON(OpenAPI_nrf_info_se
     OpenAPI_lnode_t *node = NULL;
 
     if (nrf_info_served_udsf_info_value == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [NrfInfo_servedUdsfInfo_value]");
+        log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [NrfInfo_servedUdsfInfo_value]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (nrf_info_served_udsf_info_value->group_id) {
     if (cJSON_AddStringToObject(item, "groupId", nrf_info_served_udsf_info_value->group_id) == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [group_id]");
+        log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [group_id]");
         goto end;
     }
     }
@@ -72,13 +72,13 @@ cJSON *OpenAPI_nrf_info_served_udsf_info_value_convertToJSON(OpenAPI_nrf_info_se
     if (nrf_info_served_udsf_info_value->supi_ranges) {
     cJSON *supi_rangesList = cJSON_AddArrayToObject(item, "supiRanges");
     if (supi_rangesList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [supi_ranges]");
+        log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [supi_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_udsf_info_value->supi_ranges, node) {
         cJSON *itemLocal = OpenAPI_supi_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [supi_ranges]");
+            log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [supi_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(supi_rangesList, itemLocal);
@@ -88,7 +88,7 @@ cJSON *OpenAPI_nrf_info_served_udsf_info_value_convertToJSON(OpenAPI_nrf_info_se
     if (nrf_info_served_udsf_info_value->storage_id_ranges) {
     cJSON *storage_id_ranges = cJSON_AddObjectToObject(item, "storageIdRanges");
     if (storage_id_ranges == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [storage_id_ranges]");
+        log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [storage_id_ranges]");
         goto end;
     }
     cJSON *localMapObject = storage_id_ranges;
@@ -96,18 +96,18 @@ cJSON *OpenAPI_nrf_info_served_udsf_info_value_convertToJSON(OpenAPI_nrf_info_se
         OpenAPI_list_for_each(nrf_info_served_udsf_info_value->storage_id_ranges, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [storage_id_ranges]");
+                log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [storage_id_ranges]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [storage_id_ranges]");
+                log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [storage_id_ranges]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_identity_range_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [inner]");
+                log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -131,7 +131,7 @@ OpenAPI_nrf_info_served_udsf_info_value_t *OpenAPI_nrf_info_served_udsf_info_val
     group_id = cJSON_GetObjectItemCaseSensitive(nrf_info_served_udsf_info_valueJSON, "groupId");
     if (group_id) {
     if (!cJSON_IsString(group_id) && !cJSON_IsNull(group_id)) {
-        ogs_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [group_id]");
+        log_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [group_id]");
         goto end;
     }
     }
@@ -140,7 +140,7 @@ OpenAPI_nrf_info_served_udsf_info_value_t *OpenAPI_nrf_info_served_udsf_info_val
     if (supi_ranges) {
         cJSON *supi_ranges_local = NULL;
         if (!cJSON_IsArray(supi_ranges)) {
-            ogs_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [supi_ranges]");
+            log_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [supi_ranges]");
             goto end;
         }
 
@@ -148,12 +148,12 @@ OpenAPI_nrf_info_served_udsf_info_value_t *OpenAPI_nrf_info_served_udsf_info_val
 
         cJSON_ArrayForEach(supi_ranges_local, supi_ranges) {
             if (!cJSON_IsObject(supi_ranges_local)) {
-                ogs_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [supi_ranges]");
+                log_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [supi_ranges]");
                 goto end;
             }
             OpenAPI_supi_range_t *supi_rangesItem = OpenAPI_supi_range_parseFromJSON(supi_ranges_local);
             if (!supi_rangesItem) {
-                ogs_error("No supi_rangesItem");
+                log_error("No supi_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(supi_rangesList, supi_rangesItem);
@@ -164,7 +164,7 @@ OpenAPI_nrf_info_served_udsf_info_value_t *OpenAPI_nrf_info_served_udsf_info_val
     if (storage_id_ranges) {
         cJSON *storage_id_ranges_local_map = NULL;
         if (!cJSON_IsObject(storage_id_ranges) && !cJSON_IsNull(storage_id_ranges)) {
-            ogs_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [storage_id_ranges]");
+            log_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [storage_id_ranges]");
             goto end;
         }
         if (cJSON_IsObject(storage_id_ranges)) {
@@ -180,7 +180,7 @@ OpenAPI_nrf_info_served_udsf_info_value_t *OpenAPI_nrf_info_served_udsf_info_val
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_nrf_info_served_udsf_info_value_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(storage_id_rangesList, localMapKeyPair);
@@ -221,10 +221,10 @@ OpenAPI_nrf_info_served_udsf_info_value_t *OpenAPI_nrf_info_served_udsf_info_val
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nrf_info_served_udsf_info_value_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed");
+        log_error("OpenAPI_nrf_info_served_udsf_info_value_convertToJSON() failed");
         return NULL;
     }
 
@@ -232,14 +232,14 @@ OpenAPI_nrf_info_served_udsf_info_value_t *OpenAPI_nrf_info_served_udsf_info_val
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

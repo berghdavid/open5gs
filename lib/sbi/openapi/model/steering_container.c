@@ -8,7 +8,7 @@ OpenAPI_steering_container_t *OpenAPI_steering_container_create(
 )
 {
     OpenAPI_steering_container_t *steering_container_local_var = ogs_malloc(sizeof(OpenAPI_steering_container_t));
-    ogs_assert(steering_container_local_var);
+    log_assert(steering_container_local_var);
 
 
     return steering_container_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_steering_container_convertToJSON(OpenAPI_steering_container_t *st
     OpenAPI_lnode_t *node = NULL;
 
     if (steering_container == NULL) {
-        ogs_error("OpenAPI_steering_container_convertToJSON() failed [SteeringContainer]");
+        log_error("OpenAPI_steering_container_convertToJSON() failed [SteeringContainer]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_steering_container_t *OpenAPI_steering_container_copy(OpenAPI_steering_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_steering_container_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_steering_container_convertToJSON() failed");
+        log_error("OpenAPI_steering_container_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_steering_container_t *OpenAPI_steering_container_copy(OpenAPI_steering_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

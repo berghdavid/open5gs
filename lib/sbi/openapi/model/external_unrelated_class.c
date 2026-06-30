@@ -11,7 +11,7 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_create(
 )
 {
     OpenAPI_external_unrelated_class_t *external_unrelated_class_local_var = ogs_malloc(sizeof(OpenAPI_external_unrelated_class_t));
-    ogs_assert(external_unrelated_class_local_var);
+    log_assert(external_unrelated_class_local_var);
 
     external_unrelated_class_local_var->lcs_client_externals = lcs_client_externals;
     external_unrelated_class_local_var->af_externals = af_externals;
@@ -57,7 +57,7 @@ cJSON *OpenAPI_external_unrelated_class_convertToJSON(OpenAPI_external_unrelated
     OpenAPI_lnode_t *node = NULL;
 
     if (external_unrelated_class == NULL) {
-        ogs_error("OpenAPI_external_unrelated_class_convertToJSON() failed [ExternalUnrelatedClass]");
+        log_error("OpenAPI_external_unrelated_class_convertToJSON() failed [ExternalUnrelatedClass]");
         return NULL;
     }
 
@@ -65,13 +65,13 @@ cJSON *OpenAPI_external_unrelated_class_convertToJSON(OpenAPI_external_unrelated
     if (external_unrelated_class->lcs_client_externals) {
     cJSON *lcs_client_externalsList = cJSON_AddArrayToObject(item, "lcsClientExternals");
     if (lcs_client_externalsList == NULL) {
-        ogs_error("OpenAPI_external_unrelated_class_convertToJSON() failed [lcs_client_externals]");
+        log_error("OpenAPI_external_unrelated_class_convertToJSON() failed [lcs_client_externals]");
         goto end;
     }
     OpenAPI_list_for_each(external_unrelated_class->lcs_client_externals, node) {
         cJSON *itemLocal = OpenAPI_lcs_client_external_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_external_unrelated_class_convertToJSON() failed [lcs_client_externals]");
+            log_error("OpenAPI_external_unrelated_class_convertToJSON() failed [lcs_client_externals]");
             goto end;
         }
         cJSON_AddItemToArray(lcs_client_externalsList, itemLocal);
@@ -81,13 +81,13 @@ cJSON *OpenAPI_external_unrelated_class_convertToJSON(OpenAPI_external_unrelated
     if (external_unrelated_class->af_externals) {
     cJSON *af_externalsList = cJSON_AddArrayToObject(item, "afExternals");
     if (af_externalsList == NULL) {
-        ogs_error("OpenAPI_external_unrelated_class_convertToJSON() failed [af_externals]");
+        log_error("OpenAPI_external_unrelated_class_convertToJSON() failed [af_externals]");
         goto end;
     }
     OpenAPI_list_for_each(external_unrelated_class->af_externals, node) {
         cJSON *itemLocal = OpenAPI_af_external_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_external_unrelated_class_convertToJSON() failed [af_externals]");
+            log_error("OpenAPI_external_unrelated_class_convertToJSON() failed [af_externals]");
             goto end;
         }
         cJSON_AddItemToArray(af_externalsList, itemLocal);
@@ -97,13 +97,13 @@ cJSON *OpenAPI_external_unrelated_class_convertToJSON(OpenAPI_external_unrelated
     if (external_unrelated_class->lcs_client_group_externals) {
     cJSON *lcs_client_group_externalsList = cJSON_AddArrayToObject(item, "lcsClientGroupExternals");
     if (lcs_client_group_externalsList == NULL) {
-        ogs_error("OpenAPI_external_unrelated_class_convertToJSON() failed [lcs_client_group_externals]");
+        log_error("OpenAPI_external_unrelated_class_convertToJSON() failed [lcs_client_group_externals]");
         goto end;
     }
     OpenAPI_list_for_each(external_unrelated_class->lcs_client_group_externals, node) {
         cJSON *itemLocal = OpenAPI_lcs_client_group_external_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_external_unrelated_class_convertToJSON() failed [lcs_client_group_externals]");
+            log_error("OpenAPI_external_unrelated_class_convertToJSON() failed [lcs_client_group_externals]");
             goto end;
         }
         cJSON_AddItemToArray(lcs_client_group_externalsList, itemLocal);
@@ -128,7 +128,7 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_parseFromJS
     if (lcs_client_externals) {
         cJSON *lcs_client_externals_local = NULL;
         if (!cJSON_IsArray(lcs_client_externals)) {
-            ogs_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [lcs_client_externals]");
+            log_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [lcs_client_externals]");
             goto end;
         }
 
@@ -136,12 +136,12 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_parseFromJS
 
         cJSON_ArrayForEach(lcs_client_externals_local, lcs_client_externals) {
             if (!cJSON_IsObject(lcs_client_externals_local)) {
-                ogs_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [lcs_client_externals]");
+                log_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [lcs_client_externals]");
                 goto end;
             }
             OpenAPI_lcs_client_external_t *lcs_client_externalsItem = OpenAPI_lcs_client_external_parseFromJSON(lcs_client_externals_local);
             if (!lcs_client_externalsItem) {
-                ogs_error("No lcs_client_externalsItem");
+                log_error("No lcs_client_externalsItem");
                 goto end;
             }
             OpenAPI_list_add(lcs_client_externalsList, lcs_client_externalsItem);
@@ -152,7 +152,7 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_parseFromJS
     if (af_externals) {
         cJSON *af_externals_local = NULL;
         if (!cJSON_IsArray(af_externals)) {
-            ogs_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [af_externals]");
+            log_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [af_externals]");
             goto end;
         }
 
@@ -160,12 +160,12 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_parseFromJS
 
         cJSON_ArrayForEach(af_externals_local, af_externals) {
             if (!cJSON_IsObject(af_externals_local)) {
-                ogs_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [af_externals]");
+                log_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [af_externals]");
                 goto end;
             }
             OpenAPI_af_external_t *af_externalsItem = OpenAPI_af_external_parseFromJSON(af_externals_local);
             if (!af_externalsItem) {
-                ogs_error("No af_externalsItem");
+                log_error("No af_externalsItem");
                 goto end;
             }
             OpenAPI_list_add(af_externalsList, af_externalsItem);
@@ -176,7 +176,7 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_parseFromJS
     if (lcs_client_group_externals) {
         cJSON *lcs_client_group_externals_local = NULL;
         if (!cJSON_IsArray(lcs_client_group_externals)) {
-            ogs_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [lcs_client_group_externals]");
+            log_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [lcs_client_group_externals]");
             goto end;
         }
 
@@ -184,12 +184,12 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_parseFromJS
 
         cJSON_ArrayForEach(lcs_client_group_externals_local, lcs_client_group_externals) {
             if (!cJSON_IsObject(lcs_client_group_externals_local)) {
-                ogs_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [lcs_client_group_externals]");
+                log_error("OpenAPI_external_unrelated_class_parseFromJSON() failed [lcs_client_group_externals]");
                 goto end;
             }
             OpenAPI_lcs_client_group_external_t *lcs_client_group_externalsItem = OpenAPI_lcs_client_group_external_parseFromJSON(lcs_client_group_externals_local);
             if (!lcs_client_group_externalsItem) {
-                ogs_error("No lcs_client_group_externalsItem");
+                log_error("No lcs_client_group_externalsItem");
                 goto end;
             }
             OpenAPI_list_add(lcs_client_group_externalsList, lcs_client_group_externalsItem);
@@ -233,10 +233,10 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_external_unrelated_class_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_external_unrelated_class_convertToJSON() failed");
+        log_error("OpenAPI_external_unrelated_class_convertToJSON() failed");
         return NULL;
     }
 
@@ -244,14 +244,14 @@ OpenAPI_external_unrelated_class_t *OpenAPI_external_unrelated_class_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

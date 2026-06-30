@@ -23,7 +23,7 @@ static void timer_send_event(int timer_id, void *data)
 {
     int rv;
     ogs_event_t *e = NULL;
-    ogs_assert(data);
+    log_assert(data);
 
     switch (timer_id) {
     case OGS_TIMER_NF_INSTANCE_REGISTRATION_INTERVAL:
@@ -34,19 +34,19 @@ static void timer_send_event(int timer_id, void *data)
     case OGS_TIMER_SUBSCRIPTION_PATCH:
     case OGS_TIMER_SBI_CLIENT_WAIT:
         e = ogs_event_new(OGS_EVENT_SBI_TIMER);
-        ogs_assert(e);
+        log_assert(e);
         e->timer_id = timer_id;
         e->sbi.data = data;
         break;
     default:
-        ogs_fatal("Unknown timer id[%d]", timer_id);
-        ogs_assert_if_reached();
+        log_fatal("Unknown timer id[%d]", timer_id);
+        log_assert_if_reached();
         break;
     }
 
     rv = ogs_queue_push(ogs_app()->queue, e);
     if (rv != OGS_OK) {
-        ogs_error("ogs_queue_push() failed [%d] in %s",
+        log_error("ogs_queue_push() failed [%d] in %s",
                 (int)rv, ogs_timer_get_name(e->timer_id));
         ogs_event_free(e);
     }

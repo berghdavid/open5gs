@@ -10,7 +10,7 @@ OpenAPI_nr_v2x_auth_t *OpenAPI_nr_v2x_auth_create(
 )
 {
     OpenAPI_nr_v2x_auth_t *nr_v2x_auth_local_var = ogs_malloc(sizeof(OpenAPI_nr_v2x_auth_t));
-    ogs_assert(nr_v2x_auth_local_var);
+    log_assert(nr_v2x_auth_local_var);
 
     nr_v2x_auth_local_var->vehicle_ue_auth = vehicle_ue_auth;
     nr_v2x_auth_local_var->pedestrian_ue_auth = pedestrian_ue_auth;
@@ -34,21 +34,21 @@ cJSON *OpenAPI_nr_v2x_auth_convertToJSON(OpenAPI_nr_v2x_auth_t *nr_v2x_auth)
     OpenAPI_lnode_t *node = NULL;
 
     if (nr_v2x_auth == NULL) {
-        ogs_error("OpenAPI_nr_v2x_auth_convertToJSON() failed [NrV2xAuth]");
+        log_error("OpenAPI_nr_v2x_auth_convertToJSON() failed [NrV2xAuth]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (nr_v2x_auth->vehicle_ue_auth != OpenAPI_ue_auth_NULL) {
     if (cJSON_AddStringToObject(item, "vehicleUeAuth", OpenAPI_ue_auth_ToString(nr_v2x_auth->vehicle_ue_auth)) == NULL) {
-        ogs_error("OpenAPI_nr_v2x_auth_convertToJSON() failed [vehicle_ue_auth]");
+        log_error("OpenAPI_nr_v2x_auth_convertToJSON() failed [vehicle_ue_auth]");
         goto end;
     }
     }
 
     if (nr_v2x_auth->pedestrian_ue_auth != OpenAPI_ue_auth_NULL) {
     if (cJSON_AddStringToObject(item, "pedestrianUeAuth", OpenAPI_ue_auth_ToString(nr_v2x_auth->pedestrian_ue_auth)) == NULL) {
-        ogs_error("OpenAPI_nr_v2x_auth_convertToJSON() failed [pedestrian_ue_auth]");
+        log_error("OpenAPI_nr_v2x_auth_convertToJSON() failed [pedestrian_ue_auth]");
         goto end;
     }
     }
@@ -68,7 +68,7 @@ OpenAPI_nr_v2x_auth_t *OpenAPI_nr_v2x_auth_parseFromJSON(cJSON *nr_v2x_authJSON)
     vehicle_ue_auth = cJSON_GetObjectItemCaseSensitive(nr_v2x_authJSON, "vehicleUeAuth");
     if (vehicle_ue_auth) {
     if (!cJSON_IsString(vehicle_ue_auth)) {
-        ogs_error("OpenAPI_nr_v2x_auth_parseFromJSON() failed [vehicle_ue_auth]");
+        log_error("OpenAPI_nr_v2x_auth_parseFromJSON() failed [vehicle_ue_auth]");
         goto end;
     }
     vehicle_ue_authVariable = OpenAPI_ue_auth_FromString(vehicle_ue_auth->valuestring);
@@ -77,7 +77,7 @@ OpenAPI_nr_v2x_auth_t *OpenAPI_nr_v2x_auth_parseFromJSON(cJSON *nr_v2x_authJSON)
     pedestrian_ue_auth = cJSON_GetObjectItemCaseSensitive(nr_v2x_authJSON, "pedestrianUeAuth");
     if (pedestrian_ue_auth) {
     if (!cJSON_IsString(pedestrian_ue_auth)) {
-        ogs_error("OpenAPI_nr_v2x_auth_parseFromJSON() failed [pedestrian_ue_auth]");
+        log_error("OpenAPI_nr_v2x_auth_parseFromJSON() failed [pedestrian_ue_auth]");
         goto end;
     }
     pedestrian_ue_authVariable = OpenAPI_ue_auth_FromString(pedestrian_ue_auth->valuestring);
@@ -98,10 +98,10 @@ OpenAPI_nr_v2x_auth_t *OpenAPI_nr_v2x_auth_copy(OpenAPI_nr_v2x_auth_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nr_v2x_auth_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nr_v2x_auth_convertToJSON() failed");
+        log_error("OpenAPI_nr_v2x_auth_convertToJSON() failed");
         return NULL;
     }
 
@@ -109,14 +109,14 @@ OpenAPI_nr_v2x_auth_t *OpenAPI_nr_v2x_auth_copy(OpenAPI_nr_v2x_auth_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

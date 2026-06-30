@@ -10,7 +10,7 @@ OpenAPI_ip_sm_gw_guidance_t *OpenAPI_ip_sm_gw_guidance_create(
 )
 {
     OpenAPI_ip_sm_gw_guidance_t *ip_sm_gw_guidance_local_var = ogs_malloc(sizeof(OpenAPI_ip_sm_gw_guidance_t));
-    ogs_assert(ip_sm_gw_guidance_local_var);
+    log_assert(ip_sm_gw_guidance_local_var);
 
     ip_sm_gw_guidance_local_var->min_delivery_time = min_delivery_time;
     ip_sm_gw_guidance_local_var->recomm_delivery_time = recomm_delivery_time;
@@ -34,18 +34,18 @@ cJSON *OpenAPI_ip_sm_gw_guidance_convertToJSON(OpenAPI_ip_sm_gw_guidance_t *ip_s
     OpenAPI_lnode_t *node = NULL;
 
     if (ip_sm_gw_guidance == NULL) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_convertToJSON() failed [IpSmGwGuidance]");
+        log_error("OpenAPI_ip_sm_gw_guidance_convertToJSON() failed [IpSmGwGuidance]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "minDeliveryTime", ip_sm_gw_guidance->min_delivery_time) == NULL) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_convertToJSON() failed [min_delivery_time]");
+        log_error("OpenAPI_ip_sm_gw_guidance_convertToJSON() failed [min_delivery_time]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "recommDeliveryTime", ip_sm_gw_guidance->recomm_delivery_time) == NULL) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_convertToJSON() failed [recomm_delivery_time]");
+        log_error("OpenAPI_ip_sm_gw_guidance_convertToJSON() failed [recomm_delivery_time]");
         goto end;
     }
 
@@ -61,21 +61,21 @@ OpenAPI_ip_sm_gw_guidance_t *OpenAPI_ip_sm_gw_guidance_parseFromJSON(cJSON *ip_s
     cJSON *recomm_delivery_time = NULL;
     min_delivery_time = cJSON_GetObjectItemCaseSensitive(ip_sm_gw_guidanceJSON, "minDeliveryTime");
     if (!min_delivery_time) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON() failed [min_delivery_time]");
+        log_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON() failed [min_delivery_time]");
         goto end;
     }
     if (!cJSON_IsNumber(min_delivery_time)) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON() failed [min_delivery_time]");
+        log_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON() failed [min_delivery_time]");
         goto end;
     }
 
     recomm_delivery_time = cJSON_GetObjectItemCaseSensitive(ip_sm_gw_guidanceJSON, "recommDeliveryTime");
     if (!recomm_delivery_time) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON() failed [recomm_delivery_time]");
+        log_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON() failed [recomm_delivery_time]");
         goto end;
     }
     if (!cJSON_IsNumber(recomm_delivery_time)) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON() failed [recomm_delivery_time]");
+        log_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON() failed [recomm_delivery_time]");
         goto end;
     }
 
@@ -96,10 +96,10 @@ OpenAPI_ip_sm_gw_guidance_t *OpenAPI_ip_sm_gw_guidance_copy(OpenAPI_ip_sm_gw_gui
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ip_sm_gw_guidance_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_convertToJSON() failed");
+        log_error("OpenAPI_ip_sm_gw_guidance_convertToJSON() failed");
         return NULL;
     }
 
@@ -107,14 +107,14 @@ OpenAPI_ip_sm_gw_guidance_t *OpenAPI_ip_sm_gw_guidance_copy(OpenAPI_ip_sm_gw_gui
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

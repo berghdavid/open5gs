@@ -27,7 +27,7 @@ void lmf_state_initial(ogs_fsm_t *s, lmf_event_t *e)
 {
     lmf_sm_debug(e);
 
-    ogs_assert(s);
+    log_assert(s);
 
     OGS_FSM_TRAN(s, &lmf_state_operational);
 }
@@ -36,7 +36,7 @@ void lmf_state_final(ogs_fsm_t *s, lmf_event_t *e)
 {
     lmf_sm_debug(e);
 
-    ogs_assert(s);
+    log_assert(s);
 }
 
 void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
@@ -53,8 +53,8 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
 
     ogs_sbi_message_t message;
 
-    ogs_assert(e);
-    ogs_assert(s);
+    log_assert(e);
+    log_assert(s);
 
     lmf_sm_debug(e);
 
@@ -67,14 +67,14 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
 
     case OGS_EVENT_SBI_SERVER:
         request = e->h.sbi.request;
-        ogs_assert(request);
+        log_assert(request);
         stream_id = OGS_POINTER_TO_UINT(e->h.sbi.data);
-        ogs_assert(stream_id >= OGS_MIN_POOL_ID &&
+        log_assert(stream_id >= OGS_MIN_POOL_ID &&
                 stream_id <= OGS_MAX_POOL_ID);
 
         stream = ogs_sbi_stream_find_by_id(stream_id);
         if (!stream) {
-            ogs_error("STREAM has already been removed [%d]", stream_id);
+            log_error("STREAM has already been removed [%d]", stream_id);
             break;
         }
 
@@ -82,15 +82,15 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
         if (rv != OGS_OK) {
             /* Health check requests (GET /) are expected and benign - log at debug level */
             if (request->h.uri && strcmp(request->h.uri, "/") == 0) {
-                ogs_debug("cannot parse HTTP message (health check) [method:%s, uri:%s]",
+                log_debug("cannot parse HTTP message (health check) [method:%s, uri:%s]",
                         request->h.method ? request->h.method : "NULL",
                         request->h.uri ? request->h.uri : "NULL");
             } else {
-                ogs_warn("cannot parse HTTP message [method:%s, uri:%s]",
+                log_warn("cannot parse HTTP message [method:%s, uri:%s]",
                         request->h.method ? request->h.method : "NULL",
                         request->h.uri ? request->h.uri : "NULL");
             }
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(
                     stream, OGS_SBI_HTTP_STATUS_BAD_REQUEST,
                     NULL, "cannot parse HTTP message", NULL, NULL));
@@ -98,8 +98,8 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
         }
 
         if (strcmp(message.h.api.version, OGS_SBI_API_V1) != 0) {
-            ogs_error("Not supported version [%s]", message.h.api.version);
-            ogs_assert(true ==
+            log_error("Not supported version [%s]", message.h.api.version);
+            log_assert(true ==
                 ogs_sbi_server_send_error(
                     stream, OGS_SBI_HTTP_STATUS_BAD_REQUEST,
                     &message, "Not supported version", NULL, NULL));
@@ -115,15 +115,15 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                 CASE(OGS_SBI_HTTP_METHOD_POST)
                     rv = lmf_nlmf_handle_determine_location(stream, &message);
                     if (rv != OGS_OK) {
-                        ogs_error("lmf_nlmf_handle_determine_location() failed");
+                        log_error("lmf_nlmf_handle_determine_location() failed");
                     }
                     /* Always free the message after handling - it contains allocated OpenAPI objects */
                     ogs_sbi_message_free(&message);
                     break;
 
                 DEFAULT
-                    ogs_error("Invalid HTTP method [%s]", message.h.method);
-                    ogs_assert(true ==
+                    log_error("Invalid HTTP method [%s]", message.h.method);
+                    log_assert(true ==
                         ogs_sbi_server_send_error(stream,
                             OGS_SBI_HTTP_STATUS_FORBIDDEN, &message,
                             "Invalid HTTP method", message.h.method, NULL));
@@ -136,14 +136,14 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                 CASE(OGS_SBI_HTTP_METHOD_POST)
                     rv = lmf_nlmf_handle_nrppa_measurement_notification(stream, &message);
                     if (rv != OGS_OK) {
-                        ogs_error("lmf_nlmf_handle_nrppa_measurement_notification() failed");
+                        log_error("lmf_nlmf_handle_nrppa_measurement_notification() failed");
                     }
                     /* Handler will free the message */
                     break;
 
                 DEFAULT
-                    ogs_error("Invalid HTTP method [%s] for callback notification", message.h.method);
-                    ogs_assert(true ==
+                    log_error("Invalid HTTP method [%s] for callback notification", message.h.method);
+                    log_assert(true ==
                         ogs_sbi_server_send_error(stream,
                             OGS_SBI_HTTP_STATUS_FORBIDDEN, &message,
                             "Invalid HTTP method", message.h.method, NULL));
@@ -152,9 +152,9 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                 break;
 
             DEFAULT
-                ogs_error("Invalid resource name [%s]",
+                log_error("Invalid resource name [%s]",
                         message.h.resource.component[0]);
-                ogs_assert(true ==
+                log_assert(true ==
                     ogs_sbi_server_send_error(stream,
                         OGS_SBI_HTTP_STATUS_BAD_REQUEST, &message,
                         "Invalid resource name",
@@ -164,8 +164,8 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
             break;
 
         DEFAULT
-            ogs_error("Unknown service name [%s]", message.h.service.name);
-            ogs_assert(true ==
+            log_error("Unknown service name [%s]", message.h.service.name);
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_BAD_REQUEST, &message,
                     "Unknown service name", message.h.service.name, NULL));
@@ -174,8 +174,8 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
         break;
 
     case OGS_EVENT_SBI_CLIENT:
-        ogs_assert(e->h.sbi.response);
-        ogs_assert(e->h.sbi.data);
+        log_assert(e->h.sbi.response);
+        log_assert(e->h.sbi.data);
 
         /* Try to identify service type from transaction ID first */
         /* For transaction-based responses, e->h.sbi.data is the transaction ID */
@@ -194,7 +194,7 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                             lmf_location_request_try_find_by_id(location_request_id);
                     }
                     if (!location_request) {
-                        ogs_error("Location request has already been removed [%d]",
+                        log_error("Location request has already been removed [%d]",
                                 location_request_id);
                         ogs_sbi_xact_remove(sbi_xact);
                         ogs_sbi_response_free(e->h.sbi.response);
@@ -221,7 +221,7 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                                     OGS_OK, e->h.sbi.response, location_request);
                         } else {
                             lmf_namf_handler_location_info_response(
-                                    OGS_ERROR, e->h.sbi.response, location_request);
+                                    LOG_ERROR, e->h.sbi.response, location_request);
                         }
                     } else {
                         /* NRPPa measurement response */
@@ -231,11 +231,11 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                             lmf_namf_handler_nrppa_measurement_response(
                                     OGS_OK, e->h.sbi.response, location_request);
                         } else {
-                            ogs_error("[%s] AMF NRPPa request failed with HTTP status %d",
+                            log_error("[%s] AMF NRPPa request failed with HTTP status %d",
                                     location_request->supi ? location_request->supi : "Unknown",
                                     e->h.sbi.response->status);
                             lmf_namf_handler_nrppa_measurement_response(
-                                    OGS_ERROR, e->h.sbi.response, location_request);
+                                    LOG_ERROR, e->h.sbi.response, location_request);
                         }
                     }
                     /* Handler function will free response */
@@ -249,14 +249,14 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
         /* Parse response for NRF NFM and other services */
         rv = ogs_sbi_parse_response(&message, e->h.sbi.response);
         if (rv != OGS_OK) {
-            ogs_error("cannot parse HTTP response");
+            log_error("cannot parse HTTP response");
             ogs_sbi_message_free(&message);
             ogs_sbi_response_free(e->h.sbi.response);
             break;
         }
 
         if (strcmp(message.h.api.version, OGS_SBI_API_V1) != 0) {
-            ogs_error("Not supported version [%s]", message.h.api.version);
+            log_error("Not supported version [%s]", message.h.api.version);
             ogs_sbi_message_free(&message);
             ogs_sbi_response_free(e->h.sbi.response);
             break;
@@ -269,7 +269,7 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
             CASE(OGS_SBI_RESOURCE_NAME_NF_INSTANCES)
                 /* For NRF NFM responses, e->h.sbi.data is the nf_instance pointer */
                 nf_instance = e->h.sbi.data;
-                ogs_assert(nf_instance);
+                log_assert(nf_instance);
 
     /*
      * Guard against dispatching to an FSM that may have been finalized
@@ -298,7 +298,7 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                     ogs_sbi_message_free(&message);
                     ogs_sbi_response_free(e->h.sbi.response);
                 } else {
-                    ogs_error("NF instance FSM has been finalized");
+                    log_error("NF instance FSM has been finalized");
                     ogs_sbi_message_free(&message);
                     ogs_sbi_response_free(e->h.sbi.response);
                 }
@@ -306,7 +306,7 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                 break;
 
             DEFAULT
-                ogs_error("Unknown NRF resource [%s]",
+                log_error("Unknown NRF resource [%s]",
                         message.h.resource.component[0] ?
                             message.h.resource.component[0] : "Unknown");
                 ogs_sbi_message_free(&message);
@@ -315,7 +315,7 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
             break;
 
         DEFAULT
-            ogs_error("Unknown service name [%s]", message.h.service.name);
+            log_error("Unknown service name [%s]", message.h.service.name);
             ogs_sbi_message_free(&message);
             ogs_sbi_response_free(e->h.sbi.response);
         END
@@ -328,8 +328,8 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
         case OGS_TIMER_NF_INSTANCE_NO_HEARTBEAT:
         case OGS_TIMER_NF_INSTANCE_VALIDITY:
             nf_instance = e->h.sbi.data;
-            ogs_assert(nf_instance);
-            ogs_assert(OGS_FSM_STATE(&nf_instance->sm));
+            log_assert(nf_instance);
+            log_assert(OGS_FSM_STATE(&nf_instance->sm));
 
             /* Update load for self instance if this is a heartbeat for self */
             if (nf_instance == ogs_sbi_self()->nf_instance) {
@@ -339,19 +339,19 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
 
             ogs_fsm_dispatch(&nf_instance->sm, e);
             if (OGS_FSM_CHECK(&nf_instance->sm, ogs_sbi_nf_state_exception))
-                ogs_error("[%s:%s] State machine exception [%d]",
+                log_error("[%s:%s] State machine exception [%d]",
                         OpenAPI_nf_type_ToString(nf_instance->nf_type),
                         nf_instance->id, e->h.timer_id);
             break;
 
         case OGS_TIMER_SBI_CLIENT_WAIT:
             sbi_xact_id = OGS_POINTER_TO_UINT(e->h.sbi.data);
-            ogs_assert(sbi_xact_id >= OGS_MIN_POOL_ID &&
+            log_assert(sbi_xact_id >= OGS_MIN_POOL_ID &&
                     sbi_xact_id <= OGS_MAX_POOL_ID);
 
             sbi_xact = ogs_sbi_xact_find_by_id(sbi_xact_id);
             if (!sbi_xact) {
-                ogs_error("SBI transaction has already been removed [%d]",
+                log_error("SBI transaction has already been removed [%d]",
                         sbi_xact_id);
                 break;
             }
@@ -364,21 +364,21 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
                     lmf_location_request_try_find_by_id(location_request_id);
             }
             if (!location_request) {
-                ogs_error("Location request has already been removed [%d]",
+                log_error("Location request has already been removed [%d]",
                         location_request_id);
                 break;
             }
 
             stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
-            ogs_error("[%s] SBI request timed out while waiting for AMF",
+            log_error("[%s] SBI request timed out while waiting for AMF",
                     location_request->supi ? location_request->supi : "Unknown");
             if (stream) {
-                ogs_assert(true == ogs_sbi_server_send_error(stream,
+                log_assert(true == ogs_sbi_server_send_error(stream,
                         OGS_SBI_HTTP_STATUS_GATEWAY_TIMEOUT,
                         NULL, "AMF discovery timed out",
                         "Unable to reach AMF via NRF/SCP", NULL));
             } else {
-                ogs_error("STREAM has already been removed [%d]",
+                log_error("STREAM has already been removed [%d]",
                         location_request->stream_id);
             }
 
@@ -387,13 +387,13 @@ void lmf_state_operational(ogs_fsm_t *s, lmf_event_t *e)
             break;
 
         default:
-            ogs_error("Unknown timer event [%d]", e->h.timer_id);
+            log_error("Unknown timer event [%d]", e->h.timer_id);
             break;
         }
         break;
 
     default:
-        ogs_error("Unknown event %s", lmf_event_get_name(e));
+        log_error("Unknown event %s", lmf_event_get_name(e));
         break;
     }
 }

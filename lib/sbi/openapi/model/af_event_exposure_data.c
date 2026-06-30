@@ -11,7 +11,7 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_create(
 )
 {
     OpenAPI_af_event_exposure_data_t *af_event_exposure_data_local_var = ogs_malloc(sizeof(OpenAPI_af_event_exposure_data_t));
-    ogs_assert(af_event_exposure_data_local_var);
+    log_assert(af_event_exposure_data_local_var);
 
     af_event_exposure_data_local_var->af_events = af_events;
     af_event_exposure_data_local_var->af_ids = af_ids;
@@ -54,23 +54,23 @@ cJSON *OpenAPI_af_event_exposure_data_convertToJSON(OpenAPI_af_event_exposure_da
     OpenAPI_lnode_t *node = NULL;
 
     if (af_event_exposure_data == NULL) {
-        ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [AfEventExposureData]");
+        log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [AfEventExposureData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (af_event_exposure_data->af_events == OpenAPI_af_event_NULL) {
-        ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_events]");
+        log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_events]");
         return NULL;
     }
     cJSON *af_eventsList = cJSON_AddArrayToObject(item, "afEvents");
     if (af_eventsList == NULL) {
-        ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_events]");
+        log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_events]");
         goto end;
     }
     OpenAPI_list_for_each(af_event_exposure_data->af_events, node) {
         if (cJSON_AddStringToObject(af_eventsList, "", OpenAPI_af_event_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_events]");
+            log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_events]");
             goto end;
         }
     }
@@ -78,12 +78,12 @@ cJSON *OpenAPI_af_event_exposure_data_convertToJSON(OpenAPI_af_event_exposure_da
     if (af_event_exposure_data->af_ids) {
     cJSON *af_idsList = cJSON_AddArrayToObject(item, "afIds");
     if (af_idsList == NULL) {
-        ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_ids]");
+        log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_ids]");
         goto end;
     }
     OpenAPI_list_for_each(af_event_exposure_data->af_ids, node) {
         if (cJSON_AddStringToObject(af_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_ids]");
+            log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [af_ids]");
             goto end;
         }
     }
@@ -92,12 +92,12 @@ cJSON *OpenAPI_af_event_exposure_data_convertToJSON(OpenAPI_af_event_exposure_da
     if (af_event_exposure_data->app_ids) {
     cJSON *app_idsList = cJSON_AddArrayToObject(item, "appIds");
     if (app_idsList == NULL) {
-        ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [app_ids]");
+        log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [app_ids]");
         goto end;
     }
     OpenAPI_list_for_each(af_event_exposure_data->app_ids, node) {
         if (cJSON_AddStringToObject(app_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [app_ids]");
+            log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed [app_ids]");
             goto end;
         }
     }
@@ -119,12 +119,12 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_parseFromJSON(c
     OpenAPI_list_t *app_idsList = NULL;
     af_events = cJSON_GetObjectItemCaseSensitive(af_event_exposure_dataJSON, "afEvents");
     if (!af_events) {
-        ogs_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_events]");
+        log_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_events]");
         goto end;
     }
         cJSON *af_events_local = NULL;
         if (!cJSON_IsArray(af_events)) {
-            ogs_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_events]");
+            log_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_events]");
             goto end;
         }
 
@@ -133,19 +133,19 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_parseFromJSON(c
         cJSON_ArrayForEach(af_events_local, af_events) {
             OpenAPI_af_event_e localEnum = OpenAPI_af_event_NULL;
             if (!cJSON_IsString(af_events_local)) {
-                ogs_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_events]");
+                log_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_events]");
                 goto end;
             }
             localEnum = OpenAPI_af_event_FromString(af_events_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"af_events\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"af_events\" is not supported. Ignoring it ...",
                          af_events_local->valuestring);
             } else {
                 OpenAPI_list_add(af_eventsList, (void *)localEnum);
             }
         }
         if (af_eventsList->count == 0) {
-            ogs_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed: Expected af_eventsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed: Expected af_eventsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
 
@@ -153,7 +153,7 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_parseFromJSON(c
     if (af_ids) {
         cJSON *af_ids_local = NULL;
         if (!cJSON_IsArray(af_ids)) {
-            ogs_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_ids]");
+            log_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_ids]");
             goto end;
         }
 
@@ -163,7 +163,7 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_parseFromJSON(c
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(af_ids_local)) {
-                ogs_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_ids]");
+                log_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [af_ids]");
                 goto end;
             }
             OpenAPI_list_add(af_idsList, ogs_strdup(af_ids_local->valuestring));
@@ -174,7 +174,7 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_parseFromJSON(c
     if (app_ids) {
         cJSON *app_ids_local = NULL;
         if (!cJSON_IsArray(app_ids)) {
-            ogs_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [app_ids]");
+            log_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [app_ids]");
             goto end;
         }
 
@@ -184,7 +184,7 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_parseFromJSON(c
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(app_ids_local)) {
-                ogs_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [app_ids]");
+                log_error("OpenAPI_af_event_exposure_data_parseFromJSON() failed [app_ids]");
                 goto end;
             }
             OpenAPI_list_add(app_idsList, ogs_strdup(app_ids_local->valuestring));
@@ -225,10 +225,10 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_copy(OpenAPI_af
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_af_event_exposure_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_af_event_exposure_data_convertToJSON() failed");
+        log_error("OpenAPI_af_event_exposure_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -236,14 +236,14 @@ OpenAPI_af_event_exposure_data_t *OpenAPI_af_event_exposure_data_copy(OpenAPI_af
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

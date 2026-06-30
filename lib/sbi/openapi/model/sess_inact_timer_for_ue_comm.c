@@ -10,7 +10,7 @@ OpenAPI_sess_inact_timer_for_ue_comm_t *OpenAPI_sess_inact_timer_for_ue_comm_cre
 )
 {
     OpenAPI_sess_inact_timer_for_ue_comm_t *sess_inact_timer_for_ue_comm_local_var = ogs_malloc(sizeof(OpenAPI_sess_inact_timer_for_ue_comm_t));
-    ogs_assert(sess_inact_timer_for_ue_comm_local_var);
+    log_assert(sess_inact_timer_for_ue_comm_local_var);
 
     sess_inact_timer_for_ue_comm_local_var->n4_sess_id = n4_sess_id;
     sess_inact_timer_for_ue_comm_local_var->sess_inactive_timer = sess_inactive_timer;
@@ -34,18 +34,18 @@ cJSON *OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON(OpenAPI_sess_inact_tim
     OpenAPI_lnode_t *node = NULL;
 
     if (sess_inact_timer_for_ue_comm == NULL) {
-        ogs_error("OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON() failed [SessInactTimerForUeComm]");
+        log_error("OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON() failed [SessInactTimerForUeComm]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "n4SessId", sess_inact_timer_for_ue_comm->n4_sess_id) == NULL) {
-        ogs_error("OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON() failed [n4_sess_id]");
+        log_error("OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON() failed [n4_sess_id]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "sessInactiveTimer", sess_inact_timer_for_ue_comm->sess_inactive_timer) == NULL) {
-        ogs_error("OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON() failed [sess_inactive_timer]");
+        log_error("OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON() failed [sess_inactive_timer]");
         goto end;
     }
 
@@ -61,21 +61,21 @@ OpenAPI_sess_inact_timer_for_ue_comm_t *OpenAPI_sess_inact_timer_for_ue_comm_par
     cJSON *sess_inactive_timer = NULL;
     n4_sess_id = cJSON_GetObjectItemCaseSensitive(sess_inact_timer_for_ue_commJSON, "n4SessId");
     if (!n4_sess_id) {
-        ogs_error("OpenAPI_sess_inact_timer_for_ue_comm_parseFromJSON() failed [n4_sess_id]");
+        log_error("OpenAPI_sess_inact_timer_for_ue_comm_parseFromJSON() failed [n4_sess_id]");
         goto end;
     }
     if (!cJSON_IsNumber(n4_sess_id)) {
-        ogs_error("OpenAPI_sess_inact_timer_for_ue_comm_parseFromJSON() failed [n4_sess_id]");
+        log_error("OpenAPI_sess_inact_timer_for_ue_comm_parseFromJSON() failed [n4_sess_id]");
         goto end;
     }
 
     sess_inactive_timer = cJSON_GetObjectItemCaseSensitive(sess_inact_timer_for_ue_commJSON, "sessInactiveTimer");
     if (!sess_inactive_timer) {
-        ogs_error("OpenAPI_sess_inact_timer_for_ue_comm_parseFromJSON() failed [sess_inactive_timer]");
+        log_error("OpenAPI_sess_inact_timer_for_ue_comm_parseFromJSON() failed [sess_inactive_timer]");
         goto end;
     }
     if (!cJSON_IsNumber(sess_inactive_timer)) {
-        ogs_error("OpenAPI_sess_inact_timer_for_ue_comm_parseFromJSON() failed [sess_inactive_timer]");
+        log_error("OpenAPI_sess_inact_timer_for_ue_comm_parseFromJSON() failed [sess_inactive_timer]");
         goto end;
     }
 
@@ -96,10 +96,10 @@ OpenAPI_sess_inact_timer_for_ue_comm_t *OpenAPI_sess_inact_timer_for_ue_comm_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON() failed");
+        log_error("OpenAPI_sess_inact_timer_for_ue_comm_convertToJSON() failed");
         return NULL;
     }
 
@@ -107,14 +107,14 @@ OpenAPI_sess_inact_timer_for_ue_comm_t *OpenAPI_sess_inact_timer_for_ue_comm_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -9,7 +9,7 @@ OpenAPI_n2_info_notification_rsp_data_t *OpenAPI_n2_info_notification_rsp_data_c
 )
 {
     OpenAPI_n2_info_notification_rsp_data_t *n2_info_notification_rsp_data_local_var = ogs_malloc(sizeof(OpenAPI_n2_info_notification_rsp_data_t));
-    ogs_assert(n2_info_notification_rsp_data_local_var);
+    log_assert(n2_info_notification_rsp_data_local_var);
 
     n2_info_notification_rsp_data_local_var->sec_rat_data_usage_list = sec_rat_data_usage_list;
 
@@ -39,7 +39,7 @@ cJSON *OpenAPI_n2_info_notification_rsp_data_convertToJSON(OpenAPI_n2_info_notif
     OpenAPI_lnode_t *node = NULL;
 
     if (n2_info_notification_rsp_data == NULL) {
-        ogs_error("OpenAPI_n2_info_notification_rsp_data_convertToJSON() failed [N2InfoNotificationRspData]");
+        log_error("OpenAPI_n2_info_notification_rsp_data_convertToJSON() failed [N2InfoNotificationRspData]");
         return NULL;
     }
 
@@ -47,13 +47,13 @@ cJSON *OpenAPI_n2_info_notification_rsp_data_convertToJSON(OpenAPI_n2_info_notif
     if (n2_info_notification_rsp_data->sec_rat_data_usage_list) {
     cJSON *sec_rat_data_usage_listList = cJSON_AddArrayToObject(item, "secRatDataUsageList");
     if (sec_rat_data_usage_listList == NULL) {
-        ogs_error("OpenAPI_n2_info_notification_rsp_data_convertToJSON() failed [sec_rat_data_usage_list]");
+        log_error("OpenAPI_n2_info_notification_rsp_data_convertToJSON() failed [sec_rat_data_usage_list]");
         goto end;
     }
     OpenAPI_list_for_each(n2_info_notification_rsp_data->sec_rat_data_usage_list, node) {
         cJSON *itemLocal = OpenAPI_n2_sm_information_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_n2_info_notification_rsp_data_convertToJSON() failed [sec_rat_data_usage_list]");
+            log_error("OpenAPI_n2_info_notification_rsp_data_convertToJSON() failed [sec_rat_data_usage_list]");
             goto end;
         }
         cJSON_AddItemToArray(sec_rat_data_usage_listList, itemLocal);
@@ -74,7 +74,7 @@ OpenAPI_n2_info_notification_rsp_data_t *OpenAPI_n2_info_notification_rsp_data_p
     if (sec_rat_data_usage_list) {
         cJSON *sec_rat_data_usage_list_local = NULL;
         if (!cJSON_IsArray(sec_rat_data_usage_list)) {
-            ogs_error("OpenAPI_n2_info_notification_rsp_data_parseFromJSON() failed [sec_rat_data_usage_list]");
+            log_error("OpenAPI_n2_info_notification_rsp_data_parseFromJSON() failed [sec_rat_data_usage_list]");
             goto end;
         }
 
@@ -82,12 +82,12 @@ OpenAPI_n2_info_notification_rsp_data_t *OpenAPI_n2_info_notification_rsp_data_p
 
         cJSON_ArrayForEach(sec_rat_data_usage_list_local, sec_rat_data_usage_list) {
             if (!cJSON_IsObject(sec_rat_data_usage_list_local)) {
-                ogs_error("OpenAPI_n2_info_notification_rsp_data_parseFromJSON() failed [sec_rat_data_usage_list]");
+                log_error("OpenAPI_n2_info_notification_rsp_data_parseFromJSON() failed [sec_rat_data_usage_list]");
                 goto end;
             }
             OpenAPI_n2_sm_information_t *sec_rat_data_usage_listItem = OpenAPI_n2_sm_information_parseFromJSON(sec_rat_data_usage_list_local);
             if (!sec_rat_data_usage_listItem) {
-                ogs_error("No sec_rat_data_usage_listItem");
+                log_error("No sec_rat_data_usage_listItem");
                 goto end;
             }
             OpenAPI_list_add(sec_rat_data_usage_listList, sec_rat_data_usage_listItem);
@@ -115,10 +115,10 @@ OpenAPI_n2_info_notification_rsp_data_t *OpenAPI_n2_info_notification_rsp_data_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_n2_info_notification_rsp_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_n2_info_notification_rsp_data_convertToJSON() failed");
+        log_error("OpenAPI_n2_info_notification_rsp_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -126,14 +126,14 @@ OpenAPI_n2_info_notification_rsp_data_t *OpenAPI_n2_info_notification_rsp_data_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

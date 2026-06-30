@@ -9,7 +9,7 @@ OpenAPI_bridge_management_container_t *OpenAPI_bridge_management_container_creat
 )
 {
     OpenAPI_bridge_management_container_t *bridge_management_container_local_var = ogs_malloc(sizeof(OpenAPI_bridge_management_container_t));
-    ogs_assert(bridge_management_container_local_var);
+    log_assert(bridge_management_container_local_var);
 
     bridge_management_container_local_var->bridge_man_cont = bridge_man_cont;
 
@@ -36,17 +36,17 @@ cJSON *OpenAPI_bridge_management_container_convertToJSON(OpenAPI_bridge_manageme
     OpenAPI_lnode_t *node = NULL;
 
     if (bridge_management_container == NULL) {
-        ogs_error("OpenAPI_bridge_management_container_convertToJSON() failed [BridgeManagementContainer]");
+        log_error("OpenAPI_bridge_management_container_convertToJSON() failed [BridgeManagementContainer]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!bridge_management_container->bridge_man_cont) {
-        ogs_error("OpenAPI_bridge_management_container_convertToJSON() failed [bridge_man_cont]");
+        log_error("OpenAPI_bridge_management_container_convertToJSON() failed [bridge_man_cont]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "bridgeManCont", bridge_management_container->bridge_man_cont) == NULL) {
-        ogs_error("OpenAPI_bridge_management_container_convertToJSON() failed [bridge_man_cont]");
+        log_error("OpenAPI_bridge_management_container_convertToJSON() failed [bridge_man_cont]");
         goto end;
     }
 
@@ -61,11 +61,11 @@ OpenAPI_bridge_management_container_t *OpenAPI_bridge_management_container_parse
     cJSON *bridge_man_cont = NULL;
     bridge_man_cont = cJSON_GetObjectItemCaseSensitive(bridge_management_containerJSON, "bridgeManCont");
     if (!bridge_man_cont) {
-        ogs_error("OpenAPI_bridge_management_container_parseFromJSON() failed [bridge_man_cont]");
+        log_error("OpenAPI_bridge_management_container_parseFromJSON() failed [bridge_man_cont]");
         goto end;
     }
     if (!cJSON_IsString(bridge_man_cont)) {
-        ogs_error("OpenAPI_bridge_management_container_parseFromJSON() failed [bridge_man_cont]");
+        log_error("OpenAPI_bridge_management_container_parseFromJSON() failed [bridge_man_cont]");
         goto end;
     }
 
@@ -83,10 +83,10 @@ OpenAPI_bridge_management_container_t *OpenAPI_bridge_management_container_copy(
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_bridge_management_container_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_bridge_management_container_convertToJSON() failed");
+        log_error("OpenAPI_bridge_management_container_convertToJSON() failed");
         return NULL;
     }
 
@@ -94,14 +94,14 @@ OpenAPI_bridge_management_container_t *OpenAPI_bridge_management_container_copy(
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

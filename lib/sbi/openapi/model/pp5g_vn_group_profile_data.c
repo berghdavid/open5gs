@@ -10,7 +10,7 @@ OpenAPI_pp5g_vn_group_profile_data_t *OpenAPI_pp5g_vn_group_profile_data_create(
 )
 {
     OpenAPI_pp5g_vn_group_profile_data_t *pp5g_vn_group_profile_data_local_var = ogs_malloc(sizeof(OpenAPI_pp5g_vn_group_profile_data_t));
-    ogs_assert(pp5g_vn_group_profile_data_local_var);
+    log_assert(pp5g_vn_group_profile_data_local_var);
 
     pp5g_vn_group_profile_data_local_var->allowed_mtc_providers = allowed_mtc_providers;
     pp5g_vn_group_profile_data_local_var->supported_features = supported_features;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_pp5g_vn_group_profile_data_convertToJSON(OpenAPI_pp5g_vn_group_pr
     OpenAPI_lnode_t *node = NULL;
 
     if (pp5g_vn_group_profile_data == NULL) {
-        ogs_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [Pp5gVnGroupProfileData]");
+        log_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [Pp5gVnGroupProfileData]");
         return NULL;
     }
 
@@ -56,7 +56,7 @@ cJSON *OpenAPI_pp5g_vn_group_profile_data_convertToJSON(OpenAPI_pp5g_vn_group_pr
     if (pp5g_vn_group_profile_data->allowed_mtc_providers) {
     cJSON *allowed_mtc_providers = cJSON_AddObjectToObject(item, "allowedMtcProviders");
     if (allowed_mtc_providers == NULL) {
-        ogs_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [allowed_mtc_providers]");
+        log_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [allowed_mtc_providers]");
         goto end;
     }
     cJSON *localMapObject = allowed_mtc_providers;
@@ -64,18 +64,18 @@ cJSON *OpenAPI_pp5g_vn_group_profile_data_convertToJSON(OpenAPI_pp5g_vn_group_pr
         OpenAPI_list_for_each(pp5g_vn_group_profile_data->allowed_mtc_providers, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [allowed_mtc_providers]");
+                log_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [allowed_mtc_providers]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [allowed_mtc_providers]");
+                log_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [allowed_mtc_providers]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_allowed_mtc_provider_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [inner]");
+                log_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -85,7 +85,7 @@ cJSON *OpenAPI_pp5g_vn_group_profile_data_convertToJSON(OpenAPI_pp5g_vn_group_pr
 
     if (pp5g_vn_group_profile_data->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", pp5g_vn_group_profile_data->supported_features) == NULL) {
-        ogs_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -105,7 +105,7 @@ OpenAPI_pp5g_vn_group_profile_data_t *OpenAPI_pp5g_vn_group_profile_data_parseFr
     if (allowed_mtc_providers) {
         cJSON *allowed_mtc_providers_local_map = NULL;
         if (!cJSON_IsObject(allowed_mtc_providers) && !cJSON_IsNull(allowed_mtc_providers)) {
-            ogs_error("OpenAPI_pp5g_vn_group_profile_data_parseFromJSON() failed [allowed_mtc_providers]");
+            log_error("OpenAPI_pp5g_vn_group_profile_data_parseFromJSON() failed [allowed_mtc_providers]");
             goto end;
         }
         if (cJSON_IsObject(allowed_mtc_providers)) {
@@ -121,7 +121,7 @@ OpenAPI_pp5g_vn_group_profile_data_t *OpenAPI_pp5g_vn_group_profile_data_parseFr
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_pp5g_vn_group_profile_data_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_pp5g_vn_group_profile_data_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(allowed_mtc_providersList, localMapKeyPair);
@@ -132,7 +132,7 @@ OpenAPI_pp5g_vn_group_profile_data_t *OpenAPI_pp5g_vn_group_profile_data_parseFr
     supported_features = cJSON_GetObjectItemCaseSensitive(pp5g_vn_group_profile_dataJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_pp5g_vn_group_profile_data_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_pp5g_vn_group_profile_data_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -162,10 +162,10 @@ OpenAPI_pp5g_vn_group_profile_data_t *OpenAPI_pp5g_vn_group_profile_data_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pp5g_vn_group_profile_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed");
+        log_error("OpenAPI_pp5g_vn_group_profile_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -173,14 +173,14 @@ OpenAPI_pp5g_vn_group_profile_data_t *OpenAPI_pp5g_vn_group_profile_data_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

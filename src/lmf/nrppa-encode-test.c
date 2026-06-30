@@ -84,7 +84,6 @@ int main(int argc, char *argv[])
     }
 
     ogs_core_initialize();
-    ogs_log_install_domain(&__lmf_log_domain, "lmf", ogs_core()->log.level);
 
     ogs_pkbuf_config_t pkbuf_conf;
     ogs_pkbuf_default_init(&pkbuf_conf);

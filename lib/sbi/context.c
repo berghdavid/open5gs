@@ -34,14 +34,12 @@ void ogs_sbi_context_init(OpenAPI_nf_type_e nf_type)
 {
     char nf_instance_id[OGS_UUID_FORMATTED_LENGTH + 1];
 
-    ogs_assert(nf_type);
+    log_assert(nf_type);
 
-    ogs_assert(context_initialized == 0);
+    log_assert(context_initialized == 0);
 
     /* Initialize SBI context */
     memset(&self, 0, sizeof(ogs_sbi_context_t));
-
-    ogs_log_install_domain(&__ogs_sbi_domain, "sbi", ogs_core()->log.level);
 
     ogs_sbi_message_init(ogs_app()->pool.message, ogs_app()->pool.message);
     ogs_sbi_server_init(ogs_app()->pool.event, ogs_app()->pool.event);
@@ -63,7 +61,7 @@ void ogs_sbi_context_init(OpenAPI_nf_type_e nf_type)
 
     /* Add SELF NF-Instance */
     self.nf_instance = ogs_sbi_nf_instance_add();
-    ogs_assert(self.nf_instance);
+    log_assert(self.nf_instance);
 
     ogs_uuid_get(&self.uuid);
     ogs_uuid_format(nf_instance_id, &self.uuid);
@@ -73,14 +71,14 @@ void ogs_sbi_context_init(OpenAPI_nf_type_e nf_type)
     /* Add NRF NF-Instance */
     if (nf_type != OpenAPI_nf_type_NRF) {
         self.nrf_instance = ogs_sbi_nf_instance_add();
-        ogs_assert(self.nrf_instance);
+        log_assert(self.nrf_instance);
         ogs_sbi_nf_instance_set_type(self.nrf_instance, OpenAPI_nf_type_NRF);
     }
 
     /* Add SCP NF-Instance */
     if (nf_type != OpenAPI_nf_type_NRF) {
         self.scp_instance = ogs_sbi_nf_instance_add();
-        ogs_assert(self.scp_instance);
+        log_assert(self.scp_instance);
         ogs_sbi_nf_instance_set_type(self.scp_instance, OpenAPI_nf_type_SCP);
     }
 
@@ -89,7 +87,7 @@ void ogs_sbi_context_init(OpenAPI_nf_type_e nf_type)
 
 void ogs_sbi_context_final(void)
 {
-    ogs_assert(context_initialized == 1);
+    log_assert(context_initialized == 1);
 
     ogs_sbi_subscription_data_remove_all();
     ogs_pool_final(&subscription_data_pool);
@@ -141,11 +139,11 @@ static int ogs_sbi_context_validation(
     int i;
     ogs_sbi_client_delegated_mode_e mode[MAX_MODE];
 
-    ogs_assert(context_initialized == 1);
+    log_assert(context_initialized == 1);
 
     /* If SMF is only used in 4G EPC, no SBI interface is required.  */
     if (local && strcmp(local, "smf") != 0 && ogs_sbi_server_first() == NULL) {
-        ogs_error("No %s.sbi.address: in '%s'", local, ogs_app()->file);
+        log_error("No %s.sbi.address: in '%s'", local, ogs_app()->file);
         return OGS_ERROR;
     }
 
@@ -166,7 +164,7 @@ static int ogs_sbi_context_validation(
                 if (NF_INSTANCE_CLIENT(self.nrf_instance) ||
                     NF_INSTANCE_CLIENT(self.scp_instance)) {
                 } else {
-                    ogs_error("[%d] DELEGATED_AUTO - "
+                    log_error("[%d] DELEGATED_AUTO - "
                             "Both NRF and %s are unavailable",
                             i, scp && strcmp(scp, "next_scp") == 0 ?
                                 "Next-hop SCP" : "SCP");
@@ -176,7 +174,7 @@ static int ogs_sbi_context_validation(
             break;
         case OGS_SBI_CLIENT_DELEGATED_YES:
             if (NF_INSTANCE_CLIENT(self.scp_instance) == NULL) {
-                ogs_error("[%d] DELEGATED_YES - no %s available",
+                log_error("[%d] DELEGATED_YES - no %s available",
                         i, scp && strcmp(scp, "next_scp") == 0 ?
                             "Next-hop SCP" : "SCP");
                 return OGS_ERROR;
@@ -184,31 +182,31 @@ static int ogs_sbi_context_validation(
             break;
         case OGS_SBI_CLIENT_DELEGATED_NO:
             if (NF_INSTANCE_CLIENT(self.nrf_instance) == NULL) {
-                ogs_error("[%d] DELEGATED_NO - no NRF available", i);
+                log_error("[%d] DELEGATED_NO - no NRF available", i);
                 return OGS_ERROR;
             }
             break;
         default:
-            ogs_fatal("[%d] Invalid dicovery-config delegated [%d]",
+            log_fatal("[%d] Invalid dicovery-config delegated [%d]",
                     i, mode[i]);
-            ogs_assert_if_reached();
+            log_assert_if_reached();
         }
     }
 
     if (ogs_sbi_self()->tls.server.scheme == OpenAPI_uri_scheme_https) {
         if (!ogs_sbi_self()->tls.server.private_key) {
-            ogs_error("HTTPS scheme enabled but no server key");
+            log_error("HTTPS scheme enabled but no server key");
             return OGS_ERROR;
         }
         if (!ogs_sbi_self()->tls.server.cert) {
-            ogs_error("HTTPS scheme enabled but no server certificate");
+            log_error("HTTPS scheme enabled but no server certificate");
             return OGS_ERROR;
         }
     }
 
     if (ogs_sbi_self()->tls.server.verify_client) {
         if (!ogs_sbi_self()->tls.server.verify_client_cacert) {
-            ogs_error("CLIENT verification enabled but no CA certificate");
+            log_error("CLIENT verification enabled but no CA certificate");
             return OGS_ERROR;
         }
     }
@@ -225,7 +223,7 @@ int ogs_sbi_context_parse_config(
     int idx = 0;
 
     document = ogs_app()->document;
-    ogs_assert(document);
+    log_assert(document);
 
     rv = ogs_sbi_context_prepare();
     if (rv != OGS_OK) return rv;
@@ -233,21 +231,21 @@ int ogs_sbi_context_parse_config(
     ogs_yaml_iter_init(&root_iter, document);
     while (ogs_yaml_iter_next(&root_iter)) {
         const char *root_key = ogs_yaml_iter_key(&root_iter);
-        ogs_assert(root_key);
+        log_assert(root_key);
         if (local && !strcmp(root_key, local) &&
             idx++ == ogs_app()->config_section_id) {
             ogs_yaml_iter_t local_iter;
             ogs_yaml_iter_recurse(&root_iter, &local_iter);
             while (ogs_yaml_iter_next(&local_iter)) {
                 const char *local_key = ogs_yaml_iter_key(&local_iter);
-                ogs_assert(local_key);
+                log_assert(local_key);
                 if (!strcmp(local_key, "default")) {
                     ogs_yaml_iter_t default_iter;
                     ogs_yaml_iter_recurse(&local_iter, &default_iter);
                     while (ogs_yaml_iter_next(&default_iter)) {
                         const char *default_key =
                             ogs_yaml_iter_key(&default_iter);
-                        ogs_assert(default_key);
+                        log_assert(default_key);
                         if (!strcmp(default_key, "interface")) {
                            self.local_if = ogs_yaml_iter_value(&default_iter);
                         } else if (!strcmp(default_key, "tls")) {
@@ -256,7 +254,7 @@ int ogs_sbi_context_parse_config(
                             while (ogs_yaml_iter_next(&tls_iter)) {
                                 const char *tls_key =
                                     ogs_yaml_iter_key(&tls_iter);
-                                ogs_assert(tls_key);
+                                log_assert(tls_key);
                                 if (!strcmp(tls_key, "server")) {
                                     ogs_yaml_iter_t server_iter;
                                     ogs_yaml_iter_recurse(
@@ -264,7 +262,7 @@ int ogs_sbi_context_parse_config(
                                     while (ogs_yaml_iter_next(&server_iter)) {
                                         const char *server_key =
                                             ogs_yaml_iter_key(&server_iter);
-                                        ogs_assert(server_key);
+                                        log_assert(server_key);
                                         if (!strcmp(server_key, "scheme")) {
                                             const char *v = ogs_yaml_iter_value(
                                                     &server_iter);
@@ -278,7 +276,7 @@ int ogs_sbi_context_parse_config(
                                                     self.tls.server.scheme =
                                                     OpenAPI_uri_scheme_http;
                                                 else
-                                                    ogs_warn(
+                                                    log_warn(
                                                         "unknown scheme `%s`",
                                                         v);
                                             }
@@ -317,7 +315,7 @@ int ogs_sbi_context_parse_config(
                                     while (ogs_yaml_iter_next(&client_iter)) {
                                         const char *client_key =
                                             ogs_yaml_iter_key(&client_iter);
-                                        ogs_assert(client_key);
+                                        log_assert(client_key);
                                         if (!strcmp(client_key, "scheme")) {
                                             const char *v = ogs_yaml_iter_value(
                                                     &client_iter);
@@ -331,7 +329,7 @@ int ogs_sbi_context_parse_config(
                                                     self.tls.client.scheme =
                                                     OpenAPI_uri_scheme_http;
                                                 else
-                                                    ogs_warn(
+                                                    log_warn(
                                                         "unknown scheme `%s`",
                                                         v);
                                             }
@@ -376,25 +374,25 @@ int ogs_sbi_context_parse_config(
     ogs_yaml_iter_init(&root_iter, document);
     while (ogs_yaml_iter_next(&root_iter)) {
         const char *root_key = ogs_yaml_iter_key(&root_iter);
-        ogs_assert(root_key);
+        log_assert(root_key);
         if (local && !strcmp(root_key, local) &&
             idx++ == ogs_app()->config_section_id) {
             ogs_yaml_iter_t local_iter;
             ogs_yaml_iter_recurse(&root_iter, &local_iter);
             while (ogs_yaml_iter_next(&local_iter)) {
                 const char *local_key = ogs_yaml_iter_key(&local_iter);
-                ogs_assert(local_key);
+                log_assert(local_key);
                 if (!strcmp(local_key, "sbi")) {
                     ogs_yaml_iter_t sbi_iter;
                     ogs_yaml_iter_recurse(&local_iter, &sbi_iter);
                     while (ogs_yaml_iter_next(&sbi_iter)) {
                         const char *sbi_key = ogs_yaml_iter_key(&sbi_iter);
-                        ogs_assert(sbi_key);
+                        log_assert(sbi_key);
                         if (!strcmp(sbi_key, "server")) {
                             rv = ogs_sbi_context_parse_server_config(
                                     &sbi_iter, NULL);
                             if (rv != OGS_OK) {
-                                ogs_error("ogs_sbi_context_parse_server_"
+                                log_error("ogs_sbi_context_parse_server_"
                                         "config() failed");
                                 return rv;
                             }
@@ -404,7 +402,7 @@ int ogs_sbi_context_parse_config(
                             while (ogs_yaml_iter_next(&client_iter)) {
                                 const char *client_key =
                                     ogs_yaml_iter_key(&client_iter);
-                                ogs_assert(client_key);
+                                log_assert(client_key);
                                 if (ogs_global_conf()->
                                         parameter.no_nrf == false &&
                                     nrf && !strcmp(client_key, nrf)) {
@@ -430,11 +428,11 @@ int ogs_sbi_context_parse_config(
                                                 YAML_SCALAR_NODE) {
                                             break;
                                         } else
-                                            ogs_assert_if_reached();
+                                            log_assert_if_reached();
 
                                         if (NF_INSTANCE_CLIENT(
                                                     self.nrf_instance)) {
-                                            ogs_error("Only one NRF client "
+                                            log_error("Only one NRF client "
                                                     "can be set");
                                             return OGS_ERROR;
                                         }
@@ -443,7 +441,7 @@ int ogs_sbi_context_parse_config(
                                             ogs_sbi_context_parse_client_config(
                                                 &nrf_iter);
                                         if (!client) {
-                                            ogs_error("ogs_sbi_context_parse_"
+                                            log_error("ogs_sbi_context_parse_"
                                                     "client_config() failed");
                                             return OGS_ERROR;
                                         }
@@ -478,11 +476,11 @@ int ogs_sbi_context_parse_config(
                                                 YAML_SCALAR_NODE) {
                                             break;
                                         } else
-                                            ogs_assert_if_reached();
+                                            log_assert_if_reached();
 
                                         if (NF_INSTANCE_CLIENT(
                                                     self.scp_instance)) {
-                                            ogs_error("Only one SCP client "
+                                            log_error("Only one SCP client "
                                                     "can be set");
                                             return OGS_ERROR;
                                         }
@@ -491,7 +489,7 @@ int ogs_sbi_context_parse_config(
                                             ogs_sbi_context_parse_client_config(
                                                 &scp_iter);
                                         if (!client) {
-                                            ogs_error("ogs_sbi_context_parse_"
+                                            log_error("ogs_sbi_context_parse_"
                                                     "client_config() failed");
                                             return OGS_ERROR;
                                         }
@@ -525,7 +523,7 @@ int ogs_sbi_context_parse_config(
                                                 const char *nrf_val =
                                                     ogs_yaml_iter_value(
                                                         &nrf_iter);
-                                                ogs_assert(nrf_key);
+                                                log_assert(nrf_key);
 
                                                 if (!strcmp(nrf_key,"nfm")) {
                                                     if (!strcmp(nrf_val,"no")) {
@@ -540,7 +538,7 @@ int ogs_sbi_context_parse_config(
                                                         self.client_delegated_config.nrf.nfm =
                                                         OGS_SBI_CLIENT_DELEGATED_AUTO;
                                                     } else {
-                                                        ogs_warn("unknown "
+                                                        log_warn("unknown "
                                                             "'nfm' `%s`",
                                                             nrf_val);
                                                     }
@@ -558,12 +556,12 @@ int ogs_sbi_context_parse_config(
                                                         self.client_delegated_config.nrf.disc =
                                                         OGS_SBI_CLIENT_DELEGATED_AUTO;
                                                     } else {
-                                                        ogs_warn("unknown "
+                                                        log_warn("unknown "
                                                             "'disc' `%s`",
                                                             nrf_val);
                                                     }
                                                 } else {
-                                                    ogs_warn("unknown nrf "
+                                                    log_warn("unknown nrf "
                                                         "delegated key `%s`",
                                                         nrf_key);
                                                 }
@@ -580,7 +578,7 @@ int ogs_sbi_context_parse_config(
                                                 const char *scp_val =
                                                     ogs_yaml_iter_value(
                                                         &scp_iter);
-                                                ogs_assert(scp_key);
+                                                log_assert(scp_key);
 
                                                 if (!strcmp(scp_key,"next")) {
                                                     if (!strcmp(scp_val,"no")) {
@@ -595,30 +593,30 @@ int ogs_sbi_context_parse_config(
                                                         self.client_delegated_config.scp.next =
                                                         OGS_SBI_CLIENT_DELEGATED_AUTO;
                                                     } else {
-                                                        ogs_warn("unknown "
+                                                        log_warn("unknown "
                                                             "'next' `%s`",
                                                             scp_val);
                                                     }
                                                 } else {
-                                                    ogs_warn("unknown scp "
+                                                    log_warn("unknown scp "
                                                         "delegated key `%s`",
                                                         scp_key);
                                                 }
                                             }
                                         } else {
-                                            ogs_warn("unknown delegated "
+                                            log_warn("unknown delegated "
                                                 "key `%s`", del_key);
                                         }
                                     }
                                 }
                             }
                         } else
-                            ogs_warn("unknown key `%s`", sbi_key);
+                            log_warn("unknown key `%s`", sbi_key);
                     }
                 } else if (!strcmp(local_key, "service_name")) {
                     ogs_yaml_iter_t service_name_iter;
                     ogs_yaml_iter_recurse(&local_iter, &service_name_iter);
-                    ogs_assert(ogs_yaml_iter_type(
+                    log_assert(ogs_yaml_iter_type(
                                 &service_name_iter) != YAML_MAPPING_NODE);
 
                     do {
@@ -653,7 +651,7 @@ int ogs_sbi_context_parse_hnet_config(ogs_yaml_iter_t *root_iter)
     int rv;
     ogs_yaml_iter_t hnet_array, hnet_iter;
 
-    ogs_assert(root_iter);
+    log_assert(root_iter);
     ogs_yaml_iter_recurse(root_iter, &hnet_array);
     do {
         uint8_t id = 0, scheme = 0;
@@ -668,11 +666,11 @@ int ogs_sbi_context_parse_hnet_config(ogs_yaml_iter_t *root_iter)
         } else if (ogs_yaml_iter_type(&hnet_array) == YAML_SCALAR_NODE) {
             break;
         } else
-            ogs_assert_if_reached();
+            log_assert_if_reached();
 
         while (ogs_yaml_iter_next(&hnet_iter)) {
             const char *hnet_key = ogs_yaml_iter_key(&hnet_iter);
-            ogs_assert(hnet_key);
+            log_assert(hnet_key);
             if (!strcmp(hnet_key, "id")) {
                 const char *v = ogs_yaml_iter_value(&hnet_iter);
                 if (v) {
@@ -688,7 +686,7 @@ int ogs_sbi_context_parse_hnet_config(ogs_yaml_iter_t *root_iter)
             } else if (!strcmp(hnet_key, "key")) {
                 filename = ogs_yaml_iter_value(&hnet_iter);
             } else
-                ogs_warn("unknown key `%s`", hnet_key);
+                log_warn("unknown key `%s`", hnet_key);
         }
 
         if (id >= OGS_HOME_NETWORK_PKI_VALUE_MIN &&
@@ -701,7 +699,7 @@ int ogs_sbi_context_parse_hnet_config(ogs_yaml_iter_t *root_iter)
                     self.hnet[id].avail = true;
                     self.hnet[id].scheme = scheme;
                 } else {
-                    ogs_error("ogs_pem_decode_curve25519_key"
+                    log_error("ogs_pem_decode_curve25519_key"
                             "[%s] failed", filename);
                 }
             } else if (scheme == OGS_PROTECTION_SCHEME_PROFILE_B) {
@@ -711,13 +709,13 @@ int ogs_sbi_context_parse_hnet_config(ogs_yaml_iter_t *root_iter)
                     self.hnet[id].avail = true;
                     self.hnet[id].scheme = scheme;
                 } else {
-                    ogs_error("ogs_pem_decode_secp256r1_key[%s]"
+                    log_error("ogs_pem_decode_secp256r1_key[%s]"
                             " failed", filename);
                 }
             } else
-                ogs_error("Invalid scheme [%d]", scheme);
+                log_error("Invalid scheme [%d]", scheme);
         } else
-            ogs_error("Invalid home network configuration "
+            log_error("Invalid home network configuration "
                     "[id:%d, filename:%s]", id, filename);
     } while (ogs_yaml_iter_type(&hnet_array) == YAML_SEQUENCE_NODE);
 
@@ -733,7 +731,7 @@ int ogs_sbi_context_parse_server_config(
     ogs_list_t list, list6;
     ogs_socknode_t *node = NULL, *node6 = NULL;
 
-    ogs_assert(parent);
+    log_assert(parent);
 
     ogs_yaml_iter_t server_iter, server_array;
     ogs_yaml_iter_recurse(parent, &server_array);
@@ -765,16 +763,16 @@ int ogs_sbi_context_parse_server_config(
         } else if (ogs_yaml_iter_type(&server_array) == YAML_SCALAR_NODE) {
             break;
         } else
-            ogs_assert_if_reached();
+            log_assert_if_reached();
 
         while (ogs_yaml_iter_next(&server_iter)) {
             const char *server_key = ogs_yaml_iter_key(&server_iter);
-            ogs_assert(server_key);
+            log_assert(server_key);
             if (!strcmp(server_key, OGS_SBI_INTERFACE_NAME_N32F)) {
                 rv = ogs_sbi_context_parse_server_config(
                         &server_iter, server_key);
                 if (rv != OGS_OK) {
-                    ogs_error("ogs_sbi_context_parse_server_config() "
+                    log_error("ogs_sbi_context_parse_server_config() "
                             "failed[key:%s]", server_key);
                     return rv;
                 }
@@ -783,7 +781,7 @@ int ogs_sbi_context_parse_server_config(
                 if (v) family = atoi(v);
                 if (family != AF_UNSPEC && family != AF_INET &&
                     family != AF_INET6) {
-                    ogs_warn("Ignore family(%d) : AF_UNSPEC(%d), "
+                    log_warn("Ignore family(%d) : AF_UNSPEC(%d), "
                         "AF_INET(%d), AF_INET6(%d) ",
                         family, AF_UNSPEC, AF_INET, AF_INET6);
                     family = AF_UNSPEC;
@@ -791,7 +789,7 @@ int ogs_sbi_context_parse_server_config(
             } else if (!strcmp(server_key, "address")) {
                 ogs_yaml_iter_t hostname_iter;
                 ogs_yaml_iter_recurse(&server_iter, &hostname_iter);
-                ogs_assert(ogs_yaml_iter_type(
+                log_assert(ogs_yaml_iter_type(
                             &hostname_iter) != YAML_MAPPING_NODE);
 
                 do {
@@ -801,14 +799,14 @@ int ogs_sbi_context_parse_server_config(
                             break;
                     }
 
-                    ogs_assert(num < OGS_MAX_NUM_OF_HOSTNAME);
+                    log_assert(num < OGS_MAX_NUM_OF_HOSTNAME);
                     hostname[num++] = ogs_yaml_iter_value(&hostname_iter);
                 } while (ogs_yaml_iter_type(
                             &hostname_iter) == YAML_SEQUENCE_NODE);
             } else if (!strcmp(server_key, "advertise")) {
                 ogs_yaml_iter_t advertise_iter;
                 ogs_yaml_iter_recurse(&server_iter, &advertise_iter);
-                ogs_assert(ogs_yaml_iter_type(
+                log_assert(ogs_yaml_iter_type(
                             &advertise_iter) != YAML_MAPPING_NODE);
 
                 do {
@@ -818,7 +816,7 @@ int ogs_sbi_context_parse_server_config(
                             break;
                     }
 
-                    ogs_assert(num_of_advertise < OGS_MAX_NUM_OF_HOSTNAME);
+                    log_assert(num_of_advertise < OGS_MAX_NUM_OF_HOSTNAME);
                     advertise[num_of_advertise++] =
                         ogs_yaml_iter_value(&advertise_iter);
                 } while (ogs_yaml_iter_type(
@@ -837,7 +835,7 @@ int ogs_sbi_context_parse_server_config(
                     else if (!ogs_strcasecmp(v, "http"))
                         scheme = OpenAPI_uri_scheme_http;
                     else
-                        ogs_warn("unknown scheme `%s`", v);
+                        log_warn("unknown scheme `%s`", v);
                 }
             } else if (!strcmp(server_key, "private_key")) {
                 private_key = ogs_yaml_iter_value(&server_iter);
@@ -852,7 +850,7 @@ int ogs_sbi_context_parse_server_config(
             } else if (!strcmp(server_key, "option")) {
                 rv = ogs_app_parse_sockopt_config(&server_iter, &option);
                 if (rv != OGS_OK) {
-                    ogs_error("ogs_app_parse_sockopt_config() failed");
+                    log_error("ogs_app_parse_sockopt_config() failed");
                     return rv;
                 }
                 is_option = true;
@@ -868,13 +866,13 @@ int ogs_sbi_context_parse_server_config(
             else if (scheme == OpenAPI_uri_scheme_http)
                 port = OGS_SBI_HTTP_PORT;
             else
-                ogs_assert_if_reached();
+                log_assert_if_reached();
         }
 
         addr = NULL;
         for (i = 0; i < num; i++) {
             rv = ogs_addaddrinfo(&addr, family, hostname[i], port, 0);
-            ogs_assert(rv == OGS_OK);
+            log_assert(rv == OGS_OK);
         }
 
         ogs_list_init(&list);
@@ -893,7 +891,7 @@ int ogs_sbi_context_parse_server_config(
                 ogs_global_conf()->parameter.no_ipv4 ?  NULL : &list,
                 ogs_global_conf()->parameter.no_ipv6 ?  NULL : &list6,
                 dev, port, NULL);
-            ogs_assert(rv == OGS_OK);
+            log_assert(rv == OGS_OK);
         }
 
         addr = NULL;
@@ -909,7 +907,7 @@ int ogs_sbi_context_parse_server_config(
 
                 /* Allocate memory for the host part */
                 hostbuf = (char *)ogs_malloc(host_len + 1);
-                ogs_assert(hostbuf);
+                log_assert(hostbuf);
 
                 /* Copy the host part into hostbuf */
                 memcpy(hostbuf, advertise[i], host_len);
@@ -920,12 +918,12 @@ int ogs_sbi_context_parse_server_config(
             } else {
                 /* If no colon, treat the entire string as the host */
                 hostbuf = ogs_strdup(advertise[i]);
-                ogs_assert(hostbuf);
+                log_assert(hostbuf);
             }
 
             /* Add the parsed address info */
             rv = ogs_addaddrinfo(&addr, family, hostbuf, adv_port, 0);
-            ogs_assert(rv == OGS_OK);
+            log_assert(rv == OGS_OK);
 
             /* Free the allocated memory */
             ogs_free(hostbuf);
@@ -935,7 +933,7 @@ int ogs_sbi_context_parse_server_config(
         if (node) {
             server = ogs_sbi_server_add(
                     interface, scheme, node->addr, is_option ? &option : NULL);
-            ogs_assert(server);
+            log_assert(server);
 
             if (addr && ogs_global_conf()->parameter.no_ipv4 == 0)
                 ogs_sbi_server_set_advertise(server, AF_INET, addr);
@@ -947,12 +945,12 @@ int ogs_sbi_context_parse_server_config(
                 if (server->verify_client_cacert)
                     ogs_free(server->verify_client_cacert);
                 server->verify_client_cacert = ogs_strdup(verify_client_cacert);
-                ogs_assert(server->verify_client_cacert);
+                log_assert(server->verify_client_cacert);
             }
 
             if (server->verify_client == true &&
                 !server->verify_client_cacert) {
-                ogs_error("CLIENT verification enabled but no CA certificate");
+                log_error("CLIENT verification enabled but no CA certificate");
                 return OGS_ERROR;
             }
 
@@ -960,28 +958,28 @@ int ogs_sbi_context_parse_server_config(
                 if (server->private_key)
                     ogs_free(server->private_key);
                 server->private_key = ogs_strdup(private_key);
-                ogs_assert(server->private_key);
+                log_assert(server->private_key);
             }
             if (cert) {
                 if (server->cert)
                     ogs_free(server->cert);
                 server->cert = ogs_strdup(cert);
-                ogs_assert(server->cert);
+                log_assert(server->cert);
             }
             if (sslkeylog) {
                 if (server->sslkeylog)
                     ogs_free(server->sslkeylog);
                 server->sslkeylog = ogs_strdup(sslkeylog);
-                ogs_assert(server->sslkeylog);
+                log_assert(server->sslkeylog);
             }
 
             if (scheme == OpenAPI_uri_scheme_https) {
                 if (!server->private_key) {
-                    ogs_error("HTTPS scheme enabled but no server key");
+                    log_error("HTTPS scheme enabled but no server key");
                     return OGS_ERROR;
                 }
                 if (!server->cert) {
-                    ogs_error("HTTPS scheme enabled but no server certificate");
+                    log_error("HTTPS scheme enabled but no server certificate");
                     return OGS_ERROR;
                 }
             }
@@ -990,7 +988,7 @@ int ogs_sbi_context_parse_server_config(
         if (node6) {
             server = ogs_sbi_server_add(
                     interface, scheme, node6->addr, is_option ? &option : NULL);
-            ogs_assert(server);
+            log_assert(server);
 
             if (addr && ogs_global_conf()->parameter.no_ipv6 == 0)
                 ogs_sbi_server_set_advertise(server, AF_INET6, addr);
@@ -1002,12 +1000,12 @@ int ogs_sbi_context_parse_server_config(
                 if (server->verify_client_cacert)
                     ogs_free(server->verify_client_cacert);
                 server->verify_client_cacert = ogs_strdup(verify_client_cacert);
-                ogs_assert(server->verify_client_cacert);
+                log_assert(server->verify_client_cacert);
             }
 
             if (server->verify_client == true &&
                 !server->verify_client_cacert) {
-                ogs_error("CLIENT verification enabled but no CA certificate");
+                log_error("CLIENT verification enabled but no CA certificate");
                 return OGS_ERROR;
             }
 
@@ -1015,28 +1013,28 @@ int ogs_sbi_context_parse_server_config(
                 if (server->private_key)
                     ogs_free(server->private_key);
                 server->private_key = ogs_strdup(private_key);
-                ogs_assert(server->private_key);
+                log_assert(server->private_key);
             }
             if (cert) {
                 if (server->cert)
                     ogs_free(server->cert);
                 server->cert = ogs_strdup(cert);
-                ogs_assert(server->cert);
+                log_assert(server->cert);
             }
             if (sslkeylog) {
                 if (server->sslkeylog)
                     ogs_free(server->sslkeylog);
                 server->sslkeylog = ogs_strdup(sslkeylog);
-                ogs_assert(server->sslkeylog);
+                log_assert(server->sslkeylog);
             }
 
             if (scheme == OpenAPI_uri_scheme_https) {
                 if (!server->private_key) {
-                    ogs_error("HTTPS scheme enabled but no server key");
+                    log_error("HTTPS scheme enabled but no server key");
                     return OGS_ERROR;
                 }
                 if (!server->cert) {
-                    ogs_error("HTTPS scheme enabled but no server certificate");
+                    log_error("HTTPS scheme enabled but no server certificate");
                     return OGS_ERROR;
                 }
             }
@@ -1079,17 +1077,17 @@ ogs_sbi_client_t *ogs_sbi_context_parse_client_config(ogs_yaml_iter_t *iter)
     ogs_sockaddr_t *addr = NULL;
     ogs_sockaddr_t *addr6 = NULL;
 
-    ogs_assert(iter);
+    log_assert(iter);
 
     while (ogs_yaml_iter_next(iter)) {
         const char *key = ogs_yaml_iter_key(iter);
-        ogs_assert(key);
+        log_assert(key);
         if (!strcmp(key, "uri")) {
             uri = ogs_yaml_iter_value(iter);
         } else if (!strcmp(key, "resolve")) {
             ogs_yaml_iter_t resolve_iter;
             ogs_yaml_iter_recurse(iter, &resolve_iter);
-            ogs_assert(ogs_yaml_iter_type(&resolve_iter) != YAML_MAPPING_NODE);
+            log_assert(ogs_yaml_iter_type(&resolve_iter) != YAML_MAPPING_NODE);
 
             do {
                 if (ogs_yaml_iter_type(&resolve_iter) == YAML_SEQUENCE_NODE) {
@@ -1097,7 +1095,7 @@ ogs_sbi_client_t *ogs_sbi_context_parse_client_config(ogs_yaml_iter_t *iter)
                         break;
                 }
 
-                ogs_assert(num_of_resolve < OGS_MAX_NUM_OF_HOSTNAME);
+                log_assert(num_of_resolve < OGS_MAX_NUM_OF_HOSTNAME);
                 resolve[num_of_resolve++] = ogs_yaml_iter_value(&resolve_iter);
             } while (ogs_yaml_iter_type(&resolve_iter) == YAML_SEQUENCE_NODE);
 
@@ -1117,7 +1115,7 @@ ogs_sbi_client_t *ogs_sbi_context_parse_client_config(ogs_yaml_iter_t *iter)
     }
 
     if (!uri) {
-        ogs_error("URI[%s] is required", uri ? uri : "NULL");
+        log_error("URI[%s] is required", uri ? uri : "NULL");
         return NULL;
     }
 
@@ -1125,9 +1123,9 @@ ogs_sbi_client_t *ogs_sbi_context_parse_client_config(ogs_yaml_iter_t *iter)
             &scheme, &fqdn, &fqdn_port, &addr, &addr6, (char *)uri);
     if (rc == false) {
         if (!scheme)
-            ogs_error("Invalid Scheme in URI[%s]", uri);
+            log_error("Invalid Scheme in URI[%s]", uri);
         else
-            ogs_error("Invalid URI[%s]", uri);
+            log_error("Invalid URI[%s]", uri);
 
         return NULL;
     }
@@ -1135,7 +1133,7 @@ ogs_sbi_client_t *ogs_sbi_context_parse_client_config(ogs_yaml_iter_t *iter)
     switch (scheme) {
     case OpenAPI_uri_scheme_https:
         if (!fqdn) {
-            ogs_error("HTTPS(TLS) must be set to FQDN [uri:%s]", uri);
+            log_error("HTTPS(TLS) must be set to FQDN [uri:%s]", uri);
 
             ogs_freeaddrinfo(addr);
             ogs_freeaddrinfo(addr6);
@@ -1143,15 +1141,15 @@ ogs_sbi_client_t *ogs_sbi_context_parse_client_config(ogs_yaml_iter_t *iter)
             return NULL;
         }
         client = ogs_sbi_client_add(scheme, fqdn, fqdn_port, NULL, NULL);
-        ogs_assert(client);
+        log_assert(client);
         break;
     case OpenAPI_uri_scheme_http:
         client = ogs_sbi_client_add(scheme, fqdn, fqdn_port, addr, addr6);
-        ogs_assert(client);
+        log_assert(client);
         break;
     default:
-        ogs_fatal("Invalid Scheme[%d]", scheme);
-        ogs_assert_if_reached();
+        log_fatal("Invalid Scheme[%d]", scheme);
+        log_assert_if_reached();
     }
 
     if (num_of_resolve)
@@ -1165,40 +1163,40 @@ ogs_sbi_client_t *ogs_sbi_context_parse_client_config(ogs_yaml_iter_t *iter)
         if (client->cacert)
             ogs_free(client->cacert);
         client->cacert = ogs_strdup(cacert);
-        ogs_assert(client->cacert);
+        log_assert(client->cacert);
     }
 
     if (client_private_key) {
         if (client->private_key)
             ogs_free(client->private_key);
         client->private_key = ogs_strdup(client_private_key);
-        ogs_assert(client->private_key);
+        log_assert(client->private_key);
     }
 
     if (client_cert) {
         if (client->cert)
             ogs_free(client->cert);
         client->cert = ogs_strdup(client_cert);
-        ogs_assert(client->cert);
+        log_assert(client->cert);
     }
 
     if (client_sslkeylog) {
         if (client->sslkeylog)
             ogs_free(client->sslkeylog);
         client->sslkeylog = ogs_strdup(client_sslkeylog);
-        ogs_assert(client->sslkeylog);
+        log_assert(client->sslkeylog);
     }
 
     if (local_if) {
         if (client->local_if)
             ogs_free(client->local_if);
         client->local_if = ogs_strdup(local_if);
-        ogs_assert(client->local_if);
+        log_assert(client->local_if);
     }
 
     if ((!client_private_key && client_cert) ||
         (client_private_key && !client_cert)) {
-        ogs_error("Either the private key or certificate is missing.");
+        log_error("Either the private key or certificate is missing.");
         ogs_sbi_client_remove(client);
         return NULL;
     }
@@ -1214,7 +1212,7 @@ bool ogs_sbi_nf_service_is_available(const char *name)
 {
     int i;
 
-    ogs_assert(name);
+    log_assert(name);
 
     if (self.num_of_service_name == 0)
         /* If no service name is configured, all services are available */
@@ -1233,7 +1231,7 @@ ogs_sbi_nf_instance_t *ogs_sbi_nf_instance_add(void)
     ogs_sbi_nf_instance_t *nf_instance = NULL;
 
     ogs_pool_alloc(&nf_instance_pool, &nf_instance);
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
     memset(nf_instance, 0, sizeof(ogs_sbi_nf_instance_t));
 
     nf_instance->time.heartbeat_interval =
@@ -1245,7 +1243,7 @@ ogs_sbi_nf_instance_t *ogs_sbi_nf_instance_add(void)
 
     ogs_list_add(&ogs_sbi_self()->nf_instance_list, nf_instance);
 
-    ogs_debug("[%s] NFInstance added with Ref [%s]",
+    log_debug("[%s] NFInstance added with Ref [%s]",
             nf_instance->nf_type ?
                 OpenAPI_nf_type_ToString(nf_instance->nf_type) : "NULL",
             nf_instance->id);
@@ -1255,18 +1253,18 @@ ogs_sbi_nf_instance_t *ogs_sbi_nf_instance_add(void)
 
 void ogs_sbi_nf_instance_set_id(ogs_sbi_nf_instance_t *nf_instance, char *id)
 {
-    ogs_assert(nf_instance);
-    ogs_assert(id);
+    log_assert(nf_instance);
+    log_assert(id);
 
     nf_instance->id = ogs_strdup(id);
-    ogs_assert(nf_instance->id);
+    log_assert(nf_instance->id);
 }
 
 void ogs_sbi_nf_instance_set_type(
         ogs_sbi_nf_instance_t *nf_instance, OpenAPI_nf_type_e nf_type)
 {
-    ogs_assert(nf_instance);
-    ogs_assert(nf_type);
+    log_assert(nf_instance);
+    log_assert(nf_type);
 
     nf_instance->nf_type = nf_type;
 }
@@ -1274,8 +1272,8 @@ void ogs_sbi_nf_instance_set_type(
 void ogs_sbi_nf_instance_set_status(
         ogs_sbi_nf_instance_t *nf_instance, OpenAPI_nf_status_e nf_status)
 {
-    ogs_assert(nf_instance);
-    ogs_assert(nf_status);
+    log_assert(nf_instance);
+    log_assert(nf_status);
 
     nf_instance->nf_status = nf_status;
 }
@@ -1283,8 +1281,8 @@ void ogs_sbi_nf_instance_set_status(
 void ogs_sbi_nf_instance_add_allowed_nf_type(
         ogs_sbi_nf_instance_t *nf_instance, OpenAPI_nf_type_e allowed_nf_type)
 {
-    ogs_assert(nf_instance);
-    ogs_assert(allowed_nf_type);
+    log_assert(nf_instance);
+    log_assert(allowed_nf_type);
 
     if (nf_instance->num_of_allowed_nf_type < OGS_SBI_MAX_NUM_OF_NF_TYPE) {
         nf_instance->allowed_nf_type[nf_instance->num_of_allowed_nf_type] =
@@ -1298,8 +1296,8 @@ bool ogs_sbi_nf_instance_is_allowed_nf_type(
 {
     int i;
 
-    ogs_assert(nf_instance);
-    ogs_assert(allowed_nf_type);
+    log_assert(nf_instance);
+    log_assert(allowed_nf_type);
 
     if (!nf_instance->num_of_allowed_nf_type) {
         return true;
@@ -1310,7 +1308,7 @@ bool ogs_sbi_nf_instance_is_allowed_nf_type(
             return true;
     }
 
-    ogs_error("Not allowed nf-type[%s] in nf-instance[%s]",
+    log_error("Not allowed nf-type[%s] in nf-instance[%s]",
             OpenAPI_nf_type_ToString(allowed_nf_type),
             OpenAPI_nf_type_ToString(nf_instance->nf_type));
     return false;
@@ -1320,7 +1318,7 @@ void ogs_sbi_nf_instance_clear(ogs_sbi_nf_instance_t *nf_instance)
 {
     int i;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     if (nf_instance->fqdn)
         ogs_free(nf_instance->fqdn);
@@ -1343,9 +1341,9 @@ void ogs_sbi_nf_instance_clear(ogs_sbi_nf_instance_t *nf_instance)
 
 void ogs_sbi_nf_instance_remove(ogs_sbi_nf_instance_t *nf_instance)
 {
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
-    ogs_debug("[%s] NFInstance removed [%s]",
+    log_debug("[%s] NFInstance removed [%s]",
             nf_instance->nf_type ?
                 OpenAPI_nf_type_ToString(nf_instance->nf_type) : "NULL",
             nf_instance->id);
@@ -1414,8 +1412,8 @@ ogs_sbi_nf_instance_t *ogs_sbi_nf_instance_find_by_discovery_param(
 {
     ogs_sbi_nf_instance_t *nf_instance = NULL;
 
-    ogs_assert(target_nf_type);
-    ogs_assert(requester_nf_type);
+    log_assert(target_nf_type);
+    log_assert(requester_nf_type);
 
     ogs_list_for_each(&ogs_sbi_self()->nf_instance_list, nf_instance) {
         if (ogs_sbi_discovery_param_is_matched(
@@ -1439,15 +1437,15 @@ ogs_sbi_nf_instance_t *ogs_sbi_nf_instance_find_by_service_type(
     OpenAPI_nf_type_e target_nf_type = OpenAPI_nf_type_NULL;
     char *service_name = NULL;
 
-    ogs_assert(requester_nf_type);
-    ogs_assert(service_type);
+    log_assert(requester_nf_type);
+    log_assert(service_type);
     target_nf_type = ogs_sbi_service_type_to_nf_type(service_type);
-    ogs_assert(target_nf_type);
+    log_assert(target_nf_type);
     service_name = (char *)ogs_sbi_service_type_to_name(service_type);
-    ogs_assert(service_name);
+    log_assert(service_name);
 
     discovery_option = ogs_sbi_discovery_option_new();
-    ogs_assert(discovery_option);
+    log_assert(discovery_option);
     ogs_sbi_discovery_option_add_service_names(discovery_option, service_name);
 
     nf_instance = ogs_sbi_nf_instance_find_by_discovery_param(
@@ -1469,20 +1467,20 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_add(
 {
     ogs_sbi_nf_service_t *nf_service = NULL;
 
-    ogs_assert(nf_instance);
-    ogs_assert(id);
-    ogs_assert(name);
+    log_assert(nf_instance);
+    log_assert(id);
+    log_assert(name);
 
     ogs_pool_alloc(&nf_service_pool, &nf_service);
-    ogs_assert(nf_service);
+    log_assert(nf_service);
     memset(nf_service, 0, sizeof(ogs_sbi_nf_service_t));
 
     nf_service->id = ogs_strdup(id);
-    ogs_assert(nf_service->id);
+    log_assert(nf_service->id);
     nf_service->name = ogs_strdup(name);
-    ogs_assert(nf_service->name);
+    log_assert(nf_service->name);
     nf_service->scheme = scheme;
-    ogs_assert(nf_service->scheme);
+    log_assert(nf_service->scheme);
 
     nf_service->status = OpenAPI_nf_service_status_REGISTERED;
 
@@ -1500,22 +1498,22 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_add(
 void ogs_sbi_nf_service_add_version(ogs_sbi_nf_service_t *nf_service,
         const char *in_uri, const char *full, const char *expiry)
 {
-    ogs_assert(nf_service);
+    log_assert(nf_service);
 
-    ogs_assert(in_uri);
-    ogs_assert(full);
+    log_assert(in_uri);
+    log_assert(full);
 
     if (nf_service->num_of_version < OGS_SBI_MAX_NUM_OF_SERVICE_VERSION) {
         nf_service->version[nf_service->num_of_version].in_uri =
             ogs_strdup(in_uri);
-        ogs_assert(nf_service->version[nf_service->num_of_version].in_uri);
+        log_assert(nf_service->version[nf_service->num_of_version].in_uri);
         nf_service->version[nf_service->num_of_version].full =
             ogs_strdup(full);
-        ogs_assert(nf_service->version[nf_service->num_of_version].full);
+        log_assert(nf_service->version[nf_service->num_of_version].full);
         if (expiry) {
             nf_service->version[nf_service->num_of_version].expiry =
                 ogs_strdup(expiry);
-            ogs_assert(
+            log_assert(
                 nf_service->version[nf_service->num_of_version].expiry);
 
         }
@@ -1526,8 +1524,8 @@ void ogs_sbi_nf_service_add_version(ogs_sbi_nf_service_t *nf_service,
 void ogs_sbi_nf_service_add_allowed_nf_type(
         ogs_sbi_nf_service_t *nf_service, OpenAPI_nf_type_e allowed_nf_type)
 {
-    ogs_assert(nf_service);
-    ogs_assert(allowed_nf_type);
+    log_assert(nf_service);
+    log_assert(allowed_nf_type);
 
     if (nf_service->num_of_allowed_nf_type < OGS_SBI_MAX_NUM_OF_NF_TYPE) {
         nf_service->allowed_nf_type[nf_service->num_of_allowed_nf_type] =
@@ -1541,8 +1539,8 @@ bool ogs_sbi_nf_service_is_allowed_nf_type(
 {
     int i;
 
-    ogs_assert(nf_service);
-    ogs_assert(allowed_nf_type);
+    log_assert(nf_service);
+    log_assert(allowed_nf_type);
 
     if (!nf_service->num_of_allowed_nf_type) {
         return true;
@@ -1553,8 +1551,8 @@ bool ogs_sbi_nf_service_is_allowed_nf_type(
             return true;
     }
 
-    ogs_assert(nf_service->name);
-    ogs_error("Not allowed nf-type[%s] in nf-service[%s]",
+    log_assert(nf_service->name);
+    log_error("Not allowed nf-type[%s] in nf-service[%s]",
             OpenAPI_nf_type_ToString(allowed_nf_type),
             nf_service->name);
     return false;
@@ -1565,9 +1563,9 @@ void ogs_sbi_nf_service_clear(ogs_sbi_nf_service_t *nf_service)
     ogs_sbi_nf_instance_t *nf_instance = NULL;
     int i;
 
-    ogs_assert(nf_service);
+    log_assert(nf_service);
     nf_instance = nf_service->nf_instance;
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     if (nf_service->fqdn)
         ogs_free(nf_service->fqdn);
@@ -1598,16 +1596,16 @@ void ogs_sbi_nf_service_remove(ogs_sbi_nf_service_t *nf_service)
 {
     ogs_sbi_nf_instance_t *nf_instance = NULL;
 
-    ogs_assert(nf_service);
+    log_assert(nf_service);
     nf_instance = nf_service->nf_instance;
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     ogs_list_remove(&nf_instance->nf_service_list, nf_service);
 
-    ogs_assert(nf_service->id);
+    log_assert(nf_service->id);
     ogs_free(nf_service->id);
 
-    ogs_assert(nf_service->name);
+    log_assert(nf_service->name);
     ogs_free(nf_service->name);
 
     ogs_sbi_nf_service_clear(nf_service);
@@ -1622,7 +1620,7 @@ void ogs_sbi_nf_service_remove_all(ogs_sbi_nf_instance_t *nf_instance)
 {
     ogs_sbi_nf_service_t *nf_service = NULL, *next_nf_service = NULL;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     ogs_list_for_each_safe(&nf_instance->nf_service_list,
             next_nf_service, nf_service)
@@ -1634,11 +1632,11 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_find_by_id(
 {
     ogs_sbi_nf_service_t *nf_service = NULL;
 
-    ogs_assert(nf_instance);
-    ogs_assert(id);
+    log_assert(nf_instance);
+    log_assert(id);
 
     ogs_list_for_each(&nf_instance->nf_service_list, nf_service) {
-        ogs_assert(nf_service->id);
+        log_assert(nf_service->id);
         if (strcmp(nf_service->id, id) == 0)
             break;
     }
@@ -1651,11 +1649,11 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_find_by_name(
 {
     ogs_sbi_nf_service_t *nf_service = NULL;
 
-    ogs_assert(nf_instance);
-    ogs_assert(name);
+    log_assert(nf_instance);
+    log_assert(name);
 
     ogs_list_for_each(&nf_instance->nf_service_list, nf_service) {
-        ogs_assert(nf_service->name);
+        log_assert(nf_service->name);
         if (strcmp(nf_service->name, name) == 0)
             return nf_service;
     }
@@ -1668,12 +1666,12 @@ ogs_sbi_nf_info_t *ogs_sbi_nf_info_add(
 {
     ogs_sbi_nf_info_t *nf_info = NULL;
 
-    ogs_assert(list);
-    ogs_assert(nf_type);
+    log_assert(list);
+    log_assert(nf_type);
 
     ogs_pool_alloc(&nf_info_pool, &nf_info);
     if (!nf_info) {
-        ogs_fatal("ogs_pool_alloc() failed");
+        log_fatal("ogs_pool_alloc() failed");
         return NULL;
     }
     memset(nf_info, 0, sizeof(*nf_info));
@@ -1687,7 +1685,7 @@ ogs_sbi_nf_info_t *ogs_sbi_nf_info_add(
 
 static void amf_info_free(ogs_sbi_amf_info_t *amf_info)
 {
-    ogs_assert(amf_info);
+    log_assert(amf_info);
 
     amf_info->num_of_guami = 0;
     amf_info->num_of_nr_tai = 0;
@@ -1697,7 +1695,7 @@ static void amf_info_free(ogs_sbi_amf_info_t *amf_info)
 static void smf_info_free(ogs_sbi_smf_info_t *smf_info)
 {
     int i, j;
-    ogs_assert(smf_info);
+    log_assert(smf_info);
 
     for (i = 0; i < smf_info->num_of_slice; i++) {
         for (j = 0; j < smf_info->slice[i].num_of_dnn; j++)
@@ -1727,8 +1725,8 @@ static void sepp_info_free(ogs_sbi_sepp_info_t *sepp_info)
 
 void ogs_sbi_nf_info_remove(ogs_list_t *list, ogs_sbi_nf_info_t *nf_info)
 {
-    ogs_assert(list);
-    ogs_assert(nf_info);
+    log_assert(list);
+    log_assert(nf_info);
 
     ogs_list_remove(list, nf_info);
 
@@ -1746,9 +1744,9 @@ void ogs_sbi_nf_info_remove(ogs_list_t *list, ogs_sbi_nf_info_t *nf_info)
         sepp_info_free(&nf_info->sepp);
         break;
     default:
-        ogs_fatal("Not implemented NF-type[%s]",
+        log_fatal("Not implemented NF-type[%s]",
                 OpenAPI_nf_type_ToString(nf_info->nf_type));
-        ogs_assert_if_reached();
+        log_assert_if_reached();
     }
 
     ogs_pool_free(&nf_info_pool, nf_info);
@@ -1758,7 +1756,7 @@ void ogs_sbi_nf_info_remove_all(ogs_list_t *list)
 {
     ogs_sbi_nf_info_t *nf_info = NULL, *next_nf_info = NULL;
 
-    ogs_assert(list);
+    log_assert(list);
 
     ogs_list_for_each_safe(list, next_nf_info, nf_info)
         ogs_sbi_nf_info_remove(list, nf_info);
@@ -1769,8 +1767,8 @@ ogs_sbi_nf_info_t *ogs_sbi_nf_info_find(
 {
     ogs_sbi_nf_info_t *nf_info = NULL;
 
-    ogs_assert(list);
-    ogs_assert(nf_type);
+    log_assert(list);
+    log_assert(nf_type);
 
     ogs_list_for_each(list, nf_info) {
         if (nf_info->nf_type == nf_type)
@@ -1785,8 +1783,8 @@ bool ogs_sbi_check_amf_info_guami(
 {
     int i;
 
-    ogs_assert(amf_info);
-    ogs_assert(guami);
+    log_assert(amf_info);
+    log_assert(guami);
 
     for (i = 0; i < amf_info->num_of_guami; i++) {
         if ((memcmp(&amf_info->guami[i].amf_id, &guami->amf_id,
@@ -1805,9 +1803,9 @@ bool ogs_sbi_check_smf_info_slice(
 {
     int i, j;
 
-    ogs_assert(smf_info);
-    ogs_assert(s_nssai);
-    ogs_assert(dnn);
+    log_assert(smf_info);
+    log_assert(s_nssai);
+    log_assert(dnn);
 
     for (i = 0; i < smf_info->num_of_slice; i++) {
         if (s_nssai->sst == smf_info->slice[i].s_nssai.sst &&
@@ -1827,8 +1825,8 @@ bool ogs_sbi_check_smf_info_tai(
 {
     int i, j;
 
-    ogs_assert(smf_info);
-    ogs_assert(tai);
+    log_assert(smf_info);
+    log_assert(tai);
 
     if (smf_info->num_of_nr_tai == 0 && smf_info->num_of_nr_tai_range == 0)
         return true;
@@ -1861,7 +1859,7 @@ void ogs_sbi_nf_instance_build_default(ogs_sbi_nf_instance_t *nf_instance)
     ogs_sbi_server_t *server = NULL;
     char *hostname = NULL;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     ogs_sbi_nf_instance_set_status(nf_instance, OpenAPI_nf_status_REGISTERED);
 
@@ -1873,7 +1871,7 @@ void ogs_sbi_nf_instance_build_default(ogs_sbi_nf_instance_t *nf_instance)
         advertise = server->advertise;
         if (!advertise)
             advertise = server->node.addr;
-        ogs_assert(advertise);
+        log_assert(advertise);
 
         /* First FQDN is selected */
         if (!hostname)
@@ -1881,8 +1879,8 @@ void ogs_sbi_nf_instance_build_default(ogs_sbi_nf_instance_t *nf_instance)
 
         if (nf_instance->num_of_ipv4 < OGS_SBI_MAX_NUM_OF_IP_ADDRESS) {
             ogs_sockaddr_t *addr = NULL;
-            ogs_assert(OGS_OK == ogs_copyaddrinfo(&addr, advertise));
-            ogs_assert(addr);
+            log_assert(OGS_OK == ogs_copyaddrinfo(&addr, advertise));
+            log_assert(addr);
 
             if (addr->ogs_sa_family == AF_INET) {
                 nf_instance->ipv4[nf_instance->num_of_ipv4] = addr;
@@ -1891,13 +1889,13 @@ void ogs_sbi_nf_instance_build_default(ogs_sbi_nf_instance_t *nf_instance)
                 nf_instance->ipv6[nf_instance->num_of_ipv6] = addr;
                 nf_instance->num_of_ipv6++;
             } else
-                ogs_assert_if_reached();
+                log_assert_if_reached();
         }
     }
 
     if (hostname) {
         nf_instance->fqdn = ogs_strdup(hostname);
-        ogs_assert(nf_instance->fqdn);
+        log_assert(nf_instance->fqdn);
     }
 
     nf_instance->time.heartbeat_interval =
@@ -1921,20 +1919,20 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_build_default(
 
     OpenAPI_uri_scheme_e scheme = OpenAPI_uri_scheme_NULL;
 
-    ogs_assert(nf_instance);
-    ogs_assert(name);
+    log_assert(nf_instance);
+    log_assert(name);
 
     ogs_uuid_get(&uuid);
     ogs_uuid_format(id, &uuid);
 
     server = ogs_sbi_server_first();
-    ogs_assert(server);
+    log_assert(server);
 
     scheme = server->scheme;
-    ogs_assert(scheme);
+    log_assert(scheme);
 
     nf_service = ogs_sbi_nf_service_add(nf_instance, id, name, scheme);
-    ogs_assert(nf_service);
+    log_assert(nf_service);
 
     hostname = NULL;
     for (server = ogs_sbi_server_first();
@@ -1944,7 +1942,7 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_build_default(
         advertise = server->advertise;
         if (!advertise)
             advertise = server->node.addr;
-        ogs_assert(advertise);
+        log_assert(advertise);
 
         /* First FQDN is selected */
         if (!hostname)
@@ -1954,8 +1952,8 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_build_default(
             bool is_port = true;
             int port = 0;
             ogs_sockaddr_t *addr = NULL;
-            ogs_assert(OGS_OK == ogs_copyaddrinfo(&addr, advertise));
-            ogs_assert(addr);
+            log_assert(OGS_OK == ogs_copyaddrinfo(&addr, advertise));
+            log_assert(addr);
 
             port = OGS_PORT(addr);
             if (nf_service->scheme == OpenAPI_uri_scheme_https) {
@@ -1971,7 +1969,7 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_build_default(
             } else if (addr->ogs_sa_family == AF_INET6) {
                 nf_service->addr[nf_service->num_of_addr].ipv6 = addr;
             } else
-                ogs_assert_if_reached();
+                log_assert_if_reached();
 
             nf_service->num_of_addr++;
         }
@@ -1979,10 +1977,10 @@ ogs_sbi_nf_service_t *ogs_sbi_nf_service_build_default(
 
     if (hostname) {
         nf_service->fqdn = ogs_strdup(hostname);
-        ogs_assert(nf_service->fqdn);
+        log_assert(nf_service->fqdn);
     }
 
-    ogs_info("NF Service [%s]", nf_service->name);
+    log_info("NF Service [%s]", nf_service->name);
 
     return nf_service;
 }
@@ -1998,7 +1996,7 @@ static ogs_sbi_client_t *nf_instance_find_client(
     uint16_t port = 0;
 
     scheme = ogs_sbi_self()->tls.client.scheme;
-    ogs_assert(scheme);
+    log_assert(scheme);
 
     switch (nf_instance->nf_type) {
     case OpenAPI_nf_type_SEPP:
@@ -2010,7 +2008,7 @@ static ogs_sbi_client_t *nf_instance_find_client(
             else if (scheme == OpenAPI_uri_scheme_http)
                 port = nf_info->sepp.http.port;
             else
-                ogs_error("Unknown scheme [%d]", scheme);
+                log_error("Unknown scheme [%d]", scheme);
         }
         break;
     case OpenAPI_nf_type_SCP:
@@ -2022,7 +2020,7 @@ static ogs_sbi_client_t *nf_instance_find_client(
             else if (scheme == OpenAPI_uri_scheme_http)
                 port = nf_info->scp.http.port;
             else
-                ogs_error("Unknown scheme [%d]", scheme);
+                log_error("Unknown scheme [%d]", scheme);
         }
         break;
     default:
@@ -2044,11 +2042,11 @@ static ogs_sbi_client_t *nf_instance_find_client(
         client = ogs_sbi_client_find(
                 scheme, nf_instance->fqdn, port, addr, addr6);
         if (!client) {
-            ogs_debug("%s: ogs_sbi_client_add()", OGS_FUNC);
+            log_debug("%s: ogs_sbi_client_add()", OGS_FUNC);
             client = ogs_sbi_client_add(
                     scheme, nf_instance->fqdn, port, addr, addr6);
             if (!client) {
-                ogs_error("%s: ogs_sbi_client_add() failed", OGS_FUNC);
+                log_error("%s: ogs_sbi_client_add() failed", OGS_FUNC);
                 return NULL;
             }
         }
@@ -2063,7 +2061,7 @@ static void nf_service_associate_client(ogs_sbi_nf_service_t *nf_service)
     ogs_sockaddr_t *addr = NULL, *addr6 = NULL;
     uint16_t port = 0;
 
-    ogs_assert(nf_service->scheme);
+    log_assert(nf_service->scheme);
 
     /* At this point, CLIENT selection method is very simple. */
     if (nf_service->num_of_addr) {
@@ -2088,17 +2086,17 @@ static void nf_service_associate_client(ogs_sbi_nf_service_t *nf_service)
         client = ogs_sbi_client_find(
                 nf_service->scheme, nf_service->fqdn, port, addr, addr6);
         if (!client) {
-            ogs_debug("%s: ogs_sbi_client_add()", OGS_FUNC);
+            log_debug("%s: ogs_sbi_client_add()", OGS_FUNC);
             client = ogs_sbi_client_add(
                     nf_service->scheme, nf_service->fqdn, port, addr, addr6);
             if (!client) {
-                ogs_error("%s: ogs_sbi_client_add() failed", OGS_FUNC);
+                log_error("%s: ogs_sbi_client_add() failed", OGS_FUNC);
                 return;
             }
         }
     }
 
-    ogs_debug("[%s] NFService associated [%s]",
+    log_debug("[%s] NFService associated [%s]",
             nf_service->name, nf_service->id);
     if (client)
         OGS_SBI_SETUP_CLIENT(nf_service, client);
@@ -2108,7 +2106,7 @@ static void nf_service_associate_client_all(ogs_sbi_nf_instance_t *nf_instance)
 {
     ogs_sbi_nf_service_t *nf_service = NULL;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     ogs_list_for_each(&nf_instance->nf_service_list, nf_service)
         nf_service_associate_client(nf_service);
@@ -2127,9 +2125,9 @@ bool ogs_sbi_discovery_option_is_matched(
     bool need_smf_any = false;     /* any SMF-specific filter */
     int i;
 
-    ogs_assert(nf_instance);
-    ogs_assert(requester_nf_type);
-    ogs_assert(discovery_option);
+    log_assert(nf_instance);
+    log_assert(requester_nf_type);
+    log_assert(discovery_option);
 
     /* --------------------------------------------------------------
      * Step 1. Common pre-checks for all NF types
@@ -2170,7 +2168,7 @@ bool ogs_sbi_discovery_option_is_matched(
      * -------------------------------------------------------------- */
     ogs_list_for_each(&nf_instance->nf_info_list, nf_info) {
         if (nf_instance->nf_type != nf_info->nf_type) {
-            ogs_error("Invalid NF-Type [%d:%d]",
+            log_error("Invalid NF-Type [%d:%d]",
                 nf_instance->nf_type, nf_info->nf_type);
             return false;
         }
@@ -2242,9 +2240,9 @@ bool ogs_sbi_discovery_option_service_names_is_matched(
     ogs_sbi_nf_service_t *nf_service = NULL;
     int i;
 
-    ogs_assert(nf_instance);
-    ogs_assert(requester_nf_type);
-    ogs_assert(discovery_option);
+    log_assert(nf_instance);
+    log_assert(requester_nf_type);
+    log_assert(discovery_option);
 
     ogs_list_for_each(&nf_instance->nf_service_list, nf_service) {
         for (i = 0; i < discovery_option->num_of_service_names; i++) {
@@ -2256,7 +2254,7 @@ bool ogs_sbi_discovery_option_service_names_is_matched(
                         nf_service, requester_nf_type) == true) {
                     return true;
                 } else {
-                    ogs_debug("Service [%s] does not allow NF type [%s] "
+                    log_debug("Service [%s] does not allow NF type [%s] "
                             "(num_of_allowed_nf_type=%d)",
                             nf_service->name,
                             OpenAPI_nf_type_ToString(requester_nf_type),
@@ -2273,7 +2271,7 @@ bool ogs_sbi_discovery_param_serving_plmn_list_is_matched(
 {
     int i, j;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     /*
      * The PLMN-ID is optional and may not be set.
@@ -2302,8 +2300,8 @@ bool ogs_sbi_discovery_option_requester_plmn_list_is_matched(
 {
     int i, j;
 
-    ogs_assert(nf_instance);
-    ogs_assert(discovery_option);
+    log_assert(nf_instance);
+    log_assert(discovery_option);
 
     for (i = 0; i < nf_instance->num_of_plmn_id; i++) {
         for (j = 0; j < discovery_option->num_of_requester_plmn_list; j++) {
@@ -2323,8 +2321,8 @@ bool ogs_sbi_discovery_option_target_plmn_list_is_matched(
 {
     int i, j;
 
-    ogs_assert(nf_instance);
-    ogs_assert(discovery_option);
+    log_assert(nf_instance);
+    log_assert(discovery_option);
 
     for (i = 0; i < nf_instance->num_of_plmn_id; i++) {
         for (j = 0; j < discovery_option->num_of_target_plmn_list; j++) {
@@ -2342,8 +2340,8 @@ bool ogs_sbi_discovery_option_hnrf_uri_is_matched(
         ogs_sbi_nf_instance_t *nf_instance,
         ogs_sbi_discovery_option_t *discovery_option)
 {
-    ogs_assert(nf_instance);
-    ogs_assert(discovery_option);
+    log_assert(nf_instance);
+    log_assert(discovery_option);
 
     if (nf_instance->hnrf_uri == NULL && discovery_option->hnrf_uri == NULL)
         return true;
@@ -2361,9 +2359,9 @@ bool ogs_sbi_discovery_param_is_matched(
         OpenAPI_nf_type_e requester_nf_type,
         ogs_sbi_discovery_option_t *discovery_option)
 {
-    ogs_assert(nf_instance);
-    ogs_assert(target_nf_type);
-    ogs_assert(requester_nf_type);
+    log_assert(nf_instance);
+    log_assert(target_nf_type);
+    log_assert(requester_nf_type);
 
     if (NF_INSTANCE_EXCLUDED_FROM_DISCOVERY(nf_instance))
         return false;
@@ -2447,12 +2445,12 @@ void ogs_sbi_client_associate(ogs_sbi_nf_instance_t *nf_instance)
 {
     ogs_sbi_client_t *client = NULL;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     client = nf_instance_find_client(nf_instance);
-    ogs_assert(client);
+    log_assert(client);
 
-    ogs_debug("[%s] NFInstance associated [%s]",
+    log_debug("[%s] NFInstance associated [%s]",
             nf_instance->nf_type ?
                 OpenAPI_nf_type_ToString(nf_instance->nf_type) : "NULL",
             nf_instance->id);
@@ -2477,12 +2475,12 @@ ogs_sbi_client_t *ogs_sbi_client_find_by_service_name(
     ogs_sbi_nf_service_t *nf_service = NULL;
     int i;
 
-    ogs_assert(nf_instance);
-    ogs_assert(name);
-    ogs_assert(version);
+    log_assert(nf_instance);
+    log_assert(name);
+    log_assert(version);
 
     ogs_list_for_each(&nf_instance->nf_service_list, nf_service) {
-        ogs_assert(nf_service->name);
+        log_assert(nf_service->name);
         if (strcmp(nf_service->name, name) == 0) {
             for (i = 0; i < nf_service->num_of_version; i++) {
                 if (strcmp(nf_service->version[i].in_uri, version) == 0) {
@@ -2501,11 +2499,11 @@ ogs_sbi_client_t *ogs_sbi_client_find_by_service_type(
 {
     ogs_sbi_nf_service_t *nf_service = NULL;
 
-    ogs_assert(nf_instance);
-    ogs_assert(service_type);
+    log_assert(nf_instance);
+    log_assert(service_type);
 
     ogs_list_for_each(&nf_instance->nf_service_list, nf_service) {
-        ogs_assert(nf_service->name);
+        log_assert(nf_service->name);
         if (ogs_sbi_service_type_from_name(nf_service->name) == service_type)
             return nf_service->client;
     }
@@ -2517,7 +2515,7 @@ void ogs_sbi_object_free(ogs_sbi_object_t *sbi_object)
 {
     int i;
 
-    ogs_assert(sbi_object);
+    log_assert(sbi_object);
 
     /* Remove all remaining transactions */
     ogs_sbi_xact_remove_all(sbi_object);
@@ -2543,11 +2541,11 @@ ogs_sbi_xact_t *ogs_sbi_xact_add(
 {
     ogs_sbi_xact_t *xact = NULL;
 
-    ogs_assert(sbi_object);
+    log_assert(sbi_object);
 
     ogs_pool_id_calloc(&xact_pool, &xact);
     if (!xact) {
-        ogs_error("ogs_pool_id_calloc() failed");
+        log_error("ogs_pool_id_calloc() failed");
         return NULL;
     }
 
@@ -2555,7 +2553,7 @@ ogs_sbi_xact_t *ogs_sbi_xact_add(
     xact->sbi_object = sbi_object;
     xact->service_type = service_type;
     xact->requester_nf_type = NF_INSTANCE_TYPE(ogs_sbi_self()->nf_instance);
-    ogs_assert(xact->requester_nf_type);
+    log_assert(xact->requester_nf_type);
 
     /*
      * Insert one service-name in the discovery option in the function below.
@@ -2565,7 +2563,7 @@ ogs_sbi_xact_t *ogs_sbi_xact_add(
      */
     if (!discovery_option) {
         discovery_option = ogs_sbi_discovery_option_new();
-        ogs_assert(discovery_option);
+        log_assert(discovery_option);
 
         /* ALWAYS add Service-MAP to requester-features in Discovery Option */
         OGS_SBI_FEATURES_SET(discovery_option->requester_features,
@@ -2583,7 +2581,7 @@ ogs_sbi_xact_t *ogs_sbi_xact_add(
             ogs_app()->timer_mgr, ogs_timer_sbi_client_wait_expire,
             OGS_UINT_TO_POINTER(xact->id));
     if (!xact->t_response) {
-        ogs_error("ogs_timer_add() failed");
+        log_error("ogs_timer_add() failed");
 
         if (xact->discovery_option)
             ogs_sbi_discovery_option_free(xact->discovery_option);
@@ -2598,7 +2596,7 @@ ogs_sbi_xact_t *ogs_sbi_xact_add(
     if (build) {
         xact->request = (*build)(context, data);
         if (!xact->request) {
-            ogs_error("SBI build failed");
+            log_error("SBI build failed");
 
             if (xact->discovery_option)
                 ogs_sbi_discovery_option_free(xact->discovery_option);
@@ -2611,10 +2609,10 @@ ogs_sbi_xact_t *ogs_sbi_xact_add(
         if (!xact->request->h.uri) {
             const char *service_name = NULL;
 
-            ogs_assert(xact->service_type);
+            log_assert(xact->service_type);
             service_name = ogs_sbi_service_type_to_name(xact->service_type);
-            ogs_assert(service_name);
-            ogs_assert(xact->request->h.service.name);
+            log_assert(service_name);
+            log_assert(xact->request->h.service.name);
 
             /*
              * Make sure the service matches
@@ -2628,10 +2626,10 @@ ogs_sbi_xact_t *ogs_sbi_xact_add(
              */
 
             if (strcmp(service_name, xact->request->h.service.name) != 0) {
-                ogs_fatal("[%s:%d] is not the same with [%s]",
+                log_fatal("[%s:%d] is not the same with [%s]",
                             service_name, xact->service_type,
                             xact->request->h.service.name);
-                ogs_assert_if_reached();
+                log_assert_if_reached();
             }
         }
     }
@@ -2645,19 +2643,19 @@ void ogs_sbi_xact_remove(ogs_sbi_xact_t *xact)
 {
     ogs_sbi_object_t *sbi_object = NULL;
 
-    ogs_assert(xact);
+    log_assert(xact);
 
     sbi_object = xact->sbi_object;
-    ogs_assert(sbi_object);
+    log_assert(sbi_object);
 
     if (xact->discovery_option) {
-        ogs_debug("ogs_sbi_xact_remove: freeing xact->discovery_option=%p",
+        log_debug("ogs_sbi_xact_remove: freeing xact->discovery_option=%p",
                 xact->discovery_option);
         ogs_sbi_discovery_option_free(xact->discovery_option);
         xact->discovery_option = NULL; /* Prevent double-free */
     }
 
-    ogs_assert(xact->t_response);
+    log_assert(xact->t_response);
     ogs_timer_delete(xact->t_response);
 
     if (xact->request)
@@ -2674,7 +2672,7 @@ void ogs_sbi_xact_remove_all(ogs_sbi_object_t *sbi_object)
 {
     ogs_sbi_xact_t *xact = NULL, *next_xact = NULL;
 
-    ogs_assert(sbi_object);
+    log_assert(sbi_object);
 
     ogs_list_for_each_safe(&sbi_object->xact_list, next_xact, xact)
         ogs_sbi_xact_remove(xact);
@@ -2691,10 +2689,10 @@ ogs_sbi_subscription_spec_t *ogs_sbi_subscription_spec_add(
     ogs_sbi_subscription_spec_t *subscription_spec = NULL;
 
     /* Issue #2630 : The format of subscrCond is invalid. Must be 'oneOf'. */
-    ogs_assert(!nf_type || !service_name);
+    log_assert(!nf_type || !service_name);
 
     ogs_pool_alloc(&subscription_spec_pool, &subscription_spec);
-    ogs_assert(subscription_spec);
+    log_assert(subscription_spec);
     memset(subscription_spec, 0, sizeof(ogs_sbi_subscription_spec_t));
 
     if (nf_type)
@@ -2702,8 +2700,8 @@ ogs_sbi_subscription_spec_t *ogs_sbi_subscription_spec_add(
     else if (service_name)
         subscription_spec->subscr_cond.service_name = ogs_strdup(service_name);
     else {
-        ogs_fatal("SubscrCond must be 'oneOf'.");
-        ogs_assert_if_reached();
+        log_fatal("SubscrCond must be 'oneOf'.");
+        log_assert_if_reached();
     }
 
     ogs_list_add(&ogs_sbi_self()->subscription_spec_list, subscription_spec);
@@ -2714,7 +2712,7 @@ ogs_sbi_subscription_spec_t *ogs_sbi_subscription_spec_add(
 void ogs_sbi_subscription_spec_remove(
         ogs_sbi_subscription_spec_t *subscription_spec)
 {
-    ogs_assert(subscription_spec);
+    log_assert(subscription_spec);
 
     ogs_list_remove(&ogs_sbi_self()->subscription_spec_list, subscription_spec);
 
@@ -2739,7 +2737,7 @@ ogs_sbi_subscription_data_t *ogs_sbi_subscription_data_add(void)
     ogs_sbi_subscription_data_t *subscription_data = NULL;
 
     ogs_pool_alloc(&subscription_data_pool, &subscription_data);
-    ogs_assert(subscription_data);
+    log_assert(subscription_data);
     memset(subscription_data, 0, sizeof(ogs_sbi_subscription_data_t));
 
     ogs_list_add(&ogs_sbi_self()->subscription_data_list, subscription_data);
@@ -2750,31 +2748,31 @@ ogs_sbi_subscription_data_t *ogs_sbi_subscription_data_add(void)
 void ogs_sbi_subscription_data_set_resource_uri(
         ogs_sbi_subscription_data_t *subscription_data, char *resource_uri)
 {
-    ogs_assert(subscription_data);
-    ogs_assert(resource_uri);
+    log_assert(subscription_data);
+    log_assert(resource_uri);
 
     if (subscription_data->resource_uri)
         ogs_free(subscription_data->resource_uri);
     subscription_data->resource_uri = ogs_strdup(resource_uri);
-    ogs_assert(subscription_data->resource_uri);
+    log_assert(subscription_data->resource_uri);
 }
 
 void ogs_sbi_subscription_data_set_id(
         ogs_sbi_subscription_data_t *subscription_data, char *id)
 {
-    ogs_assert(subscription_data);
-    ogs_assert(id);
+    log_assert(subscription_data);
+    log_assert(id);
 
     if (subscription_data->id)
         ogs_free(subscription_data->id);
     subscription_data->id = ogs_strdup(id);
-    ogs_assert(subscription_data->id);
+    log_assert(subscription_data->id);
 }
 
 void ogs_sbi_subscription_data_remove(
         ogs_sbi_subscription_data_t *subscription_data)
 {
-    ogs_assert(subscription_data);
+    log_assert(subscription_data);
 
     ogs_list_remove(&ogs_sbi_self()->subscription_data_list, subscription_data);
 
@@ -2814,7 +2812,7 @@ void ogs_sbi_subscription_data_remove_all_by_nf_instance_id(
     ogs_sbi_subscription_data_t *subscription_data = NULL;
     ogs_sbi_subscription_data_t *next_subscription_data = NULL;
 
-    ogs_assert(nf_instance_id);
+    log_assert(nf_instance_id);
 
     ogs_list_for_each_safe(&ogs_sbi_self()->subscription_data_list,
             next_subscription_data, subscription_data) {
@@ -2840,11 +2838,11 @@ ogs_sbi_subscription_data_t *ogs_sbi_subscription_data_find(char *id)
 {
     ogs_sbi_subscription_data_t *subscription_data = NULL;
 
-    ogs_assert(id);
+    log_assert(id);
 
     ogs_list_for_each(&ogs_sbi_self()->subscription_data_list,
             subscription_data) {
-        ogs_assert(subscription_data->id);
+        log_assert(subscription_data->id);
         if (strcmp(subscription_data->id, id) == 0)
             break;
     }
@@ -2858,7 +2856,7 @@ bool ogs_sbi_supi_in_vplmn(char *supi)
     bool home_network = false;
     int i;
 
-    ogs_assert(supi);
+    log_assert(supi);
 
     if (ogs_local_conf()->num_of_serving_plmn_id == 0) {
         return false;
@@ -2887,19 +2885,19 @@ bool ogs_sbi_plmn_id_in_vplmn(ogs_plmn_id_t *plmn_id)
     bool home_network = false;
     int i;
 
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
 
     if (ogs_local_conf()->num_of_serving_plmn_id == 0) {
         return false;
     }
 
     if (ogs_plmn_id_mcc(plmn_id) == 0) {
-        ogs_error("No MCC");
+        log_error("No MCC");
         return false;
     }
 
     if (ogs_plmn_id_mnc(plmn_id) == 0) {
-        ogs_error("No MNC");
+        log_error("No MNC");
         return false;
     }
 
@@ -2922,7 +2920,7 @@ bool ogs_sbi_fqdn_in_vplmn(char *fqdn)
     bool home_network = false;
     int i;
 
-    ogs_assert(fqdn);
+    log_assert(fqdn);
 
     if (ogs_local_conf()->num_of_serving_plmn_id == 0) {
         return false;
@@ -2955,21 +2953,21 @@ void ogs_sbi_keylog_callback(const SSL *ssl, const char *line)
     FILE *file = NULL;
     const char *sslkeylog_file = NULL;
 
-    ogs_assert(ssl);
-    ogs_assert(line);
+    log_assert(ssl);
+    log_assert(line);
 
     /* Retrieve SSL_CTX from SSL object */
     ctx = SSL_get_SSL_CTX(ssl);
-    ogs_assert(ctx);
+    log_assert(ctx);
 
     sslkeylog_file = (const char *)SSL_CTX_get_app_data(ctx);
-    ogs_assert(sslkeylog_file);
+    log_assert(sslkeylog_file);
 
     file = fopen(sslkeylog_file, "a");
     if (file) {
         fprintf(file, "%s\n", line);
         fclose(file);
     } else {
-        ogs_error("Failed to open SSL key log file: %s", sslkeylog_file);
+        log_error("Failed to open SSL key log file: %s", sslkeylog_file);
     }
 }

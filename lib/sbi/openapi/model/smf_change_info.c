@@ -10,7 +10,7 @@ OpenAPI_smf_change_info_t *OpenAPI_smf_change_info_create(
 )
 {
     OpenAPI_smf_change_info_t *smf_change_info_local_var = ogs_malloc(sizeof(OpenAPI_smf_change_info_t));
-    ogs_assert(smf_change_info_local_var);
+    log_assert(smf_change_info_local_var);
 
     smf_change_info_local_var->pdu_session_id_list = pdu_session_id_list;
     smf_change_info_local_var->smf_change_ind = smf_change_ind;
@@ -41,37 +41,37 @@ cJSON *OpenAPI_smf_change_info_convertToJSON(OpenAPI_smf_change_info_t *smf_chan
     OpenAPI_lnode_t *node = NULL;
 
     if (smf_change_info == NULL) {
-        ogs_error("OpenAPI_smf_change_info_convertToJSON() failed [SmfChangeInfo]");
+        log_error("OpenAPI_smf_change_info_convertToJSON() failed [SmfChangeInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!smf_change_info->pdu_session_id_list) {
-        ogs_error("OpenAPI_smf_change_info_convertToJSON() failed [pdu_session_id_list]");
+        log_error("OpenAPI_smf_change_info_convertToJSON() failed [pdu_session_id_list]");
         return NULL;
     }
     cJSON *pdu_session_id_listList = cJSON_AddArrayToObject(item, "pduSessionIdList");
     if (pdu_session_id_listList == NULL) {
-        ogs_error("OpenAPI_smf_change_info_convertToJSON() failed [pdu_session_id_list]");
+        log_error("OpenAPI_smf_change_info_convertToJSON() failed [pdu_session_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(smf_change_info->pdu_session_id_list, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_smf_change_info_convertToJSON() failed [pdu_session_id_list]");
+            log_error("OpenAPI_smf_change_info_convertToJSON() failed [pdu_session_id_list]");
             goto end;
         }
         if (cJSON_AddNumberToObject(pdu_session_id_listList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_smf_change_info_convertToJSON() failed [pdu_session_id_list]");
+            log_error("OpenAPI_smf_change_info_convertToJSON() failed [pdu_session_id_list]");
             goto end;
         }
     }
 
     if (smf_change_info->smf_change_ind == OpenAPI_smf_change_indication_NULL) {
-        ogs_error("OpenAPI_smf_change_info_convertToJSON() failed [smf_change_ind]");
+        log_error("OpenAPI_smf_change_info_convertToJSON() failed [smf_change_ind]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "smfChangeInd", OpenAPI_smf_change_indication_ToString(smf_change_info->smf_change_ind)) == NULL) {
-        ogs_error("OpenAPI_smf_change_info_convertToJSON() failed [smf_change_ind]");
+        log_error("OpenAPI_smf_change_info_convertToJSON() failed [smf_change_ind]");
         goto end;
     }
 
@@ -89,12 +89,12 @@ OpenAPI_smf_change_info_t *OpenAPI_smf_change_info_parseFromJSON(cJSON *smf_chan
     OpenAPI_smf_change_indication_e smf_change_indVariable = 0;
     pdu_session_id_list = cJSON_GetObjectItemCaseSensitive(smf_change_infoJSON, "pduSessionIdList");
     if (!pdu_session_id_list) {
-        ogs_error("OpenAPI_smf_change_info_parseFromJSON() failed [pdu_session_id_list]");
+        log_error("OpenAPI_smf_change_info_parseFromJSON() failed [pdu_session_id_list]");
         goto end;
     }
         cJSON *pdu_session_id_list_local = NULL;
         if (!cJSON_IsArray(pdu_session_id_list)) {
-            ogs_error("OpenAPI_smf_change_info_parseFromJSON() failed [pdu_session_id_list]");
+            log_error("OpenAPI_smf_change_info_parseFromJSON() failed [pdu_session_id_list]");
             goto end;
         }
 
@@ -104,12 +104,12 @@ OpenAPI_smf_change_info_t *OpenAPI_smf_change_info_parseFromJSON(cJSON *smf_chan
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(pdu_session_id_list_local)) {
-                ogs_error("OpenAPI_smf_change_info_parseFromJSON() failed [pdu_session_id_list]");
+                log_error("OpenAPI_smf_change_info_parseFromJSON() failed [pdu_session_id_list]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_smf_change_info_parseFromJSON() failed [pdu_session_id_list]");
+                log_error("OpenAPI_smf_change_info_parseFromJSON() failed [pdu_session_id_list]");
                 goto end;
             }
             *localDouble = pdu_session_id_list_local->valuedouble;
@@ -118,11 +118,11 @@ OpenAPI_smf_change_info_t *OpenAPI_smf_change_info_parseFromJSON(cJSON *smf_chan
 
     smf_change_ind = cJSON_GetObjectItemCaseSensitive(smf_change_infoJSON, "smfChangeInd");
     if (!smf_change_ind) {
-        ogs_error("OpenAPI_smf_change_info_parseFromJSON() failed [smf_change_ind]");
+        log_error("OpenAPI_smf_change_info_parseFromJSON() failed [smf_change_ind]");
         goto end;
     }
     if (!cJSON_IsString(smf_change_ind)) {
-        ogs_error("OpenAPI_smf_change_info_parseFromJSON() failed [smf_change_ind]");
+        log_error("OpenAPI_smf_change_info_parseFromJSON() failed [smf_change_ind]");
         goto end;
     }
     smf_change_indVariable = OpenAPI_smf_change_indication_FromString(smf_change_ind->valuestring);
@@ -149,10 +149,10 @@ OpenAPI_smf_change_info_t *OpenAPI_smf_change_info_copy(OpenAPI_smf_change_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_smf_change_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_smf_change_info_convertToJSON() failed");
+        log_error("OpenAPI_smf_change_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -160,14 +160,14 @@ OpenAPI_smf_change_info_t *OpenAPI_smf_change_info_copy(OpenAPI_smf_change_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

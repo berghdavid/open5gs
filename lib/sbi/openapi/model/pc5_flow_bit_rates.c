@@ -10,7 +10,7 @@ OpenAPI_pc5_flow_bit_rates_t *OpenAPI_pc5_flow_bit_rates_create(
 )
 {
     OpenAPI_pc5_flow_bit_rates_t *pc5_flow_bit_rates_local_var = ogs_malloc(sizeof(OpenAPI_pc5_flow_bit_rates_t));
-    ogs_assert(pc5_flow_bit_rates_local_var);
+    log_assert(pc5_flow_bit_rates_local_var);
 
     pc5_flow_bit_rates_local_var->gua_fbr = gua_fbr;
     pc5_flow_bit_rates_local_var->max_fbr = max_fbr;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_pc5_flow_bit_rates_convertToJSON(OpenAPI_pc5_flow_bit_rates_t *pc
     OpenAPI_lnode_t *node = NULL;
 
     if (pc5_flow_bit_rates == NULL) {
-        ogs_error("OpenAPI_pc5_flow_bit_rates_convertToJSON() failed [Pc5FlowBitRates]");
+        log_error("OpenAPI_pc5_flow_bit_rates_convertToJSON() failed [Pc5FlowBitRates]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (pc5_flow_bit_rates->gua_fbr) {
     if (cJSON_AddStringToObject(item, "guaFbr", pc5_flow_bit_rates->gua_fbr) == NULL) {
-        ogs_error("OpenAPI_pc5_flow_bit_rates_convertToJSON() failed [gua_fbr]");
+        log_error("OpenAPI_pc5_flow_bit_rates_convertToJSON() failed [gua_fbr]");
         goto end;
     }
     }
 
     if (pc5_flow_bit_rates->max_fbr) {
     if (cJSON_AddStringToObject(item, "maxFbr", pc5_flow_bit_rates->max_fbr) == NULL) {
-        ogs_error("OpenAPI_pc5_flow_bit_rates_convertToJSON() failed [max_fbr]");
+        log_error("OpenAPI_pc5_flow_bit_rates_convertToJSON() failed [max_fbr]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_pc5_flow_bit_rates_t *OpenAPI_pc5_flow_bit_rates_parseFromJSON(cJSON *pc
     gua_fbr = cJSON_GetObjectItemCaseSensitive(pc5_flow_bit_ratesJSON, "guaFbr");
     if (gua_fbr) {
     if (!cJSON_IsString(gua_fbr) && !cJSON_IsNull(gua_fbr)) {
-        ogs_error("OpenAPI_pc5_flow_bit_rates_parseFromJSON() failed [gua_fbr]");
+        log_error("OpenAPI_pc5_flow_bit_rates_parseFromJSON() failed [gua_fbr]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_pc5_flow_bit_rates_t *OpenAPI_pc5_flow_bit_rates_parseFromJSON(cJSON *pc
     max_fbr = cJSON_GetObjectItemCaseSensitive(pc5_flow_bit_ratesJSON, "maxFbr");
     if (max_fbr) {
     if (!cJSON_IsString(max_fbr) && !cJSON_IsNull(max_fbr)) {
-        ogs_error("OpenAPI_pc5_flow_bit_rates_parseFromJSON() failed [max_fbr]");
+        log_error("OpenAPI_pc5_flow_bit_rates_parseFromJSON() failed [max_fbr]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_pc5_flow_bit_rates_t *OpenAPI_pc5_flow_bit_rates_copy(OpenAPI_pc5_flow_b
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pc5_flow_bit_rates_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pc5_flow_bit_rates_convertToJSON() failed");
+        log_error("OpenAPI_pc5_flow_bit_rates_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_pc5_flow_bit_rates_t *OpenAPI_pc5_flow_bit_rates_copy(OpenAPI_pc5_flow_b
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

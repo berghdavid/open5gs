@@ -11,7 +11,7 @@ OpenAPI_av5g_aka_t *OpenAPI_av5g_aka_create(
 )
 {
     OpenAPI_av5g_aka_t *av5g_aka_local_var = ogs_malloc(sizeof(OpenAPI_av5g_aka_t));
-    ogs_assert(av5g_aka_local_var);
+    log_assert(av5g_aka_local_var);
 
     av5g_aka_local_var->rand = rand;
     av5g_aka_local_var->hxres_star = hxres_star;
@@ -48,35 +48,35 @@ cJSON *OpenAPI_av5g_aka_convertToJSON(OpenAPI_av5g_aka_t *av5g_aka)
     OpenAPI_lnode_t *node = NULL;
 
     if (av5g_aka == NULL) {
-        ogs_error("OpenAPI_av5g_aka_convertToJSON() failed [Av5gAka]");
+        log_error("OpenAPI_av5g_aka_convertToJSON() failed [Av5gAka]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!av5g_aka->rand) {
-        ogs_error("OpenAPI_av5g_aka_convertToJSON() failed [rand]");
+        log_error("OpenAPI_av5g_aka_convertToJSON() failed [rand]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "rand", av5g_aka->rand) == NULL) {
-        ogs_error("OpenAPI_av5g_aka_convertToJSON() failed [rand]");
+        log_error("OpenAPI_av5g_aka_convertToJSON() failed [rand]");
         goto end;
     }
 
     if (!av5g_aka->hxres_star) {
-        ogs_error("OpenAPI_av5g_aka_convertToJSON() failed [hxres_star]");
+        log_error("OpenAPI_av5g_aka_convertToJSON() failed [hxres_star]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "hxresStar", av5g_aka->hxres_star) == NULL) {
-        ogs_error("OpenAPI_av5g_aka_convertToJSON() failed [hxres_star]");
+        log_error("OpenAPI_av5g_aka_convertToJSON() failed [hxres_star]");
         goto end;
     }
 
     if (!av5g_aka->autn) {
-        ogs_error("OpenAPI_av5g_aka_convertToJSON() failed [autn]");
+        log_error("OpenAPI_av5g_aka_convertToJSON() failed [autn]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "autn", av5g_aka->autn) == NULL) {
-        ogs_error("OpenAPI_av5g_aka_convertToJSON() failed [autn]");
+        log_error("OpenAPI_av5g_aka_convertToJSON() failed [autn]");
         goto end;
     }
 
@@ -93,31 +93,31 @@ OpenAPI_av5g_aka_t *OpenAPI_av5g_aka_parseFromJSON(cJSON *av5g_akaJSON)
     cJSON *autn = NULL;
     rand = cJSON_GetObjectItemCaseSensitive(av5g_akaJSON, "rand");
     if (!rand) {
-        ogs_error("OpenAPI_av5g_aka_parseFromJSON() failed [rand]");
+        log_error("OpenAPI_av5g_aka_parseFromJSON() failed [rand]");
         goto end;
     }
     if (!cJSON_IsString(rand)) {
-        ogs_error("OpenAPI_av5g_aka_parseFromJSON() failed [rand]");
+        log_error("OpenAPI_av5g_aka_parseFromJSON() failed [rand]");
         goto end;
     }
 
     hxres_star = cJSON_GetObjectItemCaseSensitive(av5g_akaJSON, "hxresStar");
     if (!hxres_star) {
-        ogs_error("OpenAPI_av5g_aka_parseFromJSON() failed [hxres_star]");
+        log_error("OpenAPI_av5g_aka_parseFromJSON() failed [hxres_star]");
         goto end;
     }
     if (!cJSON_IsString(hxres_star)) {
-        ogs_error("OpenAPI_av5g_aka_parseFromJSON() failed [hxres_star]");
+        log_error("OpenAPI_av5g_aka_parseFromJSON() failed [hxres_star]");
         goto end;
     }
 
     autn = cJSON_GetObjectItemCaseSensitive(av5g_akaJSON, "autn");
     if (!autn) {
-        ogs_error("OpenAPI_av5g_aka_parseFromJSON() failed [autn]");
+        log_error("OpenAPI_av5g_aka_parseFromJSON() failed [autn]");
         goto end;
     }
     if (!cJSON_IsString(autn)) {
-        ogs_error("OpenAPI_av5g_aka_parseFromJSON() failed [autn]");
+        log_error("OpenAPI_av5g_aka_parseFromJSON() failed [autn]");
         goto end;
     }
 
@@ -137,10 +137,10 @@ OpenAPI_av5g_aka_t *OpenAPI_av5g_aka_copy(OpenAPI_av5g_aka_t *dst, OpenAPI_av5g_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_av5g_aka_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_av5g_aka_convertToJSON() failed");
+        log_error("OpenAPI_av5g_aka_convertToJSON() failed");
         return NULL;
     }
 
@@ -148,14 +148,14 @@ OpenAPI_av5g_aka_t *OpenAPI_av5g_aka_copy(OpenAPI_av5g_aka_t *dst, OpenAPI_av5g_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -13,7 +13,7 @@ OpenAPI_ddd_traffic_descriptor_t *OpenAPI_ddd_traffic_descriptor_create(
 )
 {
     OpenAPI_ddd_traffic_descriptor_t *ddd_traffic_descriptor_local_var = ogs_malloc(sizeof(OpenAPI_ddd_traffic_descriptor_t));
-    ogs_assert(ddd_traffic_descriptor_local_var);
+    log_assert(ddd_traffic_descriptor_local_var);
 
     ddd_traffic_descriptor_local_var->ipv4_addr = ipv4_addr;
     ddd_traffic_descriptor_local_var->ipv6_addr = ipv6_addr;
@@ -52,35 +52,35 @@ cJSON *OpenAPI_ddd_traffic_descriptor_convertToJSON(OpenAPI_ddd_traffic_descript
     OpenAPI_lnode_t *node = NULL;
 
     if (ddd_traffic_descriptor == NULL) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [DddTrafficDescriptor]");
+        log_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [DddTrafficDescriptor]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ddd_traffic_descriptor->ipv4_addr) {
     if (cJSON_AddStringToObject(item, "ipv4Addr", ddd_traffic_descriptor->ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [ipv4_addr]");
+        log_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [ipv4_addr]");
         goto end;
     }
     }
 
     if (ddd_traffic_descriptor->ipv6_addr) {
     if (cJSON_AddStringToObject(item, "ipv6Addr", ddd_traffic_descriptor->ipv6_addr) == NULL) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [ipv6_addr]");
+        log_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [ipv6_addr]");
         goto end;
     }
     }
 
     if (ddd_traffic_descriptor->is_port_number) {
     if (cJSON_AddNumberToObject(item, "portNumber", ddd_traffic_descriptor->port_number) == NULL) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [port_number]");
+        log_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [port_number]");
         goto end;
     }
     }
 
     if (ddd_traffic_descriptor->mac_addr) {
     if (cJSON_AddStringToObject(item, "macAddr", ddd_traffic_descriptor->mac_addr) == NULL) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [mac_addr]");
+        log_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed [mac_addr]");
         goto end;
     }
     }
@@ -100,7 +100,7 @@ OpenAPI_ddd_traffic_descriptor_t *OpenAPI_ddd_traffic_descriptor_parseFromJSON(c
     ipv4_addr = cJSON_GetObjectItemCaseSensitive(ddd_traffic_descriptorJSON, "ipv4Addr");
     if (ipv4_addr) {
     if (!cJSON_IsString(ipv4_addr) && !cJSON_IsNull(ipv4_addr)) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_parseFromJSON() failed [ipv4_addr]");
+        log_error("OpenAPI_ddd_traffic_descriptor_parseFromJSON() failed [ipv4_addr]");
         goto end;
     }
     }
@@ -108,7 +108,7 @@ OpenAPI_ddd_traffic_descriptor_t *OpenAPI_ddd_traffic_descriptor_parseFromJSON(c
     ipv6_addr = cJSON_GetObjectItemCaseSensitive(ddd_traffic_descriptorJSON, "ipv6Addr");
     if (ipv6_addr) {
     if (!cJSON_IsString(ipv6_addr) && !cJSON_IsNull(ipv6_addr)) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_parseFromJSON() failed [ipv6_addr]");
+        log_error("OpenAPI_ddd_traffic_descriptor_parseFromJSON() failed [ipv6_addr]");
         goto end;
     }
     }
@@ -116,7 +116,7 @@ OpenAPI_ddd_traffic_descriptor_t *OpenAPI_ddd_traffic_descriptor_parseFromJSON(c
     port_number = cJSON_GetObjectItemCaseSensitive(ddd_traffic_descriptorJSON, "portNumber");
     if (port_number) {
     if (!cJSON_IsNumber(port_number)) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_parseFromJSON() failed [port_number]");
+        log_error("OpenAPI_ddd_traffic_descriptor_parseFromJSON() failed [port_number]");
         goto end;
     }
     }
@@ -124,7 +124,7 @@ OpenAPI_ddd_traffic_descriptor_t *OpenAPI_ddd_traffic_descriptor_parseFromJSON(c
     mac_addr = cJSON_GetObjectItemCaseSensitive(ddd_traffic_descriptorJSON, "macAddr");
     if (mac_addr) {
     if (!cJSON_IsString(mac_addr) && !cJSON_IsNull(mac_addr)) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_parseFromJSON() failed [mac_addr]");
+        log_error("OpenAPI_ddd_traffic_descriptor_parseFromJSON() failed [mac_addr]");
         goto end;
     }
     }
@@ -147,10 +147,10 @@ OpenAPI_ddd_traffic_descriptor_t *OpenAPI_ddd_traffic_descriptor_copy(OpenAPI_dd
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ddd_traffic_descriptor_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed");
+        log_error("OpenAPI_ddd_traffic_descriptor_convertToJSON() failed");
         return NULL;
     }
 
@@ -158,14 +158,14 @@ OpenAPI_ddd_traffic_descriptor_t *OpenAPI_ddd_traffic_descriptor_copy(OpenAPI_dd
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

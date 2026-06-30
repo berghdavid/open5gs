@@ -11,7 +11,7 @@ OpenAPI_cell_global_id_t *OpenAPI_cell_global_id_create(
 )
 {
     OpenAPI_cell_global_id_t *cell_global_id_local_var = ogs_malloc(sizeof(OpenAPI_cell_global_id_t));
-    ogs_assert(cell_global_id_local_var);
+    log_assert(cell_global_id_local_var);
 
     cell_global_id_local_var->plmn_id = plmn_id;
     cell_global_id_local_var->lac = lac;
@@ -48,41 +48,41 @@ cJSON *OpenAPI_cell_global_id_convertToJSON(OpenAPI_cell_global_id_t *cell_globa
     OpenAPI_lnode_t *node = NULL;
 
     if (cell_global_id == NULL) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed [CellGlobalId]");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed [CellGlobalId]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!cell_global_id->plmn_id) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed [plmn_id]");
         return NULL;
     }
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(cell_global_id->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed [plmn_id]");
         goto end;
     }
 
     if (!cell_global_id->lac) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed [lac]");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed [lac]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "lac", cell_global_id->lac) == NULL) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed [lac]");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed [lac]");
         goto end;
     }
 
     if (!cell_global_id->cell_id) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed [cell_id]");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed [cell_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "cellId", cell_global_id->cell_id) == NULL) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed [cell_id]");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed [cell_id]");
         goto end;
     }
 
@@ -100,32 +100,32 @@ OpenAPI_cell_global_id_t *OpenAPI_cell_global_id_parseFromJSON(cJSON *cell_globa
     cJSON *cell_id = NULL;
     plmn_id = cJSON_GetObjectItemCaseSensitive(cell_global_idJSON, "plmnId");
     if (!plmn_id) {
-        ogs_error("OpenAPI_cell_global_id_parseFromJSON() failed [plmn_id]");
+        log_error("OpenAPI_cell_global_id_parseFromJSON() failed [plmn_id]");
         goto end;
     }
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
 
     lac = cJSON_GetObjectItemCaseSensitive(cell_global_idJSON, "lac");
     if (!lac) {
-        ogs_error("OpenAPI_cell_global_id_parseFromJSON() failed [lac]");
+        log_error("OpenAPI_cell_global_id_parseFromJSON() failed [lac]");
         goto end;
     }
     if (!cJSON_IsString(lac)) {
-        ogs_error("OpenAPI_cell_global_id_parseFromJSON() failed [lac]");
+        log_error("OpenAPI_cell_global_id_parseFromJSON() failed [lac]");
         goto end;
     }
 
     cell_id = cJSON_GetObjectItemCaseSensitive(cell_global_idJSON, "cellId");
     if (!cell_id) {
-        ogs_error("OpenAPI_cell_global_id_parseFromJSON() failed [cell_id]");
+        log_error("OpenAPI_cell_global_id_parseFromJSON() failed [cell_id]");
         goto end;
     }
     if (!cJSON_IsString(cell_id)) {
-        ogs_error("OpenAPI_cell_global_id_parseFromJSON() failed [cell_id]");
+        log_error("OpenAPI_cell_global_id_parseFromJSON() failed [cell_id]");
         goto end;
     }
 
@@ -149,10 +149,10 @@ OpenAPI_cell_global_id_t *OpenAPI_cell_global_id_copy(OpenAPI_cell_global_id_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_cell_global_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_cell_global_id_convertToJSON() failed");
+        log_error("OpenAPI_cell_global_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -160,14 +160,14 @@ OpenAPI_cell_global_id_t *OpenAPI_cell_global_id_copy(OpenAPI_cell_global_id_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

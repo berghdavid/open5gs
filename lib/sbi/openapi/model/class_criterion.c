@@ -11,7 +11,7 @@ OpenAPI_class_criterion_t *OpenAPI_class_criterion_create(
 )
 {
     OpenAPI_class_criterion_t *class_criterion_local_var = ogs_malloc(sizeof(OpenAPI_class_criterion_t));
-    ogs_assert(class_criterion_local_var);
+    log_assert(class_criterion_local_var);
 
     class_criterion_local_var->disper_class = disper_class;
     class_criterion_local_var->class_threshold = class_threshold;
@@ -44,43 +44,43 @@ cJSON *OpenAPI_class_criterion_convertToJSON(OpenAPI_class_criterion_t *class_cr
     OpenAPI_lnode_t *node = NULL;
 
     if (class_criterion == NULL) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed [ClassCriterion]");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed [ClassCriterion]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!class_criterion->disper_class) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed [disper_class]");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed [disper_class]");
         return NULL;
     }
     cJSON *disper_class_local_JSON = OpenAPI_dispersion_class_convertToJSON(class_criterion->disper_class);
     if (disper_class_local_JSON == NULL) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed [disper_class]");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed [disper_class]");
         goto end;
     }
     cJSON_AddItemToObject(item, "disperClass", disper_class_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed [disper_class]");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed [disper_class]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "classThreshold", class_criterion->class_threshold) == NULL) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed [class_threshold]");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed [class_threshold]");
         goto end;
     }
 
     if (!class_criterion->thres_match) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed [thres_match]");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed [thres_match]");
         return NULL;
     }
     cJSON *thres_match_local_JSON = OpenAPI_matching_direction_convertToJSON(class_criterion->thres_match);
     if (thres_match_local_JSON == NULL) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed [thres_match]");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed [thres_match]");
         goto end;
     }
     cJSON_AddItemToObject(item, "thresMatch", thres_match_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed [thres_match]");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed [thres_match]");
         goto end;
     }
 
@@ -99,33 +99,33 @@ OpenAPI_class_criterion_t *OpenAPI_class_criterion_parseFromJSON(cJSON *class_cr
     OpenAPI_matching_direction_t *thres_match_local_nonprim = NULL;
     disper_class = cJSON_GetObjectItemCaseSensitive(class_criterionJSON, "disperClass");
     if (!disper_class) {
-        ogs_error("OpenAPI_class_criterion_parseFromJSON() failed [disper_class]");
+        log_error("OpenAPI_class_criterion_parseFromJSON() failed [disper_class]");
         goto end;
     }
     disper_class_local_nonprim = OpenAPI_dispersion_class_parseFromJSON(disper_class);
     if (!disper_class_local_nonprim) {
-        ogs_error("OpenAPI_dispersion_class_parseFromJSON failed [disper_class]");
+        log_error("OpenAPI_dispersion_class_parseFromJSON failed [disper_class]");
         goto end;
     }
 
     class_threshold = cJSON_GetObjectItemCaseSensitive(class_criterionJSON, "classThreshold");
     if (!class_threshold) {
-        ogs_error("OpenAPI_class_criterion_parseFromJSON() failed [class_threshold]");
+        log_error("OpenAPI_class_criterion_parseFromJSON() failed [class_threshold]");
         goto end;
     }
     if (!cJSON_IsNumber(class_threshold)) {
-        ogs_error("OpenAPI_class_criterion_parseFromJSON() failed [class_threshold]");
+        log_error("OpenAPI_class_criterion_parseFromJSON() failed [class_threshold]");
         goto end;
     }
 
     thres_match = cJSON_GetObjectItemCaseSensitive(class_criterionJSON, "thresMatch");
     if (!thres_match) {
-        ogs_error("OpenAPI_class_criterion_parseFromJSON() failed [thres_match]");
+        log_error("OpenAPI_class_criterion_parseFromJSON() failed [thres_match]");
         goto end;
     }
     thres_match_local_nonprim = OpenAPI_matching_direction_parseFromJSON(thres_match);
     if (!thres_match_local_nonprim) {
-        ogs_error("OpenAPI_matching_direction_parseFromJSON failed [thres_match]");
+        log_error("OpenAPI_matching_direction_parseFromJSON failed [thres_match]");
         goto end;
     }
 
@@ -154,10 +154,10 @@ OpenAPI_class_criterion_t *OpenAPI_class_criterion_copy(OpenAPI_class_criterion_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_class_criterion_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_class_criterion_convertToJSON() failed");
+        log_error("OpenAPI_class_criterion_convertToJSON() failed");
         return NULL;
     }
 
@@ -165,14 +165,14 @@ OpenAPI_class_criterion_t *OpenAPI_class_criterion_copy(OpenAPI_class_criterion_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

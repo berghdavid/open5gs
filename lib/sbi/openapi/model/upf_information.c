@@ -10,7 +10,7 @@ OpenAPI_upf_information_t *OpenAPI_upf_information_create(
 )
 {
     OpenAPI_upf_information_t *upf_information_local_var = ogs_malloc(sizeof(OpenAPI_upf_information_t));
-    ogs_assert(upf_information_local_var);
+    log_assert(upf_information_local_var);
 
     upf_information_local_var->upf_id = upf_id;
     upf_information_local_var->upf_addr = upf_addr;
@@ -42,14 +42,14 @@ cJSON *OpenAPI_upf_information_convertToJSON(OpenAPI_upf_information_t *upf_info
     OpenAPI_lnode_t *node = NULL;
 
     if (upf_information == NULL) {
-        ogs_error("OpenAPI_upf_information_convertToJSON() failed [UpfInformation]");
+        log_error("OpenAPI_upf_information_convertToJSON() failed [UpfInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (upf_information->upf_id) {
     if (cJSON_AddStringToObject(item, "upfId", upf_information->upf_id) == NULL) {
-        ogs_error("OpenAPI_upf_information_convertToJSON() failed [upf_id]");
+        log_error("OpenAPI_upf_information_convertToJSON() failed [upf_id]");
         goto end;
     }
     }
@@ -57,12 +57,12 @@ cJSON *OpenAPI_upf_information_convertToJSON(OpenAPI_upf_information_t *upf_info
     if (upf_information->upf_addr) {
     cJSON *upf_addr_local_JSON = OpenAPI_addr_fqdn_convertToJSON(upf_information->upf_addr);
     if (upf_addr_local_JSON == NULL) {
-        ogs_error("OpenAPI_upf_information_convertToJSON() failed [upf_addr]");
+        log_error("OpenAPI_upf_information_convertToJSON() failed [upf_addr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "upfAddr", upf_addr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_upf_information_convertToJSON() failed [upf_addr]");
+        log_error("OpenAPI_upf_information_convertToJSON() failed [upf_addr]");
         goto end;
     }
     }
@@ -81,7 +81,7 @@ OpenAPI_upf_information_t *OpenAPI_upf_information_parseFromJSON(cJSON *upf_info
     upf_id = cJSON_GetObjectItemCaseSensitive(upf_informationJSON, "upfId");
     if (upf_id) {
     if (!cJSON_IsString(upf_id) && !cJSON_IsNull(upf_id)) {
-        ogs_error("OpenAPI_upf_information_parseFromJSON() failed [upf_id]");
+        log_error("OpenAPI_upf_information_parseFromJSON() failed [upf_id]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_upf_information_t *OpenAPI_upf_information_parseFromJSON(cJSON *upf_info
     if (upf_addr) {
     upf_addr_local_nonprim = OpenAPI_addr_fqdn_parseFromJSON(upf_addr);
     if (!upf_addr_local_nonprim) {
-        ogs_error("OpenAPI_addr_fqdn_parseFromJSON failed [upf_addr]");
+        log_error("OpenAPI_addr_fqdn_parseFromJSON failed [upf_addr]");
         goto end;
     }
     }
@@ -114,10 +114,10 @@ OpenAPI_upf_information_t *OpenAPI_upf_information_copy(OpenAPI_upf_information_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_upf_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_upf_information_convertToJSON() failed");
+        log_error("OpenAPI_upf_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -125,14 +125,14 @@ OpenAPI_upf_information_t *OpenAPI_upf_information_copy(OpenAPI_upf_information_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

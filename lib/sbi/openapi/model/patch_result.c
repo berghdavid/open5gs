@@ -9,7 +9,7 @@ OpenAPI_patch_result_t *OpenAPI_patch_result_create(
 )
 {
     OpenAPI_patch_result_t *patch_result_local_var = ogs_malloc(sizeof(OpenAPI_patch_result_t));
-    ogs_assert(patch_result_local_var);
+    log_assert(patch_result_local_var);
 
     patch_result_local_var->report = report;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_patch_result_convertToJSON(OpenAPI_patch_result_t *patch_result)
     OpenAPI_lnode_t *node = NULL;
 
     if (patch_result == NULL) {
-        ogs_error("OpenAPI_patch_result_convertToJSON() failed [PatchResult]");
+        log_error("OpenAPI_patch_result_convertToJSON() failed [PatchResult]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!patch_result->report) {
-        ogs_error("OpenAPI_patch_result_convertToJSON() failed [report]");
+        log_error("OpenAPI_patch_result_convertToJSON() failed [report]");
         return NULL;
     }
     cJSON *reportList = cJSON_AddArrayToObject(item, "report");
     if (reportList == NULL) {
-        ogs_error("OpenAPI_patch_result_convertToJSON() failed [report]");
+        log_error("OpenAPI_patch_result_convertToJSON() failed [report]");
         goto end;
     }
     OpenAPI_list_for_each(patch_result->report, node) {
         cJSON *itemLocal = OpenAPI_report_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_patch_result_convertToJSON() failed [report]");
+            log_error("OpenAPI_patch_result_convertToJSON() failed [report]");
             goto end;
         }
         cJSON_AddItemToArray(reportList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_patch_result_t *OpenAPI_patch_result_parseFromJSON(cJSON *patch_resultJS
     OpenAPI_list_t *reportList = NULL;
     report = cJSON_GetObjectItemCaseSensitive(patch_resultJSON, "report");
     if (!report) {
-        ogs_error("OpenAPI_patch_result_parseFromJSON() failed [report]");
+        log_error("OpenAPI_patch_result_parseFromJSON() failed [report]");
         goto end;
     }
         cJSON *report_local = NULL;
         if (!cJSON_IsArray(report)) {
-            ogs_error("OpenAPI_patch_result_parseFromJSON() failed [report]");
+            log_error("OpenAPI_patch_result_parseFromJSON() failed [report]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_patch_result_t *OpenAPI_patch_result_parseFromJSON(cJSON *patch_resultJS
 
         cJSON_ArrayForEach(report_local, report) {
             if (!cJSON_IsObject(report_local)) {
-                ogs_error("OpenAPI_patch_result_parseFromJSON() failed [report]");
+                log_error("OpenAPI_patch_result_parseFromJSON() failed [report]");
                 goto end;
             }
             OpenAPI_report_item_t *reportItem = OpenAPI_report_item_parseFromJSON(report_local);
             if (!reportItem) {
-                ogs_error("No reportItem");
+                log_error("No reportItem");
                 goto end;
             }
             OpenAPI_list_add(reportList, reportItem);
@@ -119,10 +119,10 @@ OpenAPI_patch_result_t *OpenAPI_patch_result_copy(OpenAPI_patch_result_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_patch_result_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_patch_result_convertToJSON() failed");
+        log_error("OpenAPI_patch_result_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_patch_result_t *OpenAPI_patch_result_copy(OpenAPI_patch_result_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

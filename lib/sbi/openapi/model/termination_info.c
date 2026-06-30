@@ -10,7 +10,7 @@ OpenAPI_termination_info_t *OpenAPI_termination_info_create(
 )
 {
     OpenAPI_termination_info_t *termination_info_local_var = ogs_malloc(sizeof(OpenAPI_termination_info_t));
-    ogs_assert(termination_info_local_var);
+    log_assert(termination_info_local_var);
 
     termination_info_local_var->term_cause = term_cause;
     termination_info_local_var->res_uri = res_uri;
@@ -38,26 +38,26 @@ cJSON *OpenAPI_termination_info_convertToJSON(OpenAPI_termination_info_t *termin
     OpenAPI_lnode_t *node = NULL;
 
     if (termination_info == NULL) {
-        ogs_error("OpenAPI_termination_info_convertToJSON() failed [TerminationInfo]");
+        log_error("OpenAPI_termination_info_convertToJSON() failed [TerminationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (termination_info->term_cause == OpenAPI_termination_cause_any_of_NULL) {
-        ogs_error("OpenAPI_termination_info_convertToJSON() failed [term_cause]");
+        log_error("OpenAPI_termination_info_convertToJSON() failed [term_cause]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "termCause", OpenAPI_termination_cause_any_of_ToString(termination_info->term_cause)) == NULL) {
-        ogs_error("OpenAPI_termination_info_convertToJSON() failed [term_cause]");
+        log_error("OpenAPI_termination_info_convertToJSON() failed [term_cause]");
         goto end;
     }
 
     if (!termination_info->res_uri) {
-        ogs_error("OpenAPI_termination_info_convertToJSON() failed [res_uri]");
+        log_error("OpenAPI_termination_info_convertToJSON() failed [res_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "resUri", termination_info->res_uri) == NULL) {
-        ogs_error("OpenAPI_termination_info_convertToJSON() failed [res_uri]");
+        log_error("OpenAPI_termination_info_convertToJSON() failed [res_uri]");
         goto end;
     }
 
@@ -74,22 +74,22 @@ OpenAPI_termination_info_t *OpenAPI_termination_info_parseFromJSON(cJSON *termin
     cJSON *res_uri = NULL;
     term_cause = cJSON_GetObjectItemCaseSensitive(termination_infoJSON, "termCause");
     if (!term_cause) {
-        ogs_error("OpenAPI_termination_info_parseFromJSON() failed [term_cause]");
+        log_error("OpenAPI_termination_info_parseFromJSON() failed [term_cause]");
         goto end;
     }
     if (!cJSON_IsString(term_cause)) {
-        ogs_error("OpenAPI_termination_info_parseFromJSON() failed [term_cause]");
+        log_error("OpenAPI_termination_info_parseFromJSON() failed [term_cause]");
         goto end;
     }
     term_causeVariable = OpenAPI_termination_cause_any_of_FromString(term_cause->valuestring);
 
     res_uri = cJSON_GetObjectItemCaseSensitive(termination_infoJSON, "resUri");
     if (!res_uri) {
-        ogs_error("OpenAPI_termination_info_parseFromJSON() failed [res_uri]");
+        log_error("OpenAPI_termination_info_parseFromJSON() failed [res_uri]");
         goto end;
     }
     if (!cJSON_IsString(res_uri)) {
-        ogs_error("OpenAPI_termination_info_parseFromJSON() failed [res_uri]");
+        log_error("OpenAPI_termination_info_parseFromJSON() failed [res_uri]");
         goto end;
     }
 
@@ -108,10 +108,10 @@ OpenAPI_termination_info_t *OpenAPI_termination_info_copy(OpenAPI_termination_in
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_termination_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_termination_info_convertToJSON() failed");
+        log_error("OpenAPI_termination_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -119,14 +119,14 @@ OpenAPI_termination_info_t *OpenAPI_termination_info_copy(OpenAPI_termination_in
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

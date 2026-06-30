@@ -27,7 +27,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_create(
 )
 {
     OpenAPI_nf_load_level_information_t *nf_load_level_information_local_var = ogs_malloc(sizeof(OpenAPI_nf_load_level_information_t));
-    ogs_assert(nf_load_level_information_local_var);
+    log_assert(nf_load_level_information_local_var);
 
     nf_load_level_information_local_var->nf_type = nf_type;
     nf_load_level_information_local_var->nf_instance_id = nf_instance_id;
@@ -84,28 +84,28 @@ cJSON *OpenAPI_nf_load_level_information_convertToJSON(OpenAPI_nf_load_level_inf
     OpenAPI_lnode_t *node = NULL;
 
     if (nf_load_level_information == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [NfLoadLevelInformation]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [NfLoadLevelInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (nf_load_level_information->nf_type != OpenAPI_nf_type_NULL) {
     if (cJSON_AddStringToObject(item, "nfType", OpenAPI_nf_type_ToString(nf_load_level_information->nf_type)) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_type]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_type]");
         goto end;
     }
     }
 
     if (nf_load_level_information->nf_instance_id) {
     if (cJSON_AddStringToObject(item, "nfInstanceId", nf_load_level_information->nf_instance_id) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_instance_id]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_instance_id]");
         goto end;
     }
     }
 
     if (nf_load_level_information->nf_set_id) {
     if (cJSON_AddStringToObject(item, "nfSetId", nf_load_level_information->nf_set_id) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_set_id]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_set_id]");
         goto end;
     }
     }
@@ -113,54 +113,54 @@ cJSON *OpenAPI_nf_load_level_information_convertToJSON(OpenAPI_nf_load_level_inf
     if (nf_load_level_information->nf_status) {
     cJSON *nf_status_local_JSON = OpenAPI_nnwdaf_nf_status_convertToJSON(nf_load_level_information->nf_status);
     if (nf_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_status]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nfStatus", nf_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_status]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_status]");
         goto end;
     }
     }
 
     if (nf_load_level_information->is_nf_cpu_usage) {
     if (cJSON_AddNumberToObject(item, "nfCpuUsage", nf_load_level_information->nf_cpu_usage) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_cpu_usage]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_cpu_usage]");
         goto end;
     }
     }
 
     if (nf_load_level_information->is_nf_memory_usage) {
     if (cJSON_AddNumberToObject(item, "nfMemoryUsage", nf_load_level_information->nf_memory_usage) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_memory_usage]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_memory_usage]");
         goto end;
     }
     }
 
     if (nf_load_level_information->is_nf_storage_usage) {
     if (cJSON_AddNumberToObject(item, "nfStorageUsage", nf_load_level_information->nf_storage_usage) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_storage_usage]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_storage_usage]");
         goto end;
     }
     }
 
     if (nf_load_level_information->is_nf_load_level_average) {
     if (cJSON_AddNumberToObject(item, "nfLoadLevelAverage", nf_load_level_information->nf_load_level_average) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_load_level_average]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_load_level_average]");
         goto end;
     }
     }
 
     if (nf_load_level_information->is_nf_load_levelpeak) {
     if (cJSON_AddNumberToObject(item, "nfLoadLevelpeak", nf_load_level_information->nf_load_levelpeak) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_load_levelpeak]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_load_levelpeak]");
         goto end;
     }
     }
 
     if (nf_load_level_information->is_nf_load_avg_in_aoi) {
     if (cJSON_AddNumberToObject(item, "nfLoadAvgInAoi", nf_load_level_information->nf_load_avg_in_aoi) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_load_avg_in_aoi]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [nf_load_avg_in_aoi]");
         goto end;
     }
     }
@@ -168,19 +168,19 @@ cJSON *OpenAPI_nf_load_level_information_convertToJSON(OpenAPI_nf_load_level_inf
     if (nf_load_level_information->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(nf_load_level_information->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [snssai]");
         goto end;
     }
     }
 
     if (nf_load_level_information->is_confidence) {
     if (cJSON_AddNumberToObject(item, "confidence", nf_load_level_information->confidence) == NULL) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed [confidence]");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed [confidence]");
         goto end;
     }
     }
@@ -211,7 +211,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_type = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfType");
     if (nf_type) {
     if (!cJSON_IsString(nf_type)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_type]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_type]");
         goto end;
     }
     nf_typeVariable = OpenAPI_nf_type_FromString(nf_type->valuestring);
@@ -220,7 +220,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_instance_id = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfInstanceId");
     if (nf_instance_id) {
     if (!cJSON_IsString(nf_instance_id) && !cJSON_IsNull(nf_instance_id)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_instance_id]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_instance_id]");
         goto end;
     }
     }
@@ -228,7 +228,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_set_id = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfSetId");
     if (nf_set_id) {
     if (!cJSON_IsString(nf_set_id) && !cJSON_IsNull(nf_set_id)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_set_id]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_set_id]");
         goto end;
     }
     }
@@ -237,7 +237,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     if (nf_status) {
     nf_status_local_nonprim = OpenAPI_nnwdaf_nf_status_parseFromJSON(nf_status);
     if (!nf_status_local_nonprim) {
-        ogs_error("OpenAPI_nnwdaf_nf_status_parseFromJSON failed [nf_status]");
+        log_error("OpenAPI_nnwdaf_nf_status_parseFromJSON failed [nf_status]");
         goto end;
     }
     }
@@ -245,7 +245,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_cpu_usage = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfCpuUsage");
     if (nf_cpu_usage) {
     if (!cJSON_IsNumber(nf_cpu_usage)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_cpu_usage]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_cpu_usage]");
         goto end;
     }
     }
@@ -253,7 +253,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_memory_usage = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfMemoryUsage");
     if (nf_memory_usage) {
     if (!cJSON_IsNumber(nf_memory_usage)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_memory_usage]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_memory_usage]");
         goto end;
     }
     }
@@ -261,7 +261,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_storage_usage = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfStorageUsage");
     if (nf_storage_usage) {
     if (!cJSON_IsNumber(nf_storage_usage)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_storage_usage]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_storage_usage]");
         goto end;
     }
     }
@@ -269,7 +269,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_load_level_average = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfLoadLevelAverage");
     if (nf_load_level_average) {
     if (!cJSON_IsNumber(nf_load_level_average)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_load_level_average]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_load_level_average]");
         goto end;
     }
     }
@@ -277,7 +277,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_load_levelpeak = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfLoadLevelpeak");
     if (nf_load_levelpeak) {
     if (!cJSON_IsNumber(nf_load_levelpeak)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_load_levelpeak]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_load_levelpeak]");
         goto end;
     }
     }
@@ -285,7 +285,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     nf_load_avg_in_aoi = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "nfLoadAvgInAoi");
     if (nf_load_avg_in_aoi) {
     if (!cJSON_IsNumber(nf_load_avg_in_aoi)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_load_avg_in_aoi]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [nf_load_avg_in_aoi]");
         goto end;
     }
     }
@@ -294,7 +294,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -302,7 +302,7 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_parseFrom
     confidence = cJSON_GetObjectItemCaseSensitive(nf_load_level_informationJSON, "confidence");
     if (confidence) {
     if (!cJSON_IsNumber(confidence)) {
-        ogs_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [confidence]");
+        log_error("OpenAPI_nf_load_level_information_parseFromJSON() failed [confidence]");
         goto end;
     }
     }
@@ -347,10 +347,10 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nf_load_level_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nf_load_level_information_convertToJSON() failed");
+        log_error("OpenAPI_nf_load_level_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -358,14 +358,14 @@ OpenAPI_nf_load_level_information_t *OpenAPI_nf_load_level_information_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

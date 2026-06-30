@@ -123,7 +123,7 @@ void ogs_uuid_get(ogs_uuid_t *uuid)
     unsigned char *d = NULL;
     int version = 4;
 
-    ogs_assert(uuid);
+    log_assert(uuid);
     d = uuid->data;
 
     if (!uuid_state_node[0])

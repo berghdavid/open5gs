@@ -8,7 +8,7 @@ OpenAPI_output_strategy_t *OpenAPI_output_strategy_create(
 )
 {
     OpenAPI_output_strategy_t *output_strategy_local_var = ogs_malloc(sizeof(OpenAPI_output_strategy_t));
-    ogs_assert(output_strategy_local_var);
+    log_assert(output_strategy_local_var);
 
 
     return output_strategy_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_output_strategy_convertToJSON(OpenAPI_output_strategy_t *output_s
     OpenAPI_lnode_t *node = NULL;
 
     if (output_strategy == NULL) {
-        ogs_error("OpenAPI_output_strategy_convertToJSON() failed [OutputStrategy]");
+        log_error("OpenAPI_output_strategy_convertToJSON() failed [OutputStrategy]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_output_strategy_t *OpenAPI_output_strategy_copy(OpenAPI_output_strategy_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_output_strategy_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_output_strategy_convertToJSON() failed");
+        log_error("OpenAPI_output_strategy_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_output_strategy_t *OpenAPI_output_strategy_copy(OpenAPI_output_strategy_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

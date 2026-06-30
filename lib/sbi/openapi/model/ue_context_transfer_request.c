@@ -10,7 +10,7 @@ OpenAPI_ue_context_transfer_request_t *OpenAPI_ue_context_transfer_request_creat
 )
 {
     OpenAPI_ue_context_transfer_request_t *ue_context_transfer_request_local_var = ogs_malloc(sizeof(OpenAPI_ue_context_transfer_request_t));
-    ogs_assert(ue_context_transfer_request_local_var);
+    log_assert(ue_context_transfer_request_local_var);
 
     ue_context_transfer_request_local_var->json_data = json_data;
     ue_context_transfer_request_local_var->binary_data_n1_message = binary_data_n1_message;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_ue_context_transfer_request_convertToJSON(OpenAPI_ue_context_tran
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_context_transfer_request == NULL) {
-        ogs_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed [UEContextTransfer_request]");
+        log_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed [UEContextTransfer_request]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_ue_context_transfer_request_convertToJSON(OpenAPI_ue_context_tran
     if (ue_context_transfer_request->json_data) {
     cJSON *json_data_local_JSON = OpenAPI_ue_context_transfer_req_data_convertToJSON(ue_context_transfer_request->json_data);
     if (json_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed [json_data]");
+        log_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed [json_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "jsonData", json_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed [json_data]");
+        log_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed [json_data]");
         goto end;
     }
     }
@@ -63,7 +63,7 @@ cJSON *OpenAPI_ue_context_transfer_request_convertToJSON(OpenAPI_ue_context_tran
     if (ue_context_transfer_request->binary_data_n1_message) {
     char* encoded_str_binary_data_n1_message = OpenAPI_base64encode(ue_context_transfer_request->binary_data_n1_message->data,ue_context_transfer_request->binary_data_n1_message->len);
     if (cJSON_AddStringToObject(item, "binaryDataN1Message", encoded_str_binary_data_n1_message) == NULL) {
-        ogs_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed [binary_data_n1_message]");
+        log_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed [binary_data_n1_message]");
         goto end;
     }
     ogs_free(encoded_str_binary_data_n1_message);
@@ -85,7 +85,7 @@ OpenAPI_ue_context_transfer_request_t *OpenAPI_ue_context_transfer_request_parse
     if (json_data) {
     json_data_local_nonprim = OpenAPI_ue_context_transfer_req_data_parseFromJSON(json_data);
     if (!json_data_local_nonprim) {
-        ogs_error("OpenAPI_ue_context_transfer_req_data_parseFromJSON failed [json_data]");
+        log_error("OpenAPI_ue_context_transfer_req_data_parseFromJSON failed [json_data]");
         goto end;
     }
     }
@@ -93,14 +93,14 @@ OpenAPI_ue_context_transfer_request_t *OpenAPI_ue_context_transfer_request_parse
     binary_data_n1_message = cJSON_GetObjectItemCaseSensitive(ue_context_transfer_requestJSON, "binaryDataN1Message");
     if (binary_data_n1_message) {
     decoded_str_binary_data_n1_message = ogs_malloc(sizeof(OpenAPI_binary_t));
-    ogs_assert(decoded_str_binary_data_n1_message);
+    log_assert(decoded_str_binary_data_n1_message);
     if (!cJSON_IsString(binary_data_n1_message)) {
-        ogs_error("OpenAPI_ue_context_transfer_request_parseFromJSON() failed [binary_data_n1_message]");
+        log_error("OpenAPI_ue_context_transfer_request_parseFromJSON() failed [binary_data_n1_message]");
         goto end;
     }
     decoded_str_binary_data_n1_message->data = OpenAPI_base64decode(binary_data_n1_message->valuestring, strlen(binary_data_n1_message->valuestring), &decoded_str_binary_data_n1_message->len);
     if (!decoded_str_binary_data_n1_message->data) {
-        ogs_error("OpenAPI_ue_context_transfer_request_parseFromJSON() failed [binary_data_n1_message]");
+        log_error("OpenAPI_ue_context_transfer_request_parseFromJSON() failed [binary_data_n1_message]");
         goto end;
     }
     }
@@ -124,10 +124,10 @@ OpenAPI_ue_context_transfer_request_t *OpenAPI_ue_context_transfer_request_copy(
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_context_transfer_request_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed");
+        log_error("OpenAPI_ue_context_transfer_request_convertToJSON() failed");
         return NULL;
     }
 
@@ -135,14 +135,14 @@ OpenAPI_ue_context_transfer_request_t *OpenAPI_ue_context_transfer_request_copy(
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

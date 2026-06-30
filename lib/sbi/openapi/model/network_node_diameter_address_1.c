@@ -10,7 +10,7 @@ OpenAPI_network_node_diameter_address_1_t *OpenAPI_network_node_diameter_address
 )
 {
     OpenAPI_network_node_diameter_address_1_t *network_node_diameter_address_1_local_var = ogs_malloc(sizeof(OpenAPI_network_node_diameter_address_1_t));
-    ogs_assert(network_node_diameter_address_1_local_var);
+    log_assert(network_node_diameter_address_1_local_var);
 
     network_node_diameter_address_1_local_var->name = name;
     network_node_diameter_address_1_local_var->realm = realm;
@@ -42,26 +42,26 @@ cJSON *OpenAPI_network_node_diameter_address_1_convertToJSON(OpenAPI_network_nod
     OpenAPI_lnode_t *node = NULL;
 
     if (network_node_diameter_address_1 == NULL) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [NetworkNodeDiameterAddress_1]");
+        log_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [NetworkNodeDiameterAddress_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!network_node_diameter_address_1->name) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [name]");
+        log_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [name]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "name", network_node_diameter_address_1->name) == NULL) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [name]");
+        log_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [name]");
         goto end;
     }
 
     if (!network_node_diameter_address_1->realm) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [realm]");
+        log_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [realm]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "realm", network_node_diameter_address_1->realm) == NULL) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [realm]");
+        log_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed [realm]");
         goto end;
     }
 
@@ -77,21 +77,21 @@ OpenAPI_network_node_diameter_address_1_t *OpenAPI_network_node_diameter_address
     cJSON *realm = NULL;
     name = cJSON_GetObjectItemCaseSensitive(network_node_diameter_address_1JSON, "name");
     if (!name) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_parseFromJSON() failed [name]");
+        log_error("OpenAPI_network_node_diameter_address_1_parseFromJSON() failed [name]");
         goto end;
     }
     if (!cJSON_IsString(name)) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_parseFromJSON() failed [name]");
+        log_error("OpenAPI_network_node_diameter_address_1_parseFromJSON() failed [name]");
         goto end;
     }
 
     realm = cJSON_GetObjectItemCaseSensitive(network_node_diameter_address_1JSON, "realm");
     if (!realm) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_parseFromJSON() failed [realm]");
+        log_error("OpenAPI_network_node_diameter_address_1_parseFromJSON() failed [realm]");
         goto end;
     }
     if (!cJSON_IsString(realm)) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_parseFromJSON() failed [realm]");
+        log_error("OpenAPI_network_node_diameter_address_1_parseFromJSON() failed [realm]");
         goto end;
     }
 
@@ -110,10 +110,10 @@ OpenAPI_network_node_diameter_address_1_t *OpenAPI_network_node_diameter_address
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_network_node_diameter_address_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed");
+        log_error("OpenAPI_network_node_diameter_address_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_network_node_diameter_address_1_t *OpenAPI_network_node_diameter_address
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

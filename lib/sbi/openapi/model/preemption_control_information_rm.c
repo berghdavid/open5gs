@@ -8,7 +8,7 @@ OpenAPI_preemption_control_information_rm_t *OpenAPI_preemption_control_informat
 )
 {
     OpenAPI_preemption_control_information_rm_t *preemption_control_information_rm_local_var = ogs_malloc(sizeof(OpenAPI_preemption_control_information_rm_t));
-    ogs_assert(preemption_control_information_rm_local_var);
+    log_assert(preemption_control_information_rm_local_var);
 
 
     return preemption_control_information_rm_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_preemption_control_information_rm_convertToJSON(OpenAPI_preemptio
     OpenAPI_lnode_t *node = NULL;
 
     if (preemption_control_information_rm == NULL) {
-        ogs_error("OpenAPI_preemption_control_information_rm_convertToJSON() failed [PreemptionControlInformationRm]");
+        log_error("OpenAPI_preemption_control_information_rm_convertToJSON() failed [PreemptionControlInformationRm]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_preemption_control_information_rm_t *OpenAPI_preemption_control_informat
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_preemption_control_information_rm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_preemption_control_information_rm_convertToJSON() failed");
+        log_error("OpenAPI_preemption_control_information_rm_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_preemption_control_information_rm_t *OpenAPI_preemption_control_informat
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

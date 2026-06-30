@@ -8,7 +8,7 @@ OpenAPI_time_unit_t *OpenAPI_time_unit_create(
 )
 {
     OpenAPI_time_unit_t *time_unit_local_var = ogs_malloc(sizeof(OpenAPI_time_unit_t));
-    ogs_assert(time_unit_local_var);
+    log_assert(time_unit_local_var);
 
 
     return time_unit_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_time_unit_convertToJSON(OpenAPI_time_unit_t *time_unit)
     OpenAPI_lnode_t *node = NULL;
 
     if (time_unit == NULL) {
-        ogs_error("OpenAPI_time_unit_convertToJSON() failed [TimeUnit]");
+        log_error("OpenAPI_time_unit_convertToJSON() failed [TimeUnit]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_time_unit_t *OpenAPI_time_unit_copy(OpenAPI_time_unit_t *dst, OpenAPI_ti
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_time_unit_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_time_unit_convertToJSON() failed");
+        log_error("OpenAPI_time_unit_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_time_unit_t *OpenAPI_time_unit_copy(OpenAPI_time_unit_t *dst, OpenAPI_ti
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

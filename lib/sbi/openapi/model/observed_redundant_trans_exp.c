@@ -24,7 +24,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_cre
 )
 {
     OpenAPI_observed_redundant_trans_exp_t *observed_redundant_trans_exp_local_var = ogs_malloc(sizeof(OpenAPI_observed_redundant_trans_exp_t));
-    ogs_assert(observed_redundant_trans_exp_local_var);
+    log_assert(observed_redundant_trans_exp_local_var);
 
     observed_redundant_trans_exp_local_var->is_avg_pkt_drop_rate_ul = is_avg_pkt_drop_rate_ul;
     observed_redundant_trans_exp_local_var->avg_pkt_drop_rate_ul = avg_pkt_drop_rate_ul;
@@ -62,63 +62,63 @@ cJSON *OpenAPI_observed_redundant_trans_exp_convertToJSON(OpenAPI_observed_redun
     OpenAPI_lnode_t *node = NULL;
 
     if (observed_redundant_trans_exp == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [ObservedRedundantTransExp]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [ObservedRedundantTransExp]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (observed_redundant_trans_exp->is_avg_pkt_drop_rate_ul) {
     if (cJSON_AddNumberToObject(item, "avgPktDropRateUl", observed_redundant_trans_exp->avg_pkt_drop_rate_ul) == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [avg_pkt_drop_rate_ul]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [avg_pkt_drop_rate_ul]");
         goto end;
     }
     }
 
     if (observed_redundant_trans_exp->is_var_pkt_drop_rate_ul) {
     if (cJSON_AddNumberToObject(item, "varPktDropRateUl", observed_redundant_trans_exp->var_pkt_drop_rate_ul) == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [var_pkt_drop_rate_ul]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [var_pkt_drop_rate_ul]");
         goto end;
     }
     }
 
     if (observed_redundant_trans_exp->is_avg_pkt_drop_rate_dl) {
     if (cJSON_AddNumberToObject(item, "avgPktDropRateDl", observed_redundant_trans_exp->avg_pkt_drop_rate_dl) == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [avg_pkt_drop_rate_dl]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [avg_pkt_drop_rate_dl]");
         goto end;
     }
     }
 
     if (observed_redundant_trans_exp->is_var_pkt_drop_rate_dl) {
     if (cJSON_AddNumberToObject(item, "varPktDropRateDl", observed_redundant_trans_exp->var_pkt_drop_rate_dl) == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [var_pkt_drop_rate_dl]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [var_pkt_drop_rate_dl]");
         goto end;
     }
     }
 
     if (observed_redundant_trans_exp->is_avg_pkt_delay_ul) {
     if (cJSON_AddNumberToObject(item, "avgPktDelayUl", observed_redundant_trans_exp->avg_pkt_delay_ul) == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [avg_pkt_delay_ul]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [avg_pkt_delay_ul]");
         goto end;
     }
     }
 
     if (observed_redundant_trans_exp->is_var_pkt_delay_ul) {
     if (cJSON_AddNumberToObject(item, "varPktDelayUl", observed_redundant_trans_exp->var_pkt_delay_ul) == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [var_pkt_delay_ul]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [var_pkt_delay_ul]");
         goto end;
     }
     }
 
     if (observed_redundant_trans_exp->is_avg_pkt_delay_dl) {
     if (cJSON_AddNumberToObject(item, "avgPktDelayDl", observed_redundant_trans_exp->avg_pkt_delay_dl) == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [avg_pkt_delay_dl]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [avg_pkt_delay_dl]");
         goto end;
     }
     }
 
     if (observed_redundant_trans_exp->is_var_pkt_delay_dl) {
     if (cJSON_AddNumberToObject(item, "varPktDelayDl", observed_redundant_trans_exp->var_pkt_delay_dl) == NULL) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [var_pkt_delay_dl]");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed [var_pkt_delay_dl]");
         goto end;
     }
     }
@@ -142,7 +142,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_par
     avg_pkt_drop_rate_ul = cJSON_GetObjectItemCaseSensitive(observed_redundant_trans_expJSON, "avgPktDropRateUl");
     if (avg_pkt_drop_rate_ul) {
     if (!cJSON_IsNumber(avg_pkt_drop_rate_ul)) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [avg_pkt_drop_rate_ul]");
+        log_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [avg_pkt_drop_rate_ul]");
         goto end;
     }
     }
@@ -150,7 +150,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_par
     var_pkt_drop_rate_ul = cJSON_GetObjectItemCaseSensitive(observed_redundant_trans_expJSON, "varPktDropRateUl");
     if (var_pkt_drop_rate_ul) {
     if (!cJSON_IsNumber(var_pkt_drop_rate_ul)) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [var_pkt_drop_rate_ul]");
+        log_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [var_pkt_drop_rate_ul]");
         goto end;
     }
     }
@@ -158,7 +158,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_par
     avg_pkt_drop_rate_dl = cJSON_GetObjectItemCaseSensitive(observed_redundant_trans_expJSON, "avgPktDropRateDl");
     if (avg_pkt_drop_rate_dl) {
     if (!cJSON_IsNumber(avg_pkt_drop_rate_dl)) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [avg_pkt_drop_rate_dl]");
+        log_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [avg_pkt_drop_rate_dl]");
         goto end;
     }
     }
@@ -166,7 +166,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_par
     var_pkt_drop_rate_dl = cJSON_GetObjectItemCaseSensitive(observed_redundant_trans_expJSON, "varPktDropRateDl");
     if (var_pkt_drop_rate_dl) {
     if (!cJSON_IsNumber(var_pkt_drop_rate_dl)) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [var_pkt_drop_rate_dl]");
+        log_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [var_pkt_drop_rate_dl]");
         goto end;
     }
     }
@@ -174,7 +174,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_par
     avg_pkt_delay_ul = cJSON_GetObjectItemCaseSensitive(observed_redundant_trans_expJSON, "avgPktDelayUl");
     if (avg_pkt_delay_ul) {
     if (!cJSON_IsNumber(avg_pkt_delay_ul)) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [avg_pkt_delay_ul]");
+        log_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [avg_pkt_delay_ul]");
         goto end;
     }
     }
@@ -182,7 +182,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_par
     var_pkt_delay_ul = cJSON_GetObjectItemCaseSensitive(observed_redundant_trans_expJSON, "varPktDelayUl");
     if (var_pkt_delay_ul) {
     if (!cJSON_IsNumber(var_pkt_delay_ul)) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [var_pkt_delay_ul]");
+        log_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [var_pkt_delay_ul]");
         goto end;
     }
     }
@@ -190,7 +190,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_par
     avg_pkt_delay_dl = cJSON_GetObjectItemCaseSensitive(observed_redundant_trans_expJSON, "avgPktDelayDl");
     if (avg_pkt_delay_dl) {
     if (!cJSON_IsNumber(avg_pkt_delay_dl)) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [avg_pkt_delay_dl]");
+        log_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [avg_pkt_delay_dl]");
         goto end;
     }
     }
@@ -198,7 +198,7 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_par
     var_pkt_delay_dl = cJSON_GetObjectItemCaseSensitive(observed_redundant_trans_expJSON, "varPktDelayDl");
     if (var_pkt_delay_dl) {
     if (!cJSON_IsNumber(var_pkt_delay_dl)) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [var_pkt_delay_dl]");
+        log_error("OpenAPI_observed_redundant_trans_exp_parseFromJSON() failed [var_pkt_delay_dl]");
         goto end;
     }
     }
@@ -232,10 +232,10 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_observed_redundant_trans_exp_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed");
+        log_error("OpenAPI_observed_redundant_trans_exp_convertToJSON() failed");
         return NULL;
     }
 
@@ -243,14 +243,14 @@ OpenAPI_observed_redundant_trans_exp_t *OpenAPI_observed_redundant_trans_exp_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

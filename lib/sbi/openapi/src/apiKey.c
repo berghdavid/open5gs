@@ -6,10 +6,10 @@ OpenAPI_map_t *OpenAPI_map_create(char *key, void *value)
 {
     OpenAPI_map_t *OpenAPI_map = NULL;
 
-    ogs_assert(key);
+    log_assert(key);
 
     OpenAPI_map = ogs_malloc(sizeof(OpenAPI_map_t));
-    ogs_assert(OpenAPI_map);
+    log_assert(OpenAPI_map);
     OpenAPI_map->key = key;
     OpenAPI_map->value = value;
 
@@ -19,7 +19,7 @@ OpenAPI_map_t *OpenAPI_map_create(char *key, void *value)
 OpenAPI_map_t *OpenAPI_map_create_allocate(char *key, double value)
 {
     double* boolpointer = ogs_malloc(sizeof(value));
-    ogs_assert(boolpointer);
+    log_assert(boolpointer);
     memcpy(boolpointer, &value, sizeof(value));
     return OpenAPI_map_create(key, boolpointer);
 }

@@ -101,7 +101,7 @@ int ogs_proc_create(const char *const commandLine[], int options,
     ogs_proc_ttartup_info_s startInfo = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    ogs_assert(out_process);
+    log_assert(out_process);
 
     startInfo.cb = sizeof(startInfo);
     startInfo.dwFlags = startFUseStdHandles;
@@ -235,7 +235,7 @@ int ogs_proc_create(const char *const commandLine[], int options,
     int stderrfd[2];
     pid_t child;
 
-    ogs_assert(out_process);
+    log_assert(out_process);
 
     if (0 != pipe(stdinfd)) {
         return OGS_ERROR;
@@ -317,19 +317,19 @@ int ogs_proc_create(const char *const commandLine[], int options,
 
 FILE *ogs_proc_stdin(const ogs_proc_t *const process)
 {
-    ogs_assert(process);
+    log_assert(process);
     return process->stdin_file;
 }
 
 FILE *ogs_proc_stdout(const ogs_proc_t *const process)
 {
-    ogs_assert(process);
+    log_assert(process);
     return process->stdout_file;
 }
 
 FILE *ogs_proc_stderr(const ogs_proc_t *const process)
 {
-    ogs_assert(process);
+    log_assert(process);
     if (process->stdout_file != process->stderr_file) {
         return process->stderr_file;
     } else {
@@ -342,8 +342,8 @@ int ogs_proc_join(ogs_proc_t *const process, int *const out_return_code)
 #if defined(_WIN32)
     const unsigned long infinite = 0xFFFFFFFF;
 
-    ogs_assert(process);
-    ogs_assert(out_return_code);
+    log_assert(process);
+    log_assert(out_return_code);
     if (0 != process->stdin_file) {
         fclose(process->stdin_file);
         process->stdin_file = 0;
@@ -362,8 +362,8 @@ int ogs_proc_join(ogs_proc_t *const process, int *const out_return_code)
 #else
     int status;
 
-    ogs_assert(process);
-    ogs_assert(out_return_code);
+    log_assert(process);
+    log_assert(out_return_code);
     if (0 != process->stdin_file) {
         fclose(process->stdin_file);
         process->stdin_file = 0;
@@ -371,7 +371,7 @@ int ogs_proc_join(ogs_proc_t *const process, int *const out_return_code)
 
     if (process->child != waitpid(process->child, &status, 0)) {
         process->child = 0;
-        ogs_error("waitpid failed: %d", status);
+        log_error("waitpid failed: %d", status);
         return OGS_ERROR;
     }
 
@@ -395,7 +395,7 @@ int ogs_proc_join(ogs_proc_t *const process, int *const out_return_code)
 
 int ogs_proc_destroy(ogs_proc_t *const process)
 {
-    ogs_assert(process);
+    log_assert(process);
     if (0 != process->stdin_file) {
         fclose(process->stdin_file);
     }
@@ -415,7 +415,7 @@ int ogs_proc_destroy(ogs_proc_t *const process)
 
 int ogs_proc_terminate(ogs_proc_t *const process)
 {
-    ogs_assert(process);
+    log_assert(process);
 #if defined(_WIN32)
     // `GenerateConsoleCtrlEvent` can only be called on a process group. To call
     // `GenerateConsoleCtrlEvent` on a single child process it has to be put in
@@ -442,7 +442,7 @@ int ogs_proc_terminate(ogs_proc_t *const process)
     
 int ogs_proc_kill(ogs_proc_t *const process)
 {
-    ogs_assert(process);
+    log_assert(process);
 #if defined(_WIN32)
     // We use 137 as the exit status because it is the same exit status as a
     // process that is stopped with the `SIGKILL` signal on POSIX systems.

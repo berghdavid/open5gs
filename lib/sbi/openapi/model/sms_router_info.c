@@ -14,7 +14,7 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_create(
 )
 {
     OpenAPI_sms_router_info_t *sms_router_info_local_var = ogs_malloc(sizeof(OpenAPI_sms_router_info_t));
-    ogs_assert(sms_router_info_local_var);
+    log_assert(sms_router_info_local_var);
 
     sms_router_info_local_var->nf_instance_id = nf_instance_id;
     sms_router_info_local_var->diameter_address = diameter_address;
@@ -66,14 +66,14 @@ cJSON *OpenAPI_sms_router_info_convertToJSON(OpenAPI_sms_router_info_t *sms_rout
     OpenAPI_lnode_t *node = NULL;
 
     if (sms_router_info == NULL) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed [SmsRouterInfo]");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed [SmsRouterInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (sms_router_info->nf_instance_id) {
     if (cJSON_AddStringToObject(item, "nfInstanceId", sms_router_info->nf_instance_id) == NULL) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed [nf_instance_id]");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed [nf_instance_id]");
         goto end;
     }
     }
@@ -81,40 +81,40 @@ cJSON *OpenAPI_sms_router_info_convertToJSON(OpenAPI_sms_router_info_t *sms_rout
     if (sms_router_info->diameter_address) {
     cJSON *diameter_address_local_JSON = OpenAPI_network_node_diameter_address_convertToJSON(sms_router_info->diameter_address);
     if (diameter_address_local_JSON == NULL) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed [diameter_address]");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed [diameter_address]");
         goto end;
     }
     cJSON_AddItemToObject(item, "diameterAddress", diameter_address_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed [diameter_address]");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed [diameter_address]");
         goto end;
     }
     }
 
     if (sms_router_info->map_address) {
     if (cJSON_AddStringToObject(item, "mapAddress", sms_router_info->map_address) == NULL) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed [map_address]");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed [map_address]");
         goto end;
     }
     }
 
     if (sms_router_info->router_ipv4) {
     if (cJSON_AddStringToObject(item, "routerIpv4", sms_router_info->router_ipv4) == NULL) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed [router_ipv4]");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed [router_ipv4]");
         goto end;
     }
     }
 
     if (sms_router_info->router_ipv6) {
     if (cJSON_AddStringToObject(item, "routerIpv6", sms_router_info->router_ipv6) == NULL) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed [router_ipv6]");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed [router_ipv6]");
         goto end;
     }
     }
 
     if (sms_router_info->router_fqdn) {
     if (cJSON_AddStringToObject(item, "routerFqdn", sms_router_info->router_fqdn) == NULL) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed [router_fqdn]");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed [router_fqdn]");
         goto end;
     }
     }
@@ -137,7 +137,7 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_parseFromJSON(cJSON *sms_rout
     nf_instance_id = cJSON_GetObjectItemCaseSensitive(sms_router_infoJSON, "nfInstanceId");
     if (nf_instance_id) {
     if (!cJSON_IsString(nf_instance_id) && !cJSON_IsNull(nf_instance_id)) {
-        ogs_error("OpenAPI_sms_router_info_parseFromJSON() failed [nf_instance_id]");
+        log_error("OpenAPI_sms_router_info_parseFromJSON() failed [nf_instance_id]");
         goto end;
     }
     }
@@ -146,7 +146,7 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_parseFromJSON(cJSON *sms_rout
     if (diameter_address) {
     diameter_address_local_nonprim = OpenAPI_network_node_diameter_address_parseFromJSON(diameter_address);
     if (!diameter_address_local_nonprim) {
-        ogs_error("OpenAPI_network_node_diameter_address_parseFromJSON failed [diameter_address]");
+        log_error("OpenAPI_network_node_diameter_address_parseFromJSON failed [diameter_address]");
         goto end;
     }
     }
@@ -154,7 +154,7 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_parseFromJSON(cJSON *sms_rout
     map_address = cJSON_GetObjectItemCaseSensitive(sms_router_infoJSON, "mapAddress");
     if (map_address) {
     if (!cJSON_IsString(map_address) && !cJSON_IsNull(map_address)) {
-        ogs_error("OpenAPI_sms_router_info_parseFromJSON() failed [map_address]");
+        log_error("OpenAPI_sms_router_info_parseFromJSON() failed [map_address]");
         goto end;
     }
     }
@@ -162,7 +162,7 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_parseFromJSON(cJSON *sms_rout
     router_ipv4 = cJSON_GetObjectItemCaseSensitive(sms_router_infoJSON, "routerIpv4");
     if (router_ipv4) {
     if (!cJSON_IsString(router_ipv4) && !cJSON_IsNull(router_ipv4)) {
-        ogs_error("OpenAPI_sms_router_info_parseFromJSON() failed [router_ipv4]");
+        log_error("OpenAPI_sms_router_info_parseFromJSON() failed [router_ipv4]");
         goto end;
     }
     }
@@ -170,7 +170,7 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_parseFromJSON(cJSON *sms_rout
     router_ipv6 = cJSON_GetObjectItemCaseSensitive(sms_router_infoJSON, "routerIpv6");
     if (router_ipv6) {
     if (!cJSON_IsString(router_ipv6) && !cJSON_IsNull(router_ipv6)) {
-        ogs_error("OpenAPI_sms_router_info_parseFromJSON() failed [router_ipv6]");
+        log_error("OpenAPI_sms_router_info_parseFromJSON() failed [router_ipv6]");
         goto end;
     }
     }
@@ -178,7 +178,7 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_parseFromJSON(cJSON *sms_rout
     router_fqdn = cJSON_GetObjectItemCaseSensitive(sms_router_infoJSON, "routerFqdn");
     if (router_fqdn) {
     if (!cJSON_IsString(router_fqdn) && !cJSON_IsNull(router_fqdn)) {
-        ogs_error("OpenAPI_sms_router_info_parseFromJSON() failed [router_fqdn]");
+        log_error("OpenAPI_sms_router_info_parseFromJSON() failed [router_fqdn]");
         goto end;
     }
     }
@@ -206,10 +206,10 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_copy(OpenAPI_sms_router_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sms_router_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sms_router_info_convertToJSON() failed");
+        log_error("OpenAPI_sms_router_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -217,14 +217,14 @@ OpenAPI_sms_router_info_t *OpenAPI_sms_router_info_copy(OpenAPI_sms_router_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

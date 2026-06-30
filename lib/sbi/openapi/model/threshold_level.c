@@ -28,7 +28,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_create(
 )
 {
     OpenAPI_threshold_level_t *threshold_level_local_var = ogs_malloc(sizeof(OpenAPI_threshold_level_t));
-    ogs_assert(threshold_level_local_var);
+    log_assert(threshold_level_local_var);
 
     threshold_level_local_var->is_cong_level = is_cong_level;
     threshold_level_local_var->cong_level = cong_level;
@@ -78,84 +78,84 @@ cJSON *OpenAPI_threshold_level_convertToJSON(OpenAPI_threshold_level_t *threshol
     OpenAPI_lnode_t *node = NULL;
 
     if (threshold_level == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [ThresholdLevel]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [ThresholdLevel]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (threshold_level->is_cong_level) {
     if (cJSON_AddNumberToObject(item, "congLevel", threshold_level->cong_level) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [cong_level]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [cong_level]");
         goto end;
     }
     }
 
     if (threshold_level->is_nf_load_level) {
     if (cJSON_AddNumberToObject(item, "nfLoadLevel", threshold_level->nf_load_level) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [nf_load_level]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [nf_load_level]");
         goto end;
     }
     }
 
     if (threshold_level->is_nf_cpu_usage) {
     if (cJSON_AddNumberToObject(item, "nfCpuUsage", threshold_level->nf_cpu_usage) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [nf_cpu_usage]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [nf_cpu_usage]");
         goto end;
     }
     }
 
     if (threshold_level->is_nf_memory_usage) {
     if (cJSON_AddNumberToObject(item, "nfMemoryUsage", threshold_level->nf_memory_usage) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [nf_memory_usage]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [nf_memory_usage]");
         goto end;
     }
     }
 
     if (threshold_level->is_nf_storage_usage) {
     if (cJSON_AddNumberToObject(item, "nfStorageUsage", threshold_level->nf_storage_usage) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [nf_storage_usage]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [nf_storage_usage]");
         goto end;
     }
     }
 
     if (threshold_level->avg_traffic_rate) {
     if (cJSON_AddStringToObject(item, "avgTrafficRate", threshold_level->avg_traffic_rate) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [avg_traffic_rate]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [avg_traffic_rate]");
         goto end;
     }
     }
 
     if (threshold_level->max_traffic_rate) {
     if (cJSON_AddStringToObject(item, "maxTrafficRate", threshold_level->max_traffic_rate) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [max_traffic_rate]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [max_traffic_rate]");
         goto end;
     }
     }
 
     if (threshold_level->is_avg_packet_delay) {
     if (cJSON_AddNumberToObject(item, "avgPacketDelay", threshold_level->avg_packet_delay) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [avg_packet_delay]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [avg_packet_delay]");
         goto end;
     }
     }
 
     if (threshold_level->is_max_packet_delay) {
     if (cJSON_AddNumberToObject(item, "maxPacketDelay", threshold_level->max_packet_delay) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [max_packet_delay]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [max_packet_delay]");
         goto end;
     }
     }
 
     if (threshold_level->is_avg_packet_loss_rate) {
     if (cJSON_AddNumberToObject(item, "avgPacketLossRate", threshold_level->avg_packet_loss_rate) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [avg_packet_loss_rate]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [avg_packet_loss_rate]");
         goto end;
     }
     }
 
     if (threshold_level->is_svc_exp_level) {
     if (cJSON_AddNumberToObject(item, "svcExpLevel", threshold_level->svc_exp_level) == NULL) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed [svc_exp_level]");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed [svc_exp_level]");
         goto end;
     }
     }
@@ -182,7 +182,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     cong_level = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "congLevel");
     if (cong_level) {
     if (!cJSON_IsNumber(cong_level)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [cong_level]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [cong_level]");
         goto end;
     }
     }
@@ -190,7 +190,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     nf_load_level = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "nfLoadLevel");
     if (nf_load_level) {
     if (!cJSON_IsNumber(nf_load_level)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [nf_load_level]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [nf_load_level]");
         goto end;
     }
     }
@@ -198,7 +198,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     nf_cpu_usage = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "nfCpuUsage");
     if (nf_cpu_usage) {
     if (!cJSON_IsNumber(nf_cpu_usage)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [nf_cpu_usage]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [nf_cpu_usage]");
         goto end;
     }
     }
@@ -206,7 +206,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     nf_memory_usage = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "nfMemoryUsage");
     if (nf_memory_usage) {
     if (!cJSON_IsNumber(nf_memory_usage)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [nf_memory_usage]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [nf_memory_usage]");
         goto end;
     }
     }
@@ -214,7 +214,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     nf_storage_usage = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "nfStorageUsage");
     if (nf_storage_usage) {
     if (!cJSON_IsNumber(nf_storage_usage)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [nf_storage_usage]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [nf_storage_usage]");
         goto end;
     }
     }
@@ -222,7 +222,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     avg_traffic_rate = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "avgTrafficRate");
     if (avg_traffic_rate) {
     if (!cJSON_IsString(avg_traffic_rate) && !cJSON_IsNull(avg_traffic_rate)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [avg_traffic_rate]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [avg_traffic_rate]");
         goto end;
     }
     }
@@ -230,7 +230,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     max_traffic_rate = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "maxTrafficRate");
     if (max_traffic_rate) {
     if (!cJSON_IsString(max_traffic_rate) && !cJSON_IsNull(max_traffic_rate)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [max_traffic_rate]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [max_traffic_rate]");
         goto end;
     }
     }
@@ -238,7 +238,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     avg_packet_delay = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "avgPacketDelay");
     if (avg_packet_delay) {
     if (!cJSON_IsNumber(avg_packet_delay)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [avg_packet_delay]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [avg_packet_delay]");
         goto end;
     }
     }
@@ -246,7 +246,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     max_packet_delay = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "maxPacketDelay");
     if (max_packet_delay) {
     if (!cJSON_IsNumber(max_packet_delay)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [max_packet_delay]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [max_packet_delay]");
         goto end;
     }
     }
@@ -254,7 +254,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     avg_packet_loss_rate = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "avgPacketLossRate");
     if (avg_packet_loss_rate) {
     if (!cJSON_IsNumber(avg_packet_loss_rate)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [avg_packet_loss_rate]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [avg_packet_loss_rate]");
         goto end;
     }
     }
@@ -262,7 +262,7 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_parseFromJSON(cJSON *threshol
     svc_exp_level = cJSON_GetObjectItemCaseSensitive(threshold_levelJSON, "svcExpLevel");
     if (svc_exp_level) {
     if (!cJSON_IsNumber(svc_exp_level)) {
-        ogs_error("OpenAPI_threshold_level_parseFromJSON() failed [svc_exp_level]");
+        log_error("OpenAPI_threshold_level_parseFromJSON() failed [svc_exp_level]");
         goto end;
     }
     }
@@ -300,10 +300,10 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_copy(OpenAPI_threshold_level_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_threshold_level_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_threshold_level_convertToJSON() failed");
+        log_error("OpenAPI_threshold_level_convertToJSON() failed");
         return NULL;
     }
 
@@ -311,14 +311,14 @@ OpenAPI_threshold_level_t *OpenAPI_threshold_level_copy(OpenAPI_threshold_level_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -10,7 +10,7 @@ OpenAPI_report_item_t *OpenAPI_report_item_create(
 )
 {
     OpenAPI_report_item_t *report_item_local_var = ogs_malloc(sizeof(OpenAPI_report_item_t));
-    ogs_assert(report_item_local_var);
+    log_assert(report_item_local_var);
 
     report_item_local_var->path = path;
     report_item_local_var->reason = reason;
@@ -42,23 +42,23 @@ cJSON *OpenAPI_report_item_convertToJSON(OpenAPI_report_item_t *report_item)
     OpenAPI_lnode_t *node = NULL;
 
     if (report_item == NULL) {
-        ogs_error("OpenAPI_report_item_convertToJSON() failed [ReportItem]");
+        log_error("OpenAPI_report_item_convertToJSON() failed [ReportItem]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!report_item->path) {
-        ogs_error("OpenAPI_report_item_convertToJSON() failed [path]");
+        log_error("OpenAPI_report_item_convertToJSON() failed [path]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "path", report_item->path) == NULL) {
-        ogs_error("OpenAPI_report_item_convertToJSON() failed [path]");
+        log_error("OpenAPI_report_item_convertToJSON() failed [path]");
         goto end;
     }
 
     if (report_item->reason) {
     if (cJSON_AddStringToObject(item, "reason", report_item->reason) == NULL) {
-        ogs_error("OpenAPI_report_item_convertToJSON() failed [reason]");
+        log_error("OpenAPI_report_item_convertToJSON() failed [reason]");
         goto end;
     }
     }
@@ -75,18 +75,18 @@ OpenAPI_report_item_t *OpenAPI_report_item_parseFromJSON(cJSON *report_itemJSON)
     cJSON *reason = NULL;
     path = cJSON_GetObjectItemCaseSensitive(report_itemJSON, "path");
     if (!path) {
-        ogs_error("OpenAPI_report_item_parseFromJSON() failed [path]");
+        log_error("OpenAPI_report_item_parseFromJSON() failed [path]");
         goto end;
     }
     if (!cJSON_IsString(path)) {
-        ogs_error("OpenAPI_report_item_parseFromJSON() failed [path]");
+        log_error("OpenAPI_report_item_parseFromJSON() failed [path]");
         goto end;
     }
 
     reason = cJSON_GetObjectItemCaseSensitive(report_itemJSON, "reason");
     if (reason) {
     if (!cJSON_IsString(reason) && !cJSON_IsNull(reason)) {
-        ogs_error("OpenAPI_report_item_parseFromJSON() failed [reason]");
+        log_error("OpenAPI_report_item_parseFromJSON() failed [reason]");
         goto end;
     }
     }
@@ -106,10 +106,10 @@ OpenAPI_report_item_t *OpenAPI_report_item_copy(OpenAPI_report_item_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_report_item_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_report_item_convertToJSON() failed");
+        log_error("OpenAPI_report_item_convertToJSON() failed");
         return NULL;
     }
 
@@ -117,14 +117,14 @@ OpenAPI_report_item_t *OpenAPI_report_item_copy(OpenAPI_report_item_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

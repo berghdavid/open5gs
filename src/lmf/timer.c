@@ -38,9 +38,9 @@ void lmf_timer_location_request_timeout(void *data)
 {
     lmf_location_request_t *location_request = data;
 
-    ogs_assert(location_request);
+    log_assert(location_request);
     
-    ogs_warn("[%s] Location request timeout", 
+    log_warn("[%s] Location request timeout", 
             location_request->supi ? location_request->supi : "Unknown");
 
     /* Cleanup location request */

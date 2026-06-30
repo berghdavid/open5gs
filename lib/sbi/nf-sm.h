@@ -39,7 +39,7 @@ void ogs_sbi_nf_state_de_registered(ogs_fsm_t *s, ogs_event_t *e);
 void ogs_sbi_nf_state_exception(ogs_fsm_t *s, ogs_event_t *e);
 
 #define ogs_sbi_sm_debug(__e) \
-    ogs_debug("%s(): %s", __func__, ogs_event_get_name(__e))
+    log_debug("%s(): %s", __func__, ogs_event_get_name(__e))
 
 #ifdef __cplusplus
 }

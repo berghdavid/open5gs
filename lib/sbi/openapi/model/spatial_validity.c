@@ -9,7 +9,7 @@ OpenAPI_spatial_validity_t *OpenAPI_spatial_validity_create(
 )
 {
     OpenAPI_spatial_validity_t *spatial_validity_local_var = ogs_malloc(sizeof(OpenAPI_spatial_validity_t));
-    ogs_assert(spatial_validity_local_var);
+    log_assert(spatial_validity_local_var);
 
     spatial_validity_local_var->presence_info_list = presence_info_list;
 
@@ -42,18 +42,18 @@ cJSON *OpenAPI_spatial_validity_convertToJSON(OpenAPI_spatial_validity_t *spatia
     OpenAPI_lnode_t *node = NULL;
 
     if (spatial_validity == NULL) {
-        ogs_error("OpenAPI_spatial_validity_convertToJSON() failed [SpatialValidity]");
+        log_error("OpenAPI_spatial_validity_convertToJSON() failed [SpatialValidity]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!spatial_validity->presence_info_list) {
-        ogs_error("OpenAPI_spatial_validity_convertToJSON() failed [presence_info_list]");
+        log_error("OpenAPI_spatial_validity_convertToJSON() failed [presence_info_list]");
         return NULL;
     }
     cJSON *presence_info_list = cJSON_AddObjectToObject(item, "presenceInfoList");
     if (presence_info_list == NULL) {
-        ogs_error("OpenAPI_spatial_validity_convertToJSON() failed [presence_info_list]");
+        log_error("OpenAPI_spatial_validity_convertToJSON() failed [presence_info_list]");
         goto end;
     }
     cJSON *localMapObject = presence_info_list;
@@ -61,18 +61,18 @@ cJSON *OpenAPI_spatial_validity_convertToJSON(OpenAPI_spatial_validity_t *spatia
         OpenAPI_list_for_each(spatial_validity->presence_info_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_spatial_validity_convertToJSON() failed [presence_info_list]");
+                log_error("OpenAPI_spatial_validity_convertToJSON() failed [presence_info_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_spatial_validity_convertToJSON() failed [presence_info_list]");
+                log_error("OpenAPI_spatial_validity_convertToJSON() failed [presence_info_list]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_presence_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_spatial_validity_convertToJSON() failed [inner]");
+                log_error("OpenAPI_spatial_validity_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -91,12 +91,12 @@ OpenAPI_spatial_validity_t *OpenAPI_spatial_validity_parseFromJSON(cJSON *spatia
     OpenAPI_list_t *presence_info_listList = NULL;
     presence_info_list = cJSON_GetObjectItemCaseSensitive(spatial_validityJSON, "presenceInfoList");
     if (!presence_info_list) {
-        ogs_error("OpenAPI_spatial_validity_parseFromJSON() failed [presence_info_list]");
+        log_error("OpenAPI_spatial_validity_parseFromJSON() failed [presence_info_list]");
         goto end;
     }
         cJSON *presence_info_list_local_map = NULL;
         if (!cJSON_IsObject(presence_info_list) && !cJSON_IsNull(presence_info_list)) {
-            ogs_error("OpenAPI_spatial_validity_parseFromJSON() failed [presence_info_list]");
+            log_error("OpenAPI_spatial_validity_parseFromJSON() failed [presence_info_list]");
             goto end;
         }
         if (cJSON_IsObject(presence_info_list)) {
@@ -110,7 +110,7 @@ OpenAPI_spatial_validity_t *OpenAPI_spatial_validity_parseFromJSON(cJSON *spatia
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_spatial_validity_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_spatial_validity_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(presence_info_listList, localMapKeyPair);
@@ -141,10 +141,10 @@ OpenAPI_spatial_validity_t *OpenAPI_spatial_validity_copy(OpenAPI_spatial_validi
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_spatial_validity_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_spatial_validity_convertToJSON() failed");
+        log_error("OpenAPI_spatial_validity_convertToJSON() failed");
         return NULL;
     }
 
@@ -152,14 +152,14 @@ OpenAPI_spatial_validity_t *OpenAPI_spatial_validity_copy(OpenAPI_spatial_validi
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

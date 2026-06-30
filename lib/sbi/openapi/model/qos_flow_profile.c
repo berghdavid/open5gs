@@ -18,7 +18,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_create(
 )
 {
     OpenAPI_qos_flow_profile_t *qos_flow_profile_local_var = ogs_malloc(sizeof(OpenAPI_qos_flow_profile_t));
-    ogs_assert(qos_flow_profile_local_var);
+    log_assert(qos_flow_profile_local_var);
 
     qos_flow_profile_local_var->_5qi = _5qi;
     qos_flow_profile_local_var->non_dynamic5_qi = non_dynamic5_qi;
@@ -66,25 +66,25 @@ cJSON *OpenAPI_qos_flow_profile_convertToJSON(OpenAPI_qos_flow_profile_t *qos_fl
     OpenAPI_lnode_t *node = NULL;
 
     if (qos_flow_profile == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [QosFlowProfile]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [QosFlowProfile]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "5qi", qos_flow_profile->_5qi) == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [_5qi]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [_5qi]");
         goto end;
     }
 
     if (qos_flow_profile->non_dynamic5_qi) {
     cJSON *non_dynamic5_qi_local_JSON = OpenAPI_non_dynamic5_qi_convertToJSON(qos_flow_profile->non_dynamic5_qi);
     if (non_dynamic5_qi_local_JSON == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [non_dynamic5_qi]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [non_dynamic5_qi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nonDynamic5Qi", non_dynamic5_qi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [non_dynamic5_qi]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [non_dynamic5_qi]");
         goto end;
     }
     }
@@ -92,12 +92,12 @@ cJSON *OpenAPI_qos_flow_profile_convertToJSON(OpenAPI_qos_flow_profile_t *qos_fl
     if (qos_flow_profile->dynamic5_qi) {
     cJSON *dynamic5_qi_local_JSON = OpenAPI_dynamic5_qi_convertToJSON(qos_flow_profile->dynamic5_qi);
     if (dynamic5_qi_local_JSON == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [dynamic5_qi]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [dynamic5_qi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "dynamic5Qi", dynamic5_qi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [dynamic5_qi]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [dynamic5_qi]");
         goto end;
     }
     }
@@ -105,12 +105,12 @@ cJSON *OpenAPI_qos_flow_profile_convertToJSON(OpenAPI_qos_flow_profile_t *qos_fl
     if (qos_flow_profile->arp) {
     cJSON *arp_local_JSON = OpenAPI_arp_convertToJSON(qos_flow_profile->arp);
     if (arp_local_JSON == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [arp]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [arp]");
         goto end;
     }
     cJSON_AddItemToObject(item, "arp", arp_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [arp]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [arp]");
         goto end;
     }
     }
@@ -118,40 +118,40 @@ cJSON *OpenAPI_qos_flow_profile_convertToJSON(OpenAPI_qos_flow_profile_t *qos_fl
     if (qos_flow_profile->gbr_qos_flow_info) {
     cJSON *gbr_qos_flow_info_local_JSON = OpenAPI_gbr_qos_flow_information_convertToJSON(qos_flow_profile->gbr_qos_flow_info);
     if (gbr_qos_flow_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [gbr_qos_flow_info]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [gbr_qos_flow_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "gbrQosFlowInfo", gbr_qos_flow_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [gbr_qos_flow_info]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [gbr_qos_flow_info]");
         goto end;
     }
     }
 
     if (qos_flow_profile->rqa != OpenAPI_reflective_qo_s_attribute_NULL) {
     if (cJSON_AddStringToObject(item, "rqa", OpenAPI_reflective_qo_s_attribute_ToString(qos_flow_profile->rqa)) == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [rqa]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [rqa]");
         goto end;
     }
     }
 
     if (qos_flow_profile->additional_qos_flow_info != OpenAPI_additional_qos_flow_info_NULL) {
     if (cJSON_AddStringToObject(item, "additionalQosFlowInfo", OpenAPI_additional_qos_flow_info_ToString(qos_flow_profile->additional_qos_flow_info)) == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [additional_qos_flow_info]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [additional_qos_flow_info]");
         goto end;
     }
     }
 
     if (qos_flow_profile->qos_monitoring_req != OpenAPI_qos_monitoring_req_NULL) {
     if (cJSON_AddStringToObject(item, "qosMonitoringReq", OpenAPI_qos_monitoring_req_ToString(qos_flow_profile->qos_monitoring_req)) == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [qos_monitoring_req]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [qos_monitoring_req]");
         goto end;
     }
     }
 
     if (qos_flow_profile->is_qos_rep_period) {
     if (cJSON_AddNumberToObject(item, "qosRepPeriod", qos_flow_profile->qos_rep_period) == NULL) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed [qos_rep_period]");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed [qos_rep_period]");
         goto end;
     }
     }
@@ -182,11 +182,11 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     cJSON *qos_rep_period = NULL;
     _5qi = cJSON_GetObjectItemCaseSensitive(qos_flow_profileJSON, "5qi");
     if (!_5qi) {
-        ogs_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [_5qi]");
+        log_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [_5qi]");
         goto end;
     }
     if (!cJSON_IsNumber(_5qi)) {
-        ogs_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [_5qi]");
+        log_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [_5qi]");
         goto end;
     }
 
@@ -194,7 +194,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     if (non_dynamic5_qi) {
     non_dynamic5_qi_local_nonprim = OpenAPI_non_dynamic5_qi_parseFromJSON(non_dynamic5_qi);
     if (!non_dynamic5_qi_local_nonprim) {
-        ogs_error("OpenAPI_non_dynamic5_qi_parseFromJSON failed [non_dynamic5_qi]");
+        log_error("OpenAPI_non_dynamic5_qi_parseFromJSON failed [non_dynamic5_qi]");
         goto end;
     }
     }
@@ -203,7 +203,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     if (dynamic5_qi) {
     dynamic5_qi_local_nonprim = OpenAPI_dynamic5_qi_parseFromJSON(dynamic5_qi);
     if (!dynamic5_qi_local_nonprim) {
-        ogs_error("OpenAPI_dynamic5_qi_parseFromJSON failed [dynamic5_qi]");
+        log_error("OpenAPI_dynamic5_qi_parseFromJSON failed [dynamic5_qi]");
         goto end;
     }
     }
@@ -212,7 +212,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     if (arp) {
     arp_local_nonprim = OpenAPI_arp_parseFromJSON(arp);
     if (!arp_local_nonprim) {
-        ogs_error("OpenAPI_arp_parseFromJSON failed [arp]");
+        log_error("OpenAPI_arp_parseFromJSON failed [arp]");
         goto end;
     }
     }
@@ -221,7 +221,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     if (gbr_qos_flow_info) {
     gbr_qos_flow_info_local_nonprim = OpenAPI_gbr_qos_flow_information_parseFromJSON(gbr_qos_flow_info);
     if (!gbr_qos_flow_info_local_nonprim) {
-        ogs_error("OpenAPI_gbr_qos_flow_information_parseFromJSON failed [gbr_qos_flow_info]");
+        log_error("OpenAPI_gbr_qos_flow_information_parseFromJSON failed [gbr_qos_flow_info]");
         goto end;
     }
     }
@@ -229,7 +229,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     rqa = cJSON_GetObjectItemCaseSensitive(qos_flow_profileJSON, "rqa");
     if (rqa) {
     if (!cJSON_IsString(rqa)) {
-        ogs_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [rqa]");
+        log_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [rqa]");
         goto end;
     }
     rqaVariable = OpenAPI_reflective_qo_s_attribute_FromString(rqa->valuestring);
@@ -238,7 +238,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     additional_qos_flow_info = cJSON_GetObjectItemCaseSensitive(qos_flow_profileJSON, "additionalQosFlowInfo");
     if (additional_qos_flow_info) {
     if (!cJSON_IsString(additional_qos_flow_info)) {
-        ogs_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [additional_qos_flow_info]");
+        log_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [additional_qos_flow_info]");
         goto end;
     }
     additional_qos_flow_infoVariable = OpenAPI_additional_qos_flow_info_FromString(additional_qos_flow_info->valuestring);
@@ -247,7 +247,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     qos_monitoring_req = cJSON_GetObjectItemCaseSensitive(qos_flow_profileJSON, "qosMonitoringReq");
     if (qos_monitoring_req) {
     if (!cJSON_IsString(qos_monitoring_req)) {
-        ogs_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [qos_monitoring_req]");
+        log_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [qos_monitoring_req]");
         goto end;
     }
     qos_monitoring_reqVariable = OpenAPI_qos_monitoring_req_FromString(qos_monitoring_req->valuestring);
@@ -256,7 +256,7 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_parseFromJSON(cJSON *qos_fl
     qos_rep_period = cJSON_GetObjectItemCaseSensitive(qos_flow_profileJSON, "qosRepPeriod");
     if (qos_rep_period) {
     if (!cJSON_IsNumber(qos_rep_period)) {
-        ogs_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [qos_rep_period]");
+        log_error("OpenAPI_qos_flow_profile_parseFromJSON() failed [qos_rep_period]");
         goto end;
     }
     }
@@ -301,10 +301,10 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_copy(OpenAPI_qos_flow_profi
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_qos_flow_profile_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_qos_flow_profile_convertToJSON() failed");
+        log_error("OpenAPI_qos_flow_profile_convertToJSON() failed");
         return NULL;
     }
 
@@ -312,14 +312,14 @@ OpenAPI_qos_flow_profile_t *OpenAPI_qos_flow_profile_copy(OpenAPI_qos_flow_profi
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

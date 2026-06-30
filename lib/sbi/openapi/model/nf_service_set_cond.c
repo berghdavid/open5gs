@@ -10,7 +10,7 @@ OpenAPI_nf_service_set_cond_t *OpenAPI_nf_service_set_cond_create(
 )
 {
     OpenAPI_nf_service_set_cond_t *nf_service_set_cond_local_var = ogs_malloc(sizeof(OpenAPI_nf_service_set_cond_t));
-    ogs_assert(nf_service_set_cond_local_var);
+    log_assert(nf_service_set_cond_local_var);
 
     nf_service_set_cond_local_var->nf_service_set_id = nf_service_set_id;
     nf_service_set_cond_local_var->nf_set_id = nf_set_id;
@@ -42,23 +42,23 @@ cJSON *OpenAPI_nf_service_set_cond_convertToJSON(OpenAPI_nf_service_set_cond_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (nf_service_set_cond == NULL) {
-        ogs_error("OpenAPI_nf_service_set_cond_convertToJSON() failed [NfServiceSetCond]");
+        log_error("OpenAPI_nf_service_set_cond_convertToJSON() failed [NfServiceSetCond]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!nf_service_set_cond->nf_service_set_id) {
-        ogs_error("OpenAPI_nf_service_set_cond_convertToJSON() failed [nf_service_set_id]");
+        log_error("OpenAPI_nf_service_set_cond_convertToJSON() failed [nf_service_set_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "nfServiceSetId", nf_service_set_cond->nf_service_set_id) == NULL) {
-        ogs_error("OpenAPI_nf_service_set_cond_convertToJSON() failed [nf_service_set_id]");
+        log_error("OpenAPI_nf_service_set_cond_convertToJSON() failed [nf_service_set_id]");
         goto end;
     }
 
     if (nf_service_set_cond->nf_set_id) {
     if (cJSON_AddStringToObject(item, "nfSetId", nf_service_set_cond->nf_set_id) == NULL) {
-        ogs_error("OpenAPI_nf_service_set_cond_convertToJSON() failed [nf_set_id]");
+        log_error("OpenAPI_nf_service_set_cond_convertToJSON() failed [nf_set_id]");
         goto end;
     }
     }
@@ -75,18 +75,18 @@ OpenAPI_nf_service_set_cond_t *OpenAPI_nf_service_set_cond_parseFromJSON(cJSON *
     cJSON *nf_set_id = NULL;
     nf_service_set_id = cJSON_GetObjectItemCaseSensitive(nf_service_set_condJSON, "nfServiceSetId");
     if (!nf_service_set_id) {
-        ogs_error("OpenAPI_nf_service_set_cond_parseFromJSON() failed [nf_service_set_id]");
+        log_error("OpenAPI_nf_service_set_cond_parseFromJSON() failed [nf_service_set_id]");
         goto end;
     }
     if (!cJSON_IsString(nf_service_set_id)) {
-        ogs_error("OpenAPI_nf_service_set_cond_parseFromJSON() failed [nf_service_set_id]");
+        log_error("OpenAPI_nf_service_set_cond_parseFromJSON() failed [nf_service_set_id]");
         goto end;
     }
 
     nf_set_id = cJSON_GetObjectItemCaseSensitive(nf_service_set_condJSON, "nfSetId");
     if (nf_set_id) {
     if (!cJSON_IsString(nf_set_id) && !cJSON_IsNull(nf_set_id)) {
-        ogs_error("OpenAPI_nf_service_set_cond_parseFromJSON() failed [nf_set_id]");
+        log_error("OpenAPI_nf_service_set_cond_parseFromJSON() failed [nf_set_id]");
         goto end;
     }
     }
@@ -106,10 +106,10 @@ OpenAPI_nf_service_set_cond_t *OpenAPI_nf_service_set_cond_copy(OpenAPI_nf_servi
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nf_service_set_cond_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nf_service_set_cond_convertToJSON() failed");
+        log_error("OpenAPI_nf_service_set_cond_convertToJSON() failed");
         return NULL;
     }
 
@@ -117,14 +117,14 @@ OpenAPI_nf_service_set_cond_t *OpenAPI_nf_service_set_cond_copy(OpenAPI_nf_servi
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

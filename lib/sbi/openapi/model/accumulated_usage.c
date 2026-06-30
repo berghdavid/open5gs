@@ -16,7 +16,7 @@ OpenAPI_accumulated_usage_t *OpenAPI_accumulated_usage_create(
 )
 {
     OpenAPI_accumulated_usage_t *accumulated_usage_local_var = ogs_malloc(sizeof(OpenAPI_accumulated_usage_t));
-    ogs_assert(accumulated_usage_local_var);
+    log_assert(accumulated_usage_local_var);
 
     accumulated_usage_local_var->is_duration = is_duration;
     accumulated_usage_local_var->duration = duration;
@@ -46,35 +46,35 @@ cJSON *OpenAPI_accumulated_usage_convertToJSON(OpenAPI_accumulated_usage_t *accu
     OpenAPI_lnode_t *node = NULL;
 
     if (accumulated_usage == NULL) {
-        ogs_error("OpenAPI_accumulated_usage_convertToJSON() failed [AccumulatedUsage]");
+        log_error("OpenAPI_accumulated_usage_convertToJSON() failed [AccumulatedUsage]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (accumulated_usage->is_duration) {
     if (cJSON_AddNumberToObject(item, "duration", accumulated_usage->duration) == NULL) {
-        ogs_error("OpenAPI_accumulated_usage_convertToJSON() failed [duration]");
+        log_error("OpenAPI_accumulated_usage_convertToJSON() failed [duration]");
         goto end;
     }
     }
 
     if (accumulated_usage->is_total_volume) {
     if (cJSON_AddNumberToObject(item, "totalVolume", accumulated_usage->total_volume) == NULL) {
-        ogs_error("OpenAPI_accumulated_usage_convertToJSON() failed [total_volume]");
+        log_error("OpenAPI_accumulated_usage_convertToJSON() failed [total_volume]");
         goto end;
     }
     }
 
     if (accumulated_usage->is_downlink_volume) {
     if (cJSON_AddNumberToObject(item, "downlinkVolume", accumulated_usage->downlink_volume) == NULL) {
-        ogs_error("OpenAPI_accumulated_usage_convertToJSON() failed [downlink_volume]");
+        log_error("OpenAPI_accumulated_usage_convertToJSON() failed [downlink_volume]");
         goto end;
     }
     }
 
     if (accumulated_usage->is_uplink_volume) {
     if (cJSON_AddNumberToObject(item, "uplinkVolume", accumulated_usage->uplink_volume) == NULL) {
-        ogs_error("OpenAPI_accumulated_usage_convertToJSON() failed [uplink_volume]");
+        log_error("OpenAPI_accumulated_usage_convertToJSON() failed [uplink_volume]");
         goto end;
     }
     }
@@ -94,7 +94,7 @@ OpenAPI_accumulated_usage_t *OpenAPI_accumulated_usage_parseFromJSON(cJSON *accu
     duration = cJSON_GetObjectItemCaseSensitive(accumulated_usageJSON, "duration");
     if (duration) {
     if (!cJSON_IsNumber(duration)) {
-        ogs_error("OpenAPI_accumulated_usage_parseFromJSON() failed [duration]");
+        log_error("OpenAPI_accumulated_usage_parseFromJSON() failed [duration]");
         goto end;
     }
     }
@@ -102,7 +102,7 @@ OpenAPI_accumulated_usage_t *OpenAPI_accumulated_usage_parseFromJSON(cJSON *accu
     total_volume = cJSON_GetObjectItemCaseSensitive(accumulated_usageJSON, "totalVolume");
     if (total_volume) {
     if (!cJSON_IsNumber(total_volume)) {
-        ogs_error("OpenAPI_accumulated_usage_parseFromJSON() failed [total_volume]");
+        log_error("OpenAPI_accumulated_usage_parseFromJSON() failed [total_volume]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_accumulated_usage_t *OpenAPI_accumulated_usage_parseFromJSON(cJSON *accu
     downlink_volume = cJSON_GetObjectItemCaseSensitive(accumulated_usageJSON, "downlinkVolume");
     if (downlink_volume) {
     if (!cJSON_IsNumber(downlink_volume)) {
-        ogs_error("OpenAPI_accumulated_usage_parseFromJSON() failed [downlink_volume]");
+        log_error("OpenAPI_accumulated_usage_parseFromJSON() failed [downlink_volume]");
         goto end;
     }
     }
@@ -118,7 +118,7 @@ OpenAPI_accumulated_usage_t *OpenAPI_accumulated_usage_parseFromJSON(cJSON *accu
     uplink_volume = cJSON_GetObjectItemCaseSensitive(accumulated_usageJSON, "uplinkVolume");
     if (uplink_volume) {
     if (!cJSON_IsNumber(uplink_volume)) {
-        ogs_error("OpenAPI_accumulated_usage_parseFromJSON() failed [uplink_volume]");
+        log_error("OpenAPI_accumulated_usage_parseFromJSON() failed [uplink_volume]");
         goto end;
     }
     }
@@ -144,10 +144,10 @@ OpenAPI_accumulated_usage_t *OpenAPI_accumulated_usage_copy(OpenAPI_accumulated_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_accumulated_usage_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_accumulated_usage_convertToJSON() failed");
+        log_error("OpenAPI_accumulated_usage_convertToJSON() failed");
         return NULL;
     }
 
@@ -155,14 +155,14 @@ OpenAPI_accumulated_usage_t *OpenAPI_accumulated_usage_copy(OpenAPI_accumulated_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

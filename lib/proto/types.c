@@ -26,7 +26,7 @@
 uint32_t ogs_plmn_id_hexdump(const void *plmn_id)
 {
     uint32_t hex;
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     memcpy(&hex, plmn_id, sizeof(ogs_plmn_id_t));
     hex = be32toh(hex) >> 8;
     return hex;
@@ -34,25 +34,25 @@ uint32_t ogs_plmn_id_hexdump(const void *plmn_id)
 
 uint16_t ogs_plmn_id_mcc(const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     return plmn_id->mcc1 * 100 + plmn_id->mcc2 * 10 + plmn_id->mcc3;
 }
 uint16_t ogs_plmn_id_mnc(const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     return plmn_id->mnc1 == 0xf ? plmn_id->mnc2 * 10 + plmn_id->mnc3 :
         plmn_id->mnc1 * 100 + plmn_id->mnc2 * 10 + plmn_id->mnc3;
 }
 uint16_t ogs_plmn_id_mnc_len(const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     return plmn_id->mnc1 == 0xf ? 2 : 3;
 }
 
 void *ogs_plmn_id_build(ogs_plmn_id_t *plmn_id,
         uint16_t mcc, uint16_t mnc, uint16_t mnc_len)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
 
     plmn_id->mcc1 = PLMN_ID_DIGIT1(mcc);
     plmn_id->mcc2 = PLMN_ID_DIGIT2(mcc);
@@ -72,8 +72,8 @@ void *ogs_plmn_id_build(ogs_plmn_id_t *plmn_id,
 void *ogs_nas_from_plmn_id(
         ogs_nas_plmn_id_t *ogs_nas_plmn_id, const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(ogs_nas_plmn_id);
-    ogs_assert(plmn_id);
+    log_assert(ogs_nas_plmn_id);
+    log_assert(plmn_id);
 
     memcpy(ogs_nas_plmn_id, plmn_id, OGS_PLMN_ID_LEN);
     if (plmn_id->mnc1 != 0xf) {
@@ -86,8 +86,8 @@ void *ogs_nas_from_plmn_id(
 void *ogs_nas_to_plmn_id(
         ogs_plmn_id_t *plmn_id, const ogs_nas_plmn_id_t *ogs_nas_plmn_id)
 {
-    ogs_assert(plmn_id);
-    ogs_assert(ogs_nas_plmn_id);
+    log_assert(plmn_id);
+    log_assert(ogs_nas_plmn_id);
 
     memcpy(plmn_id, ogs_nas_plmn_id, OGS_PLMN_ID_LEN);
     if (plmn_id->mnc1 != 0xf) {
@@ -100,13 +100,13 @@ void *ogs_nas_to_plmn_id(
 
 char *ogs_plmn_id_mcc_string(const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     return ogs_msprintf("%03d", ogs_plmn_id_mcc(plmn_id));
 }
 
 char *ogs_plmn_id_mnc_string(const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     if (ogs_plmn_id_mnc_len(plmn_id) == 2)
         return ogs_msprintf("%02d", ogs_plmn_id_mnc(plmn_id));
     else
@@ -115,8 +115,8 @@ char *ogs_plmn_id_mnc_string(const ogs_plmn_id_t *plmn_id)
 
 char *ogs_plmn_id_to_string(const ogs_plmn_id_t *plmn_id, char *buf)
 {
-    ogs_assert(plmn_id);
-    ogs_assert(buf);
+    log_assert(plmn_id);
+    log_assert(buf);
 
     if (ogs_plmn_id_mnc_len(plmn_id) == 2)
         ogs_snprintf(buf, OGS_PLMNIDSTRLEN, "%03d%02d",
@@ -134,21 +134,21 @@ char *ogs_plmn_id_to_string(const ogs_plmn_id_t *plmn_id, char *buf)
 
 char *ogs_serving_network_name_from_plmn_id(const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     return ogs_msprintf("5G:mnc%03d.mcc%03d" FQDN_3GPPNETWORK_ORG,
             ogs_plmn_id_mnc(plmn_id), ogs_plmn_id_mcc(plmn_id));
 }
 
 char *ogs_home_network_domain_from_plmn_id(const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     return ogs_msprintf("5gc.mnc%03d.mcc%03d" FQDN_3GPPNETWORK_ORG,
             ogs_plmn_id_mnc(plmn_id), ogs_plmn_id_mcc(plmn_id));
 }
 
 char *ogs_epc_domain_from_plmn_id(const ogs_plmn_id_t *plmn_id)
 {
-    ogs_assert(plmn_id);
+    log_assert(plmn_id);
     return ogs_msprintf("epc.mnc%03d.mcc%03d" FQDN_3GPPNETWORK_ORG,
             ogs_plmn_id_mnc(plmn_id), ogs_plmn_id_mcc(plmn_id));
 }
@@ -169,7 +169,7 @@ char *ogs_home_network_domain_from_fqdn(char *fqdn)
 {
     char *p = NULL;
 
-    ogs_assert(fqdn);
+    log_assert(fqdn);
 
     if (strlen(fqdn) <
         strlen(FQDN_5GC_MNC "XXX" FQDN_MCC "XXX" FQDN_3GPPNETWORK_ORG)) {
@@ -202,11 +202,11 @@ uint16_t ogs_plmn_id_mcc_from_fqdn(char *fqdn)
     char mcc[4];
     char *p = NULL;
 
-    ogs_assert(fqdn);
+    log_assert(fqdn);
 
     p = ogs_home_network_domain_from_fqdn(fqdn);
     if (p == NULL) {
-        ogs_error("Invalid FQDN [%d:%s]", (int)strlen(fqdn), fqdn);
+        log_error("Invalid FQDN [%d:%s]", (int)strlen(fqdn), fqdn);
         return 0;
     }
 
@@ -223,11 +223,11 @@ uint16_t ogs_plmn_id_mnc_from_fqdn(char *fqdn)
     char mnc[4];
     char *p = NULL;
 
-    ogs_assert(fqdn);
+    log_assert(fqdn);
 
     p = ogs_home_network_domain_from_fqdn(fqdn);
     if (p == NULL) {
-        ogs_error("Invalid FQDN [%d:%s]", (int)strlen(fqdn), fqdn);
+        log_error("Invalid FQDN [%d:%s]", (int)strlen(fqdn), fqdn);
         return 0;
     }
 
@@ -243,7 +243,7 @@ uint32_t ogs_amf_id_hexdump(const ogs_amf_id_t *amf_id)
 {
     uint32_t hex;
 
-    ogs_assert(amf_id);
+    log_assert(amf_id);
 
     memcpy(&hex, amf_id, sizeof(ogs_amf_id_t));
     hex = be32toh(hex) >> 8;
@@ -255,8 +255,8 @@ ogs_amf_id_t *ogs_amf_id_from_string(ogs_amf_id_t *amf_id, const char *hex)
 {
     char hexbuf[sizeof(ogs_amf_id_t)];
 
-    ogs_assert(amf_id);
-    ogs_assert(hex);
+    log_assert(amf_id);
+    log_assert(hex);
 
     ogs_hex_from_string(hex, hexbuf, sizeof(hexbuf));
 
@@ -272,11 +272,11 @@ ogs_amf_id_t *ogs_amf_id_from_string(ogs_amf_id_t *amf_id, const char *hex)
 char *ogs_amf_id_to_string(const ogs_amf_id_t *amf_id)
 {
     char *str = NULL;
-    ogs_assert(amf_id);
+    log_assert(amf_id);
 
     str = ogs_calloc(1, OGS_AMFIDSTRLEN);
     if (!str) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
@@ -287,17 +287,17 @@ char *ogs_amf_id_to_string(const ogs_amf_id_t *amf_id)
 
 uint8_t ogs_amf_region_id(const ogs_amf_id_t *amf_id)
 {
-    ogs_assert(amf_id);
+    log_assert(amf_id);
     return amf_id->region;
 }
 uint16_t ogs_amf_set_id(const ogs_amf_id_t *amf_id)
 {
-    ogs_assert(amf_id);
+    log_assert(amf_id);
     return (amf_id->set1 << 2) + amf_id->set2;
 }
 uint8_t ogs_amf_pointer(const ogs_amf_id_t *amf_id)
 {
-    ogs_assert(amf_id);
+    log_assert(amf_id);
     return amf_id->pointer;
 }
 
@@ -317,22 +317,22 @@ char *ogs_id_get_type(const char *str)
     char *token, *p, *tmp;
     char *type = NULL;
 
-    ogs_assert(str);
+    log_assert(str);
     tmp = ogs_strdup(str);
     if (!tmp) {
-        ogs_error("ogs_strdup[%s] failed", str);
+        log_error("ogs_strdup[%s] failed", str);
         goto cleanup;
     }
 
     p = tmp;
     token = strsep(&p, "-");
     if (!token) {
-        ogs_error("strsep[%s] failed", str);
+        log_error("strsep[%s] failed", str);
         goto cleanup;
     }
     type = ogs_strdup(token);
     if (!type) {
-        ogs_error("ogs_strdup[%s:%s] failed", str, token);
+        log_error("ogs_strdup[%s:%s] failed", str, token);
         goto cleanup;
     }
 
@@ -347,27 +347,27 @@ char *ogs_id_get_value(const char *str)
     char *token, *p, *tmp;
     char *ueid = NULL;
 
-    ogs_assert(str);
+    log_assert(str);
     tmp = ogs_strdup(str);
     if (!tmp) {
-        ogs_error("ogs_strdup[%s] failed", str);
+        log_error("ogs_strdup[%s] failed", str);
         goto cleanup;
     }
 
     p = tmp;
     token = strsep(&p, "-");
     if (!token) {
-        ogs_error("strsep[%s] failed", str);
+        log_error("strsep[%s] failed", str);
         goto cleanup;
     }
     token = strsep(&p, "-");
     if (!token) {
-        ogs_error("strsep[%s] failed", str);
+        log_error("strsep[%s] failed", str);
         goto cleanup;
     }
     ueid = ogs_strdup(token);
     if (!ueid) {
-        ogs_error("ogs_strdup[%s:%s] failed", str, token);
+        log_error("ogs_strdup[%s:%s] failed", str, token);
         goto cleanup;
     }
 
@@ -385,7 +385,7 @@ char *ogs_s_nssai_sd_to_string(const ogs_uint24_t sd)
         return NULL;
 
     string = ogs_uint24_to_0string(sd);
-    ogs_expect(string);
+    log_expect(string);
 
     return string;
 }
@@ -426,9 +426,9 @@ int ogs_fqdn_parse(char *dst, const char *src, int length)
     while (i+1 <= length) {
         len = src[i++];
         if ((j + len + 1) > length) {
-            ogs_error("Invalid FQDN encoding[j:%d+len:%d] + 1 > length[%d]",
+            log_error("Invalid FQDN encoding[j:%d+len:%d] + 1 > length[%d]",
                     j, len, length);
-            ogs_log_hexdump(OGS_LOG_ERROR, (unsigned char *)src, length);
+            log_hexdump(LOG_ERROR, (unsigned char *)src, length);
             return -EINVAL;
         }
         memcpy(&dst[j], &src[i], len);
@@ -453,9 +453,9 @@ int ogs_pco_parse(ogs_pco_t *pco, unsigned char *data, int data_len)
     int size = 0;
     int i = 0;
 
-    ogs_assert(pco);
-    ogs_assert(data);
-    ogs_assert(data_len);
+    log_assert(pco);
+    log_assert(data);
+    log_assert(data_len);
 
     memset(pco, 0, sizeof(ogs_pco_t));
 
@@ -465,12 +465,12 @@ int ogs_pco_parse(ogs_pco_t *pco, unsigned char *data, int data_len)
 
     while(size < data_len && i < OGS_MAX_NUM_OF_PROTOCOL_OR_CONTAINER_ID) {
         ogs_pco_id_t *id = &pco->ids[i];
-        ogs_assert(size + sizeof(id->id) <= data_len);
+        log_assert(size + sizeof(id->id) <= data_len);
         memcpy(&id->id, data + size, sizeof(id->id));
         id->id = be16toh(id->id);
         size += sizeof(id->id);
 
-        ogs_assert(size + sizeof(id->len) <= data_len);
+        log_assert(size + sizeof(id->len) <= data_len);
         memcpy(&id->len, data + size, sizeof(id->len));
         size += sizeof(id->len);
 
@@ -480,7 +480,7 @@ int ogs_pco_parse(ogs_pco_t *pco, unsigned char *data, int data_len)
         i++;
     }
     pco->num_of_id = i;
-    ogs_expect(size == data_len);
+    log_expect(size == data_len);
 
     return size;
 }
@@ -490,30 +490,30 @@ int ogs_pco_build(unsigned char *data, int data_len, ogs_pco_t *pco)
     int size = 0;
     int i = 0;
 
-    ogs_assert(pco);
-    ogs_assert(data);
-    ogs_assert(data_len);
+    log_assert(pco);
+    log_assert(data);
+    log_assert(data_len);
 
     memcpy(&target, pco, sizeof(ogs_pco_t));
 
-    ogs_assert(size + 1 <= data_len);
+    log_assert(size + 1 <= data_len);
     memcpy(data + size, &target, 1);
     size += 1;
 
-    ogs_assert(target.num_of_id <= OGS_MAX_NUM_OF_PROTOCOL_OR_CONTAINER_ID);
+    log_assert(target.num_of_id <= OGS_MAX_NUM_OF_PROTOCOL_OR_CONTAINER_ID);
     for (i = 0; i < target.num_of_id; i++) {
         ogs_pco_id_t *id = &target.ids[i];
 
-        ogs_assert(size + sizeof(id->id) <= data_len);
+        log_assert(size + sizeof(id->id) <= data_len);
         id->id = htobe16(id->id);
         memcpy(data + size, &id->id, sizeof(id->id));
         size += sizeof(id->id);
 
-        ogs_assert(size + sizeof(id->len) <= data_len);
+        log_assert(size + sizeof(id->len) <= data_len);
         memcpy(data + size, &id->len, sizeof(id->len));
         size += sizeof(id->len);
 
-        ogs_assert(size + id->len <= data_len);
+        log_assert(size + id->len <= data_len);
         memcpy(data + size, id->data, id->len);
         size += id->len;
     }
@@ -525,12 +525,12 @@ int ogs_ip_to_sockaddr(ogs_ip_t *ip, uint16_t port, ogs_sockaddr_t **list)
 {
     ogs_sockaddr_t *addr = NULL, *addr6 = NULL;
 
-    ogs_assert(ip);
-    ogs_assert(list);
+    log_assert(ip);
+    log_assert(list);
 
     addr = ogs_calloc(1, sizeof(ogs_sockaddr_t));
     if (!addr) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return OGS_ERROR;
     }
     addr->ogs_sa_family = AF_INET;
@@ -538,7 +538,7 @@ int ogs_ip_to_sockaddr(ogs_ip_t *ip, uint16_t port, ogs_sockaddr_t **list)
 
     addr6 = ogs_calloc(1, sizeof(ogs_sockaddr_t));
     if (!addr6) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         ogs_free(addr);
         return OGS_ERROR;
     }
@@ -563,7 +563,7 @@ int ogs_ip_to_sockaddr(ogs_ip_t *ip, uint16_t port, ogs_sockaddr_t **list)
 
         *list = addr6;
     } else {
-        ogs_error("No IPv4 and IPv6");
+        log_error("No IPv4 and IPv6");
         ogs_free(addr);
         ogs_free(addr6);
         return OGS_ERROR;
@@ -576,11 +576,11 @@ int ogs_sockaddr_to_ip(
         ogs_sockaddr_t *addr, ogs_sockaddr_t *addr6, ogs_ip_t *ip)
 {
     if (!ip) {
-        ogs_error("No IP");
+        log_error("No IP");
         return OGS_ERROR;
     }
     if (!addr && !addr6) {
-        ogs_error("No Address");
+        log_error("No Address");
         return OGS_ERROR;
     }
 
@@ -601,7 +601,7 @@ int ogs_sockaddr_to_ip(
         ip->len = OGS_IPV6_LEN;
         memcpy(ip->addr6, addr6->sin6.sin6_addr.s6_addr, OGS_IPV6_LEN);
     } else
-        ogs_assert_if_reached();
+        log_assert_if_reached();
 
     return OGS_OK;
 }
@@ -612,7 +612,7 @@ char *ogs_ipv4_to_string(uint32_t addr)
 
     buf = ogs_calloc(1, OGS_ADDRSTRLEN);
     if (!buf) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
@@ -622,11 +622,11 @@ char *ogs_ipv4_to_string(uint32_t addr)
 char *ogs_ipv6addr_to_string(const uint8_t *addr6)
 {
     char *buf = NULL;
-    ogs_assert(addr6);
+    log_assert(addr6);
 
     buf = ogs_calloc(1, OGS_ADDRSTRLEN);
     if (!buf) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
@@ -637,21 +637,21 @@ char *ogs_ipv6prefix_to_string(const uint8_t *addr6, uint8_t prefixlen)
 {
     char *buf = NULL;
     uint8_t tmp[OGS_IPV6_LEN];
-    ogs_assert(addr6);
+    log_assert(addr6);
 
     memset(tmp, 0, OGS_IPV6_LEN);
     memcpy(tmp, addr6, prefixlen >> 3);
 
     buf = ogs_calloc(1, OGS_ADDRSTRLEN);
     if (!buf) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
     if (OGS_INET6_NTOP(tmp, buf) == NULL) {
-        ogs_fatal("Invalid IPv6 address");
-        ogs_log_hexdump(OGS_LOG_FATAL, addr6, OGS_IPV6_LEN);
-        ogs_assert_if_reached();
+        log_fatal("Invalid IPv6 address");
+        log_hexdump(LOG_FATAL, addr6, OGS_IPV6_LEN);
+        log_assert_if_reached();
     }
     return ogs_mstrcatf(buf, "/%d", prefixlen);
 }
@@ -661,12 +661,12 @@ int ogs_ipv4_from_string(uint32_t *addr, const char *string)
     int rv;
     ogs_sockaddr_t tmp;
 
-    ogs_assert(addr);
-    ogs_assert(string);
+    log_assert(addr);
+    log_assert(string);
 
     rv = ogs_inet_pton(AF_INET, string, &tmp);
     if (rv != OGS_OK) {
-        ogs_error("Invalid IPv4 string = %s", string);
+        log_error("Invalid IPv4 string = %s", string);
         return OGS_ERROR;
     }
 
@@ -680,12 +680,12 @@ int ogs_ipv6addr_from_string(uint8_t *addr6, const char *string)
     int rv;
     ogs_sockaddr_t tmp;
 
-    ogs_assert(addr6);
-    ogs_assert(string);
+    log_assert(addr6);
+    log_assert(string);
 
     rv = ogs_inet_pton(AF_INET6, string, &tmp);
     if (rv != OGS_OK) {
-        ogs_error("Invalid IPv6 string = %s", string);
+        log_error("Invalid IPv6 string = %s", string);
         return OGS_ERROR;
     }
 
@@ -700,12 +700,12 @@ int ogs_ipv6prefix_from_string(uint8_t *addr6, uint8_t *prefixlen, const char *s
     ogs_sockaddr_t tmp;
     char *v = NULL, *pv = NULL, *ipstr = NULL, *mask_or_numbits = NULL;
 
-    ogs_assert(addr6);
-    ogs_assert(prefixlen);
-    ogs_assert(string);
+    log_assert(addr6);
+    log_assert(prefixlen);
+    log_assert(string);
     pv = v = ogs_strdup(string);
     if (!v) {
-        ogs_error("ogs_strdup() failed");
+        log_error("ogs_strdup() failed");
         return OGS_ERROR;
     }
 
@@ -714,14 +714,14 @@ int ogs_ipv6prefix_from_string(uint8_t *addr6, uint8_t *prefixlen, const char *s
         mask_or_numbits = v;
 
     if (!ipstr || !mask_or_numbits) {
-        ogs_error("Invalid IPv6 Prefix string = %s", v);
+        log_error("Invalid IPv6 Prefix string = %s", v);
         ogs_free(v);
         return OGS_ERROR;
     }
 
     rv = ogs_inet_pton(AF_INET6, ipstr, &tmp);
     if (rv != OGS_OK) {
-        ogs_error("ogs_inet_pton() failed");
+        log_error("ogs_inet_pton() failed");
         return rv;
     }
 
@@ -734,14 +734,14 @@ int ogs_ipv6prefix_from_string(uint8_t *addr6, uint8_t *prefixlen, const char *s
 
 int ogs_check_br_conf(ogs_bitrate_t *br)
 {
-    ogs_assert(br);
+    log_assert(br);
 
     if (br->downlink == 0) {
-        ogs_error("No Downlink");
+        log_error("No Downlink");
         return OGS_ERROR;
     }
     if (br->uplink == 0) {
-        ogs_error("No Uplink");
+        log_error("No Uplink");
         return OGS_ERROR;
     }
 
@@ -750,23 +750,23 @@ int ogs_check_br_conf(ogs_bitrate_t *br)
 
 int ogs_check_qos_conf(ogs_qos_t *qos)
 {
-    ogs_assert(qos);
+    log_assert(qos);
 
     if (!qos->index) {
-        ogs_error("No QCI");
+        log_error("No QCI");
         return OGS_ERROR;
     }
 
     if (!qos->arp.priority_level) {
-        ogs_error("No Priority Level");
+        log_error("No Priority Level");
         return OGS_ERROR;
     }
     if (!qos->arp.pre_emption_capability) {
-        ogs_error("No Pre-emption Capability");
+        log_error("No Pre-emption Capability");
         return OGS_ERROR;
     }
     if (!qos->arp.pre_emption_vulnerability) {
-        ogs_error("No Pre-emption Vulnerability ");
+        log_error("No Pre-emption Vulnerability ");
         return OGS_ERROR;
     }
 
@@ -777,8 +777,8 @@ int ogs_sockaddr_to_user_plane_ip_resource_info(
     ogs_sockaddr_t *addr, ogs_sockaddr_t *addr6,
     ogs_user_plane_ip_resource_info_t *info)
 {
-    ogs_assert(addr || addr6);
-    ogs_assert(info);
+    log_assert(addr || addr6);
+    log_assert(info);
 
     if (addr) {
         info->v4 = 1;
@@ -796,22 +796,22 @@ int ogs_user_plane_ip_resource_info_to_sockaddr(
     ogs_user_plane_ip_resource_info_t *info,
     ogs_sockaddr_t **addr, ogs_sockaddr_t **addr6)
 {
-    ogs_assert(addr && addr6);
-    ogs_assert(info);
+    log_assert(addr && addr6);
+    log_assert(info);
 
     *addr = NULL;
     *addr6 = NULL;
 
     if (info->v4) {
         *addr = ogs_calloc(1, sizeof(**addr));
-        ogs_assert(*addr);
+        log_assert(*addr);
         (*addr)->sin.sin_addr.s_addr = info->addr;
         (*addr)->ogs_sa_family = AF_INET;
     }
 
     if (info->v6) {
         *addr6 = ogs_calloc(1, sizeof(**addr6));
-        ogs_assert(*addr6);
+        log_assert(*addr6);
         memcpy((*addr6)->sin6.sin6_addr.s6_addr, info->addr6, OGS_IPV6_LEN);
         (*addr6)->ogs_sa_family = AF_INET6;
     }
@@ -825,9 +825,9 @@ ogs_slice_data_t *ogs_slice_find_by_s_nssai(
 {
     int i;
 
-    ogs_assert(slice_data);
-    ogs_assert(num_of_slice_data);
-    ogs_assert(s_nssai);
+    log_assert(slice_data);
+    log_assert(num_of_slice_data);
+    log_assert(s_nssai);
 
     /* Compare S-NSSAI */
     for (i = 0; i < num_of_slice_data; i++) {
@@ -844,7 +844,7 @@ void ogs_subscription_data_free(ogs_subscription_data_t *subscription_data)
 {
     int i, j;
 
-    ogs_assert(subscription_data);
+    log_assert(subscription_data);
 
     if (subscription_data->imsi)
         ogs_free(subscription_data->imsi);
@@ -873,7 +873,7 @@ void ogs_ims_data_free(ogs_ims_data_t *ims_data)
 {
     int i, j, k;
 
-    ogs_assert(ims_data);
+    log_assert(ims_data);
 
     for (i = 0; i < ims_data->num_of_media_component; i++) {
         ogs_media_component_t *media_component = &ims_data->media_component[i];
@@ -887,7 +887,7 @@ void ogs_ims_data_free(ogs_ims_data_t *ims_data)
                 if (flow->description) {
                     ogs_free(flow->description);
                 } else
-                    ogs_assert_if_reached();
+                    log_assert_if_reached();
             }
         }
     }
@@ -898,14 +898,14 @@ static int flow_rx_to_gx(ogs_flow_t *rx_flow, ogs_flow_t *gx_flow)
     int len;
     char *from_str, *to_str;
 
-    ogs_assert(rx_flow);
-    ogs_assert(gx_flow);
+    log_assert(rx_flow);
+    log_assert(gx_flow);
 
     if (!strncmp(rx_flow->description,
                 "permit out", strlen("permit out"))) {
         gx_flow->direction = OGS_FLOW_DOWNLINK_ONLY;
         gx_flow->description = ogs_strdup(rx_flow->description);
-        ogs_assert(gx_flow->description);
+        log_assert(gx_flow->description);
 
     } else if (!strncmp(rx_flow->description,
                 "permit in", strlen("permit in"))) {
@@ -915,12 +915,12 @@ static int flow_rx_to_gx(ogs_flow_t *rx_flow, ogs_flow_t *gx_flow)
          * 'permit out' in Gx Diameter */
         len = strlen(rx_flow->description)+2;
         gx_flow->description = ogs_calloc(1, len);
-        ogs_assert(gx_flow->description);
+        log_assert(gx_flow->description);
         strcpy(gx_flow->description, "permit out");
         from_str = strstr(&rx_flow->description[strlen("permit in")], "from");
-        ogs_assert(from_str);
+        log_assert(from_str);
         to_str = strstr(&rx_flow->description[strlen("permit in")], "to");
-        ogs_assert(to_str);
+        log_assert(to_str);
         strncat(gx_flow->description,
             &rx_flow->description[strlen("permit in")],
             strlen(rx_flow->description) -
@@ -930,9 +930,9 @@ static int flow_rx_to_gx(ogs_flow_t *rx_flow, ogs_flow_t *gx_flow)
         strcat(gx_flow->description, " to");
         strncat(gx_flow->description, &from_str[strlen("from")],
                 strlen(from_str) - strlen(to_str) - strlen("from") - 1);
-        ogs_assert(len == strlen(gx_flow->description)+1);
+        log_assert(len == strlen(gx_flow->description)+1);
     } else {
-        ogs_error("Invalid Flow Descripton : [%s]", rx_flow->description);
+        log_error("Invalid Flow Descripton : [%s]", rx_flow->description);
         return OGS_ERROR;
     }
 
@@ -947,8 +947,8 @@ int ogs_pcc_rule_num_of_flow_equal_to_media(
     int matched = 0;
     int new = 0;
 
-    ogs_assert(pcc_rule);
-    ogs_assert(media_component);
+    log_assert(pcc_rule);
+    log_assert(media_component);
 
     for (i = 0; i < media_component->num_of_sub; i++) {
         ogs_media_sub_component_t *sub = &media_component->sub[i];
@@ -973,7 +973,7 @@ int ogs_pcc_rule_num_of_flow_equal_to_media(
 
             rv = flow_rx_to_gx(rx_flow, &gx_flow);
             if (rv != OGS_OK) {
-                ogs_error("flow reformatting error");
+                log_error("flow reformatting error");
                 return OGS_ERROR;
             }
 
@@ -999,8 +999,8 @@ int ogs_pcc_rule_install_flow_from_media(
     int rv;
     int i, j;
 
-    ogs_assert(pcc_rule);
-    ogs_assert(media_component);
+    log_assert(pcc_rule);
+    log_assert(media_component);
 
     /* Remove Flow from PCC Rule */
     for (i = 0; i < pcc_rule->num_of_flow; i++) {
@@ -1023,13 +1023,13 @@ int ogs_pcc_rule_install_flow_from_media(
 
                 rv = flow_rx_to_gx(rx_flow, gx_flow);
                 if (rv != OGS_OK) {
-                    ogs_error("flow reformatting error");
+                    log_error("flow reformatting error");
                     return OGS_ERROR;
                 }
 
                 pcc_rule->num_of_flow++;
             } else {
-                ogs_error("Overflow: Number of Flow");
+                log_error("Overflow: Number of Flow");
                 return OGS_ERROR;
             }
         }
@@ -1044,8 +1044,8 @@ int ogs_pcc_rule_update_qos_from_media(
     int rv;
     int i, j;
 
-    ogs_assert(pcc_rule);
-    ogs_assert(media_component);
+    log_assert(pcc_rule);
+    log_assert(media_component);
 
     pcc_rule->qos.mbr.downlink = 0;
     pcc_rule->qos.mbr.uplink = 0;
@@ -1062,7 +1062,7 @@ int ogs_pcc_rule_update_qos_from_media(
 
             rv = flow_rx_to_gx(rx_flow, &gx_flow);
             if (rv != OGS_OK) {
-                ogs_error("flow reformatting error");
+                log_error("flow reformatting error");
                 return OGS_ERROR;
             }
 
@@ -1141,7 +1141,7 @@ int ogs_pcc_rule_update_qos_from_media(
                     }
                 }
             } else
-                ogs_assert_if_reached();
+                log_assert_if_reached();
 
             OGS_FLOW_FREE(&gx_flow);
         }

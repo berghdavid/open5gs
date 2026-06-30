@@ -8,7 +8,7 @@ OpenAPI_policy_data_subset_t *OpenAPI_policy_data_subset_create(
 )
 {
     OpenAPI_policy_data_subset_t *policy_data_subset_local_var = ogs_malloc(sizeof(OpenAPI_policy_data_subset_t));
-    ogs_assert(policy_data_subset_local_var);
+    log_assert(policy_data_subset_local_var);
 
 
     return policy_data_subset_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_policy_data_subset_convertToJSON(OpenAPI_policy_data_subset_t *po
     OpenAPI_lnode_t *node = NULL;
 
     if (policy_data_subset == NULL) {
-        ogs_error("OpenAPI_policy_data_subset_convertToJSON() failed [PolicyDataSubset]");
+        log_error("OpenAPI_policy_data_subset_convertToJSON() failed [PolicyDataSubset]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_policy_data_subset_t *OpenAPI_policy_data_subset_copy(OpenAPI_policy_dat
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_policy_data_subset_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_policy_data_subset_convertToJSON() failed");
+        log_error("OpenAPI_policy_data_subset_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_policy_data_subset_t *OpenAPI_policy_data_subset_copy(OpenAPI_policy_dat
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

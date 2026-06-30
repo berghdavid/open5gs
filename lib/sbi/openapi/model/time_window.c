@@ -10,7 +10,7 @@ OpenAPI_time_window_t *OpenAPI_time_window_create(
 )
 {
     OpenAPI_time_window_t *time_window_local_var = ogs_malloc(sizeof(OpenAPI_time_window_t));
-    ogs_assert(time_window_local_var);
+    log_assert(time_window_local_var);
 
     time_window_local_var->start_time = start_time;
     time_window_local_var->stop_time = stop_time;
@@ -42,26 +42,26 @@ cJSON *OpenAPI_time_window_convertToJSON(OpenAPI_time_window_t *time_window)
     OpenAPI_lnode_t *node = NULL;
 
     if (time_window == NULL) {
-        ogs_error("OpenAPI_time_window_convertToJSON() failed [TimeWindow]");
+        log_error("OpenAPI_time_window_convertToJSON() failed [TimeWindow]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!time_window->start_time) {
-        ogs_error("OpenAPI_time_window_convertToJSON() failed [start_time]");
+        log_error("OpenAPI_time_window_convertToJSON() failed [start_time]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "startTime", time_window->start_time) == NULL) {
-        ogs_error("OpenAPI_time_window_convertToJSON() failed [start_time]");
+        log_error("OpenAPI_time_window_convertToJSON() failed [start_time]");
         goto end;
     }
 
     if (!time_window->stop_time) {
-        ogs_error("OpenAPI_time_window_convertToJSON() failed [stop_time]");
+        log_error("OpenAPI_time_window_convertToJSON() failed [stop_time]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "stopTime", time_window->stop_time) == NULL) {
-        ogs_error("OpenAPI_time_window_convertToJSON() failed [stop_time]");
+        log_error("OpenAPI_time_window_convertToJSON() failed [stop_time]");
         goto end;
     }
 
@@ -77,21 +77,21 @@ OpenAPI_time_window_t *OpenAPI_time_window_parseFromJSON(cJSON *time_windowJSON)
     cJSON *stop_time = NULL;
     start_time = cJSON_GetObjectItemCaseSensitive(time_windowJSON, "startTime");
     if (!start_time) {
-        ogs_error("OpenAPI_time_window_parseFromJSON() failed [start_time]");
+        log_error("OpenAPI_time_window_parseFromJSON() failed [start_time]");
         goto end;
     }
     if (!cJSON_IsString(start_time) && !cJSON_IsNull(start_time)) {
-        ogs_error("OpenAPI_time_window_parseFromJSON() failed [start_time]");
+        log_error("OpenAPI_time_window_parseFromJSON() failed [start_time]");
         goto end;
     }
 
     stop_time = cJSON_GetObjectItemCaseSensitive(time_windowJSON, "stopTime");
     if (!stop_time) {
-        ogs_error("OpenAPI_time_window_parseFromJSON() failed [stop_time]");
+        log_error("OpenAPI_time_window_parseFromJSON() failed [stop_time]");
         goto end;
     }
     if (!cJSON_IsString(stop_time) && !cJSON_IsNull(stop_time)) {
-        ogs_error("OpenAPI_time_window_parseFromJSON() failed [stop_time]");
+        log_error("OpenAPI_time_window_parseFromJSON() failed [stop_time]");
         goto end;
     }
 
@@ -110,10 +110,10 @@ OpenAPI_time_window_t *OpenAPI_time_window_copy(OpenAPI_time_window_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_time_window_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_time_window_convertToJSON() failed");
+        log_error("OpenAPI_time_window_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_time_window_t *OpenAPI_time_window_copy(OpenAPI_time_window_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

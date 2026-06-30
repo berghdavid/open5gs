@@ -8,7 +8,7 @@ OpenAPI_nwdaf_failure_code_t *OpenAPI_nwdaf_failure_code_create(
 )
 {
     OpenAPI_nwdaf_failure_code_t *nwdaf_failure_code_local_var = ogs_malloc(sizeof(OpenAPI_nwdaf_failure_code_t));
-    ogs_assert(nwdaf_failure_code_local_var);
+    log_assert(nwdaf_failure_code_local_var);
 
 
     return nwdaf_failure_code_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_nwdaf_failure_code_convertToJSON(OpenAPI_nwdaf_failure_code_t *nw
     OpenAPI_lnode_t *node = NULL;
 
     if (nwdaf_failure_code == NULL) {
-        ogs_error("OpenAPI_nwdaf_failure_code_convertToJSON() failed [NwdafFailureCode]");
+        log_error("OpenAPI_nwdaf_failure_code_convertToJSON() failed [NwdafFailureCode]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_nwdaf_failure_code_t *OpenAPI_nwdaf_failure_code_copy(OpenAPI_nwdaf_fail
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nwdaf_failure_code_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nwdaf_failure_code_convertToJSON() failed");
+        log_error("OpenAPI_nwdaf_failure_code_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_nwdaf_failure_code_t *OpenAPI_nwdaf_failure_code_copy(OpenAPI_nwdaf_fail
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

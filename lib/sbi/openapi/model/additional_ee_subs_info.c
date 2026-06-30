@@ -11,7 +11,7 @@ OpenAPI_additional_ee_subs_info_t *OpenAPI_additional_ee_subs_info_create(
 )
 {
     OpenAPI_additional_ee_subs_info_t *additional_ee_subs_info_local_var = ogs_malloc(sizeof(OpenAPI_additional_ee_subs_info_t));
-    ogs_assert(additional_ee_subs_info_local_var);
+    log_assert(additional_ee_subs_info_local_var);
 
     additional_ee_subs_info_local_var->amf_subscription_info_list = amf_subscription_info_list;
     additional_ee_subs_info_local_var->smf_subscription_info = smf_subscription_info;
@@ -51,7 +51,7 @@ cJSON *OpenAPI_additional_ee_subs_info_convertToJSON(OpenAPI_additional_ee_subs_
     OpenAPI_lnode_t *node = NULL;
 
     if (additional_ee_subs_info == NULL) {
-        ogs_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [AdditionalEeSubsInfo]");
+        log_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [AdditionalEeSubsInfo]");
         return NULL;
     }
 
@@ -59,13 +59,13 @@ cJSON *OpenAPI_additional_ee_subs_info_convertToJSON(OpenAPI_additional_ee_subs_
     if (additional_ee_subs_info->amf_subscription_info_list) {
     cJSON *amf_subscription_info_listList = cJSON_AddArrayToObject(item, "amfSubscriptionInfoList");
     if (amf_subscription_info_listList == NULL) {
-        ogs_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [amf_subscription_info_list]");
+        log_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [amf_subscription_info_list]");
         goto end;
     }
     OpenAPI_list_for_each(additional_ee_subs_info->amf_subscription_info_list, node) {
         cJSON *itemLocal = OpenAPI_amf_subscription_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [amf_subscription_info_list]");
+            log_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [amf_subscription_info_list]");
             goto end;
         }
         cJSON_AddItemToArray(amf_subscription_info_listList, itemLocal);
@@ -75,12 +75,12 @@ cJSON *OpenAPI_additional_ee_subs_info_convertToJSON(OpenAPI_additional_ee_subs_
     if (additional_ee_subs_info->smf_subscription_info) {
     cJSON *smf_subscription_info_local_JSON = OpenAPI_smf_subscription_info_convertToJSON(additional_ee_subs_info->smf_subscription_info);
     if (smf_subscription_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [smf_subscription_info]");
+        log_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [smf_subscription_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smfSubscriptionInfo", smf_subscription_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [smf_subscription_info]");
+        log_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [smf_subscription_info]");
         goto end;
     }
     }
@@ -88,12 +88,12 @@ cJSON *OpenAPI_additional_ee_subs_info_convertToJSON(OpenAPI_additional_ee_subs_
     if (additional_ee_subs_info->hss_subscription_info) {
     cJSON *hss_subscription_info_local_JSON = OpenAPI_hss_subscription_info_convertToJSON(additional_ee_subs_info->hss_subscription_info);
     if (hss_subscription_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [hss_subscription_info]");
+        log_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [hss_subscription_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "hssSubscriptionInfo", hss_subscription_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [hss_subscription_info]");
+        log_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed [hss_subscription_info]");
         goto end;
     }
     }
@@ -116,7 +116,7 @@ OpenAPI_additional_ee_subs_info_t *OpenAPI_additional_ee_subs_info_parseFromJSON
     if (amf_subscription_info_list) {
         cJSON *amf_subscription_info_list_local = NULL;
         if (!cJSON_IsArray(amf_subscription_info_list)) {
-            ogs_error("OpenAPI_additional_ee_subs_info_parseFromJSON() failed [amf_subscription_info_list]");
+            log_error("OpenAPI_additional_ee_subs_info_parseFromJSON() failed [amf_subscription_info_list]");
             goto end;
         }
 
@@ -124,12 +124,12 @@ OpenAPI_additional_ee_subs_info_t *OpenAPI_additional_ee_subs_info_parseFromJSON
 
         cJSON_ArrayForEach(amf_subscription_info_list_local, amf_subscription_info_list) {
             if (!cJSON_IsObject(amf_subscription_info_list_local)) {
-                ogs_error("OpenAPI_additional_ee_subs_info_parseFromJSON() failed [amf_subscription_info_list]");
+                log_error("OpenAPI_additional_ee_subs_info_parseFromJSON() failed [amf_subscription_info_list]");
                 goto end;
             }
             OpenAPI_amf_subscription_info_t *amf_subscription_info_listItem = OpenAPI_amf_subscription_info_parseFromJSON(amf_subscription_info_list_local);
             if (!amf_subscription_info_listItem) {
-                ogs_error("No amf_subscription_info_listItem");
+                log_error("No amf_subscription_info_listItem");
                 goto end;
             }
             OpenAPI_list_add(amf_subscription_info_listList, amf_subscription_info_listItem);
@@ -140,7 +140,7 @@ OpenAPI_additional_ee_subs_info_t *OpenAPI_additional_ee_subs_info_parseFromJSON
     if (smf_subscription_info) {
     smf_subscription_info_local_nonprim = OpenAPI_smf_subscription_info_parseFromJSON(smf_subscription_info);
     if (!smf_subscription_info_local_nonprim) {
-        ogs_error("OpenAPI_smf_subscription_info_parseFromJSON failed [smf_subscription_info]");
+        log_error("OpenAPI_smf_subscription_info_parseFromJSON failed [smf_subscription_info]");
         goto end;
     }
     }
@@ -149,7 +149,7 @@ OpenAPI_additional_ee_subs_info_t *OpenAPI_additional_ee_subs_info_parseFromJSON
     if (hss_subscription_info) {
     hss_subscription_info_local_nonprim = OpenAPI_hss_subscription_info_parseFromJSON(hss_subscription_info);
     if (!hss_subscription_info_local_nonprim) {
-        ogs_error("OpenAPI_hss_subscription_info_parseFromJSON failed [hss_subscription_info]");
+        log_error("OpenAPI_hss_subscription_info_parseFromJSON failed [hss_subscription_info]");
         goto end;
     }
     }
@@ -185,10 +185,10 @@ OpenAPI_additional_ee_subs_info_t *OpenAPI_additional_ee_subs_info_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_additional_ee_subs_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed");
+        log_error("OpenAPI_additional_ee_subs_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -196,14 +196,14 @@ OpenAPI_additional_ee_subs_info_t *OpenAPI_additional_ee_subs_info_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

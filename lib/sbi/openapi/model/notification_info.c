@@ -12,7 +12,7 @@ OpenAPI_notification_info_t *OpenAPI_notification_info_create(
 )
 {
     OpenAPI_notification_info_t *notification_info_local_var = ogs_malloc(sizeof(OpenAPI_notification_info_t));
-    ogs_assert(notification_info_local_var);
+    log_assert(notification_info_local_var);
 
     notification_info_local_var->notif_id = notif_id;
     notification_info_local_var->notif_uri = notif_uri;
@@ -46,32 +46,32 @@ cJSON *OpenAPI_notification_info_convertToJSON(OpenAPI_notification_info_t *noti
     OpenAPI_lnode_t *node = NULL;
 
     if (notification_info == NULL) {
-        ogs_error("OpenAPI_notification_info_convertToJSON() failed [NotificationInfo]");
+        log_error("OpenAPI_notification_info_convertToJSON() failed [NotificationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!notification_info->notif_id) {
-        ogs_error("OpenAPI_notification_info_convertToJSON() failed [notif_id]");
+        log_error("OpenAPI_notification_info_convertToJSON() failed [notif_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "notifId", notification_info->notif_id) == NULL) {
-        ogs_error("OpenAPI_notification_info_convertToJSON() failed [notif_id]");
+        log_error("OpenAPI_notification_info_convertToJSON() failed [notif_id]");
         goto end;
     }
 
     if (!notification_info->notif_uri) {
-        ogs_error("OpenAPI_notification_info_convertToJSON() failed [notif_uri]");
+        log_error("OpenAPI_notification_info_convertToJSON() failed [notif_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "notifUri", notification_info->notif_uri) == NULL) {
-        ogs_error("OpenAPI_notification_info_convertToJSON() failed [notif_uri]");
+        log_error("OpenAPI_notification_info_convertToJSON() failed [notif_uri]");
         goto end;
     }
 
     if (notification_info->is_up_buffer_ind) {
     if (cJSON_AddBoolToObject(item, "upBufferInd", notification_info->up_buffer_ind) == NULL) {
-        ogs_error("OpenAPI_notification_info_convertToJSON() failed [up_buffer_ind]");
+        log_error("OpenAPI_notification_info_convertToJSON() failed [up_buffer_ind]");
         goto end;
     }
     }
@@ -89,28 +89,28 @@ OpenAPI_notification_info_t *OpenAPI_notification_info_parseFromJSON(cJSON *noti
     cJSON *up_buffer_ind = NULL;
     notif_id = cJSON_GetObjectItemCaseSensitive(notification_infoJSON, "notifId");
     if (!notif_id) {
-        ogs_error("OpenAPI_notification_info_parseFromJSON() failed [notif_id]");
+        log_error("OpenAPI_notification_info_parseFromJSON() failed [notif_id]");
         goto end;
     }
     if (!cJSON_IsString(notif_id)) {
-        ogs_error("OpenAPI_notification_info_parseFromJSON() failed [notif_id]");
+        log_error("OpenAPI_notification_info_parseFromJSON() failed [notif_id]");
         goto end;
     }
 
     notif_uri = cJSON_GetObjectItemCaseSensitive(notification_infoJSON, "notifUri");
     if (!notif_uri) {
-        ogs_error("OpenAPI_notification_info_parseFromJSON() failed [notif_uri]");
+        log_error("OpenAPI_notification_info_parseFromJSON() failed [notif_uri]");
         goto end;
     }
     if (!cJSON_IsString(notif_uri)) {
-        ogs_error("OpenAPI_notification_info_parseFromJSON() failed [notif_uri]");
+        log_error("OpenAPI_notification_info_parseFromJSON() failed [notif_uri]");
         goto end;
     }
 
     up_buffer_ind = cJSON_GetObjectItemCaseSensitive(notification_infoJSON, "upBufferInd");
     if (up_buffer_ind) {
     if (!cJSON_IsBool(up_buffer_ind)) {
-        ogs_error("OpenAPI_notification_info_parseFromJSON() failed [up_buffer_ind]");
+        log_error("OpenAPI_notification_info_parseFromJSON() failed [up_buffer_ind]");
         goto end;
     }
     }
@@ -132,10 +132,10 @@ OpenAPI_notification_info_t *OpenAPI_notification_info_copy(OpenAPI_notification
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_notification_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_notification_info_convertToJSON() failed");
+        log_error("OpenAPI_notification_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -143,14 +143,14 @@ OpenAPI_notification_info_t *OpenAPI_notification_info_copy(OpenAPI_notification
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

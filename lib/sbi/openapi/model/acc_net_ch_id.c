@@ -14,7 +14,7 @@ OpenAPI_acc_net_ch_id_t *OpenAPI_acc_net_ch_id_create(
 )
 {
     OpenAPI_acc_net_ch_id_t *acc_net_ch_id_local_var = ogs_malloc(sizeof(OpenAPI_acc_net_ch_id_t));
-    ogs_assert(acc_net_ch_id_local_var);
+    log_assert(acc_net_ch_id_local_var);
 
     acc_net_ch_id_local_var->is_acc_net_cha_id_value = is_acc_net_cha_id_value;
     acc_net_ch_id_local_var->acc_net_cha_id_value = acc_net_cha_id_value;
@@ -53,21 +53,21 @@ cJSON *OpenAPI_acc_net_ch_id_convertToJSON(OpenAPI_acc_net_ch_id_t *acc_net_ch_i
     OpenAPI_lnode_t *node = NULL;
 
     if (acc_net_ch_id == NULL) {
-        ogs_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [AccNetChId]");
+        log_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [AccNetChId]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (acc_net_ch_id->is_acc_net_cha_id_value) {
     if (cJSON_AddNumberToObject(item, "accNetChaIdValue", acc_net_ch_id->acc_net_cha_id_value) == NULL) {
-        ogs_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [acc_net_cha_id_value]");
+        log_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [acc_net_cha_id_value]");
         goto end;
     }
     }
 
     if (acc_net_ch_id->acc_net_charg_id) {
     if (cJSON_AddStringToObject(item, "accNetChargId", acc_net_ch_id->acc_net_charg_id) == NULL) {
-        ogs_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [acc_net_charg_id]");
+        log_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [acc_net_charg_id]");
         goto end;
     }
     }
@@ -75,12 +75,12 @@ cJSON *OpenAPI_acc_net_ch_id_convertToJSON(OpenAPI_acc_net_ch_id_t *acc_net_ch_i
     if (acc_net_ch_id->ref_pcc_rule_ids) {
     cJSON *ref_pcc_rule_idsList = cJSON_AddArrayToObject(item, "refPccRuleIds");
     if (ref_pcc_rule_idsList == NULL) {
-        ogs_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [ref_pcc_rule_ids]");
+        log_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [ref_pcc_rule_ids]");
         goto end;
     }
     OpenAPI_list_for_each(acc_net_ch_id->ref_pcc_rule_ids, node) {
         if (cJSON_AddStringToObject(ref_pcc_rule_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [ref_pcc_rule_ids]");
+            log_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [ref_pcc_rule_ids]");
             goto end;
         }
     }
@@ -88,7 +88,7 @@ cJSON *OpenAPI_acc_net_ch_id_convertToJSON(OpenAPI_acc_net_ch_id_t *acc_net_ch_i
 
     if (acc_net_ch_id->is_session_ch_scope) {
     if (cJSON_AddBoolToObject(item, "sessionChScope", acc_net_ch_id->session_ch_scope) == NULL) {
-        ogs_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [session_ch_scope]");
+        log_error("OpenAPI_acc_net_ch_id_convertToJSON() failed [session_ch_scope]");
         goto end;
     }
     }
@@ -109,7 +109,7 @@ OpenAPI_acc_net_ch_id_t *OpenAPI_acc_net_ch_id_parseFromJSON(cJSON *acc_net_ch_i
     acc_net_cha_id_value = cJSON_GetObjectItemCaseSensitive(acc_net_ch_idJSON, "accNetChaIdValue");
     if (acc_net_cha_id_value) {
     if (!cJSON_IsNumber(acc_net_cha_id_value)) {
-        ogs_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [acc_net_cha_id_value]");
+        log_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [acc_net_cha_id_value]");
         goto end;
     }
     }
@@ -117,7 +117,7 @@ OpenAPI_acc_net_ch_id_t *OpenAPI_acc_net_ch_id_parseFromJSON(cJSON *acc_net_ch_i
     acc_net_charg_id = cJSON_GetObjectItemCaseSensitive(acc_net_ch_idJSON, "accNetChargId");
     if (acc_net_charg_id) {
     if (!cJSON_IsString(acc_net_charg_id) && !cJSON_IsNull(acc_net_charg_id)) {
-        ogs_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [acc_net_charg_id]");
+        log_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [acc_net_charg_id]");
         goto end;
     }
     }
@@ -126,7 +126,7 @@ OpenAPI_acc_net_ch_id_t *OpenAPI_acc_net_ch_id_parseFromJSON(cJSON *acc_net_ch_i
     if (ref_pcc_rule_ids) {
         cJSON *ref_pcc_rule_ids_local = NULL;
         if (!cJSON_IsArray(ref_pcc_rule_ids)) {
-            ogs_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [ref_pcc_rule_ids]");
+            log_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [ref_pcc_rule_ids]");
             goto end;
         }
 
@@ -136,7 +136,7 @@ OpenAPI_acc_net_ch_id_t *OpenAPI_acc_net_ch_id_parseFromJSON(cJSON *acc_net_ch_i
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ref_pcc_rule_ids_local)) {
-                ogs_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [ref_pcc_rule_ids]");
+                log_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [ref_pcc_rule_ids]");
                 goto end;
             }
             OpenAPI_list_add(ref_pcc_rule_idsList, ogs_strdup(ref_pcc_rule_ids_local->valuestring));
@@ -146,7 +146,7 @@ OpenAPI_acc_net_ch_id_t *OpenAPI_acc_net_ch_id_parseFromJSON(cJSON *acc_net_ch_i
     session_ch_scope = cJSON_GetObjectItemCaseSensitive(acc_net_ch_idJSON, "sessionChScope");
     if (session_ch_scope) {
     if (!cJSON_IsBool(session_ch_scope)) {
-        ogs_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [session_ch_scope]");
+        log_error("OpenAPI_acc_net_ch_id_parseFromJSON() failed [session_ch_scope]");
         goto end;
     }
     }
@@ -177,10 +177,10 @@ OpenAPI_acc_net_ch_id_t *OpenAPI_acc_net_ch_id_copy(OpenAPI_acc_net_ch_id_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_acc_net_ch_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_acc_net_ch_id_convertToJSON() failed");
+        log_error("OpenAPI_acc_net_ch_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -188,14 +188,14 @@ OpenAPI_acc_net_ch_id_t *OpenAPI_acc_net_ch_id_copy(OpenAPI_acc_net_ch_id_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

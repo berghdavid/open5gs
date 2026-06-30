@@ -36,11 +36,11 @@ ogs_socknode_t *ogs_socknode_new(ogs_sockaddr_t *addr)
 {
     ogs_socknode_t *node = NULL;
 
-    ogs_assert(addr);
+    log_assert(addr);
 
     node = ogs_calloc(1, sizeof(ogs_socknode_t));
     if (!node) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
@@ -51,7 +51,7 @@ ogs_socknode_t *ogs_socknode_new(ogs_sockaddr_t *addr)
 
 void ogs_socknode_free(ogs_socknode_t *node)
 {
-    ogs_assert(node);
+    log_assert(node);
 
     ogs_freeaddrinfo(node->addr);
     if (node->dev)
@@ -75,16 +75,16 @@ ogs_socknode_t *ogs_socknode_add(ogs_list_t *list,
     ogs_socknode_t *node = NULL;
     ogs_sockaddr_t *dup = NULL;
 
-    ogs_assert(list);
-    ogs_assert(addr);
+    log_assert(list);
+    log_assert(addr);
 
-    ogs_assert(OGS_OK == ogs_copyaddrinfo(&dup, addr));
+    log_assert(OGS_OK == ogs_copyaddrinfo(&dup, addr));
     if (family != AF_UNSPEC)
         ogs_filteraddrinfo(&dup, family);
 
     if (dup) {
         node = ogs_socknode_new(dup);
-        ogs_assert(node);
+        log_assert(node);
         ogs_list_add(list, node);
 
         if (option)
@@ -96,7 +96,7 @@ ogs_socknode_t *ogs_socknode_add(ogs_list_t *list,
 
 void ogs_socknode_remove(ogs_list_t *list, ogs_socknode_t *node)
 {
-    ogs_assert(node);
+    log_assert(node);
 
     ogs_list_remove(list, node);
     ogs_socknode_free(node);
@@ -120,7 +120,7 @@ int ogs_socknode_probe(ogs_list_t *list, ogs_list_t *list6,
 
     rc = getifaddrs(&iflist);
     if (rc != 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "getifaddrs failed");
+        log_error_msg(LOG_ERROR, ogs_socket_errno, "getifaddrs failed");
         return OGS_ERROR;
     }
 
@@ -178,13 +178,13 @@ int ogs_socknode_probe(ogs_list_t *list, ogs_list_t *list6,
             node->dev = ogs_strdup(dev);
 
         if (addr->ogs_sa_family == AF_INET) {
-            ogs_assert(list);
+            log_assert(list);
             ogs_list_add(list, node);
         } else if (addr->ogs_sa_family == AF_INET6) {
-            ogs_assert(list6);
+            log_assert(list6);
             ogs_list_add(list6, node);
         } else
-            ogs_assert_if_reached();
+            log_assert_if_reached();
 
         if (option)
             node->option = ogs_memdup(option, sizeof *option);
@@ -195,7 +195,7 @@ int ogs_socknode_probe(ogs_list_t *list, ogs_list_t *list6,
 #elif defined(_WIN32)
     return OGS_OK;
 #else
-    ogs_assert_if_reached();
+    log_assert_if_reached();
     return OGS_ERROR;
 #endif
 
@@ -222,7 +222,7 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
         if (iflist == NULL) {
             rc = getifaddrs(&iflist);
             if (rc != 0) {
-                ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+                log_error_msg(LOG_ERROR, ogs_socket_errno,
                         "getifaddrs failed");
                 return OGS_ERROR;
             }
@@ -255,7 +255,7 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
 #elif defined(_WIN32)
     return OGS_OK;
 #else
-    ogs_assert_if_reached();
+    log_assert_if_reached();
     return OGS_ERROR;
 #endif
 }
@@ -264,8 +264,8 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
 void ogs_socknode_set_cleanup(
         ogs_socknode_t *node, void (*cleanup)(ogs_sock_t *))
 {
-    ogs_assert(node);
-    ogs_assert(cleanup);
+    log_assert(node);
+    log_assert(cleanup);
 
     node->cleanup = cleanup;
 }
@@ -274,7 +274,7 @@ ogs_sock_t *ogs_socknode_sock_first(ogs_list_t *list)
 {
     ogs_socknode_t *snode = NULL;
 
-    ogs_assert(list);
+    log_assert(list);
     ogs_list_for_each(list, snode) {
         if (snode->sock)
             return snode->sock;

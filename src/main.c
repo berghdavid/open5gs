@@ -95,7 +95,7 @@ int main(int argc, const char *const argv[])
             pid_t pid;
             pid = fork();
 
-            ogs_assert(pid >= 0);
+            log_assert(pid >= 0);
 
             if (pid != 0)
             {
@@ -189,7 +189,7 @@ int main(int argc, const char *const argv[])
         if (rv == OGS_RETRY)
             return EXIT_SUCCESS;
 
-        ogs_fatal("Open5GS initialization failed. Aborted");
+        log_fatal("Open5GS initialization failed. Aborted");
         return OGS_ERROR;
     }
 
@@ -199,14 +199,14 @@ int main(int argc, const char *const argv[])
         if (rv == OGS_RETRY)
             return EXIT_SUCCESS;
 
-        ogs_fatal("Open5GS initialization failed. Aborted");
+        log_fatal("Open5GS initialization failed. Aborted");
         return OGS_ERROR;
     }
 
     atexit(terminate);
     pthread_join(signal_thread, NULL);
 
-    ogs_info("Open5GS daemon terminating...");
+    log_info("Open5GS daemon terminating...");
 
     return OGS_OK;
 }

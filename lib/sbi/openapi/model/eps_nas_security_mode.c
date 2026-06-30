@@ -10,7 +10,7 @@ OpenAPI_eps_nas_security_mode_t *OpenAPI_eps_nas_security_mode_create(
 )
 {
     OpenAPI_eps_nas_security_mode_t *eps_nas_security_mode_local_var = ogs_malloc(sizeof(OpenAPI_eps_nas_security_mode_t));
-    ogs_assert(eps_nas_security_mode_local_var);
+    log_assert(eps_nas_security_mode_local_var);
 
     eps_nas_security_mode_local_var->integrity_algorithm = integrity_algorithm;
     eps_nas_security_mode_local_var->ciphering_algorithm = ciphering_algorithm;
@@ -34,26 +34,26 @@ cJSON *OpenAPI_eps_nas_security_mode_convertToJSON(OpenAPI_eps_nas_security_mode
     OpenAPI_lnode_t *node = NULL;
 
     if (eps_nas_security_mode == NULL) {
-        ogs_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [EpsNasSecurityMode]");
+        log_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [EpsNasSecurityMode]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (eps_nas_security_mode->integrity_algorithm == OpenAPI_eps_nas_integrity_algorithm_NULL) {
-        ogs_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [integrity_algorithm]");
+        log_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [integrity_algorithm]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "integrityAlgorithm", OpenAPI_eps_nas_integrity_algorithm_ToString(eps_nas_security_mode->integrity_algorithm)) == NULL) {
-        ogs_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [integrity_algorithm]");
+        log_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [integrity_algorithm]");
         goto end;
     }
 
     if (eps_nas_security_mode->ciphering_algorithm == OpenAPI_eps_nas_ciphering_algorithm_NULL) {
-        ogs_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [ciphering_algorithm]");
+        log_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [ciphering_algorithm]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "cipheringAlgorithm", OpenAPI_eps_nas_ciphering_algorithm_ToString(eps_nas_security_mode->ciphering_algorithm)) == NULL) {
-        ogs_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [ciphering_algorithm]");
+        log_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed [ciphering_algorithm]");
         goto end;
     }
 
@@ -71,22 +71,22 @@ OpenAPI_eps_nas_security_mode_t *OpenAPI_eps_nas_security_mode_parseFromJSON(cJS
     OpenAPI_eps_nas_ciphering_algorithm_e ciphering_algorithmVariable = 0;
     integrity_algorithm = cJSON_GetObjectItemCaseSensitive(eps_nas_security_modeJSON, "integrityAlgorithm");
     if (!integrity_algorithm) {
-        ogs_error("OpenAPI_eps_nas_security_mode_parseFromJSON() failed [integrity_algorithm]");
+        log_error("OpenAPI_eps_nas_security_mode_parseFromJSON() failed [integrity_algorithm]");
         goto end;
     }
     if (!cJSON_IsString(integrity_algorithm)) {
-        ogs_error("OpenAPI_eps_nas_security_mode_parseFromJSON() failed [integrity_algorithm]");
+        log_error("OpenAPI_eps_nas_security_mode_parseFromJSON() failed [integrity_algorithm]");
         goto end;
     }
     integrity_algorithmVariable = OpenAPI_eps_nas_integrity_algorithm_FromString(integrity_algorithm->valuestring);
 
     ciphering_algorithm = cJSON_GetObjectItemCaseSensitive(eps_nas_security_modeJSON, "cipheringAlgorithm");
     if (!ciphering_algorithm) {
-        ogs_error("OpenAPI_eps_nas_security_mode_parseFromJSON() failed [ciphering_algorithm]");
+        log_error("OpenAPI_eps_nas_security_mode_parseFromJSON() failed [ciphering_algorithm]");
         goto end;
     }
     if (!cJSON_IsString(ciphering_algorithm)) {
-        ogs_error("OpenAPI_eps_nas_security_mode_parseFromJSON() failed [ciphering_algorithm]");
+        log_error("OpenAPI_eps_nas_security_mode_parseFromJSON() failed [ciphering_algorithm]");
         goto end;
     }
     ciphering_algorithmVariable = OpenAPI_eps_nas_ciphering_algorithm_FromString(ciphering_algorithm->valuestring);
@@ -106,10 +106,10 @@ OpenAPI_eps_nas_security_mode_t *OpenAPI_eps_nas_security_mode_copy(OpenAPI_eps_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_eps_nas_security_mode_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed");
+        log_error("OpenAPI_eps_nas_security_mode_convertToJSON() failed");
         return NULL;
     }
 
@@ -117,14 +117,14 @@ OpenAPI_eps_nas_security_mode_t *OpenAPI_eps_nas_security_mode_copy(OpenAPI_eps_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

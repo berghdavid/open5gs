@@ -9,7 +9,7 @@ OpenAPI_nidd_authorization_info_t *OpenAPI_nidd_authorization_info_create(
 )
 {
     OpenAPI_nidd_authorization_info_t *nidd_authorization_info_local_var = ogs_malloc(sizeof(OpenAPI_nidd_authorization_info_t));
-    ogs_assert(nidd_authorization_info_local_var);
+    log_assert(nidd_authorization_info_local_var);
 
     nidd_authorization_info_local_var->nidd_authorization_list = nidd_authorization_list;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_nidd_authorization_info_convertToJSON(OpenAPI_nidd_authorization_
     OpenAPI_lnode_t *node = NULL;
 
     if (nidd_authorization_info == NULL) {
-        ogs_error("OpenAPI_nidd_authorization_info_convertToJSON() failed [NiddAuthorizationInfo]");
+        log_error("OpenAPI_nidd_authorization_info_convertToJSON() failed [NiddAuthorizationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!nidd_authorization_info->nidd_authorization_list) {
-        ogs_error("OpenAPI_nidd_authorization_info_convertToJSON() failed [nidd_authorization_list]");
+        log_error("OpenAPI_nidd_authorization_info_convertToJSON() failed [nidd_authorization_list]");
         return NULL;
     }
     cJSON *nidd_authorization_listList = cJSON_AddArrayToObject(item, "niddAuthorizationList");
     if (nidd_authorization_listList == NULL) {
-        ogs_error("OpenAPI_nidd_authorization_info_convertToJSON() failed [nidd_authorization_list]");
+        log_error("OpenAPI_nidd_authorization_info_convertToJSON() failed [nidd_authorization_list]");
         goto end;
     }
     OpenAPI_list_for_each(nidd_authorization_info->nidd_authorization_list, node) {
         cJSON *itemLocal = OpenAPI_authorization_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nidd_authorization_info_convertToJSON() failed [nidd_authorization_list]");
+            log_error("OpenAPI_nidd_authorization_info_convertToJSON() failed [nidd_authorization_list]");
             goto end;
         }
         cJSON_AddItemToArray(nidd_authorization_listList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_nidd_authorization_info_t *OpenAPI_nidd_authorization_info_parseFromJSON
     OpenAPI_list_t *nidd_authorization_listList = NULL;
     nidd_authorization_list = cJSON_GetObjectItemCaseSensitive(nidd_authorization_infoJSON, "niddAuthorizationList");
     if (!nidd_authorization_list) {
-        ogs_error("OpenAPI_nidd_authorization_info_parseFromJSON() failed [nidd_authorization_list]");
+        log_error("OpenAPI_nidd_authorization_info_parseFromJSON() failed [nidd_authorization_list]");
         goto end;
     }
         cJSON *nidd_authorization_list_local = NULL;
         if (!cJSON_IsArray(nidd_authorization_list)) {
-            ogs_error("OpenAPI_nidd_authorization_info_parseFromJSON() failed [nidd_authorization_list]");
+            log_error("OpenAPI_nidd_authorization_info_parseFromJSON() failed [nidd_authorization_list]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_nidd_authorization_info_t *OpenAPI_nidd_authorization_info_parseFromJSON
 
         cJSON_ArrayForEach(nidd_authorization_list_local, nidd_authorization_list) {
             if (!cJSON_IsObject(nidd_authorization_list_local)) {
-                ogs_error("OpenAPI_nidd_authorization_info_parseFromJSON() failed [nidd_authorization_list]");
+                log_error("OpenAPI_nidd_authorization_info_parseFromJSON() failed [nidd_authorization_list]");
                 goto end;
             }
             OpenAPI_authorization_info_t *nidd_authorization_listItem = OpenAPI_authorization_info_parseFromJSON(nidd_authorization_list_local);
             if (!nidd_authorization_listItem) {
-                ogs_error("No nidd_authorization_listItem");
+                log_error("No nidd_authorization_listItem");
                 goto end;
             }
             OpenAPI_list_add(nidd_authorization_listList, nidd_authorization_listItem);
@@ -119,10 +119,10 @@ OpenAPI_nidd_authorization_info_t *OpenAPI_nidd_authorization_info_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nidd_authorization_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nidd_authorization_info_convertToJSON() failed");
+        log_error("OpenAPI_nidd_authorization_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_nidd_authorization_info_t *OpenAPI_nidd_authorization_info_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

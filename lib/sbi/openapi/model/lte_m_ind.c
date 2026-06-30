@@ -9,7 +9,7 @@ OpenAPI_lte_m_ind_t *OpenAPI_lte_m_ind_create(
 )
 {
     OpenAPI_lte_m_ind_t *lte_m_ind_local_var = ogs_malloc(sizeof(OpenAPI_lte_m_ind_t));
-    ogs_assert(lte_m_ind_local_var);
+    log_assert(lte_m_ind_local_var);
 
     lte_m_ind_local_var->lte_cat_m_ind = lte_cat_m_ind;
 
@@ -32,13 +32,13 @@ cJSON *OpenAPI_lte_m_ind_convertToJSON(OpenAPI_lte_m_ind_t *lte_m_ind)
     OpenAPI_lnode_t *node = NULL;
 
     if (lte_m_ind == NULL) {
-        ogs_error("OpenAPI_lte_m_ind_convertToJSON() failed [LteMInd]");
+        log_error("OpenAPI_lte_m_ind_convertToJSON() failed [LteMInd]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddBoolToObject(item, "lteCatMInd", lte_m_ind->lte_cat_m_ind) == NULL) {
-        ogs_error("OpenAPI_lte_m_ind_convertToJSON() failed [lte_cat_m_ind]");
+        log_error("OpenAPI_lte_m_ind_convertToJSON() failed [lte_cat_m_ind]");
         goto end;
     }
 
@@ -53,11 +53,11 @@ OpenAPI_lte_m_ind_t *OpenAPI_lte_m_ind_parseFromJSON(cJSON *lte_m_indJSON)
     cJSON *lte_cat_m_ind = NULL;
     lte_cat_m_ind = cJSON_GetObjectItemCaseSensitive(lte_m_indJSON, "lteCatMInd");
     if (!lte_cat_m_ind) {
-        ogs_error("OpenAPI_lte_m_ind_parseFromJSON() failed [lte_cat_m_ind]");
+        log_error("OpenAPI_lte_m_ind_parseFromJSON() failed [lte_cat_m_ind]");
         goto end;
     }
     if (!cJSON_IsBool(lte_cat_m_ind)) {
-        ogs_error("OpenAPI_lte_m_ind_parseFromJSON() failed [lte_cat_m_ind]");
+        log_error("OpenAPI_lte_m_ind_parseFromJSON() failed [lte_cat_m_ind]");
         goto end;
     }
 
@@ -76,10 +76,10 @@ OpenAPI_lte_m_ind_t *OpenAPI_lte_m_ind_copy(OpenAPI_lte_m_ind_t *dst, OpenAPI_lt
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_lte_m_ind_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_lte_m_ind_convertToJSON() failed");
+        log_error("OpenAPI_lte_m_ind_convertToJSON() failed");
         return NULL;
     }
 
@@ -87,14 +87,14 @@ OpenAPI_lte_m_ind_t *OpenAPI_lte_m_ind_copy(OpenAPI_lte_m_ind_t *dst, OpenAPI_lt
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

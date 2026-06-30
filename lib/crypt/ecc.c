@@ -84,7 +84,7 @@ static int getRandomNumber(uint64_t *p_vli)
     HCRYPTPROV l_prov;
     if(!CryptAcquireContext(&l_prov, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
     {
-        ogs_error("CryptAcquireContext() failed");
+        log_error("CryptAcquireContext() failed");
         return 0;
     }
 
@@ -110,11 +110,11 @@ static int getRandomNumber(uint64_t *p_vli)
     int l_fd = open("/dev/urandom", O_RDONLY | O_CLOEXEC);
     if(l_fd == -1)
     {
-        ogs_error("open(/dev/urandom) failed");
+        log_error("open(/dev/urandom) failed");
         l_fd = open("/dev/random", O_RDONLY | O_CLOEXEC);
         if(l_fd == -1)
         {
-            ogs_error("open(/dev/random) failed");
+            log_error("open(/dev/random) failed");
             return 0;
         }
     }
@@ -127,7 +127,7 @@ static int getRandomNumber(uint64_t *p_vli)
         if(l_read <= 0)
         { // read failed
             close(l_fd);
-            ogs_error("read() failed");
+            log_error("read() failed");
             return 0;
         }
         l_left -= l_read;
@@ -1084,7 +1084,7 @@ int ecc_make_key(uint8_t p_publicKey[ECC_BYTES+1], uint8_t p_privateKey[ECC_BYTE
     {
         if(!getRandomNumber(l_private) || (l_tries++ >= MAX_TRIES))
         {
-            ogs_error("getRandomNumber() failed [%d]", l_tries);
+            log_error("getRandomNumber() failed [%d]", l_tries);
             return 0;
         }
         if(vli_isZero(l_private))
@@ -1155,7 +1155,7 @@ int ecdh_shared_secret(const uint8_t p_publicKey[ECC_BYTES+1], const uint8_t p_p
     
     if(!getRandomNumber(l_random))
     {
-        ogs_error("getRandomNumber() failed");
+        log_error("getRandomNumber() failed");
         return 0;
     }
     
@@ -1168,7 +1168,7 @@ int ecdh_shared_secret(const uint8_t p_publicKey[ECC_BYTES+1], const uint8_t p_p
      */
     if (!ecdh_validate_pubkey(l_public, l_private))
     {
-        ogs_error("ecdh_validate_pubkey() failed");
+        log_error("ecdh_validate_pubkey() failed");
         return 0;
     }
 
@@ -1269,7 +1269,7 @@ int ecdsa_sign(const uint8_t p_privateKey[ECC_BYTES], const uint8_t p_hash[ECC_B
     {
         if(!getRandomNumber(k) || (l_tries++ >= MAX_TRIES))
         {
-            ogs_error("getRandomNumber() failed [%d]", l_tries);
+            log_error("getRandomNumber() failed [%d]", l_tries);
             return 0;
         }
         if(vli_isZero(k))
@@ -1324,13 +1324,13 @@ int ecdsa_verify(const uint8_t p_publicKey[ECC_BYTES+1], const uint8_t p_hash[EC
     
     if(vli_isZero(l_r) || vli_isZero(l_s))
     { /* r, s must not be 0. */
-        ogs_error("r, s must not be 0");
+        log_error("r, s must not be 0");
         return 0;
     }
     
     if(vli_cmp(curve_n, l_r) != 1 || vli_cmp(curve_n, l_s) != 1)
     { /* r, s must be < n. */
-        ogs_error("r, s must be < n");
+        log_error("r, s must be < n");
         return 0;
     }
 

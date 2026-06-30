@@ -8,7 +8,7 @@ OpenAPI_network_perf_type_t *OpenAPI_network_perf_type_create(
 )
 {
     OpenAPI_network_perf_type_t *network_perf_type_local_var = ogs_malloc(sizeof(OpenAPI_network_perf_type_t));
-    ogs_assert(network_perf_type_local_var);
+    log_assert(network_perf_type_local_var);
 
 
     return network_perf_type_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_network_perf_type_convertToJSON(OpenAPI_network_perf_type_t *netw
     OpenAPI_lnode_t *node = NULL;
 
     if (network_perf_type == NULL) {
-        ogs_error("OpenAPI_network_perf_type_convertToJSON() failed [NetworkPerfType]");
+        log_error("OpenAPI_network_perf_type_convertToJSON() failed [NetworkPerfType]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_network_perf_type_t *OpenAPI_network_perf_type_copy(OpenAPI_network_perf
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_network_perf_type_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_network_perf_type_convertToJSON() failed");
+        log_error("OpenAPI_network_perf_type_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_network_perf_type_t *OpenAPI_network_perf_type_copy(OpenAPI_network_perf
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

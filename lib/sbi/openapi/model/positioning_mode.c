@@ -8,7 +8,7 @@ OpenAPI_positioning_mode_t *OpenAPI_positioning_mode_create(
 )
 {
     OpenAPI_positioning_mode_t *positioning_mode_local_var = ogs_malloc(sizeof(OpenAPI_positioning_mode_t));
-    ogs_assert(positioning_mode_local_var);
+    log_assert(positioning_mode_local_var);
 
 
     return positioning_mode_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_positioning_mode_convertToJSON(OpenAPI_positioning_mode_t *positi
     OpenAPI_lnode_t *node = NULL;
 
     if (positioning_mode == NULL) {
-        ogs_error("OpenAPI_positioning_mode_convertToJSON() failed [PositioningMode]");
+        log_error("OpenAPI_positioning_mode_convertToJSON() failed [PositioningMode]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_positioning_mode_t *OpenAPI_positioning_mode_copy(OpenAPI_positioning_mo
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_positioning_mode_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_positioning_mode_convertToJSON() failed");
+        log_error("OpenAPI_positioning_mode_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_positioning_mode_t *OpenAPI_positioning_mode_copy(OpenAPI_positioning_mo
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -42,7 +42,7 @@ void ogs_socket_init(void)
     wVersionRequested = MAKEWORD(2, 2);
 
     err = WSAStartup(wVersionRequested, &wsaData);
-    ogs_assert(err == 0);
+    log_assert(err == 0);
 #endif
 }
 
@@ -56,7 +56,7 @@ ogs_sock_t *ogs_sock_create(void)
 
     sock = ogs_calloc(1, sizeof(*sock));
     if (!sock) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
@@ -67,7 +67,7 @@ ogs_sock_t *ogs_sock_create(void)
 
 void ogs_sock_destroy(ogs_sock_t *sock)
 {
-    ogs_assert(sock);
+    log_assert(sock);
 
     if (sock->fd != INVALID_SOCKET) {
         ogs_closesocket(sock->fd);
@@ -82,19 +82,19 @@ ogs_sock_t *ogs_sock_socket(int family, int type, int protocol)
     ogs_sock_t *sock = NULL;
 
     sock = ogs_sock_create();
-    ogs_assert(sock);
+    log_assert(sock);
 
     sock->family = family;
     sock->fd = socket(sock->family, type, protocol);
     if (sock->fd < 0) {
         ogs_sock_destroy(sock);
         
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
             "socket create(%d:%d:%d) failed", sock->family, type, protocol);
         return NULL;
     }
 
-    ogs_debug("socket create(%d:%d:%d)", sock->family, type, protocol);
+    log_debug("socket create(%d:%d:%d)", sock->family, type, protocol);
 
     return sock;
 }
@@ -104,14 +104,14 @@ int ogs_sock_bind(ogs_sock_t *sock, ogs_sockaddr_t *addr)
     char buf[OGS_ADDRSTRLEN];
     socklen_t addrlen;
 
-    ogs_assert(sock);
-    ogs_assert(addr);
+    log_assert(sock);
+    log_assert(addr);
 
     addrlen = ogs_sockaddr_len(addr);
-    ogs_assert(addrlen);
+    log_assert(addrlen);
 
     if (bind(sock->fd, &addr->sa, addrlen) != 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                 "socket bind(%d) [%s]:%d failed",
                 addr->ogs_sa_family, OGS_ADDR(addr, buf), OGS_PORT(addr));
         return OGS_ERROR;
@@ -119,7 +119,7 @@ int ogs_sock_bind(ogs_sock_t *sock, ogs_sockaddr_t *addr)
 
     memcpy(&sock->local_addr, addr, sizeof(sock->local_addr));
 
-    ogs_debug("socket bind %s:%d", OGS_ADDR(addr, buf), OGS_PORT(addr));
+    log_debug("socket bind %s:%d", OGS_ADDR(addr, buf), OGS_PORT(addr));
 
     return OGS_OK;
 }
@@ -129,14 +129,14 @@ int ogs_sock_connect(ogs_sock_t *sock, ogs_sockaddr_t *addr)
     char buf[OGS_ADDRSTRLEN];
     socklen_t addrlen;
 
-    ogs_assert(sock);
-    ogs_assert(addr);
+    log_assert(sock);
+    log_assert(addr);
 
     addrlen = ogs_sockaddr_len(addr);
-    ogs_assert(addrlen);
+    log_assert(addrlen);
 
     if (connect(sock->fd, &addr->sa, addrlen) != 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                 "socket connect[%s]:%d failed",
                 OGS_ADDR(addr, buf), OGS_PORT(addr));
         return OGS_ERROR;
@@ -144,7 +144,7 @@ int ogs_sock_connect(ogs_sock_t *sock, ogs_sockaddr_t *addr)
 
     memcpy(&sock->remote_addr, addr, sizeof(sock->remote_addr));
 
-    ogs_debug("socket connect %s:%d\n", OGS_ADDR(addr, buf), OGS_PORT(addr));
+    log_debug("socket connect %s:%d\n", OGS_ADDR(addr, buf), OGS_PORT(addr));
 
     return OGS_OK;
 }
@@ -152,11 +152,11 @@ int ogs_sock_connect(ogs_sock_t *sock, ogs_sockaddr_t *addr)
 int ogs_sock_listen(ogs_sock_t *sock)
 {
     int rc;
-    ogs_assert(sock);
+    log_assert(sock);
 
     rc = listen(sock->fd, 5);
     if (rc < 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "listen failed");
+        log_error_msg(LOG_ERROR, ogs_socket_errno, "listen failed");
         return OGS_ERROR;
     }
 
@@ -171,7 +171,7 @@ ogs_sock_t *ogs_sock_accept(ogs_sock_t *sock)
     ogs_sockaddr_t addr;
     socklen_t addrlen;
 
-    ogs_assert(sock);
+    log_assert(sock);
 
     memset(&addr, 0, sizeof(addr));
     addrlen = sizeof(addr.ss);
@@ -182,7 +182,7 @@ ogs_sock_t *ogs_sock_accept(ogs_sock_t *sock)
     }
 
     new_sock = ogs_sock_create();
-    ogs_assert(new_sock);
+    log_assert(new_sock);
 
     new_sock->family = sock->family;
     new_sock->fd = new_fd;
@@ -194,21 +194,21 @@ ogs_sock_t *ogs_sock_accept(ogs_sock_t *sock)
 
 ssize_t ogs_write(ogs_socket_t fd, const void *buf, size_t len)
 {
-    ogs_assert(fd != INVALID_SOCKET);
+    log_assert(fd != INVALID_SOCKET);
 
     return write(fd, buf, len);
 }
 
 ssize_t ogs_read(ogs_socket_t fd, void *buf, size_t len)
 {
-    ogs_assert(fd != INVALID_SOCKET);
+    log_assert(fd != INVALID_SOCKET);
 
     return read(fd, buf, len);
 }
 
 ssize_t ogs_send(ogs_socket_t fd, const void *buf, size_t len, int flags)
 {
-    ogs_assert(fd != INVALID_SOCKET);
+    log_assert(fd != INVALID_SOCKET);
 
     return send(fd, buf, len, flags);
 }
@@ -218,18 +218,18 @@ ssize_t ogs_sendto(ogs_socket_t fd,
 {
     socklen_t addrlen;
 
-    ogs_assert(fd != INVALID_SOCKET);
-    ogs_assert(to);
+    log_assert(fd != INVALID_SOCKET);
+    log_assert(to);
 
     addrlen = ogs_sockaddr_len(to);
-    ogs_assert(addrlen);
+    log_assert(addrlen);
 
     return sendto(fd, buf, len, flags, &to->sa, addrlen);
 }
 
 ssize_t ogs_recv(ogs_socket_t fd, void *buf, size_t len, int flags)
 {
-    ogs_assert(fd != INVALID_SOCKET);
+    log_assert(fd != INVALID_SOCKET);
     return recv(fd, buf, len, flags);
 }
 
@@ -238,8 +238,8 @@ ssize_t ogs_recvfrom(ogs_socket_t fd,
 {
     socklen_t addrlen = sizeof(struct sockaddr_storage);
 
-    ogs_assert(fd != INVALID_SOCKET);
-    ogs_assert(from);
+    log_assert(fd != INVALID_SOCKET);
+    log_assert(from);
 
     memset(from, 0, sizeof *from);
     return recvfrom(fd, buf, len, flags, &from->sa, &addrlen);
@@ -254,7 +254,7 @@ int ogs_closesocket(ogs_socket_t fd)
     r = close(fd);
 #endif
     if (r != 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "closesocket failed");
+        log_error_msg(LOG_ERROR, ogs_socket_errno, "closesocket failed");
         return OGS_ERROR;
     }
 

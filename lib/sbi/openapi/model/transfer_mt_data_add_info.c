@@ -10,7 +10,7 @@ OpenAPI_transfer_mt_data_add_info_t *OpenAPI_transfer_mt_data_add_info_create(
 )
 {
     OpenAPI_transfer_mt_data_add_info_t *transfer_mt_data_add_info_local_var = ogs_malloc(sizeof(OpenAPI_transfer_mt_data_add_info_t));
-    ogs_assert(transfer_mt_data_add_info_local_var);
+    log_assert(transfer_mt_data_add_info_local_var);
 
     transfer_mt_data_add_info_local_var->is_max_waiting_time = is_max_waiting_time;
     transfer_mt_data_add_info_local_var->max_waiting_time = max_waiting_time;
@@ -34,14 +34,14 @@ cJSON *OpenAPI_transfer_mt_data_add_info_convertToJSON(OpenAPI_transfer_mt_data_
     OpenAPI_lnode_t *node = NULL;
 
     if (transfer_mt_data_add_info == NULL) {
-        ogs_error("OpenAPI_transfer_mt_data_add_info_convertToJSON() failed [TransferMtDataAddInfo]");
+        log_error("OpenAPI_transfer_mt_data_add_info_convertToJSON() failed [TransferMtDataAddInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (transfer_mt_data_add_info->is_max_waiting_time) {
     if (cJSON_AddNumberToObject(item, "maxWaitingTime", transfer_mt_data_add_info->max_waiting_time) == NULL) {
-        ogs_error("OpenAPI_transfer_mt_data_add_info_convertToJSON() failed [max_waiting_time]");
+        log_error("OpenAPI_transfer_mt_data_add_info_convertToJSON() failed [max_waiting_time]");
         goto end;
     }
     }
@@ -58,7 +58,7 @@ OpenAPI_transfer_mt_data_add_info_t *OpenAPI_transfer_mt_data_add_info_parseFrom
     max_waiting_time = cJSON_GetObjectItemCaseSensitive(transfer_mt_data_add_infoJSON, "maxWaitingTime");
     if (max_waiting_time) {
     if (!cJSON_IsNumber(max_waiting_time)) {
-        ogs_error("OpenAPI_transfer_mt_data_add_info_parseFromJSON() failed [max_waiting_time]");
+        log_error("OpenAPI_transfer_mt_data_add_info_parseFromJSON() failed [max_waiting_time]");
         goto end;
     }
     }
@@ -78,10 +78,10 @@ OpenAPI_transfer_mt_data_add_info_t *OpenAPI_transfer_mt_data_add_info_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_transfer_mt_data_add_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_transfer_mt_data_add_info_convertToJSON() failed");
+        log_error("OpenAPI_transfer_mt_data_add_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -89,14 +89,14 @@ OpenAPI_transfer_mt_data_add_info_t *OpenAPI_transfer_mt_data_add_info_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

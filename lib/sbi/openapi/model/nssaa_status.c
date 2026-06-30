@@ -10,7 +10,7 @@ OpenAPI_nssaa_status_t *OpenAPI_nssaa_status_create(
 )
 {
     OpenAPI_nssaa_status_t *nssaa_status_local_var = ogs_malloc(sizeof(OpenAPI_nssaa_status_t));
-    ogs_assert(nssaa_status_local_var);
+    log_assert(nssaa_status_local_var);
 
     nssaa_status_local_var->snssai = snssai;
     nssaa_status_local_var->status = status;
@@ -38,32 +38,32 @@ cJSON *OpenAPI_nssaa_status_convertToJSON(OpenAPI_nssaa_status_t *nssaa_status)
     OpenAPI_lnode_t *node = NULL;
 
     if (nssaa_status == NULL) {
-        ogs_error("OpenAPI_nssaa_status_convertToJSON() failed [NssaaStatus]");
+        log_error("OpenAPI_nssaa_status_convertToJSON() failed [NssaaStatus]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!nssaa_status->snssai) {
-        ogs_error("OpenAPI_nssaa_status_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_nssaa_status_convertToJSON() failed [snssai]");
         return NULL;
     }
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(nssaa_status->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_nssaa_status_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_nssaa_status_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_nssaa_status_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_nssaa_status_convertToJSON() failed [snssai]");
         goto end;
     }
 
     if (nssaa_status->status == OpenAPI_auth_status_NULL) {
-        ogs_error("OpenAPI_nssaa_status_convertToJSON() failed [status]");
+        log_error("OpenAPI_nssaa_status_convertToJSON() failed [status]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "status", OpenAPI_auth_status_ToString(nssaa_status->status)) == NULL) {
-        ogs_error("OpenAPI_nssaa_status_convertToJSON() failed [status]");
+        log_error("OpenAPI_nssaa_status_convertToJSON() failed [status]");
         goto end;
     }
 
@@ -81,22 +81,22 @@ OpenAPI_nssaa_status_t *OpenAPI_nssaa_status_parseFromJSON(cJSON *nssaa_statusJS
     OpenAPI_auth_status_e statusVariable = 0;
     snssai = cJSON_GetObjectItemCaseSensitive(nssaa_statusJSON, "snssai");
     if (!snssai) {
-        ogs_error("OpenAPI_nssaa_status_parseFromJSON() failed [snssai]");
+        log_error("OpenAPI_nssaa_status_parseFromJSON() failed [snssai]");
         goto end;
     }
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
 
     status = cJSON_GetObjectItemCaseSensitive(nssaa_statusJSON, "status");
     if (!status) {
-        ogs_error("OpenAPI_nssaa_status_parseFromJSON() failed [status]");
+        log_error("OpenAPI_nssaa_status_parseFromJSON() failed [status]");
         goto end;
     }
     if (!cJSON_IsString(status)) {
-        ogs_error("OpenAPI_nssaa_status_parseFromJSON() failed [status]");
+        log_error("OpenAPI_nssaa_status_parseFromJSON() failed [status]");
         goto end;
     }
     statusVariable = OpenAPI_auth_status_FromString(status->valuestring);
@@ -120,10 +120,10 @@ OpenAPI_nssaa_status_t *OpenAPI_nssaa_status_copy(OpenAPI_nssaa_status_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nssaa_status_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nssaa_status_convertToJSON() failed");
+        log_error("OpenAPI_nssaa_status_convertToJSON() failed");
         return NULL;
     }
 
@@ -131,14 +131,14 @@ OpenAPI_nssaa_status_t *OpenAPI_nssaa_status_copy(OpenAPI_nssaa_status_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

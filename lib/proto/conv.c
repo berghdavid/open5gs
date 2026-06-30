@@ -24,8 +24,8 @@ void ogs_extract_digit_from_string(char *digit, char *string)
     bool extracting = false;
     int i = 0;
 
-    ogs_assert(string);
-    ogs_assert(digit);
+    log_assert(string);
+    log_assert(digit);
 
     while (*string && i < OGS_MAX_IMSI_BCD_LEN) {
         if (*string >= '0' && *string <= '9') {
@@ -43,8 +43,8 @@ void ogs_extract_digit_from_string(char *digit, char *string)
 
 int ogs_paa_to_ip(const ogs_paa_t *paa, ogs_ip_t *ip)
 {
-    ogs_assert(paa);
-    ogs_assert(ip);
+    log_assert(paa);
+    log_assert(ip);
 
     memset(ip, 0, sizeof *ip);
 
@@ -62,7 +62,7 @@ int ogs_paa_to_ip(const ogs_paa_t *paa, ogs_ip_t *ip)
         ip->ipv6 = 1;
         memcpy(ip->addr6, paa->addr6, OGS_IPV6_LEN);
     } else {
-        ogs_error("No IPv4 or IPv6");
+        log_error("No IPv4 or IPv6");
         return OGS_ERROR;
     }
 

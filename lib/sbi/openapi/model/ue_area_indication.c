@@ -11,7 +11,7 @@ OpenAPI_ue_area_indication_t *OpenAPI_ue_area_indication_create(
 )
 {
     OpenAPI_ue_area_indication_t *ue_area_indication_local_var = ogs_malloc(sizeof(OpenAPI_ue_area_indication_t));
-    ogs_assert(ue_area_indication_local_var);
+    log_assert(ue_area_indication_local_var);
 
     ue_area_indication_local_var->country = country;
     ue_area_indication_local_var->is_international_area_ind = is_international_area_ind;
@@ -40,21 +40,21 @@ cJSON *OpenAPI_ue_area_indication_convertToJSON(OpenAPI_ue_area_indication_t *ue
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_area_indication == NULL) {
-        ogs_error("OpenAPI_ue_area_indication_convertToJSON() failed [UeAreaIndication]");
+        log_error("OpenAPI_ue_area_indication_convertToJSON() failed [UeAreaIndication]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ue_area_indication->country) {
     if (cJSON_AddStringToObject(item, "country", ue_area_indication->country) == NULL) {
-        ogs_error("OpenAPI_ue_area_indication_convertToJSON() failed [country]");
+        log_error("OpenAPI_ue_area_indication_convertToJSON() failed [country]");
         goto end;
     }
     }
 
     if (ue_area_indication->is_international_area_ind) {
     if (cJSON_AddBoolToObject(item, "internationalAreaInd", ue_area_indication->international_area_ind) == NULL) {
-        ogs_error("OpenAPI_ue_area_indication_convertToJSON() failed [international_area_ind]");
+        log_error("OpenAPI_ue_area_indication_convertToJSON() failed [international_area_ind]");
         goto end;
     }
     }
@@ -72,7 +72,7 @@ OpenAPI_ue_area_indication_t *OpenAPI_ue_area_indication_parseFromJSON(cJSON *ue
     country = cJSON_GetObjectItemCaseSensitive(ue_area_indicationJSON, "country");
     if (country) {
     if (!cJSON_IsString(country) && !cJSON_IsNull(country)) {
-        ogs_error("OpenAPI_ue_area_indication_parseFromJSON() failed [country]");
+        log_error("OpenAPI_ue_area_indication_parseFromJSON() failed [country]");
         goto end;
     }
     }
@@ -80,7 +80,7 @@ OpenAPI_ue_area_indication_t *OpenAPI_ue_area_indication_parseFromJSON(cJSON *ue
     international_area_ind = cJSON_GetObjectItemCaseSensitive(ue_area_indicationJSON, "internationalAreaInd");
     if (international_area_ind) {
     if (!cJSON_IsBool(international_area_ind)) {
-        ogs_error("OpenAPI_ue_area_indication_parseFromJSON() failed [international_area_ind]");
+        log_error("OpenAPI_ue_area_indication_parseFromJSON() failed [international_area_ind]");
         goto end;
     }
     }
@@ -101,10 +101,10 @@ OpenAPI_ue_area_indication_t *OpenAPI_ue_area_indication_copy(OpenAPI_ue_area_in
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_area_indication_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_area_indication_convertToJSON() failed");
+        log_error("OpenAPI_ue_area_indication_convertToJSON() failed");
         return NULL;
     }
 
@@ -112,14 +112,14 @@ OpenAPI_ue_area_indication_t *OpenAPI_ue_area_indication_copy(OpenAPI_ue_area_in
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

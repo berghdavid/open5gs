@@ -56,10 +56,10 @@ struct select_context_s {
 static void select_init(ogs_pollset_t *pollset)
 {
     struct select_context_s *context = NULL;
-    ogs_assert(pollset);
+    log_assert(pollset);
 
     context = ogs_calloc(1, sizeof *context);
-    ogs_assert(context);
+    log_assert(context);
     pollset->context = context;
 
     ogs_list_init(&context->list);
@@ -75,9 +75,9 @@ static void select_cleanup(ogs_pollset_t *pollset)
 {
     struct select_context_s *context = NULL;
 
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     ogs_notify_final(pollset);
     ogs_free(context);
@@ -88,11 +88,11 @@ static int select_add(ogs_poll_t *poll)
     ogs_pollset_t *pollset = NULL;
     struct select_context_s *context = NULL;
 
-    ogs_assert(poll);
+    log_assert(poll);
     pollset = poll->pollset;
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     if (poll->when & OGS_POLLIN) {
         FD_SET(poll->fd, &context->master_read_fd_set);
@@ -115,11 +115,11 @@ static int select_remove(ogs_poll_t *poll)
     ogs_pollset_t *pollset = NULL;
     struct select_context_s *context = NULL;
 
-    ogs_assert(poll);
+    log_assert(poll);
     pollset = poll->pollset;
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     if (poll->when & OGS_POLLIN)
         FD_CLR(poll->fd, &context->master_read_fd_set);
@@ -143,9 +143,9 @@ static int select_process(ogs_pollset_t *pollset, ogs_time_t timeout)
     int rc;
     struct timeval tv, *tp;
 
-    ogs_assert(pollset);
+    log_assert(pollset);
     context = pollset->context;
-    ogs_assert(context);
+    log_assert(context);
 
     if (context->max_fd == -1) {
         ogs_list_for_each(&context->list, poll) {
@@ -153,7 +153,7 @@ static int select_process(ogs_pollset_t *pollset, ogs_time_t timeout)
                 context->max_fd = poll->fd;
             }
         }
-        ogs_debug("change max_fd: %d", context->max_fd);
+        log_debug("change max_fd: %d", context->max_fd);
     }
 
     context->work_read_fd_set = context->master_read_fd_set;
@@ -175,7 +175,7 @@ static int select_process(ogs_pollset_t *pollset, ogs_time_t timeout)
     rc = select(context->max_fd + 1,
             &context->work_read_fd_set, &context->work_write_fd_set, NULL, tp);
     if (rc < 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "select() failed");
+        log_error_msg(LOG_ERROR, ogs_socket_errno, "select() failed");
         return OGS_ERROR;
     } else if (rc == 0) {
         return OGS_TIMEUP;

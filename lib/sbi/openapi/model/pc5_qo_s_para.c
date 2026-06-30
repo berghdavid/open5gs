@@ -10,7 +10,7 @@ OpenAPI_pc5_qo_s_para_t *OpenAPI_pc5_qo_s_para_create(
 )
 {
     OpenAPI_pc5_qo_s_para_t *pc5_qo_s_para_local_var = ogs_malloc(sizeof(OpenAPI_pc5_qo_s_para_t));
-    ogs_assert(pc5_qo_s_para_local_var);
+    log_assert(pc5_qo_s_para_local_var);
 
     pc5_qo_s_para_local_var->pc5_qos_flow_list = pc5_qos_flow_list;
     pc5_qo_s_para_local_var->pc5_link_ambr = pc5_link_ambr;
@@ -45,24 +45,24 @@ cJSON *OpenAPI_pc5_qo_s_para_convertToJSON(OpenAPI_pc5_qo_s_para_t *pc5_qo_s_par
     OpenAPI_lnode_t *node = NULL;
 
     if (pc5_qo_s_para == NULL) {
-        ogs_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [Pc5QoSPara]");
+        log_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [Pc5QoSPara]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!pc5_qo_s_para->pc5_qos_flow_list) {
-        ogs_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [pc5_qos_flow_list]");
+        log_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [pc5_qos_flow_list]");
         return NULL;
     }
     cJSON *pc5_qos_flow_listList = cJSON_AddArrayToObject(item, "pc5QosFlowList");
     if (pc5_qos_flow_listList == NULL) {
-        ogs_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [pc5_qos_flow_list]");
+        log_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [pc5_qos_flow_list]");
         goto end;
     }
     OpenAPI_list_for_each(pc5_qo_s_para->pc5_qos_flow_list, node) {
         cJSON *itemLocal = OpenAPI_pc5_qos_flow_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [pc5_qos_flow_list]");
+            log_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [pc5_qos_flow_list]");
             goto end;
         }
         cJSON_AddItemToArray(pc5_qos_flow_listList, itemLocal);
@@ -70,7 +70,7 @@ cJSON *OpenAPI_pc5_qo_s_para_convertToJSON(OpenAPI_pc5_qo_s_para_t *pc5_qo_s_par
 
     if (pc5_qo_s_para->pc5_link_ambr) {
     if (cJSON_AddStringToObject(item, "pc5LinkAmbr", pc5_qo_s_para->pc5_link_ambr) == NULL) {
-        ogs_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [pc5_link_ambr]");
+        log_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed [pc5_link_ambr]");
         goto end;
     }
     }
@@ -88,12 +88,12 @@ OpenAPI_pc5_qo_s_para_t *OpenAPI_pc5_qo_s_para_parseFromJSON(cJSON *pc5_qo_s_par
     cJSON *pc5_link_ambr = NULL;
     pc5_qos_flow_list = cJSON_GetObjectItemCaseSensitive(pc5_qo_s_paraJSON, "pc5QosFlowList");
     if (!pc5_qos_flow_list) {
-        ogs_error("OpenAPI_pc5_qo_s_para_parseFromJSON() failed [pc5_qos_flow_list]");
+        log_error("OpenAPI_pc5_qo_s_para_parseFromJSON() failed [pc5_qos_flow_list]");
         goto end;
     }
         cJSON *pc5_qos_flow_list_local = NULL;
         if (!cJSON_IsArray(pc5_qos_flow_list)) {
-            ogs_error("OpenAPI_pc5_qo_s_para_parseFromJSON() failed [pc5_qos_flow_list]");
+            log_error("OpenAPI_pc5_qo_s_para_parseFromJSON() failed [pc5_qos_flow_list]");
             goto end;
         }
 
@@ -101,12 +101,12 @@ OpenAPI_pc5_qo_s_para_t *OpenAPI_pc5_qo_s_para_parseFromJSON(cJSON *pc5_qo_s_par
 
         cJSON_ArrayForEach(pc5_qos_flow_list_local, pc5_qos_flow_list) {
             if (!cJSON_IsObject(pc5_qos_flow_list_local)) {
-                ogs_error("OpenAPI_pc5_qo_s_para_parseFromJSON() failed [pc5_qos_flow_list]");
+                log_error("OpenAPI_pc5_qo_s_para_parseFromJSON() failed [pc5_qos_flow_list]");
                 goto end;
             }
             OpenAPI_pc5_qos_flow_item_t *pc5_qos_flow_listItem = OpenAPI_pc5_qos_flow_item_parseFromJSON(pc5_qos_flow_list_local);
             if (!pc5_qos_flow_listItem) {
-                ogs_error("No pc5_qos_flow_listItem");
+                log_error("No pc5_qos_flow_listItem");
                 goto end;
             }
             OpenAPI_list_add(pc5_qos_flow_listList, pc5_qos_flow_listItem);
@@ -115,7 +115,7 @@ OpenAPI_pc5_qo_s_para_t *OpenAPI_pc5_qo_s_para_parseFromJSON(cJSON *pc5_qo_s_par
     pc5_link_ambr = cJSON_GetObjectItemCaseSensitive(pc5_qo_s_paraJSON, "pc5LinkAmbr");
     if (pc5_link_ambr) {
     if (!cJSON_IsString(pc5_link_ambr) && !cJSON_IsNull(pc5_link_ambr)) {
-        ogs_error("OpenAPI_pc5_qo_s_para_parseFromJSON() failed [pc5_link_ambr]");
+        log_error("OpenAPI_pc5_qo_s_para_parseFromJSON() failed [pc5_link_ambr]");
         goto end;
     }
     }
@@ -142,10 +142,10 @@ OpenAPI_pc5_qo_s_para_t *OpenAPI_pc5_qo_s_para_copy(OpenAPI_pc5_qo_s_para_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pc5_qo_s_para_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed");
+        log_error("OpenAPI_pc5_qo_s_para_convertToJSON() failed");
         return NULL;
     }
 
@@ -153,14 +153,14 @@ OpenAPI_pc5_qo_s_para_t *OpenAPI_pc5_qo_s_para_copy(OpenAPI_pc5_qo_s_para_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -13,7 +13,7 @@ OpenAPI_released_data_t *OpenAPI_released_data_create(
 )
 {
     OpenAPI_released_data_t *released_data_local_var = ogs_malloc(sizeof(OpenAPI_released_data_t));
-    ogs_assert(released_data_local_var);
+    log_assert(released_data_local_var);
 
     released_data_local_var->small_data_rate_status = small_data_rate_status;
     released_data_local_var->apn_rate_status = apn_rate_status;
@@ -60,7 +60,7 @@ cJSON *OpenAPI_released_data_convertToJSON(OpenAPI_released_data_t *released_dat
     OpenAPI_lnode_t *node = NULL;
 
     if (released_data == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [ReleasedData]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [ReleasedData]");
         return NULL;
     }
 
@@ -68,12 +68,12 @@ cJSON *OpenAPI_released_data_convertToJSON(OpenAPI_released_data_t *released_dat
     if (released_data->small_data_rate_status) {
     cJSON *small_data_rate_status_local_JSON = OpenAPI_small_data_rate_status_convertToJSON(released_data->small_data_rate_status);
     if (small_data_rate_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [small_data_rate_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smallDataRateStatus", small_data_rate_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [small_data_rate_status]");
         goto end;
     }
     }
@@ -81,12 +81,12 @@ cJSON *OpenAPI_released_data_convertToJSON(OpenAPI_released_data_t *released_dat
     if (released_data->apn_rate_status) {
     cJSON *apn_rate_status_local_JSON = OpenAPI_apn_rate_status_convertToJSON(released_data->apn_rate_status);
     if (apn_rate_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [apn_rate_status]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [apn_rate_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "apnRateStatus", apn_rate_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [apn_rate_status]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [apn_rate_status]");
         goto end;
     }
     }
@@ -94,12 +94,12 @@ cJSON *OpenAPI_released_data_convertToJSON(OpenAPI_released_data_t *released_dat
     if (released_data->n4_info) {
     cJSON *n4_info_local_JSON = OpenAPI_n4_information_convertToJSON(released_data->n4_info);
     if (n4_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [n4_info]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [n4_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n4Info", n4_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [n4_info]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [n4_info]");
         goto end;
     }
     }
@@ -107,12 +107,12 @@ cJSON *OpenAPI_released_data_convertToJSON(OpenAPI_released_data_t *released_dat
     if (released_data->n4_info_ext1) {
     cJSON *n4_info_ext1_local_JSON = OpenAPI_n4_information_convertToJSON(released_data->n4_info_ext1);
     if (n4_info_ext1_local_JSON == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [n4_info_ext1]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [n4_info_ext1]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n4InfoExt1", n4_info_ext1_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [n4_info_ext1]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [n4_info_ext1]");
         goto end;
     }
     }
@@ -120,12 +120,12 @@ cJSON *OpenAPI_released_data_convertToJSON(OpenAPI_released_data_t *released_dat
     if (released_data->n4_info_ext2) {
     cJSON *n4_info_ext2_local_JSON = OpenAPI_n4_information_convertToJSON(released_data->n4_info_ext2);
     if (n4_info_ext2_local_JSON == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [n4_info_ext2]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [n4_info_ext2]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n4InfoExt2", n4_info_ext2_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed [n4_info_ext2]");
+        log_error("OpenAPI_released_data_convertToJSON() failed [n4_info_ext2]");
         goto end;
     }
     }
@@ -152,7 +152,7 @@ OpenAPI_released_data_t *OpenAPI_released_data_parseFromJSON(cJSON *released_dat
     if (small_data_rate_status) {
     small_data_rate_status_local_nonprim = OpenAPI_small_data_rate_status_parseFromJSON(small_data_rate_status);
     if (!small_data_rate_status_local_nonprim) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON failed [small_data_rate_status]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON failed [small_data_rate_status]");
         goto end;
     }
     }
@@ -161,7 +161,7 @@ OpenAPI_released_data_t *OpenAPI_released_data_parseFromJSON(cJSON *released_dat
     if (apn_rate_status) {
     apn_rate_status_local_nonprim = OpenAPI_apn_rate_status_parseFromJSON(apn_rate_status);
     if (!apn_rate_status_local_nonprim) {
-        ogs_error("OpenAPI_apn_rate_status_parseFromJSON failed [apn_rate_status]");
+        log_error("OpenAPI_apn_rate_status_parseFromJSON failed [apn_rate_status]");
         goto end;
     }
     }
@@ -170,7 +170,7 @@ OpenAPI_released_data_t *OpenAPI_released_data_parseFromJSON(cJSON *released_dat
     if (n4_info) {
     n4_info_local_nonprim = OpenAPI_n4_information_parseFromJSON(n4_info);
     if (!n4_info_local_nonprim) {
-        ogs_error("OpenAPI_n4_information_parseFromJSON failed [n4_info]");
+        log_error("OpenAPI_n4_information_parseFromJSON failed [n4_info]");
         goto end;
     }
     }
@@ -179,7 +179,7 @@ OpenAPI_released_data_t *OpenAPI_released_data_parseFromJSON(cJSON *released_dat
     if (n4_info_ext1) {
     n4_info_ext1_local_nonprim = OpenAPI_n4_information_parseFromJSON(n4_info_ext1);
     if (!n4_info_ext1_local_nonprim) {
-        ogs_error("OpenAPI_n4_information_parseFromJSON failed [n4_info_ext1]");
+        log_error("OpenAPI_n4_information_parseFromJSON failed [n4_info_ext1]");
         goto end;
     }
     }
@@ -188,7 +188,7 @@ OpenAPI_released_data_t *OpenAPI_released_data_parseFromJSON(cJSON *released_dat
     if (n4_info_ext2) {
     n4_info_ext2_local_nonprim = OpenAPI_n4_information_parseFromJSON(n4_info_ext2);
     if (!n4_info_ext2_local_nonprim) {
-        ogs_error("OpenAPI_n4_information_parseFromJSON failed [n4_info_ext2]");
+        log_error("OpenAPI_n4_information_parseFromJSON failed [n4_info_ext2]");
         goto end;
     }
     }
@@ -231,10 +231,10 @@ OpenAPI_released_data_t *OpenAPI_released_data_copy(OpenAPI_released_data_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_released_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_released_data_convertToJSON() failed");
+        log_error("OpenAPI_released_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -242,14 +242,14 @@ OpenAPI_released_data_t *OpenAPI_released_data_copy(OpenAPI_released_data_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

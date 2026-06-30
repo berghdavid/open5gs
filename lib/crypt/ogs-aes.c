@@ -1240,13 +1240,13 @@ int ogs_aes_cbc_encrypt(const uint8_t *key, const uint32_t keybits,
     uint32_t rk[OGS_AES_RKLENGTH(OGS_AES_MAX_KEY_BITS)];
     int nrounds;
 
-    ogs_assert(key);
-    ogs_assert(keybits >= 128);
-    ogs_assert(ivec);
-    ogs_assert(in);
-    ogs_assert(inlen);
-    ogs_assert(out);
-    ogs_assert(outlen);
+    log_assert(key);
+    log_assert(keybits >= 128);
+    log_assert(ivec);
+    log_assert(in);
+    log_assert(inlen);
+    log_assert(out);
+    log_assert(outlen);
 
     if (*outlen < ((inlen - 1) / OGS_AES_BLOCK_SIZE + 1) * OGS_AES_BLOCK_SIZE)
     {
@@ -1301,13 +1301,13 @@ int ogs_aes_cbc_decrypt(const uint8_t *key, const uint32_t keybits,
     uint32_t rk[OGS_AES_RKLENGTH(OGS_AES_MAX_KEY_BITS)];
     int nrounds;
 
-    ogs_assert(key);
-    ogs_assert(keybits >= 128);
-    ogs_assert(ivec);
-    ogs_assert(in);
-    ogs_assert(inlen);
-    ogs_assert(out);
-    ogs_assert(outlen);
+    log_assert(key);
+    log_assert(keybits >= 128);
+    log_assert(ivec);
+    log_assert(in);
+    log_assert(inlen);
+    log_assert(out);
+    log_assert(outlen);
 
     if (inlen % OGS_AES_BLOCK_SIZE != 0)
     {
@@ -1429,11 +1429,11 @@ int ogs_aes_ctr128_encrypt(const uint8_t *key,
     uint32_t n = 0;
     size_t l = 0;
 
-    ogs_assert(key);
-    ogs_assert(ivec);
-    ogs_assert(in);
-    ogs_assert(len);
-    ogs_assert(out);
+    log_assert(key);
+    log_assert(ivec);
+    log_assert(in);
+    log_assert(len);
+    log_assert(out);
 
     memset(ecount_buf, 0, 16);
     nrounds = ogs_aes_setup_enc(rk, key, 128);

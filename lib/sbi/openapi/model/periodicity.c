@@ -8,7 +8,7 @@ OpenAPI_periodicity_t *OpenAPI_periodicity_create(
 )
 {
     OpenAPI_periodicity_t *periodicity_local_var = ogs_malloc(sizeof(OpenAPI_periodicity_t));
-    ogs_assert(periodicity_local_var);
+    log_assert(periodicity_local_var);
 
 
     return periodicity_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_periodicity_convertToJSON(OpenAPI_periodicity_t *periodicity)
     OpenAPI_lnode_t *node = NULL;
 
     if (periodicity == NULL) {
-        ogs_error("OpenAPI_periodicity_convertToJSON() failed [Periodicity]");
+        log_error("OpenAPI_periodicity_convertToJSON() failed [Periodicity]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_periodicity_t *OpenAPI_periodicity_copy(OpenAPI_periodicity_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_periodicity_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_periodicity_convertToJSON() failed");
+        log_error("OpenAPI_periodicity_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_periodicity_t *OpenAPI_periodicity_copy(OpenAPI_periodicity_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

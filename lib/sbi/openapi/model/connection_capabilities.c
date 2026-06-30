@@ -8,7 +8,7 @@ OpenAPI_connection_capabilities_t *OpenAPI_connection_capabilities_create(
 )
 {
     OpenAPI_connection_capabilities_t *connection_capabilities_local_var = ogs_malloc(sizeof(OpenAPI_connection_capabilities_t));
-    ogs_assert(connection_capabilities_local_var);
+    log_assert(connection_capabilities_local_var);
 
 
     return connection_capabilities_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_connection_capabilities_convertToJSON(OpenAPI_connection_capabili
     OpenAPI_lnode_t *node = NULL;
 
     if (connection_capabilities == NULL) {
-        ogs_error("OpenAPI_connection_capabilities_convertToJSON() failed [ConnectionCapabilities]");
+        log_error("OpenAPI_connection_capabilities_convertToJSON() failed [ConnectionCapabilities]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_connection_capabilities_t *OpenAPI_connection_capabilities_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_connection_capabilities_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_connection_capabilities_convertToJSON() failed");
+        log_error("OpenAPI_connection_capabilities_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_connection_capabilities_t *OpenAPI_connection_capabilities_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

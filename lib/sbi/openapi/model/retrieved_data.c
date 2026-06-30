@@ -10,7 +10,7 @@ OpenAPI_retrieved_data_t *OpenAPI_retrieved_data_create(
 )
 {
     OpenAPI_retrieved_data_t *retrieved_data_local_var = ogs_malloc(sizeof(OpenAPI_retrieved_data_t));
-    ogs_assert(retrieved_data_local_var);
+    log_assert(retrieved_data_local_var);
 
     retrieved_data_local_var->small_data_rate_status = small_data_rate_status;
     retrieved_data_local_var->af_coordination_info = af_coordination_info;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_retrieved_data_convertToJSON(OpenAPI_retrieved_data_t *retrieved_
     OpenAPI_lnode_t *node = NULL;
 
     if (retrieved_data == NULL) {
-        ogs_error("OpenAPI_retrieved_data_convertToJSON() failed [RetrievedData]");
+        log_error("OpenAPI_retrieved_data_convertToJSON() failed [RetrievedData]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_retrieved_data_convertToJSON(OpenAPI_retrieved_data_t *retrieved_
     if (retrieved_data->small_data_rate_status) {
     cJSON *small_data_rate_status_local_JSON = OpenAPI_small_data_rate_status_convertToJSON(retrieved_data->small_data_rate_status);
     if (small_data_rate_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_retrieved_data_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_retrieved_data_convertToJSON() failed [small_data_rate_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smallDataRateStatus", small_data_rate_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_retrieved_data_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_retrieved_data_convertToJSON() failed [small_data_rate_status]");
         goto end;
     }
     }
@@ -63,12 +63,12 @@ cJSON *OpenAPI_retrieved_data_convertToJSON(OpenAPI_retrieved_data_t *retrieved_
     if (retrieved_data->af_coordination_info) {
     cJSON *af_coordination_info_local_JSON = OpenAPI_af_coordination_info_convertToJSON(retrieved_data->af_coordination_info);
     if (af_coordination_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_retrieved_data_convertToJSON() failed [af_coordination_info]");
+        log_error("OpenAPI_retrieved_data_convertToJSON() failed [af_coordination_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "afCoordinationInfo", af_coordination_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_retrieved_data_convertToJSON() failed [af_coordination_info]");
+        log_error("OpenAPI_retrieved_data_convertToJSON() failed [af_coordination_info]");
         goto end;
     }
     }
@@ -89,7 +89,7 @@ OpenAPI_retrieved_data_t *OpenAPI_retrieved_data_parseFromJSON(cJSON *retrieved_
     if (small_data_rate_status) {
     small_data_rate_status_local_nonprim = OpenAPI_small_data_rate_status_parseFromJSON(small_data_rate_status);
     if (!small_data_rate_status_local_nonprim) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON failed [small_data_rate_status]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON failed [small_data_rate_status]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_retrieved_data_t *OpenAPI_retrieved_data_parseFromJSON(cJSON *retrieved_
     if (af_coordination_info) {
     af_coordination_info_local_nonprim = OpenAPI_af_coordination_info_parseFromJSON(af_coordination_info);
     if (!af_coordination_info_local_nonprim) {
-        ogs_error("OpenAPI_af_coordination_info_parseFromJSON failed [af_coordination_info]");
+        log_error("OpenAPI_af_coordination_info_parseFromJSON failed [af_coordination_info]");
         goto end;
     }
     }
@@ -126,10 +126,10 @@ OpenAPI_retrieved_data_t *OpenAPI_retrieved_data_copy(OpenAPI_retrieved_data_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_retrieved_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_retrieved_data_convertToJSON() failed");
+        log_error("OpenAPI_retrieved_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -137,14 +137,14 @@ OpenAPI_retrieved_data_t *OpenAPI_retrieved_data_copy(OpenAPI_retrieved_data_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

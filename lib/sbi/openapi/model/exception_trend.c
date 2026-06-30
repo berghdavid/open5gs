@@ -8,7 +8,7 @@ OpenAPI_exception_trend_t *OpenAPI_exception_trend_create(
 )
 {
     OpenAPI_exception_trend_t *exception_trend_local_var = ogs_malloc(sizeof(OpenAPI_exception_trend_t));
-    ogs_assert(exception_trend_local_var);
+    log_assert(exception_trend_local_var);
 
 
     return exception_trend_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_exception_trend_convertToJSON(OpenAPI_exception_trend_t *exceptio
     OpenAPI_lnode_t *node = NULL;
 
     if (exception_trend == NULL) {
-        ogs_error("OpenAPI_exception_trend_convertToJSON() failed [ExceptionTrend]");
+        log_error("OpenAPI_exception_trend_convertToJSON() failed [ExceptionTrend]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_exception_trend_t *OpenAPI_exception_trend_copy(OpenAPI_exception_trend_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_exception_trend_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_exception_trend_convertToJSON() failed");
+        log_error("OpenAPI_exception_trend_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_exception_trend_t *OpenAPI_exception_trend_copy(OpenAPI_exception_trend_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

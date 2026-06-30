@@ -9,7 +9,7 @@ OpenAPI_ulcl_bp_information_t *OpenAPI_ulcl_bp_information_create(
 )
 {
     OpenAPI_ulcl_bp_information_t *ulcl_bp_information_local_var = ogs_malloc(sizeof(OpenAPI_ulcl_bp_information_t));
-    ogs_assert(ulcl_bp_information_local_var);
+    log_assert(ulcl_bp_information_local_var);
 
     ulcl_bp_information_local_var->ulcl_bp_upf_id = ulcl_bp_upf_id;
 
@@ -36,14 +36,14 @@ cJSON *OpenAPI_ulcl_bp_information_convertToJSON(OpenAPI_ulcl_bp_information_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (ulcl_bp_information == NULL) {
-        ogs_error("OpenAPI_ulcl_bp_information_convertToJSON() failed [UlclBpInformation]");
+        log_error("OpenAPI_ulcl_bp_information_convertToJSON() failed [UlclBpInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ulcl_bp_information->ulcl_bp_upf_id) {
     if (cJSON_AddStringToObject(item, "ulclBpUpfId", ulcl_bp_information->ulcl_bp_upf_id) == NULL) {
-        ogs_error("OpenAPI_ulcl_bp_information_convertToJSON() failed [ulcl_bp_upf_id]");
+        log_error("OpenAPI_ulcl_bp_information_convertToJSON() failed [ulcl_bp_upf_id]");
         goto end;
     }
     }
@@ -60,7 +60,7 @@ OpenAPI_ulcl_bp_information_t *OpenAPI_ulcl_bp_information_parseFromJSON(cJSON *
     ulcl_bp_upf_id = cJSON_GetObjectItemCaseSensitive(ulcl_bp_informationJSON, "ulclBpUpfId");
     if (ulcl_bp_upf_id) {
     if (!cJSON_IsString(ulcl_bp_upf_id) && !cJSON_IsNull(ulcl_bp_upf_id)) {
-        ogs_error("OpenAPI_ulcl_bp_information_parseFromJSON() failed [ulcl_bp_upf_id]");
+        log_error("OpenAPI_ulcl_bp_information_parseFromJSON() failed [ulcl_bp_upf_id]");
         goto end;
     }
     }
@@ -79,10 +79,10 @@ OpenAPI_ulcl_bp_information_t *OpenAPI_ulcl_bp_information_copy(OpenAPI_ulcl_bp_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ulcl_bp_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ulcl_bp_information_convertToJSON() failed");
+        log_error("OpenAPI_ulcl_bp_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -90,14 +90,14 @@ OpenAPI_ulcl_bp_information_t *OpenAPI_ulcl_bp_information_copy(OpenAPI_ulcl_bp_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

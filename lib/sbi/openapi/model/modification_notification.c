@@ -9,7 +9,7 @@ OpenAPI_modification_notification_t *OpenAPI_modification_notification_create(
 )
 {
     OpenAPI_modification_notification_t *modification_notification_local_var = ogs_malloc(sizeof(OpenAPI_modification_notification_t));
-    ogs_assert(modification_notification_local_var);
+    log_assert(modification_notification_local_var);
 
     modification_notification_local_var->notify_items = notify_items;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_modification_notification_convertToJSON(OpenAPI_modification_noti
     OpenAPI_lnode_t *node = NULL;
 
     if (modification_notification == NULL) {
-        ogs_error("OpenAPI_modification_notification_convertToJSON() failed [ModificationNotification]");
+        log_error("OpenAPI_modification_notification_convertToJSON() failed [ModificationNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!modification_notification->notify_items) {
-        ogs_error("OpenAPI_modification_notification_convertToJSON() failed [notify_items]");
+        log_error("OpenAPI_modification_notification_convertToJSON() failed [notify_items]");
         return NULL;
     }
     cJSON *notify_itemsList = cJSON_AddArrayToObject(item, "notifyItems");
     if (notify_itemsList == NULL) {
-        ogs_error("OpenAPI_modification_notification_convertToJSON() failed [notify_items]");
+        log_error("OpenAPI_modification_notification_convertToJSON() failed [notify_items]");
         goto end;
     }
     OpenAPI_list_for_each(modification_notification->notify_items, node) {
         cJSON *itemLocal = OpenAPI_notify_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_modification_notification_convertToJSON() failed [notify_items]");
+            log_error("OpenAPI_modification_notification_convertToJSON() failed [notify_items]");
             goto end;
         }
         cJSON_AddItemToArray(notify_itemsList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_modification_notification_t *OpenAPI_modification_notification_parseFrom
     OpenAPI_list_t *notify_itemsList = NULL;
     notify_items = cJSON_GetObjectItemCaseSensitive(modification_notificationJSON, "notifyItems");
     if (!notify_items) {
-        ogs_error("OpenAPI_modification_notification_parseFromJSON() failed [notify_items]");
+        log_error("OpenAPI_modification_notification_parseFromJSON() failed [notify_items]");
         goto end;
     }
         cJSON *notify_items_local = NULL;
         if (!cJSON_IsArray(notify_items)) {
-            ogs_error("OpenAPI_modification_notification_parseFromJSON() failed [notify_items]");
+            log_error("OpenAPI_modification_notification_parseFromJSON() failed [notify_items]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_modification_notification_t *OpenAPI_modification_notification_parseFrom
 
         cJSON_ArrayForEach(notify_items_local, notify_items) {
             if (!cJSON_IsObject(notify_items_local)) {
-                ogs_error("OpenAPI_modification_notification_parseFromJSON() failed [notify_items]");
+                log_error("OpenAPI_modification_notification_parseFromJSON() failed [notify_items]");
                 goto end;
             }
             OpenAPI_notify_item_t *notify_itemsItem = OpenAPI_notify_item_parseFromJSON(notify_items_local);
             if (!notify_itemsItem) {
-                ogs_error("No notify_itemsItem");
+                log_error("No notify_itemsItem");
                 goto end;
             }
             OpenAPI_list_add(notify_itemsList, notify_itemsItem);
@@ -119,10 +119,10 @@ OpenAPI_modification_notification_t *OpenAPI_modification_notification_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_modification_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_modification_notification_convertToJSON() failed");
+        log_error("OpenAPI_modification_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_modification_notification_t *OpenAPI_modification_notification_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

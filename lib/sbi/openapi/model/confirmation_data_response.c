@@ -12,7 +12,7 @@ OpenAPI_confirmation_data_response_t *OpenAPI_confirmation_data_response_create(
 )
 {
     OpenAPI_confirmation_data_response_t *confirmation_data_response_local_var = ogs_malloc(sizeof(OpenAPI_confirmation_data_response_t));
-    ogs_assert(confirmation_data_response_local_var);
+    log_assert(confirmation_data_response_local_var);
 
     confirmation_data_response_local_var->auth_result = auth_result;
     confirmation_data_response_local_var->supi = supi;
@@ -53,30 +53,30 @@ cJSON *OpenAPI_confirmation_data_response_convertToJSON(OpenAPI_confirmation_dat
     OpenAPI_lnode_t *node = NULL;
 
     if (confirmation_data_response == NULL) {
-        ogs_error("OpenAPI_confirmation_data_response_convertToJSON() failed [ConfirmationDataResponse]");
+        log_error("OpenAPI_confirmation_data_response_convertToJSON() failed [ConfirmationDataResponse]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (confirmation_data_response->auth_result == OpenAPI_auth_result_NULL) {
-        ogs_error("OpenAPI_confirmation_data_response_convertToJSON() failed [auth_result]");
+        log_error("OpenAPI_confirmation_data_response_convertToJSON() failed [auth_result]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "authResult", OpenAPI_auth_result_ToString(confirmation_data_response->auth_result)) == NULL) {
-        ogs_error("OpenAPI_confirmation_data_response_convertToJSON() failed [auth_result]");
+        log_error("OpenAPI_confirmation_data_response_convertToJSON() failed [auth_result]");
         goto end;
     }
 
     if (confirmation_data_response->supi) {
     if (cJSON_AddStringToObject(item, "supi", confirmation_data_response->supi) == NULL) {
-        ogs_error("OpenAPI_confirmation_data_response_convertToJSON() failed [supi]");
+        log_error("OpenAPI_confirmation_data_response_convertToJSON() failed [supi]");
         goto end;
     }
     }
 
     if (confirmation_data_response->kseaf) {
     if (cJSON_AddStringToObject(item, "kseaf", confirmation_data_response->kseaf) == NULL) {
-        ogs_error("OpenAPI_confirmation_data_response_convertToJSON() failed [kseaf]");
+        log_error("OpenAPI_confirmation_data_response_convertToJSON() failed [kseaf]");
         goto end;
     }
     }
@@ -84,13 +84,13 @@ cJSON *OpenAPI_confirmation_data_response_convertToJSON(OpenAPI_confirmation_dat
     if (confirmation_data_response->pvs_info) {
     cJSON *pvs_infoList = cJSON_AddArrayToObject(item, "pvsInfo");
     if (pvs_infoList == NULL) {
-        ogs_error("OpenAPI_confirmation_data_response_convertToJSON() failed [pvs_info]");
+        log_error("OpenAPI_confirmation_data_response_convertToJSON() failed [pvs_info]");
         goto end;
     }
     OpenAPI_list_for_each(confirmation_data_response->pvs_info, node) {
         cJSON *itemLocal = OpenAPI_server_addressing_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_confirmation_data_response_convertToJSON() failed [pvs_info]");
+            log_error("OpenAPI_confirmation_data_response_convertToJSON() failed [pvs_info]");
             goto end;
         }
         cJSON_AddItemToArray(pvs_infoList, itemLocal);
@@ -113,11 +113,11 @@ OpenAPI_confirmation_data_response_t *OpenAPI_confirmation_data_response_parseFr
     OpenAPI_list_t *pvs_infoList = NULL;
     auth_result = cJSON_GetObjectItemCaseSensitive(confirmation_data_responseJSON, "authResult");
     if (!auth_result) {
-        ogs_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [auth_result]");
+        log_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [auth_result]");
         goto end;
     }
     if (!cJSON_IsString(auth_result)) {
-        ogs_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [auth_result]");
+        log_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [auth_result]");
         goto end;
     }
     auth_resultVariable = OpenAPI_auth_result_FromString(auth_result->valuestring);
@@ -125,7 +125,7 @@ OpenAPI_confirmation_data_response_t *OpenAPI_confirmation_data_response_parseFr
     supi = cJSON_GetObjectItemCaseSensitive(confirmation_data_responseJSON, "supi");
     if (supi) {
     if (!cJSON_IsString(supi) && !cJSON_IsNull(supi)) {
-        ogs_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [supi]");
         goto end;
     }
     }
@@ -133,7 +133,7 @@ OpenAPI_confirmation_data_response_t *OpenAPI_confirmation_data_response_parseFr
     kseaf = cJSON_GetObjectItemCaseSensitive(confirmation_data_responseJSON, "kseaf");
     if (kseaf) {
     if (!cJSON_IsString(kseaf) && !cJSON_IsNull(kseaf)) {
-        ogs_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [kseaf]");
+        log_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [kseaf]");
         goto end;
     }
     }
@@ -142,7 +142,7 @@ OpenAPI_confirmation_data_response_t *OpenAPI_confirmation_data_response_parseFr
     if (pvs_info) {
         cJSON *pvs_info_local = NULL;
         if (!cJSON_IsArray(pvs_info)) {
-            ogs_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [pvs_info]");
+            log_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [pvs_info]");
             goto end;
         }
 
@@ -150,12 +150,12 @@ OpenAPI_confirmation_data_response_t *OpenAPI_confirmation_data_response_parseFr
 
         cJSON_ArrayForEach(pvs_info_local, pvs_info) {
             if (!cJSON_IsObject(pvs_info_local)) {
-                ogs_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [pvs_info]");
+                log_error("OpenAPI_confirmation_data_response_parseFromJSON() failed [pvs_info]");
                 goto end;
             }
             OpenAPI_server_addressing_info_t *pvs_infoItem = OpenAPI_server_addressing_info_parseFromJSON(pvs_info_local);
             if (!pvs_infoItem) {
-                ogs_error("No pvs_infoItem");
+                log_error("No pvs_infoItem");
                 goto end;
             }
             OpenAPI_list_add(pvs_infoList, pvs_infoItem);
@@ -186,10 +186,10 @@ OpenAPI_confirmation_data_response_t *OpenAPI_confirmation_data_response_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_confirmation_data_response_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_confirmation_data_response_convertToJSON() failed");
+        log_error("OpenAPI_confirmation_data_response_convertToJSON() failed");
         return NULL;
     }
 
@@ -197,14 +197,14 @@ OpenAPI_confirmation_data_response_t *OpenAPI_confirmation_data_response_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

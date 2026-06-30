@@ -14,7 +14,7 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_create(
 )
 {
     OpenAPI_slice_policy_data_t *slice_policy_data_local_var = ogs_malloc(sizeof(OpenAPI_slice_policy_data_t));
-    ogs_assert(slice_policy_data_local_var);
+    log_assert(slice_policy_data_local_var);
 
     slice_policy_data_local_var->mbr_ul = mbr_ul;
     slice_policy_data_local_var->mbr_dl = mbr_dl;
@@ -69,42 +69,42 @@ cJSON *OpenAPI_slice_policy_data_convertToJSON(OpenAPI_slice_policy_data_t *slic
     OpenAPI_lnode_t *node = NULL;
 
     if (slice_policy_data == NULL) {
-        ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed [SlicePolicyData]");
+        log_error("OpenAPI_slice_policy_data_convertToJSON() failed [SlicePolicyData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (slice_policy_data->mbr_ul) {
     if (cJSON_AddStringToObject(item, "mbrUl", slice_policy_data->mbr_ul) == NULL) {
-        ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed [mbr_ul]");
+        log_error("OpenAPI_slice_policy_data_convertToJSON() failed [mbr_ul]");
         goto end;
     }
     }
 
     if (slice_policy_data->mbr_dl) {
     if (cJSON_AddStringToObject(item, "mbrDl", slice_policy_data->mbr_dl) == NULL) {
-        ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed [mbr_dl]");
+        log_error("OpenAPI_slice_policy_data_convertToJSON() failed [mbr_dl]");
         goto end;
     }
     }
 
     if (slice_policy_data->remain_mbr_ul) {
     if (cJSON_AddStringToObject(item, "remainMbrUl", slice_policy_data->remain_mbr_ul) == NULL) {
-        ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed [remain_mbr_ul]");
+        log_error("OpenAPI_slice_policy_data_convertToJSON() failed [remain_mbr_ul]");
         goto end;
     }
     }
 
     if (slice_policy_data->remain_mbr_dl) {
     if (cJSON_AddStringToObject(item, "remainMbrDl", slice_policy_data->remain_mbr_dl) == NULL) {
-        ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed [remain_mbr_dl]");
+        log_error("OpenAPI_slice_policy_data_convertToJSON() failed [remain_mbr_dl]");
         goto end;
     }
     }
 
     if (slice_policy_data->supp_feat) {
     if (cJSON_AddStringToObject(item, "suppFeat", slice_policy_data->supp_feat) == NULL) {
-        ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed [supp_feat]");
+        log_error("OpenAPI_slice_policy_data_convertToJSON() failed [supp_feat]");
         goto end;
     }
     }
@@ -112,12 +112,12 @@ cJSON *OpenAPI_slice_policy_data_convertToJSON(OpenAPI_slice_policy_data_t *slic
     if (slice_policy_data->reset_ids) {
     cJSON *reset_idsList = cJSON_AddArrayToObject(item, "resetIds");
     if (reset_idsList == NULL) {
-        ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed [reset_ids]");
+        log_error("OpenAPI_slice_policy_data_convertToJSON() failed [reset_ids]");
         goto end;
     }
     OpenAPI_list_for_each(slice_policy_data->reset_ids, node) {
         if (cJSON_AddStringToObject(reset_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed [reset_ids]");
+            log_error("OpenAPI_slice_policy_data_convertToJSON() failed [reset_ids]");
             goto end;
         }
     }
@@ -141,7 +141,7 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_parseFromJSON(cJSON *slic
     mbr_ul = cJSON_GetObjectItemCaseSensitive(slice_policy_dataJSON, "mbrUl");
     if (mbr_ul) {
     if (!cJSON_IsString(mbr_ul) && !cJSON_IsNull(mbr_ul)) {
-        ogs_error("OpenAPI_slice_policy_data_parseFromJSON() failed [mbr_ul]");
+        log_error("OpenAPI_slice_policy_data_parseFromJSON() failed [mbr_ul]");
         goto end;
     }
     }
@@ -149,7 +149,7 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_parseFromJSON(cJSON *slic
     mbr_dl = cJSON_GetObjectItemCaseSensitive(slice_policy_dataJSON, "mbrDl");
     if (mbr_dl) {
     if (!cJSON_IsString(mbr_dl) && !cJSON_IsNull(mbr_dl)) {
-        ogs_error("OpenAPI_slice_policy_data_parseFromJSON() failed [mbr_dl]");
+        log_error("OpenAPI_slice_policy_data_parseFromJSON() failed [mbr_dl]");
         goto end;
     }
     }
@@ -157,7 +157,7 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_parseFromJSON(cJSON *slic
     remain_mbr_ul = cJSON_GetObjectItemCaseSensitive(slice_policy_dataJSON, "remainMbrUl");
     if (remain_mbr_ul) {
     if (!cJSON_IsString(remain_mbr_ul) && !cJSON_IsNull(remain_mbr_ul)) {
-        ogs_error("OpenAPI_slice_policy_data_parseFromJSON() failed [remain_mbr_ul]");
+        log_error("OpenAPI_slice_policy_data_parseFromJSON() failed [remain_mbr_ul]");
         goto end;
     }
     }
@@ -165,7 +165,7 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_parseFromJSON(cJSON *slic
     remain_mbr_dl = cJSON_GetObjectItemCaseSensitive(slice_policy_dataJSON, "remainMbrDl");
     if (remain_mbr_dl) {
     if (!cJSON_IsString(remain_mbr_dl) && !cJSON_IsNull(remain_mbr_dl)) {
-        ogs_error("OpenAPI_slice_policy_data_parseFromJSON() failed [remain_mbr_dl]");
+        log_error("OpenAPI_slice_policy_data_parseFromJSON() failed [remain_mbr_dl]");
         goto end;
     }
     }
@@ -173,7 +173,7 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_parseFromJSON(cJSON *slic
     supp_feat = cJSON_GetObjectItemCaseSensitive(slice_policy_dataJSON, "suppFeat");
     if (supp_feat) {
     if (!cJSON_IsString(supp_feat) && !cJSON_IsNull(supp_feat)) {
-        ogs_error("OpenAPI_slice_policy_data_parseFromJSON() failed [supp_feat]");
+        log_error("OpenAPI_slice_policy_data_parseFromJSON() failed [supp_feat]");
         goto end;
     }
     }
@@ -182,7 +182,7 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_parseFromJSON(cJSON *slic
     if (reset_ids) {
         cJSON *reset_ids_local = NULL;
         if (!cJSON_IsArray(reset_ids)) {
-            ogs_error("OpenAPI_slice_policy_data_parseFromJSON() failed [reset_ids]");
+            log_error("OpenAPI_slice_policy_data_parseFromJSON() failed [reset_ids]");
             goto end;
         }
 
@@ -192,7 +192,7 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_parseFromJSON(cJSON *slic
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(reset_ids_local)) {
-                ogs_error("OpenAPI_slice_policy_data_parseFromJSON() failed [reset_ids]");
+                log_error("OpenAPI_slice_policy_data_parseFromJSON() failed [reset_ids]");
                 goto end;
             }
             OpenAPI_list_add(reset_idsList, ogs_strdup(reset_ids_local->valuestring));
@@ -225,10 +225,10 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_copy(OpenAPI_slice_policy
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_slice_policy_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_slice_policy_data_convertToJSON() failed");
+        log_error("OpenAPI_slice_policy_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -236,14 +236,14 @@ OpenAPI_slice_policy_data_t *OpenAPI_slice_policy_data_copy(OpenAPI_slice_policy
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

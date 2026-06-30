@@ -13,7 +13,7 @@ OpenAPI_transfer_policy_t *OpenAPI_transfer_policy_create(
 )
 {
     OpenAPI_transfer_policy_t *transfer_policy_local_var = ogs_malloc(sizeof(OpenAPI_transfer_policy_t));
-    ogs_assert(transfer_policy_local_var);
+    log_assert(transfer_policy_local_var);
 
     transfer_policy_local_var->max_bit_rate_dl = max_bit_rate_dl;
     transfer_policy_local_var->max_bit_rate_ul = max_bit_rate_ul;
@@ -52,47 +52,47 @@ cJSON *OpenAPI_transfer_policy_convertToJSON(OpenAPI_transfer_policy_t *transfer
     OpenAPI_lnode_t *node = NULL;
 
     if (transfer_policy == NULL) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed [TransferPolicy]");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed [TransferPolicy]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (transfer_policy->max_bit_rate_dl) {
     if (cJSON_AddStringToObject(item, "maxBitRateDl", transfer_policy->max_bit_rate_dl) == NULL) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed [max_bit_rate_dl]");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed [max_bit_rate_dl]");
         goto end;
     }
     }
 
     if (transfer_policy->max_bit_rate_ul) {
     if (cJSON_AddStringToObject(item, "maxBitRateUl", transfer_policy->max_bit_rate_ul) == NULL) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed [max_bit_rate_ul]");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed [max_bit_rate_ul]");
         goto end;
     }
     }
 
     if (cJSON_AddNumberToObject(item, "ratingGroup", transfer_policy->rating_group) == NULL) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed [rating_group]");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed [rating_group]");
         goto end;
     }
 
     if (!transfer_policy->rec_time_int) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed [rec_time_int]");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed [rec_time_int]");
         return NULL;
     }
     cJSON *rec_time_int_local_JSON = OpenAPI_time_window_convertToJSON(transfer_policy->rec_time_int);
     if (rec_time_int_local_JSON == NULL) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed [rec_time_int]");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed [rec_time_int]");
         goto end;
     }
     cJSON_AddItemToObject(item, "recTimeInt", rec_time_int_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed [rec_time_int]");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed [rec_time_int]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "transPolicyId", transfer_policy->trans_policy_id) == NULL) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed [trans_policy_id]");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed [trans_policy_id]");
         goto end;
     }
 
@@ -113,7 +113,7 @@ OpenAPI_transfer_policy_t *OpenAPI_transfer_policy_parseFromJSON(cJSON *transfer
     max_bit_rate_dl = cJSON_GetObjectItemCaseSensitive(transfer_policyJSON, "maxBitRateDl");
     if (max_bit_rate_dl) {
     if (!cJSON_IsString(max_bit_rate_dl) && !cJSON_IsNull(max_bit_rate_dl)) {
-        ogs_error("OpenAPI_transfer_policy_parseFromJSON() failed [max_bit_rate_dl]");
+        log_error("OpenAPI_transfer_policy_parseFromJSON() failed [max_bit_rate_dl]");
         goto end;
     }
     }
@@ -121,39 +121,39 @@ OpenAPI_transfer_policy_t *OpenAPI_transfer_policy_parseFromJSON(cJSON *transfer
     max_bit_rate_ul = cJSON_GetObjectItemCaseSensitive(transfer_policyJSON, "maxBitRateUl");
     if (max_bit_rate_ul) {
     if (!cJSON_IsString(max_bit_rate_ul) && !cJSON_IsNull(max_bit_rate_ul)) {
-        ogs_error("OpenAPI_transfer_policy_parseFromJSON() failed [max_bit_rate_ul]");
+        log_error("OpenAPI_transfer_policy_parseFromJSON() failed [max_bit_rate_ul]");
         goto end;
     }
     }
 
     rating_group = cJSON_GetObjectItemCaseSensitive(transfer_policyJSON, "ratingGroup");
     if (!rating_group) {
-        ogs_error("OpenAPI_transfer_policy_parseFromJSON() failed [rating_group]");
+        log_error("OpenAPI_transfer_policy_parseFromJSON() failed [rating_group]");
         goto end;
     }
     if (!cJSON_IsNumber(rating_group)) {
-        ogs_error("OpenAPI_transfer_policy_parseFromJSON() failed [rating_group]");
+        log_error("OpenAPI_transfer_policy_parseFromJSON() failed [rating_group]");
         goto end;
     }
 
     rec_time_int = cJSON_GetObjectItemCaseSensitive(transfer_policyJSON, "recTimeInt");
     if (!rec_time_int) {
-        ogs_error("OpenAPI_transfer_policy_parseFromJSON() failed [rec_time_int]");
+        log_error("OpenAPI_transfer_policy_parseFromJSON() failed [rec_time_int]");
         goto end;
     }
     rec_time_int_local_nonprim = OpenAPI_time_window_parseFromJSON(rec_time_int);
     if (!rec_time_int_local_nonprim) {
-        ogs_error("OpenAPI_time_window_parseFromJSON failed [rec_time_int]");
+        log_error("OpenAPI_time_window_parseFromJSON failed [rec_time_int]");
         goto end;
     }
 
     trans_policy_id = cJSON_GetObjectItemCaseSensitive(transfer_policyJSON, "transPolicyId");
     if (!trans_policy_id) {
-        ogs_error("OpenAPI_transfer_policy_parseFromJSON() failed [trans_policy_id]");
+        log_error("OpenAPI_transfer_policy_parseFromJSON() failed [trans_policy_id]");
         goto end;
     }
     if (!cJSON_IsNumber(trans_policy_id)) {
-        ogs_error("OpenAPI_transfer_policy_parseFromJSON() failed [trans_policy_id]");
+        log_error("OpenAPI_transfer_policy_parseFromJSON() failed [trans_policy_id]");
         goto end;
     }
 
@@ -181,10 +181,10 @@ OpenAPI_transfer_policy_t *OpenAPI_transfer_policy_copy(OpenAPI_transfer_policy_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_transfer_policy_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_transfer_policy_convertToJSON() failed");
+        log_error("OpenAPI_transfer_policy_convertToJSON() failed");
         return NULL;
     }
 
@@ -192,14 +192,14 @@ OpenAPI_transfer_policy_t *OpenAPI_transfer_policy_copy(OpenAPI_transfer_policy_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

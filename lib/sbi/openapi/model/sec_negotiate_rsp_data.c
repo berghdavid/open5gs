@@ -17,7 +17,7 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_create(
 )
 {
     OpenAPI_sec_negotiate_rsp_data_t *sec_negotiate_rsp_data_local_var = ogs_malloc(sizeof(OpenAPI_sec_negotiate_rsp_data_t));
-    ogs_assert(sec_negotiate_rsp_data_local_var);
+    log_assert(sec_negotiate_rsp_data_local_var);
 
     sec_negotiate_rsp_data_local_var->sender = sender;
     sec_negotiate_rsp_data_local_var->selected_sec_capability = selected_sec_capability;
@@ -84,32 +84,32 @@ cJSON *OpenAPI_sec_negotiate_rsp_data_convertToJSON(OpenAPI_sec_negotiate_rsp_da
     OpenAPI_lnode_t *node = NULL;
 
     if (sec_negotiate_rsp_data == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [SecNegotiateRspData]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [SecNegotiateRspData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!sec_negotiate_rsp_data->sender) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [sender]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [sender]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "sender", sec_negotiate_rsp_data->sender) == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [sender]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [sender]");
         goto end;
     }
 
     if (sec_negotiate_rsp_data->selected_sec_capability == OpenAPI_security_capability_NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [selected_sec_capability]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [selected_sec_capability]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "selectedSecCapability", OpenAPI_security_capability_ToString(sec_negotiate_rsp_data->selected_sec_capability)) == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [selected_sec_capability]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [selected_sec_capability]");
         goto end;
     }
 
     if (sec_negotiate_rsp_data->is__3_gpp_sbi_target_api_root_supported) {
     if (cJSON_AddBoolToObject(item, "3GppSbiTargetApiRootSupported", sec_negotiate_rsp_data->_3_gpp_sbi_target_api_root_supported) == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [_3_gpp_sbi_target_api_root_supported]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [_3_gpp_sbi_target_api_root_supported]");
         goto end;
     }
     }
@@ -117,13 +117,13 @@ cJSON *OpenAPI_sec_negotiate_rsp_data_convertToJSON(OpenAPI_sec_negotiate_rsp_da
     if (sec_negotiate_rsp_data->plmn_id_list) {
     cJSON *plmn_id_listList = cJSON_AddArrayToObject(item, "plmnIdList");
     if (plmn_id_listList == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [plmn_id_list]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [plmn_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(sec_negotiate_rsp_data->plmn_id_list, node) {
         cJSON *itemLocal = OpenAPI_plmn_id_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [plmn_id_list]");
+            log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [plmn_id_list]");
             goto end;
         }
         cJSON_AddItemToArray(plmn_id_listList, itemLocal);
@@ -133,13 +133,13 @@ cJSON *OpenAPI_sec_negotiate_rsp_data_convertToJSON(OpenAPI_sec_negotiate_rsp_da
     if (sec_negotiate_rsp_data->snpn_id_list) {
     cJSON *snpn_id_listList = cJSON_AddArrayToObject(item, "snpnIdList");
     if (snpn_id_listList == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [snpn_id_list]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [snpn_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(sec_negotiate_rsp_data->snpn_id_list, node) {
         cJSON *itemLocal = OpenAPI_plmn_id_nid_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [snpn_id_list]");
+            log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [snpn_id_list]");
             goto end;
         }
         cJSON_AddItemToArray(snpn_id_listList, itemLocal);
@@ -149,13 +149,13 @@ cJSON *OpenAPI_sec_negotiate_rsp_data_convertToJSON(OpenAPI_sec_negotiate_rsp_da
     if (sec_negotiate_rsp_data->allowed_usage_purpose) {
     cJSON *allowed_usage_purposeList = cJSON_AddArrayToObject(item, "allowedUsagePurpose");
     if (allowed_usage_purposeList == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [allowed_usage_purpose]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [allowed_usage_purpose]");
         goto end;
     }
     OpenAPI_list_for_each(sec_negotiate_rsp_data->allowed_usage_purpose, node) {
         cJSON *itemLocal = OpenAPI_intended_n32_purpose_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [allowed_usage_purpose]");
+            log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [allowed_usage_purpose]");
             goto end;
         }
         cJSON_AddItemToArray(allowed_usage_purposeList, itemLocal);
@@ -165,13 +165,13 @@ cJSON *OpenAPI_sec_negotiate_rsp_data_convertToJSON(OpenAPI_sec_negotiate_rsp_da
     if (sec_negotiate_rsp_data->rejected_usage_purpose) {
     cJSON *rejected_usage_purposeList = cJSON_AddArrayToObject(item, "rejectedUsagePurpose");
     if (rejected_usage_purposeList == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [rejected_usage_purpose]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [rejected_usage_purpose]");
         goto end;
     }
     OpenAPI_list_for_each(sec_negotiate_rsp_data->rejected_usage_purpose, node) {
         cJSON *itemLocal = OpenAPI_intended_n32_purpose_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [rejected_usage_purpose]");
+            log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [rejected_usage_purpose]");
             goto end;
         }
         cJSON_AddItemToArray(rejected_usage_purposeList, itemLocal);
@@ -180,7 +180,7 @@ cJSON *OpenAPI_sec_negotiate_rsp_data_convertToJSON(OpenAPI_sec_negotiate_rsp_da
 
     if (sec_negotiate_rsp_data->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", sec_negotiate_rsp_data->supported_features) == NULL) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -208,21 +208,21 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
     cJSON *supported_features = NULL;
     sender = cJSON_GetObjectItemCaseSensitive(sec_negotiate_rsp_dataJSON, "sender");
     if (!sender) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [sender]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [sender]");
         goto end;
     }
     if (!cJSON_IsString(sender)) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [sender]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [sender]");
         goto end;
     }
 
     selected_sec_capability = cJSON_GetObjectItemCaseSensitive(sec_negotiate_rsp_dataJSON, "selectedSecCapability");
     if (!selected_sec_capability) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [selected_sec_capability]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [selected_sec_capability]");
         goto end;
     }
     if (!cJSON_IsString(selected_sec_capability)) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [selected_sec_capability]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [selected_sec_capability]");
         goto end;
     }
     selected_sec_capabilityVariable = OpenAPI_security_capability_FromString(selected_sec_capability->valuestring);
@@ -230,7 +230,7 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
     _3_gpp_sbi_target_api_root_supported = cJSON_GetObjectItemCaseSensitive(sec_negotiate_rsp_dataJSON, "3GppSbiTargetApiRootSupported");
     if (_3_gpp_sbi_target_api_root_supported) {
     if (!cJSON_IsBool(_3_gpp_sbi_target_api_root_supported)) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [_3_gpp_sbi_target_api_root_supported]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [_3_gpp_sbi_target_api_root_supported]");
         goto end;
     }
     }
@@ -239,7 +239,7 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
     if (plmn_id_list) {
         cJSON *plmn_id_list_local = NULL;
         if (!cJSON_IsArray(plmn_id_list)) {
-            ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [plmn_id_list]");
+            log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [plmn_id_list]");
             goto end;
         }
 
@@ -247,12 +247,12 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
 
         cJSON_ArrayForEach(plmn_id_list_local, plmn_id_list) {
             if (!cJSON_IsObject(plmn_id_list_local)) {
-                ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [plmn_id_list]");
+                log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [plmn_id_list]");
                 goto end;
             }
             OpenAPI_plmn_id_t *plmn_id_listItem = OpenAPI_plmn_id_parseFromJSON(plmn_id_list_local);
             if (!plmn_id_listItem) {
-                ogs_error("No plmn_id_listItem");
+                log_error("No plmn_id_listItem");
                 goto end;
             }
             OpenAPI_list_add(plmn_id_listList, plmn_id_listItem);
@@ -263,7 +263,7 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
     if (snpn_id_list) {
         cJSON *snpn_id_list_local = NULL;
         if (!cJSON_IsArray(snpn_id_list)) {
-            ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [snpn_id_list]");
+            log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [snpn_id_list]");
             goto end;
         }
 
@@ -271,12 +271,12 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
 
         cJSON_ArrayForEach(snpn_id_list_local, snpn_id_list) {
             if (!cJSON_IsObject(snpn_id_list_local)) {
-                ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [snpn_id_list]");
+                log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [snpn_id_list]");
                 goto end;
             }
             OpenAPI_plmn_id_nid_t *snpn_id_listItem = OpenAPI_plmn_id_nid_parseFromJSON(snpn_id_list_local);
             if (!snpn_id_listItem) {
-                ogs_error("No snpn_id_listItem");
+                log_error("No snpn_id_listItem");
                 goto end;
             }
             OpenAPI_list_add(snpn_id_listList, snpn_id_listItem);
@@ -287,7 +287,7 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
     if (allowed_usage_purpose) {
         cJSON *allowed_usage_purpose_local = NULL;
         if (!cJSON_IsArray(allowed_usage_purpose)) {
-            ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [allowed_usage_purpose]");
+            log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [allowed_usage_purpose]");
             goto end;
         }
 
@@ -295,12 +295,12 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
 
         cJSON_ArrayForEach(allowed_usage_purpose_local, allowed_usage_purpose) {
             if (!cJSON_IsObject(allowed_usage_purpose_local)) {
-                ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [allowed_usage_purpose]");
+                log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [allowed_usage_purpose]");
                 goto end;
             }
             OpenAPI_intended_n32_purpose_t *allowed_usage_purposeItem = OpenAPI_intended_n32_purpose_parseFromJSON(allowed_usage_purpose_local);
             if (!allowed_usage_purposeItem) {
-                ogs_error("No allowed_usage_purposeItem");
+                log_error("No allowed_usage_purposeItem");
                 goto end;
             }
             OpenAPI_list_add(allowed_usage_purposeList, allowed_usage_purposeItem);
@@ -311,7 +311,7 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
     if (rejected_usage_purpose) {
         cJSON *rejected_usage_purpose_local = NULL;
         if (!cJSON_IsArray(rejected_usage_purpose)) {
-            ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [rejected_usage_purpose]");
+            log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [rejected_usage_purpose]");
             goto end;
         }
 
@@ -319,12 +319,12 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
 
         cJSON_ArrayForEach(rejected_usage_purpose_local, rejected_usage_purpose) {
             if (!cJSON_IsObject(rejected_usage_purpose_local)) {
-                ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [rejected_usage_purpose]");
+                log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [rejected_usage_purpose]");
                 goto end;
             }
             OpenAPI_intended_n32_purpose_t *rejected_usage_purposeItem = OpenAPI_intended_n32_purpose_parseFromJSON(rejected_usage_purpose_local);
             if (!rejected_usage_purposeItem) {
-                ogs_error("No rejected_usage_purposeItem");
+                log_error("No rejected_usage_purposeItem");
                 goto end;
             }
             OpenAPI_list_add(rejected_usage_purposeList, rejected_usage_purposeItem);
@@ -334,7 +334,7 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_parseFromJSON(c
     supported_features = cJSON_GetObjectItemCaseSensitive(sec_negotiate_rsp_dataJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_sec_negotiate_rsp_data_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -389,10 +389,10 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_copy(OpenAPI_se
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sec_negotiate_rsp_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed");
+        log_error("OpenAPI_sec_negotiate_rsp_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -400,14 +400,14 @@ OpenAPI_sec_negotiate_rsp_data_t *OpenAPI_sec_negotiate_rsp_data_copy(OpenAPI_se
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -9,7 +9,7 @@ OpenAPI_nrf_info_served_aanf_info_list_value_value_t *OpenAPI_nrf_info_served_aa
 )
 {
     OpenAPI_nrf_info_served_aanf_info_list_value_value_t *nrf_info_served_aanf_info_list_value_value_local_var = ogs_malloc(sizeof(OpenAPI_nrf_info_served_aanf_info_list_value_value_t));
-    ogs_assert(nrf_info_served_aanf_info_list_value_value_local_var);
+    log_assert(nrf_info_served_aanf_info_list_value_value_local_var);
 
     nrf_info_served_aanf_info_list_value_value_local_var->routing_indicators = routing_indicators;
 
@@ -39,7 +39,7 @@ cJSON *OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON(OpenAPI_
     OpenAPI_lnode_t *node = NULL;
 
     if (nrf_info_served_aanf_info_list_value_value == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON() failed [NrfInfo_servedAanfInfoList_value_value]");
+        log_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON() failed [NrfInfo_servedAanfInfoList_value_value]");
         return NULL;
     }
 
@@ -47,12 +47,12 @@ cJSON *OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON(OpenAPI_
     if (nrf_info_served_aanf_info_list_value_value->routing_indicators) {
     cJSON *routing_indicatorsList = cJSON_AddArrayToObject(item, "routingIndicators");
     if (routing_indicatorsList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON() failed [routing_indicators]");
+        log_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON() failed [routing_indicators]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_aanf_info_list_value_value->routing_indicators, node) {
         if (cJSON_AddStringToObject(routing_indicatorsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON() failed [routing_indicators]");
+            log_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON() failed [routing_indicators]");
             goto end;
         }
     }
@@ -72,7 +72,7 @@ OpenAPI_nrf_info_served_aanf_info_list_value_value_t *OpenAPI_nrf_info_served_aa
     if (routing_indicators) {
         cJSON *routing_indicators_local = NULL;
         if (!cJSON_IsArray(routing_indicators)) {
-            ogs_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_parseFromJSON() failed [routing_indicators]");
+            log_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_parseFromJSON() failed [routing_indicators]");
             goto end;
         }
 
@@ -82,7 +82,7 @@ OpenAPI_nrf_info_served_aanf_info_list_value_value_t *OpenAPI_nrf_info_served_aa
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(routing_indicators_local)) {
-                ogs_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_parseFromJSON() failed [routing_indicators]");
+                log_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_parseFromJSON() failed [routing_indicators]");
                 goto end;
             }
             OpenAPI_list_add(routing_indicatorsList, ogs_strdup(routing_indicators_local->valuestring));
@@ -110,10 +110,10 @@ OpenAPI_nrf_info_served_aanf_info_list_value_value_t *OpenAPI_nrf_info_served_aa
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON() failed");
+        log_error("OpenAPI_nrf_info_served_aanf_info_list_value_value_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_nrf_info_served_aanf_info_list_value_value_t *OpenAPI_nrf_info_served_aa
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

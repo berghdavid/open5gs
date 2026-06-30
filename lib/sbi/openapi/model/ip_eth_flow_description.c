@@ -10,7 +10,7 @@ OpenAPI_ip_eth_flow_description_t *OpenAPI_ip_eth_flow_description_create(
 )
 {
     OpenAPI_ip_eth_flow_description_t *ip_eth_flow_description_local_var = ogs_malloc(sizeof(OpenAPI_ip_eth_flow_description_t));
-    ogs_assert(ip_eth_flow_description_local_var);
+    log_assert(ip_eth_flow_description_local_var);
 
     ip_eth_flow_description_local_var->ip_traffic_filter = ip_traffic_filter;
     ip_eth_flow_description_local_var->eth_traffic_filter = eth_traffic_filter;
@@ -42,14 +42,14 @@ cJSON *OpenAPI_ip_eth_flow_description_convertToJSON(OpenAPI_ip_eth_flow_descrip
     OpenAPI_lnode_t *node = NULL;
 
     if (ip_eth_flow_description == NULL) {
-        ogs_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed [IpEthFlowDescription]");
+        log_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed [IpEthFlowDescription]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ip_eth_flow_description->ip_traffic_filter) {
     if (cJSON_AddStringToObject(item, "ipTrafficFilter", ip_eth_flow_description->ip_traffic_filter) == NULL) {
-        ogs_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed [ip_traffic_filter]");
+        log_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed [ip_traffic_filter]");
         goto end;
     }
     }
@@ -57,12 +57,12 @@ cJSON *OpenAPI_ip_eth_flow_description_convertToJSON(OpenAPI_ip_eth_flow_descrip
     if (ip_eth_flow_description->eth_traffic_filter) {
     cJSON *eth_traffic_filter_local_JSON = OpenAPI_eth_flow_description_convertToJSON(ip_eth_flow_description->eth_traffic_filter);
     if (eth_traffic_filter_local_JSON == NULL) {
-        ogs_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed [eth_traffic_filter]");
+        log_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed [eth_traffic_filter]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ethTrafficFilter", eth_traffic_filter_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed [eth_traffic_filter]");
+        log_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed [eth_traffic_filter]");
         goto end;
     }
     }
@@ -81,7 +81,7 @@ OpenAPI_ip_eth_flow_description_t *OpenAPI_ip_eth_flow_description_parseFromJSON
     ip_traffic_filter = cJSON_GetObjectItemCaseSensitive(ip_eth_flow_descriptionJSON, "ipTrafficFilter");
     if (ip_traffic_filter) {
     if (!cJSON_IsString(ip_traffic_filter) && !cJSON_IsNull(ip_traffic_filter)) {
-        ogs_error("OpenAPI_ip_eth_flow_description_parseFromJSON() failed [ip_traffic_filter]");
+        log_error("OpenAPI_ip_eth_flow_description_parseFromJSON() failed [ip_traffic_filter]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_ip_eth_flow_description_t *OpenAPI_ip_eth_flow_description_parseFromJSON
     if (eth_traffic_filter) {
     eth_traffic_filter_local_nonprim = OpenAPI_eth_flow_description_parseFromJSON(eth_traffic_filter);
     if (!eth_traffic_filter_local_nonprim) {
-        ogs_error("OpenAPI_eth_flow_description_parseFromJSON failed [eth_traffic_filter]");
+        log_error("OpenAPI_eth_flow_description_parseFromJSON failed [eth_traffic_filter]");
         goto end;
     }
     }
@@ -114,10 +114,10 @@ OpenAPI_ip_eth_flow_description_t *OpenAPI_ip_eth_flow_description_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ip_eth_flow_description_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed");
+        log_error("OpenAPI_ip_eth_flow_description_convertToJSON() failed");
         return NULL;
     }
 
@@ -125,14 +125,14 @@ OpenAPI_ip_eth_flow_description_t *OpenAPI_ip_eth_flow_description_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

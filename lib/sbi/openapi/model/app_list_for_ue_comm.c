@@ -15,7 +15,7 @@ OpenAPI_app_list_for_ue_comm_t *OpenAPI_app_list_for_ue_comm_create(
 )
 {
     OpenAPI_app_list_for_ue_comm_t *app_list_for_ue_comm_local_var = ogs_malloc(sizeof(OpenAPI_app_list_for_ue_comm_t));
-    ogs_assert(app_list_for_ue_comm_local_var);
+    log_assert(app_list_for_ue_comm_local_var);
 
     app_list_for_ue_comm_local_var->app_id = app_id;
     app_list_for_ue_comm_local_var->start_time = start_time;
@@ -56,37 +56,37 @@ cJSON *OpenAPI_app_list_for_ue_comm_convertToJSON(OpenAPI_app_list_for_ue_comm_t
     OpenAPI_lnode_t *node = NULL;
 
     if (app_list_for_ue_comm == NULL) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [AppListForUeComm]");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [AppListForUeComm]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!app_list_for_ue_comm->app_id) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [app_id]");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [app_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "appId", app_list_for_ue_comm->app_id) == NULL) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [app_id]");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [app_id]");
         goto end;
     }
 
     if (app_list_for_ue_comm->start_time) {
     if (cJSON_AddStringToObject(item, "startTime", app_list_for_ue_comm->start_time) == NULL) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [start_time]");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [start_time]");
         goto end;
     }
     }
 
     if (app_list_for_ue_comm->is_app_dur) {
     if (cJSON_AddNumberToObject(item, "appDur", app_list_for_ue_comm->app_dur) == NULL) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [app_dur]");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [app_dur]");
         goto end;
     }
     }
 
     if (app_list_for_ue_comm->is_occur_ratio) {
     if (cJSON_AddNumberToObject(item, "occurRatio", app_list_for_ue_comm->occur_ratio) == NULL) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [occur_ratio]");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [occur_ratio]");
         goto end;
     }
     }
@@ -94,12 +94,12 @@ cJSON *OpenAPI_app_list_for_ue_comm_convertToJSON(OpenAPI_app_list_for_ue_comm_t
     if (app_list_for_ue_comm->spatial_validity) {
     cJSON *spatial_validity_local_JSON = OpenAPI_network_area_info_convertToJSON(app_list_for_ue_comm->spatial_validity);
     if (spatial_validity_local_JSON == NULL) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [spatial_validity]");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [spatial_validity]");
         goto end;
     }
     cJSON_AddItemToObject(item, "spatialValidity", spatial_validity_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [spatial_validity]");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed [spatial_validity]");
         goto end;
     }
     }
@@ -120,18 +120,18 @@ OpenAPI_app_list_for_ue_comm_t *OpenAPI_app_list_for_ue_comm_parseFromJSON(cJSON
     OpenAPI_network_area_info_t *spatial_validity_local_nonprim = NULL;
     app_id = cJSON_GetObjectItemCaseSensitive(app_list_for_ue_commJSON, "appId");
     if (!app_id) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [app_id]");
+        log_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [app_id]");
         goto end;
     }
     if (!cJSON_IsString(app_id)) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [app_id]");
+        log_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [app_id]");
         goto end;
     }
 
     start_time = cJSON_GetObjectItemCaseSensitive(app_list_for_ue_commJSON, "startTime");
     if (start_time) {
     if (!cJSON_IsString(start_time) && !cJSON_IsNull(start_time)) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [start_time]");
+        log_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [start_time]");
         goto end;
     }
     }
@@ -139,7 +139,7 @@ OpenAPI_app_list_for_ue_comm_t *OpenAPI_app_list_for_ue_comm_parseFromJSON(cJSON
     app_dur = cJSON_GetObjectItemCaseSensitive(app_list_for_ue_commJSON, "appDur");
     if (app_dur) {
     if (!cJSON_IsNumber(app_dur)) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [app_dur]");
+        log_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [app_dur]");
         goto end;
     }
     }
@@ -147,7 +147,7 @@ OpenAPI_app_list_for_ue_comm_t *OpenAPI_app_list_for_ue_comm_parseFromJSON(cJSON
     occur_ratio = cJSON_GetObjectItemCaseSensitive(app_list_for_ue_commJSON, "occurRatio");
     if (occur_ratio) {
     if (!cJSON_IsNumber(occur_ratio)) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [occur_ratio]");
+        log_error("OpenAPI_app_list_for_ue_comm_parseFromJSON() failed [occur_ratio]");
         goto end;
     }
     }
@@ -156,7 +156,7 @@ OpenAPI_app_list_for_ue_comm_t *OpenAPI_app_list_for_ue_comm_parseFromJSON(cJSON
     if (spatial_validity) {
     spatial_validity_local_nonprim = OpenAPI_network_area_info_parseFromJSON(spatial_validity);
     if (!spatial_validity_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [spatial_validity]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [spatial_validity]");
         goto end;
     }
     }
@@ -185,10 +185,10 @@ OpenAPI_app_list_for_ue_comm_t *OpenAPI_app_list_for_ue_comm_copy(OpenAPI_app_li
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_app_list_for_ue_comm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed");
+        log_error("OpenAPI_app_list_for_ue_comm_convertToJSON() failed");
         return NULL;
     }
 
@@ -196,14 +196,14 @@ OpenAPI_app_list_for_ue_comm_t *OpenAPI_app_list_for_ue_comm_copy(OpenAPI_app_li
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

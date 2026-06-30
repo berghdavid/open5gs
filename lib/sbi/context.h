@@ -229,31 +229,31 @@ typedef ogs_sbi_request_t *(*ogs_sbi_build_f)(
 
 #define OGS_SBI_XACT_LOG(xact) \
     do { \
-        ogs_error("    requester-nf-type[%s:%d]", \
+        log_error("    requester-nf-type[%s:%d]", \
                 OpenAPI_nf_type_ToString((xact)->requester_nf_type), \
                 (xact)->requester_nf_type); \
-        ogs_error("    service-name[%s:%d]", \
+        log_error("    service-name[%s:%d]", \
                 ogs_sbi_service_type_to_name((xact)->service_type), \
                 (xact)->service_type); \
         if ((xact)->request) { \
             int i; \
             ogs_sbi_request_t *request = (xact)->request; \
             if (request->h.method) \
-                ogs_error("    h.method[%s]", request->h.method); \
+                log_error("    h.method[%s]", request->h.method); \
             if (request->h.uri) \
-                ogs_error("    h.uri[%s]", request->h.uri); \
+                log_error("    h.uri[%s]", request->h.uri); \
             if (request->h.service.name) \
-                ogs_error("    h.service.name[%s]", request->h.service.name); \
+                log_error("    h.service.name[%s]", request->h.service.name); \
             if (request->h.api.version) \
-                ogs_error("    h.api.version[%s]", request->h.api.version); \
+                log_error("    h.api.version[%s]", request->h.api.version); \
             for (i = 0; i < OGS_SBI_MAX_NUM_OF_RESOURCE_COMPONENT && \
                         request->h.resource.component[i]; i++)  \
-                ogs_error("    h.resource.component[%s:%d]", \
+                log_error("    h.resource.component[%s:%d]", \
                         request->h.resource.component[i], i); \
-            ogs_error("    http.content_length[%d]", \
+            log_error("    http.content_length[%d]", \
                     (int)request->http.content_length); \
             if (request->http.content) \
-                ogs_error("    http.content[%s]", request->http.content); \
+                log_error("    http.content[%s]", request->http.content); \
         } \
     } while(0)
 typedef struct ogs_sbi_xact_s {
@@ -514,13 +514,13 @@ int ogs_sbi_default_client_port(OpenAPI_uri_scheme_e scheme);
 #if ENABLE_VALIDITY_TIMEOUT
 #define OGS_SBI_SETUP_NF_INSTANCE(__cTX, __nFInstance) \
     do { \
-        ogs_assert(__nFInstance); \
-        ogs_assert((__nFInstance)->id); \
-        ogs_assert((__nFInstance)->nf_type); \
-        ogs_assert((__nFInstance)->t_validity); \
+        log_assert(__nFInstance); \
+        log_assert((__nFInstance)->id); \
+        log_assert((__nFInstance)->nf_type); \
+        log_assert((__nFInstance)->t_validity); \
         \
         if ((__cTX).nf_instance_id) { \
-            ogs_warn("[%s] Unlink NF Instance " \
+            log_warn("[%s] Unlink NF Instance " \
                     "[type:%s validity:%d timeout:%lds]", \
                     ((__cTX).nf_instance_id), \
                     OpenAPI_nf_type_ToString((__nFInstance)->nf_type), \
@@ -535,7 +535,7 @@ int ogs_sbi_default_client_port(OpenAPI_uri_scheme_e scheme);
         } else { \
             ((__cTX).validity_timeout) = 0; \
         } \
-        ogs_info("[%s] Setup NF Instance [type:%s validity:%d timeout:%lds]", \
+        log_info("[%s] Setup NF Instance [type:%s validity:%d timeout:%lds]", \
                 ((__cTX).nf_instance_id), \
                 OpenAPI_nf_type_ToString((__nFInstance)->nf_type), \
                 (__nFInstance)->time.validity_duration, \
@@ -544,19 +544,19 @@ int ogs_sbi_default_client_port(OpenAPI_uri_scheme_e scheme);
 #else
 #define OGS_SBI_SETUP_NF_INSTANCE(__cTX, __nFInstance) \
     do { \
-        ogs_assert(__nFInstance); \
-        ogs_assert((__nFInstance)->id); \
-        ogs_assert((__nFInstance)->nf_type); \
+        log_assert(__nFInstance); \
+        log_assert((__nFInstance)->id); \
+        log_assert((__nFInstance)->nf_type); \
         \
         if ((__cTX).nf_instance_id) { \
-            ogs_warn("[%s] Unlink NF Instance [type:%s]", \
+            log_warn("[%s] Unlink NF Instance [type:%s]", \
                     ((__cTX).nf_instance_id), \
                     OpenAPI_nf_type_ToString((__nFInstance)->nf_type)); \
             ogs_free((__cTX).nf_instance_id); \
         } \
         \
         ((__cTX).nf_instance_id) = ogs_strdup((__nFInstance)->id); \
-        ogs_info("[%s] Setup NF Instance [type:%s]", \
+        log_info("[%s] Setup NF Instance [type:%s]", \
                 ((__cTX).nf_instance_id), \
                 OpenAPI_nf_type_ToString((__nFInstance)->nf_type)); \
     } while(0)

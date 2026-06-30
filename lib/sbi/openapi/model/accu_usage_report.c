@@ -25,7 +25,7 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_create(
 )
 {
     OpenAPI_accu_usage_report_t *accu_usage_report_local_var = ogs_malloc(sizeof(OpenAPI_accu_usage_report_t));
-    ogs_assert(accu_usage_report_local_var);
+    log_assert(accu_usage_report_local_var);
 
     accu_usage_report_local_var->ref_um_ids = ref_um_ids;
     accu_usage_report_local_var->is_vol_usage = is_vol_usage;
@@ -68,72 +68,72 @@ cJSON *OpenAPI_accu_usage_report_convertToJSON(OpenAPI_accu_usage_report_t *accu
     OpenAPI_lnode_t *node = NULL;
 
     if (accu_usage_report == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [AccuUsageReport]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [AccuUsageReport]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!accu_usage_report->ref_um_ids) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [ref_um_ids]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [ref_um_ids]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "refUmIds", accu_usage_report->ref_um_ids) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [ref_um_ids]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [ref_um_ids]");
         goto end;
     }
 
     if (accu_usage_report->is_vol_usage) {
     if (cJSON_AddNumberToObject(item, "volUsage", accu_usage_report->vol_usage) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [vol_usage]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [vol_usage]");
         goto end;
     }
     }
 
     if (accu_usage_report->is_vol_usage_uplink) {
     if (cJSON_AddNumberToObject(item, "volUsageUplink", accu_usage_report->vol_usage_uplink) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [vol_usage_uplink]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [vol_usage_uplink]");
         goto end;
     }
     }
 
     if (accu_usage_report->is_vol_usage_downlink) {
     if (cJSON_AddNumberToObject(item, "volUsageDownlink", accu_usage_report->vol_usage_downlink) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [vol_usage_downlink]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [vol_usage_downlink]");
         goto end;
     }
     }
 
     if (accu_usage_report->is_time_usage) {
     if (cJSON_AddNumberToObject(item, "timeUsage", accu_usage_report->time_usage) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [time_usage]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [time_usage]");
         goto end;
     }
     }
 
     if (accu_usage_report->is_next_vol_usage) {
     if (cJSON_AddNumberToObject(item, "nextVolUsage", accu_usage_report->next_vol_usage) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [next_vol_usage]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [next_vol_usage]");
         goto end;
     }
     }
 
     if (accu_usage_report->is_next_vol_usage_uplink) {
     if (cJSON_AddNumberToObject(item, "nextVolUsageUplink", accu_usage_report->next_vol_usage_uplink) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [next_vol_usage_uplink]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [next_vol_usage_uplink]");
         goto end;
     }
     }
 
     if (accu_usage_report->is_next_vol_usage_downlink) {
     if (cJSON_AddNumberToObject(item, "nextVolUsageDownlink", accu_usage_report->next_vol_usage_downlink) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [next_vol_usage_downlink]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [next_vol_usage_downlink]");
         goto end;
     }
     }
 
     if (accu_usage_report->is_next_time_usage) {
     if (cJSON_AddNumberToObject(item, "nextTimeUsage", accu_usage_report->next_time_usage) == NULL) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed [next_time_usage]");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed [next_time_usage]");
         goto end;
     }
     }
@@ -157,18 +157,18 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_parseFromJSON(cJSON *accu
     cJSON *next_time_usage = NULL;
     ref_um_ids = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "refUmIds");
     if (!ref_um_ids) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [ref_um_ids]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [ref_um_ids]");
         goto end;
     }
     if (!cJSON_IsString(ref_um_ids)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [ref_um_ids]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [ref_um_ids]");
         goto end;
     }
 
     vol_usage = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "volUsage");
     if (vol_usage) {
     if (!cJSON_IsNumber(vol_usage)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [vol_usage]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [vol_usage]");
         goto end;
     }
     }
@@ -176,7 +176,7 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_parseFromJSON(cJSON *accu
     vol_usage_uplink = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "volUsageUplink");
     if (vol_usage_uplink) {
     if (!cJSON_IsNumber(vol_usage_uplink)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [vol_usage_uplink]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [vol_usage_uplink]");
         goto end;
     }
     }
@@ -184,7 +184,7 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_parseFromJSON(cJSON *accu
     vol_usage_downlink = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "volUsageDownlink");
     if (vol_usage_downlink) {
     if (!cJSON_IsNumber(vol_usage_downlink)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [vol_usage_downlink]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [vol_usage_downlink]");
         goto end;
     }
     }
@@ -192,7 +192,7 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_parseFromJSON(cJSON *accu
     time_usage = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "timeUsage");
     if (time_usage) {
     if (!cJSON_IsNumber(time_usage)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [time_usage]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [time_usage]");
         goto end;
     }
     }
@@ -200,7 +200,7 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_parseFromJSON(cJSON *accu
     next_vol_usage = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "nextVolUsage");
     if (next_vol_usage) {
     if (!cJSON_IsNumber(next_vol_usage)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [next_vol_usage]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [next_vol_usage]");
         goto end;
     }
     }
@@ -208,7 +208,7 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_parseFromJSON(cJSON *accu
     next_vol_usage_uplink = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "nextVolUsageUplink");
     if (next_vol_usage_uplink) {
     if (!cJSON_IsNumber(next_vol_usage_uplink)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [next_vol_usage_uplink]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [next_vol_usage_uplink]");
         goto end;
     }
     }
@@ -216,7 +216,7 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_parseFromJSON(cJSON *accu
     next_vol_usage_downlink = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "nextVolUsageDownlink");
     if (next_vol_usage_downlink) {
     if (!cJSON_IsNumber(next_vol_usage_downlink)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [next_vol_usage_downlink]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [next_vol_usage_downlink]");
         goto end;
     }
     }
@@ -224,7 +224,7 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_parseFromJSON(cJSON *accu
     next_time_usage = cJSON_GetObjectItemCaseSensitive(accu_usage_reportJSON, "nextTimeUsage");
     if (next_time_usage) {
     if (!cJSON_IsNumber(next_time_usage)) {
-        ogs_error("OpenAPI_accu_usage_report_parseFromJSON() failed [next_time_usage]");
+        log_error("OpenAPI_accu_usage_report_parseFromJSON() failed [next_time_usage]");
         goto end;
     }
     }
@@ -259,10 +259,10 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_copy(OpenAPI_accu_usage_r
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_accu_usage_report_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_accu_usage_report_convertToJSON() failed");
+        log_error("OpenAPI_accu_usage_report_convertToJSON() failed");
         return NULL;
     }
 
@@ -270,14 +270,14 @@ OpenAPI_accu_usage_report_t *OpenAPI_accu_usage_report_copy(OpenAPI_accu_usage_r
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

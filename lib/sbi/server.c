@@ -59,11 +59,11 @@ ogs_sbi_server_t *ogs_sbi_server_add(
 {
     ogs_sbi_server_t *server = NULL;
 
-    ogs_assert(addr);
-    ogs_assert(scheme);
+    log_assert(addr);
+    log_assert(scheme);
 
     ogs_pool_id_calloc(&server_pool, &server);
-    ogs_assert(server);
+    log_assert(server);
 
     if (interface)
         server->interface = ogs_strdup(interface);
@@ -83,7 +83,7 @@ ogs_sbi_server_t *ogs_sbi_server_add(
         server->verify_client_cacert =
             ogs_strdup(ogs_sbi_self()->tls.server.verify_client_cacert);
 
-    ogs_assert(OGS_OK == ogs_copyaddrinfo(&server->node.addr, addr));
+    log_assert(OGS_OK == ogs_copyaddrinfo(&server->node.addr, addr));
     if (option)
         server->node.option = ogs_memdup(option, sizeof *option);
 
@@ -94,14 +94,14 @@ ogs_sbi_server_t *ogs_sbi_server_add(
 
 void ogs_sbi_server_remove(ogs_sbi_server_t *server)
 {
-    ogs_assert(server);
+    log_assert(server);
 
     ogs_list_remove(&ogs_sbi_self()->server_list, server);
 
     if (server->interface)
         ogs_free(server->interface);
 
-    ogs_assert(server->node.addr);
+    log_assert(server->node.addr);
     ogs_freeaddrinfo(server->node.addr);
     if (server->node.option)
         ogs_free(server->node.option);
@@ -133,10 +133,10 @@ void ogs_sbi_server_set_advertise(
 {
     ogs_sockaddr_t *addr = NULL;
 
-    ogs_assert(server);
-    ogs_assert(advertise);
+    log_assert(server);
+    log_assert(advertise);
 
-    ogs_assert(OGS_OK == ogs_copyaddrinfo(&addr, advertise));
+    log_assert(OGS_OK == ogs_copyaddrinfo(&addr, advertise));
     if (family != AF_UNSPEC)
         ogs_filteraddrinfo(&addr, family);
 
@@ -190,8 +190,8 @@ bool ogs_sbi_server_send_problem(
     ogs_sbi_message_t message;
     ogs_sbi_response_t *response = NULL;
 
-    ogs_assert(stream);
-    ogs_assert(problem);
+    log_assert(stream);
+    log_assert(problem);
 
     memset(&message, 0, sizeof(message));
 
@@ -199,7 +199,7 @@ bool ogs_sbi_server_send_problem(
     message.ProblemDetails = problem;
 
     response = ogs_sbi_build_response(&message, problem->status);
-    ogs_assert(response);
+    log_assert(response);
 
     ogs_sbi_server_send_response(stream, response);
 
@@ -212,14 +212,14 @@ bool ogs_sbi_server_send_error(ogs_sbi_stream_t *stream,
 {
     OpenAPI_problem_details_t problem;
 
-    ogs_assert(stream);
+    log_assert(stream);
 
     memset(&problem, 0, sizeof(problem));
 
     if (message) {
         problem.type = ogs_msprintf("/%s/%s",
                 message->h.service.name, message->h.api.version);
-        ogs_expect(problem.type);
+        log_expect(problem.type);
         if (message->h.resource.component[1])
             problem.instance = ogs_msprintf("/%s/%s",
                     message->h.resource.component[0],
@@ -227,7 +227,7 @@ bool ogs_sbi_server_send_error(ogs_sbi_stream_t *stream,
         else
             problem.instance =
                     ogs_msprintf("/%s", message->h.resource.component[0]);
-        ogs_expect(problem.instance);
+        log_expect(problem.instance);
     }
     if (status) {
         problem.is_status = true;
@@ -290,20 +290,20 @@ ogs_sbi_server_t *ogs_sbi_server_first(void)
 
 ogs_sbi_server_t *ogs_sbi_server_next(ogs_sbi_server_t *current)
 {
-    ogs_assert(current);
+    log_assert(current);
     return ogs_sbi_server_find_by_interface(current, NULL);
 }
 
 ogs_sbi_server_t *ogs_sbi_server_first_by_interface(const char *interface)
 {
-    ogs_assert(interface);
+    log_assert(interface);
     return ogs_sbi_server_find_by_interface(NULL, interface);
 }
 
 ogs_sbi_server_t *ogs_sbi_server_next_by_interface(
         ogs_sbi_server_t *current, const char *interface)
 {
-    ogs_assert(current);
-    ogs_assert(interface);
+    log_assert(current);
+    log_assert(interface);
     return ogs_sbi_server_find_by_interface(current, interface);
 }

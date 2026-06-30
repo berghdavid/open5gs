@@ -8,7 +8,7 @@ OpenAPI_operator_specific_data_container_value_t *OpenAPI_operator_specific_data
 )
 {
     OpenAPI_operator_specific_data_container_value_t *operator_specific_data_container_value_local_var = ogs_malloc(sizeof(OpenAPI_operator_specific_data_container_value_t));
-    ogs_assert(operator_specific_data_container_value_local_var);
+    log_assert(operator_specific_data_container_value_local_var);
 
 
     return operator_specific_data_container_value_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_operator_specific_data_container_value_convertToJSON(OpenAPI_oper
     OpenAPI_lnode_t *node = NULL;
 
     if (operator_specific_data_container_value == NULL) {
-        ogs_error("OpenAPI_operator_specific_data_container_value_convertToJSON() failed [OperatorSpecificDataContainer_value]");
+        log_error("OpenAPI_operator_specific_data_container_value_convertToJSON() failed [OperatorSpecificDataContainer_value]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_operator_specific_data_container_value_t *OpenAPI_operator_specific_data
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_operator_specific_data_container_value_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_operator_specific_data_container_value_convertToJSON() failed");
+        log_error("OpenAPI_operator_specific_data_container_value_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_operator_specific_data_container_value_t *OpenAPI_operator_specific_data
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -42,38 +42,38 @@ ogs_sbi_request_t *lmf_namf_build_nrppa_measurement_request(
     OpenAPI_n2_info_content_t n2InfoContent;
     OpenAPI_ref_to_binary_data_t nrppaBinary;
 
-    ogs_assert(location_request);
+    log_assert(location_request);
 
     memset(&message, 0, sizeof(message));
     message.h.method = ogs_strdup(OGS_SBI_HTTP_METHOD_POST);
-    ogs_assert(message.h.method);
+    log_assert(message.h.method);
     message.h.service.name = ogs_strdup(OGS_SBI_SERVICE_NAME_NAMF_COMM);
-    ogs_assert(message.h.service.name);
+    log_assert(message.h.service.name);
     message.h.api.version = ogs_strdup(OGS_SBI_API_V1);
-    ogs_assert(message.h.api.version);
+    log_assert(message.h.api.version);
     message.h.resource.component[0] = ogs_strdup(OGS_SBI_RESOURCE_NAME_UE_CONTEXTS);
-    ogs_assert(message.h.resource.component[0]);
+    log_assert(message.h.resource.component[0]);
     
     /* Extract SUPI from input message or use placeholder */
     if (location_request->supi) {
         message.h.resource.component[1] = ogs_strdup(location_request->supi);
-        ogs_assert(message.h.resource.component[1]);
+        log_assert(message.h.resource.component[1]);
     } else {
-        ogs_error("No SUPI in location request");
+        log_error("No SUPI in location request");
         ogs_sbi_message_free(&message);
         return NULL;
     }
     
     message.h.resource.component[2] =
         ogs_strdup(OGS_SBI_RESOURCE_NAME_N1_N2_MESSAGES);
-    ogs_assert(message.h.resource.component[2]);
+    log_assert(message.h.resource.component[2]);
 
     /* Generate measurement ID if not set */
     /* Note: UE-Measurement-ID in v17.2.0 is constrained to 1..256 */
     if (location_request->measurement_id == 0 ||
             location_request->measurement_id > 256) {
         location_request->measurement_id = (ogs_random32() % 256) + 1;
-        ogs_info("[%s] Generated measurement_id=%u (range: 1..256 for v17.2.0)",
+        log_info("[%s] Generated measurement_id=%u (range: 1..256 for v17.2.0)",
                 location_request->supi, location_request->measurement_id);
     }
 
@@ -98,7 +98,7 @@ ogs_sbi_request_t *lmf_namf_build_nrppa_measurement_request(
             0,  /* UE NGAP ID is not part of NRPPa PDU, set by AMF/NGAP */
             requested_measurements);
     if (!nrppa_pdu) {
-        ogs_error("[%s] lmf_nrppa_build_ecid_measurement_request() failed",
+        log_error("[%s] lmf_nrppa_build_ecid_measurement_request() failed",
                 location_request->supi);
         ogs_sbi_message_free(&message);
         return NULL;
@@ -128,7 +128,7 @@ ogs_sbi_request_t *lmf_namf_build_nrppa_measurement_request(
             
             N1N2MessageTransferReqData.n1n2_failure_txf_notif_uri = ogs_sbi_server_uri(server, &header);
             if (N1N2MessageTransferReqData.n1n2_failure_txf_notif_uri) {
-                ogs_info("[%s] Built callback URI for NRPPa notification: %s",
+                log_info("[%s] Built callback URI for NRPPa notification: %s",
                         location_request->supi, N1N2MessageTransferReqData.n1n2_failure_txf_notif_uri);
                 /* Store callback URI in location request for reference */
                 if (location_request->callback_reference) {
@@ -140,7 +140,7 @@ ogs_sbi_request_t *lmf_namf_build_nrppa_measurement_request(
         }
         
         if (!N1N2MessageTransferReqData.n1n2_failure_txf_notif_uri) {
-            ogs_warn("[%s] Failed to build callback URI for NRPPa notification. Callback may not work.",
+            log_warn("[%s] Failed to build callback URI for NRPPa notification. Callback may not work.",
                     location_request->supi);
         }
     }
@@ -158,11 +158,11 @@ ogs_sbi_request_t *lmf_namf_build_nrppa_measurement_request(
     n2InfoContent.ngap_ie_type = OpenAPI_ngap_ie_type_NRPPA_PDU;
     n2InfoContent.ngap_data = &nrppaBinary;
 
-    ogs_assert(message.num_of_part < OGS_SBI_MAX_NUM_OF_PART);
+    log_assert(message.num_of_part < OGS_SBI_MAX_NUM_OF_PART);
     content_id_plain = ogs_msprintf("n2-blob-%u",
             (unsigned)location_request->measurement_id);
     if (!content_id_plain) {
-        ogs_error("ogs_msprintf() failed");
+        log_error("ogs_msprintf() failed");
         ogs_pkbuf_free(nrppa_pdu);
         ogs_sbi_message_free(&message);
         return NULL;
@@ -173,7 +173,7 @@ ogs_sbi_request_t *lmf_namf_build_nrppa_measurement_request(
 
     content_id_header = ogs_msprintf("<%s>", content_id_plain);
     if (!content_id_header) {
-        ogs_error("ogs_msprintf() failed");
+        log_error("ogs_msprintf() failed");
         ogs_free(content_id_plain);
         content_id_plain = NULL;
         ogs_pkbuf_free(nrppa_pdu);
@@ -188,7 +188,7 @@ ogs_sbi_request_t *lmf_namf_build_nrppa_measurement_request(
     message.num_of_part++;
 
     request = ogs_sbi_build_request(&message);
-    ogs_expect(request);
+    log_expect(request);
 
     if (!request)
         goto build_error;

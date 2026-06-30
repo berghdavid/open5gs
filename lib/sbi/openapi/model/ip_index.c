@@ -8,7 +8,7 @@ OpenAPI_ip_index_t *OpenAPI_ip_index_create(
 )
 {
     OpenAPI_ip_index_t *ip_index_local_var = ogs_malloc(sizeof(OpenAPI_ip_index_t));
-    ogs_assert(ip_index_local_var);
+    log_assert(ip_index_local_var);
 
 
     return ip_index_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_ip_index_convertToJSON(OpenAPI_ip_index_t *ip_index)
     OpenAPI_lnode_t *node = NULL;
 
     if (ip_index == NULL) {
-        ogs_error("OpenAPI_ip_index_convertToJSON() failed [IpIndex]");
+        log_error("OpenAPI_ip_index_convertToJSON() failed [IpIndex]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_ip_index_t *OpenAPI_ip_index_copy(OpenAPI_ip_index_t *dst, OpenAPI_ip_in
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ip_index_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ip_index_convertToJSON() failed");
+        log_error("OpenAPI_ip_index_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_ip_index_t *OpenAPI_ip_index_copy(OpenAPI_ip_index_t *dst, OpenAPI_ip_in
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

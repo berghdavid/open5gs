@@ -12,7 +12,7 @@ OpenAPI_app_port_id_t *OpenAPI_app_port_id_create(
 )
 {
     OpenAPI_app_port_id_t *app_port_id_local_var = ogs_malloc(sizeof(OpenAPI_app_port_id_t));
-    ogs_assert(app_port_id_local_var);
+    log_assert(app_port_id_local_var);
 
     app_port_id_local_var->is_destination_port = is_destination_port;
     app_port_id_local_var->destination_port = destination_port;
@@ -38,21 +38,21 @@ cJSON *OpenAPI_app_port_id_convertToJSON(OpenAPI_app_port_id_t *app_port_id)
     OpenAPI_lnode_t *node = NULL;
 
     if (app_port_id == NULL) {
-        ogs_error("OpenAPI_app_port_id_convertToJSON() failed [AppPortId]");
+        log_error("OpenAPI_app_port_id_convertToJSON() failed [AppPortId]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (app_port_id->is_destination_port) {
     if (cJSON_AddNumberToObject(item, "destinationPort", app_port_id->destination_port) == NULL) {
-        ogs_error("OpenAPI_app_port_id_convertToJSON() failed [destination_port]");
+        log_error("OpenAPI_app_port_id_convertToJSON() failed [destination_port]");
         goto end;
     }
     }
 
     if (app_port_id->is_originator_port) {
     if (cJSON_AddNumberToObject(item, "originatorPort", app_port_id->originator_port) == NULL) {
-        ogs_error("OpenAPI_app_port_id_convertToJSON() failed [originator_port]");
+        log_error("OpenAPI_app_port_id_convertToJSON() failed [originator_port]");
         goto end;
     }
     }
@@ -70,7 +70,7 @@ OpenAPI_app_port_id_t *OpenAPI_app_port_id_parseFromJSON(cJSON *app_port_idJSON)
     destination_port = cJSON_GetObjectItemCaseSensitive(app_port_idJSON, "destinationPort");
     if (destination_port) {
     if (!cJSON_IsNumber(destination_port)) {
-        ogs_error("OpenAPI_app_port_id_parseFromJSON() failed [destination_port]");
+        log_error("OpenAPI_app_port_id_parseFromJSON() failed [destination_port]");
         goto end;
     }
     }
@@ -78,7 +78,7 @@ OpenAPI_app_port_id_t *OpenAPI_app_port_id_parseFromJSON(cJSON *app_port_idJSON)
     originator_port = cJSON_GetObjectItemCaseSensitive(app_port_idJSON, "originatorPort");
     if (originator_port) {
     if (!cJSON_IsNumber(originator_port)) {
-        ogs_error("OpenAPI_app_port_id_parseFromJSON() failed [originator_port]");
+        log_error("OpenAPI_app_port_id_parseFromJSON() failed [originator_port]");
         goto end;
     }
     }
@@ -100,10 +100,10 @@ OpenAPI_app_port_id_t *OpenAPI_app_port_id_copy(OpenAPI_app_port_id_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_app_port_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_app_port_id_convertToJSON() failed");
+        log_error("OpenAPI_app_port_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -111,14 +111,14 @@ OpenAPI_app_port_id_t *OpenAPI_app_port_id_copy(OpenAPI_app_port_id_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

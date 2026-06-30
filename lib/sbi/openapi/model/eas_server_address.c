@@ -10,7 +10,7 @@ OpenAPI_eas_server_address_t *OpenAPI_eas_server_address_create(
 )
 {
     OpenAPI_eas_server_address_t *eas_server_address_local_var = ogs_malloc(sizeof(OpenAPI_eas_server_address_t));
-    ogs_assert(eas_server_address_local_var);
+    log_assert(eas_server_address_local_var);
 
     eas_server_address_local_var->ip = ip;
     eas_server_address_local_var->port = port;
@@ -38,28 +38,28 @@ cJSON *OpenAPI_eas_server_address_convertToJSON(OpenAPI_eas_server_address_t *ea
     OpenAPI_lnode_t *node = NULL;
 
     if (eas_server_address == NULL) {
-        ogs_error("OpenAPI_eas_server_address_convertToJSON() failed [EasServerAddress]");
+        log_error("OpenAPI_eas_server_address_convertToJSON() failed [EasServerAddress]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!eas_server_address->ip) {
-        ogs_error("OpenAPI_eas_server_address_convertToJSON() failed [ip]");
+        log_error("OpenAPI_eas_server_address_convertToJSON() failed [ip]");
         return NULL;
     }
     cJSON *ip_local_JSON = OpenAPI_ip_addr_convertToJSON(eas_server_address->ip);
     if (ip_local_JSON == NULL) {
-        ogs_error("OpenAPI_eas_server_address_convertToJSON() failed [ip]");
+        log_error("OpenAPI_eas_server_address_convertToJSON() failed [ip]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ip", ip_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_eas_server_address_convertToJSON() failed [ip]");
+        log_error("OpenAPI_eas_server_address_convertToJSON() failed [ip]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "port", eas_server_address->port) == NULL) {
-        ogs_error("OpenAPI_eas_server_address_convertToJSON() failed [port]");
+        log_error("OpenAPI_eas_server_address_convertToJSON() failed [port]");
         goto end;
     }
 
@@ -76,22 +76,22 @@ OpenAPI_eas_server_address_t *OpenAPI_eas_server_address_parseFromJSON(cJSON *ea
     cJSON *port = NULL;
     ip = cJSON_GetObjectItemCaseSensitive(eas_server_addressJSON, "ip");
     if (!ip) {
-        ogs_error("OpenAPI_eas_server_address_parseFromJSON() failed [ip]");
+        log_error("OpenAPI_eas_server_address_parseFromJSON() failed [ip]");
         goto end;
     }
     ip_local_nonprim = OpenAPI_ip_addr_parseFromJSON(ip);
     if (!ip_local_nonprim) {
-        ogs_error("OpenAPI_ip_addr_parseFromJSON failed [ip]");
+        log_error("OpenAPI_ip_addr_parseFromJSON failed [ip]");
         goto end;
     }
 
     port = cJSON_GetObjectItemCaseSensitive(eas_server_addressJSON, "port");
     if (!port) {
-        ogs_error("OpenAPI_eas_server_address_parseFromJSON() failed [port]");
+        log_error("OpenAPI_eas_server_address_parseFromJSON() failed [port]");
         goto end;
     }
     if (!cJSON_IsNumber(port)) {
-        ogs_error("OpenAPI_eas_server_address_parseFromJSON() failed [port]");
+        log_error("OpenAPI_eas_server_address_parseFromJSON() failed [port]");
         goto end;
     }
 
@@ -115,10 +115,10 @@ OpenAPI_eas_server_address_t *OpenAPI_eas_server_address_copy(OpenAPI_eas_server
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_eas_server_address_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_eas_server_address_convertToJSON() failed");
+        log_error("OpenAPI_eas_server_address_convertToJSON() failed");
         return NULL;
     }
 
@@ -126,14 +126,14 @@ OpenAPI_eas_server_address_t *OpenAPI_eas_server_address_copy(OpenAPI_eas_server
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

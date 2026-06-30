@@ -115,8 +115,8 @@ static ogs_inline void *ogs_pkbuf_put(ogs_pkbuf_t *pkbuf, unsigned int len)
 {
     void *tmp = pkbuf->tail;
 
-    if (ogs_unlikely(ogs_pkbuf_tailroom(pkbuf) < (int)len))
-        ogs_assert_if_reached();
+    if (unlikely(ogs_pkbuf_tailroom(pkbuf) < (int)len))
+        log_assert_if_reached();
 
     pkbuf->tail += len;
     pkbuf->len += len;
@@ -145,8 +145,8 @@ static ogs_inline void ogs_pkbuf_put_u32(ogs_pkbuf_t *pkbuf, uint32_t val)
 
 static ogs_inline void *ogs_pkbuf_push(ogs_pkbuf_t *pkbuf, unsigned int len)
 {
-    if (ogs_unlikely(ogs_pkbuf_headroom(pkbuf) < (int)len))
-        ogs_assert_if_reached();
+    if (unlikely(ogs_pkbuf_headroom(pkbuf) < (int)len))
+        log_assert_if_reached();
 
     pkbuf->data -= len;
     pkbuf->len += len;
@@ -163,16 +163,16 @@ static ogs_inline void *ogs_pkbuf_pull_inline(
 
 static ogs_inline void *ogs_pkbuf_pull(ogs_pkbuf_t *pkbuf, unsigned int len)
 {
-    return ogs_unlikely(len > pkbuf->len) ?
+    return unlikely(len > pkbuf->len) ?
         NULL : ogs_pkbuf_pull_inline(pkbuf, len);
 }
 
 static ogs_inline int ogs_pkbuf_trim(ogs_pkbuf_t *pkbuf, int len)
 {
-    if (ogs_unlikely(len < 0))
-        ogs_assert_if_reached();
-    if (ogs_unlikely(len > pkbuf->len)) {
-        ogs_error("len(%d) > pkbuf->len(%d)", len, pkbuf->len);
+    if (unlikely(len < 0))
+        log_assert_if_reached();
+    if (unlikely(len > pkbuf->len)) {
+        log_error("len(%d) > pkbuf->len(%d)", len, pkbuf->len);
         return OGS_ERROR;
     }
 

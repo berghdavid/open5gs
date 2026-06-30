@@ -24,7 +24,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_create(
 )
 {
     OpenAPI_dispersion_collection_t *dispersion_collection_local_var = ogs_malloc(sizeof(OpenAPI_dispersion_collection_t));
-    ogs_assert(dispersion_collection_local_var);
+    log_assert(dispersion_collection_local_var);
 
     dispersion_collection_local_var->ue_loc = ue_loc;
     dispersion_collection_local_var->snssai = snssai;
@@ -95,7 +95,7 @@ cJSON *OpenAPI_dispersion_collection_convertToJSON(OpenAPI_dispersion_collection
     OpenAPI_lnode_t *node = NULL;
 
     if (dispersion_collection == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [DispersionCollection]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [DispersionCollection]");
         return NULL;
     }
 
@@ -103,12 +103,12 @@ cJSON *OpenAPI_dispersion_collection_convertToJSON(OpenAPI_dispersion_collection
     if (dispersion_collection->ue_loc) {
     cJSON *ue_loc_local_JSON = OpenAPI_user_location_convertToJSON(dispersion_collection->ue_loc);
     if (ue_loc_local_JSON == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [ue_loc]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [ue_loc]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueLoc", ue_loc_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [ue_loc]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [ue_loc]");
         goto end;
     }
     }
@@ -116,12 +116,12 @@ cJSON *OpenAPI_dispersion_collection_convertToJSON(OpenAPI_dispersion_collection
     if (dispersion_collection->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(dispersion_collection->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [snssai]");
         goto end;
     }
     }
@@ -129,12 +129,12 @@ cJSON *OpenAPI_dispersion_collection_convertToJSON(OpenAPI_dispersion_collection
     if (dispersion_collection->supis) {
     cJSON *supisList = cJSON_AddArrayToObject(item, "supis");
     if (supisList == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [supis]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [supis]");
         goto end;
     }
     OpenAPI_list_for_each(dispersion_collection->supis, node) {
         if (cJSON_AddStringToObject(supisList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [supis]");
+            log_error("OpenAPI_dispersion_collection_convertToJSON() failed [supis]");
             goto end;
         }
     }
@@ -143,12 +143,12 @@ cJSON *OpenAPI_dispersion_collection_convertToJSON(OpenAPI_dispersion_collection
     if (dispersion_collection->gpsis) {
     cJSON *gpsisList = cJSON_AddArrayToObject(item, "gpsis");
     if (gpsisList == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [gpsis]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [gpsis]");
         goto end;
     }
     OpenAPI_list_for_each(dispersion_collection->gpsis, node) {
         if (cJSON_AddStringToObject(gpsisList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [gpsis]");
+            log_error("OpenAPI_dispersion_collection_convertToJSON() failed [gpsis]");
             goto end;
         }
     }
@@ -157,13 +157,13 @@ cJSON *OpenAPI_dispersion_collection_convertToJSON(OpenAPI_dispersion_collection
     if (dispersion_collection->app_volumes) {
     cJSON *app_volumesList = cJSON_AddArrayToObject(item, "appVolumes");
     if (app_volumesList == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [app_volumes]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [app_volumes]");
         goto end;
     }
     OpenAPI_list_for_each(dispersion_collection->app_volumes, node) {
         cJSON *itemLocal = OpenAPI_application_volume_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [app_volumes]");
+            log_error("OpenAPI_dispersion_collection_convertToJSON() failed [app_volumes]");
             goto end;
         }
         cJSON_AddItemToArray(app_volumesList, itemLocal);
@@ -172,7 +172,7 @@ cJSON *OpenAPI_dispersion_collection_convertToJSON(OpenAPI_dispersion_collection
 
     if (dispersion_collection->is_disper_amount) {
     if (cJSON_AddNumberToObject(item, "disperAmount", dispersion_collection->disper_amount) == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [disper_amount]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [disper_amount]");
         goto end;
     }
     }
@@ -180,40 +180,40 @@ cJSON *OpenAPI_dispersion_collection_convertToJSON(OpenAPI_dispersion_collection
     if (dispersion_collection->disper_class) {
     cJSON *disper_class_local_JSON = OpenAPI_dispersion_class_convertToJSON(dispersion_collection->disper_class);
     if (disper_class_local_JSON == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [disper_class]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [disper_class]");
         goto end;
     }
     cJSON_AddItemToObject(item, "disperClass", disper_class_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [disper_class]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [disper_class]");
         goto end;
     }
     }
 
     if (dispersion_collection->is_usage_rank) {
     if (cJSON_AddNumberToObject(item, "usageRank", dispersion_collection->usage_rank) == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [usage_rank]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [usage_rank]");
         goto end;
     }
     }
 
     if (dispersion_collection->is_percentile_rank) {
     if (cJSON_AddNumberToObject(item, "percentileRank", dispersion_collection->percentile_rank) == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [percentile_rank]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [percentile_rank]");
         goto end;
     }
     }
 
     if (dispersion_collection->is_ue_ratio) {
     if (cJSON_AddNumberToObject(item, "ueRatio", dispersion_collection->ue_ratio) == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [ue_ratio]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [ue_ratio]");
         goto end;
     }
     }
 
     if (dispersion_collection->is_confidence) {
     if (cJSON_AddNumberToObject(item, "confidence", dispersion_collection->confidence) == NULL) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed [confidence]");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed [confidence]");
         goto end;
     }
     }
@@ -247,7 +247,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     if (ue_loc) {
     ue_loc_local_nonprim = OpenAPI_user_location_parseFromJSON(ue_loc);
     if (!ue_loc_local_nonprim) {
-        ogs_error("OpenAPI_user_location_parseFromJSON failed [ue_loc]");
+        log_error("OpenAPI_user_location_parseFromJSON failed [ue_loc]");
         goto end;
     }
     }
@@ -256,7 +256,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -265,7 +265,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     if (supis) {
         cJSON *supis_local = NULL;
         if (!cJSON_IsArray(supis)) {
-            ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [supis]");
+            log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [supis]");
             goto end;
         }
 
@@ -275,7 +275,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(supis_local)) {
-                ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [supis]");
+                log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [supis]");
                 goto end;
             }
             OpenAPI_list_add(supisList, ogs_strdup(supis_local->valuestring));
@@ -286,7 +286,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     if (gpsis) {
         cJSON *gpsis_local = NULL;
         if (!cJSON_IsArray(gpsis)) {
-            ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [gpsis]");
+            log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [gpsis]");
             goto end;
         }
 
@@ -296,7 +296,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(gpsis_local)) {
-                ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [gpsis]");
+                log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [gpsis]");
                 goto end;
             }
             OpenAPI_list_add(gpsisList, ogs_strdup(gpsis_local->valuestring));
@@ -307,7 +307,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     if (app_volumes) {
         cJSON *app_volumes_local = NULL;
         if (!cJSON_IsArray(app_volumes)) {
-            ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [app_volumes]");
+            log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [app_volumes]");
             goto end;
         }
 
@@ -315,12 +315,12 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
 
         cJSON_ArrayForEach(app_volumes_local, app_volumes) {
             if (!cJSON_IsObject(app_volumes_local)) {
-                ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [app_volumes]");
+                log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [app_volumes]");
                 goto end;
             }
             OpenAPI_application_volume_t *app_volumesItem = OpenAPI_application_volume_parseFromJSON(app_volumes_local);
             if (!app_volumesItem) {
-                ogs_error("No app_volumesItem");
+                log_error("No app_volumesItem");
                 goto end;
             }
             OpenAPI_list_add(app_volumesList, app_volumesItem);
@@ -330,7 +330,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     disper_amount = cJSON_GetObjectItemCaseSensitive(dispersion_collectionJSON, "disperAmount");
     if (disper_amount) {
     if (!cJSON_IsNumber(disper_amount)) {
-        ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [disper_amount]");
+        log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [disper_amount]");
         goto end;
     }
     }
@@ -339,7 +339,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     if (disper_class) {
     disper_class_local_nonprim = OpenAPI_dispersion_class_parseFromJSON(disper_class);
     if (!disper_class_local_nonprim) {
-        ogs_error("OpenAPI_dispersion_class_parseFromJSON failed [disper_class]");
+        log_error("OpenAPI_dispersion_class_parseFromJSON failed [disper_class]");
         goto end;
     }
     }
@@ -347,7 +347,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     usage_rank = cJSON_GetObjectItemCaseSensitive(dispersion_collectionJSON, "usageRank");
     if (usage_rank) {
     if (!cJSON_IsNumber(usage_rank)) {
-        ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [usage_rank]");
+        log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [usage_rank]");
         goto end;
     }
     }
@@ -355,7 +355,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     percentile_rank = cJSON_GetObjectItemCaseSensitive(dispersion_collectionJSON, "percentileRank");
     if (percentile_rank) {
     if (!cJSON_IsNumber(percentile_rank)) {
-        ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [percentile_rank]");
+        log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [percentile_rank]");
         goto end;
     }
     }
@@ -363,7 +363,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     ue_ratio = cJSON_GetObjectItemCaseSensitive(dispersion_collectionJSON, "ueRatio");
     if (ue_ratio) {
     if (!cJSON_IsNumber(ue_ratio)) {
-        ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [ue_ratio]");
+        log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [ue_ratio]");
         goto end;
     }
     }
@@ -371,7 +371,7 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_parseFromJSON(cJS
     confidence = cJSON_GetObjectItemCaseSensitive(dispersion_collectionJSON, "confidence");
     if (confidence) {
     if (!cJSON_IsNumber(confidence)) {
-        ogs_error("OpenAPI_dispersion_collection_parseFromJSON() failed [confidence]");
+        log_error("OpenAPI_dispersion_collection_parseFromJSON() failed [confidence]");
         goto end;
     }
     }
@@ -438,10 +438,10 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_copy(OpenAPI_disp
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dispersion_collection_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dispersion_collection_convertToJSON() failed");
+        log_error("OpenAPI_dispersion_collection_convertToJSON() failed");
         return NULL;
     }
 
@@ -449,14 +449,14 @@ OpenAPI_dispersion_collection_t *OpenAPI_dispersion_collection_copy(OpenAPI_disp
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

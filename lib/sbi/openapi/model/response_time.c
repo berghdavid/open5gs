@@ -8,7 +8,7 @@ OpenAPI_response_time_t *OpenAPI_response_time_create(
 )
 {
     OpenAPI_response_time_t *response_time_local_var = ogs_malloc(sizeof(OpenAPI_response_time_t));
-    ogs_assert(response_time_local_var);
+    log_assert(response_time_local_var);
 
 
     return response_time_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_response_time_convertToJSON(OpenAPI_response_time_t *response_tim
     OpenAPI_lnode_t *node = NULL;
 
     if (response_time == NULL) {
-        ogs_error("OpenAPI_response_time_convertToJSON() failed [ResponseTime]");
+        log_error("OpenAPI_response_time_convertToJSON() failed [ResponseTime]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_response_time_t *OpenAPI_response_time_copy(OpenAPI_response_time_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_response_time_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_response_time_convertToJSON() failed");
+        log_error("OpenAPI_response_time_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_response_time_t *OpenAPI_response_time_copy(OpenAPI_response_time_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

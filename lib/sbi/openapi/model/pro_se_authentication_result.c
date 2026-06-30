@@ -12,7 +12,7 @@ OpenAPI_pro_se_authentication_result_t *OpenAPI_pro_se_authentication_result_cre
 )
 {
     OpenAPI_pro_se_authentication_result_t *pro_se_authentication_result_local_var = ogs_malloc(sizeof(OpenAPI_pro_se_authentication_result_t));
-    ogs_assert(pro_se_authentication_result_local_var);
+    log_assert(pro_se_authentication_result_local_var);
 
     pro_se_authentication_result_local_var->knr_pro_se = knr_pro_se;
     pro_se_authentication_result_local_var->is_nonce2_null = is_nonce2_null;
@@ -50,33 +50,33 @@ cJSON *OpenAPI_pro_se_authentication_result_convertToJSON(OpenAPI_pro_se_authent
     OpenAPI_lnode_t *node = NULL;
 
     if (pro_se_authentication_result == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [ProSeAuthenticationResult]");
+        log_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [ProSeAuthenticationResult]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (pro_se_authentication_result->knr_pro_se) {
     if (cJSON_AddStringToObject(item, "knrProSe", pro_se_authentication_result->knr_pro_se) == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [knr_pro_se]");
+        log_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [knr_pro_se]");
         goto end;
     }
     }
 
     if (pro_se_authentication_result->nonce2) {
     if (cJSON_AddStringToObject(item, "nonce2", pro_se_authentication_result->nonce2) == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [nonce2]");
+        log_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [nonce2]");
         goto end;
     }
     } else if (pro_se_authentication_result->is_nonce2_null) {
         if (cJSON_AddNullToObject(item, "nonce2") == NULL) {
-            ogs_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [nonce2]");
+            log_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [nonce2]");
             goto end;
         }
     }
 
     if (pro_se_authentication_result->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", pro_se_authentication_result->supported_features) == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -95,7 +95,7 @@ OpenAPI_pro_se_authentication_result_t *OpenAPI_pro_se_authentication_result_par
     knr_pro_se = cJSON_GetObjectItemCaseSensitive(pro_se_authentication_resultJSON, "knrProSe");
     if (knr_pro_se) {
     if (!cJSON_IsString(knr_pro_se) && !cJSON_IsNull(knr_pro_se)) {
-        ogs_error("OpenAPI_pro_se_authentication_result_parseFromJSON() failed [knr_pro_se]");
+        log_error("OpenAPI_pro_se_authentication_result_parseFromJSON() failed [knr_pro_se]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_pro_se_authentication_result_t *OpenAPI_pro_se_authentication_result_par
     if (nonce2) {
     if (!cJSON_IsNull(nonce2)) {
     if (!cJSON_IsString(nonce2) && !cJSON_IsNull(nonce2)) {
-        ogs_error("OpenAPI_pro_se_authentication_result_parseFromJSON() failed [nonce2]");
+        log_error("OpenAPI_pro_se_authentication_result_parseFromJSON() failed [nonce2]");
         goto end;
     }
     }
@@ -113,7 +113,7 @@ OpenAPI_pro_se_authentication_result_t *OpenAPI_pro_se_authentication_result_par
     supported_features = cJSON_GetObjectItemCaseSensitive(pro_se_authentication_resultJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_pro_se_authentication_result_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_pro_se_authentication_result_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -135,10 +135,10 @@ OpenAPI_pro_se_authentication_result_t *OpenAPI_pro_se_authentication_result_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pro_se_authentication_result_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed");
+        log_error("OpenAPI_pro_se_authentication_result_convertToJSON() failed");
         return NULL;
     }
 
@@ -146,14 +146,14 @@ OpenAPI_pro_se_authentication_result_t *OpenAPI_pro_se_authentication_result_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

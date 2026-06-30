@@ -8,7 +8,7 @@ OpenAPI_external_client_type_t *OpenAPI_external_client_type_create(
 )
 {
     OpenAPI_external_client_type_t *external_client_type_local_var = ogs_malloc(sizeof(OpenAPI_external_client_type_t));
-    ogs_assert(external_client_type_local_var);
+    log_assert(external_client_type_local_var);
 
 
     return external_client_type_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_external_client_type_convertToJSON(OpenAPI_external_client_type_t
     OpenAPI_lnode_t *node = NULL;
 
     if (external_client_type == NULL) {
-        ogs_error("OpenAPI_external_client_type_convertToJSON() failed [ExternalClientType]");
+        log_error("OpenAPI_external_client_type_convertToJSON() failed [ExternalClientType]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_external_client_type_t *OpenAPI_external_client_type_copy(OpenAPI_extern
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_external_client_type_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_external_client_type_convertToJSON() failed");
+        log_error("OpenAPI_external_client_type_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_external_client_type_t *OpenAPI_external_client_type_copy(OpenAPI_extern
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

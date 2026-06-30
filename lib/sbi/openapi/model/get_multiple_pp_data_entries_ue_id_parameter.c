@@ -8,7 +8,7 @@ OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_t *OpenAPI_get_multiple_pp_
 )
 {
     OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_t *get_multiple_pp_data_entries_ue_id_parameter_local_var = ogs_malloc(sizeof(OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_t));
-    ogs_assert(get_multiple_pp_data_entries_ue_id_parameter_local_var);
+    log_assert(get_multiple_pp_data_entries_ue_id_parameter_local_var);
 
 
     return get_multiple_pp_data_entries_ue_id_parameter_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_convertToJSON(OpenAP
     OpenAPI_lnode_t *node = NULL;
 
     if (get_multiple_pp_data_entries_ue_id_parameter == NULL) {
-        ogs_error("OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_convertToJSON() failed [Get_Multiple_PP_Data_Entries_ueId_parameter]");
+        log_error("OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_convertToJSON() failed [Get_Multiple_PP_Data_Entries_ueId_parameter]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_t *OpenAPI_get_multiple_pp_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_convertToJSON() failed");
+        log_error("OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_get_multiple_pp_data_entries_ue_id_parameter_t *OpenAPI_get_multiple_pp_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

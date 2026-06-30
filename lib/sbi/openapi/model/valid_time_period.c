@@ -10,7 +10,7 @@ OpenAPI_valid_time_period_t *OpenAPI_valid_time_period_create(
 )
 {
     OpenAPI_valid_time_period_t *valid_time_period_local_var = ogs_malloc(sizeof(OpenAPI_valid_time_period_t));
-    ogs_assert(valid_time_period_local_var);
+    log_assert(valid_time_period_local_var);
 
     valid_time_period_local_var->start_time = start_time;
     valid_time_period_local_var->end_time = end_time;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_valid_time_period_convertToJSON(OpenAPI_valid_time_period_t *vali
     OpenAPI_lnode_t *node = NULL;
 
     if (valid_time_period == NULL) {
-        ogs_error("OpenAPI_valid_time_period_convertToJSON() failed [ValidTimePeriod]");
+        log_error("OpenAPI_valid_time_period_convertToJSON() failed [ValidTimePeriod]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (valid_time_period->start_time) {
     if (cJSON_AddStringToObject(item, "startTime", valid_time_period->start_time) == NULL) {
-        ogs_error("OpenAPI_valid_time_period_convertToJSON() failed [start_time]");
+        log_error("OpenAPI_valid_time_period_convertToJSON() failed [start_time]");
         goto end;
     }
     }
 
     if (valid_time_period->end_time) {
     if (cJSON_AddStringToObject(item, "endTime", valid_time_period->end_time) == NULL) {
-        ogs_error("OpenAPI_valid_time_period_convertToJSON() failed [end_time]");
+        log_error("OpenAPI_valid_time_period_convertToJSON() failed [end_time]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_valid_time_period_t *OpenAPI_valid_time_period_parseFromJSON(cJSON *vali
     start_time = cJSON_GetObjectItemCaseSensitive(valid_time_periodJSON, "startTime");
     if (start_time) {
     if (!cJSON_IsString(start_time) && !cJSON_IsNull(start_time)) {
-        ogs_error("OpenAPI_valid_time_period_parseFromJSON() failed [start_time]");
+        log_error("OpenAPI_valid_time_period_parseFromJSON() failed [start_time]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_valid_time_period_t *OpenAPI_valid_time_period_parseFromJSON(cJSON *vali
     end_time = cJSON_GetObjectItemCaseSensitive(valid_time_periodJSON, "endTime");
     if (end_time) {
     if (!cJSON_IsString(end_time) && !cJSON_IsNull(end_time)) {
-        ogs_error("OpenAPI_valid_time_period_parseFromJSON() failed [end_time]");
+        log_error("OpenAPI_valid_time_period_parseFromJSON() failed [end_time]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_valid_time_period_t *OpenAPI_valid_time_period_copy(OpenAPI_valid_time_p
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_valid_time_period_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_valid_time_period_convertToJSON() failed");
+        log_error("OpenAPI_valid_time_period_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_valid_time_period_t *OpenAPI_valid_time_period_copy(OpenAPI_valid_time_p
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

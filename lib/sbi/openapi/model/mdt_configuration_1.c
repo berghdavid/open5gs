@@ -39,7 +39,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_create(
 )
 {
     OpenAPI_mdt_configuration_1_t *mdt_configuration_1_local_var = ogs_malloc(sizeof(OpenAPI_mdt_configuration_1_t));
-    ogs_assert(mdt_configuration_1_local_var);
+    log_assert(mdt_configuration_1_local_var);
 
     mdt_configuration_1_local_var->job_type = job_type;
     mdt_configuration_1_local_var->report_type = report_type;
@@ -141,23 +141,23 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (mdt_configuration_1 == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [MdtConfiguration_1]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [MdtConfiguration_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (mdt_configuration_1->job_type == OpenAPI_job_type_NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [job_type]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [job_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "jobType", OpenAPI_job_type_ToString(mdt_configuration_1->job_type)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [job_type]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [job_type]");
         goto end;
     }
 
     if (mdt_configuration_1->report_type != OpenAPI_report_type_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "reportType", OpenAPI_report_type_mdt_ToString(mdt_configuration_1->report_type)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [report_type]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [report_type]");
         goto end;
     }
     }
@@ -165,12 +165,12 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->area_scope) {
     cJSON *area_scope_local_JSON = OpenAPI_area_scope_convertToJSON(mdt_configuration_1->area_scope);
     if (area_scope_local_JSON == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [area_scope]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [area_scope]");
         goto end;
     }
     cJSON_AddItemToObject(item, "areaScope", area_scope_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [area_scope]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [area_scope]");
         goto end;
     }
     }
@@ -178,12 +178,12 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->measurement_lte_list != OpenAPI_measurement_lte_for_mdt_NULL) {
     cJSON *measurement_lte_listList = cJSON_AddArrayToObject(item, "measurementLteList");
     if (measurement_lte_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_lte_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_lte_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->measurement_lte_list, node) {
         if (cJSON_AddStringToObject(measurement_lte_listList, "", OpenAPI_measurement_lte_for_mdt_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_lte_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_lte_list]");
             goto end;
         }
     }
@@ -192,12 +192,12 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->measurement_nr_list != OpenAPI_measurement_nr_for_mdt_NULL) {
     cJSON *measurement_nr_listList = cJSON_AddArrayToObject(item, "measurementNrList");
     if (measurement_nr_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_nr_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_nr_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->measurement_nr_list, node) {
         if (cJSON_AddStringToObject(measurement_nr_listList, "", OpenAPI_measurement_nr_for_mdt_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_nr_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_nr_list]");
             goto end;
         }
     }
@@ -206,12 +206,12 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->sensor_measurement_list != OpenAPI_sensor_measurement_NULL) {
     cJSON *sensor_measurement_listList = cJSON_AddArrayToObject(item, "sensorMeasurementList");
     if (sensor_measurement_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [sensor_measurement_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [sensor_measurement_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->sensor_measurement_list, node) {
         if (cJSON_AddStringToObject(sensor_measurement_listList, "", OpenAPI_sensor_measurement_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [sensor_measurement_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [sensor_measurement_list]");
             goto end;
         }
     }
@@ -220,12 +220,12 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->reporting_trigger_list != OpenAPI_reporting_trigger_NULL) {
     cJSON *reporting_trigger_listList = cJSON_AddArrayToObject(item, "reportingTriggerList");
     if (reporting_trigger_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [reporting_trigger_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [reporting_trigger_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->reporting_trigger_list, node) {
         if (cJSON_AddStringToObject(reporting_trigger_listList, "", OpenAPI_reporting_trigger_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [reporting_trigger_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [reporting_trigger_list]");
             goto end;
         }
     }
@@ -233,49 +233,49 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
 
     if (mdt_configuration_1->report_interval != OpenAPI_report_interval_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "reportInterval", OpenAPI_report_interval_mdt_ToString(mdt_configuration_1->report_interval)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [report_interval]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [report_interval]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->report_interval_nr != OpenAPI_report_interval_nr_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "reportIntervalNr", OpenAPI_report_interval_nr_mdt_ToString(mdt_configuration_1->report_interval_nr)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [report_interval_nr]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [report_interval_nr]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->report_amount != OpenAPI_report_amount_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "reportAmount", OpenAPI_report_amount_mdt_ToString(mdt_configuration_1->report_amount)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [report_amount]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [report_amount]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->is_event_threshold_rsrp) {
     if (cJSON_AddNumberToObject(item, "eventThresholdRsrp", mdt_configuration_1->event_threshold_rsrp) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_threshold_rsrp]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_threshold_rsrp]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->is_event_threshold_rsrp_nr) {
     if (cJSON_AddNumberToObject(item, "eventThresholdRsrpNr", mdt_configuration_1->event_threshold_rsrp_nr) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_threshold_rsrp_nr]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_threshold_rsrp_nr]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->is_event_threshold_rsrq) {
     if (cJSON_AddNumberToObject(item, "eventThresholdRsrq", mdt_configuration_1->event_threshold_rsrq) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_threshold_rsrq]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_threshold_rsrq]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->is_event_threshold_rsrq_nr) {
     if (cJSON_AddNumberToObject(item, "eventThresholdRsrqNr", mdt_configuration_1->event_threshold_rsrq_nr) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_threshold_rsrq_nr]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_threshold_rsrq_nr]");
         goto end;
     }
     }
@@ -283,12 +283,12 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->event_list != OpenAPI_event_for_mdt_NULL) {
     cJSON *event_listList = cJSON_AddArrayToObject(item, "eventList");
     if (event_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->event_list, node) {
         if (cJSON_AddStringToObject(event_listList, "", OpenAPI_event_for_mdt_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [event_list]");
             goto end;
         }
     }
@@ -296,35 +296,35 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
 
     if (mdt_configuration_1->logging_interval != OpenAPI_logging_interval_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "loggingInterval", OpenAPI_logging_interval_mdt_ToString(mdt_configuration_1->logging_interval)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [logging_interval]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [logging_interval]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->logging_interval_nr != OpenAPI_logging_interval_nr_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "loggingIntervalNr", OpenAPI_logging_interval_nr_mdt_ToString(mdt_configuration_1->logging_interval_nr)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [logging_interval_nr]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [logging_interval_nr]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->logging_duration != OpenAPI_logging_duration_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "loggingDuration", OpenAPI_logging_duration_mdt_ToString(mdt_configuration_1->logging_duration)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [logging_duration]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [logging_duration]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->logging_duration_nr != OpenAPI_logging_duration_nr_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "loggingDurationNr", OpenAPI_logging_duration_nr_mdt_ToString(mdt_configuration_1->logging_duration_nr)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [logging_duration_nr]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [logging_duration_nr]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->positioning_method != OpenAPI_positioning_method_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "positioningMethod", OpenAPI_positioning_method_mdt_ToString(mdt_configuration_1->positioning_method)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [positioning_method]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [positioning_method]");
         goto end;
     }
     }
@@ -332,12 +332,12 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->add_positioning_method_list != OpenAPI_positioning_method_mdt_NULL) {
     cJSON *add_positioning_method_listList = cJSON_AddArrayToObject(item, "addPositioningMethodList");
     if (add_positioning_method_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [add_positioning_method_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [add_positioning_method_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->add_positioning_method_list, node) {
         if (cJSON_AddStringToObject(add_positioning_method_listList, "", OpenAPI_positioning_method_mdt_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [add_positioning_method_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [add_positioning_method_list]");
             goto end;
         }
     }
@@ -345,21 +345,21 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
 
     if (mdt_configuration_1->collection_period_rmm_lte != OpenAPI_collection_period_rmm_lte_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "collectionPeriodRmmLte", OpenAPI_collection_period_rmm_lte_mdt_ToString(mdt_configuration_1->collection_period_rmm_lte)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [collection_period_rmm_lte]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [collection_period_rmm_lte]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->collection_period_rmm_nr != OpenAPI_collection_period_rmm_nr_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "collectionPeriodRmmNr", OpenAPI_collection_period_rmm_nr_mdt_ToString(mdt_configuration_1->collection_period_rmm_nr)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [collection_period_rmm_nr]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [collection_period_rmm_nr]");
         goto end;
     }
     }
 
     if (mdt_configuration_1->measurement_period_lte != OpenAPI_measurement_period_lte_mdt_NULL) {
     if (cJSON_AddStringToObject(item, "measurementPeriodLte", OpenAPI_measurement_period_lte_mdt_ToString(mdt_configuration_1->measurement_period_lte)) == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_period_lte]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [measurement_period_lte]");
         goto end;
     }
     }
@@ -367,13 +367,13 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->mdt_allowed_plmn_id_list) {
     cJSON *mdt_allowed_plmn_id_listList = cJSON_AddArrayToObject(item, "mdtAllowedPlmnIdList");
     if (mdt_allowed_plmn_id_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [mdt_allowed_plmn_id_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [mdt_allowed_plmn_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->mdt_allowed_plmn_id_list, node) {
         cJSON *itemLocal = OpenAPI_plmn_id_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [mdt_allowed_plmn_id_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [mdt_allowed_plmn_id_list]");
             goto end;
         }
         cJSON_AddItemToArray(mdt_allowed_plmn_id_listList, itemLocal);
@@ -383,13 +383,13 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->mbsfn_area_list) {
     cJSON *mbsfn_area_listList = cJSON_AddArrayToObject(item, "mbsfnAreaList");
     if (mbsfn_area_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [mbsfn_area_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [mbsfn_area_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->mbsfn_area_list, node) {
         cJSON *itemLocal = OpenAPI_mbsfn_area_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [mbsfn_area_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [mbsfn_area_list]");
             goto end;
         }
         cJSON_AddItemToArray(mbsfn_area_listList, itemLocal);
@@ -399,13 +399,13 @@ cJSON *OpenAPI_mdt_configuration_1_convertToJSON(OpenAPI_mdt_configuration_1_t *
     if (mdt_configuration_1->inter_freq_target_list) {
     cJSON *inter_freq_target_listList = cJSON_AddArrayToObject(item, "interFreqTargetList");
     if (inter_freq_target_listList == NULL) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [inter_freq_target_list]");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [inter_freq_target_list]");
         goto end;
     }
     OpenAPI_list_for_each(mdt_configuration_1->inter_freq_target_list, node) {
         cJSON *itemLocal = OpenAPI_inter_freq_target_info_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [inter_freq_target_list]");
+            log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed [inter_freq_target_list]");
             goto end;
         }
         cJSON_AddItemToArray(inter_freq_target_listList, itemLocal);
@@ -472,11 +472,11 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     OpenAPI_list_t *inter_freq_target_listList = NULL;
     job_type = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "jobType");
     if (!job_type) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [job_type]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [job_type]");
         goto end;
     }
     if (!cJSON_IsString(job_type)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [job_type]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [job_type]");
         goto end;
     }
     job_typeVariable = OpenAPI_job_type_FromString(job_type->valuestring);
@@ -484,7 +484,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     report_type = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "reportType");
     if (report_type) {
     if (!cJSON_IsString(report_type)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [report_type]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [report_type]");
         goto end;
     }
     report_typeVariable = OpenAPI_report_type_mdt_FromString(report_type->valuestring);
@@ -494,7 +494,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (area_scope) {
     area_scope_local_nonprim = OpenAPI_area_scope_parseFromJSON(area_scope);
     if (!area_scope_local_nonprim) {
-        ogs_error("OpenAPI_area_scope_parseFromJSON failed [area_scope]");
+        log_error("OpenAPI_area_scope_parseFromJSON failed [area_scope]");
         goto end;
     }
     }
@@ -503,7 +503,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (measurement_lte_list) {
         cJSON *measurement_lte_list_local = NULL;
         if (!cJSON_IsArray(measurement_lte_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_lte_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_lte_list]");
             goto end;
         }
 
@@ -512,19 +512,19 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
         cJSON_ArrayForEach(measurement_lte_list_local, measurement_lte_list) {
             OpenAPI_measurement_lte_for_mdt_e localEnum = OpenAPI_measurement_lte_for_mdt_NULL;
             if (!cJSON_IsString(measurement_lte_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_lte_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_lte_list]");
                 goto end;
             }
             localEnum = OpenAPI_measurement_lte_for_mdt_FromString(measurement_lte_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"measurement_lte_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"measurement_lte_list\" is not supported. Ignoring it ...",
                          measurement_lte_list_local->valuestring);
             } else {
                 OpenAPI_list_add(measurement_lte_listList, (void *)localEnum);
             }
         }
         if (measurement_lte_listList->count == 0) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected measurement_lte_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected measurement_lte_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -533,7 +533,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (measurement_nr_list) {
         cJSON *measurement_nr_list_local = NULL;
         if (!cJSON_IsArray(measurement_nr_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_nr_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_nr_list]");
             goto end;
         }
 
@@ -542,19 +542,19 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
         cJSON_ArrayForEach(measurement_nr_list_local, measurement_nr_list) {
             OpenAPI_measurement_nr_for_mdt_e localEnum = OpenAPI_measurement_nr_for_mdt_NULL;
             if (!cJSON_IsString(measurement_nr_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_nr_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_nr_list]");
                 goto end;
             }
             localEnum = OpenAPI_measurement_nr_for_mdt_FromString(measurement_nr_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"measurement_nr_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"measurement_nr_list\" is not supported. Ignoring it ...",
                          measurement_nr_list_local->valuestring);
             } else {
                 OpenAPI_list_add(measurement_nr_listList, (void *)localEnum);
             }
         }
         if (measurement_nr_listList->count == 0) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected measurement_nr_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected measurement_nr_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -563,7 +563,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (sensor_measurement_list) {
         cJSON *sensor_measurement_list_local = NULL;
         if (!cJSON_IsArray(sensor_measurement_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [sensor_measurement_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [sensor_measurement_list]");
             goto end;
         }
 
@@ -572,19 +572,19 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
         cJSON_ArrayForEach(sensor_measurement_list_local, sensor_measurement_list) {
             OpenAPI_sensor_measurement_e localEnum = OpenAPI_sensor_measurement_NULL;
             if (!cJSON_IsString(sensor_measurement_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [sensor_measurement_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [sensor_measurement_list]");
                 goto end;
             }
             localEnum = OpenAPI_sensor_measurement_FromString(sensor_measurement_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"sensor_measurement_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"sensor_measurement_list\" is not supported. Ignoring it ...",
                          sensor_measurement_list_local->valuestring);
             } else {
                 OpenAPI_list_add(sensor_measurement_listList, (void *)localEnum);
             }
         }
         if (sensor_measurement_listList->count == 0) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected sensor_measurement_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected sensor_measurement_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -593,7 +593,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (reporting_trigger_list) {
         cJSON *reporting_trigger_list_local = NULL;
         if (!cJSON_IsArray(reporting_trigger_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [reporting_trigger_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [reporting_trigger_list]");
             goto end;
         }
 
@@ -602,19 +602,19 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
         cJSON_ArrayForEach(reporting_trigger_list_local, reporting_trigger_list) {
             OpenAPI_reporting_trigger_e localEnum = OpenAPI_reporting_trigger_NULL;
             if (!cJSON_IsString(reporting_trigger_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [reporting_trigger_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [reporting_trigger_list]");
                 goto end;
             }
             localEnum = OpenAPI_reporting_trigger_FromString(reporting_trigger_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"reporting_trigger_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"reporting_trigger_list\" is not supported. Ignoring it ...",
                          reporting_trigger_list_local->valuestring);
             } else {
                 OpenAPI_list_add(reporting_trigger_listList, (void *)localEnum);
             }
         }
         if (reporting_trigger_listList->count == 0) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected reporting_trigger_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected reporting_trigger_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -622,7 +622,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     report_interval = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "reportInterval");
     if (report_interval) {
     if (!cJSON_IsString(report_interval)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [report_interval]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [report_interval]");
         goto end;
     }
     report_intervalVariable = OpenAPI_report_interval_mdt_FromString(report_interval->valuestring);
@@ -631,7 +631,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     report_interval_nr = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "reportIntervalNr");
     if (report_interval_nr) {
     if (!cJSON_IsString(report_interval_nr)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [report_interval_nr]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [report_interval_nr]");
         goto end;
     }
     report_interval_nrVariable = OpenAPI_report_interval_nr_mdt_FromString(report_interval_nr->valuestring);
@@ -640,7 +640,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     report_amount = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "reportAmount");
     if (report_amount) {
     if (!cJSON_IsString(report_amount)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [report_amount]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [report_amount]");
         goto end;
     }
     report_amountVariable = OpenAPI_report_amount_mdt_FromString(report_amount->valuestring);
@@ -649,7 +649,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     event_threshold_rsrp = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "eventThresholdRsrp");
     if (event_threshold_rsrp) {
     if (!cJSON_IsNumber(event_threshold_rsrp)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_threshold_rsrp]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_threshold_rsrp]");
         goto end;
     }
     }
@@ -657,7 +657,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     event_threshold_rsrp_nr = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "eventThresholdRsrpNr");
     if (event_threshold_rsrp_nr) {
     if (!cJSON_IsNumber(event_threshold_rsrp_nr)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_threshold_rsrp_nr]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_threshold_rsrp_nr]");
         goto end;
     }
     }
@@ -665,7 +665,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     event_threshold_rsrq = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "eventThresholdRsrq");
     if (event_threshold_rsrq) {
     if (!cJSON_IsNumber(event_threshold_rsrq)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_threshold_rsrq]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_threshold_rsrq]");
         goto end;
     }
     }
@@ -673,7 +673,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     event_threshold_rsrq_nr = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "eventThresholdRsrqNr");
     if (event_threshold_rsrq_nr) {
     if (!cJSON_IsNumber(event_threshold_rsrq_nr)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_threshold_rsrq_nr]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_threshold_rsrq_nr]");
         goto end;
     }
     }
@@ -682,7 +682,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (event_list) {
         cJSON *event_list_local = NULL;
         if (!cJSON_IsArray(event_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_list]");
             goto end;
         }
 
@@ -691,19 +691,19 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
         cJSON_ArrayForEach(event_list_local, event_list) {
             OpenAPI_event_for_mdt_e localEnum = OpenAPI_event_for_mdt_NULL;
             if (!cJSON_IsString(event_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [event_list]");
                 goto end;
             }
             localEnum = OpenAPI_event_for_mdt_FromString(event_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"event_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"event_list\" is not supported. Ignoring it ...",
                          event_list_local->valuestring);
             } else {
                 OpenAPI_list_add(event_listList, (void *)localEnum);
             }
         }
         if (event_listList->count == 0) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected event_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected event_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -711,7 +711,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     logging_interval = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "loggingInterval");
     if (logging_interval) {
     if (!cJSON_IsString(logging_interval)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [logging_interval]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [logging_interval]");
         goto end;
     }
     logging_intervalVariable = OpenAPI_logging_interval_mdt_FromString(logging_interval->valuestring);
@@ -720,7 +720,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     logging_interval_nr = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "loggingIntervalNr");
     if (logging_interval_nr) {
     if (!cJSON_IsString(logging_interval_nr)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [logging_interval_nr]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [logging_interval_nr]");
         goto end;
     }
     logging_interval_nrVariable = OpenAPI_logging_interval_nr_mdt_FromString(logging_interval_nr->valuestring);
@@ -729,7 +729,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     logging_duration = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "loggingDuration");
     if (logging_duration) {
     if (!cJSON_IsString(logging_duration)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [logging_duration]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [logging_duration]");
         goto end;
     }
     logging_durationVariable = OpenAPI_logging_duration_mdt_FromString(logging_duration->valuestring);
@@ -738,7 +738,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     logging_duration_nr = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "loggingDurationNr");
     if (logging_duration_nr) {
     if (!cJSON_IsString(logging_duration_nr)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [logging_duration_nr]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [logging_duration_nr]");
         goto end;
     }
     logging_duration_nrVariable = OpenAPI_logging_duration_nr_mdt_FromString(logging_duration_nr->valuestring);
@@ -747,7 +747,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     positioning_method = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "positioningMethod");
     if (positioning_method) {
     if (!cJSON_IsString(positioning_method)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [positioning_method]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [positioning_method]");
         goto end;
     }
     positioning_methodVariable = OpenAPI_positioning_method_mdt_FromString(positioning_method->valuestring);
@@ -757,7 +757,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (add_positioning_method_list) {
         cJSON *add_positioning_method_list_local = NULL;
         if (!cJSON_IsArray(add_positioning_method_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [add_positioning_method_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [add_positioning_method_list]");
             goto end;
         }
 
@@ -766,19 +766,19 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
         cJSON_ArrayForEach(add_positioning_method_list_local, add_positioning_method_list) {
             OpenAPI_positioning_method_mdt_e localEnum = OpenAPI_positioning_method_mdt_NULL;
             if (!cJSON_IsString(add_positioning_method_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [add_positioning_method_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [add_positioning_method_list]");
                 goto end;
             }
             localEnum = OpenAPI_positioning_method_mdt_FromString(add_positioning_method_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"add_positioning_method_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"add_positioning_method_list\" is not supported. Ignoring it ...",
                          add_positioning_method_list_local->valuestring);
             } else {
                 OpenAPI_list_add(add_positioning_method_listList, (void *)localEnum);
             }
         }
         if (add_positioning_method_listList->count == 0) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected add_positioning_method_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed: Expected add_positioning_method_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -786,7 +786,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     collection_period_rmm_lte = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "collectionPeriodRmmLte");
     if (collection_period_rmm_lte) {
     if (!cJSON_IsString(collection_period_rmm_lte)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [collection_period_rmm_lte]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [collection_period_rmm_lte]");
         goto end;
     }
     collection_period_rmm_lteVariable = OpenAPI_collection_period_rmm_lte_mdt_FromString(collection_period_rmm_lte->valuestring);
@@ -795,7 +795,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     collection_period_rmm_nr = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "collectionPeriodRmmNr");
     if (collection_period_rmm_nr) {
     if (!cJSON_IsString(collection_period_rmm_nr)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [collection_period_rmm_nr]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [collection_period_rmm_nr]");
         goto end;
     }
     collection_period_rmm_nrVariable = OpenAPI_collection_period_rmm_nr_mdt_FromString(collection_period_rmm_nr->valuestring);
@@ -804,7 +804,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     measurement_period_lte = cJSON_GetObjectItemCaseSensitive(mdt_configuration_1JSON, "measurementPeriodLte");
     if (measurement_period_lte) {
     if (!cJSON_IsString(measurement_period_lte)) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_period_lte]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [measurement_period_lte]");
         goto end;
     }
     measurement_period_lteVariable = OpenAPI_measurement_period_lte_mdt_FromString(measurement_period_lte->valuestring);
@@ -814,7 +814,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (mdt_allowed_plmn_id_list) {
         cJSON *mdt_allowed_plmn_id_list_local = NULL;
         if (!cJSON_IsArray(mdt_allowed_plmn_id_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [mdt_allowed_plmn_id_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [mdt_allowed_plmn_id_list]");
             goto end;
         }
 
@@ -822,12 +822,12 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
 
         cJSON_ArrayForEach(mdt_allowed_plmn_id_list_local, mdt_allowed_plmn_id_list) {
             if (!cJSON_IsObject(mdt_allowed_plmn_id_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [mdt_allowed_plmn_id_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [mdt_allowed_plmn_id_list]");
                 goto end;
             }
             OpenAPI_plmn_id_1_t *mdt_allowed_plmn_id_listItem = OpenAPI_plmn_id_1_parseFromJSON(mdt_allowed_plmn_id_list_local);
             if (!mdt_allowed_plmn_id_listItem) {
-                ogs_error("No mdt_allowed_plmn_id_listItem");
+                log_error("No mdt_allowed_plmn_id_listItem");
                 goto end;
             }
             OpenAPI_list_add(mdt_allowed_plmn_id_listList, mdt_allowed_plmn_id_listItem);
@@ -838,7 +838,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (mbsfn_area_list) {
         cJSON *mbsfn_area_list_local = NULL;
         if (!cJSON_IsArray(mbsfn_area_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [mbsfn_area_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [mbsfn_area_list]");
             goto end;
         }
 
@@ -846,12 +846,12 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
 
         cJSON_ArrayForEach(mbsfn_area_list_local, mbsfn_area_list) {
             if (!cJSON_IsObject(mbsfn_area_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [mbsfn_area_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [mbsfn_area_list]");
                 goto end;
             }
             OpenAPI_mbsfn_area_t *mbsfn_area_listItem = OpenAPI_mbsfn_area_parseFromJSON(mbsfn_area_list_local);
             if (!mbsfn_area_listItem) {
-                ogs_error("No mbsfn_area_listItem");
+                log_error("No mbsfn_area_listItem");
                 goto end;
             }
             OpenAPI_list_add(mbsfn_area_listList, mbsfn_area_listItem);
@@ -862,7 +862,7 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
     if (inter_freq_target_list) {
         cJSON *inter_freq_target_list_local = NULL;
         if (!cJSON_IsArray(inter_freq_target_list)) {
-            ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [inter_freq_target_list]");
+            log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [inter_freq_target_list]");
             goto end;
         }
 
@@ -870,12 +870,12 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_parseFromJSON(cJSON *
 
         cJSON_ArrayForEach(inter_freq_target_list_local, inter_freq_target_list) {
             if (!cJSON_IsObject(inter_freq_target_list_local)) {
-                ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [inter_freq_target_list]");
+                log_error("OpenAPI_mdt_configuration_1_parseFromJSON() failed [inter_freq_target_list]");
                 goto end;
             }
             OpenAPI_inter_freq_target_info_1_t *inter_freq_target_listItem = OpenAPI_inter_freq_target_info_1_parseFromJSON(inter_freq_target_list_local);
             if (!inter_freq_target_listItem) {
-                ogs_error("No inter_freq_target_listItem");
+                log_error("No inter_freq_target_listItem");
                 goto end;
             }
             OpenAPI_list_add(inter_freq_target_listList, inter_freq_target_listItem);
@@ -975,10 +975,10 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_copy(OpenAPI_mdt_conf
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_mdt_configuration_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_mdt_configuration_1_convertToJSON() failed");
+        log_error("OpenAPI_mdt_configuration_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -986,14 +986,14 @@ OpenAPI_mdt_configuration_1_t *OpenAPI_mdt_configuration_1_copy(OpenAPI_mdt_conf
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

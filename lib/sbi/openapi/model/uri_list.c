@@ -11,7 +11,7 @@ OpenAPI_uri_list_t *OpenAPI_uri_list_create(
 )
 {
     OpenAPI_uri_list_t *uri_list_local_var = ogs_malloc(sizeof(OpenAPI_uri_list_t));
-    ogs_assert(uri_list_local_var);
+    log_assert(uri_list_local_var);
 
     uri_list_local_var->_links = _links;
     uri_list_local_var->is_total_item_count = is_total_item_count;
@@ -46,7 +46,7 @@ cJSON *OpenAPI_uri_list_convertToJSON(OpenAPI_uri_list_t *uri_list)
     OpenAPI_lnode_t *node = NULL;
 
     if (uri_list == NULL) {
-        ogs_error("OpenAPI_uri_list_convertToJSON() failed [UriList]");
+        log_error("OpenAPI_uri_list_convertToJSON() failed [UriList]");
         return NULL;
     }
 
@@ -54,7 +54,7 @@ cJSON *OpenAPI_uri_list_convertToJSON(OpenAPI_uri_list_t *uri_list)
     if (uri_list->_links) {
     cJSON *_links = cJSON_AddObjectToObject(item, "_links");
     if (_links == NULL) {
-        ogs_error("OpenAPI_uri_list_convertToJSON() failed [_links]");
+        log_error("OpenAPI_uri_list_convertToJSON() failed [_links]");
         goto end;
     }
     cJSON *localMapObject = _links;
@@ -62,18 +62,18 @@ cJSON *OpenAPI_uri_list_convertToJSON(OpenAPI_uri_list_t *uri_list)
         OpenAPI_list_for_each(uri_list->_links, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_uri_list_convertToJSON() failed [_links]");
+                log_error("OpenAPI_uri_list_convertToJSON() failed [_links]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_uri_list_convertToJSON() failed [_links]");
+                log_error("OpenAPI_uri_list_convertToJSON() failed [_links]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_links_value_schema_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_uri_list_convertToJSON() failed [inner]");
+                log_error("OpenAPI_uri_list_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -83,7 +83,7 @@ cJSON *OpenAPI_uri_list_convertToJSON(OpenAPI_uri_list_t *uri_list)
 
     if (uri_list->is_total_item_count) {
     if (cJSON_AddNumberToObject(item, "totalItemCount", uri_list->total_item_count) == NULL) {
-        ogs_error("OpenAPI_uri_list_convertToJSON() failed [total_item_count]");
+        log_error("OpenAPI_uri_list_convertToJSON() failed [total_item_count]");
         goto end;
     }
     }
@@ -103,7 +103,7 @@ OpenAPI_uri_list_t *OpenAPI_uri_list_parseFromJSON(cJSON *uri_listJSON)
     if (_links) {
         cJSON *_links_local_map = NULL;
         if (!cJSON_IsObject(_links) && !cJSON_IsNull(_links)) {
-            ogs_error("OpenAPI_uri_list_parseFromJSON() failed [_links]");
+            log_error("OpenAPI_uri_list_parseFromJSON() failed [_links]");
             goto end;
         }
         if (cJSON_IsObject(_links)) {
@@ -117,7 +117,7 @@ OpenAPI_uri_list_t *OpenAPI_uri_list_parseFromJSON(cJSON *uri_listJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_uri_list_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_uri_list_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(_linksList, localMapKeyPair);
@@ -128,7 +128,7 @@ OpenAPI_uri_list_t *OpenAPI_uri_list_parseFromJSON(cJSON *uri_listJSON)
     total_item_count = cJSON_GetObjectItemCaseSensitive(uri_listJSON, "totalItemCount");
     if (total_item_count) {
     if (!cJSON_IsNumber(total_item_count)) {
-        ogs_error("OpenAPI_uri_list_parseFromJSON() failed [total_item_count]");
+        log_error("OpenAPI_uri_list_parseFromJSON() failed [total_item_count]");
         goto end;
     }
     }
@@ -159,10 +159,10 @@ OpenAPI_uri_list_t *OpenAPI_uri_list_copy(OpenAPI_uri_list_t *dst, OpenAPI_uri_l
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_uri_list_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_uri_list_convertToJSON() failed");
+        log_error("OpenAPI_uri_list_convertToJSON() failed");
         return NULL;
     }
 
@@ -170,14 +170,14 @@ OpenAPI_uri_list_t *OpenAPI_uri_list_copy(OpenAPI_uri_list_t *dst, OpenAPI_uri_l
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

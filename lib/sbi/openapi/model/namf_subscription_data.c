@@ -10,7 +10,7 @@ OpenAPI_namf_subscription_data_t *OpenAPI_namf_subscription_data_create(
 )
 {
     OpenAPI_namf_subscription_data_t *namf_subscription_data_local_var = ogs_malloc(sizeof(OpenAPI_namf_subscription_data_t));
-    ogs_assert(namf_subscription_data_local_var);
+    log_assert(namf_subscription_data_local_var);
 
     namf_subscription_data_local_var->amf_status_uri = amf_status_uri;
     namf_subscription_data_local_var->guami_list = guami_list;
@@ -45,30 +45,30 @@ cJSON *OpenAPI_namf_subscription_data_convertToJSON(OpenAPI_namf_subscription_da
     OpenAPI_lnode_t *node = NULL;
 
     if (namf_subscription_data == NULL) {
-        ogs_error("OpenAPI_namf_subscription_data_convertToJSON() failed [NamfSubscriptionData]");
+        log_error("OpenAPI_namf_subscription_data_convertToJSON() failed [NamfSubscriptionData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!namf_subscription_data->amf_status_uri) {
-        ogs_error("OpenAPI_namf_subscription_data_convertToJSON() failed [amf_status_uri]");
+        log_error("OpenAPI_namf_subscription_data_convertToJSON() failed [amf_status_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "amfStatusUri", namf_subscription_data->amf_status_uri) == NULL) {
-        ogs_error("OpenAPI_namf_subscription_data_convertToJSON() failed [amf_status_uri]");
+        log_error("OpenAPI_namf_subscription_data_convertToJSON() failed [amf_status_uri]");
         goto end;
     }
 
     if (namf_subscription_data->guami_list) {
     cJSON *guami_listList = cJSON_AddArrayToObject(item, "guamiList");
     if (guami_listList == NULL) {
-        ogs_error("OpenAPI_namf_subscription_data_convertToJSON() failed [guami_list]");
+        log_error("OpenAPI_namf_subscription_data_convertToJSON() failed [guami_list]");
         goto end;
     }
     OpenAPI_list_for_each(namf_subscription_data->guami_list, node) {
         cJSON *itemLocal = OpenAPI_guami_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_namf_subscription_data_convertToJSON() failed [guami_list]");
+            log_error("OpenAPI_namf_subscription_data_convertToJSON() failed [guami_list]");
             goto end;
         }
         cJSON_AddItemToArray(guami_listList, itemLocal);
@@ -88,11 +88,11 @@ OpenAPI_namf_subscription_data_t *OpenAPI_namf_subscription_data_parseFromJSON(c
     OpenAPI_list_t *guami_listList = NULL;
     amf_status_uri = cJSON_GetObjectItemCaseSensitive(namf_subscription_dataJSON, "amfStatusUri");
     if (!amf_status_uri) {
-        ogs_error("OpenAPI_namf_subscription_data_parseFromJSON() failed [amf_status_uri]");
+        log_error("OpenAPI_namf_subscription_data_parseFromJSON() failed [amf_status_uri]");
         goto end;
     }
     if (!cJSON_IsString(amf_status_uri)) {
-        ogs_error("OpenAPI_namf_subscription_data_parseFromJSON() failed [amf_status_uri]");
+        log_error("OpenAPI_namf_subscription_data_parseFromJSON() failed [amf_status_uri]");
         goto end;
     }
 
@@ -100,7 +100,7 @@ OpenAPI_namf_subscription_data_t *OpenAPI_namf_subscription_data_parseFromJSON(c
     if (guami_list) {
         cJSON *guami_list_local = NULL;
         if (!cJSON_IsArray(guami_list)) {
-            ogs_error("OpenAPI_namf_subscription_data_parseFromJSON() failed [guami_list]");
+            log_error("OpenAPI_namf_subscription_data_parseFromJSON() failed [guami_list]");
             goto end;
         }
 
@@ -108,12 +108,12 @@ OpenAPI_namf_subscription_data_t *OpenAPI_namf_subscription_data_parseFromJSON(c
 
         cJSON_ArrayForEach(guami_list_local, guami_list) {
             if (!cJSON_IsObject(guami_list_local)) {
-                ogs_error("OpenAPI_namf_subscription_data_parseFromJSON() failed [guami_list]");
+                log_error("OpenAPI_namf_subscription_data_parseFromJSON() failed [guami_list]");
                 goto end;
             }
             OpenAPI_guami_t *guami_listItem = OpenAPI_guami_parseFromJSON(guami_list_local);
             if (!guami_listItem) {
-                ogs_error("No guami_listItem");
+                log_error("No guami_listItem");
                 goto end;
             }
             OpenAPI_list_add(guami_listList, guami_listItem);
@@ -142,10 +142,10 @@ OpenAPI_namf_subscription_data_t *OpenAPI_namf_subscription_data_copy(OpenAPI_na
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_namf_subscription_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_namf_subscription_data_convertToJSON() failed");
+        log_error("OpenAPI_namf_subscription_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -153,14 +153,14 @@ OpenAPI_namf_subscription_data_t *OpenAPI_namf_subscription_data_copy(OpenAPI_na
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

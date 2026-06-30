@@ -11,7 +11,7 @@ OpenAPI_parameter_combination_t *OpenAPI_parameter_combination_create(
 )
 {
     OpenAPI_parameter_combination_t *parameter_combination_local_var = ogs_malloc(sizeof(OpenAPI_parameter_combination_t));
-    ogs_assert(parameter_combination_local_var);
+    log_assert(parameter_combination_local_var);
 
     parameter_combination_local_var->supi = supi;
     parameter_combination_local_var->dnn = dnn;
@@ -48,21 +48,21 @@ cJSON *OpenAPI_parameter_combination_convertToJSON(OpenAPI_parameter_combination
     OpenAPI_lnode_t *node = NULL;
 
     if (parameter_combination == NULL) {
-        ogs_error("OpenAPI_parameter_combination_convertToJSON() failed [ParameterCombination]");
+        log_error("OpenAPI_parameter_combination_convertToJSON() failed [ParameterCombination]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (parameter_combination->supi) {
     if (cJSON_AddStringToObject(item, "supi", parameter_combination->supi) == NULL) {
-        ogs_error("OpenAPI_parameter_combination_convertToJSON() failed [supi]");
+        log_error("OpenAPI_parameter_combination_convertToJSON() failed [supi]");
         goto end;
     }
     }
 
     if (parameter_combination->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", parameter_combination->dnn) == NULL) {
-        ogs_error("OpenAPI_parameter_combination_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_parameter_combination_convertToJSON() failed [dnn]");
         goto end;
     }
     }
@@ -70,12 +70,12 @@ cJSON *OpenAPI_parameter_combination_convertToJSON(OpenAPI_parameter_combination
     if (parameter_combination->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(parameter_combination->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_parameter_combination_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_parameter_combination_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_parameter_combination_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_parameter_combination_convertToJSON() failed [snssai]");
         goto end;
     }
     }
@@ -95,7 +95,7 @@ OpenAPI_parameter_combination_t *OpenAPI_parameter_combination_parseFromJSON(cJS
     supi = cJSON_GetObjectItemCaseSensitive(parameter_combinationJSON, "supi");
     if (supi) {
     if (!cJSON_IsString(supi) && !cJSON_IsNull(supi)) {
-        ogs_error("OpenAPI_parameter_combination_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_parameter_combination_parseFromJSON() failed [supi]");
         goto end;
     }
     }
@@ -103,7 +103,7 @@ OpenAPI_parameter_combination_t *OpenAPI_parameter_combination_parseFromJSON(cJS
     dnn = cJSON_GetObjectItemCaseSensitive(parameter_combinationJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_parameter_combination_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_parameter_combination_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -112,7 +112,7 @@ OpenAPI_parameter_combination_t *OpenAPI_parameter_combination_parseFromJSON(cJS
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -137,10 +137,10 @@ OpenAPI_parameter_combination_t *OpenAPI_parameter_combination_copy(OpenAPI_para
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_parameter_combination_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_parameter_combination_convertToJSON() failed");
+        log_error("OpenAPI_parameter_combination_convertToJSON() failed");
         return NULL;
     }
 
@@ -148,14 +148,14 @@ OpenAPI_parameter_combination_t *OpenAPI_parameter_combination_copy(OpenAPI_para
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

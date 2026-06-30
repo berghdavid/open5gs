@@ -30,9 +30,9 @@ int lmf_location_determine(lmf_location_request_t *location_request)
 {
     int rv;
 
-    ogs_assert(location_request);
+    log_assert(location_request);
 
-    ogs_assert(location_request->positioning_method);
+    log_assert(location_request->positioning_method);
 
     /* Route based on positioning method */
     if (strcmp(location_request->positioning_method, "CELLID") == 0) {
@@ -40,13 +40,13 @@ int lmf_location_determine(lmf_location_request_t *location_request)
         OpenAPI_input_data_t *input_data = location_request->input_message->InputData;
         if (!input_data || (!input_data->ncgi && !input_data->ecgi)) {
             /* No cell info provided - request from AMF via async API */
-            ogs_info("[%s] Starting location determination (CELLID) - requesting Cell ID from AMF",
+            log_info("[%s] Starting location determination (CELLID) - requesting Cell ID from AMF",
                     location_request->supi ? location_request->supi : "Unknown");
             
             /* Send async request to AMF for location info */
             rv = lmf_amf_send_location_info_request(location_request);
             if (rv != OGS_OK) {
-                ogs_error("[%s] lmf_amf_send_location_info_request() failed",
+                log_error("[%s] lmf_amf_send_location_info_request() failed",
                         location_request->supi);
                 
                 /* Send error response to client */
@@ -66,12 +66,12 @@ int lmf_location_determine(lmf_location_request_t *location_request)
             return OGS_OK;
         } else {
             /* Cell info provided - proceed directly */
-            ogs_info("[%s] Starting location determination (CELLID) - using provided cell info",
+            log_info("[%s] Starting location determination (CELLID) - using provided cell info",
                     location_request->supi ? location_request->supi : "Unknown");
             
             rv = lmf_location_determine_cellid(location_request);
             if (rv != OGS_OK) {
-                ogs_error("[%s] lmf_location_determine_cellid() failed",
+                log_error("[%s] lmf_location_determine_cellid() failed",
                         location_request->supi);
                 /* Error response already sent by lmf_location_determine_cellid() */
                 return rv;
@@ -82,13 +82,13 @@ int lmf_location_determine(lmf_location_request_t *location_request)
         
     } else if (strcmp(location_request->positioning_method, "ECID") == 0) {
         /* For ECID, we need to request NRPPa measurement from AMF */
-        ogs_info("[%s] Starting location determination (ECID)",
+        log_info("[%s] Starting location determination (ECID)",
                 location_request->supi ? location_request->supi : "Unknown");
 
         /* Send NRPPa measurement request to AMF with all supported measurements */
         rv = lmf_amf_send_nrppa_measurement_request(location_request);
         if (rv != OGS_OK) {
-            ogs_error("[%s] lmf_amf_send_nrppa_measurement_request() failed",
+            log_error("[%s] lmf_amf_send_nrppa_measurement_request() failed",
                     location_request->supi);
             
             /* Send error response to client */
@@ -99,7 +99,7 @@ int lmf_location_determine(lmf_location_request_t *location_request)
                         NULL, "AMF communication failed",
                         "Unable to send NRPPa measurement request to AMF", NULL);
             } else {
-                ogs_error("[%s] Stream ID=%d not found for error response",
+                log_error("[%s] Stream ID=%d not found for error response",
                         location_request->supi, location_request->stream_id);
             }
             
@@ -109,7 +109,7 @@ int lmf_location_determine(lmf_location_request_t *location_request)
 
         return OGS_OK;
     } else {
-        ogs_error("[%s] Unsupported positioning method: %s",
+        log_error("[%s] Unsupported positioning method: %s",
                 location_request->supi,
                 location_request->positioning_method);
         
@@ -121,7 +121,7 @@ int lmf_location_determine(lmf_location_request_t *location_request)
                     NULL, "Unsupported positioning method",
                     location_request->positioning_method, NULL);
         } else {
-            ogs_error("[%s] Stream ID=%d not found for error response",
+            log_error("[%s] Stream ID=%d not found for error response",
                     location_request->supi, location_request->stream_id);
         }
         
@@ -174,10 +174,10 @@ int lmf_location_determine_ecid(
     OpenAPI_ncgi_t *ncgi_openapi = NULL;
     OpenAPI_plmn_id_t *plmn_id_openapi = NULL;
 
-    ogs_assert(location_request);
-    ogs_assert(ecid_response);
+    log_assert(location_request);
+    log_assert(ecid_response);
 
-    ogs_info("[%s] ECID location determination from measurements",
+    log_info("[%s] ECID location determination from measurements",
             location_request->supi ? location_request->supi : "Unknown");
 
     /* Build serving cell NCGI from ECID response */
@@ -189,7 +189,7 @@ int lmf_location_determine_ecid(
     /* Lookup serving cell in database */
     serving_cell_info = lmf_cell_database_find_by_ncgi(&serving_ncgi);
     if (!serving_cell_info) {
-        ogs_error("[%s] Serving cell NCGI=%llx not found in database",
+        log_error("[%s] Serving cell NCGI=%llx not found in database",
                 location_request->supi,
                 (unsigned long long)ecid_response->serving_cell.ncgi);
         
@@ -199,7 +199,7 @@ int lmf_location_determine_ecid(
     }
 
     if (!serving_cell_info) {
-        ogs_error("[%s] Cannot calculate location: serving cell not in database",
+        log_error("[%s] Cannot calculate location: serving cell not in database",
                 location_request->supi);
         
         /* Send error response */
@@ -213,7 +213,7 @@ int lmf_location_determine_ecid(
         return OGS_ERROR;
     }
 
-    ogs_info("[%s] Serving cell found: lat=%.6f, lon=%.6f, alt=%.1f",
+    log_info("[%s] Serving cell found: lat=%.6f, lon=%.6f, alt=%.1f",
             location_request->supi,
             serving_cell_info->latitude,
             serving_cell_info->longitude,
@@ -233,7 +233,7 @@ int lmf_location_determine_ecid(
     final_alt += serving_cell_info->altitude * serving_weight;
     total_weight += serving_weight;
 
-    ogs_info("[%s] Serving cell: RSRP=%d (%.1f dBm), weight=%.3e",
+    log_info("[%s] Serving cell: RSRP=%d (%.1f dBm), weight=%.3e",
             location_request->supi,
             ecid_response->serving_cell.rsrp,
             ecid_response->serving_cell.rsrp / 10.0,
@@ -268,7 +268,7 @@ int lmf_location_determine_ecid(
             final_alt += neighbor_cell_info->altitude * neighbor_weight;
             total_weight += neighbor_weight;
 
-            ogs_debug("[%s] Neighbor[%d]: NCGI=%llx, RSRP=%d, weight=%.3e",
+            log_debug("[%s] Neighbor[%d]: NCGI=%llx, RSRP=%d, weight=%.3e",
                     location_request->supi, i,
                     (unsigned long long)ecid_response->neighbor_cells[i].ncgi,
                     ecid_response->neighbor_cells[i].rsrp,
@@ -300,7 +300,7 @@ int lmf_location_determine_ecid(
         if (ta_distance > uncertainty_radius) {
             uncertainty_radius = ta_distance;
         }
-        ogs_debug("[%s] Timing Advance: TA=%u, distance=%.1f m",
+        log_debug("[%s] Timing Advance: TA=%u, distance=%.1f m",
                 location_request->supi,
                 ecid_response->serving_cell.timing_advance,
                 ta_distance);
@@ -314,7 +314,7 @@ int lmf_location_determine_ecid(
         uncertainty_radius = 50.0;
     }
 
-    ogs_info("[%s] Calculated location: lat=%.6f, lon=%.6f, alt=%.1f, "
+    log_info("[%s] Calculated location: lat=%.6f, lon=%.6f, alt=%.1f, "
             "uncertainty=%.0f m",
             location_request->supi,
             final_lat, final_lon, final_alt, uncertainty_radius);
@@ -324,10 +324,10 @@ int lmf_location_determine_ecid(
     
     /* Create NCGI for response */
     ncgi_openapi = ogs_calloc(1, sizeof(OpenAPI_ncgi_t));
-    ogs_assert(ncgi_openapi);
+    log_assert(ncgi_openapi);
     
     plmn_id_openapi = ogs_calloc(1, sizeof(OpenAPI_plmn_id_t));
-    ogs_assert(plmn_id_openapi);
+    log_assert(plmn_id_openapi);
     
     /* Convert PLMN ID */
     plmn_id_openapi->mcc = ogs_plmn_id_mcc_string(&serving_ncgi.plmn_id);
@@ -339,10 +339,10 @@ int lmf_location_determine_ecid(
     
     /* Create geographic area with all parameters */
     shape = OpenAPI_supported_gad_shapes_create();
-    ogs_assert(shape);
+    log_assert(shape);
     
     coordinates = OpenAPI_geographical_coordinates_create(final_lon, final_lat);
-    ogs_assert(coordinates);
+    log_assert(coordinates);
     
     geographic_area = OpenAPI_geographic_area_create(
         shape,                      /* shape */
@@ -358,7 +358,7 @@ int lmf_location_determine_ecid(
         0,                          /* offset_angle */
         0                           /* included_angle */
     );
-    ogs_assert(geographic_area);
+    log_assert(geographic_area);
     
     /* Create LocationData */
     location_data = OpenAPI_location_data_create(
@@ -384,7 +384,7 @@ int lmf_location_determine_ecid(
             NULL,  /* supported_features */
             NULL   /* achieved_qos */
     );
-    ogs_assert(location_data);
+    log_assert(location_data);
 
     message.h.method = (char *)OGS_SBI_HTTP_METHOD_POST;
     message.h.service.name = (char *)OGS_SBI_SERVICE_NAME_NLMF_LOC;
@@ -392,14 +392,14 @@ int lmf_location_determine_ecid(
     message.h.resource.component[0] = (char *)"determine-location";
     message.LocationData = location_data;
 
-    ogs_info("[%s] LocationData prepared: lat=%.6f, lon=%.6f, uncertainty=%.0f",
+    log_info("[%s] LocationData prepared: lat=%.6f, lon=%.6f, uncertainty=%.0f",
             location_request->supi, final_lat, final_lon, uncertainty_radius);
-    ogs_info("  NCGI: plmn=%s/%s, cell=%s",
+    log_info("  NCGI: plmn=%s/%s, cell=%s",
             plmn_id_openapi->mcc, plmn_id_openapi->mnc, ncgi_openapi->nr_cell_id);
 
     /* Build comprehensive JSON response with all location data */
     cJSON *root = cJSON_CreateObject();
-    ogs_assert(root);
+    log_assert(root);
     
     cJSON *location_obj = cJSON_CreateObject();
     
@@ -496,16 +496,16 @@ int lmf_location_determine_ecid(
     cJSON_Delete(root);
     
     if (!json_str) {
-        ogs_error("[%s] cJSON_PrintUnformatted failed", location_request->supi);
+        log_error("[%s] cJSON_PrintUnformatted failed", location_request->supi);
         ogs_sbi_message_free(&message);
         return OGS_ERROR;
     }
     
-    ogs_info("[%s] LocationData JSON: %s", location_request->supi, json_str);
+    log_info("[%s] LocationData JSON: %s", location_request->supi, json_str);
     
     /* Build HTTP response */
     response = ogs_sbi_response_new();
-    ogs_assert(response);
+    log_assert(response);
     response->status = OGS_SBI_HTTP_STATUS_OK;
     response->http.content = json_str;
     response->http.content_length = strlen(json_str);
@@ -522,7 +522,7 @@ int lmf_location_determine_ecid(
     /* Find stream for async response */
     stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
     if (!stream) {
-        ogs_error("[%s] Stream ID=%d not found for async response",
+        log_error("[%s] Stream ID=%d not found for async response",
                 location_request->supi, location_request->stream_id);
         ogs_sbi_response_free(response);
         return OGS_ERROR;
@@ -531,13 +531,13 @@ int lmf_location_determine_ecid(
     /* Send async response */
     rv = ogs_sbi_server_send_response(stream, response);
     if (!rv) {
-        ogs_error("[%s] ogs_sbi_server_send_response() failed",
+        log_error("[%s] ogs_sbi_server_send_response() failed",
                 location_request->supi);
         ogs_sbi_response_free(response);
         return OGS_ERROR;
     }
 
-    ogs_info("[%s] Location response sent successfully",
+    log_info("[%s] Location response sent successfully",
             location_request->supi);
 
     /* Clean up location request */
@@ -570,16 +570,16 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     uint16_t mnc_len = 2;
     bool is_ncgi = false;
 
-    ogs_assert(location_request);
-    ogs_assert(location_request->input_message);
+    log_assert(location_request);
+    log_assert(location_request->input_message);
 
-    ogs_info("[%s] CELLID location determination from provided cell information",
+    log_info("[%s] CELLID location determination from provided cell information",
             location_request->supi ? location_request->supi : "Unknown");
 
     /* Extract InputData from stored message */
     input_data = location_request->input_message->InputData;
     if (!input_data) {
-        ogs_error("[%s] No InputData in stored message",
+        log_error("[%s] No InputData in stored message",
                 location_request->supi);
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
@@ -608,7 +608,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
         if (location_request->ncgi_from_amf) {
             /* Use NCGI retrieved from AMF */
             ncgi_openapi_input = location_request->ncgi_from_amf;
-            ogs_info("[%s] Using NCGI retrieved from AMF: PLMN=%s/%s, CellID=%s",
+            log_info("[%s] Using NCGI retrieved from AMF: PLMN=%s/%s, CellID=%s",
                     location_request->supi,
                     ncgi_openapi_input->plmn_id ?
                         (ncgi_openapi_input->plmn_id->mcc ? ncgi_openapi_input->plmn_id->mcc : "N/A") : "N/A",
@@ -618,7 +618,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
             /* Note: ncgi_from_amf will be freed in location_request cleanup */
         } else {
             /* No NCGI from AMF yet - should not happen, this function is called after async response */
-            ogs_error("[%s] No NCGI/ECGI provided and no NCGI from AMF available",
+            log_error("[%s] No NCGI/ECGI provided and no NCGI from AMF available",
                     location_request->supi);
             stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
             if (stream) {
@@ -639,7 +639,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     
     if (ncgi_openapi_input) {
         is_ncgi = true;
-        ogs_info("[%s] Using NCGI for CELLID positioning",
+        log_info("[%s] Using NCGI for CELLID positioning",
                 location_request->supi);
 
         /* Extract PLMN ID from NCGI */
@@ -656,12 +656,12 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
         /* Extract cell ID from NCGI (hex string without 0x prefix) */
         if (ncgi_openapi_input->nr_cell_id) {
             cell_id = strtoull(ncgi_openapi_input->nr_cell_id, NULL, 16);
-            ogs_info("[%s] NCGI cell_id=%llx (from string: %s)",
+            log_info("[%s] NCGI cell_id=%llx (from string: %s)",
                     location_request->supi,
                     (unsigned long long)cell_id,
                     ncgi_openapi_input->nr_cell_id);
         } else {
-            ogs_error("[%s] NCGI missing nr_cell_id",
+            log_error("[%s] NCGI missing nr_cell_id",
                     location_request->supi);
             stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
             if (stream) {
@@ -678,7 +678,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
         }
     } else if (ecgi_openapi_input) {
         is_ncgi = false;
-        ogs_info("[%s] Using ECGI for CELLID positioning (LTE)",
+        log_info("[%s] Using ECGI for CELLID positioning (LTE)",
                 location_request->supi);
 
         /* Extract PLMN ID from ECGI */
@@ -695,12 +695,12 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
         /* Extract cell ID from ECGI (hex string without 0x prefix) */
         if (ecgi_openapi_input->eutra_cell_id) {
             cell_id = strtoull(ecgi_openapi_input->eutra_cell_id, NULL, 16);
-            ogs_info("[%s] ECGI cell_id=%llx (from string: %s)",
+            log_info("[%s] ECGI cell_id=%llx (from string: %s)",
                     location_request->supi,
                     (unsigned long long)cell_id,
                     ecgi_openapi_input->eutra_cell_id);
         } else {
-            ogs_error("[%s] ECGI missing eutra_cell_id",
+            log_error("[%s] ECGI missing eutra_cell_id",
                     location_request->supi);
             stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
             if (stream) {
@@ -723,7 +723,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
         ogs_plmn_id_build(&ncgi.plmn_id, mcc, mnc, mnc_len);
     } else {
         /* Use default PLMN if not specified */
-        ogs_warn("[%s] PLMN not specified, using default 999/70",
+        log_warn("[%s] PLMN not specified, using default 999/70",
                 location_request->supi);
         ogs_plmn_id_build(&ncgi.plmn_id, 999, 70, 2);
     }
@@ -732,13 +732,13 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     cell_info = lmf_cell_database_find_by_ncgi(&ncgi);
     if (!cell_info) {
         /* Try fallback: lookup by cell_id only (if PLMN doesn't match) */
-        ogs_debug("[%s] Cell not found by NCGI, trying cell_id-only lookup",
+        log_debug("[%s] Cell not found by NCGI, trying cell_id-only lookup",
                 location_request->supi);
         cell_info = lmf_cell_database_find_by_cell_id(cell_id);
     }
 
     if (!cell_info) {
-        ogs_error("[%s] Cell not found in database: NCGI=%llx [PLMN:%06x,CELL:%llx]",
+        log_error("[%s] Cell not found in database: NCGI=%llx [PLMN:%06x,CELL:%llx]",
                 location_request->supi,
                 (unsigned long long)cell_id,
                 ogs_plmn_id_hexdump(&ncgi.plmn_id),
@@ -758,7 +758,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
         return OGS_ERROR;
     }
 
-    ogs_info("[%s] Cell found in database: lat=%.6f, lon=%.6f, alt=%.1f, radius=%um",
+    log_info("[%s] Cell found in database: lat=%.6f, lon=%.6f, alt=%.1f, radius=%um",
             location_request->supi,
             cell_info->latitude,
             cell_info->longitude,
@@ -776,7 +776,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
         uncertainty_radius = 50.0;
     }
 
-    ogs_info("[%s] Calculated location (CELLID): lat=%.6f, lon=%.6f, alt=%.1f, "
+    log_info("[%s] Calculated location (CELLID): lat=%.6f, lon=%.6f, alt=%.1f, "
             "uncertainty=%.0f m",
             location_request->supi,
             final_lat, final_lon, final_alt, uncertainty_radius);
@@ -786,10 +786,10 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     
     /* Create NCGI for response */
     ncgi_openapi = ogs_calloc(1, sizeof(OpenAPI_ncgi_t));
-    ogs_assert(ncgi_openapi);
+    log_assert(ncgi_openapi);
     
     plmn_id_openapi = ogs_calloc(1, sizeof(OpenAPI_plmn_id_t));
-    ogs_assert(plmn_id_openapi);
+    log_assert(plmn_id_openapi);
     
     /* Convert PLMN ID */
     plmn_id_openapi->mcc = ogs_plmn_id_mcc_string(&ncgi.plmn_id);
@@ -801,10 +801,10 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     
     /* Create geographic area */
     shape = OpenAPI_supported_gad_shapes_create();
-    ogs_assert(shape);
+    log_assert(shape);
     
     coordinates = OpenAPI_geographical_coordinates_create(final_lon, final_lat);
-    ogs_assert(coordinates);
+    log_assert(coordinates);
     
     geographic_area = OpenAPI_geographic_area_create(
         shape,                      /* shape */
@@ -820,7 +820,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
         0,                          /* offset_angle */
         0                           /* included_angle */
     );
-    ogs_assert(geographic_area);
+    log_assert(geographic_area);
     
     /* Create LocationData */
     location_data = OpenAPI_location_data_create(
@@ -846,7 +846,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
             NULL,  /* supported_features */
             NULL   /* achieved_qos */
     );
-    ogs_assert(location_data);
+    log_assert(location_data);
 
     message.h.method = (char *)OGS_SBI_HTTP_METHOD_POST;
     message.h.service.name = (char *)OGS_SBI_SERVICE_NAME_NLMF_LOC;
@@ -854,14 +854,14 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     message.h.resource.component[0] = (char *)"determine-location";
     message.LocationData = location_data;
 
-    ogs_info("[%s] LocationData prepared: lat=%.6f, lon=%.6f, uncertainty=%.0f",
+    log_info("[%s] LocationData prepared: lat=%.6f, lon=%.6f, uncertainty=%.0f",
             location_request->supi, final_lat, final_lon, uncertainty_radius);
-    ogs_info("  NCGI: plmn=%s/%s, cell=%s",
+    log_info("  NCGI: plmn=%s/%s, cell=%s",
             plmn_id_openapi->mcc, plmn_id_openapi->mnc, ncgi_openapi->nr_cell_id);
 
     /* Build JSON response */
     cJSON *root = cJSON_CreateObject();
-    ogs_assert(root);
+    log_assert(root);
     
     cJSON *location_obj = cJSON_CreateObject();
     
@@ -918,16 +918,16 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     cJSON_Delete(root);
     
     if (!json_str) {
-        ogs_error("[%s] cJSON_PrintUnformatted failed", location_request->supi);
+        log_error("[%s] cJSON_PrintUnformatted failed", location_request->supi);
         ogs_sbi_message_free(&message);
         return OGS_ERROR;
     }
     
-    ogs_info("[%s] LocationData JSON: %s", location_request->supi, json_str);
+    log_info("[%s] LocationData JSON: %s", location_request->supi, json_str);
     
     /* Build HTTP response */
     response = ogs_sbi_response_new();
-    ogs_assert(response);
+    log_assert(response);
     response->status = OGS_SBI_HTTP_STATUS_OK;
     response->http.content = json_str;
     response->http.content_length = strlen(json_str);
@@ -944,7 +944,7 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     /* Find stream for async response */
     stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
     if (!stream) {
-        ogs_error("[%s] Stream ID=%d not found for async response",
+        log_error("[%s] Stream ID=%d not found for async response",
                 location_request->supi, location_request->stream_id);
         ogs_sbi_response_free(response);
         return OGS_ERROR;
@@ -953,13 +953,13 @@ int lmf_location_determine_cellid(lmf_location_request_t *location_request)
     /* Send async response */
     rv = ogs_sbi_server_send_response(stream, response);
     if (!rv) {
-        ogs_error("[%s] ogs_sbi_server_send_response() failed",
+        log_error("[%s] ogs_sbi_server_send_response() failed",
                 location_request->supi);
         ogs_sbi_response_free(response);
         return OGS_ERROR;
     }
 
-    ogs_info("[%s] Location response sent successfully (CELLID)",
+    log_info("[%s] Location response sent successfully (CELLID)",
             location_request->supi);
 
     /* Clean up location request */

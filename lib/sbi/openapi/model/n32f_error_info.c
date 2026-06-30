@@ -13,7 +13,7 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_create(
 )
 {
     OpenAPI_n32f_error_info_t *n32f_error_info_local_var = ogs_malloc(sizeof(OpenAPI_n32f_error_info_t));
-    ogs_assert(n32f_error_info_local_var);
+    log_assert(n32f_error_info_local_var);
 
     n32f_error_info_local_var->n32f_message_id = n32f_message_id;
     n32f_error_info_local_var->n32f_error_type = n32f_error_type;
@@ -62,32 +62,32 @@ cJSON *OpenAPI_n32f_error_info_convertToJSON(OpenAPI_n32f_error_info_t *n32f_err
     OpenAPI_lnode_t *node = NULL;
 
     if (n32f_error_info == NULL) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [N32fErrorInfo]");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed [N32fErrorInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!n32f_error_info->n32f_message_id) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_message_id]");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_message_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "n32fMessageId", n32f_error_info->n32f_message_id) == NULL) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_message_id]");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_message_id]");
         goto end;
     }
 
     if (n32f_error_info->n32f_error_type == OpenAPI_n32f_error_type_NULL) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_error_type]");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_error_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "n32fErrorType", OpenAPI_n32f_error_type_ToString(n32f_error_info->n32f_error_type)) == NULL) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_error_type]");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_error_type]");
         goto end;
     }
 
     if (n32f_error_info->n32f_context_id) {
     if (cJSON_AddStringToObject(item, "n32fContextId", n32f_error_info->n32f_context_id) == NULL) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed [n32f_context_id]");
         goto end;
     }
     }
@@ -95,13 +95,13 @@ cJSON *OpenAPI_n32f_error_info_convertToJSON(OpenAPI_n32f_error_info_t *n32f_err
     if (n32f_error_info->failed_modification_list) {
     cJSON *failed_modification_listList = cJSON_AddArrayToObject(item, "failedModificationList");
     if (failed_modification_listList == NULL) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [failed_modification_list]");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed [failed_modification_list]");
         goto end;
     }
     OpenAPI_list_for_each(n32f_error_info->failed_modification_list, node) {
         cJSON *itemLocal = OpenAPI_failed_modification_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [failed_modification_list]");
+            log_error("OpenAPI_n32f_error_info_convertToJSON() failed [failed_modification_list]");
             goto end;
         }
         cJSON_AddItemToArray(failed_modification_listList, itemLocal);
@@ -111,13 +111,13 @@ cJSON *OpenAPI_n32f_error_info_convertToJSON(OpenAPI_n32f_error_info_t *n32f_err
     if (n32f_error_info->error_details_list) {
     cJSON *error_details_listList = cJSON_AddArrayToObject(item, "errorDetailsList");
     if (error_details_listList == NULL) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [error_details_list]");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed [error_details_list]");
         goto end;
     }
     OpenAPI_list_for_each(n32f_error_info->error_details_list, node) {
         cJSON *itemLocal = OpenAPI_n32f_error_detail_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed [error_details_list]");
+            log_error("OpenAPI_n32f_error_info_convertToJSON() failed [error_details_list]");
             goto end;
         }
         cJSON_AddItemToArray(error_details_listList, itemLocal);
@@ -142,21 +142,21 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_parseFromJSON(cJSON *n32f_err
     OpenAPI_list_t *error_details_listList = NULL;
     n32f_message_id = cJSON_GetObjectItemCaseSensitive(n32f_error_infoJSON, "n32fMessageId");
     if (!n32f_message_id) {
-        ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_message_id]");
+        log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_message_id]");
         goto end;
     }
     if (!cJSON_IsString(n32f_message_id)) {
-        ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_message_id]");
+        log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_message_id]");
         goto end;
     }
 
     n32f_error_type = cJSON_GetObjectItemCaseSensitive(n32f_error_infoJSON, "n32fErrorType");
     if (!n32f_error_type) {
-        ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_error_type]");
+        log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_error_type]");
         goto end;
     }
     if (!cJSON_IsString(n32f_error_type)) {
-        ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_error_type]");
+        log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_error_type]");
         goto end;
     }
     n32f_error_typeVariable = OpenAPI_n32f_error_type_FromString(n32f_error_type->valuestring);
@@ -164,7 +164,7 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_parseFromJSON(cJSON *n32f_err
     n32f_context_id = cJSON_GetObjectItemCaseSensitive(n32f_error_infoJSON, "n32fContextId");
     if (n32f_context_id) {
     if (!cJSON_IsString(n32f_context_id) && !cJSON_IsNull(n32f_context_id)) {
-        ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_context_id]");
+        log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [n32f_context_id]");
         goto end;
     }
     }
@@ -173,7 +173,7 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_parseFromJSON(cJSON *n32f_err
     if (failed_modification_list) {
         cJSON *failed_modification_list_local = NULL;
         if (!cJSON_IsArray(failed_modification_list)) {
-            ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [failed_modification_list]");
+            log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [failed_modification_list]");
             goto end;
         }
 
@@ -181,12 +181,12 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_parseFromJSON(cJSON *n32f_err
 
         cJSON_ArrayForEach(failed_modification_list_local, failed_modification_list) {
             if (!cJSON_IsObject(failed_modification_list_local)) {
-                ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [failed_modification_list]");
+                log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [failed_modification_list]");
                 goto end;
             }
             OpenAPI_failed_modification_info_t *failed_modification_listItem = OpenAPI_failed_modification_info_parseFromJSON(failed_modification_list_local);
             if (!failed_modification_listItem) {
-                ogs_error("No failed_modification_listItem");
+                log_error("No failed_modification_listItem");
                 goto end;
             }
             OpenAPI_list_add(failed_modification_listList, failed_modification_listItem);
@@ -197,7 +197,7 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_parseFromJSON(cJSON *n32f_err
     if (error_details_list) {
         cJSON *error_details_list_local = NULL;
         if (!cJSON_IsArray(error_details_list)) {
-            ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [error_details_list]");
+            log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [error_details_list]");
             goto end;
         }
 
@@ -205,12 +205,12 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_parseFromJSON(cJSON *n32f_err
 
         cJSON_ArrayForEach(error_details_list_local, error_details_list) {
             if (!cJSON_IsObject(error_details_list_local)) {
-                ogs_error("OpenAPI_n32f_error_info_parseFromJSON() failed [error_details_list]");
+                log_error("OpenAPI_n32f_error_info_parseFromJSON() failed [error_details_list]");
                 goto end;
             }
             OpenAPI_n32f_error_detail_t *error_details_listItem = OpenAPI_n32f_error_detail_parseFromJSON(error_details_list_local);
             if (!error_details_listItem) {
-                ogs_error("No error_details_listItem");
+                log_error("No error_details_listItem");
                 goto end;
             }
             OpenAPI_list_add(error_details_listList, error_details_listItem);
@@ -249,10 +249,10 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_copy(OpenAPI_n32f_error_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_n32f_error_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_n32f_error_info_convertToJSON() failed");
+        log_error("OpenAPI_n32f_error_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -260,14 +260,14 @@ OpenAPI_n32f_error_info_t *OpenAPI_n32f_error_info_copy(OpenAPI_n32f_error_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

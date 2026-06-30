@@ -8,7 +8,7 @@ OpenAPI_association_type_t *OpenAPI_association_type_create(
 )
 {
     OpenAPI_association_type_t *association_type_local_var = ogs_malloc(sizeof(OpenAPI_association_type_t));
-    ogs_assert(association_type_local_var);
+    log_assert(association_type_local_var);
 
 
     return association_type_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_association_type_convertToJSON(OpenAPI_association_type_t *associ
     OpenAPI_lnode_t *node = NULL;
 
     if (association_type == NULL) {
-        ogs_error("OpenAPI_association_type_convertToJSON() failed [AssociationType]");
+        log_error("OpenAPI_association_type_convertToJSON() failed [AssociationType]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_association_type_t *OpenAPI_association_type_copy(OpenAPI_association_ty
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_association_type_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_association_type_convertToJSON() failed");
+        log_error("OpenAPI_association_type_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_association_type_t *OpenAPI_association_type_copy(OpenAPI_association_ty
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

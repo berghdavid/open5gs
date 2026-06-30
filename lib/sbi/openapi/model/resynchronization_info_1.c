@@ -10,7 +10,7 @@ OpenAPI_resynchronization_info_1_t *OpenAPI_resynchronization_info_1_create(
 )
 {
     OpenAPI_resynchronization_info_1_t *resynchronization_info_1_local_var = ogs_malloc(sizeof(OpenAPI_resynchronization_info_1_t));
-    ogs_assert(resynchronization_info_1_local_var);
+    log_assert(resynchronization_info_1_local_var);
 
     resynchronization_info_1_local_var->rand = rand;
     resynchronization_info_1_local_var->auts = auts;
@@ -42,26 +42,26 @@ cJSON *OpenAPI_resynchronization_info_1_convertToJSON(OpenAPI_resynchronization_
     OpenAPI_lnode_t *node = NULL;
 
     if (resynchronization_info_1 == NULL) {
-        ogs_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [ResynchronizationInfo_1]");
+        log_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [ResynchronizationInfo_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!resynchronization_info_1->rand) {
-        ogs_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [rand]");
+        log_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [rand]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "rand", resynchronization_info_1->rand) == NULL) {
-        ogs_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [rand]");
+        log_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [rand]");
         goto end;
     }
 
     if (!resynchronization_info_1->auts) {
-        ogs_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [auts]");
+        log_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [auts]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "auts", resynchronization_info_1->auts) == NULL) {
-        ogs_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [auts]");
+        log_error("OpenAPI_resynchronization_info_1_convertToJSON() failed [auts]");
         goto end;
     }
 
@@ -77,21 +77,21 @@ OpenAPI_resynchronization_info_1_t *OpenAPI_resynchronization_info_1_parseFromJS
     cJSON *auts = NULL;
     rand = cJSON_GetObjectItemCaseSensitive(resynchronization_info_1JSON, "rand");
     if (!rand) {
-        ogs_error("OpenAPI_resynchronization_info_1_parseFromJSON() failed [rand]");
+        log_error("OpenAPI_resynchronization_info_1_parseFromJSON() failed [rand]");
         goto end;
     }
     if (!cJSON_IsString(rand)) {
-        ogs_error("OpenAPI_resynchronization_info_1_parseFromJSON() failed [rand]");
+        log_error("OpenAPI_resynchronization_info_1_parseFromJSON() failed [rand]");
         goto end;
     }
 
     auts = cJSON_GetObjectItemCaseSensitive(resynchronization_info_1JSON, "auts");
     if (!auts) {
-        ogs_error("OpenAPI_resynchronization_info_1_parseFromJSON() failed [auts]");
+        log_error("OpenAPI_resynchronization_info_1_parseFromJSON() failed [auts]");
         goto end;
     }
     if (!cJSON_IsString(auts)) {
-        ogs_error("OpenAPI_resynchronization_info_1_parseFromJSON() failed [auts]");
+        log_error("OpenAPI_resynchronization_info_1_parseFromJSON() failed [auts]");
         goto end;
     }
 
@@ -110,10 +110,10 @@ OpenAPI_resynchronization_info_1_t *OpenAPI_resynchronization_info_1_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_resynchronization_info_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_resynchronization_info_1_convertToJSON() failed");
+        log_error("OpenAPI_resynchronization_info_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_resynchronization_info_1_t *OpenAPI_resynchronization_info_1_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

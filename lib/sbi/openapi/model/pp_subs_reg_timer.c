@@ -13,7 +13,7 @@ OpenAPI_pp_subs_reg_timer_t *OpenAPI_pp_subs_reg_timer_create(
 )
 {
     OpenAPI_pp_subs_reg_timer_t *pp_subs_reg_timer_local_var = ogs_malloc(sizeof(OpenAPI_pp_subs_reg_timer_t));
-    ogs_assert(pp_subs_reg_timer_local_var);
+    log_assert(pp_subs_reg_timer_local_var);
 
     pp_subs_reg_timer_local_var->subs_reg_timer = subs_reg_timer;
     pp_subs_reg_timer_local_var->af_instance_id = af_instance_id;
@@ -52,40 +52,40 @@ cJSON *OpenAPI_pp_subs_reg_timer_convertToJSON(OpenAPI_pp_subs_reg_timer_t *pp_s
     OpenAPI_lnode_t *node = NULL;
 
     if (pp_subs_reg_timer == NULL) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [PpSubsRegTimer]");
+        log_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [PpSubsRegTimer]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "subsRegTimer", pp_subs_reg_timer->subs_reg_timer) == NULL) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [subs_reg_timer]");
+        log_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [subs_reg_timer]");
         goto end;
     }
 
     if (!pp_subs_reg_timer->af_instance_id) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [af_instance_id]");
+        log_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [af_instance_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "afInstanceId", pp_subs_reg_timer->af_instance_id) == NULL) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [af_instance_id]");
+        log_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [af_instance_id]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "referenceId", pp_subs_reg_timer->reference_id) == NULL) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [reference_id]");
+        log_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [reference_id]");
         goto end;
     }
 
     if (pp_subs_reg_timer->validity_time) {
     if (cJSON_AddStringToObject(item, "validityTime", pp_subs_reg_timer->validity_time) == NULL) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [validity_time]");
+        log_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [validity_time]");
         goto end;
     }
     }
 
     if (pp_subs_reg_timer->mtc_provider_information) {
     if (cJSON_AddStringToObject(item, "mtcProviderInformation", pp_subs_reg_timer->mtc_provider_information) == NULL) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -105,38 +105,38 @@ OpenAPI_pp_subs_reg_timer_t *OpenAPI_pp_subs_reg_timer_parseFromJSON(cJSON *pp_s
     cJSON *mtc_provider_information = NULL;
     subs_reg_timer = cJSON_GetObjectItemCaseSensitive(pp_subs_reg_timerJSON, "subsRegTimer");
     if (!subs_reg_timer) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [subs_reg_timer]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [subs_reg_timer]");
         goto end;
     }
     if (!cJSON_IsNumber(subs_reg_timer)) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [subs_reg_timer]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [subs_reg_timer]");
         goto end;
     }
 
     af_instance_id = cJSON_GetObjectItemCaseSensitive(pp_subs_reg_timerJSON, "afInstanceId");
     if (!af_instance_id) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [af_instance_id]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [af_instance_id]");
         goto end;
     }
     if (!cJSON_IsString(af_instance_id)) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [af_instance_id]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [af_instance_id]");
         goto end;
     }
 
     reference_id = cJSON_GetObjectItemCaseSensitive(pp_subs_reg_timerJSON, "referenceId");
     if (!reference_id) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [reference_id]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [reference_id]");
         goto end;
     }
     if (!cJSON_IsNumber(reference_id)) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [reference_id]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [reference_id]");
         goto end;
     }
 
     validity_time = cJSON_GetObjectItemCaseSensitive(pp_subs_reg_timerJSON, "validityTime");
     if (validity_time) {
     if (!cJSON_IsString(validity_time) && !cJSON_IsNull(validity_time)) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [validity_time]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [validity_time]");
         goto end;
     }
     }
@@ -144,7 +144,7 @@ OpenAPI_pp_subs_reg_timer_t *OpenAPI_pp_subs_reg_timer_parseFromJSON(cJSON *pp_s
     mtc_provider_information = cJSON_GetObjectItemCaseSensitive(pp_subs_reg_timerJSON, "mtcProviderInformation");
     if (mtc_provider_information) {
     if (!cJSON_IsString(mtc_provider_information) && !cJSON_IsNull(mtc_provider_information)) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_pp_subs_reg_timer_parseFromJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -169,10 +169,10 @@ OpenAPI_pp_subs_reg_timer_t *OpenAPI_pp_subs_reg_timer_copy(OpenAPI_pp_subs_reg_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pp_subs_reg_timer_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed");
+        log_error("OpenAPI_pp_subs_reg_timer_convertToJSON() failed");
         return NULL;
     }
 
@@ -180,14 +180,14 @@ OpenAPI_pp_subs_reg_timer_t *OpenAPI_pp_subs_reg_timer_copy(OpenAPI_pp_subs_reg_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

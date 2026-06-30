@@ -11,7 +11,7 @@ OpenAPI_app_session_context_resp_data_t *OpenAPI_app_session_context_resp_data_c
 )
 {
     OpenAPI_app_session_context_resp_data_t *app_session_context_resp_data_local_var = ogs_malloc(sizeof(OpenAPI_app_session_context_resp_data_t));
-    ogs_assert(app_session_context_resp_data_local_var);
+    log_assert(app_session_context_resp_data_local_var);
 
     app_session_context_resp_data_local_var->serv_auth_info = serv_auth_info;
     app_session_context_resp_data_local_var->ue_ids = ue_ids;
@@ -47,14 +47,14 @@ cJSON *OpenAPI_app_session_context_resp_data_convertToJSON(OpenAPI_app_session_c
     OpenAPI_lnode_t *node = NULL;
 
     if (app_session_context_resp_data == NULL) {
-        ogs_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [AppSessionContextRespData]");
+        log_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [AppSessionContextRespData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (app_session_context_resp_data->serv_auth_info != OpenAPI_serv_auth_info_NULL) {
     if (cJSON_AddStringToObject(item, "servAuthInfo", OpenAPI_serv_auth_info_ToString(app_session_context_resp_data->serv_auth_info)) == NULL) {
-        ogs_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [serv_auth_info]");
+        log_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [serv_auth_info]");
         goto end;
     }
     }
@@ -62,13 +62,13 @@ cJSON *OpenAPI_app_session_context_resp_data_convertToJSON(OpenAPI_app_session_c
     if (app_session_context_resp_data->ue_ids) {
     cJSON *ue_idsList = cJSON_AddArrayToObject(item, "ueIds");
     if (ue_idsList == NULL) {
-        ogs_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [ue_ids]");
+        log_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [ue_ids]");
         goto end;
     }
     OpenAPI_list_for_each(app_session_context_resp_data->ue_ids, node) {
         cJSON *itemLocal = OpenAPI_ue_identity_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [ue_ids]");
+            log_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [ue_ids]");
             goto end;
         }
         cJSON_AddItemToArray(ue_idsList, itemLocal);
@@ -77,7 +77,7 @@ cJSON *OpenAPI_app_session_context_resp_data_convertToJSON(OpenAPI_app_session_c
 
     if (app_session_context_resp_data->supp_feat) {
     if (cJSON_AddStringToObject(item, "suppFeat", app_session_context_resp_data->supp_feat) == NULL) {
-        ogs_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [supp_feat]");
+        log_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed [supp_feat]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_app_session_context_resp_data_t *OpenAPI_app_session_context_resp_data_p
     serv_auth_info = cJSON_GetObjectItemCaseSensitive(app_session_context_resp_dataJSON, "servAuthInfo");
     if (serv_auth_info) {
     if (!cJSON_IsString(serv_auth_info)) {
-        ogs_error("OpenAPI_app_session_context_resp_data_parseFromJSON() failed [serv_auth_info]");
+        log_error("OpenAPI_app_session_context_resp_data_parseFromJSON() failed [serv_auth_info]");
         goto end;
     }
     serv_auth_infoVariable = OpenAPI_serv_auth_info_FromString(serv_auth_info->valuestring);
@@ -108,7 +108,7 @@ OpenAPI_app_session_context_resp_data_t *OpenAPI_app_session_context_resp_data_p
     if (ue_ids) {
         cJSON *ue_ids_local = NULL;
         if (!cJSON_IsArray(ue_ids)) {
-            ogs_error("OpenAPI_app_session_context_resp_data_parseFromJSON() failed [ue_ids]");
+            log_error("OpenAPI_app_session_context_resp_data_parseFromJSON() failed [ue_ids]");
             goto end;
         }
 
@@ -116,12 +116,12 @@ OpenAPI_app_session_context_resp_data_t *OpenAPI_app_session_context_resp_data_p
 
         cJSON_ArrayForEach(ue_ids_local, ue_ids) {
             if (!cJSON_IsObject(ue_ids_local)) {
-                ogs_error("OpenAPI_app_session_context_resp_data_parseFromJSON() failed [ue_ids]");
+                log_error("OpenAPI_app_session_context_resp_data_parseFromJSON() failed [ue_ids]");
                 goto end;
             }
             OpenAPI_ue_identity_info_t *ue_idsItem = OpenAPI_ue_identity_info_parseFromJSON(ue_ids_local);
             if (!ue_idsItem) {
-                ogs_error("No ue_idsItem");
+                log_error("No ue_idsItem");
                 goto end;
             }
             OpenAPI_list_add(ue_idsList, ue_idsItem);
@@ -131,7 +131,7 @@ OpenAPI_app_session_context_resp_data_t *OpenAPI_app_session_context_resp_data_p
     supp_feat = cJSON_GetObjectItemCaseSensitive(app_session_context_resp_dataJSON, "suppFeat");
     if (supp_feat) {
     if (!cJSON_IsString(supp_feat) && !cJSON_IsNull(supp_feat)) {
-        ogs_error("OpenAPI_app_session_context_resp_data_parseFromJSON() failed [supp_feat]");
+        log_error("OpenAPI_app_session_context_resp_data_parseFromJSON() failed [supp_feat]");
         goto end;
     }
     }
@@ -159,10 +159,10 @@ OpenAPI_app_session_context_resp_data_t *OpenAPI_app_session_context_resp_data_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_app_session_context_resp_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed");
+        log_error("OpenAPI_app_session_context_resp_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -170,14 +170,14 @@ OpenAPI_app_session_context_resp_data_t *OpenAPI_app_session_context_resp_data_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

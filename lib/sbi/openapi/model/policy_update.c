@@ -29,7 +29,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_create(
 )
 {
     OpenAPI_policy_update_t *policy_update_local_var = ogs_malloc(sizeof(OpenAPI_policy_update_t));
-    ogs_assert(policy_update_local_var);
+    log_assert(policy_update_local_var);
 
     policy_update_local_var->resource_uri = resource_uri;
     policy_update_local_var->is_triggers_null = is_triggers_null;
@@ -128,35 +128,35 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     OpenAPI_lnode_t *node = NULL;
 
     if (policy_update == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [PolicyUpdate]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [PolicyUpdate]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!policy_update->resource_uri) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [resource_uri]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [resource_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "resourceUri", policy_update->resource_uri) == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [resource_uri]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [resource_uri]");
         goto end;
     }
 
     if (policy_update->triggers != OpenAPI_request_trigger_NULL) {
     cJSON *triggersList = cJSON_AddArrayToObject(item, "triggers");
     if (triggersList == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [triggers]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [triggers]");
         goto end;
     }
     OpenAPI_list_for_each(policy_update->triggers, node) {
         if (cJSON_AddStringToObject(triggersList, "", OpenAPI_request_trigger_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [triggers]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [triggers]");
             goto end;
         }
     }
     } else if (policy_update->is_triggers_null) {
         if (cJSON_AddNullToObject(item, "triggers") == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [triggers]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [triggers]");
             goto end;
         }
     }
@@ -164,12 +164,12 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->serv_area_res) {
     cJSON *serv_area_res_local_JSON = OpenAPI_service_area_restriction_convertToJSON(policy_update->serv_area_res);
     if (serv_area_res_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [serv_area_res]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [serv_area_res]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servAreaRes", serv_area_res_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [serv_area_res]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [serv_area_res]");
         goto end;
     }
     }
@@ -177,26 +177,26 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->wl_serv_area_res) {
     cJSON *wl_serv_area_res_local_JSON = OpenAPI_wireline_service_area_restriction_convertToJSON(policy_update->wl_serv_area_res);
     if (wl_serv_area_res_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [wl_serv_area_res]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [wl_serv_area_res]");
         goto end;
     }
     cJSON_AddItemToObject(item, "wlServAreaRes", wl_serv_area_res_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [wl_serv_area_res]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [wl_serv_area_res]");
         goto end;
     }
     }
 
     if (policy_update->is_rfsp) {
     if (cJSON_AddNumberToObject(item, "rfsp", policy_update->rfsp) == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [rfsp]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [rfsp]");
         goto end;
     }
     }
 
     if (policy_update->is_target_rfsp) {
     if (cJSON_AddNumberToObject(item, "targetRfsp", policy_update->target_rfsp) == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [target_rfsp]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [target_rfsp]");
         goto end;
     }
     }
@@ -204,17 +204,17 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->smf_sel_info) {
     cJSON *smf_sel_info_local_JSON = OpenAPI_smf_selection_data_convertToJSON(policy_update->smf_sel_info);
     if (smf_sel_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [smf_sel_info]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [smf_sel_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "smfSelInfo", smf_sel_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [smf_sel_info]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [smf_sel_info]");
         goto end;
     }
     } else if (policy_update->is_smf_sel_info_null) {
         if (cJSON_AddNullToObject(item, "smfSelInfo") == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [smf_sel_info]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [smf_sel_info]");
             goto end;
         }
     }
@@ -222,12 +222,12 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->ue_ambr) {
     cJSON *ue_ambr_local_JSON = OpenAPI_ambr_convertToJSON(policy_update->ue_ambr);
     if (ue_ambr_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [ue_ambr]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [ue_ambr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueAmbr", ue_ambr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [ue_ambr]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [ue_ambr]");
         goto end;
     }
     }
@@ -235,13 +235,13 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->ue_slice_mbrs) {
     cJSON *ue_slice_mbrsList = cJSON_AddArrayToObject(item, "ueSliceMbrs");
     if (ue_slice_mbrsList == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [ue_slice_mbrs]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [ue_slice_mbrs]");
         goto end;
     }
     OpenAPI_list_for_each(policy_update->ue_slice_mbrs, node) {
         cJSON *itemLocal = OpenAPI_ue_slice_mbr_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [ue_slice_mbrs]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [ue_slice_mbrs]");
             goto end;
         }
         cJSON_AddItemToArray(ue_slice_mbrsList, itemLocal);
@@ -251,7 +251,7 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->pras) {
     cJSON *pras = cJSON_AddObjectToObject(item, "pras");
     if (pras == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [pras]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [pras]");
         goto end;
     }
     cJSON *localMapObject = pras;
@@ -259,18 +259,18 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
         OpenAPI_list_for_each(policy_update->pras, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_policy_update_convertToJSON() failed [pras]");
+                log_error("OpenAPI_policy_update_convertToJSON() failed [pras]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_policy_update_convertToJSON() failed [pras]");
+                log_error("OpenAPI_policy_update_convertToJSON() failed [pras]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_presence_info_rm_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_policy_update_convertToJSON() failed [inner]");
+                log_error("OpenAPI_policy_update_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -278,7 +278,7 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     }
     } else if (policy_update->is_pras_null) {
         if (cJSON_AddNullToObject(item, "pras") == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [pras]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [pras]");
             goto end;
         }
     }
@@ -286,17 +286,17 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->pcf_ue_info) {
     cJSON *pcf_ue_info_local_JSON = OpenAPI_pcf_ue_callback_info_convertToJSON(policy_update->pcf_ue_info);
     if (pcf_ue_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [pcf_ue_info]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [pcf_ue_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "pcfUeInfo", pcf_ue_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [pcf_ue_info]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [pcf_ue_info]");
         goto end;
     }
     } else if (policy_update->is_pcf_ue_info_null) {
         if (cJSON_AddNullToObject(item, "pcfUeInfo") == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [pcf_ue_info]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [pcf_ue_info]");
             goto end;
         }
     }
@@ -304,20 +304,20 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->match_pdus) {
     cJSON *match_pdusList = cJSON_AddArrayToObject(item, "matchPdus");
     if (match_pdusList == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [match_pdus]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [match_pdus]");
         goto end;
     }
     OpenAPI_list_for_each(policy_update->match_pdus, node) {
         cJSON *itemLocal = OpenAPI_pdu_session_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [match_pdus]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [match_pdus]");
             goto end;
         }
         cJSON_AddItemToArray(match_pdusList, itemLocal);
     }
     } else if (policy_update->is_match_pdus_null) {
         if (cJSON_AddNullToObject(item, "matchPdus") == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [match_pdus]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [match_pdus]");
             goto end;
         }
     }
@@ -325,17 +325,17 @@ cJSON *OpenAPI_policy_update_convertToJSON(OpenAPI_policy_update_t *policy_updat
     if (policy_update->as_time_dis_param) {
     cJSON *as_time_dis_param_local_JSON = OpenAPI_as_time_distribution_param_convertToJSON(policy_update->as_time_dis_param);
     if (as_time_dis_param_local_JSON == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [as_time_dis_param]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [as_time_dis_param]");
         goto end;
     }
     cJSON_AddItemToObject(item, "asTimeDisParam", as_time_dis_param_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed [as_time_dis_param]");
+        log_error("OpenAPI_policy_update_convertToJSON() failed [as_time_dis_param]");
         goto end;
     }
     } else if (policy_update->is_as_time_dis_param_null) {
         if (cJSON_AddNullToObject(item, "asTimeDisParam") == NULL) {
-            ogs_error("OpenAPI_policy_update_convertToJSON() failed [as_time_dis_param]");
+            log_error("OpenAPI_policy_update_convertToJSON() failed [as_time_dis_param]");
             goto end;
         }
     }
@@ -373,11 +373,11 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     OpenAPI_as_time_distribution_param_t *as_time_dis_param_local_nonprim = NULL;
     resource_uri = cJSON_GetObjectItemCaseSensitive(policy_updateJSON, "resourceUri");
     if (!resource_uri) {
-        ogs_error("OpenAPI_policy_update_parseFromJSON() failed [resource_uri]");
+        log_error("OpenAPI_policy_update_parseFromJSON() failed [resource_uri]");
         goto end;
     }
     if (!cJSON_IsString(resource_uri)) {
-        ogs_error("OpenAPI_policy_update_parseFromJSON() failed [resource_uri]");
+        log_error("OpenAPI_policy_update_parseFromJSON() failed [resource_uri]");
         goto end;
     }
 
@@ -386,7 +386,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (!cJSON_IsNull(triggers)) {
         cJSON *triggers_local = NULL;
         if (!cJSON_IsArray(triggers)) {
-            ogs_error("OpenAPI_policy_update_parseFromJSON() failed [triggers]");
+            log_error("OpenAPI_policy_update_parseFromJSON() failed [triggers]");
             goto end;
         }
 
@@ -395,19 +395,19 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
         cJSON_ArrayForEach(triggers_local, triggers) {
             OpenAPI_request_trigger_e localEnum = OpenAPI_request_trigger_NULL;
             if (!cJSON_IsString(triggers_local)) {
-                ogs_error("OpenAPI_policy_update_parseFromJSON() failed [triggers]");
+                log_error("OpenAPI_policy_update_parseFromJSON() failed [triggers]");
                 goto end;
             }
             localEnum = OpenAPI_request_trigger_FromString(triggers_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"triggers\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"triggers\" is not supported. Ignoring it ...",
                          triggers_local->valuestring);
             } else {
                 OpenAPI_list_add(triggersList, (void *)localEnum);
             }
         }
         if (triggersList->count == 0) {
-            ogs_error("OpenAPI_policy_update_parseFromJSON() failed: Expected triggersList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_policy_update_parseFromJSON() failed: Expected triggersList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -417,7 +417,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (serv_area_res) {
     serv_area_res_local_nonprim = OpenAPI_service_area_restriction_parseFromJSON(serv_area_res);
     if (!serv_area_res_local_nonprim) {
-        ogs_error("OpenAPI_service_area_restriction_parseFromJSON failed [serv_area_res]");
+        log_error("OpenAPI_service_area_restriction_parseFromJSON failed [serv_area_res]");
         goto end;
     }
     }
@@ -426,7 +426,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (wl_serv_area_res) {
     wl_serv_area_res_local_nonprim = OpenAPI_wireline_service_area_restriction_parseFromJSON(wl_serv_area_res);
     if (!wl_serv_area_res_local_nonprim) {
-        ogs_error("OpenAPI_wireline_service_area_restriction_parseFromJSON failed [wl_serv_area_res]");
+        log_error("OpenAPI_wireline_service_area_restriction_parseFromJSON failed [wl_serv_area_res]");
         goto end;
     }
     }
@@ -434,7 +434,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     rfsp = cJSON_GetObjectItemCaseSensitive(policy_updateJSON, "rfsp");
     if (rfsp) {
     if (!cJSON_IsNumber(rfsp)) {
-        ogs_error("OpenAPI_policy_update_parseFromJSON() failed [rfsp]");
+        log_error("OpenAPI_policy_update_parseFromJSON() failed [rfsp]");
         goto end;
     }
     }
@@ -442,7 +442,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     target_rfsp = cJSON_GetObjectItemCaseSensitive(policy_updateJSON, "targetRfsp");
     if (target_rfsp) {
     if (!cJSON_IsNumber(target_rfsp)) {
-        ogs_error("OpenAPI_policy_update_parseFromJSON() failed [target_rfsp]");
+        log_error("OpenAPI_policy_update_parseFromJSON() failed [target_rfsp]");
         goto end;
     }
     }
@@ -452,7 +452,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (!cJSON_IsNull(smf_sel_info)) {
     smf_sel_info_local_nonprim = OpenAPI_smf_selection_data_parseFromJSON(smf_sel_info);
     if (!smf_sel_info_local_nonprim) {
-        ogs_error("OpenAPI_smf_selection_data_parseFromJSON failed [smf_sel_info]");
+        log_error("OpenAPI_smf_selection_data_parseFromJSON failed [smf_sel_info]");
         goto end;
     }
     }
@@ -462,7 +462,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (ue_ambr) {
     ue_ambr_local_nonprim = OpenAPI_ambr_parseFromJSON(ue_ambr);
     if (!ue_ambr_local_nonprim) {
-        ogs_error("OpenAPI_ambr_parseFromJSON failed [ue_ambr]");
+        log_error("OpenAPI_ambr_parseFromJSON failed [ue_ambr]");
         goto end;
     }
     }
@@ -471,7 +471,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (ue_slice_mbrs) {
         cJSON *ue_slice_mbrs_local = NULL;
         if (!cJSON_IsArray(ue_slice_mbrs)) {
-            ogs_error("OpenAPI_policy_update_parseFromJSON() failed [ue_slice_mbrs]");
+            log_error("OpenAPI_policy_update_parseFromJSON() failed [ue_slice_mbrs]");
             goto end;
         }
 
@@ -479,12 +479,12 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
 
         cJSON_ArrayForEach(ue_slice_mbrs_local, ue_slice_mbrs) {
             if (!cJSON_IsObject(ue_slice_mbrs_local)) {
-                ogs_error("OpenAPI_policy_update_parseFromJSON() failed [ue_slice_mbrs]");
+                log_error("OpenAPI_policy_update_parseFromJSON() failed [ue_slice_mbrs]");
                 goto end;
             }
             OpenAPI_ue_slice_mbr_t *ue_slice_mbrsItem = OpenAPI_ue_slice_mbr_parseFromJSON(ue_slice_mbrs_local);
             if (!ue_slice_mbrsItem) {
-                ogs_error("No ue_slice_mbrsItem");
+                log_error("No ue_slice_mbrsItem");
                 goto end;
             }
             OpenAPI_list_add(ue_slice_mbrsList, ue_slice_mbrsItem);
@@ -496,7 +496,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (!cJSON_IsNull(pras)) {
         cJSON *pras_local_map = NULL;
         if (!cJSON_IsObject(pras) && !cJSON_IsNull(pras)) {
-            ogs_error("OpenAPI_policy_update_parseFromJSON() failed [pras]");
+            log_error("OpenAPI_policy_update_parseFromJSON() failed [pras]");
             goto end;
         }
         if (cJSON_IsObject(pras)) {
@@ -510,7 +510,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_policy_update_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_policy_update_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(prasList, localMapKeyPair);
@@ -524,7 +524,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (!cJSON_IsNull(pcf_ue_info)) {
     pcf_ue_info_local_nonprim = OpenAPI_pcf_ue_callback_info_parseFromJSON(pcf_ue_info);
     if (!pcf_ue_info_local_nonprim) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_parseFromJSON failed [pcf_ue_info]");
+        log_error("OpenAPI_pcf_ue_callback_info_parseFromJSON failed [pcf_ue_info]");
         goto end;
     }
     }
@@ -535,7 +535,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (!cJSON_IsNull(match_pdus)) {
         cJSON *match_pdus_local = NULL;
         if (!cJSON_IsArray(match_pdus)) {
-            ogs_error("OpenAPI_policy_update_parseFromJSON() failed [match_pdus]");
+            log_error("OpenAPI_policy_update_parseFromJSON() failed [match_pdus]");
             goto end;
         }
 
@@ -543,12 +543,12 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
 
         cJSON_ArrayForEach(match_pdus_local, match_pdus) {
             if (!cJSON_IsObject(match_pdus_local)) {
-                ogs_error("OpenAPI_policy_update_parseFromJSON() failed [match_pdus]");
+                log_error("OpenAPI_policy_update_parseFromJSON() failed [match_pdus]");
                 goto end;
             }
             OpenAPI_pdu_session_info_t *match_pdusItem = OpenAPI_pdu_session_info_parseFromJSON(match_pdus_local);
             if (!match_pdusItem) {
-                ogs_error("No match_pdusItem");
+                log_error("No match_pdusItem");
                 goto end;
             }
             OpenAPI_list_add(match_pdusList, match_pdusItem);
@@ -561,7 +561,7 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_parseFromJSON(cJSON *policy_updat
     if (!cJSON_IsNull(as_time_dis_param)) {
     as_time_dis_param_local_nonprim = OpenAPI_as_time_distribution_param_parseFromJSON(as_time_dis_param);
     if (!as_time_dis_param_local_nonprim) {
-        ogs_error("OpenAPI_as_time_distribution_param_parseFromJSON failed [as_time_dis_param]");
+        log_error("OpenAPI_as_time_distribution_param_parseFromJSON failed [as_time_dis_param]");
         goto end;
     }
     }
@@ -653,10 +653,10 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_copy(OpenAPI_policy_update_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_policy_update_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_policy_update_convertToJSON() failed");
+        log_error("OpenAPI_policy_update_convertToJSON() failed");
         return NULL;
     }
 
@@ -664,14 +664,14 @@ OpenAPI_policy_update_t *OpenAPI_policy_update_copy(OpenAPI_policy_update_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

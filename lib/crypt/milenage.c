@@ -326,58 +326,58 @@ int milenage_check(const uint8_t *opc, const uint8_t *k,
 	uint8_t mac_a[8], ak[6], rx_sqn[6];
 	const uint8_t *amf;
 
-    ogs_log_print(OGS_LOG_INFO, "Milenage: AUTN\n");
-    ogs_log_hexdump(OGS_LOG_INFO, autn, 16);
-    ogs_log_print(OGS_LOG_INFO, "Milenage: RAND\n");
-    ogs_log_hexdump(OGS_LOG_INFO, _rand, 16);
+    log_info("Milenage: AUTN\n");
+    log_hexdump(LOG_INFO, autn, 16);
+    log_info("Milenage: RAND\n");
+    log_hexdump(LOG_INFO, _rand, 16);
 
 	if (milenage_f2345(opc, k, _rand, res, ck, ik, ak, NULL))
 		return -1;
 
 	*res_len = 8;
-    ogs_log_print(OGS_LOG_INFO, "Milenage: RES\n");
-    ogs_log_hexdump(OGS_LOG_INFO, res, *res_len);
-    ogs_log_print(OGS_LOG_INFO, "Milenage: CK\n");
-    ogs_log_hexdump(OGS_LOG_INFO, ck, 16);
-    ogs_log_print(OGS_LOG_INFO, "Milenage: IK\n");
-    ogs_log_hexdump(OGS_LOG_INFO, ik, 16);
-    ogs_log_print(OGS_LOG_INFO, "Milenage: AK\n");
-    ogs_log_hexdump(OGS_LOG_INFO, ak, 6);
+    log_info("Milenage: RES\n");
+    log_hexdump(LOG_INFO, res, *res_len);
+    log_info("Milenage: CK\n");
+    log_hexdump(LOG_INFO, ck, 16);
+    log_info("Milenage: IK\n");
+    log_hexdump(LOG_INFO, ik, 16);
+    log_info("Milenage: AK\n");
+    log_hexdump(LOG_INFO, ak, 6);
 
 	/* AUTN = (SQN ^ AK) || AMF || MAC */
 	for (i = 0; i < 6; i++)
 		rx_sqn[i] = autn[i] ^ ak[i];
-    ogs_log_print(OGS_LOG_INFO, "Milenage: SQN\n");
-    ogs_log_hexdump(OGS_LOG_INFO, rx_sqn, 6);
+    log_info("Milenage: SQN\n");
+    log_hexdump(LOG_INFO, rx_sqn, 6);
 
 	if (os_memcmp(rx_sqn, sqn, 6) <= 0) {
 		uint8_t auts_amf[2] = { 0x00, 0x00 }; /* TS 33.102 v7.0.0, 6.3.3 */
 		if (milenage_f2345(opc, k, _rand, NULL, NULL, NULL, NULL, ak))
 			return -1;
-        ogs_log_print(OGS_LOG_INFO, "Milenage: AK*\n");
-        ogs_log_hexdump(OGS_LOG_INFO, ak, 6);
+        log_info("Milenage: AK*\n");
+        log_hexdump(LOG_INFO, ak, 6);
 		for (i = 0; i < 6; i++)
 			auts[i] = sqn[i] ^ ak[i];
 		if (milenage_f1(opc, k, _rand, sqn, auts_amf, NULL, auts + 6))
 			return -1;
-        ogs_log_print(OGS_LOG_INFO, "Milenage: AUTS*\n");
-        ogs_log_hexdump(OGS_LOG_INFO, auts, 14);
+        log_info("Milenage: AUTS*\n");
+        log_hexdump(LOG_INFO, auts, 14);
 		return -2;
 	}
 
 	amf = autn + 6;
-    ogs_log_print(OGS_LOG_INFO, "Milenage: AMF\n");
-    ogs_log_hexdump(OGS_LOG_INFO, amf, 2);
+    log_info("Milenage: AMF\n");
+    log_hexdump(LOG_INFO, amf, 2);
 	if (milenage_f1(opc, k, _rand, rx_sqn, amf, mac_a, NULL))
 		return -1;
 
-    ogs_log_print(OGS_LOG_INFO, "Milenage: MAC_A\n");
-    ogs_log_hexdump(OGS_LOG_INFO, mac_a, 8);
+    log_info("Milenage: MAC_A\n");
+    log_hexdump(LOG_INFO, mac_a, 8);
 
 	if (os_memcmp_const(mac_a, autn + 8, 8) != 0) {
-        ogs_log_print(OGS_LOG_INFO, "Milenage: MAC mismatch\n");
-        ogs_log_print(OGS_LOG_INFO, "Milenage: Received MAC_A\n");
-        ogs_log_hexdump(OGS_LOG_INFO, autn + 8, 8);
+        log_info("Milenage: MAC mismatch\n");
+        log_info("Milenage: Received MAC_A\n");
+        log_hexdump(LOG_INFO, autn + 8, 8);
 		return -1;
 	}
 

@@ -35,12 +35,12 @@ int ogs_socketpair(int family, int type, int protocol, ogs_socket_t fd[2])
     struct sockaddr_in client_addr;
     socklen_t size;
 
-    ogs_assert(family == AF_INET);
-    ogs_assert(type == SOCK_STREAM);
-    ogs_assert(protocol == 0);
+    log_assert(family == AF_INET);
+    log_assert(type == SOCK_STREAM);
+    log_assert(protocol == 0);
 
     server = socket(family, type, protocol);
-    ogs_assert(server != INVALID_SOCKET);
+    log_assert(server != INVALID_SOCKET);
 
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
@@ -48,33 +48,33 @@ int ogs_socketpair(int family, int type, int protocol, ogs_socket_t fd[2])
     server_addr.sin_port = 0;
 
     rc = bind(server, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    ogs_assert(rc == 0);
+    log_assert(rc == 0);
     rc = listen(server, 1);
-    ogs_assert(rc == 0);
+    log_assert(rc == 0);
 
     client = socket(AF_INET, SOCK_STREAM, 0);
-    ogs_assert(client != INVALID_SOCKET);
+    log_assert(client != INVALID_SOCKET);
 
     memset(&client_addr, 0, sizeof(client_addr));
     size = sizeof(client_addr);
     rc = getsockname(server, (struct sockaddr *)&client_addr, &size);
-    ogs_assert(rc == 0);
-    ogs_assert(size == sizeof(client_addr));
+    log_assert(rc == 0);
+    log_assert(size == sizeof(client_addr));
 
     rc = connect(client, (struct sockaddr *)&client_addr, sizeof(client_addr));
-    ogs_assert(rc == 0);
+    log_assert(rc == 0);
 
     size = sizeof(server_addr);
     acceptor = accept(server, (struct sockaddr *)&server_addr, &size);
-    ogs_assert(acceptor != INVALID_SOCKET);
-    ogs_assert(size == sizeof(server_addr));
+    log_assert(acceptor != INVALID_SOCKET);
+    log_assert(size == sizeof(server_addr));
 
     rc = getsockname(client, (struct sockaddr *)&client_addr, &size);
-    ogs_assert(rc == 0);
-    ogs_assert(size == sizeof(client_addr));
-    ogs_assert(server_addr.sin_family == client_addr.sin_family);
-    ogs_assert(server_addr.sin_addr.s_addr == client_addr.sin_addr.s_addr);
-    ogs_assert(server_addr.sin_port == client_addr.sin_port);
+    log_assert(rc == 0);
+    log_assert(size == sizeof(client_addr));
+    log_assert(server_addr.sin_family == client_addr.sin_family);
+    log_assert(server_addr.sin_addr.s_addr == client_addr.sin_addr.s_addr);
+    log_assert(server_addr.sin_port == client_addr.sin_port);
 
     ogs_closesocket(server);
     fd[0] = client;

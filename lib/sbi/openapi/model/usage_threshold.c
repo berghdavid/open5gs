@@ -16,7 +16,7 @@ OpenAPI_usage_threshold_t *OpenAPI_usage_threshold_create(
 )
 {
     OpenAPI_usage_threshold_t *usage_threshold_local_var = ogs_malloc(sizeof(OpenAPI_usage_threshold_t));
-    ogs_assert(usage_threshold_local_var);
+    log_assert(usage_threshold_local_var);
 
     usage_threshold_local_var->is_duration = is_duration;
     usage_threshold_local_var->duration = duration;
@@ -46,35 +46,35 @@ cJSON *OpenAPI_usage_threshold_convertToJSON(OpenAPI_usage_threshold_t *usage_th
     OpenAPI_lnode_t *node = NULL;
 
     if (usage_threshold == NULL) {
-        ogs_error("OpenAPI_usage_threshold_convertToJSON() failed [UsageThreshold]");
+        log_error("OpenAPI_usage_threshold_convertToJSON() failed [UsageThreshold]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (usage_threshold->is_duration) {
     if (cJSON_AddNumberToObject(item, "duration", usage_threshold->duration) == NULL) {
-        ogs_error("OpenAPI_usage_threshold_convertToJSON() failed [duration]");
+        log_error("OpenAPI_usage_threshold_convertToJSON() failed [duration]");
         goto end;
     }
     }
 
     if (usage_threshold->is_total_volume) {
     if (cJSON_AddNumberToObject(item, "totalVolume", usage_threshold->total_volume) == NULL) {
-        ogs_error("OpenAPI_usage_threshold_convertToJSON() failed [total_volume]");
+        log_error("OpenAPI_usage_threshold_convertToJSON() failed [total_volume]");
         goto end;
     }
     }
 
     if (usage_threshold->is_downlink_volume) {
     if (cJSON_AddNumberToObject(item, "downlinkVolume", usage_threshold->downlink_volume) == NULL) {
-        ogs_error("OpenAPI_usage_threshold_convertToJSON() failed [downlink_volume]");
+        log_error("OpenAPI_usage_threshold_convertToJSON() failed [downlink_volume]");
         goto end;
     }
     }
 
     if (usage_threshold->is_uplink_volume) {
     if (cJSON_AddNumberToObject(item, "uplinkVolume", usage_threshold->uplink_volume) == NULL) {
-        ogs_error("OpenAPI_usage_threshold_convertToJSON() failed [uplink_volume]");
+        log_error("OpenAPI_usage_threshold_convertToJSON() failed [uplink_volume]");
         goto end;
     }
     }
@@ -94,7 +94,7 @@ OpenAPI_usage_threshold_t *OpenAPI_usage_threshold_parseFromJSON(cJSON *usage_th
     duration = cJSON_GetObjectItemCaseSensitive(usage_thresholdJSON, "duration");
     if (duration) {
     if (!cJSON_IsNumber(duration)) {
-        ogs_error("OpenAPI_usage_threshold_parseFromJSON() failed [duration]");
+        log_error("OpenAPI_usage_threshold_parseFromJSON() failed [duration]");
         goto end;
     }
     }
@@ -102,7 +102,7 @@ OpenAPI_usage_threshold_t *OpenAPI_usage_threshold_parseFromJSON(cJSON *usage_th
     total_volume = cJSON_GetObjectItemCaseSensitive(usage_thresholdJSON, "totalVolume");
     if (total_volume) {
     if (!cJSON_IsNumber(total_volume)) {
-        ogs_error("OpenAPI_usage_threshold_parseFromJSON() failed [total_volume]");
+        log_error("OpenAPI_usage_threshold_parseFromJSON() failed [total_volume]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_usage_threshold_t *OpenAPI_usage_threshold_parseFromJSON(cJSON *usage_th
     downlink_volume = cJSON_GetObjectItemCaseSensitive(usage_thresholdJSON, "downlinkVolume");
     if (downlink_volume) {
     if (!cJSON_IsNumber(downlink_volume)) {
-        ogs_error("OpenAPI_usage_threshold_parseFromJSON() failed [downlink_volume]");
+        log_error("OpenAPI_usage_threshold_parseFromJSON() failed [downlink_volume]");
         goto end;
     }
     }
@@ -118,7 +118,7 @@ OpenAPI_usage_threshold_t *OpenAPI_usage_threshold_parseFromJSON(cJSON *usage_th
     uplink_volume = cJSON_GetObjectItemCaseSensitive(usage_thresholdJSON, "uplinkVolume");
     if (uplink_volume) {
     if (!cJSON_IsNumber(uplink_volume)) {
-        ogs_error("OpenAPI_usage_threshold_parseFromJSON() failed [uplink_volume]");
+        log_error("OpenAPI_usage_threshold_parseFromJSON() failed [uplink_volume]");
         goto end;
     }
     }
@@ -144,10 +144,10 @@ OpenAPI_usage_threshold_t *OpenAPI_usage_threshold_copy(OpenAPI_usage_threshold_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_usage_threshold_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_usage_threshold_convertToJSON() failed");
+        log_error("OpenAPI_usage_threshold_convertToJSON() failed");
         return NULL;
     }
 
@@ -155,14 +155,14 @@ OpenAPI_usage_threshold_t *OpenAPI_usage_threshold_copy(OpenAPI_usage_threshold_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

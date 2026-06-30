@@ -8,7 +8,7 @@ OpenAPI_data_ind_t *OpenAPI_data_ind_create(
 )
 {
     OpenAPI_data_ind_t *data_ind_local_var = ogs_malloc(sizeof(OpenAPI_data_ind_t));
-    ogs_assert(data_ind_local_var);
+    log_assert(data_ind_local_var);
 
 
     return data_ind_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_data_ind_convertToJSON(OpenAPI_data_ind_t *data_ind)
     OpenAPI_lnode_t *node = NULL;
 
     if (data_ind == NULL) {
-        ogs_error("OpenAPI_data_ind_convertToJSON() failed [DataInd]");
+        log_error("OpenAPI_data_ind_convertToJSON() failed [DataInd]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_data_ind_t *OpenAPI_data_ind_copy(OpenAPI_data_ind_t *dst, OpenAPI_data_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_data_ind_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_data_ind_convertToJSON() failed");
+        log_error("OpenAPI_data_ind_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_data_ind_t *OpenAPI_data_ind_copy(OpenAPI_data_ind_t *dst, OpenAPI_data_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -12,7 +12,7 @@ OpenAPI_eps_pdn_cnx_info_t *OpenAPI_eps_pdn_cnx_info_create(
 )
 {
     OpenAPI_eps_pdn_cnx_info_t *eps_pdn_cnx_info_local_var = ogs_malloc(sizeof(OpenAPI_eps_pdn_cnx_info_t));
-    ogs_assert(eps_pdn_cnx_info_local_var);
+    log_assert(eps_pdn_cnx_info_local_var);
 
     eps_pdn_cnx_info_local_var->pgw_s8c_fteid = pgw_s8c_fteid;
     eps_pdn_cnx_info_local_var->pgw_node_name = pgw_node_name;
@@ -46,30 +46,30 @@ cJSON *OpenAPI_eps_pdn_cnx_info_convertToJSON(OpenAPI_eps_pdn_cnx_info_t *eps_pd
     OpenAPI_lnode_t *node = NULL;
 
     if (eps_pdn_cnx_info == NULL) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [EpsPdnCnxInfo]");
+        log_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [EpsPdnCnxInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!eps_pdn_cnx_info->pgw_s8c_fteid) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [pgw_s8c_fteid]");
+        log_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [pgw_s8c_fteid]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "pgwS8cFteid", eps_pdn_cnx_info->pgw_s8c_fteid) == NULL) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [pgw_s8c_fteid]");
+        log_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [pgw_s8c_fteid]");
         goto end;
     }
 
     if (eps_pdn_cnx_info->pgw_node_name) {
     if (cJSON_AddStringToObject(item, "pgwNodeName", eps_pdn_cnx_info->pgw_node_name) == NULL) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [pgw_node_name]");
+        log_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [pgw_node_name]");
         goto end;
     }
     }
 
     if (eps_pdn_cnx_info->is_linked_bearer_id) {
     if (cJSON_AddNumberToObject(item, "linkedBearerId", eps_pdn_cnx_info->linked_bearer_id) == NULL) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [linked_bearer_id]");
+        log_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed [linked_bearer_id]");
         goto end;
     }
     }
@@ -87,18 +87,18 @@ OpenAPI_eps_pdn_cnx_info_t *OpenAPI_eps_pdn_cnx_info_parseFromJSON(cJSON *eps_pd
     cJSON *linked_bearer_id = NULL;
     pgw_s8c_fteid = cJSON_GetObjectItemCaseSensitive(eps_pdn_cnx_infoJSON, "pgwS8cFteid");
     if (!pgw_s8c_fteid) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_parseFromJSON() failed [pgw_s8c_fteid]");
+        log_error("OpenAPI_eps_pdn_cnx_info_parseFromJSON() failed [pgw_s8c_fteid]");
         goto end;
     }
     if (!cJSON_IsString(pgw_s8c_fteid)) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_parseFromJSON() failed [pgw_s8c_fteid]");
+        log_error("OpenAPI_eps_pdn_cnx_info_parseFromJSON() failed [pgw_s8c_fteid]");
         goto end;
     }
 
     pgw_node_name = cJSON_GetObjectItemCaseSensitive(eps_pdn_cnx_infoJSON, "pgwNodeName");
     if (pgw_node_name) {
     if (!cJSON_IsString(pgw_node_name) && !cJSON_IsNull(pgw_node_name)) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_parseFromJSON() failed [pgw_node_name]");
+        log_error("OpenAPI_eps_pdn_cnx_info_parseFromJSON() failed [pgw_node_name]");
         goto end;
     }
     }
@@ -106,7 +106,7 @@ OpenAPI_eps_pdn_cnx_info_t *OpenAPI_eps_pdn_cnx_info_parseFromJSON(cJSON *eps_pd
     linked_bearer_id = cJSON_GetObjectItemCaseSensitive(eps_pdn_cnx_infoJSON, "linkedBearerId");
     if (linked_bearer_id) {
     if (!cJSON_IsNumber(linked_bearer_id)) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_parseFromJSON() failed [linked_bearer_id]");
+        log_error("OpenAPI_eps_pdn_cnx_info_parseFromJSON() failed [linked_bearer_id]");
         goto end;
     }
     }
@@ -128,10 +128,10 @@ OpenAPI_eps_pdn_cnx_info_t *OpenAPI_eps_pdn_cnx_info_copy(OpenAPI_eps_pdn_cnx_in
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_eps_pdn_cnx_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed");
+        log_error("OpenAPI_eps_pdn_cnx_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -139,14 +139,14 @@ OpenAPI_eps_pdn_cnx_info_t *OpenAPI_eps_pdn_cnx_info_copy(OpenAPI_eps_pdn_cnx_in
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

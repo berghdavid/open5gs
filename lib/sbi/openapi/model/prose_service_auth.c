@@ -10,7 +10,7 @@ OpenAPI_prose_service_auth_t *OpenAPI_prose_service_auth_create(
 )
 {
     OpenAPI_prose_service_auth_t *prose_service_auth_local_var = ogs_malloc(sizeof(OpenAPI_prose_service_auth_t));
-    ogs_assert(prose_service_auth_local_var);
+    log_assert(prose_service_auth_local_var);
 
     prose_service_auth_local_var->prose_direct_discovery_auth = prose_direct_discovery_auth;
     prose_service_auth_local_var->prose_direct_communication_auth = prose_direct_communication_auth;
@@ -34,21 +34,21 @@ cJSON *OpenAPI_prose_service_auth_convertToJSON(OpenAPI_prose_service_auth_t *pr
     OpenAPI_lnode_t *node = NULL;
 
     if (prose_service_auth == NULL) {
-        ogs_error("OpenAPI_prose_service_auth_convertToJSON() failed [ProseServiceAuth]");
+        log_error("OpenAPI_prose_service_auth_convertToJSON() failed [ProseServiceAuth]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (prose_service_auth->prose_direct_discovery_auth != OpenAPI_ue_auth_NULL) {
     if (cJSON_AddStringToObject(item, "proseDirectDiscoveryAuth", OpenAPI_ue_auth_ToString(prose_service_auth->prose_direct_discovery_auth)) == NULL) {
-        ogs_error("OpenAPI_prose_service_auth_convertToJSON() failed [prose_direct_discovery_auth]");
+        log_error("OpenAPI_prose_service_auth_convertToJSON() failed [prose_direct_discovery_auth]");
         goto end;
     }
     }
 
     if (prose_service_auth->prose_direct_communication_auth != OpenAPI_ue_auth_NULL) {
     if (cJSON_AddStringToObject(item, "proseDirectCommunicationAuth", OpenAPI_ue_auth_ToString(prose_service_auth->prose_direct_communication_auth)) == NULL) {
-        ogs_error("OpenAPI_prose_service_auth_convertToJSON() failed [prose_direct_communication_auth]");
+        log_error("OpenAPI_prose_service_auth_convertToJSON() failed [prose_direct_communication_auth]");
         goto end;
     }
     }
@@ -68,7 +68,7 @@ OpenAPI_prose_service_auth_t *OpenAPI_prose_service_auth_parseFromJSON(cJSON *pr
     prose_direct_discovery_auth = cJSON_GetObjectItemCaseSensitive(prose_service_authJSON, "proseDirectDiscoveryAuth");
     if (prose_direct_discovery_auth) {
     if (!cJSON_IsString(prose_direct_discovery_auth)) {
-        ogs_error("OpenAPI_prose_service_auth_parseFromJSON() failed [prose_direct_discovery_auth]");
+        log_error("OpenAPI_prose_service_auth_parseFromJSON() failed [prose_direct_discovery_auth]");
         goto end;
     }
     prose_direct_discovery_authVariable = OpenAPI_ue_auth_FromString(prose_direct_discovery_auth->valuestring);
@@ -77,7 +77,7 @@ OpenAPI_prose_service_auth_t *OpenAPI_prose_service_auth_parseFromJSON(cJSON *pr
     prose_direct_communication_auth = cJSON_GetObjectItemCaseSensitive(prose_service_authJSON, "proseDirectCommunicationAuth");
     if (prose_direct_communication_auth) {
     if (!cJSON_IsString(prose_direct_communication_auth)) {
-        ogs_error("OpenAPI_prose_service_auth_parseFromJSON() failed [prose_direct_communication_auth]");
+        log_error("OpenAPI_prose_service_auth_parseFromJSON() failed [prose_direct_communication_auth]");
         goto end;
     }
     prose_direct_communication_authVariable = OpenAPI_ue_auth_FromString(prose_direct_communication_auth->valuestring);
@@ -98,10 +98,10 @@ OpenAPI_prose_service_auth_t *OpenAPI_prose_service_auth_copy(OpenAPI_prose_serv
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_prose_service_auth_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_prose_service_auth_convertToJSON() failed");
+        log_error("OpenAPI_prose_service_auth_convertToJSON() failed");
         return NULL;
     }
 
@@ -109,14 +109,14 @@ OpenAPI_prose_service_auth_t *OpenAPI_prose_service_auth_copy(OpenAPI_prose_serv
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

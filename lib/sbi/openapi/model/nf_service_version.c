@@ -11,7 +11,7 @@ OpenAPI_nf_service_version_t *OpenAPI_nf_service_version_create(
 )
 {
     OpenAPI_nf_service_version_t *nf_service_version_local_var = ogs_malloc(sizeof(OpenAPI_nf_service_version_t));
-    ogs_assert(nf_service_version_local_var);
+    log_assert(nf_service_version_local_var);
 
     nf_service_version_local_var->api_version_in_uri = api_version_in_uri;
     nf_service_version_local_var->api_full_version = api_full_version;
@@ -48,32 +48,32 @@ cJSON *OpenAPI_nf_service_version_convertToJSON(OpenAPI_nf_service_version_t *nf
     OpenAPI_lnode_t *node = NULL;
 
     if (nf_service_version == NULL) {
-        ogs_error("OpenAPI_nf_service_version_convertToJSON() failed [NFServiceVersion]");
+        log_error("OpenAPI_nf_service_version_convertToJSON() failed [NFServiceVersion]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!nf_service_version->api_version_in_uri) {
-        ogs_error("OpenAPI_nf_service_version_convertToJSON() failed [api_version_in_uri]");
+        log_error("OpenAPI_nf_service_version_convertToJSON() failed [api_version_in_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "apiVersionInUri", nf_service_version->api_version_in_uri) == NULL) {
-        ogs_error("OpenAPI_nf_service_version_convertToJSON() failed [api_version_in_uri]");
+        log_error("OpenAPI_nf_service_version_convertToJSON() failed [api_version_in_uri]");
         goto end;
     }
 
     if (!nf_service_version->api_full_version) {
-        ogs_error("OpenAPI_nf_service_version_convertToJSON() failed [api_full_version]");
+        log_error("OpenAPI_nf_service_version_convertToJSON() failed [api_full_version]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "apiFullVersion", nf_service_version->api_full_version) == NULL) {
-        ogs_error("OpenAPI_nf_service_version_convertToJSON() failed [api_full_version]");
+        log_error("OpenAPI_nf_service_version_convertToJSON() failed [api_full_version]");
         goto end;
     }
 
     if (nf_service_version->expiry) {
     if (cJSON_AddStringToObject(item, "expiry", nf_service_version->expiry) == NULL) {
-        ogs_error("OpenAPI_nf_service_version_convertToJSON() failed [expiry]");
+        log_error("OpenAPI_nf_service_version_convertToJSON() failed [expiry]");
         goto end;
     }
     }
@@ -91,28 +91,28 @@ OpenAPI_nf_service_version_t *OpenAPI_nf_service_version_parseFromJSON(cJSON *nf
     cJSON *expiry = NULL;
     api_version_in_uri = cJSON_GetObjectItemCaseSensitive(nf_service_versionJSON, "apiVersionInUri");
     if (!api_version_in_uri) {
-        ogs_error("OpenAPI_nf_service_version_parseFromJSON() failed [api_version_in_uri]");
+        log_error("OpenAPI_nf_service_version_parseFromJSON() failed [api_version_in_uri]");
         goto end;
     }
     if (!cJSON_IsString(api_version_in_uri)) {
-        ogs_error("OpenAPI_nf_service_version_parseFromJSON() failed [api_version_in_uri]");
+        log_error("OpenAPI_nf_service_version_parseFromJSON() failed [api_version_in_uri]");
         goto end;
     }
 
     api_full_version = cJSON_GetObjectItemCaseSensitive(nf_service_versionJSON, "apiFullVersion");
     if (!api_full_version) {
-        ogs_error("OpenAPI_nf_service_version_parseFromJSON() failed [api_full_version]");
+        log_error("OpenAPI_nf_service_version_parseFromJSON() failed [api_full_version]");
         goto end;
     }
     if (!cJSON_IsString(api_full_version)) {
-        ogs_error("OpenAPI_nf_service_version_parseFromJSON() failed [api_full_version]");
+        log_error("OpenAPI_nf_service_version_parseFromJSON() failed [api_full_version]");
         goto end;
     }
 
     expiry = cJSON_GetObjectItemCaseSensitive(nf_service_versionJSON, "expiry");
     if (expiry) {
     if (!cJSON_IsString(expiry) && !cJSON_IsNull(expiry)) {
-        ogs_error("OpenAPI_nf_service_version_parseFromJSON() failed [expiry]");
+        log_error("OpenAPI_nf_service_version_parseFromJSON() failed [expiry]");
         goto end;
     }
     }
@@ -133,10 +133,10 @@ OpenAPI_nf_service_version_t *OpenAPI_nf_service_version_copy(OpenAPI_nf_service
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nf_service_version_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nf_service_version_convertToJSON() failed");
+        log_error("OpenAPI_nf_service_version_convertToJSON() failed");
         return NULL;
     }
 
@@ -144,14 +144,14 @@ OpenAPI_nf_service_version_t *OpenAPI_nf_service_version_copy(OpenAPI_nf_service
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

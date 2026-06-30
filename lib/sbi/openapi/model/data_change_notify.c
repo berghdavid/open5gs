@@ -14,7 +14,7 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_create(
 )
 {
     OpenAPI_data_change_notify_t *data_change_notify_local_var = ogs_malloc(sizeof(OpenAPI_data_change_notify_t));
-    ogs_assert(data_change_notify_local_var);
+    log_assert(data_change_notify_local_var);
 
     data_change_notify_local_var->original_callback_reference = original_callback_reference;
     data_change_notify_local_var->ue_id = ue_id;
@@ -78,7 +78,7 @@ cJSON *OpenAPI_data_change_notify_convertToJSON(OpenAPI_data_change_notify_t *da
     OpenAPI_lnode_t *node = NULL;
 
     if (data_change_notify == NULL) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [DataChangeNotify]");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed [DataChangeNotify]");
         return NULL;
     }
 
@@ -86,12 +86,12 @@ cJSON *OpenAPI_data_change_notify_convertToJSON(OpenAPI_data_change_notify_t *da
     if (data_change_notify->original_callback_reference) {
     cJSON *original_callback_referenceList = cJSON_AddArrayToObject(item, "originalCallbackReference");
     if (original_callback_referenceList == NULL) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [original_callback_reference]");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed [original_callback_reference]");
         goto end;
     }
     OpenAPI_list_for_each(data_change_notify->original_callback_reference, node) {
         if (cJSON_AddStringToObject(original_callback_referenceList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [original_callback_reference]");
+            log_error("OpenAPI_data_change_notify_convertToJSON() failed [original_callback_reference]");
             goto end;
         }
     }
@@ -99,7 +99,7 @@ cJSON *OpenAPI_data_change_notify_convertToJSON(OpenAPI_data_change_notify_t *da
 
     if (data_change_notify->ue_id) {
     if (cJSON_AddStringToObject(item, "ueId", data_change_notify->ue_id) == NULL) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [ue_id]");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed [ue_id]");
         goto end;
     }
     }
@@ -107,13 +107,13 @@ cJSON *OpenAPI_data_change_notify_convertToJSON(OpenAPI_data_change_notify_t *da
     if (data_change_notify->notify_items) {
     cJSON *notify_itemsList = cJSON_AddArrayToObject(item, "notifyItems");
     if (notify_itemsList == NULL) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [notify_items]");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed [notify_items]");
         goto end;
     }
     OpenAPI_list_for_each(data_change_notify->notify_items, node) {
         cJSON *itemLocal = OpenAPI_notify_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [notify_items]");
+            log_error("OpenAPI_data_change_notify_convertToJSON() failed [notify_items]");
             goto end;
         }
         cJSON_AddItemToArray(notify_itemsList, itemLocal);
@@ -123,12 +123,12 @@ cJSON *OpenAPI_data_change_notify_convertToJSON(OpenAPI_data_change_notify_t *da
     if (data_change_notify->sdm_subscription) {
     cJSON *sdm_subscription_local_JSON = OpenAPI_sdm_subscription_1_convertToJSON(data_change_notify->sdm_subscription);
     if (sdm_subscription_local_JSON == NULL) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [sdm_subscription]");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed [sdm_subscription]");
         goto end;
     }
     cJSON_AddItemToObject(item, "sdmSubscription", sdm_subscription_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [sdm_subscription]");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed [sdm_subscription]");
         goto end;
     }
     }
@@ -136,13 +136,13 @@ cJSON *OpenAPI_data_change_notify_convertToJSON(OpenAPI_data_change_notify_t *da
     if (data_change_notify->additional_sdm_subscriptions) {
     cJSON *additional_sdm_subscriptionsList = cJSON_AddArrayToObject(item, "additionalSdmSubscriptions");
     if (additional_sdm_subscriptionsList == NULL) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [additional_sdm_subscriptions]");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed [additional_sdm_subscriptions]");
         goto end;
     }
     OpenAPI_list_for_each(data_change_notify->additional_sdm_subscriptions, node) {
         cJSON *itemLocal = OpenAPI_sdm_subscription_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [additional_sdm_subscriptions]");
+            log_error("OpenAPI_data_change_notify_convertToJSON() failed [additional_sdm_subscriptions]");
             goto end;
         }
         cJSON_AddItemToArray(additional_sdm_subscriptionsList, itemLocal);
@@ -152,13 +152,13 @@ cJSON *OpenAPI_data_change_notify_convertToJSON(OpenAPI_data_change_notify_t *da
     if (data_change_notify->subscription_data_subscriptions) {
     cJSON *subscription_data_subscriptionsList = cJSON_AddArrayToObject(item, "subscriptionDataSubscriptions");
     if (subscription_data_subscriptionsList == NULL) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [subscription_data_subscriptions]");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed [subscription_data_subscriptions]");
         goto end;
     }
     OpenAPI_list_for_each(data_change_notify->subscription_data_subscriptions, node) {
         cJSON *itemLocal = OpenAPI_subscription_data_subscriptions_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_data_change_notify_convertToJSON() failed [subscription_data_subscriptions]");
+            log_error("OpenAPI_data_change_notify_convertToJSON() failed [subscription_data_subscriptions]");
             goto end;
         }
         cJSON_AddItemToArray(subscription_data_subscriptionsList, itemLocal);
@@ -188,7 +188,7 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
     if (original_callback_reference) {
         cJSON *original_callback_reference_local = NULL;
         if (!cJSON_IsArray(original_callback_reference)) {
-            ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [original_callback_reference]");
+            log_error("OpenAPI_data_change_notify_parseFromJSON() failed [original_callback_reference]");
             goto end;
         }
 
@@ -198,7 +198,7 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(original_callback_reference_local)) {
-                ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [original_callback_reference]");
+                log_error("OpenAPI_data_change_notify_parseFromJSON() failed [original_callback_reference]");
                 goto end;
             }
             OpenAPI_list_add(original_callback_referenceList, ogs_strdup(original_callback_reference_local->valuestring));
@@ -208,7 +208,7 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
     ue_id = cJSON_GetObjectItemCaseSensitive(data_change_notifyJSON, "ueId");
     if (ue_id) {
     if (!cJSON_IsString(ue_id) && !cJSON_IsNull(ue_id)) {
-        ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [ue_id]");
+        log_error("OpenAPI_data_change_notify_parseFromJSON() failed [ue_id]");
         goto end;
     }
     }
@@ -217,7 +217,7 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
     if (notify_items) {
         cJSON *notify_items_local = NULL;
         if (!cJSON_IsArray(notify_items)) {
-            ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [notify_items]");
+            log_error("OpenAPI_data_change_notify_parseFromJSON() failed [notify_items]");
             goto end;
         }
 
@@ -225,12 +225,12 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
 
         cJSON_ArrayForEach(notify_items_local, notify_items) {
             if (!cJSON_IsObject(notify_items_local)) {
-                ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [notify_items]");
+                log_error("OpenAPI_data_change_notify_parseFromJSON() failed [notify_items]");
                 goto end;
             }
             OpenAPI_notify_item_t *notify_itemsItem = OpenAPI_notify_item_parseFromJSON(notify_items_local);
             if (!notify_itemsItem) {
-                ogs_error("No notify_itemsItem");
+                log_error("No notify_itemsItem");
                 goto end;
             }
             OpenAPI_list_add(notify_itemsList, notify_itemsItem);
@@ -241,7 +241,7 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
     if (sdm_subscription) {
     sdm_subscription_local_nonprim = OpenAPI_sdm_subscription_1_parseFromJSON(sdm_subscription);
     if (!sdm_subscription_local_nonprim) {
-        ogs_error("OpenAPI_sdm_subscription_1_parseFromJSON failed [sdm_subscription]");
+        log_error("OpenAPI_sdm_subscription_1_parseFromJSON failed [sdm_subscription]");
         goto end;
     }
     }
@@ -250,7 +250,7 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
     if (additional_sdm_subscriptions) {
         cJSON *additional_sdm_subscriptions_local = NULL;
         if (!cJSON_IsArray(additional_sdm_subscriptions)) {
-            ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [additional_sdm_subscriptions]");
+            log_error("OpenAPI_data_change_notify_parseFromJSON() failed [additional_sdm_subscriptions]");
             goto end;
         }
 
@@ -258,12 +258,12 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
 
         cJSON_ArrayForEach(additional_sdm_subscriptions_local, additional_sdm_subscriptions) {
             if (!cJSON_IsObject(additional_sdm_subscriptions_local)) {
-                ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [additional_sdm_subscriptions]");
+                log_error("OpenAPI_data_change_notify_parseFromJSON() failed [additional_sdm_subscriptions]");
                 goto end;
             }
             OpenAPI_sdm_subscription_1_t *additional_sdm_subscriptionsItem = OpenAPI_sdm_subscription_1_parseFromJSON(additional_sdm_subscriptions_local);
             if (!additional_sdm_subscriptionsItem) {
-                ogs_error("No additional_sdm_subscriptionsItem");
+                log_error("No additional_sdm_subscriptionsItem");
                 goto end;
             }
             OpenAPI_list_add(additional_sdm_subscriptionsList, additional_sdm_subscriptionsItem);
@@ -274,7 +274,7 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
     if (subscription_data_subscriptions) {
         cJSON *subscription_data_subscriptions_local = NULL;
         if (!cJSON_IsArray(subscription_data_subscriptions)) {
-            ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [subscription_data_subscriptions]");
+            log_error("OpenAPI_data_change_notify_parseFromJSON() failed [subscription_data_subscriptions]");
             goto end;
         }
 
@@ -282,12 +282,12 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_parseFromJSON(cJSON *da
 
         cJSON_ArrayForEach(subscription_data_subscriptions_local, subscription_data_subscriptions) {
             if (!cJSON_IsObject(subscription_data_subscriptions_local)) {
-                ogs_error("OpenAPI_data_change_notify_parseFromJSON() failed [subscription_data_subscriptions]");
+                log_error("OpenAPI_data_change_notify_parseFromJSON() failed [subscription_data_subscriptions]");
                 goto end;
             }
             OpenAPI_subscription_data_subscriptions_t *subscription_data_subscriptionsItem = OpenAPI_subscription_data_subscriptions_parseFromJSON(subscription_data_subscriptions_local);
             if (!subscription_data_subscriptionsItem) {
-                ogs_error("No subscription_data_subscriptionsItem");
+                log_error("No subscription_data_subscriptionsItem");
                 goto end;
             }
             OpenAPI_list_add(subscription_data_subscriptionsList, subscription_data_subscriptionsItem);
@@ -345,10 +345,10 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_copy(OpenAPI_data_chang
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_data_change_notify_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_data_change_notify_convertToJSON() failed");
+        log_error("OpenAPI_data_change_notify_convertToJSON() failed");
         return NULL;
     }
 
@@ -356,14 +356,14 @@ OpenAPI_data_change_notify_t *OpenAPI_data_change_notify_copy(OpenAPI_data_chang
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

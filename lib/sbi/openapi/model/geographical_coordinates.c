@@ -10,7 +10,7 @@ OpenAPI_geographical_coordinates_t *OpenAPI_geographical_coordinates_create(
 )
 {
     OpenAPI_geographical_coordinates_t *geographical_coordinates_local_var = ogs_malloc(sizeof(OpenAPI_geographical_coordinates_t));
-    ogs_assert(geographical_coordinates_local_var);
+    log_assert(geographical_coordinates_local_var);
 
     geographical_coordinates_local_var->lon = lon;
     geographical_coordinates_local_var->lat = lat;
@@ -34,18 +34,18 @@ cJSON *OpenAPI_geographical_coordinates_convertToJSON(OpenAPI_geographical_coord
     OpenAPI_lnode_t *node = NULL;
 
     if (geographical_coordinates == NULL) {
-        ogs_error("OpenAPI_geographical_coordinates_convertToJSON() failed [GeographicalCoordinates]");
+        log_error("OpenAPI_geographical_coordinates_convertToJSON() failed [GeographicalCoordinates]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "lon", geographical_coordinates->lon) == NULL) {
-        ogs_error("OpenAPI_geographical_coordinates_convertToJSON() failed [lon]");
+        log_error("OpenAPI_geographical_coordinates_convertToJSON() failed [lon]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "lat", geographical_coordinates->lat) == NULL) {
-        ogs_error("OpenAPI_geographical_coordinates_convertToJSON() failed [lat]");
+        log_error("OpenAPI_geographical_coordinates_convertToJSON() failed [lat]");
         goto end;
     }
 
@@ -61,21 +61,21 @@ OpenAPI_geographical_coordinates_t *OpenAPI_geographical_coordinates_parseFromJS
     cJSON *lat = NULL;
     lon = cJSON_GetObjectItemCaseSensitive(geographical_coordinatesJSON, "lon");
     if (!lon) {
-        ogs_error("OpenAPI_geographical_coordinates_parseFromJSON() failed [lon]");
+        log_error("OpenAPI_geographical_coordinates_parseFromJSON() failed [lon]");
         goto end;
     }
     if (!cJSON_IsNumber(lon)) {
-        ogs_error("OpenAPI_geographical_coordinates_parseFromJSON() failed [lon]");
+        log_error("OpenAPI_geographical_coordinates_parseFromJSON() failed [lon]");
         goto end;
     }
 
     lat = cJSON_GetObjectItemCaseSensitive(geographical_coordinatesJSON, "lat");
     if (!lat) {
-        ogs_error("OpenAPI_geographical_coordinates_parseFromJSON() failed [lat]");
+        log_error("OpenAPI_geographical_coordinates_parseFromJSON() failed [lat]");
         goto end;
     }
     if (!cJSON_IsNumber(lat)) {
-        ogs_error("OpenAPI_geographical_coordinates_parseFromJSON() failed [lat]");
+        log_error("OpenAPI_geographical_coordinates_parseFromJSON() failed [lat]");
         goto end;
     }
 
@@ -96,10 +96,10 @@ OpenAPI_geographical_coordinates_t *OpenAPI_geographical_coordinates_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_geographical_coordinates_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_geographical_coordinates_convertToJSON() failed");
+        log_error("OpenAPI_geographical_coordinates_convertToJSON() failed");
         return NULL;
     }
 
@@ -107,14 +107,14 @@ OpenAPI_geographical_coordinates_t *OpenAPI_geographical_coordinates_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

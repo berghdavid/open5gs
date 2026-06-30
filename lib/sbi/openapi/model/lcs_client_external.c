@@ -11,7 +11,7 @@ OpenAPI_lcs_client_external_t *OpenAPI_lcs_client_external_create(
 )
 {
     OpenAPI_lcs_client_external_t *lcs_client_external_local_var = ogs_malloc(sizeof(OpenAPI_lcs_client_external_t));
-    ogs_assert(lcs_client_external_local_var);
+    log_assert(lcs_client_external_local_var);
 
     lcs_client_external_local_var->allowed_geographic_area = allowed_geographic_area;
     lcs_client_external_local_var->privacy_check_related_action = privacy_check_related_action;
@@ -47,7 +47,7 @@ cJSON *OpenAPI_lcs_client_external_convertToJSON(OpenAPI_lcs_client_external_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (lcs_client_external == NULL) {
-        ogs_error("OpenAPI_lcs_client_external_convertToJSON() failed [LcsClientExternal]");
+        log_error("OpenAPI_lcs_client_external_convertToJSON() failed [LcsClientExternal]");
         return NULL;
     }
 
@@ -55,13 +55,13 @@ cJSON *OpenAPI_lcs_client_external_convertToJSON(OpenAPI_lcs_client_external_t *
     if (lcs_client_external->allowed_geographic_area) {
     cJSON *allowed_geographic_areaList = cJSON_AddArrayToObject(item, "allowedGeographicArea");
     if (allowed_geographic_areaList == NULL) {
-        ogs_error("OpenAPI_lcs_client_external_convertToJSON() failed [allowed_geographic_area]");
+        log_error("OpenAPI_lcs_client_external_convertToJSON() failed [allowed_geographic_area]");
         goto end;
     }
     OpenAPI_list_for_each(lcs_client_external->allowed_geographic_area, node) {
         cJSON *itemLocal = OpenAPI_geographic_area_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_lcs_client_external_convertToJSON() failed [allowed_geographic_area]");
+            log_error("OpenAPI_lcs_client_external_convertToJSON() failed [allowed_geographic_area]");
             goto end;
         }
         cJSON_AddItemToArray(allowed_geographic_areaList, itemLocal);
@@ -70,7 +70,7 @@ cJSON *OpenAPI_lcs_client_external_convertToJSON(OpenAPI_lcs_client_external_t *
 
     if (lcs_client_external->privacy_check_related_action != OpenAPI_privacy_check_related_action_NULL) {
     if (cJSON_AddStringToObject(item, "privacyCheckRelatedAction", OpenAPI_privacy_check_related_action_ToString(lcs_client_external->privacy_check_related_action)) == NULL) {
-        ogs_error("OpenAPI_lcs_client_external_convertToJSON() failed [privacy_check_related_action]");
+        log_error("OpenAPI_lcs_client_external_convertToJSON() failed [privacy_check_related_action]");
         goto end;
     }
     }
@@ -78,12 +78,12 @@ cJSON *OpenAPI_lcs_client_external_convertToJSON(OpenAPI_lcs_client_external_t *
     if (lcs_client_external->valid_time_period) {
     cJSON *valid_time_period_local_JSON = OpenAPI_valid_time_period_convertToJSON(lcs_client_external->valid_time_period);
     if (valid_time_period_local_JSON == NULL) {
-        ogs_error("OpenAPI_lcs_client_external_convertToJSON() failed [valid_time_period]");
+        log_error("OpenAPI_lcs_client_external_convertToJSON() failed [valid_time_period]");
         goto end;
     }
     cJSON_AddItemToObject(item, "validTimePeriod", valid_time_period_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_lcs_client_external_convertToJSON() failed [valid_time_period]");
+        log_error("OpenAPI_lcs_client_external_convertToJSON() failed [valid_time_period]");
         goto end;
     }
     }
@@ -106,7 +106,7 @@ OpenAPI_lcs_client_external_t *OpenAPI_lcs_client_external_parseFromJSON(cJSON *
     if (allowed_geographic_area) {
         cJSON *allowed_geographic_area_local = NULL;
         if (!cJSON_IsArray(allowed_geographic_area)) {
-            ogs_error("OpenAPI_lcs_client_external_parseFromJSON() failed [allowed_geographic_area]");
+            log_error("OpenAPI_lcs_client_external_parseFromJSON() failed [allowed_geographic_area]");
             goto end;
         }
 
@@ -114,12 +114,12 @@ OpenAPI_lcs_client_external_t *OpenAPI_lcs_client_external_parseFromJSON(cJSON *
 
         cJSON_ArrayForEach(allowed_geographic_area_local, allowed_geographic_area) {
             if (!cJSON_IsObject(allowed_geographic_area_local)) {
-                ogs_error("OpenAPI_lcs_client_external_parseFromJSON() failed [allowed_geographic_area]");
+                log_error("OpenAPI_lcs_client_external_parseFromJSON() failed [allowed_geographic_area]");
                 goto end;
             }
             OpenAPI_geographic_area_t *allowed_geographic_areaItem = OpenAPI_geographic_area_parseFromJSON(allowed_geographic_area_local);
             if (!allowed_geographic_areaItem) {
-                ogs_error("No allowed_geographic_areaItem");
+                log_error("No allowed_geographic_areaItem");
                 goto end;
             }
             OpenAPI_list_add(allowed_geographic_areaList, allowed_geographic_areaItem);
@@ -129,7 +129,7 @@ OpenAPI_lcs_client_external_t *OpenAPI_lcs_client_external_parseFromJSON(cJSON *
     privacy_check_related_action = cJSON_GetObjectItemCaseSensitive(lcs_client_externalJSON, "privacyCheckRelatedAction");
     if (privacy_check_related_action) {
     if (!cJSON_IsString(privacy_check_related_action)) {
-        ogs_error("OpenAPI_lcs_client_external_parseFromJSON() failed [privacy_check_related_action]");
+        log_error("OpenAPI_lcs_client_external_parseFromJSON() failed [privacy_check_related_action]");
         goto end;
     }
     privacy_check_related_actionVariable = OpenAPI_privacy_check_related_action_FromString(privacy_check_related_action->valuestring);
@@ -139,7 +139,7 @@ OpenAPI_lcs_client_external_t *OpenAPI_lcs_client_external_parseFromJSON(cJSON *
     if (valid_time_period) {
     valid_time_period_local_nonprim = OpenAPI_valid_time_period_parseFromJSON(valid_time_period);
     if (!valid_time_period_local_nonprim) {
-        ogs_error("OpenAPI_valid_time_period_parseFromJSON failed [valid_time_period]");
+        log_error("OpenAPI_valid_time_period_parseFromJSON failed [valid_time_period]");
         goto end;
     }
     }
@@ -171,10 +171,10 @@ OpenAPI_lcs_client_external_t *OpenAPI_lcs_client_external_copy(OpenAPI_lcs_clie
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_lcs_client_external_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_lcs_client_external_convertToJSON() failed");
+        log_error("OpenAPI_lcs_client_external_convertToJSON() failed");
         return NULL;
     }
 
@@ -182,14 +182,14 @@ OpenAPI_lcs_client_external_t *OpenAPI_lcs_client_external_copy(OpenAPI_lcs_clie
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

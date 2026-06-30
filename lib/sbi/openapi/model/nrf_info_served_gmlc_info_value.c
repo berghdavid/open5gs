@@ -10,7 +10,7 @@ OpenAPI_nrf_info_served_gmlc_info_value_t *OpenAPI_nrf_info_served_gmlc_info_val
 )
 {
     OpenAPI_nrf_info_served_gmlc_info_value_t *nrf_info_served_gmlc_info_value_local_var = ogs_malloc(sizeof(OpenAPI_nrf_info_served_gmlc_info_value_t));
-    ogs_assert(nrf_info_served_gmlc_info_value_local_var);
+    log_assert(nrf_info_served_gmlc_info_value_local_var);
 
     nrf_info_served_gmlc_info_value_local_var->serving_client_types = serving_client_types;
     nrf_info_served_gmlc_info_value_local_var->gmlc_numbers = gmlc_numbers;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON(OpenAPI_nrf_info_se
     OpenAPI_lnode_t *node = NULL;
 
     if (nrf_info_served_gmlc_info_value == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [NrfInfo_servedGmlcInfo_value]");
+        log_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [NrfInfo_servedGmlcInfo_value]");
         return NULL;
     }
 
@@ -56,13 +56,13 @@ cJSON *OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON(OpenAPI_nrf_info_se
     if (nrf_info_served_gmlc_info_value->serving_client_types) {
     cJSON *serving_client_typesList = cJSON_AddArrayToObject(item, "servingClientTypes");
     if (serving_client_typesList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [serving_client_types]");
+        log_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [serving_client_types]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_gmlc_info_value->serving_client_types, node) {
         cJSON *itemLocal = OpenAPI_external_client_type_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [serving_client_types]");
+            log_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [serving_client_types]");
             goto end;
         }
         cJSON_AddItemToArray(serving_client_typesList, itemLocal);
@@ -72,12 +72,12 @@ cJSON *OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON(OpenAPI_nrf_info_se
     if (nrf_info_served_gmlc_info_value->gmlc_numbers) {
     cJSON *gmlc_numbersList = cJSON_AddArrayToObject(item, "gmlcNumbers");
     if (gmlc_numbersList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [gmlc_numbers]");
+        log_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [gmlc_numbers]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_gmlc_info_value->gmlc_numbers, node) {
         if (cJSON_AddStringToObject(gmlc_numbersList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [gmlc_numbers]");
+            log_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed [gmlc_numbers]");
             goto end;
         }
     }
@@ -99,7 +99,7 @@ OpenAPI_nrf_info_served_gmlc_info_value_t *OpenAPI_nrf_info_served_gmlc_info_val
     if (serving_client_types) {
         cJSON *serving_client_types_local = NULL;
         if (!cJSON_IsArray(serving_client_types)) {
-            ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_parseFromJSON() failed [serving_client_types]");
+            log_error("OpenAPI_nrf_info_served_gmlc_info_value_parseFromJSON() failed [serving_client_types]");
             goto end;
         }
 
@@ -107,12 +107,12 @@ OpenAPI_nrf_info_served_gmlc_info_value_t *OpenAPI_nrf_info_served_gmlc_info_val
 
         cJSON_ArrayForEach(serving_client_types_local, serving_client_types) {
             if (!cJSON_IsObject(serving_client_types_local)) {
-                ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_parseFromJSON() failed [serving_client_types]");
+                log_error("OpenAPI_nrf_info_served_gmlc_info_value_parseFromJSON() failed [serving_client_types]");
                 goto end;
             }
             OpenAPI_external_client_type_t *serving_client_typesItem = OpenAPI_external_client_type_parseFromJSON(serving_client_types_local);
             if (!serving_client_typesItem) {
-                ogs_error("No serving_client_typesItem");
+                log_error("No serving_client_typesItem");
                 goto end;
             }
             OpenAPI_list_add(serving_client_typesList, serving_client_typesItem);
@@ -123,7 +123,7 @@ OpenAPI_nrf_info_served_gmlc_info_value_t *OpenAPI_nrf_info_served_gmlc_info_val
     if (gmlc_numbers) {
         cJSON *gmlc_numbers_local = NULL;
         if (!cJSON_IsArray(gmlc_numbers)) {
-            ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_parseFromJSON() failed [gmlc_numbers]");
+            log_error("OpenAPI_nrf_info_served_gmlc_info_value_parseFromJSON() failed [gmlc_numbers]");
             goto end;
         }
 
@@ -133,7 +133,7 @@ OpenAPI_nrf_info_served_gmlc_info_value_t *OpenAPI_nrf_info_served_gmlc_info_val
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(gmlc_numbers_local)) {
-                ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_parseFromJSON() failed [gmlc_numbers]");
+                log_error("OpenAPI_nrf_info_served_gmlc_info_value_parseFromJSON() failed [gmlc_numbers]");
                 goto end;
             }
             OpenAPI_list_add(gmlc_numbersList, ogs_strdup(gmlc_numbers_local->valuestring));
@@ -169,10 +169,10 @@ OpenAPI_nrf_info_served_gmlc_info_value_t *OpenAPI_nrf_info_served_gmlc_info_val
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed");
+        log_error("OpenAPI_nrf_info_served_gmlc_info_value_convertToJSON() failed");
         return NULL;
     }
 
@@ -180,14 +180,14 @@ OpenAPI_nrf_info_served_gmlc_info_value_t *OpenAPI_nrf_info_served_gmlc_info_val
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

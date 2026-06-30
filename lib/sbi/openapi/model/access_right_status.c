@@ -8,7 +8,7 @@ OpenAPI_access_right_status_t *OpenAPI_access_right_status_create(
 )
 {
     OpenAPI_access_right_status_t *access_right_status_local_var = ogs_malloc(sizeof(OpenAPI_access_right_status_t));
-    ogs_assert(access_right_status_local_var);
+    log_assert(access_right_status_local_var);
 
 
     return access_right_status_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_access_right_status_convertToJSON(OpenAPI_access_right_status_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (access_right_status == NULL) {
-        ogs_error("OpenAPI_access_right_status_convertToJSON() failed [AccessRightStatus]");
+        log_error("OpenAPI_access_right_status_convertToJSON() failed [AccessRightStatus]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_access_right_status_t *OpenAPI_access_right_status_copy(OpenAPI_access_r
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_access_right_status_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_access_right_status_convertToJSON() failed");
+        log_error("OpenAPI_access_right_status_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_access_right_status_t *OpenAPI_access_right_status_copy(OpenAPI_access_r
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

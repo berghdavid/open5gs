@@ -24,18 +24,18 @@ bool ogs_nnrf_nfm_send_nf_register(ogs_sbi_nf_instance_t *nf_instance)
     bool rc;
     ogs_sbi_request_t *request = NULL;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     request = ogs_nnrf_nfm_build_register();
     if (!request) {
-        ogs_error("No Request");
+        log_error("No Request");
         return false;
     }
 
     rc = ogs_sbi_send_request_to_nrf(
             OGS_SBI_SERVICE_TYPE_NNRF_NFM, NULL,
             ogs_sbi_client_handler, request, nf_instance);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     ogs_sbi_request_free(request);
 
@@ -47,18 +47,18 @@ bool ogs_nnrf_nfm_send_nf_update(ogs_sbi_nf_instance_t *nf_instance)
     bool rc;
     ogs_sbi_request_t *request = NULL;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     request = ogs_nnrf_nfm_build_update();
     if (!request) {
-        ogs_error("No Request");
+        log_error("No Request");
         return false;
     }
 
     rc = ogs_sbi_send_request_to_nrf(
             OGS_SBI_SERVICE_TYPE_NNRF_NFM, NULL,
             ogs_sbi_client_handler, request, nf_instance);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     ogs_sbi_request_free(request);
 
@@ -70,18 +70,18 @@ bool ogs_nnrf_nfm_send_nf_de_register(ogs_sbi_nf_instance_t *nf_instance)
     bool rc;
     ogs_sbi_request_t *request = NULL;
 
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
 
     request = ogs_nnrf_nfm_build_de_register();
     if (!request) {
-        ogs_error("No Request");
+        log_error("No Request");
         return false;
     }
 
     rc = ogs_sbi_send_request_to_nrf(
             OGS_SBI_SERVICE_TYPE_NNRF_NFM, NULL,
             ogs_sbi_client_handler, request, nf_instance);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     ogs_sbi_request_free(request);
 
@@ -98,10 +98,10 @@ bool ogs_nnrf_nfm_send_nf_status_subscribe(
     ogs_sbi_subscription_data_t *subscription_data = NULL;
 
     /* Issue #2630 : The format of subscrCond is invalid. Must be 'oneOf'. */
-    ogs_assert(!subscr_cond_nf_type || !subscr_cond_service_name);
+    log_assert(!subscr_cond_nf_type || !subscr_cond_service_name);
 
     subscription_data = ogs_sbi_subscription_data_add();
-    ogs_assert(subscription_data);
+    log_assert(subscription_data);
 
     subscription_data->req_nf_type = req_nf_type;
     if (req_nf_instance_id)
@@ -113,20 +113,20 @@ bool ogs_nnrf_nfm_send_nf_status_subscribe(
         subscription_data->subscr_cond.service_name =
             ogs_strdup(subscr_cond_service_name);
     else {
-        ogs_fatal("SubscrCond must be 'oneOf'.");
-        ogs_assert_if_reached();
+        log_fatal("SubscrCond must be 'oneOf'.");
+        log_assert_if_reached();
     }
 
     request = ogs_nnrf_nfm_build_status_subscribe(subscription_data);
     if (!request) {
-        ogs_error("No Request");
+        log_error("No Request");
         return false;
     }
 
     rc = ogs_sbi_send_request_to_nrf(
             OGS_SBI_SERVICE_TYPE_NNRF_NFM, NULL,
             ogs_sbi_client_handler, request, subscription_data);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     ogs_sbi_request_free(request);
 
@@ -139,18 +139,18 @@ bool ogs_nnrf_nfm_send_nf_status_update(
     bool rc;
     ogs_sbi_request_t *request = NULL;
 
-    ogs_assert(subscription_data);
+    log_assert(subscription_data);
 
     request = ogs_nnrf_nfm_build_status_update(subscription_data);
     if (!request) {
-        ogs_error("No Request");
+        log_error("No Request");
         return false;
     }
 
     rc = ogs_sbi_send_request_to_nrf(
             OGS_SBI_SERVICE_TYPE_NNRF_NFM, NULL,
             ogs_sbi_client_handler, request, subscription_data);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     ogs_sbi_request_free(request);
 
@@ -163,18 +163,18 @@ bool ogs_nnrf_nfm_send_nf_status_unsubscribe(
     bool rc;
     ogs_sbi_request_t *request = NULL;
 
-    ogs_assert(subscription_data);
+    log_assert(subscription_data);
 
     request = ogs_nnrf_nfm_build_status_unsubscribe(subscription_data);
     if (!request) {
-        ogs_error("No Request");
+        log_error("No Request");
         return false;
     }
 
     rc = ogs_sbi_send_request_to_nrf(
             OGS_SBI_SERVICE_TYPE_NNRF_NFM, NULL,
             ogs_sbi_client_handler, request, subscription_data);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     ogs_sbi_request_free(request);
 
@@ -188,14 +188,14 @@ bool ogs_nnrf_nfm_send_nf_list_retrieve(void)
 
     request = ogs_nnrf_nfm_build_nflist_retrieve();
     if (!request) {
-        ogs_error("No Request");
+        log_error("No Request");
         return false;
     }
 
     rc = ogs_sbi_send_request_to_nrf(
             OGS_SBI_SERVICE_TYPE_NNRF_NFM, NULL,
             ogs_sbi_client_handler, request, ogs_sbi_self()->nf_instance);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     ogs_sbi_request_free(request);
 
@@ -209,14 +209,14 @@ bool ogs_nnrf_nfm_send_nf_profile_get(char *nf_instance_id)
 
     request = ogs_nnrf_nfm_build_profile_retrieve(nf_instance_id);
     if (!request) {
-        ogs_error("No Request");
+        log_error("No Request");
         return false;
     }
 
     rc = ogs_sbi_send_request_to_nrf(
             OGS_SBI_SERVICE_TYPE_NNRF_NFM, NULL,
             ogs_sbi_client_handler, request, ogs_sbi_self()->nf_instance);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     ogs_sbi_request_free(request);
 

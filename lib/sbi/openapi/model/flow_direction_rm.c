@@ -8,7 +8,7 @@ OpenAPI_flow_direction_rm_t *OpenAPI_flow_direction_rm_create(
 )
 {
     OpenAPI_flow_direction_rm_t *flow_direction_rm_local_var = ogs_malloc(sizeof(OpenAPI_flow_direction_rm_t));
-    ogs_assert(flow_direction_rm_local_var);
+    log_assert(flow_direction_rm_local_var);
 
 
     return flow_direction_rm_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_flow_direction_rm_convertToJSON(OpenAPI_flow_direction_rm_t *flow
     OpenAPI_lnode_t *node = NULL;
 
     if (flow_direction_rm == NULL) {
-        ogs_error("OpenAPI_flow_direction_rm_convertToJSON() failed [FlowDirectionRm]");
+        log_error("OpenAPI_flow_direction_rm_convertToJSON() failed [FlowDirectionRm]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_flow_direction_rm_t *OpenAPI_flow_direction_rm_copy(OpenAPI_flow_directi
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_flow_direction_rm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_flow_direction_rm_convertToJSON() failed");
+        log_error("OpenAPI_flow_direction_rm_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_flow_direction_rm_t *OpenAPI_flow_direction_rm_copy(OpenAPI_flow_directi
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

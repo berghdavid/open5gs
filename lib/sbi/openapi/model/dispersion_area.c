@@ -13,7 +13,7 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_create(
 )
 {
     OpenAPI_dispersion_area_t *dispersion_area_local_var = ogs_malloc(sizeof(OpenAPI_dispersion_area_t));
-    ogs_assert(dispersion_area_local_var);
+    log_assert(dispersion_area_local_var);
 
     dispersion_area_local_var->tai_list = tai_list;
     dispersion_area_local_var->ncgi_list = ncgi_list;
@@ -61,7 +61,7 @@ cJSON *OpenAPI_dispersion_area_convertToJSON(OpenAPI_dispersion_area_t *dispersi
     OpenAPI_lnode_t *node = NULL;
 
     if (dispersion_area == NULL) {
-        ogs_error("OpenAPI_dispersion_area_convertToJSON() failed [DispersionArea]");
+        log_error("OpenAPI_dispersion_area_convertToJSON() failed [DispersionArea]");
         return NULL;
     }
 
@@ -69,13 +69,13 @@ cJSON *OpenAPI_dispersion_area_convertToJSON(OpenAPI_dispersion_area_t *dispersi
     if (dispersion_area->tai_list) {
     cJSON *tai_listList = cJSON_AddArrayToObject(item, "taiList");
     if (tai_listList == NULL) {
-        ogs_error("OpenAPI_dispersion_area_convertToJSON() failed [tai_list]");
+        log_error("OpenAPI_dispersion_area_convertToJSON() failed [tai_list]");
         goto end;
     }
     OpenAPI_list_for_each(dispersion_area->tai_list, node) {
         cJSON *itemLocal = OpenAPI_tai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dispersion_area_convertToJSON() failed [tai_list]");
+            log_error("OpenAPI_dispersion_area_convertToJSON() failed [tai_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_listList, itemLocal);
@@ -85,13 +85,13 @@ cJSON *OpenAPI_dispersion_area_convertToJSON(OpenAPI_dispersion_area_t *dispersi
     if (dispersion_area->ncgi_list) {
     cJSON *ncgi_listList = cJSON_AddArrayToObject(item, "ncgiList");
     if (ncgi_listList == NULL) {
-        ogs_error("OpenAPI_dispersion_area_convertToJSON() failed [ncgi_list]");
+        log_error("OpenAPI_dispersion_area_convertToJSON() failed [ncgi_list]");
         goto end;
     }
     OpenAPI_list_for_each(dispersion_area->ncgi_list, node) {
         cJSON *itemLocal = OpenAPI_ncgi_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dispersion_area_convertToJSON() failed [ncgi_list]");
+            log_error("OpenAPI_dispersion_area_convertToJSON() failed [ncgi_list]");
             goto end;
         }
         cJSON_AddItemToArray(ncgi_listList, itemLocal);
@@ -101,13 +101,13 @@ cJSON *OpenAPI_dispersion_area_convertToJSON(OpenAPI_dispersion_area_t *dispersi
     if (dispersion_area->ecgi_list) {
     cJSON *ecgi_listList = cJSON_AddArrayToObject(item, "ecgiList");
     if (ecgi_listList == NULL) {
-        ogs_error("OpenAPI_dispersion_area_convertToJSON() failed [ecgi_list]");
+        log_error("OpenAPI_dispersion_area_convertToJSON() failed [ecgi_list]");
         goto end;
     }
     OpenAPI_list_for_each(dispersion_area->ecgi_list, node) {
         cJSON *itemLocal = OpenAPI_ecgi_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dispersion_area_convertToJSON() failed [ecgi_list]");
+            log_error("OpenAPI_dispersion_area_convertToJSON() failed [ecgi_list]");
             goto end;
         }
         cJSON_AddItemToArray(ecgi_listList, itemLocal);
@@ -116,7 +116,7 @@ cJSON *OpenAPI_dispersion_area_convertToJSON(OpenAPI_dispersion_area_t *dispersi
 
     if (dispersion_area->is_n3ga_ind) {
     if (cJSON_AddBoolToObject(item, "n3gaInd", dispersion_area->n3ga_ind) == NULL) {
-        ogs_error("OpenAPI_dispersion_area_convertToJSON() failed [n3ga_ind]");
+        log_error("OpenAPI_dispersion_area_convertToJSON() failed [n3ga_ind]");
         goto end;
     }
     }
@@ -140,7 +140,7 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_parseFromJSON(cJSON *dispersi
     if (tai_list) {
         cJSON *tai_list_local = NULL;
         if (!cJSON_IsArray(tai_list)) {
-            ogs_error("OpenAPI_dispersion_area_parseFromJSON() failed [tai_list]");
+            log_error("OpenAPI_dispersion_area_parseFromJSON() failed [tai_list]");
             goto end;
         }
 
@@ -148,12 +148,12 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_parseFromJSON(cJSON *dispersi
 
         cJSON_ArrayForEach(tai_list_local, tai_list) {
             if (!cJSON_IsObject(tai_list_local)) {
-                ogs_error("OpenAPI_dispersion_area_parseFromJSON() failed [tai_list]");
+                log_error("OpenAPI_dispersion_area_parseFromJSON() failed [tai_list]");
                 goto end;
             }
             OpenAPI_tai_t *tai_listItem = OpenAPI_tai_parseFromJSON(tai_list_local);
             if (!tai_listItem) {
-                ogs_error("No tai_listItem");
+                log_error("No tai_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_listList, tai_listItem);
@@ -164,7 +164,7 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_parseFromJSON(cJSON *dispersi
     if (ncgi_list) {
         cJSON *ncgi_list_local = NULL;
         if (!cJSON_IsArray(ncgi_list)) {
-            ogs_error("OpenAPI_dispersion_area_parseFromJSON() failed [ncgi_list]");
+            log_error("OpenAPI_dispersion_area_parseFromJSON() failed [ncgi_list]");
             goto end;
         }
 
@@ -172,12 +172,12 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_parseFromJSON(cJSON *dispersi
 
         cJSON_ArrayForEach(ncgi_list_local, ncgi_list) {
             if (!cJSON_IsObject(ncgi_list_local)) {
-                ogs_error("OpenAPI_dispersion_area_parseFromJSON() failed [ncgi_list]");
+                log_error("OpenAPI_dispersion_area_parseFromJSON() failed [ncgi_list]");
                 goto end;
             }
             OpenAPI_ncgi_t *ncgi_listItem = OpenAPI_ncgi_parseFromJSON(ncgi_list_local);
             if (!ncgi_listItem) {
-                ogs_error("No ncgi_listItem");
+                log_error("No ncgi_listItem");
                 goto end;
             }
             OpenAPI_list_add(ncgi_listList, ncgi_listItem);
@@ -188,7 +188,7 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_parseFromJSON(cJSON *dispersi
     if (ecgi_list) {
         cJSON *ecgi_list_local = NULL;
         if (!cJSON_IsArray(ecgi_list)) {
-            ogs_error("OpenAPI_dispersion_area_parseFromJSON() failed [ecgi_list]");
+            log_error("OpenAPI_dispersion_area_parseFromJSON() failed [ecgi_list]");
             goto end;
         }
 
@@ -196,12 +196,12 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_parseFromJSON(cJSON *dispersi
 
         cJSON_ArrayForEach(ecgi_list_local, ecgi_list) {
             if (!cJSON_IsObject(ecgi_list_local)) {
-                ogs_error("OpenAPI_dispersion_area_parseFromJSON() failed [ecgi_list]");
+                log_error("OpenAPI_dispersion_area_parseFromJSON() failed [ecgi_list]");
                 goto end;
             }
             OpenAPI_ecgi_t *ecgi_listItem = OpenAPI_ecgi_parseFromJSON(ecgi_list_local);
             if (!ecgi_listItem) {
-                ogs_error("No ecgi_listItem");
+                log_error("No ecgi_listItem");
                 goto end;
             }
             OpenAPI_list_add(ecgi_listList, ecgi_listItem);
@@ -211,7 +211,7 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_parseFromJSON(cJSON *dispersi
     n3ga_ind = cJSON_GetObjectItemCaseSensitive(dispersion_areaJSON, "n3gaInd");
     if (n3ga_ind) {
     if (!cJSON_IsBool(n3ga_ind)) {
-        ogs_error("OpenAPI_dispersion_area_parseFromJSON() failed [n3ga_ind]");
+        log_error("OpenAPI_dispersion_area_parseFromJSON() failed [n3ga_ind]");
         goto end;
     }
     }
@@ -255,10 +255,10 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_copy(OpenAPI_dispersion_area_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dispersion_area_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dispersion_area_convertToJSON() failed");
+        log_error("OpenAPI_dispersion_area_convertToJSON() failed");
         return NULL;
     }
 
@@ -266,14 +266,14 @@ OpenAPI_dispersion_area_t *OpenAPI_dispersion_area_copy(OpenAPI_dispersion_area_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

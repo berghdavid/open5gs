@@ -8,7 +8,7 @@ OpenAPI_expected_analytics_type_t *OpenAPI_expected_analytics_type_create(
 )
 {
     OpenAPI_expected_analytics_type_t *expected_analytics_type_local_var = ogs_malloc(sizeof(OpenAPI_expected_analytics_type_t));
-    ogs_assert(expected_analytics_type_local_var);
+    log_assert(expected_analytics_type_local_var);
 
 
     return expected_analytics_type_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_expected_analytics_type_convertToJSON(OpenAPI_expected_analytics_
     OpenAPI_lnode_t *node = NULL;
 
     if (expected_analytics_type == NULL) {
-        ogs_error("OpenAPI_expected_analytics_type_convertToJSON() failed [ExpectedAnalyticsType]");
+        log_error("OpenAPI_expected_analytics_type_convertToJSON() failed [ExpectedAnalyticsType]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_expected_analytics_type_t *OpenAPI_expected_analytics_type_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_expected_analytics_type_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_expected_analytics_type_convertToJSON() failed");
+        log_error("OpenAPI_expected_analytics_type_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_expected_analytics_type_t *OpenAPI_expected_analytics_type_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

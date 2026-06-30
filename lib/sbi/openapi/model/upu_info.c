@@ -17,7 +17,7 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_create(
 )
 {
     OpenAPI_upu_info_t *upu_info_local_var = ogs_malloc(sizeof(OpenAPI_upu_info_t));
-    ogs_assert(upu_info_local_var);
+    log_assert(upu_info_local_var);
 
     upu_info_local_var->upu_data_list = upu_data_list;
     upu_info_local_var->is_upu_reg_ind = is_upu_reg_ind;
@@ -71,7 +71,7 @@ cJSON *OpenAPI_upu_info_convertToJSON(OpenAPI_upu_info_t *upu_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (upu_info == NULL) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [UpuInfo]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [UpuInfo]");
         return NULL;
     }
 
@@ -79,13 +79,13 @@ cJSON *OpenAPI_upu_info_convertToJSON(OpenAPI_upu_info_t *upu_info)
     if (upu_info->upu_data_list) {
     cJSON *upu_data_listList = cJSON_AddArrayToObject(item, "upuDataList");
     if (upu_data_listList == NULL) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [upu_data_list]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [upu_data_list]");
         goto end;
     }
     OpenAPI_list_for_each(upu_info->upu_data_list, node) {
         cJSON *itemLocal = OpenAPI_upu_data_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_upu_info_convertToJSON() failed [upu_data_list]");
+            log_error("OpenAPI_upu_info_convertToJSON() failed [upu_data_list]");
             goto end;
         }
         cJSON_AddItemToArray(upu_data_listList, itemLocal);
@@ -94,44 +94,44 @@ cJSON *OpenAPI_upu_info_convertToJSON(OpenAPI_upu_info_t *upu_info)
 
     if (upu_info->is_upu_reg_ind) {
     if (cJSON_AddBoolToObject(item, "upuRegInd", upu_info->upu_reg_ind) == NULL) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [upu_reg_ind]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [upu_reg_ind]");
         goto end;
     }
     }
 
     if (upu_info->is_upu_ack_ind) {
     if (cJSON_AddBoolToObject(item, "upuAckInd", upu_info->upu_ack_ind) == NULL) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [upu_ack_ind]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [upu_ack_ind]");
         goto end;
     }
     }
 
     if (upu_info->upu_mac_iausf) {
     if (cJSON_AddStringToObject(item, "upuMacIausf", upu_info->upu_mac_iausf) == NULL) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [upu_mac_iausf]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [upu_mac_iausf]");
         goto end;
     }
     }
 
     if (upu_info->counter_upu) {
     if (cJSON_AddStringToObject(item, "counterUpu", upu_info->counter_upu) == NULL) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [counter_upu]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [counter_upu]");
         goto end;
     }
     }
 
     if (!upu_info->provisioning_time) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [provisioning_time]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [provisioning_time]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "provisioningTime", upu_info->provisioning_time) == NULL) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [provisioning_time]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [provisioning_time]");
         goto end;
     }
 
     if (upu_info->upu_transparent_container) {
     if (cJSON_AddStringToObject(item, "upuTransparentContainer", upu_info->upu_transparent_container) == NULL) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed [upu_transparent_container]");
+        log_error("OpenAPI_upu_info_convertToJSON() failed [upu_transparent_container]");
         goto end;
     }
     }
@@ -156,7 +156,7 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_parseFromJSON(cJSON *upu_infoJSON)
     if (upu_data_list) {
         cJSON *upu_data_list_local = NULL;
         if (!cJSON_IsArray(upu_data_list)) {
-            ogs_error("OpenAPI_upu_info_parseFromJSON() failed [upu_data_list]");
+            log_error("OpenAPI_upu_info_parseFromJSON() failed [upu_data_list]");
             goto end;
         }
 
@@ -164,12 +164,12 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_parseFromJSON(cJSON *upu_infoJSON)
 
         cJSON_ArrayForEach(upu_data_list_local, upu_data_list) {
             if (!cJSON_IsObject(upu_data_list_local)) {
-                ogs_error("OpenAPI_upu_info_parseFromJSON() failed [upu_data_list]");
+                log_error("OpenAPI_upu_info_parseFromJSON() failed [upu_data_list]");
                 goto end;
             }
             OpenAPI_upu_data_t *upu_data_listItem = OpenAPI_upu_data_parseFromJSON(upu_data_list_local);
             if (!upu_data_listItem) {
-                ogs_error("No upu_data_listItem");
+                log_error("No upu_data_listItem");
                 goto end;
             }
             OpenAPI_list_add(upu_data_listList, upu_data_listItem);
@@ -179,7 +179,7 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_parseFromJSON(cJSON *upu_infoJSON)
     upu_reg_ind = cJSON_GetObjectItemCaseSensitive(upu_infoJSON, "upuRegInd");
     if (upu_reg_ind) {
     if (!cJSON_IsBool(upu_reg_ind)) {
-        ogs_error("OpenAPI_upu_info_parseFromJSON() failed [upu_reg_ind]");
+        log_error("OpenAPI_upu_info_parseFromJSON() failed [upu_reg_ind]");
         goto end;
     }
     }
@@ -187,7 +187,7 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_parseFromJSON(cJSON *upu_infoJSON)
     upu_ack_ind = cJSON_GetObjectItemCaseSensitive(upu_infoJSON, "upuAckInd");
     if (upu_ack_ind) {
     if (!cJSON_IsBool(upu_ack_ind)) {
-        ogs_error("OpenAPI_upu_info_parseFromJSON() failed [upu_ack_ind]");
+        log_error("OpenAPI_upu_info_parseFromJSON() failed [upu_ack_ind]");
         goto end;
     }
     }
@@ -195,7 +195,7 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_parseFromJSON(cJSON *upu_infoJSON)
     upu_mac_iausf = cJSON_GetObjectItemCaseSensitive(upu_infoJSON, "upuMacIausf");
     if (upu_mac_iausf) {
     if (!cJSON_IsString(upu_mac_iausf) && !cJSON_IsNull(upu_mac_iausf)) {
-        ogs_error("OpenAPI_upu_info_parseFromJSON() failed [upu_mac_iausf]");
+        log_error("OpenAPI_upu_info_parseFromJSON() failed [upu_mac_iausf]");
         goto end;
     }
     }
@@ -203,25 +203,25 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_parseFromJSON(cJSON *upu_infoJSON)
     counter_upu = cJSON_GetObjectItemCaseSensitive(upu_infoJSON, "counterUpu");
     if (counter_upu) {
     if (!cJSON_IsString(counter_upu) && !cJSON_IsNull(counter_upu)) {
-        ogs_error("OpenAPI_upu_info_parseFromJSON() failed [counter_upu]");
+        log_error("OpenAPI_upu_info_parseFromJSON() failed [counter_upu]");
         goto end;
     }
     }
 
     provisioning_time = cJSON_GetObjectItemCaseSensitive(upu_infoJSON, "provisioningTime");
     if (!provisioning_time) {
-        ogs_error("OpenAPI_upu_info_parseFromJSON() failed [provisioning_time]");
+        log_error("OpenAPI_upu_info_parseFromJSON() failed [provisioning_time]");
         goto end;
     }
     if (!cJSON_IsString(provisioning_time) && !cJSON_IsNull(provisioning_time)) {
-        ogs_error("OpenAPI_upu_info_parseFromJSON() failed [provisioning_time]");
+        log_error("OpenAPI_upu_info_parseFromJSON() failed [provisioning_time]");
         goto end;
     }
 
     upu_transparent_container = cJSON_GetObjectItemCaseSensitive(upu_infoJSON, "upuTransparentContainer");
     if (upu_transparent_container) {
     if (!cJSON_IsString(upu_transparent_container) && !cJSON_IsNull(upu_transparent_container)) {
-        ogs_error("OpenAPI_upu_info_parseFromJSON() failed [upu_transparent_container]");
+        log_error("OpenAPI_upu_info_parseFromJSON() failed [upu_transparent_container]");
         goto end;
     }
     }
@@ -255,10 +255,10 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_copy(OpenAPI_upu_info_t *dst, OpenAPI_upu_i
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_upu_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_upu_info_convertToJSON() failed");
+        log_error("OpenAPI_upu_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -266,14 +266,14 @@ OpenAPI_upu_info_t *OpenAPI_upu_info_copy(OpenAPI_upu_info_t *dst, OpenAPI_upu_i
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -9,7 +9,7 @@ OpenAPI_enhanced_coverage_restriction_data_t *OpenAPI_enhanced_coverage_restrict
 )
 {
     OpenAPI_enhanced_coverage_restriction_data_t *enhanced_coverage_restriction_data_local_var = ogs_malloc(sizeof(OpenAPI_enhanced_coverage_restriction_data_t));
-    ogs_assert(enhanced_coverage_restriction_data_local_var);
+    log_assert(enhanced_coverage_restriction_data_local_var);
 
     enhanced_coverage_restriction_data_local_var->plmn_ec_info_list = plmn_ec_info_list;
 
@@ -39,7 +39,7 @@ cJSON *OpenAPI_enhanced_coverage_restriction_data_convertToJSON(OpenAPI_enhanced
     OpenAPI_lnode_t *node = NULL;
 
     if (enhanced_coverage_restriction_data == NULL) {
-        ogs_error("OpenAPI_enhanced_coverage_restriction_data_convertToJSON() failed [EnhancedCoverageRestrictionData]");
+        log_error("OpenAPI_enhanced_coverage_restriction_data_convertToJSON() failed [EnhancedCoverageRestrictionData]");
         return NULL;
     }
 
@@ -47,13 +47,13 @@ cJSON *OpenAPI_enhanced_coverage_restriction_data_convertToJSON(OpenAPI_enhanced
     if (enhanced_coverage_restriction_data->plmn_ec_info_list) {
     cJSON *plmn_ec_info_listList = cJSON_AddArrayToObject(item, "plmnEcInfoList");
     if (plmn_ec_info_listList == NULL) {
-        ogs_error("OpenAPI_enhanced_coverage_restriction_data_convertToJSON() failed [plmn_ec_info_list]");
+        log_error("OpenAPI_enhanced_coverage_restriction_data_convertToJSON() failed [plmn_ec_info_list]");
         goto end;
     }
     OpenAPI_list_for_each(enhanced_coverage_restriction_data->plmn_ec_info_list, node) {
         cJSON *itemLocal = OpenAPI_plmn_ec_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_enhanced_coverage_restriction_data_convertToJSON() failed [plmn_ec_info_list]");
+            log_error("OpenAPI_enhanced_coverage_restriction_data_convertToJSON() failed [plmn_ec_info_list]");
             goto end;
         }
         cJSON_AddItemToArray(plmn_ec_info_listList, itemLocal);
@@ -74,7 +74,7 @@ OpenAPI_enhanced_coverage_restriction_data_t *OpenAPI_enhanced_coverage_restrict
     if (plmn_ec_info_list) {
         cJSON *plmn_ec_info_list_local = NULL;
         if (!cJSON_IsArray(plmn_ec_info_list)) {
-            ogs_error("OpenAPI_enhanced_coverage_restriction_data_parseFromJSON() failed [plmn_ec_info_list]");
+            log_error("OpenAPI_enhanced_coverage_restriction_data_parseFromJSON() failed [plmn_ec_info_list]");
             goto end;
         }
 
@@ -82,12 +82,12 @@ OpenAPI_enhanced_coverage_restriction_data_t *OpenAPI_enhanced_coverage_restrict
 
         cJSON_ArrayForEach(plmn_ec_info_list_local, plmn_ec_info_list) {
             if (!cJSON_IsObject(plmn_ec_info_list_local)) {
-                ogs_error("OpenAPI_enhanced_coverage_restriction_data_parseFromJSON() failed [plmn_ec_info_list]");
+                log_error("OpenAPI_enhanced_coverage_restriction_data_parseFromJSON() failed [plmn_ec_info_list]");
                 goto end;
             }
             OpenAPI_plmn_ec_info_t *plmn_ec_info_listItem = OpenAPI_plmn_ec_info_parseFromJSON(plmn_ec_info_list_local);
             if (!plmn_ec_info_listItem) {
-                ogs_error("No plmn_ec_info_listItem");
+                log_error("No plmn_ec_info_listItem");
                 goto end;
             }
             OpenAPI_list_add(plmn_ec_info_listList, plmn_ec_info_listItem);
@@ -115,10 +115,10 @@ OpenAPI_enhanced_coverage_restriction_data_t *OpenAPI_enhanced_coverage_restrict
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_enhanced_coverage_restriction_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_enhanced_coverage_restriction_data_convertToJSON() failed");
+        log_error("OpenAPI_enhanced_coverage_restriction_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -126,14 +126,14 @@ OpenAPI_enhanced_coverage_restriction_data_t *OpenAPI_enhanced_coverage_restrict
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

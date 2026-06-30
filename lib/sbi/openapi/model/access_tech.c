@@ -8,7 +8,7 @@ OpenAPI_access_tech_t *OpenAPI_access_tech_create(
 )
 {
     OpenAPI_access_tech_t *access_tech_local_var = ogs_malloc(sizeof(OpenAPI_access_tech_t));
-    ogs_assert(access_tech_local_var);
+    log_assert(access_tech_local_var);
 
 
     return access_tech_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_access_tech_convertToJSON(OpenAPI_access_tech_t *access_tech)
     OpenAPI_lnode_t *node = NULL;
 
     if (access_tech == NULL) {
-        ogs_error("OpenAPI_access_tech_convertToJSON() failed [AccessTech]");
+        log_error("OpenAPI_access_tech_convertToJSON() failed [AccessTech]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_access_tech_t *OpenAPI_access_tech_copy(OpenAPI_access_tech_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_access_tech_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_access_tech_convertToJSON() failed");
+        log_error("OpenAPI_access_tech_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_access_tech_t *OpenAPI_access_tech_copy(OpenAPI_access_tech_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

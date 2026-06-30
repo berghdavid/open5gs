@@ -15,7 +15,7 @@ OpenAPI_tsn_bridge_info_t *OpenAPI_tsn_bridge_info_create(
 )
 {
     OpenAPI_tsn_bridge_info_t *tsn_bridge_info_local_var = ogs_malloc(sizeof(OpenAPI_tsn_bridge_info_t));
-    ogs_assert(tsn_bridge_info_local_var);
+    log_assert(tsn_bridge_info_local_var);
 
     tsn_bridge_info_local_var->is_bridge_id = is_bridge_id;
     tsn_bridge_info_local_var->bridge_id = bridge_id;
@@ -48,35 +48,35 @@ cJSON *OpenAPI_tsn_bridge_info_convertToJSON(OpenAPI_tsn_bridge_info_t *tsn_brid
     OpenAPI_lnode_t *node = NULL;
 
     if (tsn_bridge_info == NULL) {
-        ogs_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [TsnBridgeInfo]");
+        log_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [TsnBridgeInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (tsn_bridge_info->is_bridge_id) {
     if (cJSON_AddNumberToObject(item, "bridgeId", tsn_bridge_info->bridge_id) == NULL) {
-        ogs_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [bridge_id]");
+        log_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [bridge_id]");
         goto end;
     }
     }
 
     if (tsn_bridge_info->dstt_addr) {
     if (cJSON_AddStringToObject(item, "dsttAddr", tsn_bridge_info->dstt_addr) == NULL) {
-        ogs_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [dstt_addr]");
+        log_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [dstt_addr]");
         goto end;
     }
     }
 
     if (tsn_bridge_info->is_dstt_port_num) {
     if (cJSON_AddNumberToObject(item, "dsttPortNum", tsn_bridge_info->dstt_port_num) == NULL) {
-        ogs_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [dstt_port_num]");
+        log_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [dstt_port_num]");
         goto end;
     }
     }
 
     if (tsn_bridge_info->is_dstt_resid_time) {
     if (cJSON_AddNumberToObject(item, "dsttResidTime", tsn_bridge_info->dstt_resid_time) == NULL) {
-        ogs_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [dstt_resid_time]");
+        log_error("OpenAPI_tsn_bridge_info_convertToJSON() failed [dstt_resid_time]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_tsn_bridge_info_t *OpenAPI_tsn_bridge_info_parseFromJSON(cJSON *tsn_brid
     bridge_id = cJSON_GetObjectItemCaseSensitive(tsn_bridge_infoJSON, "bridgeId");
     if (bridge_id) {
     if (!cJSON_IsNumber(bridge_id)) {
-        ogs_error("OpenAPI_tsn_bridge_info_parseFromJSON() failed [bridge_id]");
+        log_error("OpenAPI_tsn_bridge_info_parseFromJSON() failed [bridge_id]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_tsn_bridge_info_t *OpenAPI_tsn_bridge_info_parseFromJSON(cJSON *tsn_brid
     dstt_addr = cJSON_GetObjectItemCaseSensitive(tsn_bridge_infoJSON, "dsttAddr");
     if (dstt_addr) {
     if (!cJSON_IsString(dstt_addr) && !cJSON_IsNull(dstt_addr)) {
-        ogs_error("OpenAPI_tsn_bridge_info_parseFromJSON() failed [dstt_addr]");
+        log_error("OpenAPI_tsn_bridge_info_parseFromJSON() failed [dstt_addr]");
         goto end;
     }
     }
@@ -112,7 +112,7 @@ OpenAPI_tsn_bridge_info_t *OpenAPI_tsn_bridge_info_parseFromJSON(cJSON *tsn_brid
     dstt_port_num = cJSON_GetObjectItemCaseSensitive(tsn_bridge_infoJSON, "dsttPortNum");
     if (dstt_port_num) {
     if (!cJSON_IsNumber(dstt_port_num)) {
-        ogs_error("OpenAPI_tsn_bridge_info_parseFromJSON() failed [dstt_port_num]");
+        log_error("OpenAPI_tsn_bridge_info_parseFromJSON() failed [dstt_port_num]");
         goto end;
     }
     }
@@ -120,7 +120,7 @@ OpenAPI_tsn_bridge_info_t *OpenAPI_tsn_bridge_info_parseFromJSON(cJSON *tsn_brid
     dstt_resid_time = cJSON_GetObjectItemCaseSensitive(tsn_bridge_infoJSON, "dsttResidTime");
     if (dstt_resid_time) {
     if (!cJSON_IsNumber(dstt_resid_time)) {
-        ogs_error("OpenAPI_tsn_bridge_info_parseFromJSON() failed [dstt_resid_time]");
+        log_error("OpenAPI_tsn_bridge_info_parseFromJSON() failed [dstt_resid_time]");
         goto end;
     }
     }
@@ -145,10 +145,10 @@ OpenAPI_tsn_bridge_info_t *OpenAPI_tsn_bridge_info_copy(OpenAPI_tsn_bridge_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_tsn_bridge_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_tsn_bridge_info_convertToJSON() failed");
+        log_error("OpenAPI_tsn_bridge_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -156,14 +156,14 @@ OpenAPI_tsn_bridge_info_t *OpenAPI_tsn_bridge_info_copy(OpenAPI_tsn_bridge_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

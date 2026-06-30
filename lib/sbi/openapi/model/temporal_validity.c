@@ -10,7 +10,7 @@ OpenAPI_temporal_validity_t *OpenAPI_temporal_validity_create(
 )
 {
     OpenAPI_temporal_validity_t *temporal_validity_local_var = ogs_malloc(sizeof(OpenAPI_temporal_validity_t));
-    ogs_assert(temporal_validity_local_var);
+    log_assert(temporal_validity_local_var);
 
     temporal_validity_local_var->start_time = start_time;
     temporal_validity_local_var->stop_time = stop_time;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_temporal_validity_convertToJSON(OpenAPI_temporal_validity_t *temp
     OpenAPI_lnode_t *node = NULL;
 
     if (temporal_validity == NULL) {
-        ogs_error("OpenAPI_temporal_validity_convertToJSON() failed [TemporalValidity]");
+        log_error("OpenAPI_temporal_validity_convertToJSON() failed [TemporalValidity]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (temporal_validity->start_time) {
     if (cJSON_AddStringToObject(item, "startTime", temporal_validity->start_time) == NULL) {
-        ogs_error("OpenAPI_temporal_validity_convertToJSON() failed [start_time]");
+        log_error("OpenAPI_temporal_validity_convertToJSON() failed [start_time]");
         goto end;
     }
     }
 
     if (temporal_validity->stop_time) {
     if (cJSON_AddStringToObject(item, "stopTime", temporal_validity->stop_time) == NULL) {
-        ogs_error("OpenAPI_temporal_validity_convertToJSON() failed [stop_time]");
+        log_error("OpenAPI_temporal_validity_convertToJSON() failed [stop_time]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_temporal_validity_t *OpenAPI_temporal_validity_parseFromJSON(cJSON *temp
     start_time = cJSON_GetObjectItemCaseSensitive(temporal_validityJSON, "startTime");
     if (start_time) {
     if (!cJSON_IsString(start_time) && !cJSON_IsNull(start_time)) {
-        ogs_error("OpenAPI_temporal_validity_parseFromJSON() failed [start_time]");
+        log_error("OpenAPI_temporal_validity_parseFromJSON() failed [start_time]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_temporal_validity_t *OpenAPI_temporal_validity_parseFromJSON(cJSON *temp
     stop_time = cJSON_GetObjectItemCaseSensitive(temporal_validityJSON, "stopTime");
     if (stop_time) {
     if (!cJSON_IsString(stop_time) && !cJSON_IsNull(stop_time)) {
-        ogs_error("OpenAPI_temporal_validity_parseFromJSON() failed [stop_time]");
+        log_error("OpenAPI_temporal_validity_parseFromJSON() failed [stop_time]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_temporal_validity_t *OpenAPI_temporal_validity_copy(OpenAPI_temporal_val
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_temporal_validity_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_temporal_validity_convertToJSON() failed");
+        log_error("OpenAPI_temporal_validity_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_temporal_validity_t *OpenAPI_temporal_validity_copy(OpenAPI_temporal_val
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

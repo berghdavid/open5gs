@@ -16,7 +16,7 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_create(
 )
 {
     OpenAPI_qos_sustainability_info_t *qos_sustainability_info_local_var = ogs_malloc(sizeof(OpenAPI_qos_sustainability_info_t));
-    ogs_assert(qos_sustainability_info_local_var);
+    log_assert(qos_sustainability_info_local_var);
 
     qos_sustainability_info_local_var->area_info = area_info;
     qos_sustainability_info_local_var->start_ts = start_ts;
@@ -70,7 +70,7 @@ cJSON *OpenAPI_qos_sustainability_info_convertToJSON(OpenAPI_qos_sustainability_
     OpenAPI_lnode_t *node = NULL;
 
     if (qos_sustainability_info == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [QosSustainabilityInfo]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [QosSustainabilityInfo]");
         return NULL;
     }
 
@@ -78,26 +78,26 @@ cJSON *OpenAPI_qos_sustainability_info_convertToJSON(OpenAPI_qos_sustainability_
     if (qos_sustainability_info->area_info) {
     cJSON *area_info_local_JSON = OpenAPI_network_area_info_convertToJSON(qos_sustainability_info->area_info);
     if (area_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [area_info]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [area_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "areaInfo", area_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [area_info]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [area_info]");
         goto end;
     }
     }
 
     if (qos_sustainability_info->start_ts) {
     if (cJSON_AddStringToObject(item, "startTs", qos_sustainability_info->start_ts) == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [start_ts]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [start_ts]");
         goto end;
     }
     }
 
     if (qos_sustainability_info->end_ts) {
     if (cJSON_AddStringToObject(item, "endTs", qos_sustainability_info->end_ts) == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [end_ts]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [end_ts]");
         goto end;
     }
     }
@@ -105,19 +105,19 @@ cJSON *OpenAPI_qos_sustainability_info_convertToJSON(OpenAPI_qos_sustainability_
     if (qos_sustainability_info->qos_flow_ret_thd) {
     cJSON *qos_flow_ret_thd_local_JSON = OpenAPI_retainability_threshold_convertToJSON(qos_sustainability_info->qos_flow_ret_thd);
     if (qos_flow_ret_thd_local_JSON == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [qos_flow_ret_thd]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [qos_flow_ret_thd]");
         goto end;
     }
     cJSON_AddItemToObject(item, "qosFlowRetThd", qos_flow_ret_thd_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [qos_flow_ret_thd]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [qos_flow_ret_thd]");
         goto end;
     }
     }
 
     if (qos_sustainability_info->ran_ue_throu_thd) {
     if (cJSON_AddStringToObject(item, "ranUeThrouThd", qos_sustainability_info->ran_ue_throu_thd) == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [ran_ue_throu_thd]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [ran_ue_throu_thd]");
         goto end;
     }
     }
@@ -125,19 +125,19 @@ cJSON *OpenAPI_qos_sustainability_info_convertToJSON(OpenAPI_qos_sustainability_
     if (qos_sustainability_info->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(qos_sustainability_info->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [snssai]");
         goto end;
     }
     }
 
     if (qos_sustainability_info->is_confidence) {
     if (cJSON_AddNumberToObject(item, "confidence", qos_sustainability_info->confidence) == NULL) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [confidence]");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed [confidence]");
         goto end;
     }
     }
@@ -164,7 +164,7 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_parseFromJSON
     if (area_info) {
     area_info_local_nonprim = OpenAPI_network_area_info_parseFromJSON(area_info);
     if (!area_info_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [area_info]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [area_info]");
         goto end;
     }
     }
@@ -172,7 +172,7 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_parseFromJSON
     start_ts = cJSON_GetObjectItemCaseSensitive(qos_sustainability_infoJSON, "startTs");
     if (start_ts) {
     if (!cJSON_IsString(start_ts) && !cJSON_IsNull(start_ts)) {
-        ogs_error("OpenAPI_qos_sustainability_info_parseFromJSON() failed [start_ts]");
+        log_error("OpenAPI_qos_sustainability_info_parseFromJSON() failed [start_ts]");
         goto end;
     }
     }
@@ -180,7 +180,7 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_parseFromJSON
     end_ts = cJSON_GetObjectItemCaseSensitive(qos_sustainability_infoJSON, "endTs");
     if (end_ts) {
     if (!cJSON_IsString(end_ts) && !cJSON_IsNull(end_ts)) {
-        ogs_error("OpenAPI_qos_sustainability_info_parseFromJSON() failed [end_ts]");
+        log_error("OpenAPI_qos_sustainability_info_parseFromJSON() failed [end_ts]");
         goto end;
     }
     }
@@ -189,7 +189,7 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_parseFromJSON
     if (qos_flow_ret_thd) {
     qos_flow_ret_thd_local_nonprim = OpenAPI_retainability_threshold_parseFromJSON(qos_flow_ret_thd);
     if (!qos_flow_ret_thd_local_nonprim) {
-        ogs_error("OpenAPI_retainability_threshold_parseFromJSON failed [qos_flow_ret_thd]");
+        log_error("OpenAPI_retainability_threshold_parseFromJSON failed [qos_flow_ret_thd]");
         goto end;
     }
     }
@@ -197,7 +197,7 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_parseFromJSON
     ran_ue_throu_thd = cJSON_GetObjectItemCaseSensitive(qos_sustainability_infoJSON, "ranUeThrouThd");
     if (ran_ue_throu_thd) {
     if (!cJSON_IsString(ran_ue_throu_thd) && !cJSON_IsNull(ran_ue_throu_thd)) {
-        ogs_error("OpenAPI_qos_sustainability_info_parseFromJSON() failed [ran_ue_throu_thd]");
+        log_error("OpenAPI_qos_sustainability_info_parseFromJSON() failed [ran_ue_throu_thd]");
         goto end;
     }
     }
@@ -206,7 +206,7 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_parseFromJSON
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -214,7 +214,7 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_parseFromJSON
     confidence = cJSON_GetObjectItemCaseSensitive(qos_sustainability_infoJSON, "confidence");
     if (confidence) {
     if (!cJSON_IsNumber(confidence)) {
-        ogs_error("OpenAPI_qos_sustainability_info_parseFromJSON() failed [confidence]");
+        log_error("OpenAPI_qos_sustainability_info_parseFromJSON() failed [confidence]");
         goto end;
     }
     }
@@ -252,10 +252,10 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_qos_sustainability_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_qos_sustainability_info_convertToJSON() failed");
+        log_error("OpenAPI_qos_sustainability_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -263,14 +263,14 @@ OpenAPI_qos_sustainability_info_t *OpenAPI_qos_sustainability_info_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -38,7 +38,6 @@
 #include "core/ogs-errno.h"
 #include "core/ogs-time.h"
 #include "core/ogs-conv.h"
-#include "core/ogs-log.h"
 #include "core/ogs-pkbuf.h"
 #include "core/ogs-memory.h"
 #include "core/ogs-rand.h"
@@ -81,7 +80,7 @@ typedef struct {
     struct {
         int pool;
         int domain_pool;
-        ogs_log_level_e level;
+        log_level_e level;
     } log;
 
     struct {

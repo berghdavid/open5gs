@@ -9,7 +9,7 @@ OpenAPI_odb_data_t *OpenAPI_odb_data_create(
 )
 {
     OpenAPI_odb_data_t *odb_data_local_var = ogs_malloc(sizeof(OpenAPI_odb_data_t));
-    ogs_assert(odb_data_local_var);
+    log_assert(odb_data_local_var);
 
     odb_data_local_var->roaming_odb = roaming_odb;
 
@@ -32,14 +32,14 @@ cJSON *OpenAPI_odb_data_convertToJSON(OpenAPI_odb_data_t *odb_data)
     OpenAPI_lnode_t *node = NULL;
 
     if (odb_data == NULL) {
-        ogs_error("OpenAPI_odb_data_convertToJSON() failed [OdbData]");
+        log_error("OpenAPI_odb_data_convertToJSON() failed [OdbData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (odb_data->roaming_odb != OpenAPI_roaming_odb_NULL) {
     if (cJSON_AddStringToObject(item, "roamingOdb", OpenAPI_roaming_odb_ToString(odb_data->roaming_odb)) == NULL) {
-        ogs_error("OpenAPI_odb_data_convertToJSON() failed [roaming_odb]");
+        log_error("OpenAPI_odb_data_convertToJSON() failed [roaming_odb]");
         goto end;
     }
     }
@@ -57,7 +57,7 @@ OpenAPI_odb_data_t *OpenAPI_odb_data_parseFromJSON(cJSON *odb_dataJSON)
     roaming_odb = cJSON_GetObjectItemCaseSensitive(odb_dataJSON, "roamingOdb");
     if (roaming_odb) {
     if (!cJSON_IsString(roaming_odb)) {
-        ogs_error("OpenAPI_odb_data_parseFromJSON() failed [roaming_odb]");
+        log_error("OpenAPI_odb_data_parseFromJSON() failed [roaming_odb]");
         goto end;
     }
     roaming_odbVariable = OpenAPI_roaming_odb_FromString(roaming_odb->valuestring);
@@ -77,10 +77,10 @@ OpenAPI_odb_data_t *OpenAPI_odb_data_copy(OpenAPI_odb_data_t *dst, OpenAPI_odb_d
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_odb_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_odb_data_convertToJSON() failed");
+        log_error("OpenAPI_odb_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -88,14 +88,14 @@ OpenAPI_odb_data_t *OpenAPI_odb_data_copy(OpenAPI_odb_data_t *dst, OpenAPI_odb_d
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

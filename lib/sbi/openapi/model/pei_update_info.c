@@ -9,7 +9,7 @@ OpenAPI_pei_update_info_t *OpenAPI_pei_update_info_create(
 )
 {
     OpenAPI_pei_update_info_t *pei_update_info_local_var = ogs_malloc(sizeof(OpenAPI_pei_update_info_t));
-    ogs_assert(pei_update_info_local_var);
+    log_assert(pei_update_info_local_var);
 
     pei_update_info_local_var->pei = pei;
 
@@ -36,17 +36,17 @@ cJSON *OpenAPI_pei_update_info_convertToJSON(OpenAPI_pei_update_info_t *pei_upda
     OpenAPI_lnode_t *node = NULL;
 
     if (pei_update_info == NULL) {
-        ogs_error("OpenAPI_pei_update_info_convertToJSON() failed [PeiUpdateInfo]");
+        log_error("OpenAPI_pei_update_info_convertToJSON() failed [PeiUpdateInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!pei_update_info->pei) {
-        ogs_error("OpenAPI_pei_update_info_convertToJSON() failed [pei]");
+        log_error("OpenAPI_pei_update_info_convertToJSON() failed [pei]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "pei", pei_update_info->pei) == NULL) {
-        ogs_error("OpenAPI_pei_update_info_convertToJSON() failed [pei]");
+        log_error("OpenAPI_pei_update_info_convertToJSON() failed [pei]");
         goto end;
     }
 
@@ -61,11 +61,11 @@ OpenAPI_pei_update_info_t *OpenAPI_pei_update_info_parseFromJSON(cJSON *pei_upda
     cJSON *pei = NULL;
     pei = cJSON_GetObjectItemCaseSensitive(pei_update_infoJSON, "pei");
     if (!pei) {
-        ogs_error("OpenAPI_pei_update_info_parseFromJSON() failed [pei]");
+        log_error("OpenAPI_pei_update_info_parseFromJSON() failed [pei]");
         goto end;
     }
     if (!cJSON_IsString(pei)) {
-        ogs_error("OpenAPI_pei_update_info_parseFromJSON() failed [pei]");
+        log_error("OpenAPI_pei_update_info_parseFromJSON() failed [pei]");
         goto end;
     }
 
@@ -83,10 +83,10 @@ OpenAPI_pei_update_info_t *OpenAPI_pei_update_info_copy(OpenAPI_pei_update_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pei_update_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pei_update_info_convertToJSON() failed");
+        log_error("OpenAPI_pei_update_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -94,14 +94,14 @@ OpenAPI_pei_update_info_t *OpenAPI_pei_update_info_copy(OpenAPI_pei_update_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

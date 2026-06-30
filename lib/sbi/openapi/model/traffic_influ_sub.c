@@ -16,7 +16,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_create(
 )
 {
     OpenAPI_traffic_influ_sub_t *traffic_influ_sub_local_var = ogs_malloc(sizeof(OpenAPI_traffic_influ_sub_t));
-    ogs_assert(traffic_influ_sub_local_var);
+    log_assert(traffic_influ_sub_local_var);
 
     traffic_influ_sub_local_var->dnns = dnns;
     traffic_influ_sub_local_var->snssais = snssais;
@@ -93,7 +93,7 @@ cJSON *OpenAPI_traffic_influ_sub_convertToJSON(OpenAPI_traffic_influ_sub_t *traf
     OpenAPI_lnode_t *node = NULL;
 
     if (traffic_influ_sub == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [TrafficInfluSub]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [TrafficInfluSub]");
         return NULL;
     }
 
@@ -101,12 +101,12 @@ cJSON *OpenAPI_traffic_influ_sub_convertToJSON(OpenAPI_traffic_influ_sub_t *traf
     if (traffic_influ_sub->dnns) {
     cJSON *dnnsList = cJSON_AddArrayToObject(item, "dnns");
     if (dnnsList == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [dnns]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [dnns]");
         goto end;
     }
     OpenAPI_list_for_each(traffic_influ_sub->dnns, node) {
         if (cJSON_AddStringToObject(dnnsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [dnns]");
+            log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [dnns]");
             goto end;
         }
     }
@@ -115,13 +115,13 @@ cJSON *OpenAPI_traffic_influ_sub_convertToJSON(OpenAPI_traffic_influ_sub_t *traf
     if (traffic_influ_sub->snssais) {
     cJSON *snssaisList = cJSON_AddArrayToObject(item, "snssais");
     if (snssaisList == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [snssais]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [snssais]");
         goto end;
     }
     OpenAPI_list_for_each(traffic_influ_sub->snssais, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [snssais]");
+            log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [snssais]");
             goto end;
         }
         cJSON_AddItemToArray(snssaisList, itemLocal);
@@ -131,12 +131,12 @@ cJSON *OpenAPI_traffic_influ_sub_convertToJSON(OpenAPI_traffic_influ_sub_t *traf
     if (traffic_influ_sub->internal_group_ids) {
     cJSON *internal_group_idsList = cJSON_AddArrayToObject(item, "internalGroupIds");
     if (internal_group_idsList == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [internal_group_ids]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [internal_group_ids]");
         goto end;
     }
     OpenAPI_list_for_each(traffic_influ_sub->internal_group_ids, node) {
         if (cJSON_AddStringToObject(internal_group_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [internal_group_ids]");
+            log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [internal_group_ids]");
             goto end;
         }
     }
@@ -145,36 +145,36 @@ cJSON *OpenAPI_traffic_influ_sub_convertToJSON(OpenAPI_traffic_influ_sub_t *traf
     if (traffic_influ_sub->supis) {
     cJSON *supisList = cJSON_AddArrayToObject(item, "supis");
     if (supisList == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [supis]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [supis]");
         goto end;
     }
     OpenAPI_list_for_each(traffic_influ_sub->supis, node) {
         if (cJSON_AddStringToObject(supisList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [supis]");
+            log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [supis]");
             goto end;
         }
     }
     }
 
     if (!traffic_influ_sub->notification_uri) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [notification_uri]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [notification_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "notificationUri", traffic_influ_sub->notification_uri) == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [notification_uri]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [notification_uri]");
         goto end;
     }
 
     if (traffic_influ_sub->expiry) {
     if (cJSON_AddStringToObject(item, "expiry", traffic_influ_sub->expiry) == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [expiry]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [expiry]");
         goto end;
     }
     }
 
     if (traffic_influ_sub->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", traffic_influ_sub->supported_features) == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -182,12 +182,12 @@ cJSON *OpenAPI_traffic_influ_sub_convertToJSON(OpenAPI_traffic_influ_sub_t *traf
     if (traffic_influ_sub->reset_ids) {
     cJSON *reset_idsList = cJSON_AddArrayToObject(item, "resetIds");
     if (reset_idsList == NULL) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [reset_ids]");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [reset_ids]");
         goto end;
     }
     OpenAPI_list_for_each(traffic_influ_sub->reset_ids, node) {
         if (cJSON_AddStringToObject(reset_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [reset_ids]");
+            log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed [reset_ids]");
             goto end;
         }
     }
@@ -218,7 +218,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
     if (dnns) {
         cJSON *dnns_local = NULL;
         if (!cJSON_IsArray(dnns)) {
-            ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [dnns]");
+            log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [dnns]");
             goto end;
         }
 
@@ -228,7 +228,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(dnns_local)) {
-                ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [dnns]");
+                log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [dnns]");
                 goto end;
             }
             OpenAPI_list_add(dnnsList, ogs_strdup(dnns_local->valuestring));
@@ -239,7 +239,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
     if (snssais) {
         cJSON *snssais_local = NULL;
         if (!cJSON_IsArray(snssais)) {
-            ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [snssais]");
+            log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [snssais]");
             goto end;
         }
 
@@ -247,12 +247,12 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
 
         cJSON_ArrayForEach(snssais_local, snssais) {
             if (!cJSON_IsObject(snssais_local)) {
-                ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [snssais]");
+                log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [snssais]");
                 goto end;
             }
             OpenAPI_snssai_t *snssaisItem = OpenAPI_snssai_parseFromJSON(snssais_local);
             if (!snssaisItem) {
-                ogs_error("No snssaisItem");
+                log_error("No snssaisItem");
                 goto end;
             }
             OpenAPI_list_add(snssaisList, snssaisItem);
@@ -263,7 +263,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
     if (internal_group_ids) {
         cJSON *internal_group_ids_local = NULL;
         if (!cJSON_IsArray(internal_group_ids)) {
-            ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [internal_group_ids]");
+            log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [internal_group_ids]");
             goto end;
         }
 
@@ -273,7 +273,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(internal_group_ids_local)) {
-                ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [internal_group_ids]");
+                log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [internal_group_ids]");
                 goto end;
             }
             OpenAPI_list_add(internal_group_idsList, ogs_strdup(internal_group_ids_local->valuestring));
@@ -284,7 +284,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
     if (supis) {
         cJSON *supis_local = NULL;
         if (!cJSON_IsArray(supis)) {
-            ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [supis]");
+            log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [supis]");
             goto end;
         }
 
@@ -294,7 +294,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(supis_local)) {
-                ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [supis]");
+                log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [supis]");
                 goto end;
             }
             OpenAPI_list_add(supisList, ogs_strdup(supis_local->valuestring));
@@ -303,18 +303,18 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
 
     notification_uri = cJSON_GetObjectItemCaseSensitive(traffic_influ_subJSON, "notificationUri");
     if (!notification_uri) {
-        ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [notification_uri]");
+        log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [notification_uri]");
         goto end;
     }
     if (!cJSON_IsString(notification_uri)) {
-        ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [notification_uri]");
+        log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [notification_uri]");
         goto end;
     }
 
     expiry = cJSON_GetObjectItemCaseSensitive(traffic_influ_subJSON, "expiry");
     if (expiry) {
     if (!cJSON_IsString(expiry) && !cJSON_IsNull(expiry)) {
-        ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [expiry]");
+        log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [expiry]");
         goto end;
     }
     }
@@ -322,7 +322,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
     supported_features = cJSON_GetObjectItemCaseSensitive(traffic_influ_subJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -331,7 +331,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
     if (reset_ids) {
         cJSON *reset_ids_local = NULL;
         if (!cJSON_IsArray(reset_ids)) {
-            ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [reset_ids]");
+            log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [reset_ids]");
             goto end;
         }
 
@@ -341,7 +341,7 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_parseFromJSON(cJSON *traf
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(reset_ids_local)) {
-                ogs_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [reset_ids]");
+                log_error("OpenAPI_traffic_influ_sub_parseFromJSON() failed [reset_ids]");
                 goto end;
             }
             OpenAPI_list_add(reset_idsList, ogs_strdup(reset_ids_local->valuestring));
@@ -404,10 +404,10 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_copy(OpenAPI_traffic_infl
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_traffic_influ_sub_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_traffic_influ_sub_convertToJSON() failed");
+        log_error("OpenAPI_traffic_influ_sub_convertToJSON() failed");
         return NULL;
     }
 
@@ -415,14 +415,14 @@ OpenAPI_traffic_influ_sub_t *OpenAPI_traffic_influ_sub_copy(OpenAPI_traffic_infl
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

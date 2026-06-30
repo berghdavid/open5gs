@@ -10,7 +10,7 @@ OpenAPI_cag_ack_data_t *OpenAPI_cag_ack_data_create(
 )
 {
     OpenAPI_cag_ack_data_t *cag_ack_data_local_var = ogs_malloc(sizeof(OpenAPI_cag_ack_data_t));
-    ogs_assert(cag_ack_data_local_var);
+    log_assert(cag_ack_data_local_var);
 
     cag_ack_data_local_var->provisioning_time = provisioning_time;
     cag_ack_data_local_var->ue_update_status = ue_update_status;
@@ -38,26 +38,26 @@ cJSON *OpenAPI_cag_ack_data_convertToJSON(OpenAPI_cag_ack_data_t *cag_ack_data)
     OpenAPI_lnode_t *node = NULL;
 
     if (cag_ack_data == NULL) {
-        ogs_error("OpenAPI_cag_ack_data_convertToJSON() failed [CagAckData]");
+        log_error("OpenAPI_cag_ack_data_convertToJSON() failed [CagAckData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!cag_ack_data->provisioning_time) {
-        ogs_error("OpenAPI_cag_ack_data_convertToJSON() failed [provisioning_time]");
+        log_error("OpenAPI_cag_ack_data_convertToJSON() failed [provisioning_time]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "provisioningTime", cag_ack_data->provisioning_time) == NULL) {
-        ogs_error("OpenAPI_cag_ack_data_convertToJSON() failed [provisioning_time]");
+        log_error("OpenAPI_cag_ack_data_convertToJSON() failed [provisioning_time]");
         goto end;
     }
 
     if (cag_ack_data->ue_update_status == OpenAPI_ue_update_status_NULL) {
-        ogs_error("OpenAPI_cag_ack_data_convertToJSON() failed [ue_update_status]");
+        log_error("OpenAPI_cag_ack_data_convertToJSON() failed [ue_update_status]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ueUpdateStatus", OpenAPI_ue_update_status_ToString(cag_ack_data->ue_update_status)) == NULL) {
-        ogs_error("OpenAPI_cag_ack_data_convertToJSON() failed [ue_update_status]");
+        log_error("OpenAPI_cag_ack_data_convertToJSON() failed [ue_update_status]");
         goto end;
     }
 
@@ -74,21 +74,21 @@ OpenAPI_cag_ack_data_t *OpenAPI_cag_ack_data_parseFromJSON(cJSON *cag_ack_dataJS
     OpenAPI_ue_update_status_e ue_update_statusVariable = 0;
     provisioning_time = cJSON_GetObjectItemCaseSensitive(cag_ack_dataJSON, "provisioningTime");
     if (!provisioning_time) {
-        ogs_error("OpenAPI_cag_ack_data_parseFromJSON() failed [provisioning_time]");
+        log_error("OpenAPI_cag_ack_data_parseFromJSON() failed [provisioning_time]");
         goto end;
     }
     if (!cJSON_IsString(provisioning_time) && !cJSON_IsNull(provisioning_time)) {
-        ogs_error("OpenAPI_cag_ack_data_parseFromJSON() failed [provisioning_time]");
+        log_error("OpenAPI_cag_ack_data_parseFromJSON() failed [provisioning_time]");
         goto end;
     }
 
     ue_update_status = cJSON_GetObjectItemCaseSensitive(cag_ack_dataJSON, "ueUpdateStatus");
     if (!ue_update_status) {
-        ogs_error("OpenAPI_cag_ack_data_parseFromJSON() failed [ue_update_status]");
+        log_error("OpenAPI_cag_ack_data_parseFromJSON() failed [ue_update_status]");
         goto end;
     }
     if (!cJSON_IsString(ue_update_status)) {
-        ogs_error("OpenAPI_cag_ack_data_parseFromJSON() failed [ue_update_status]");
+        log_error("OpenAPI_cag_ack_data_parseFromJSON() failed [ue_update_status]");
         goto end;
     }
     ue_update_statusVariable = OpenAPI_ue_update_status_FromString(ue_update_status->valuestring);
@@ -108,10 +108,10 @@ OpenAPI_cag_ack_data_t *OpenAPI_cag_ack_data_copy(OpenAPI_cag_ack_data_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_cag_ack_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_cag_ack_data_convertToJSON() failed");
+        log_error("OpenAPI_cag_ack_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -119,14 +119,14 @@ OpenAPI_cag_ack_data_t *OpenAPI_cag_ack_data_copy(OpenAPI_cag_ack_data_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

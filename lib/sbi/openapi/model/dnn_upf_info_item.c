@@ -16,7 +16,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_create(
 )
 {
     OpenAPI_dnn_upf_info_item_t *dnn_upf_info_item_local_var = ogs_malloc(sizeof(OpenAPI_dnn_upf_info_item_t));
-    ogs_assert(dnn_upf_info_item_local_var);
+    log_assert(dnn_upf_info_item_local_var);
 
     dnn_upf_info_item_local_var->dnn = dnn;
     dnn_upf_info_item_local_var->dnai_list = dnai_list;
@@ -99,29 +99,29 @@ cJSON *OpenAPI_dnn_upf_info_item_convertToJSON(OpenAPI_dnn_upf_info_item_t *dnn_
     OpenAPI_lnode_t *node = NULL;
 
     if (dnn_upf_info_item == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [DnnUpfInfoItem]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [DnnUpfInfoItem]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!dnn_upf_info_item->dnn) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnn]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "dnn", dnn_upf_info_item->dnn) == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnn]");
         goto end;
     }
 
     if (dnn_upf_info_item->dnai_list) {
     cJSON *dnai_listList = cJSON_AddArrayToObject(item, "dnaiList");
     if (dnai_listList == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_list]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_list]");
         goto end;
     }
     OpenAPI_list_for_each(dnn_upf_info_item->dnai_list, node) {
         if (cJSON_AddStringToObject(dnai_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_list]");
+            log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_list]");
             goto end;
         }
     }
@@ -130,12 +130,12 @@ cJSON *OpenAPI_dnn_upf_info_item_convertToJSON(OpenAPI_dnn_upf_info_item_t *dnn_
     if (dnn_upf_info_item->pdu_session_types != OpenAPI_pdu_session_type_NULL) {
     cJSON *pdu_session_typesList = cJSON_AddArrayToObject(item, "pduSessionTypes");
     if (pdu_session_typesList == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [pdu_session_types]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [pdu_session_types]");
         goto end;
     }
     OpenAPI_list_for_each(dnn_upf_info_item->pdu_session_types, node) {
         if (cJSON_AddStringToObject(pdu_session_typesList, "", OpenAPI_pdu_session_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [pdu_session_types]");
+            log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [pdu_session_types]");
             goto end;
         }
     }
@@ -144,13 +144,13 @@ cJSON *OpenAPI_dnn_upf_info_item_convertToJSON(OpenAPI_dnn_upf_info_item_t *dnn_
     if (dnn_upf_info_item->ipv4_address_ranges) {
     cJSON *ipv4_address_rangesList = cJSON_AddArrayToObject(item, "ipv4AddressRanges");
     if (ipv4_address_rangesList == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv4_address_ranges]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv4_address_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(dnn_upf_info_item->ipv4_address_ranges, node) {
         cJSON *itemLocal = OpenAPI_ipv4_address_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv4_address_ranges]");
+            log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv4_address_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(ipv4_address_rangesList, itemLocal);
@@ -160,13 +160,13 @@ cJSON *OpenAPI_dnn_upf_info_item_convertToJSON(OpenAPI_dnn_upf_info_item_t *dnn_
     if (dnn_upf_info_item->ipv6_prefix_ranges) {
     cJSON *ipv6_prefix_rangesList = cJSON_AddArrayToObject(item, "ipv6PrefixRanges");
     if (ipv6_prefix_rangesList == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv6_prefix_ranges]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv6_prefix_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(dnn_upf_info_item->ipv6_prefix_ranges, node) {
         cJSON *itemLocal = OpenAPI_ipv6_prefix_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv6_prefix_ranges]");
+            log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv6_prefix_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(ipv6_prefix_rangesList, itemLocal);
@@ -176,13 +176,13 @@ cJSON *OpenAPI_dnn_upf_info_item_convertToJSON(OpenAPI_dnn_upf_info_item_t *dnn_
     if (dnn_upf_info_item->ipv4_index_list) {
     cJSON *ipv4_index_listList = cJSON_AddArrayToObject(item, "ipv4IndexList");
     if (ipv4_index_listList == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv4_index_list]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv4_index_list]");
         goto end;
     }
     OpenAPI_list_for_each(dnn_upf_info_item->ipv4_index_list, node) {
         cJSON *itemLocal = OpenAPI_ip_index_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv4_index_list]");
+            log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv4_index_list]");
             goto end;
         }
         cJSON_AddItemToArray(ipv4_index_listList, itemLocal);
@@ -192,13 +192,13 @@ cJSON *OpenAPI_dnn_upf_info_item_convertToJSON(OpenAPI_dnn_upf_info_item_t *dnn_
     if (dnn_upf_info_item->ipv6_index_list) {
     cJSON *ipv6_index_listList = cJSON_AddArrayToObject(item, "ipv6IndexList");
     if (ipv6_index_listList == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv6_index_list]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv6_index_list]");
         goto end;
     }
     OpenAPI_list_for_each(dnn_upf_info_item->ipv6_index_list, node) {
         cJSON *itemLocal = OpenAPI_ip_index_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv6_index_list]");
+            log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [ipv6_index_list]");
             goto end;
         }
         cJSON_AddItemToArray(ipv6_index_listList, itemLocal);
@@ -208,7 +208,7 @@ cJSON *OpenAPI_dnn_upf_info_item_convertToJSON(OpenAPI_dnn_upf_info_item_t *dnn_
     if (dnn_upf_info_item->dnai_nw_instance_list) {
     cJSON *dnai_nw_instance_list = cJSON_AddObjectToObject(item, "dnaiNwInstanceList");
     if (dnai_nw_instance_list == NULL) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_nw_instance_list]");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_nw_instance_list]");
         goto end;
     }
     cJSON *localMapObject = dnai_nw_instance_list;
@@ -216,15 +216,15 @@ cJSON *OpenAPI_dnn_upf_info_item_convertToJSON(OpenAPI_dnn_upf_info_item_t *dnn_
         OpenAPI_list_for_each(dnn_upf_info_item->dnai_nw_instance_list, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_nw_instance_list]");
+                log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_nw_instance_list]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_nw_instance_list]");
+                log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [dnai_nw_instance_list]");
                 goto end;
             }
             if (cJSON_AddStringToObject(localMapObject, localKeyValue->key, (char*)localKeyValue->value) == NULL) {
-                ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [inner]");
+                log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed [inner]");
                 goto end;
             }
         }
@@ -256,11 +256,11 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
     OpenAPI_list_t *dnai_nw_instance_listList = NULL;
     dnn = cJSON_GetObjectItemCaseSensitive(dnn_upf_info_itemJSON, "dnn");
     if (!dnn) {
-        ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnn]");
         goto end;
     }
     if (!cJSON_IsString(dnn)) {
-        ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnn]");
         goto end;
     }
 
@@ -268,7 +268,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
     if (dnai_list) {
         cJSON *dnai_list_local = NULL;
         if (!cJSON_IsArray(dnai_list)) {
-            ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnai_list]");
+            log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnai_list]");
             goto end;
         }
 
@@ -278,7 +278,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(dnai_list_local)) {
-                ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnai_list]");
+                log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnai_list]");
                 goto end;
             }
             OpenAPI_list_add(dnai_listList, ogs_strdup(dnai_list_local->valuestring));
@@ -289,7 +289,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
     if (pdu_session_types) {
         cJSON *pdu_session_types_local = NULL;
         if (!cJSON_IsArray(pdu_session_types)) {
-            ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [pdu_session_types]");
+            log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [pdu_session_types]");
             goto end;
         }
 
@@ -298,19 +298,19 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
         cJSON_ArrayForEach(pdu_session_types_local, pdu_session_types) {
             OpenAPI_pdu_session_type_e localEnum = OpenAPI_pdu_session_type_NULL;
             if (!cJSON_IsString(pdu_session_types_local)) {
-                ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [pdu_session_types]");
+                log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [pdu_session_types]");
                 goto end;
             }
             localEnum = OpenAPI_pdu_session_type_FromString(pdu_session_types_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"pdu_session_types\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"pdu_session_types\" is not supported. Ignoring it ...",
                          pdu_session_types_local->valuestring);
             } else {
                 OpenAPI_list_add(pdu_session_typesList, (void *)localEnum);
             }
         }
         if (pdu_session_typesList->count == 0) {
-            ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed: Expected pdu_session_typesList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed: Expected pdu_session_typesList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -319,7 +319,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
     if (ipv4_address_ranges) {
         cJSON *ipv4_address_ranges_local = NULL;
         if (!cJSON_IsArray(ipv4_address_ranges)) {
-            ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv4_address_ranges]");
+            log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv4_address_ranges]");
             goto end;
         }
 
@@ -327,12 +327,12 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
 
         cJSON_ArrayForEach(ipv4_address_ranges_local, ipv4_address_ranges) {
             if (!cJSON_IsObject(ipv4_address_ranges_local)) {
-                ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv4_address_ranges]");
+                log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv4_address_ranges]");
                 goto end;
             }
             OpenAPI_ipv4_address_range_t *ipv4_address_rangesItem = OpenAPI_ipv4_address_range_parseFromJSON(ipv4_address_ranges_local);
             if (!ipv4_address_rangesItem) {
-                ogs_error("No ipv4_address_rangesItem");
+                log_error("No ipv4_address_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(ipv4_address_rangesList, ipv4_address_rangesItem);
@@ -343,7 +343,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
     if (ipv6_prefix_ranges) {
         cJSON *ipv6_prefix_ranges_local = NULL;
         if (!cJSON_IsArray(ipv6_prefix_ranges)) {
-            ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv6_prefix_ranges]");
+            log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv6_prefix_ranges]");
             goto end;
         }
 
@@ -351,12 +351,12 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
 
         cJSON_ArrayForEach(ipv6_prefix_ranges_local, ipv6_prefix_ranges) {
             if (!cJSON_IsObject(ipv6_prefix_ranges_local)) {
-                ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv6_prefix_ranges]");
+                log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv6_prefix_ranges]");
                 goto end;
             }
             OpenAPI_ipv6_prefix_range_t *ipv6_prefix_rangesItem = OpenAPI_ipv6_prefix_range_parseFromJSON(ipv6_prefix_ranges_local);
             if (!ipv6_prefix_rangesItem) {
-                ogs_error("No ipv6_prefix_rangesItem");
+                log_error("No ipv6_prefix_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(ipv6_prefix_rangesList, ipv6_prefix_rangesItem);
@@ -367,7 +367,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
     if (ipv4_index_list) {
         cJSON *ipv4_index_list_local = NULL;
         if (!cJSON_IsArray(ipv4_index_list)) {
-            ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv4_index_list]");
+            log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv4_index_list]");
             goto end;
         }
 
@@ -375,12 +375,12 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
 
         cJSON_ArrayForEach(ipv4_index_list_local, ipv4_index_list) {
             if (!cJSON_IsObject(ipv4_index_list_local)) {
-                ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv4_index_list]");
+                log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv4_index_list]");
                 goto end;
             }
             OpenAPI_ip_index_t *ipv4_index_listItem = OpenAPI_ip_index_parseFromJSON(ipv4_index_list_local);
             if (!ipv4_index_listItem) {
-                ogs_error("No ipv4_index_listItem");
+                log_error("No ipv4_index_listItem");
                 goto end;
             }
             OpenAPI_list_add(ipv4_index_listList, ipv4_index_listItem);
@@ -391,7 +391,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
     if (ipv6_index_list) {
         cJSON *ipv6_index_list_local = NULL;
         if (!cJSON_IsArray(ipv6_index_list)) {
-            ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv6_index_list]");
+            log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv6_index_list]");
             goto end;
         }
 
@@ -399,12 +399,12 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
 
         cJSON_ArrayForEach(ipv6_index_list_local, ipv6_index_list) {
             if (!cJSON_IsObject(ipv6_index_list_local)) {
-                ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv6_index_list]");
+                log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [ipv6_index_list]");
                 goto end;
             }
             OpenAPI_ip_index_t *ipv6_index_listItem = OpenAPI_ip_index_parseFromJSON(ipv6_index_list_local);
             if (!ipv6_index_listItem) {
-                ogs_error("No ipv6_index_listItem");
+                log_error("No ipv6_index_listItem");
                 goto end;
             }
             OpenAPI_list_add(ipv6_index_listList, ipv6_index_listItem);
@@ -415,7 +415,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
     if (dnai_nw_instance_list) {
         cJSON *dnai_nw_instance_list_local_map = NULL;
         if (!cJSON_IsObject(dnai_nw_instance_list) && !cJSON_IsNull(dnai_nw_instance_list)) {
-            ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnai_nw_instance_list]");
+            log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [dnai_nw_instance_list]");
             goto end;
         }
         if (cJSON_IsObject(dnai_nw_instance_list)) {
@@ -426,7 +426,7 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_parseFromJSON(cJSON *dnn_
                 double *localDouble = NULL;
                 int *localInt = NULL;
                 if (!cJSON_IsString(localMapObject)) {
-                    ogs_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_dnn_upf_info_item_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), ogs_strdup(localMapObject->valuestring));
@@ -505,10 +505,10 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_copy(OpenAPI_dnn_upf_info
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dnn_upf_info_item_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed");
+        log_error("OpenAPI_dnn_upf_info_item_convertToJSON() failed");
         return NULL;
     }
 
@@ -516,14 +516,14 @@ OpenAPI_dnn_upf_info_item_t *OpenAPI_dnn_upf_info_item_copy(OpenAPI_dnn_upf_info
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

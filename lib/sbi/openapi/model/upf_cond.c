@@ -34,7 +34,7 @@ OpenAPI_upf_cond_t *OpenAPI_upf_cond_create(
 )
 {
     OpenAPI_upf_cond_t *upf_cond_local_var = ogs_malloc(sizeof(OpenAPI_upf_cond_t));
-    ogs_assert(upf_cond_local_var);
+    log_assert(upf_cond_local_var);
 
     upf_cond_local_var->condition_type = condition_type;
     upf_cond_local_var->smf_serving_area = smf_serving_area;
@@ -73,29 +73,29 @@ cJSON *OpenAPI_upf_cond_convertToJSON(OpenAPI_upf_cond_t *upf_cond)
     OpenAPI_lnode_t *node = NULL;
 
     if (upf_cond == NULL) {
-        ogs_error("OpenAPI_upf_cond_convertToJSON() failed [UpfCond]");
+        log_error("OpenAPI_upf_cond_convertToJSON() failed [UpfCond]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (upf_cond->condition_type == OpenAPI_upf_cond_CONDITIONTYPE_NULL) {
-        ogs_error("OpenAPI_upf_cond_convertToJSON() failed [condition_type]");
+        log_error("OpenAPI_upf_cond_convertToJSON() failed [condition_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "conditionType", OpenAPI_condition_typeupf_cond_ToString(upf_cond->condition_type)) == NULL) {
-        ogs_error("OpenAPI_upf_cond_convertToJSON() failed [condition_type]");
+        log_error("OpenAPI_upf_cond_convertToJSON() failed [condition_type]");
         goto end;
     }
 
     if (upf_cond->smf_serving_area) {
     cJSON *smf_serving_areaList = cJSON_AddArrayToObject(item, "smfServingArea");
     if (smf_serving_areaList == NULL) {
-        ogs_error("OpenAPI_upf_cond_convertToJSON() failed [smf_serving_area]");
+        log_error("OpenAPI_upf_cond_convertToJSON() failed [smf_serving_area]");
         goto end;
     }
     OpenAPI_list_for_each(upf_cond->smf_serving_area, node) {
         if (cJSON_AddStringToObject(smf_serving_areaList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_upf_cond_convertToJSON() failed [smf_serving_area]");
+            log_error("OpenAPI_upf_cond_convertToJSON() failed [smf_serving_area]");
             goto end;
         }
     }
@@ -104,13 +104,13 @@ cJSON *OpenAPI_upf_cond_convertToJSON(OpenAPI_upf_cond_t *upf_cond)
     if (upf_cond->tai_list) {
     cJSON *tai_listList = cJSON_AddArrayToObject(item, "taiList");
     if (tai_listList == NULL) {
-        ogs_error("OpenAPI_upf_cond_convertToJSON() failed [tai_list]");
+        log_error("OpenAPI_upf_cond_convertToJSON() failed [tai_list]");
         goto end;
     }
     OpenAPI_list_for_each(upf_cond->tai_list, node) {
         cJSON *itemLocal = OpenAPI_tai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_upf_cond_convertToJSON() failed [tai_list]");
+            log_error("OpenAPI_upf_cond_convertToJSON() failed [tai_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_listList, itemLocal);
@@ -133,11 +133,11 @@ OpenAPI_upf_cond_t *OpenAPI_upf_cond_parseFromJSON(cJSON *upf_condJSON)
     OpenAPI_list_t *tai_listList = NULL;
     condition_type = cJSON_GetObjectItemCaseSensitive(upf_condJSON, "conditionType");
     if (!condition_type) {
-        ogs_error("OpenAPI_upf_cond_parseFromJSON() failed [condition_type]");
+        log_error("OpenAPI_upf_cond_parseFromJSON() failed [condition_type]");
         goto end;
     }
     if (!cJSON_IsString(condition_type)) {
-        ogs_error("OpenAPI_upf_cond_parseFromJSON() failed [condition_type]");
+        log_error("OpenAPI_upf_cond_parseFromJSON() failed [condition_type]");
         goto end;
     }
     condition_typeVariable = OpenAPI_condition_typeupf_cond_FromString(condition_type->valuestring);
@@ -146,7 +146,7 @@ OpenAPI_upf_cond_t *OpenAPI_upf_cond_parseFromJSON(cJSON *upf_condJSON)
     if (smf_serving_area) {
         cJSON *smf_serving_area_local = NULL;
         if (!cJSON_IsArray(smf_serving_area)) {
-            ogs_error("OpenAPI_upf_cond_parseFromJSON() failed [smf_serving_area]");
+            log_error("OpenAPI_upf_cond_parseFromJSON() failed [smf_serving_area]");
             goto end;
         }
 
@@ -156,7 +156,7 @@ OpenAPI_upf_cond_t *OpenAPI_upf_cond_parseFromJSON(cJSON *upf_condJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(smf_serving_area_local)) {
-                ogs_error("OpenAPI_upf_cond_parseFromJSON() failed [smf_serving_area]");
+                log_error("OpenAPI_upf_cond_parseFromJSON() failed [smf_serving_area]");
                 goto end;
             }
             OpenAPI_list_add(smf_serving_areaList, ogs_strdup(smf_serving_area_local->valuestring));
@@ -167,7 +167,7 @@ OpenAPI_upf_cond_t *OpenAPI_upf_cond_parseFromJSON(cJSON *upf_condJSON)
     if (tai_list) {
         cJSON *tai_list_local = NULL;
         if (!cJSON_IsArray(tai_list)) {
-            ogs_error("OpenAPI_upf_cond_parseFromJSON() failed [tai_list]");
+            log_error("OpenAPI_upf_cond_parseFromJSON() failed [tai_list]");
             goto end;
         }
 
@@ -175,12 +175,12 @@ OpenAPI_upf_cond_t *OpenAPI_upf_cond_parseFromJSON(cJSON *upf_condJSON)
 
         cJSON_ArrayForEach(tai_list_local, tai_list) {
             if (!cJSON_IsObject(tai_list_local)) {
-                ogs_error("OpenAPI_upf_cond_parseFromJSON() failed [tai_list]");
+                log_error("OpenAPI_upf_cond_parseFromJSON() failed [tai_list]");
                 goto end;
             }
             OpenAPI_tai_t *tai_listItem = OpenAPI_tai_parseFromJSON(tai_list_local);
             if (!tai_listItem) {
-                ogs_error("No tai_listItem");
+                log_error("No tai_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_listList, tai_listItem);
@@ -217,10 +217,10 @@ OpenAPI_upf_cond_t *OpenAPI_upf_cond_copy(OpenAPI_upf_cond_t *dst, OpenAPI_upf_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_upf_cond_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_upf_cond_convertToJSON() failed");
+        log_error("OpenAPI_upf_cond_convertToJSON() failed");
         return NULL;
     }
 
@@ -228,14 +228,14 @@ OpenAPI_upf_cond_t *OpenAPI_upf_cond_copy(OpenAPI_upf_cond_t *dst, OpenAPI_upf_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

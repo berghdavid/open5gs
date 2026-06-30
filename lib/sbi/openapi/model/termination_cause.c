@@ -8,7 +8,7 @@ OpenAPI_termination_cause_t *OpenAPI_termination_cause_create(
 )
 {
     OpenAPI_termination_cause_t *termination_cause_local_var = ogs_malloc(sizeof(OpenAPI_termination_cause_t));
-    ogs_assert(termination_cause_local_var);
+    log_assert(termination_cause_local_var);
 
 
     return termination_cause_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_termination_cause_convertToJSON(OpenAPI_termination_cause_t *term
     OpenAPI_lnode_t *node = NULL;
 
     if (termination_cause == NULL) {
-        ogs_error("OpenAPI_termination_cause_convertToJSON() failed [TerminationCause]");
+        log_error("OpenAPI_termination_cause_convertToJSON() failed [TerminationCause]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_termination_cause_t *OpenAPI_termination_cause_copy(OpenAPI_termination_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_termination_cause_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_termination_cause_convertToJSON() failed");
+        log_error("OpenAPI_termination_cause_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_termination_cause_t *OpenAPI_termination_cause_copy(OpenAPI_termination_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

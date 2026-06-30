@@ -12,7 +12,7 @@ OpenAPI_reporting_area_t *OpenAPI_reporting_area_create(
 )
 {
     OpenAPI_reporting_area_t *reporting_area_local_var = ogs_malloc(sizeof(OpenAPI_reporting_area_t));
-    ogs_assert(reporting_area_local_var);
+    log_assert(reporting_area_local_var);
 
     reporting_area_local_var->area_type = area_type;
     reporting_area_local_var->tai = tai;
@@ -54,35 +54,35 @@ cJSON *OpenAPI_reporting_area_convertToJSON(OpenAPI_reporting_area_t *reporting_
     OpenAPI_lnode_t *node = NULL;
 
     if (reporting_area == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [ReportingArea]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [ReportingArea]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!reporting_area->area_type) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [area_type]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [area_type]");
         return NULL;
     }
     cJSON *area_type_local_JSON = OpenAPI_reporting_area_type_convertToJSON(reporting_area->area_type);
     if (area_type_local_JSON == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [area_type]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [area_type]");
         goto end;
     }
     cJSON_AddItemToObject(item, "areaType", area_type_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [area_type]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [area_type]");
         goto end;
     }
 
     if (reporting_area->tai) {
     cJSON *tai_local_JSON = OpenAPI_tai_convertToJSON(reporting_area->tai);
     if (tai_local_JSON == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [tai]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [tai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "tai", tai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [tai]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [tai]");
         goto end;
     }
     }
@@ -90,12 +90,12 @@ cJSON *OpenAPI_reporting_area_convertToJSON(OpenAPI_reporting_area_t *reporting_
     if (reporting_area->ecgi) {
     cJSON *ecgi_local_JSON = OpenAPI_ecgi_convertToJSON(reporting_area->ecgi);
     if (ecgi_local_JSON == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [ecgi]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [ecgi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ecgi", ecgi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [ecgi]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [ecgi]");
         goto end;
     }
     }
@@ -103,12 +103,12 @@ cJSON *OpenAPI_reporting_area_convertToJSON(OpenAPI_reporting_area_t *reporting_
     if (reporting_area->ncgi) {
     cJSON *ncgi_local_JSON = OpenAPI_ncgi_convertToJSON(reporting_area->ncgi);
     if (ncgi_local_JSON == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [ncgi]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [ncgi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ncgi", ncgi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed [ncgi]");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed [ncgi]");
         goto end;
     }
     }
@@ -131,12 +131,12 @@ OpenAPI_reporting_area_t *OpenAPI_reporting_area_parseFromJSON(cJSON *reporting_
     OpenAPI_ncgi_t *ncgi_local_nonprim = NULL;
     area_type = cJSON_GetObjectItemCaseSensitive(reporting_areaJSON, "areaType");
     if (!area_type) {
-        ogs_error("OpenAPI_reporting_area_parseFromJSON() failed [area_type]");
+        log_error("OpenAPI_reporting_area_parseFromJSON() failed [area_type]");
         goto end;
     }
     area_type_local_nonprim = OpenAPI_reporting_area_type_parseFromJSON(area_type);
     if (!area_type_local_nonprim) {
-        ogs_error("OpenAPI_reporting_area_type_parseFromJSON failed [area_type]");
+        log_error("OpenAPI_reporting_area_type_parseFromJSON failed [area_type]");
         goto end;
     }
 
@@ -144,7 +144,7 @@ OpenAPI_reporting_area_t *OpenAPI_reporting_area_parseFromJSON(cJSON *reporting_
     if (tai) {
     tai_local_nonprim = OpenAPI_tai_parseFromJSON(tai);
     if (!tai_local_nonprim) {
-        ogs_error("OpenAPI_tai_parseFromJSON failed [tai]");
+        log_error("OpenAPI_tai_parseFromJSON failed [tai]");
         goto end;
     }
     }
@@ -153,7 +153,7 @@ OpenAPI_reporting_area_t *OpenAPI_reporting_area_parseFromJSON(cJSON *reporting_
     if (ecgi) {
     ecgi_local_nonprim = OpenAPI_ecgi_parseFromJSON(ecgi);
     if (!ecgi_local_nonprim) {
-        ogs_error("OpenAPI_ecgi_parseFromJSON failed [ecgi]");
+        log_error("OpenAPI_ecgi_parseFromJSON failed [ecgi]");
         goto end;
     }
     }
@@ -162,7 +162,7 @@ OpenAPI_reporting_area_t *OpenAPI_reporting_area_parseFromJSON(cJSON *reporting_
     if (ncgi) {
     ncgi_local_nonprim = OpenAPI_ncgi_parseFromJSON(ncgi);
     if (!ncgi_local_nonprim) {
-        ogs_error("OpenAPI_ncgi_parseFromJSON failed [ncgi]");
+        log_error("OpenAPI_ncgi_parseFromJSON failed [ncgi]");
         goto end;
     }
     }
@@ -200,10 +200,10 @@ OpenAPI_reporting_area_t *OpenAPI_reporting_area_copy(OpenAPI_reporting_area_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_reporting_area_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_reporting_area_convertToJSON() failed");
+        log_error("OpenAPI_reporting_area_convertToJSON() failed");
         return NULL;
     }
 
@@ -211,14 +211,14 @@ OpenAPI_reporting_area_t *OpenAPI_reporting_area_copy(OpenAPI_reporting_area_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -8,7 +8,7 @@ OpenAPI_location_filter_t *OpenAPI_location_filter_create(
 )
 {
     OpenAPI_location_filter_t *location_filter_local_var = ogs_malloc(sizeof(OpenAPI_location_filter_t));
-    ogs_assert(location_filter_local_var);
+    log_assert(location_filter_local_var);
 
 
     return location_filter_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_location_filter_convertToJSON(OpenAPI_location_filter_t *location
     OpenAPI_lnode_t *node = NULL;
 
     if (location_filter == NULL) {
-        ogs_error("OpenAPI_location_filter_convertToJSON() failed [LocationFilter]");
+        log_error("OpenAPI_location_filter_convertToJSON() failed [LocationFilter]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_location_filter_t *OpenAPI_location_filter_copy(OpenAPI_location_filter_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_location_filter_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_location_filter_convertToJSON() failed");
+        log_error("OpenAPI_location_filter_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_location_filter_t *OpenAPI_location_filter_copy(OpenAPI_location_filter_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

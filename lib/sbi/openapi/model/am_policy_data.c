@@ -10,7 +10,7 @@ OpenAPI_am_policy_data_t *OpenAPI_am_policy_data_create(
 )
 {
     OpenAPI_am_policy_data_t *am_policy_data_local_var = ogs_malloc(sizeof(OpenAPI_am_policy_data_t));
-    ogs_assert(am_policy_data_local_var);
+    log_assert(am_policy_data_local_var);
 
     am_policy_data_local_var->pra_infos = pra_infos;
     am_policy_data_local_var->subsc_cats = subsc_cats;
@@ -51,7 +51,7 @@ cJSON *OpenAPI_am_policy_data_convertToJSON(OpenAPI_am_policy_data_t *am_policy_
     OpenAPI_lnode_t *node = NULL;
 
     if (am_policy_data == NULL) {
-        ogs_error("OpenAPI_am_policy_data_convertToJSON() failed [AmPolicyData]");
+        log_error("OpenAPI_am_policy_data_convertToJSON() failed [AmPolicyData]");
         return NULL;
     }
 
@@ -59,7 +59,7 @@ cJSON *OpenAPI_am_policy_data_convertToJSON(OpenAPI_am_policy_data_t *am_policy_
     if (am_policy_data->pra_infos) {
     cJSON *pra_infos = cJSON_AddObjectToObject(item, "praInfos");
     if (pra_infos == NULL) {
-        ogs_error("OpenAPI_am_policy_data_convertToJSON() failed [pra_infos]");
+        log_error("OpenAPI_am_policy_data_convertToJSON() failed [pra_infos]");
         goto end;
     }
     cJSON *localMapObject = pra_infos;
@@ -67,18 +67,18 @@ cJSON *OpenAPI_am_policy_data_convertToJSON(OpenAPI_am_policy_data_t *am_policy_
         OpenAPI_list_for_each(am_policy_data->pra_infos, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_am_policy_data_convertToJSON() failed [pra_infos]");
+                log_error("OpenAPI_am_policy_data_convertToJSON() failed [pra_infos]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_am_policy_data_convertToJSON() failed [pra_infos]");
+                log_error("OpenAPI_am_policy_data_convertToJSON() failed [pra_infos]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_presence_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_am_policy_data_convertToJSON() failed [inner]");
+                log_error("OpenAPI_am_policy_data_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -89,12 +89,12 @@ cJSON *OpenAPI_am_policy_data_convertToJSON(OpenAPI_am_policy_data_t *am_policy_
     if (am_policy_data->subsc_cats) {
     cJSON *subsc_catsList = cJSON_AddArrayToObject(item, "subscCats");
     if (subsc_catsList == NULL) {
-        ogs_error("OpenAPI_am_policy_data_convertToJSON() failed [subsc_cats]");
+        log_error("OpenAPI_am_policy_data_convertToJSON() failed [subsc_cats]");
         goto end;
     }
     OpenAPI_list_for_each(am_policy_data->subsc_cats, node) {
         if (cJSON_AddStringToObject(subsc_catsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_am_policy_data_convertToJSON() failed [subsc_cats]");
+            log_error("OpenAPI_am_policy_data_convertToJSON() failed [subsc_cats]");
             goto end;
         }
     }
@@ -116,7 +116,7 @@ OpenAPI_am_policy_data_t *OpenAPI_am_policy_data_parseFromJSON(cJSON *am_policy_
     if (pra_infos) {
         cJSON *pra_infos_local_map = NULL;
         if (!cJSON_IsObject(pra_infos) && !cJSON_IsNull(pra_infos)) {
-            ogs_error("OpenAPI_am_policy_data_parseFromJSON() failed [pra_infos]");
+            log_error("OpenAPI_am_policy_data_parseFromJSON() failed [pra_infos]");
             goto end;
         }
         if (cJSON_IsObject(pra_infos)) {
@@ -130,7 +130,7 @@ OpenAPI_am_policy_data_t *OpenAPI_am_policy_data_parseFromJSON(cJSON *am_policy_
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_am_policy_data_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_am_policy_data_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(pra_infosList, localMapKeyPair);
@@ -142,7 +142,7 @@ OpenAPI_am_policy_data_t *OpenAPI_am_policy_data_parseFromJSON(cJSON *am_policy_
     if (subsc_cats) {
         cJSON *subsc_cats_local = NULL;
         if (!cJSON_IsArray(subsc_cats)) {
-            ogs_error("OpenAPI_am_policy_data_parseFromJSON() failed [subsc_cats]");
+            log_error("OpenAPI_am_policy_data_parseFromJSON() failed [subsc_cats]");
             goto end;
         }
 
@@ -152,7 +152,7 @@ OpenAPI_am_policy_data_t *OpenAPI_am_policy_data_parseFromJSON(cJSON *am_policy_
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(subsc_cats_local)) {
-                ogs_error("OpenAPI_am_policy_data_parseFromJSON() failed [subsc_cats]");
+                log_error("OpenAPI_am_policy_data_parseFromJSON() failed [subsc_cats]");
                 goto end;
             }
             OpenAPI_list_add(subsc_catsList, ogs_strdup(subsc_cats_local->valuestring));
@@ -191,10 +191,10 @@ OpenAPI_am_policy_data_t *OpenAPI_am_policy_data_copy(OpenAPI_am_policy_data_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_am_policy_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_am_policy_data_convertToJSON() failed");
+        log_error("OpenAPI_am_policy_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -202,14 +202,14 @@ OpenAPI_am_policy_data_t *OpenAPI_am_policy_data_copy(OpenAPI_am_policy_data_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

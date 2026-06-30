@@ -14,7 +14,7 @@ OpenAPI_mme_capabilities_t *OpenAPI_mme_capabilities_create(
 )
 {
     OpenAPI_mme_capabilities_t *mme_capabilities_local_var = ogs_malloc(sizeof(OpenAPI_mme_capabilities_t));
-    ogs_assert(mme_capabilities_local_var);
+    log_assert(mme_capabilities_local_var);
 
     mme_capabilities_local_var->is_non_ip_supported = is_non_ip_supported;
     mme_capabilities_local_var->non_ip_supported = non_ip_supported;
@@ -42,28 +42,28 @@ cJSON *OpenAPI_mme_capabilities_convertToJSON(OpenAPI_mme_capabilities_t *mme_ca
     OpenAPI_lnode_t *node = NULL;
 
     if (mme_capabilities == NULL) {
-        ogs_error("OpenAPI_mme_capabilities_convertToJSON() failed [MmeCapabilities]");
+        log_error("OpenAPI_mme_capabilities_convertToJSON() failed [MmeCapabilities]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (mme_capabilities->is_non_ip_supported) {
     if (cJSON_AddBoolToObject(item, "nonIpSupported", mme_capabilities->non_ip_supported) == NULL) {
-        ogs_error("OpenAPI_mme_capabilities_convertToJSON() failed [non_ip_supported]");
+        log_error("OpenAPI_mme_capabilities_convertToJSON() failed [non_ip_supported]");
         goto end;
     }
     }
 
     if (mme_capabilities->is_ethernet_supported) {
     if (cJSON_AddBoolToObject(item, "ethernetSupported", mme_capabilities->ethernet_supported) == NULL) {
-        ogs_error("OpenAPI_mme_capabilities_convertToJSON() failed [ethernet_supported]");
+        log_error("OpenAPI_mme_capabilities_convertToJSON() failed [ethernet_supported]");
         goto end;
     }
     }
 
     if (mme_capabilities->is_upip_supported) {
     if (cJSON_AddBoolToObject(item, "upipSupported", mme_capabilities->upip_supported) == NULL) {
-        ogs_error("OpenAPI_mme_capabilities_convertToJSON() failed [upip_supported]");
+        log_error("OpenAPI_mme_capabilities_convertToJSON() failed [upip_supported]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_mme_capabilities_t *OpenAPI_mme_capabilities_parseFromJSON(cJSON *mme_ca
     non_ip_supported = cJSON_GetObjectItemCaseSensitive(mme_capabilitiesJSON, "nonIpSupported");
     if (non_ip_supported) {
     if (!cJSON_IsBool(non_ip_supported)) {
-        ogs_error("OpenAPI_mme_capabilities_parseFromJSON() failed [non_ip_supported]");
+        log_error("OpenAPI_mme_capabilities_parseFromJSON() failed [non_ip_supported]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_mme_capabilities_t *OpenAPI_mme_capabilities_parseFromJSON(cJSON *mme_ca
     ethernet_supported = cJSON_GetObjectItemCaseSensitive(mme_capabilitiesJSON, "ethernetSupported");
     if (ethernet_supported) {
     if (!cJSON_IsBool(ethernet_supported)) {
-        ogs_error("OpenAPI_mme_capabilities_parseFromJSON() failed [ethernet_supported]");
+        log_error("OpenAPI_mme_capabilities_parseFromJSON() failed [ethernet_supported]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_mme_capabilities_t *OpenAPI_mme_capabilities_parseFromJSON(cJSON *mme_ca
     upip_supported = cJSON_GetObjectItemCaseSensitive(mme_capabilitiesJSON, "upipSupported");
     if (upip_supported) {
     if (!cJSON_IsBool(upip_supported)) {
-        ogs_error("OpenAPI_mme_capabilities_parseFromJSON() failed [upip_supported]");
+        log_error("OpenAPI_mme_capabilities_parseFromJSON() failed [upip_supported]");
         goto end;
     }
     }
@@ -122,10 +122,10 @@ OpenAPI_mme_capabilities_t *OpenAPI_mme_capabilities_copy(OpenAPI_mme_capabiliti
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_mme_capabilities_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_mme_capabilities_convertToJSON() failed");
+        log_error("OpenAPI_mme_capabilities_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_mme_capabilities_t *OpenAPI_mme_capabilities_copy(OpenAPI_mme_capabiliti
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

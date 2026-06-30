@@ -11,7 +11,7 @@ OpenAPI_slice_info_for_pdu_session_t *OpenAPI_slice_info_for_pdu_session_create(
 )
 {
     OpenAPI_slice_info_for_pdu_session_t *slice_info_for_pdu_session_local_var = ogs_malloc(sizeof(OpenAPI_slice_info_for_pdu_session_t));
-    ogs_assert(slice_info_for_pdu_session_local_var);
+    log_assert(slice_info_for_pdu_session_local_var);
 
     slice_info_for_pdu_session_local_var->s_nssai = s_nssai;
     slice_info_for_pdu_session_local_var->roaming_indication = roaming_indication;
@@ -44,44 +44,44 @@ cJSON *OpenAPI_slice_info_for_pdu_session_convertToJSON(OpenAPI_slice_info_for_p
     OpenAPI_lnode_t *node = NULL;
 
     if (slice_info_for_pdu_session == NULL) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [SliceInfoForPDUSession]");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [SliceInfoForPDUSession]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!slice_info_for_pdu_session->s_nssai) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [s_nssai]");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [s_nssai]");
         return NULL;
     }
     cJSON *s_nssai_local_JSON = OpenAPI_snssai_convertToJSON(slice_info_for_pdu_session->s_nssai);
     if (s_nssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [s_nssai]");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [s_nssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "sNssai", s_nssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [s_nssai]");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [s_nssai]");
         goto end;
     }
 
     if (slice_info_for_pdu_session->roaming_indication == OpenAPI_roaming_indication_NULL) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [roaming_indication]");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [roaming_indication]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "roamingIndication", OpenAPI_roaming_indication_ToString(slice_info_for_pdu_session->roaming_indication)) == NULL) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [roaming_indication]");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [roaming_indication]");
         goto end;
     }
 
     if (slice_info_for_pdu_session->home_snssai) {
     cJSON *home_snssai_local_JSON = OpenAPI_snssai_convertToJSON(slice_info_for_pdu_session->home_snssai);
     if (home_snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [home_snssai]");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [home_snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "homeSnssai", home_snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [home_snssai]");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed [home_snssai]");
         goto end;
     }
     }
@@ -102,22 +102,22 @@ OpenAPI_slice_info_for_pdu_session_t *OpenAPI_slice_info_for_pdu_session_parseFr
     OpenAPI_snssai_t *home_snssai_local_nonprim = NULL;
     s_nssai = cJSON_GetObjectItemCaseSensitive(slice_info_for_pdu_sessionJSON, "sNssai");
     if (!s_nssai) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_parseFromJSON() failed [s_nssai]");
+        log_error("OpenAPI_slice_info_for_pdu_session_parseFromJSON() failed [s_nssai]");
         goto end;
     }
     s_nssai_local_nonprim = OpenAPI_snssai_parseFromJSON(s_nssai);
     if (!s_nssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [s_nssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [s_nssai]");
         goto end;
     }
 
     roaming_indication = cJSON_GetObjectItemCaseSensitive(slice_info_for_pdu_sessionJSON, "roamingIndication");
     if (!roaming_indication) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_parseFromJSON() failed [roaming_indication]");
+        log_error("OpenAPI_slice_info_for_pdu_session_parseFromJSON() failed [roaming_indication]");
         goto end;
     }
     if (!cJSON_IsString(roaming_indication)) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_parseFromJSON() failed [roaming_indication]");
+        log_error("OpenAPI_slice_info_for_pdu_session_parseFromJSON() failed [roaming_indication]");
         goto end;
     }
     roaming_indicationVariable = OpenAPI_roaming_indication_FromString(roaming_indication->valuestring);
@@ -126,7 +126,7 @@ OpenAPI_slice_info_for_pdu_session_t *OpenAPI_slice_info_for_pdu_session_parseFr
     if (home_snssai) {
     home_snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(home_snssai);
     if (!home_snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [home_snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [home_snssai]");
         goto end;
     }
     }
@@ -155,10 +155,10 @@ OpenAPI_slice_info_for_pdu_session_t *OpenAPI_slice_info_for_pdu_session_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_slice_info_for_pdu_session_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed");
+        log_error("OpenAPI_slice_info_for_pdu_session_convertToJSON() failed");
         return NULL;
     }
 
@@ -166,14 +166,14 @@ OpenAPI_slice_info_for_pdu_session_t *OpenAPI_slice_info_for_pdu_session_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

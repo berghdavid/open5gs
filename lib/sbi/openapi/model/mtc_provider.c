@@ -10,7 +10,7 @@ OpenAPI_mtc_provider_t *OpenAPI_mtc_provider_create(
 )
 {
     OpenAPI_mtc_provider_t *mtc_provider_local_var = ogs_malloc(sizeof(OpenAPI_mtc_provider_t));
-    ogs_assert(mtc_provider_local_var);
+    log_assert(mtc_provider_local_var);
 
     mtc_provider_local_var->mtc_provider_information = mtc_provider_information;
     mtc_provider_local_var->af_id = af_id;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_mtc_provider_convertToJSON(OpenAPI_mtc_provider_t *mtc_provider)
     OpenAPI_lnode_t *node = NULL;
 
     if (mtc_provider == NULL) {
-        ogs_error("OpenAPI_mtc_provider_convertToJSON() failed [MtcProvider]");
+        log_error("OpenAPI_mtc_provider_convertToJSON() failed [MtcProvider]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (mtc_provider->mtc_provider_information) {
     if (cJSON_AddStringToObject(item, "mtcProviderInformation", mtc_provider->mtc_provider_information) == NULL) {
-        ogs_error("OpenAPI_mtc_provider_convertToJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_mtc_provider_convertToJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
 
     if (mtc_provider->af_id) {
     if (cJSON_AddStringToObject(item, "afId", mtc_provider->af_id) == NULL) {
-        ogs_error("OpenAPI_mtc_provider_convertToJSON() failed [af_id]");
+        log_error("OpenAPI_mtc_provider_convertToJSON() failed [af_id]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_mtc_provider_t *OpenAPI_mtc_provider_parseFromJSON(cJSON *mtc_providerJS
     mtc_provider_information = cJSON_GetObjectItemCaseSensitive(mtc_providerJSON, "mtcProviderInformation");
     if (mtc_provider_information) {
     if (!cJSON_IsString(mtc_provider_information) && !cJSON_IsNull(mtc_provider_information)) {
-        ogs_error("OpenAPI_mtc_provider_parseFromJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_mtc_provider_parseFromJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_mtc_provider_t *OpenAPI_mtc_provider_parseFromJSON(cJSON *mtc_providerJS
     af_id = cJSON_GetObjectItemCaseSensitive(mtc_providerJSON, "afId");
     if (af_id) {
     if (!cJSON_IsString(af_id) && !cJSON_IsNull(af_id)) {
-        ogs_error("OpenAPI_mtc_provider_parseFromJSON() failed [af_id]");
+        log_error("OpenAPI_mtc_provider_parseFromJSON() failed [af_id]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_mtc_provider_t *OpenAPI_mtc_provider_copy(OpenAPI_mtc_provider_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_mtc_provider_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_mtc_provider_convertToJSON() failed");
+        log_error("OpenAPI_mtc_provider_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_mtc_provider_t *OpenAPI_mtc_provider_copy(OpenAPI_mtc_provider_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

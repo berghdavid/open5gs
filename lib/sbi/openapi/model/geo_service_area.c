@@ -10,7 +10,7 @@ OpenAPI_geo_service_area_t *OpenAPI_geo_service_area_create(
 )
 {
     OpenAPI_geo_service_area_t *geo_service_area_local_var = ogs_malloc(sizeof(OpenAPI_geo_service_area_t));
-    ogs_assert(geo_service_area_local_var);
+    log_assert(geo_service_area_local_var);
 
     geo_service_area_local_var->geographic_area_list = geographic_area_list;
     geo_service_area_local_var->civic_address_list = civic_address_list;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_geo_service_area_convertToJSON(OpenAPI_geo_service_area_t *geo_se
     OpenAPI_lnode_t *node = NULL;
 
     if (geo_service_area == NULL) {
-        ogs_error("OpenAPI_geo_service_area_convertToJSON() failed [GeoServiceArea]");
+        log_error("OpenAPI_geo_service_area_convertToJSON() failed [GeoServiceArea]");
         return NULL;
     }
 
@@ -56,13 +56,13 @@ cJSON *OpenAPI_geo_service_area_convertToJSON(OpenAPI_geo_service_area_t *geo_se
     if (geo_service_area->geographic_area_list) {
     cJSON *geographic_area_listList = cJSON_AddArrayToObject(item, "geographicAreaList");
     if (geographic_area_listList == NULL) {
-        ogs_error("OpenAPI_geo_service_area_convertToJSON() failed [geographic_area_list]");
+        log_error("OpenAPI_geo_service_area_convertToJSON() failed [geographic_area_list]");
         goto end;
     }
     OpenAPI_list_for_each(geo_service_area->geographic_area_list, node) {
         cJSON *itemLocal = OpenAPI_geographic_area_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_geo_service_area_convertToJSON() failed [geographic_area_list]");
+            log_error("OpenAPI_geo_service_area_convertToJSON() failed [geographic_area_list]");
             goto end;
         }
         cJSON_AddItemToArray(geographic_area_listList, itemLocal);
@@ -72,13 +72,13 @@ cJSON *OpenAPI_geo_service_area_convertToJSON(OpenAPI_geo_service_area_t *geo_se
     if (geo_service_area->civic_address_list) {
     cJSON *civic_address_listList = cJSON_AddArrayToObject(item, "civicAddressList");
     if (civic_address_listList == NULL) {
-        ogs_error("OpenAPI_geo_service_area_convertToJSON() failed [civic_address_list]");
+        log_error("OpenAPI_geo_service_area_convertToJSON() failed [civic_address_list]");
         goto end;
     }
     OpenAPI_list_for_each(geo_service_area->civic_address_list, node) {
         cJSON *itemLocal = OpenAPI_civic_address_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_geo_service_area_convertToJSON() failed [civic_address_list]");
+            log_error("OpenAPI_geo_service_area_convertToJSON() failed [civic_address_list]");
             goto end;
         }
         cJSON_AddItemToArray(civic_address_listList, itemLocal);
@@ -101,7 +101,7 @@ OpenAPI_geo_service_area_t *OpenAPI_geo_service_area_parseFromJSON(cJSON *geo_se
     if (geographic_area_list) {
         cJSON *geographic_area_list_local = NULL;
         if (!cJSON_IsArray(geographic_area_list)) {
-            ogs_error("OpenAPI_geo_service_area_parseFromJSON() failed [geographic_area_list]");
+            log_error("OpenAPI_geo_service_area_parseFromJSON() failed [geographic_area_list]");
             goto end;
         }
 
@@ -109,12 +109,12 @@ OpenAPI_geo_service_area_t *OpenAPI_geo_service_area_parseFromJSON(cJSON *geo_se
 
         cJSON_ArrayForEach(geographic_area_list_local, geographic_area_list) {
             if (!cJSON_IsObject(geographic_area_list_local)) {
-                ogs_error("OpenAPI_geo_service_area_parseFromJSON() failed [geographic_area_list]");
+                log_error("OpenAPI_geo_service_area_parseFromJSON() failed [geographic_area_list]");
                 goto end;
             }
             OpenAPI_geographic_area_t *geographic_area_listItem = OpenAPI_geographic_area_parseFromJSON(geographic_area_list_local);
             if (!geographic_area_listItem) {
-                ogs_error("No geographic_area_listItem");
+                log_error("No geographic_area_listItem");
                 goto end;
             }
             OpenAPI_list_add(geographic_area_listList, geographic_area_listItem);
@@ -125,7 +125,7 @@ OpenAPI_geo_service_area_t *OpenAPI_geo_service_area_parseFromJSON(cJSON *geo_se
     if (civic_address_list) {
         cJSON *civic_address_list_local = NULL;
         if (!cJSON_IsArray(civic_address_list)) {
-            ogs_error("OpenAPI_geo_service_area_parseFromJSON() failed [civic_address_list]");
+            log_error("OpenAPI_geo_service_area_parseFromJSON() failed [civic_address_list]");
             goto end;
         }
 
@@ -133,12 +133,12 @@ OpenAPI_geo_service_area_t *OpenAPI_geo_service_area_parseFromJSON(cJSON *geo_se
 
         cJSON_ArrayForEach(civic_address_list_local, civic_address_list) {
             if (!cJSON_IsObject(civic_address_list_local)) {
-                ogs_error("OpenAPI_geo_service_area_parseFromJSON() failed [civic_address_list]");
+                log_error("OpenAPI_geo_service_area_parseFromJSON() failed [civic_address_list]");
                 goto end;
             }
             OpenAPI_civic_address_t *civic_address_listItem = OpenAPI_civic_address_parseFromJSON(civic_address_list_local);
             if (!civic_address_listItem) {
-                ogs_error("No civic_address_listItem");
+                log_error("No civic_address_listItem");
                 goto end;
             }
             OpenAPI_list_add(civic_address_listList, civic_address_listItem);
@@ -174,10 +174,10 @@ OpenAPI_geo_service_area_t *OpenAPI_geo_service_area_copy(OpenAPI_geo_service_ar
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_geo_service_area_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_geo_service_area_convertToJSON() failed");
+        log_error("OpenAPI_geo_service_area_convertToJSON() failed");
         return NULL;
     }
 
@@ -185,14 +185,14 @@ OpenAPI_geo_service_area_t *OpenAPI_geo_service_area_copy(OpenAPI_geo_service_ar
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

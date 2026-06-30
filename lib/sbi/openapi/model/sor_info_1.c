@@ -19,7 +19,7 @@ OpenAPI_sor_info_1_t *OpenAPI_sor_info_1_create(
 )
 {
     OpenAPI_sor_info_1_t *sor_info_1_local_var = ogs_malloc(sizeof(OpenAPI_sor_info_1_t));
-    ogs_assert(sor_info_1_local_var);
+    log_assert(sor_info_1_local_var);
 
     sor_info_1_local_var->steering_container = steering_container;
     sor_info_1_local_var->ack_ind = ack_ind;
@@ -76,7 +76,7 @@ cJSON *OpenAPI_sor_info_1_convertToJSON(OpenAPI_sor_info_1_t *sor_info_1)
     OpenAPI_lnode_t *node = NULL;
 
     if (sor_info_1 == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [SorInfo_1]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [SorInfo_1]");
         return NULL;
     }
 
@@ -84,68 +84,68 @@ cJSON *OpenAPI_sor_info_1_convertToJSON(OpenAPI_sor_info_1_t *sor_info_1)
     if (sor_info_1->steering_container) {
     cJSON *steering_container_local_JSON = OpenAPI_steering_container_convertToJSON(sor_info_1->steering_container);
     if (steering_container_local_JSON == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [steering_container]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [steering_container]");
         goto end;
     }
     cJSON_AddItemToObject(item, "steeringContainer", steering_container_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [steering_container]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [steering_container]");
         goto end;
     }
     }
 
     if (cJSON_AddBoolToObject(item, "ackInd", sor_info_1->ack_ind) == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [ack_ind]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [ack_ind]");
         goto end;
     }
 
     if (sor_info_1->sor_mac_iausf) {
     if (cJSON_AddStringToObject(item, "sorMacIausf", sor_info_1->sor_mac_iausf) == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [sor_mac_iausf]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [sor_mac_iausf]");
         goto end;
     }
     }
 
     if (sor_info_1->countersor) {
     if (cJSON_AddStringToObject(item, "countersor", sor_info_1->countersor) == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [countersor]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [countersor]");
         goto end;
     }
     }
 
     if (!sor_info_1->provisioning_time) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [provisioning_time]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [provisioning_time]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "provisioningTime", sor_info_1->provisioning_time) == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [provisioning_time]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [provisioning_time]");
         goto end;
     }
 
     if (sor_info_1->sor_transparent_container) {
     if (cJSON_AddStringToObject(item, "sorTransparentContainer", sor_info_1->sor_transparent_container) == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [sor_transparent_container]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [sor_transparent_container]");
         goto end;
     }
     }
 
     if (sor_info_1->sor_cmci) {
     if (cJSON_AddStringToObject(item, "sorCmci", sor_info_1->sor_cmci) == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [sor_cmci]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [sor_cmci]");
         goto end;
     }
     }
 
     if (sor_info_1->is_store_sor_cmci_in_me) {
     if (cJSON_AddBoolToObject(item, "storeSorCmciInMe", sor_info_1->store_sor_cmci_in_me) == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [store_sor_cmci_in_me]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [store_sor_cmci_in_me]");
         goto end;
     }
     }
 
     if (sor_info_1->is_usim_support_of_sor_cmci) {
     if (cJSON_AddBoolToObject(item, "usimSupportOfSorCmci", sor_info_1->usim_support_of_sor_cmci) == NULL) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed [usim_support_of_sor_cmci]");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed [usim_support_of_sor_cmci]");
         goto end;
     }
     }
@@ -172,25 +172,25 @@ OpenAPI_sor_info_1_t *OpenAPI_sor_info_1_parseFromJSON(cJSON *sor_info_1JSON)
     if (steering_container) {
     steering_container_local_nonprim = OpenAPI_steering_container_parseFromJSON(steering_container);
     if (!steering_container_local_nonprim) {
-        ogs_error("OpenAPI_steering_container_parseFromJSON failed [steering_container]");
+        log_error("OpenAPI_steering_container_parseFromJSON failed [steering_container]");
         goto end;
     }
     }
 
     ack_ind = cJSON_GetObjectItemCaseSensitive(sor_info_1JSON, "ackInd");
     if (!ack_ind) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [ack_ind]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [ack_ind]");
         goto end;
     }
     if (!cJSON_IsBool(ack_ind)) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [ack_ind]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [ack_ind]");
         goto end;
     }
 
     sor_mac_iausf = cJSON_GetObjectItemCaseSensitive(sor_info_1JSON, "sorMacIausf");
     if (sor_mac_iausf) {
     if (!cJSON_IsString(sor_mac_iausf) && !cJSON_IsNull(sor_mac_iausf)) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [sor_mac_iausf]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [sor_mac_iausf]");
         goto end;
     }
     }
@@ -198,25 +198,25 @@ OpenAPI_sor_info_1_t *OpenAPI_sor_info_1_parseFromJSON(cJSON *sor_info_1JSON)
     countersor = cJSON_GetObjectItemCaseSensitive(sor_info_1JSON, "countersor");
     if (countersor) {
     if (!cJSON_IsString(countersor) && !cJSON_IsNull(countersor)) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [countersor]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [countersor]");
         goto end;
     }
     }
 
     provisioning_time = cJSON_GetObjectItemCaseSensitive(sor_info_1JSON, "provisioningTime");
     if (!provisioning_time) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [provisioning_time]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [provisioning_time]");
         goto end;
     }
     if (!cJSON_IsString(provisioning_time) && !cJSON_IsNull(provisioning_time)) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [provisioning_time]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [provisioning_time]");
         goto end;
     }
 
     sor_transparent_container = cJSON_GetObjectItemCaseSensitive(sor_info_1JSON, "sorTransparentContainer");
     if (sor_transparent_container) {
     if (!cJSON_IsString(sor_transparent_container) && !cJSON_IsNull(sor_transparent_container)) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [sor_transparent_container]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [sor_transparent_container]");
         goto end;
     }
     }
@@ -224,7 +224,7 @@ OpenAPI_sor_info_1_t *OpenAPI_sor_info_1_parseFromJSON(cJSON *sor_info_1JSON)
     sor_cmci = cJSON_GetObjectItemCaseSensitive(sor_info_1JSON, "sorCmci");
     if (sor_cmci) {
     if (!cJSON_IsString(sor_cmci) && !cJSON_IsNull(sor_cmci)) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [sor_cmci]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [sor_cmci]");
         goto end;
     }
     }
@@ -232,7 +232,7 @@ OpenAPI_sor_info_1_t *OpenAPI_sor_info_1_parseFromJSON(cJSON *sor_info_1JSON)
     store_sor_cmci_in_me = cJSON_GetObjectItemCaseSensitive(sor_info_1JSON, "storeSorCmciInMe");
     if (store_sor_cmci_in_me) {
     if (!cJSON_IsBool(store_sor_cmci_in_me)) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [store_sor_cmci_in_me]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [store_sor_cmci_in_me]");
         goto end;
     }
     }
@@ -240,7 +240,7 @@ OpenAPI_sor_info_1_t *OpenAPI_sor_info_1_parseFromJSON(cJSON *sor_info_1JSON)
     usim_support_of_sor_cmci = cJSON_GetObjectItemCaseSensitive(sor_info_1JSON, "usimSupportOfSorCmci");
     if (usim_support_of_sor_cmci) {
     if (!cJSON_IsBool(usim_support_of_sor_cmci)) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON() failed [usim_support_of_sor_cmci]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON() failed [usim_support_of_sor_cmci]");
         goto end;
     }
     }
@@ -274,10 +274,10 @@ OpenAPI_sor_info_1_t *OpenAPI_sor_info_1_copy(OpenAPI_sor_info_1_t *dst, OpenAPI
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sor_info_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sor_info_1_convertToJSON() failed");
+        log_error("OpenAPI_sor_info_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -285,14 +285,14 @@ OpenAPI_sor_info_1_t *OpenAPI_sor_info_1_copy(OpenAPI_sor_info_1_t *dst, OpenAPI
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

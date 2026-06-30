@@ -9,7 +9,7 @@ OpenAPI_scp_domain_connectivity_t *OpenAPI_scp_domain_connectivity_create(
 )
 {
     OpenAPI_scp_domain_connectivity_t *scp_domain_connectivity_local_var = ogs_malloc(sizeof(OpenAPI_scp_domain_connectivity_t));
-    ogs_assert(scp_domain_connectivity_local_var);
+    log_assert(scp_domain_connectivity_local_var);
 
     scp_domain_connectivity_local_var->connected_scp_domain_list = connected_scp_domain_list;
 
@@ -39,23 +39,23 @@ cJSON *OpenAPI_scp_domain_connectivity_convertToJSON(OpenAPI_scp_domain_connecti
     OpenAPI_lnode_t *node = NULL;
 
     if (scp_domain_connectivity == NULL) {
-        ogs_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed [ScpDomainConnectivity]");
+        log_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed [ScpDomainConnectivity]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!scp_domain_connectivity->connected_scp_domain_list) {
-        ogs_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed [connected_scp_domain_list]");
+        log_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed [connected_scp_domain_list]");
         return NULL;
     }
     cJSON *connected_scp_domain_listList = cJSON_AddArrayToObject(item, "connectedScpDomainList");
     if (connected_scp_domain_listList == NULL) {
-        ogs_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed [connected_scp_domain_list]");
+        log_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed [connected_scp_domain_list]");
         goto end;
     }
     OpenAPI_list_for_each(scp_domain_connectivity->connected_scp_domain_list, node) {
         if (cJSON_AddStringToObject(connected_scp_domain_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed [connected_scp_domain_list]");
+            log_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed [connected_scp_domain_list]");
             goto end;
         }
     }
@@ -72,12 +72,12 @@ OpenAPI_scp_domain_connectivity_t *OpenAPI_scp_domain_connectivity_parseFromJSON
     OpenAPI_list_t *connected_scp_domain_listList = NULL;
     connected_scp_domain_list = cJSON_GetObjectItemCaseSensitive(scp_domain_connectivityJSON, "connectedScpDomainList");
     if (!connected_scp_domain_list) {
-        ogs_error("OpenAPI_scp_domain_connectivity_parseFromJSON() failed [connected_scp_domain_list]");
+        log_error("OpenAPI_scp_domain_connectivity_parseFromJSON() failed [connected_scp_domain_list]");
         goto end;
     }
         cJSON *connected_scp_domain_list_local = NULL;
         if (!cJSON_IsArray(connected_scp_domain_list)) {
-            ogs_error("OpenAPI_scp_domain_connectivity_parseFromJSON() failed [connected_scp_domain_list]");
+            log_error("OpenAPI_scp_domain_connectivity_parseFromJSON() failed [connected_scp_domain_list]");
             goto end;
         }
 
@@ -87,7 +87,7 @@ OpenAPI_scp_domain_connectivity_t *OpenAPI_scp_domain_connectivity_parseFromJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(connected_scp_domain_list_local)) {
-                ogs_error("OpenAPI_scp_domain_connectivity_parseFromJSON() failed [connected_scp_domain_list]");
+                log_error("OpenAPI_scp_domain_connectivity_parseFromJSON() failed [connected_scp_domain_list]");
                 goto end;
             }
             OpenAPI_list_add(connected_scp_domain_listList, ogs_strdup(connected_scp_domain_list_local->valuestring));
@@ -114,10 +114,10 @@ OpenAPI_scp_domain_connectivity_t *OpenAPI_scp_domain_connectivity_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_scp_domain_connectivity_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed");
+        log_error("OpenAPI_scp_domain_connectivity_convertToJSON() failed");
         return NULL;
     }
 
@@ -125,14 +125,14 @@ OpenAPI_scp_domain_connectivity_t *OpenAPI_scp_domain_connectivity_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

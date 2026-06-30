@@ -13,7 +13,7 @@ OpenAPI_as_time_distribution_param_t *OpenAPI_as_time_distribution_param_create(
 )
 {
     OpenAPI_as_time_distribution_param_t *as_time_distribution_param_local_var = ogs_malloc(sizeof(OpenAPI_as_time_distribution_param_t));
-    ogs_assert(as_time_distribution_param_local_var);
+    log_assert(as_time_distribution_param_local_var);
 
     as_time_distribution_param_local_var->is_as_time_dist_ind = is_as_time_dist_ind;
     as_time_distribution_param_local_var->as_time_dist_ind = as_time_dist_ind;
@@ -40,26 +40,26 @@ cJSON *OpenAPI_as_time_distribution_param_convertToJSON(OpenAPI_as_time_distribu
     OpenAPI_lnode_t *node = NULL;
 
     if (as_time_distribution_param == NULL) {
-        ogs_error("OpenAPI_as_time_distribution_param_convertToJSON() failed [AsTimeDistributionParam]");
+        log_error("OpenAPI_as_time_distribution_param_convertToJSON() failed [AsTimeDistributionParam]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (as_time_distribution_param->is_as_time_dist_ind) {
     if (cJSON_AddBoolToObject(item, "asTimeDistInd", as_time_distribution_param->as_time_dist_ind) == NULL) {
-        ogs_error("OpenAPI_as_time_distribution_param_convertToJSON() failed [as_time_dist_ind]");
+        log_error("OpenAPI_as_time_distribution_param_convertToJSON() failed [as_time_dist_ind]");
         goto end;
     }
     }
 
     if (as_time_distribution_param->is_uu_error_budget) {
     if (cJSON_AddNumberToObject(item, "uuErrorBudget", as_time_distribution_param->uu_error_budget) == NULL) {
-        ogs_error("OpenAPI_as_time_distribution_param_convertToJSON() failed [uu_error_budget]");
+        log_error("OpenAPI_as_time_distribution_param_convertToJSON() failed [uu_error_budget]");
         goto end;
     }
     } else if (as_time_distribution_param->is_uu_error_budget_null) {
         if (cJSON_AddNullToObject(item, "uuErrorBudget") == NULL) {
-            ogs_error("OpenAPI_as_time_distribution_param_convertToJSON() failed [uu_error_budget]");
+            log_error("OpenAPI_as_time_distribution_param_convertToJSON() failed [uu_error_budget]");
             goto end;
         }
     }
@@ -77,7 +77,7 @@ OpenAPI_as_time_distribution_param_t *OpenAPI_as_time_distribution_param_parseFr
     as_time_dist_ind = cJSON_GetObjectItemCaseSensitive(as_time_distribution_paramJSON, "asTimeDistInd");
     if (as_time_dist_ind) {
     if (!cJSON_IsBool(as_time_dist_ind)) {
-        ogs_error("OpenAPI_as_time_distribution_param_parseFromJSON() failed [as_time_dist_ind]");
+        log_error("OpenAPI_as_time_distribution_param_parseFromJSON() failed [as_time_dist_ind]");
         goto end;
     }
     }
@@ -86,7 +86,7 @@ OpenAPI_as_time_distribution_param_t *OpenAPI_as_time_distribution_param_parseFr
     if (uu_error_budget) {
     if (!cJSON_IsNull(uu_error_budget)) {
     if (!cJSON_IsNumber(uu_error_budget)) {
-        ogs_error("OpenAPI_as_time_distribution_param_parseFromJSON() failed [uu_error_budget]");
+        log_error("OpenAPI_as_time_distribution_param_parseFromJSON() failed [uu_error_budget]");
         goto end;
     }
     }
@@ -110,10 +110,10 @@ OpenAPI_as_time_distribution_param_t *OpenAPI_as_time_distribution_param_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_as_time_distribution_param_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_as_time_distribution_param_convertToJSON() failed");
+        log_error("OpenAPI_as_time_distribution_param_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_as_time_distribution_param_t *OpenAPI_as_time_distribution_param_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

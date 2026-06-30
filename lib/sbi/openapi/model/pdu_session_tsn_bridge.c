@@ -17,7 +17,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_create(
 )
 {
     OpenAPI_pdu_session_tsn_bridge_t *pdu_session_tsn_bridge_local_var = ogs_malloc(sizeof(OpenAPI_pdu_session_tsn_bridge_t));
-    ogs_assert(pdu_session_tsn_bridge_local_var);
+    log_assert(pdu_session_tsn_bridge_local_var);
 
     pdu_session_tsn_bridge_local_var->tsn_bridge_info = tsn_bridge_info;
     pdu_session_tsn_bridge_local_var->tsn_bridge_man_cont = tsn_bridge_man_cont;
@@ -87,35 +87,35 @@ cJSON *OpenAPI_pdu_session_tsn_bridge_convertToJSON(OpenAPI_pdu_session_tsn_brid
     OpenAPI_lnode_t *node = NULL;
 
     if (pdu_session_tsn_bridge == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [PduSessionTsnBridge]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [PduSessionTsnBridge]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!pdu_session_tsn_bridge->tsn_bridge_info) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_info]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_info]");
         return NULL;
     }
     cJSON *tsn_bridge_info_local_JSON = OpenAPI_tsn_bridge_info_convertToJSON(pdu_session_tsn_bridge->tsn_bridge_info);
     if (tsn_bridge_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_info]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "tsnBridgeInfo", tsn_bridge_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_info]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_info]");
         goto end;
     }
 
     if (pdu_session_tsn_bridge->tsn_bridge_man_cont) {
     cJSON *tsn_bridge_man_cont_local_JSON = OpenAPI_bridge_management_container_convertToJSON(pdu_session_tsn_bridge->tsn_bridge_man_cont);
     if (tsn_bridge_man_cont_local_JSON == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_man_cont]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_man_cont]");
         goto end;
     }
     cJSON_AddItemToObject(item, "tsnBridgeManCont", tsn_bridge_man_cont_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_man_cont]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_bridge_man_cont]");
         goto end;
     }
     }
@@ -123,12 +123,12 @@ cJSON *OpenAPI_pdu_session_tsn_bridge_convertToJSON(OpenAPI_pdu_session_tsn_brid
     if (pdu_session_tsn_bridge->tsn_port_man_cont_dstt) {
     cJSON *tsn_port_man_cont_dstt_local_JSON = OpenAPI_port_management_container_convertToJSON(pdu_session_tsn_bridge->tsn_port_man_cont_dstt);
     if (tsn_port_man_cont_dstt_local_JSON == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_port_man_cont_dstt]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_port_man_cont_dstt]");
         goto end;
     }
     cJSON_AddItemToObject(item, "tsnPortManContDstt", tsn_port_man_cont_dstt_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_port_man_cont_dstt]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_port_man_cont_dstt]");
         goto end;
     }
     }
@@ -136,13 +136,13 @@ cJSON *OpenAPI_pdu_session_tsn_bridge_convertToJSON(OpenAPI_pdu_session_tsn_brid
     if (pdu_session_tsn_bridge->tsn_port_man_cont_nwtts) {
     cJSON *tsn_port_man_cont_nwttsList = cJSON_AddArrayToObject(item, "tsnPortManContNwtts");
     if (tsn_port_man_cont_nwttsList == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_port_man_cont_nwtts]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_port_man_cont_nwtts]");
         goto end;
     }
     OpenAPI_list_for_each(pdu_session_tsn_bridge->tsn_port_man_cont_nwtts, node) {
         cJSON *itemLocal = OpenAPI_port_management_container_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_port_man_cont_nwtts]");
+            log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [tsn_port_man_cont_nwtts]");
             goto end;
         }
         cJSON_AddItemToArray(tsn_port_man_cont_nwttsList, itemLocal);
@@ -151,14 +151,14 @@ cJSON *OpenAPI_pdu_session_tsn_bridge_convertToJSON(OpenAPI_pdu_session_tsn_brid
 
     if (pdu_session_tsn_bridge->ue_ipv4_addr) {
     if (cJSON_AddStringToObject(item, "ueIpv4Addr", pdu_session_tsn_bridge->ue_ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [ue_ipv4_addr]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [ue_ipv4_addr]");
         goto end;
     }
     }
 
     if (pdu_session_tsn_bridge->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", pdu_session_tsn_bridge->dnn) == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [dnn]");
         goto end;
     }
     }
@@ -166,26 +166,26 @@ cJSON *OpenAPI_pdu_session_tsn_bridge_convertToJSON(OpenAPI_pdu_session_tsn_brid
     if (pdu_session_tsn_bridge->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(pdu_session_tsn_bridge->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [snssai]");
         goto end;
     }
     }
 
     if (pdu_session_tsn_bridge->ip_domain) {
     if (cJSON_AddStringToObject(item, "ipDomain", pdu_session_tsn_bridge->ip_domain) == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [ip_domain]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [ip_domain]");
         goto end;
     }
     }
 
     if (pdu_session_tsn_bridge->ue_ipv6_addr_prefix) {
     if (cJSON_AddStringToObject(item, "ueIpv6AddrPrefix", pdu_session_tsn_bridge->ue_ipv6_addr_prefix) == NULL) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [ue_ipv6_addr_prefix]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed [ue_ipv6_addr_prefix]");
         goto end;
     }
     }
@@ -214,12 +214,12 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     cJSON *ue_ipv6_addr_prefix = NULL;
     tsn_bridge_info = cJSON_GetObjectItemCaseSensitive(pdu_session_tsn_bridgeJSON, "tsnBridgeInfo");
     if (!tsn_bridge_info) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [tsn_bridge_info]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [tsn_bridge_info]");
         goto end;
     }
     tsn_bridge_info_local_nonprim = OpenAPI_tsn_bridge_info_parseFromJSON(tsn_bridge_info);
     if (!tsn_bridge_info_local_nonprim) {
-        ogs_error("OpenAPI_tsn_bridge_info_parseFromJSON failed [tsn_bridge_info]");
+        log_error("OpenAPI_tsn_bridge_info_parseFromJSON failed [tsn_bridge_info]");
         goto end;
     }
 
@@ -227,7 +227,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     if (tsn_bridge_man_cont) {
     tsn_bridge_man_cont_local_nonprim = OpenAPI_bridge_management_container_parseFromJSON(tsn_bridge_man_cont);
     if (!tsn_bridge_man_cont_local_nonprim) {
-        ogs_error("OpenAPI_bridge_management_container_parseFromJSON failed [tsn_bridge_man_cont]");
+        log_error("OpenAPI_bridge_management_container_parseFromJSON failed [tsn_bridge_man_cont]");
         goto end;
     }
     }
@@ -236,7 +236,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     if (tsn_port_man_cont_dstt) {
     tsn_port_man_cont_dstt_local_nonprim = OpenAPI_port_management_container_parseFromJSON(tsn_port_man_cont_dstt);
     if (!tsn_port_man_cont_dstt_local_nonprim) {
-        ogs_error("OpenAPI_port_management_container_parseFromJSON failed [tsn_port_man_cont_dstt]");
+        log_error("OpenAPI_port_management_container_parseFromJSON failed [tsn_port_man_cont_dstt]");
         goto end;
     }
     }
@@ -245,7 +245,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     if (tsn_port_man_cont_nwtts) {
         cJSON *tsn_port_man_cont_nwtts_local = NULL;
         if (!cJSON_IsArray(tsn_port_man_cont_nwtts)) {
-            ogs_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [tsn_port_man_cont_nwtts]");
+            log_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [tsn_port_man_cont_nwtts]");
             goto end;
         }
 
@@ -253,12 +253,12 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
 
         cJSON_ArrayForEach(tsn_port_man_cont_nwtts_local, tsn_port_man_cont_nwtts) {
             if (!cJSON_IsObject(tsn_port_man_cont_nwtts_local)) {
-                ogs_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [tsn_port_man_cont_nwtts]");
+                log_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [tsn_port_man_cont_nwtts]");
                 goto end;
             }
             OpenAPI_port_management_container_t *tsn_port_man_cont_nwttsItem = OpenAPI_port_management_container_parseFromJSON(tsn_port_man_cont_nwtts_local);
             if (!tsn_port_man_cont_nwttsItem) {
-                ogs_error("No tsn_port_man_cont_nwttsItem");
+                log_error("No tsn_port_man_cont_nwttsItem");
                 goto end;
             }
             OpenAPI_list_add(tsn_port_man_cont_nwttsList, tsn_port_man_cont_nwttsItem);
@@ -268,7 +268,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     ue_ipv4_addr = cJSON_GetObjectItemCaseSensitive(pdu_session_tsn_bridgeJSON, "ueIpv4Addr");
     if (ue_ipv4_addr) {
     if (!cJSON_IsString(ue_ipv4_addr) && !cJSON_IsNull(ue_ipv4_addr)) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [ue_ipv4_addr]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [ue_ipv4_addr]");
         goto end;
     }
     }
@@ -276,7 +276,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     dnn = cJSON_GetObjectItemCaseSensitive(pdu_session_tsn_bridgeJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -285,7 +285,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -293,7 +293,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     ip_domain = cJSON_GetObjectItemCaseSensitive(pdu_session_tsn_bridgeJSON, "ipDomain");
     if (ip_domain) {
     if (!cJSON_IsString(ip_domain) && !cJSON_IsNull(ip_domain)) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [ip_domain]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [ip_domain]");
         goto end;
     }
     }
@@ -301,7 +301,7 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_parseFromJSON(c
     ue_ipv6_addr_prefix = cJSON_GetObjectItemCaseSensitive(pdu_session_tsn_bridgeJSON, "ueIpv6AddrPrefix");
     if (ue_ipv6_addr_prefix) {
     if (!cJSON_IsString(ue_ipv6_addr_prefix) && !cJSON_IsNull(ue_ipv6_addr_prefix)) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [ue_ipv6_addr_prefix]");
+        log_error("OpenAPI_pdu_session_tsn_bridge_parseFromJSON() failed [ue_ipv6_addr_prefix]");
         goto end;
     }
     }
@@ -351,10 +351,10 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_copy(OpenAPI_pd
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pdu_session_tsn_bridge_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed");
+        log_error("OpenAPI_pdu_session_tsn_bridge_convertToJSON() failed");
         return NULL;
     }
 
@@ -362,14 +362,14 @@ OpenAPI_pdu_session_tsn_bridge_t *OpenAPI_pdu_session_tsn_bridge_copy(OpenAPI_pd
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

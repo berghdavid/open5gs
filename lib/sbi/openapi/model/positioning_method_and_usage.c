@@ -13,7 +13,7 @@ OpenAPI_positioning_method_and_usage_t *OpenAPI_positioning_method_and_usage_cre
 )
 {
     OpenAPI_positioning_method_and_usage_t *positioning_method_and_usage_local_var = ogs_malloc(sizeof(OpenAPI_positioning_method_and_usage_t));
-    ogs_assert(positioning_method_and_usage_local_var);
+    log_assert(positioning_method_and_usage_local_var);
 
     positioning_method_and_usage_local_var->method = method;
     positioning_method_and_usage_local_var->mode = mode;
@@ -52,59 +52,59 @@ cJSON *OpenAPI_positioning_method_and_usage_convertToJSON(OpenAPI_positioning_me
     OpenAPI_lnode_t *node = NULL;
 
     if (positioning_method_and_usage == NULL) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [PositioningMethodAndUsage]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [PositioningMethodAndUsage]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!positioning_method_and_usage->method) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [method]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [method]");
         return NULL;
     }
     cJSON *method_local_JSON = OpenAPI_positioning_method_convertToJSON(positioning_method_and_usage->method);
     if (method_local_JSON == NULL) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [method]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [method]");
         goto end;
     }
     cJSON_AddItemToObject(item, "method", method_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [method]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [method]");
         goto end;
     }
 
     if (!positioning_method_and_usage->mode) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [mode]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [mode]");
         return NULL;
     }
     cJSON *mode_local_JSON = OpenAPI_positioning_mode_convertToJSON(positioning_method_and_usage->mode);
     if (mode_local_JSON == NULL) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [mode]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [mode]");
         goto end;
     }
     cJSON_AddItemToObject(item, "mode", mode_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [mode]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [mode]");
         goto end;
     }
 
     if (!positioning_method_and_usage->usage) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [usage]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [usage]");
         return NULL;
     }
     cJSON *usage_local_JSON = OpenAPI_usage_convertToJSON(positioning_method_and_usage->usage);
     if (usage_local_JSON == NULL) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [usage]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [usage]");
         goto end;
     }
     cJSON_AddItemToObject(item, "usage", usage_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [usage]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [usage]");
         goto end;
     }
 
     if (positioning_method_and_usage->is_method_code) {
     if (cJSON_AddNumberToObject(item, "methodCode", positioning_method_and_usage->method_code) == NULL) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [method_code]");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed [method_code]");
         goto end;
     }
     }
@@ -126,41 +126,41 @@ OpenAPI_positioning_method_and_usage_t *OpenAPI_positioning_method_and_usage_par
     cJSON *method_code = NULL;
     method = cJSON_GetObjectItemCaseSensitive(positioning_method_and_usageJSON, "method");
     if (!method) {
-        ogs_error("OpenAPI_positioning_method_and_usage_parseFromJSON() failed [method]");
+        log_error("OpenAPI_positioning_method_and_usage_parseFromJSON() failed [method]");
         goto end;
     }
     method_local_nonprim = OpenAPI_positioning_method_parseFromJSON(method);
     if (!method_local_nonprim) {
-        ogs_error("OpenAPI_positioning_method_parseFromJSON failed [method]");
+        log_error("OpenAPI_positioning_method_parseFromJSON failed [method]");
         goto end;
     }
 
     mode = cJSON_GetObjectItemCaseSensitive(positioning_method_and_usageJSON, "mode");
     if (!mode) {
-        ogs_error("OpenAPI_positioning_method_and_usage_parseFromJSON() failed [mode]");
+        log_error("OpenAPI_positioning_method_and_usage_parseFromJSON() failed [mode]");
         goto end;
     }
     mode_local_nonprim = OpenAPI_positioning_mode_parseFromJSON(mode);
     if (!mode_local_nonprim) {
-        ogs_error("OpenAPI_positioning_mode_parseFromJSON failed [mode]");
+        log_error("OpenAPI_positioning_mode_parseFromJSON failed [mode]");
         goto end;
     }
 
     usage = cJSON_GetObjectItemCaseSensitive(positioning_method_and_usageJSON, "usage");
     if (!usage) {
-        ogs_error("OpenAPI_positioning_method_and_usage_parseFromJSON() failed [usage]");
+        log_error("OpenAPI_positioning_method_and_usage_parseFromJSON() failed [usage]");
         goto end;
     }
     usage_local_nonprim = OpenAPI_usage_parseFromJSON(usage);
     if (!usage_local_nonprim) {
-        ogs_error("OpenAPI_usage_parseFromJSON failed [usage]");
+        log_error("OpenAPI_usage_parseFromJSON failed [usage]");
         goto end;
     }
 
     method_code = cJSON_GetObjectItemCaseSensitive(positioning_method_and_usageJSON, "methodCode");
     if (method_code) {
     if (!cJSON_IsNumber(method_code)) {
-        ogs_error("OpenAPI_positioning_method_and_usage_parseFromJSON() failed [method_code]");
+        log_error("OpenAPI_positioning_method_and_usage_parseFromJSON() failed [method_code]");
         goto end;
     }
     }
@@ -195,10 +195,10 @@ OpenAPI_positioning_method_and_usage_t *OpenAPI_positioning_method_and_usage_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_positioning_method_and_usage_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed");
+        log_error("OpenAPI_positioning_method_and_usage_convertToJSON() failed");
         return NULL;
     }
 
@@ -206,14 +206,14 @@ OpenAPI_positioning_method_and_usage_t *OpenAPI_positioning_method_and_usage_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

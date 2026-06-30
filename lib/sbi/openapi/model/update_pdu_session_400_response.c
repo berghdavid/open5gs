@@ -10,7 +10,7 @@ OpenAPI_update_pdu_session_400_response_t *OpenAPI_update_pdu_session_400_respon
 )
 {
     OpenAPI_update_pdu_session_400_response_t *update_pdu_session_400_response_local_var = ogs_malloc(sizeof(OpenAPI_update_pdu_session_400_response_t));
-    ogs_assert(update_pdu_session_400_response_local_var);
+    log_assert(update_pdu_session_400_response_local_var);
 
     update_pdu_session_400_response_local_var->json_data = json_data;
     update_pdu_session_400_response_local_var->binary_data_n1_sm_info_to_ue = binary_data_n1_sm_info_to_ue;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_update_pdu_session_400_response_convertToJSON(OpenAPI_update_pdu_
     OpenAPI_lnode_t *node = NULL;
 
     if (update_pdu_session_400_response == NULL) {
-        ogs_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed [UpdatePduSession_400_response]");
+        log_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed [UpdatePduSession_400_response]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_update_pdu_session_400_response_convertToJSON(OpenAPI_update_pdu_
     if (update_pdu_session_400_response->json_data) {
     cJSON *json_data_local_JSON = OpenAPI_hsmf_update_error_convertToJSON(update_pdu_session_400_response->json_data);
     if (json_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed [json_data]");
+        log_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed [json_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "jsonData", json_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed [json_data]");
+        log_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed [json_data]");
         goto end;
     }
     }
@@ -63,7 +63,7 @@ cJSON *OpenAPI_update_pdu_session_400_response_convertToJSON(OpenAPI_update_pdu_
     if (update_pdu_session_400_response->binary_data_n1_sm_info_to_ue) {
     char* encoded_str_binary_data_n1_sm_info_to_ue = OpenAPI_base64encode(update_pdu_session_400_response->binary_data_n1_sm_info_to_ue->data,update_pdu_session_400_response->binary_data_n1_sm_info_to_ue->len);
     if (cJSON_AddStringToObject(item, "binaryDataN1SmInfoToUe", encoded_str_binary_data_n1_sm_info_to_ue) == NULL) {
-        ogs_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed [binary_data_n1_sm_info_to_ue]");
+        log_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed [binary_data_n1_sm_info_to_ue]");
         goto end;
     }
     ogs_free(encoded_str_binary_data_n1_sm_info_to_ue);
@@ -85,7 +85,7 @@ OpenAPI_update_pdu_session_400_response_t *OpenAPI_update_pdu_session_400_respon
     if (json_data) {
     json_data_local_nonprim = OpenAPI_hsmf_update_error_parseFromJSON(json_data);
     if (!json_data_local_nonprim) {
-        ogs_error("OpenAPI_hsmf_update_error_parseFromJSON failed [json_data]");
+        log_error("OpenAPI_hsmf_update_error_parseFromJSON failed [json_data]");
         goto end;
     }
     }
@@ -93,14 +93,14 @@ OpenAPI_update_pdu_session_400_response_t *OpenAPI_update_pdu_session_400_respon
     binary_data_n1_sm_info_to_ue = cJSON_GetObjectItemCaseSensitive(update_pdu_session_400_responseJSON, "binaryDataN1SmInfoToUe");
     if (binary_data_n1_sm_info_to_ue) {
     decoded_str_binary_data_n1_sm_info_to_ue = ogs_malloc(sizeof(OpenAPI_binary_t));
-    ogs_assert(decoded_str_binary_data_n1_sm_info_to_ue);
+    log_assert(decoded_str_binary_data_n1_sm_info_to_ue);
     if (!cJSON_IsString(binary_data_n1_sm_info_to_ue)) {
-        ogs_error("OpenAPI_update_pdu_session_400_response_parseFromJSON() failed [binary_data_n1_sm_info_to_ue]");
+        log_error("OpenAPI_update_pdu_session_400_response_parseFromJSON() failed [binary_data_n1_sm_info_to_ue]");
         goto end;
     }
     decoded_str_binary_data_n1_sm_info_to_ue->data = OpenAPI_base64decode(binary_data_n1_sm_info_to_ue->valuestring, strlen(binary_data_n1_sm_info_to_ue->valuestring), &decoded_str_binary_data_n1_sm_info_to_ue->len);
     if (!decoded_str_binary_data_n1_sm_info_to_ue->data) {
-        ogs_error("OpenAPI_update_pdu_session_400_response_parseFromJSON() failed [binary_data_n1_sm_info_to_ue]");
+        log_error("OpenAPI_update_pdu_session_400_response_parseFromJSON() failed [binary_data_n1_sm_info_to_ue]");
         goto end;
     }
     }
@@ -124,10 +124,10 @@ OpenAPI_update_pdu_session_400_response_t *OpenAPI_update_pdu_session_400_respon
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_update_pdu_session_400_response_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed");
+        log_error("OpenAPI_update_pdu_session_400_response_convertToJSON() failed");
         return NULL;
     }
 
@@ -135,14 +135,14 @@ OpenAPI_update_pdu_session_400_response_t *OpenAPI_update_pdu_session_400_respon
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -10,7 +10,7 @@ OpenAPI_trigger_request_t *OpenAPI_trigger_request_create(
 )
 {
     OpenAPI_trigger_request_t *trigger_request_local_var = ogs_malloc(sizeof(OpenAPI_trigger_request_t));
-    ogs_assert(trigger_request_local_var);
+    log_assert(trigger_request_local_var);
 
     trigger_request_local_var->supi = supi;
     trigger_request_local_var->failed_pcscf = failed_pcscf;
@@ -42,29 +42,29 @@ cJSON *OpenAPI_trigger_request_convertToJSON(OpenAPI_trigger_request_t *trigger_
     OpenAPI_lnode_t *node = NULL;
 
     if (trigger_request == NULL) {
-        ogs_error("OpenAPI_trigger_request_convertToJSON() failed [TriggerRequest]");
+        log_error("OpenAPI_trigger_request_convertToJSON() failed [TriggerRequest]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!trigger_request->supi) {
-        ogs_error("OpenAPI_trigger_request_convertToJSON() failed [supi]");
+        log_error("OpenAPI_trigger_request_convertToJSON() failed [supi]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "supi", trigger_request->supi) == NULL) {
-        ogs_error("OpenAPI_trigger_request_convertToJSON() failed [supi]");
+        log_error("OpenAPI_trigger_request_convertToJSON() failed [supi]");
         goto end;
     }
 
     if (trigger_request->failed_pcscf) {
     cJSON *failed_pcscf_local_JSON = OpenAPI_pcscf_address_convertToJSON(trigger_request->failed_pcscf);
     if (failed_pcscf_local_JSON == NULL) {
-        ogs_error("OpenAPI_trigger_request_convertToJSON() failed [failed_pcscf]");
+        log_error("OpenAPI_trigger_request_convertToJSON() failed [failed_pcscf]");
         goto end;
     }
     cJSON_AddItemToObject(item, "failedPcscf", failed_pcscf_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_trigger_request_convertToJSON() failed [failed_pcscf]");
+        log_error("OpenAPI_trigger_request_convertToJSON() failed [failed_pcscf]");
         goto end;
     }
     }
@@ -82,11 +82,11 @@ OpenAPI_trigger_request_t *OpenAPI_trigger_request_parseFromJSON(cJSON *trigger_
     OpenAPI_pcscf_address_t *failed_pcscf_local_nonprim = NULL;
     supi = cJSON_GetObjectItemCaseSensitive(trigger_requestJSON, "supi");
     if (!supi) {
-        ogs_error("OpenAPI_trigger_request_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_trigger_request_parseFromJSON() failed [supi]");
         goto end;
     }
     if (!cJSON_IsString(supi)) {
-        ogs_error("OpenAPI_trigger_request_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_trigger_request_parseFromJSON() failed [supi]");
         goto end;
     }
 
@@ -94,7 +94,7 @@ OpenAPI_trigger_request_t *OpenAPI_trigger_request_parseFromJSON(cJSON *trigger_
     if (failed_pcscf) {
     failed_pcscf_local_nonprim = OpenAPI_pcscf_address_parseFromJSON(failed_pcscf);
     if (!failed_pcscf_local_nonprim) {
-        ogs_error("OpenAPI_pcscf_address_parseFromJSON failed [failed_pcscf]");
+        log_error("OpenAPI_pcscf_address_parseFromJSON failed [failed_pcscf]");
         goto end;
     }
     }
@@ -118,10 +118,10 @@ OpenAPI_trigger_request_t *OpenAPI_trigger_request_copy(OpenAPI_trigger_request_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_trigger_request_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_trigger_request_convertToJSON() failed");
+        log_error("OpenAPI_trigger_request_convertToJSON() failed");
         return NULL;
     }
 
@@ -129,14 +129,14 @@ OpenAPI_trigger_request_t *OpenAPI_trigger_request_copy(OpenAPI_trigger_request_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

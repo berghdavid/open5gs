@@ -9,7 +9,7 @@ OpenAPI_tac_info_t *OpenAPI_tac_info_create(
 )
 {
     OpenAPI_tac_info_t *tac_info_local_var = ogs_malloc(sizeof(OpenAPI_tac_info_t));
-    ogs_assert(tac_info_local_var);
+    log_assert(tac_info_local_var);
 
     tac_info_local_var->tac_list = tac_list;
 
@@ -39,23 +39,23 @@ cJSON *OpenAPI_tac_info_convertToJSON(OpenAPI_tac_info_t *tac_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (tac_info == NULL) {
-        ogs_error("OpenAPI_tac_info_convertToJSON() failed [TacInfo]");
+        log_error("OpenAPI_tac_info_convertToJSON() failed [TacInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!tac_info->tac_list) {
-        ogs_error("OpenAPI_tac_info_convertToJSON() failed [tac_list]");
+        log_error("OpenAPI_tac_info_convertToJSON() failed [tac_list]");
         return NULL;
     }
     cJSON *tac_listList = cJSON_AddArrayToObject(item, "tacList");
     if (tac_listList == NULL) {
-        ogs_error("OpenAPI_tac_info_convertToJSON() failed [tac_list]");
+        log_error("OpenAPI_tac_info_convertToJSON() failed [tac_list]");
         goto end;
     }
     OpenAPI_list_for_each(tac_info->tac_list, node) {
         if (cJSON_AddStringToObject(tac_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_tac_info_convertToJSON() failed [tac_list]");
+            log_error("OpenAPI_tac_info_convertToJSON() failed [tac_list]");
             goto end;
         }
     }
@@ -72,12 +72,12 @@ OpenAPI_tac_info_t *OpenAPI_tac_info_parseFromJSON(cJSON *tac_infoJSON)
     OpenAPI_list_t *tac_listList = NULL;
     tac_list = cJSON_GetObjectItemCaseSensitive(tac_infoJSON, "tacList");
     if (!tac_list) {
-        ogs_error("OpenAPI_tac_info_parseFromJSON() failed [tac_list]");
+        log_error("OpenAPI_tac_info_parseFromJSON() failed [tac_list]");
         goto end;
     }
         cJSON *tac_list_local = NULL;
         if (!cJSON_IsArray(tac_list)) {
-            ogs_error("OpenAPI_tac_info_parseFromJSON() failed [tac_list]");
+            log_error("OpenAPI_tac_info_parseFromJSON() failed [tac_list]");
             goto end;
         }
 
@@ -87,7 +87,7 @@ OpenAPI_tac_info_t *OpenAPI_tac_info_parseFromJSON(cJSON *tac_infoJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(tac_list_local)) {
-                ogs_error("OpenAPI_tac_info_parseFromJSON() failed [tac_list]");
+                log_error("OpenAPI_tac_info_parseFromJSON() failed [tac_list]");
                 goto end;
             }
             OpenAPI_list_add(tac_listList, ogs_strdup(tac_list_local->valuestring));
@@ -114,10 +114,10 @@ OpenAPI_tac_info_t *OpenAPI_tac_info_copy(OpenAPI_tac_info_t *dst, OpenAPI_tac_i
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_tac_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_tac_info_convertToJSON() failed");
+        log_error("OpenAPI_tac_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -125,14 +125,14 @@ OpenAPI_tac_info_t *OpenAPI_tac_info_copy(OpenAPI_tac_info_t *dst, OpenAPI_tac_i
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -25,7 +25,7 @@ lmf_event_t *lmf_event_new(int id)
     lmf_event_t *e = NULL;
 
     e = ogs_event_size(id, sizeof(lmf_event_t));
-    ogs_assert(e);
+    log_assert(e);
 
     e->h.id = id;
 

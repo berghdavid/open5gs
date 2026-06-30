@@ -10,7 +10,7 @@ OpenAPI_cm_info_t *OpenAPI_cm_info_create(
 )
 {
     OpenAPI_cm_info_t *cm_info_local_var = ogs_malloc(sizeof(OpenAPI_cm_info_t));
-    ogs_assert(cm_info_local_var);
+    log_assert(cm_info_local_var);
 
     cm_info_local_var->cm_state = cm_state;
     cm_info_local_var->access_type = access_type;
@@ -38,32 +38,32 @@ cJSON *OpenAPI_cm_info_convertToJSON(OpenAPI_cm_info_t *cm_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (cm_info == NULL) {
-        ogs_error("OpenAPI_cm_info_convertToJSON() failed [CmInfo]");
+        log_error("OpenAPI_cm_info_convertToJSON() failed [CmInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!cm_info->cm_state) {
-        ogs_error("OpenAPI_cm_info_convertToJSON() failed [cm_state]");
+        log_error("OpenAPI_cm_info_convertToJSON() failed [cm_state]");
         return NULL;
     }
     cJSON *cm_state_local_JSON = OpenAPI_cm_state_convertToJSON(cm_info->cm_state);
     if (cm_state_local_JSON == NULL) {
-        ogs_error("OpenAPI_cm_info_convertToJSON() failed [cm_state]");
+        log_error("OpenAPI_cm_info_convertToJSON() failed [cm_state]");
         goto end;
     }
     cJSON_AddItemToObject(item, "cmState", cm_state_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_cm_info_convertToJSON() failed [cm_state]");
+        log_error("OpenAPI_cm_info_convertToJSON() failed [cm_state]");
         goto end;
     }
 
     if (cm_info->access_type == OpenAPI_access_type_NULL) {
-        ogs_error("OpenAPI_cm_info_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_cm_info_convertToJSON() failed [access_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "accessType", OpenAPI_access_type_ToString(cm_info->access_type)) == NULL) {
-        ogs_error("OpenAPI_cm_info_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_cm_info_convertToJSON() failed [access_type]");
         goto end;
     }
 
@@ -81,22 +81,22 @@ OpenAPI_cm_info_t *OpenAPI_cm_info_parseFromJSON(cJSON *cm_infoJSON)
     OpenAPI_access_type_e access_typeVariable = 0;
     cm_state = cJSON_GetObjectItemCaseSensitive(cm_infoJSON, "cmState");
     if (!cm_state) {
-        ogs_error("OpenAPI_cm_info_parseFromJSON() failed [cm_state]");
+        log_error("OpenAPI_cm_info_parseFromJSON() failed [cm_state]");
         goto end;
     }
     cm_state_local_nonprim = OpenAPI_cm_state_parseFromJSON(cm_state);
     if (!cm_state_local_nonprim) {
-        ogs_error("OpenAPI_cm_state_parseFromJSON failed [cm_state]");
+        log_error("OpenAPI_cm_state_parseFromJSON failed [cm_state]");
         goto end;
     }
 
     access_type = cJSON_GetObjectItemCaseSensitive(cm_infoJSON, "accessType");
     if (!access_type) {
-        ogs_error("OpenAPI_cm_info_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_cm_info_parseFromJSON() failed [access_type]");
         goto end;
     }
     if (!cJSON_IsString(access_type)) {
-        ogs_error("OpenAPI_cm_info_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_cm_info_parseFromJSON() failed [access_type]");
         goto end;
     }
     access_typeVariable = OpenAPI_access_type_FromString(access_type->valuestring);
@@ -120,10 +120,10 @@ OpenAPI_cm_info_t *OpenAPI_cm_info_copy(OpenAPI_cm_info_t *dst, OpenAPI_cm_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_cm_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_cm_info_convertToJSON() failed");
+        log_error("OpenAPI_cm_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -131,14 +131,14 @@ OpenAPI_cm_info_t *OpenAPI_cm_info_copy(OpenAPI_cm_info_t *dst, OpenAPI_cm_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -13,7 +13,7 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_create(
 )
 {
     OpenAPI_exposure_data_subscription_t *exposure_data_subscription_local_var = ogs_malloc(sizeof(OpenAPI_exposure_data_subscription_t));
-    ogs_assert(exposure_data_subscription_local_var);
+    log_assert(exposure_data_subscription_local_var);
 
     exposure_data_subscription_local_var->notification_uri = notification_uri;
     exposure_data_subscription_local_var->monitored_resource_uris = monitored_resource_uris;
@@ -66,46 +66,46 @@ cJSON *OpenAPI_exposure_data_subscription_convertToJSON(OpenAPI_exposure_data_su
     OpenAPI_lnode_t *node = NULL;
 
     if (exposure_data_subscription == NULL) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [ExposureDataSubscription]");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [ExposureDataSubscription]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!exposure_data_subscription->notification_uri) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [notification_uri]");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [notification_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "notificationUri", exposure_data_subscription->notification_uri) == NULL) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [notification_uri]");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [notification_uri]");
         goto end;
     }
 
     if (!exposure_data_subscription->monitored_resource_uris) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [monitored_resource_uris]");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [monitored_resource_uris]");
         return NULL;
     }
     cJSON *monitored_resource_urisList = cJSON_AddArrayToObject(item, "monitoredResourceUris");
     if (monitored_resource_urisList == NULL) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [monitored_resource_uris]");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [monitored_resource_uris]");
         goto end;
     }
     OpenAPI_list_for_each(exposure_data_subscription->monitored_resource_uris, node) {
         if (cJSON_AddStringToObject(monitored_resource_urisList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [monitored_resource_uris]");
+            log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [monitored_resource_uris]");
             goto end;
         }
     }
 
     if (exposure_data_subscription->expiry) {
     if (cJSON_AddStringToObject(item, "expiry", exposure_data_subscription->expiry) == NULL) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [expiry]");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [expiry]");
         goto end;
     }
     }
 
     if (exposure_data_subscription->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", exposure_data_subscription->supported_features) == NULL) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -113,12 +113,12 @@ cJSON *OpenAPI_exposure_data_subscription_convertToJSON(OpenAPI_exposure_data_su
     if (exposure_data_subscription->reset_ids) {
     cJSON *reset_idsList = cJSON_AddArrayToObject(item, "resetIds");
     if (reset_idsList == NULL) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [reset_ids]");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [reset_ids]");
         goto end;
     }
     OpenAPI_list_for_each(exposure_data_subscription->reset_ids, node) {
         if (cJSON_AddStringToObject(reset_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [reset_ids]");
+            log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed [reset_ids]");
             goto end;
         }
     }
@@ -141,22 +141,22 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_parseFr
     OpenAPI_list_t *reset_idsList = NULL;
     notification_uri = cJSON_GetObjectItemCaseSensitive(exposure_data_subscriptionJSON, "notificationUri");
     if (!notification_uri) {
-        ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [notification_uri]");
+        log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [notification_uri]");
         goto end;
     }
     if (!cJSON_IsString(notification_uri)) {
-        ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [notification_uri]");
+        log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [notification_uri]");
         goto end;
     }
 
     monitored_resource_uris = cJSON_GetObjectItemCaseSensitive(exposure_data_subscriptionJSON, "monitoredResourceUris");
     if (!monitored_resource_uris) {
-        ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [monitored_resource_uris]");
+        log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [monitored_resource_uris]");
         goto end;
     }
         cJSON *monitored_resource_uris_local = NULL;
         if (!cJSON_IsArray(monitored_resource_uris)) {
-            ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [monitored_resource_uris]");
+            log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [monitored_resource_uris]");
             goto end;
         }
 
@@ -166,7 +166,7 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_parseFr
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(monitored_resource_uris_local)) {
-                ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [monitored_resource_uris]");
+                log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [monitored_resource_uris]");
                 goto end;
             }
             OpenAPI_list_add(monitored_resource_urisList, ogs_strdup(monitored_resource_uris_local->valuestring));
@@ -175,7 +175,7 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_parseFr
     expiry = cJSON_GetObjectItemCaseSensitive(exposure_data_subscriptionJSON, "expiry");
     if (expiry) {
     if (!cJSON_IsString(expiry) && !cJSON_IsNull(expiry)) {
-        ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [expiry]");
+        log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [expiry]");
         goto end;
     }
     }
@@ -183,7 +183,7 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_parseFr
     supported_features = cJSON_GetObjectItemCaseSensitive(exposure_data_subscriptionJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -192,7 +192,7 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_parseFr
     if (reset_ids) {
         cJSON *reset_ids_local = NULL;
         if (!cJSON_IsArray(reset_ids)) {
-            ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [reset_ids]");
+            log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [reset_ids]");
             goto end;
         }
 
@@ -202,7 +202,7 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_parseFr
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(reset_ids_local)) {
-                ogs_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [reset_ids]");
+                log_error("OpenAPI_exposure_data_subscription_parseFromJSON() failed [reset_ids]");
                 goto end;
             }
             OpenAPI_list_add(reset_idsList, ogs_strdup(reset_ids_local->valuestring));
@@ -241,10 +241,10 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_exposure_data_subscription_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_exposure_data_subscription_convertToJSON() failed");
+        log_error("OpenAPI_exposure_data_subscription_convertToJSON() failed");
         return NULL;
     }
 
@@ -252,14 +252,14 @@ OpenAPI_exposure_data_subscription_t *OpenAPI_exposure_data_subscription_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

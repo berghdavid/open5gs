@@ -18,7 +18,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
 )
 {
     OpenAPI_pdu_session_event_notification_t *pdu_session_event_notification_local_var = ogs_malloc(sizeof(OpenAPI_pdu_session_event_notification_t));
-    ogs_assert(pdu_session_event_notification_local_var);
+    log_assert(pdu_session_event_notification_local_var);
 
     pdu_session_event_notification_local_var->ev_notif = ev_notif;
     pdu_session_event_notification_local_var->supi = supi;
@@ -86,57 +86,57 @@ cJSON *OpenAPI_pdu_session_event_notification_convertToJSON(OpenAPI_pdu_session_
     OpenAPI_lnode_t *node = NULL;
 
     if (pdu_session_event_notification == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [PduSessionEventNotification]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [PduSessionEventNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!pdu_session_event_notification->ev_notif) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ev_notif]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ev_notif]");
         return NULL;
     }
     cJSON *ev_notif_local_JSON = OpenAPI_af_event_notification_convertToJSON(pdu_session_event_notification->ev_notif);
     if (ev_notif_local_JSON == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ev_notif]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ev_notif]");
         goto end;
     }
     cJSON_AddItemToObject(item, "evNotif", ev_notif_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ev_notif]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ev_notif]");
         goto end;
     }
 
     if (pdu_session_event_notification->supi) {
     if (cJSON_AddStringToObject(item, "supi", pdu_session_event_notification->supi) == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [supi]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [supi]");
         goto end;
     }
     }
 
     if (pdu_session_event_notification->ue_ipv4) {
     if (cJSON_AddStringToObject(item, "ueIpv4", pdu_session_event_notification->ue_ipv4) == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ue_ipv4]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ue_ipv4]");
         goto end;
     }
     }
 
     if (pdu_session_event_notification->ue_ipv6) {
     if (cJSON_AddStringToObject(item, "ueIpv6", pdu_session_event_notification->ue_ipv6) == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ue_ipv6]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ue_ipv6]");
         goto end;
     }
     }
 
     if (pdu_session_event_notification->ue_mac) {
     if (cJSON_AddStringToObject(item, "ueMac", pdu_session_event_notification->ue_mac) == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ue_mac]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [ue_mac]");
         goto end;
     }
     }
 
     if (pdu_session_event_notification->status != OpenAPI_npcf_pdu_session_status_NULL) {
     if (cJSON_AddStringToObject(item, "status", OpenAPI_npcf_pdu_session_status_ToString(pdu_session_event_notification->status)) == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [status]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [status]");
         goto end;
     }
     }
@@ -144,19 +144,19 @@ cJSON *OpenAPI_pdu_session_event_notification_convertToJSON(OpenAPI_pdu_session_
     if (pdu_session_event_notification->pcf_info) {
     cJSON *pcf_info_local_JSON = OpenAPI_pcf_addressing_info_convertToJSON(pdu_session_event_notification->pcf_info);
     if (pcf_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [pcf_info]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [pcf_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "pcfInfo", pcf_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [pcf_info]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [pcf_info]");
         goto end;
     }
     }
 
     if (pdu_session_event_notification->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", pdu_session_event_notification->dnn) == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [dnn]");
         goto end;
     }
     }
@@ -164,19 +164,19 @@ cJSON *OpenAPI_pdu_session_event_notification_convertToJSON(OpenAPI_pdu_session_
     if (pdu_session_event_notification->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(pdu_session_event_notification->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [snssai]");
         goto end;
     }
     }
 
     if (pdu_session_event_notification->gpsi) {
     if (cJSON_AddStringToObject(item, "gpsi", pdu_session_event_notification->gpsi) == NULL) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [gpsi]");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed [gpsi]");
         goto end;
     }
     }
@@ -205,19 +205,19 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     cJSON *gpsi = NULL;
     ev_notif = cJSON_GetObjectItemCaseSensitive(pdu_session_event_notificationJSON, "evNotif");
     if (!ev_notif) {
-        ogs_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [ev_notif]");
+        log_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [ev_notif]");
         goto end;
     }
     ev_notif_local_nonprim = OpenAPI_af_event_notification_parseFromJSON(ev_notif);
     if (!ev_notif_local_nonprim) {
-        ogs_error("OpenAPI_af_event_notification_parseFromJSON failed [ev_notif]");
+        log_error("OpenAPI_af_event_notification_parseFromJSON failed [ev_notif]");
         goto end;
     }
 
     supi = cJSON_GetObjectItemCaseSensitive(pdu_session_event_notificationJSON, "supi");
     if (supi) {
     if (!cJSON_IsString(supi) && !cJSON_IsNull(supi)) {
-        ogs_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [supi]");
         goto end;
     }
     }
@@ -225,7 +225,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     ue_ipv4 = cJSON_GetObjectItemCaseSensitive(pdu_session_event_notificationJSON, "ueIpv4");
     if (ue_ipv4) {
     if (!cJSON_IsString(ue_ipv4) && !cJSON_IsNull(ue_ipv4)) {
-        ogs_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [ue_ipv4]");
+        log_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [ue_ipv4]");
         goto end;
     }
     }
@@ -233,7 +233,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     ue_ipv6 = cJSON_GetObjectItemCaseSensitive(pdu_session_event_notificationJSON, "ueIpv6");
     if (ue_ipv6) {
     if (!cJSON_IsString(ue_ipv6) && !cJSON_IsNull(ue_ipv6)) {
-        ogs_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [ue_ipv6]");
+        log_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [ue_ipv6]");
         goto end;
     }
     }
@@ -241,7 +241,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     ue_mac = cJSON_GetObjectItemCaseSensitive(pdu_session_event_notificationJSON, "ueMac");
     if (ue_mac) {
     if (!cJSON_IsString(ue_mac) && !cJSON_IsNull(ue_mac)) {
-        ogs_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [ue_mac]");
+        log_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [ue_mac]");
         goto end;
     }
     }
@@ -249,7 +249,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     status = cJSON_GetObjectItemCaseSensitive(pdu_session_event_notificationJSON, "status");
     if (status) {
     if (!cJSON_IsString(status)) {
-        ogs_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [status]");
+        log_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [status]");
         goto end;
     }
     statusVariable = OpenAPI_npcf_pdu_session_status_FromString(status->valuestring);
@@ -259,7 +259,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     if (pcf_info) {
     pcf_info_local_nonprim = OpenAPI_pcf_addressing_info_parseFromJSON(pcf_info);
     if (!pcf_info_local_nonprim) {
-        ogs_error("OpenAPI_pcf_addressing_info_parseFromJSON failed [pcf_info]");
+        log_error("OpenAPI_pcf_addressing_info_parseFromJSON failed [pcf_info]");
         goto end;
     }
     }
@@ -267,7 +267,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     dnn = cJSON_GetObjectItemCaseSensitive(pdu_session_event_notificationJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -276,7 +276,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -284,7 +284,7 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     gpsi = cJSON_GetObjectItemCaseSensitive(pdu_session_event_notificationJSON, "gpsi");
     if (gpsi) {
     if (!cJSON_IsString(gpsi) && !cJSON_IsNull(gpsi)) {
-        ogs_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [gpsi]");
+        log_error("OpenAPI_pdu_session_event_notification_parseFromJSON() failed [gpsi]");
         goto end;
     }
     }
@@ -324,10 +324,10 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pdu_session_event_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed");
+        log_error("OpenAPI_pdu_session_event_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -335,14 +335,14 @@ OpenAPI_pdu_session_event_notification_t *OpenAPI_pdu_session_event_notification
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

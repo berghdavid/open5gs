@@ -12,7 +12,7 @@ OpenAPI_ip_multicast_address_info_t *OpenAPI_ip_multicast_address_info_create(
 )
 {
     OpenAPI_ip_multicast_address_info_t *ip_multicast_address_info_local_var = ogs_malloc(sizeof(OpenAPI_ip_multicast_address_info_t));
-    ogs_assert(ip_multicast_address_info_local_var);
+    log_assert(ip_multicast_address_info_local_var);
 
     ip_multicast_address_info_local_var->src_ipv4_addr = src_ipv4_addr;
     ip_multicast_address_info_local_var->ipv4_mul_addr = ipv4_mul_addr;
@@ -54,35 +54,35 @@ cJSON *OpenAPI_ip_multicast_address_info_convertToJSON(OpenAPI_ip_multicast_addr
     OpenAPI_lnode_t *node = NULL;
 
     if (ip_multicast_address_info == NULL) {
-        ogs_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [IpMulticastAddressInfo]");
+        log_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [IpMulticastAddressInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ip_multicast_address_info->src_ipv4_addr) {
     if (cJSON_AddStringToObject(item, "srcIpv4Addr", ip_multicast_address_info->src_ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [src_ipv4_addr]");
+        log_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [src_ipv4_addr]");
         goto end;
     }
     }
 
     if (ip_multicast_address_info->ipv4_mul_addr) {
     if (cJSON_AddStringToObject(item, "ipv4MulAddr", ip_multicast_address_info->ipv4_mul_addr) == NULL) {
-        ogs_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [ipv4_mul_addr]");
+        log_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [ipv4_mul_addr]");
         goto end;
     }
     }
 
     if (ip_multicast_address_info->src_ipv6_addr) {
     if (cJSON_AddStringToObject(item, "srcIpv6Addr", ip_multicast_address_info->src_ipv6_addr) == NULL) {
-        ogs_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [src_ipv6_addr]");
+        log_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [src_ipv6_addr]");
         goto end;
     }
     }
 
     if (ip_multicast_address_info->ipv6_mul_addr) {
     if (cJSON_AddStringToObject(item, "ipv6MulAddr", ip_multicast_address_info->ipv6_mul_addr) == NULL) {
-        ogs_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [ipv6_mul_addr]");
+        log_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed [ipv6_mul_addr]");
         goto end;
     }
     }
@@ -102,7 +102,7 @@ OpenAPI_ip_multicast_address_info_t *OpenAPI_ip_multicast_address_info_parseFrom
     src_ipv4_addr = cJSON_GetObjectItemCaseSensitive(ip_multicast_address_infoJSON, "srcIpv4Addr");
     if (src_ipv4_addr) {
     if (!cJSON_IsString(src_ipv4_addr) && !cJSON_IsNull(src_ipv4_addr)) {
-        ogs_error("OpenAPI_ip_multicast_address_info_parseFromJSON() failed [src_ipv4_addr]");
+        log_error("OpenAPI_ip_multicast_address_info_parseFromJSON() failed [src_ipv4_addr]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_ip_multicast_address_info_t *OpenAPI_ip_multicast_address_info_parseFrom
     ipv4_mul_addr = cJSON_GetObjectItemCaseSensitive(ip_multicast_address_infoJSON, "ipv4MulAddr");
     if (ipv4_mul_addr) {
     if (!cJSON_IsString(ipv4_mul_addr) && !cJSON_IsNull(ipv4_mul_addr)) {
-        ogs_error("OpenAPI_ip_multicast_address_info_parseFromJSON() failed [ipv4_mul_addr]");
+        log_error("OpenAPI_ip_multicast_address_info_parseFromJSON() failed [ipv4_mul_addr]");
         goto end;
     }
     }
@@ -118,7 +118,7 @@ OpenAPI_ip_multicast_address_info_t *OpenAPI_ip_multicast_address_info_parseFrom
     src_ipv6_addr = cJSON_GetObjectItemCaseSensitive(ip_multicast_address_infoJSON, "srcIpv6Addr");
     if (src_ipv6_addr) {
     if (!cJSON_IsString(src_ipv6_addr) && !cJSON_IsNull(src_ipv6_addr)) {
-        ogs_error("OpenAPI_ip_multicast_address_info_parseFromJSON() failed [src_ipv6_addr]");
+        log_error("OpenAPI_ip_multicast_address_info_parseFromJSON() failed [src_ipv6_addr]");
         goto end;
     }
     }
@@ -126,7 +126,7 @@ OpenAPI_ip_multicast_address_info_t *OpenAPI_ip_multicast_address_info_parseFrom
     ipv6_mul_addr = cJSON_GetObjectItemCaseSensitive(ip_multicast_address_infoJSON, "ipv6MulAddr");
     if (ipv6_mul_addr) {
     if (!cJSON_IsString(ipv6_mul_addr) && !cJSON_IsNull(ipv6_mul_addr)) {
-        ogs_error("OpenAPI_ip_multicast_address_info_parseFromJSON() failed [ipv6_mul_addr]");
+        log_error("OpenAPI_ip_multicast_address_info_parseFromJSON() failed [ipv6_mul_addr]");
         goto end;
     }
     }
@@ -148,10 +148,10 @@ OpenAPI_ip_multicast_address_info_t *OpenAPI_ip_multicast_address_info_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ip_multicast_address_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed");
+        log_error("OpenAPI_ip_multicast_address_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -159,14 +159,14 @@ OpenAPI_ip_multicast_address_info_t *OpenAPI_ip_multicast_address_info_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

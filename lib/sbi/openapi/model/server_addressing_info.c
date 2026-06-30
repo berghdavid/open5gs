@@ -11,7 +11,7 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_create(
 )
 {
     OpenAPI_server_addressing_info_t *server_addressing_info_local_var = ogs_malloc(sizeof(OpenAPI_server_addressing_info_t));
-    ogs_assert(server_addressing_info_local_var);
+    log_assert(server_addressing_info_local_var);
 
     server_addressing_info_local_var->ipv4_addresses = ipv4_addresses;
     server_addressing_info_local_var->ipv6_addresses = ipv6_addresses;
@@ -57,7 +57,7 @@ cJSON *OpenAPI_server_addressing_info_convertToJSON(OpenAPI_server_addressing_in
     OpenAPI_lnode_t *node = NULL;
 
     if (server_addressing_info == NULL) {
-        ogs_error("OpenAPI_server_addressing_info_convertToJSON() failed [ServerAddressingInfo]");
+        log_error("OpenAPI_server_addressing_info_convertToJSON() failed [ServerAddressingInfo]");
         return NULL;
     }
 
@@ -65,12 +65,12 @@ cJSON *OpenAPI_server_addressing_info_convertToJSON(OpenAPI_server_addressing_in
     if (server_addressing_info->ipv4_addresses) {
     cJSON *ipv4_addressesList = cJSON_AddArrayToObject(item, "ipv4Addresses");
     if (ipv4_addressesList == NULL) {
-        ogs_error("OpenAPI_server_addressing_info_convertToJSON() failed [ipv4_addresses]");
+        log_error("OpenAPI_server_addressing_info_convertToJSON() failed [ipv4_addresses]");
         goto end;
     }
     OpenAPI_list_for_each(server_addressing_info->ipv4_addresses, node) {
         if (cJSON_AddStringToObject(ipv4_addressesList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_server_addressing_info_convertToJSON() failed [ipv4_addresses]");
+            log_error("OpenAPI_server_addressing_info_convertToJSON() failed [ipv4_addresses]");
             goto end;
         }
     }
@@ -79,12 +79,12 @@ cJSON *OpenAPI_server_addressing_info_convertToJSON(OpenAPI_server_addressing_in
     if (server_addressing_info->ipv6_addresses) {
     cJSON *ipv6_addressesList = cJSON_AddArrayToObject(item, "ipv6Addresses");
     if (ipv6_addressesList == NULL) {
-        ogs_error("OpenAPI_server_addressing_info_convertToJSON() failed [ipv6_addresses]");
+        log_error("OpenAPI_server_addressing_info_convertToJSON() failed [ipv6_addresses]");
         goto end;
     }
     OpenAPI_list_for_each(server_addressing_info->ipv6_addresses, node) {
         if (cJSON_AddStringToObject(ipv6_addressesList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_server_addressing_info_convertToJSON() failed [ipv6_addresses]");
+            log_error("OpenAPI_server_addressing_info_convertToJSON() failed [ipv6_addresses]");
             goto end;
         }
     }
@@ -93,12 +93,12 @@ cJSON *OpenAPI_server_addressing_info_convertToJSON(OpenAPI_server_addressing_in
     if (server_addressing_info->fqdn_list) {
     cJSON *fqdn_listList = cJSON_AddArrayToObject(item, "fqdnList");
     if (fqdn_listList == NULL) {
-        ogs_error("OpenAPI_server_addressing_info_convertToJSON() failed [fqdn_list]");
+        log_error("OpenAPI_server_addressing_info_convertToJSON() failed [fqdn_list]");
         goto end;
     }
     OpenAPI_list_for_each(server_addressing_info->fqdn_list, node) {
         if (cJSON_AddStringToObject(fqdn_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_server_addressing_info_convertToJSON() failed [fqdn_list]");
+            log_error("OpenAPI_server_addressing_info_convertToJSON() failed [fqdn_list]");
             goto end;
         }
     }
@@ -122,7 +122,7 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_parseFromJSON(c
     if (ipv4_addresses) {
         cJSON *ipv4_addresses_local = NULL;
         if (!cJSON_IsArray(ipv4_addresses)) {
-            ogs_error("OpenAPI_server_addressing_info_parseFromJSON() failed [ipv4_addresses]");
+            log_error("OpenAPI_server_addressing_info_parseFromJSON() failed [ipv4_addresses]");
             goto end;
         }
 
@@ -132,7 +132,7 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_parseFromJSON(c
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ipv4_addresses_local)) {
-                ogs_error("OpenAPI_server_addressing_info_parseFromJSON() failed [ipv4_addresses]");
+                log_error("OpenAPI_server_addressing_info_parseFromJSON() failed [ipv4_addresses]");
                 goto end;
             }
             OpenAPI_list_add(ipv4_addressesList, ogs_strdup(ipv4_addresses_local->valuestring));
@@ -143,7 +143,7 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_parseFromJSON(c
     if (ipv6_addresses) {
         cJSON *ipv6_addresses_local = NULL;
         if (!cJSON_IsArray(ipv6_addresses)) {
-            ogs_error("OpenAPI_server_addressing_info_parseFromJSON() failed [ipv6_addresses]");
+            log_error("OpenAPI_server_addressing_info_parseFromJSON() failed [ipv6_addresses]");
             goto end;
         }
 
@@ -153,7 +153,7 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_parseFromJSON(c
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ipv6_addresses_local)) {
-                ogs_error("OpenAPI_server_addressing_info_parseFromJSON() failed [ipv6_addresses]");
+                log_error("OpenAPI_server_addressing_info_parseFromJSON() failed [ipv6_addresses]");
                 goto end;
             }
             OpenAPI_list_add(ipv6_addressesList, ogs_strdup(ipv6_addresses_local->valuestring));
@@ -164,7 +164,7 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_parseFromJSON(c
     if (fqdn_list) {
         cJSON *fqdn_list_local = NULL;
         if (!cJSON_IsArray(fqdn_list)) {
-            ogs_error("OpenAPI_server_addressing_info_parseFromJSON() failed [fqdn_list]");
+            log_error("OpenAPI_server_addressing_info_parseFromJSON() failed [fqdn_list]");
             goto end;
         }
 
@@ -174,7 +174,7 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_parseFromJSON(c
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(fqdn_list_local)) {
-                ogs_error("OpenAPI_server_addressing_info_parseFromJSON() failed [fqdn_list]");
+                log_error("OpenAPI_server_addressing_info_parseFromJSON() failed [fqdn_list]");
                 goto end;
             }
             OpenAPI_list_add(fqdn_listList, ogs_strdup(fqdn_list_local->valuestring));
@@ -218,10 +218,10 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_copy(OpenAPI_se
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_server_addressing_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_server_addressing_info_convertToJSON() failed");
+        log_error("OpenAPI_server_addressing_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -229,14 +229,14 @@ OpenAPI_server_addressing_info_t *OpenAPI_server_addressing_info_copy(OpenAPI_se
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

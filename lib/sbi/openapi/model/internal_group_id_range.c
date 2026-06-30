@@ -11,7 +11,7 @@ OpenAPI_internal_group_id_range_t *OpenAPI_internal_group_id_range_create(
 )
 {
     OpenAPI_internal_group_id_range_t *internal_group_id_range_local_var = ogs_malloc(sizeof(OpenAPI_internal_group_id_range_t));
-    ogs_assert(internal_group_id_range_local_var);
+    log_assert(internal_group_id_range_local_var);
 
     internal_group_id_range_local_var->start = start;
     internal_group_id_range_local_var->end = end;
@@ -48,28 +48,28 @@ cJSON *OpenAPI_internal_group_id_range_convertToJSON(OpenAPI_internal_group_id_r
     OpenAPI_lnode_t *node = NULL;
 
     if (internal_group_id_range == NULL) {
-        ogs_error("OpenAPI_internal_group_id_range_convertToJSON() failed [InternalGroupIdRange]");
+        log_error("OpenAPI_internal_group_id_range_convertToJSON() failed [InternalGroupIdRange]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (internal_group_id_range->start) {
     if (cJSON_AddStringToObject(item, "start", internal_group_id_range->start) == NULL) {
-        ogs_error("OpenAPI_internal_group_id_range_convertToJSON() failed [start]");
+        log_error("OpenAPI_internal_group_id_range_convertToJSON() failed [start]");
         goto end;
     }
     }
 
     if (internal_group_id_range->end) {
     if (cJSON_AddStringToObject(item, "end", internal_group_id_range->end) == NULL) {
-        ogs_error("OpenAPI_internal_group_id_range_convertToJSON() failed [end]");
+        log_error("OpenAPI_internal_group_id_range_convertToJSON() failed [end]");
         goto end;
     }
     }
 
     if (internal_group_id_range->pattern) {
     if (cJSON_AddStringToObject(item, "pattern", internal_group_id_range->pattern) == NULL) {
-        ogs_error("OpenAPI_internal_group_id_range_convertToJSON() failed [pattern]");
+        log_error("OpenAPI_internal_group_id_range_convertToJSON() failed [pattern]");
         goto end;
     }
     }
@@ -88,7 +88,7 @@ OpenAPI_internal_group_id_range_t *OpenAPI_internal_group_id_range_parseFromJSON
     start = cJSON_GetObjectItemCaseSensitive(internal_group_id_rangeJSON, "start");
     if (start) {
     if (!cJSON_IsString(start) && !cJSON_IsNull(start)) {
-        ogs_error("OpenAPI_internal_group_id_range_parseFromJSON() failed [start]");
+        log_error("OpenAPI_internal_group_id_range_parseFromJSON() failed [start]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_internal_group_id_range_t *OpenAPI_internal_group_id_range_parseFromJSON
     end = cJSON_GetObjectItemCaseSensitive(internal_group_id_rangeJSON, "end");
     if (end) {
     if (!cJSON_IsString(end) && !cJSON_IsNull(end)) {
-        ogs_error("OpenAPI_internal_group_id_range_parseFromJSON() failed [end]");
+        log_error("OpenAPI_internal_group_id_range_parseFromJSON() failed [end]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_internal_group_id_range_t *OpenAPI_internal_group_id_range_parseFromJSON
     pattern = cJSON_GetObjectItemCaseSensitive(internal_group_id_rangeJSON, "pattern");
     if (pattern) {
     if (!cJSON_IsString(pattern) && !cJSON_IsNull(pattern)) {
-        ogs_error("OpenAPI_internal_group_id_range_parseFromJSON() failed [pattern]");
+        log_error("OpenAPI_internal_group_id_range_parseFromJSON() failed [pattern]");
         goto end;
     }
     }
@@ -125,10 +125,10 @@ OpenAPI_internal_group_id_range_t *OpenAPI_internal_group_id_range_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_internal_group_id_range_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_internal_group_id_range_convertToJSON() failed");
+        log_error("OpenAPI_internal_group_id_range_convertToJSON() failed");
         return NULL;
     }
 
@@ -136,14 +136,14 @@ OpenAPI_internal_group_id_range_t *OpenAPI_internal_group_id_range_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -10,7 +10,7 @@ OpenAPI_service_area_coverage_info_t *OpenAPI_service_area_coverage_info_create(
 )
 {
     OpenAPI_service_area_coverage_info_t *service_area_coverage_info_local_var = ogs_malloc(sizeof(OpenAPI_service_area_coverage_info_t));
-    ogs_assert(service_area_coverage_info_local_var);
+    log_assert(service_area_coverage_info_local_var);
 
     service_area_coverage_info_local_var->tac_list = tac_list;
     service_area_coverage_info_local_var->serving_network = serving_network;
@@ -45,23 +45,23 @@ cJSON *OpenAPI_service_area_coverage_info_convertToJSON(OpenAPI_service_area_cov
     OpenAPI_lnode_t *node = NULL;
 
     if (service_area_coverage_info == NULL) {
-        ogs_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [ServiceAreaCoverageInfo]");
+        log_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [ServiceAreaCoverageInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!service_area_coverage_info->tac_list) {
-        ogs_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [tac_list]");
+        log_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [tac_list]");
         return NULL;
     }
     cJSON *tac_listList = cJSON_AddArrayToObject(item, "tacList");
     if (tac_listList == NULL) {
-        ogs_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [tac_list]");
+        log_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [tac_list]");
         goto end;
     }
     OpenAPI_list_for_each(service_area_coverage_info->tac_list, node) {
         if (cJSON_AddStringToObject(tac_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [tac_list]");
+            log_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [tac_list]");
             goto end;
         }
     }
@@ -69,12 +69,12 @@ cJSON *OpenAPI_service_area_coverage_info_convertToJSON(OpenAPI_service_area_cov
     if (service_area_coverage_info->serving_network) {
     cJSON *serving_network_local_JSON = OpenAPI_plmn_id_nid_1_convertToJSON(service_area_coverage_info->serving_network);
     if (serving_network_local_JSON == NULL) {
-        ogs_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [serving_network]");
+        log_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [serving_network]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servingNetwork", serving_network_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [serving_network]");
+        log_error("OpenAPI_service_area_coverage_info_convertToJSON() failed [serving_network]");
         goto end;
     }
     }
@@ -93,12 +93,12 @@ OpenAPI_service_area_coverage_info_t *OpenAPI_service_area_coverage_info_parseFr
     OpenAPI_plmn_id_nid_1_t *serving_network_local_nonprim = NULL;
     tac_list = cJSON_GetObjectItemCaseSensitive(service_area_coverage_infoJSON, "tacList");
     if (!tac_list) {
-        ogs_error("OpenAPI_service_area_coverage_info_parseFromJSON() failed [tac_list]");
+        log_error("OpenAPI_service_area_coverage_info_parseFromJSON() failed [tac_list]");
         goto end;
     }
         cJSON *tac_list_local = NULL;
         if (!cJSON_IsArray(tac_list)) {
-            ogs_error("OpenAPI_service_area_coverage_info_parseFromJSON() failed [tac_list]");
+            log_error("OpenAPI_service_area_coverage_info_parseFromJSON() failed [tac_list]");
             goto end;
         }
 
@@ -108,7 +108,7 @@ OpenAPI_service_area_coverage_info_t *OpenAPI_service_area_coverage_info_parseFr
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(tac_list_local)) {
-                ogs_error("OpenAPI_service_area_coverage_info_parseFromJSON() failed [tac_list]");
+                log_error("OpenAPI_service_area_coverage_info_parseFromJSON() failed [tac_list]");
                 goto end;
             }
             OpenAPI_list_add(tac_listList, ogs_strdup(tac_list_local->valuestring));
@@ -118,7 +118,7 @@ OpenAPI_service_area_coverage_info_t *OpenAPI_service_area_coverage_info_parseFr
     if (serving_network) {
     serving_network_local_nonprim = OpenAPI_plmn_id_nid_1_parseFromJSON(serving_network);
     if (!serving_network_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_nid_1_parseFromJSON failed [serving_network]");
+        log_error("OpenAPI_plmn_id_nid_1_parseFromJSON failed [serving_network]");
         goto end;
     }
     }
@@ -149,10 +149,10 @@ OpenAPI_service_area_coverage_info_t *OpenAPI_service_area_coverage_info_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_service_area_coverage_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_service_area_coverage_info_convertToJSON() failed");
+        log_error("OpenAPI_service_area_coverage_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -160,14 +160,14 @@ OpenAPI_service_area_coverage_info_t *OpenAPI_service_area_coverage_info_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

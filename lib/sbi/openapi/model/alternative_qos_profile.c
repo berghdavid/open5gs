@@ -14,7 +14,7 @@ OpenAPI_alternative_qos_profile_t *OpenAPI_alternative_qos_profile_create(
 )
 {
     OpenAPI_alternative_qos_profile_t *alternative_qos_profile_local_var = ogs_malloc(sizeof(OpenAPI_alternative_qos_profile_t));
-    ogs_assert(alternative_qos_profile_local_var);
+    log_assert(alternative_qos_profile_local_var);
 
     alternative_qos_profile_local_var->index = index;
     alternative_qos_profile_local_var->gua_fbr_dl = gua_fbr_dl;
@@ -54,40 +54,40 @@ cJSON *OpenAPI_alternative_qos_profile_convertToJSON(OpenAPI_alternative_qos_pro
     OpenAPI_lnode_t *node = NULL;
 
     if (alternative_qos_profile == NULL) {
-        ogs_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [AlternativeQosProfile]");
+        log_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [AlternativeQosProfile]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "index", alternative_qos_profile->index) == NULL) {
-        ogs_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [index]");
+        log_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [index]");
         goto end;
     }
 
     if (alternative_qos_profile->gua_fbr_dl) {
     if (cJSON_AddStringToObject(item, "guaFbrDl", alternative_qos_profile->gua_fbr_dl) == NULL) {
-        ogs_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [gua_fbr_dl]");
+        log_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [gua_fbr_dl]");
         goto end;
     }
     }
 
     if (alternative_qos_profile->gua_fbr_ul) {
     if (cJSON_AddStringToObject(item, "guaFbrUl", alternative_qos_profile->gua_fbr_ul) == NULL) {
-        ogs_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [gua_fbr_ul]");
+        log_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [gua_fbr_ul]");
         goto end;
     }
     }
 
     if (alternative_qos_profile->is_packet_delay_budget) {
     if (cJSON_AddNumberToObject(item, "packetDelayBudget", alternative_qos_profile->packet_delay_budget) == NULL) {
-        ogs_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [packet_delay_budget]");
+        log_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [packet_delay_budget]");
         goto end;
     }
     }
 
     if (alternative_qos_profile->packet_err_rate) {
     if (cJSON_AddStringToObject(item, "packetErrRate", alternative_qos_profile->packet_err_rate) == NULL) {
-        ogs_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [packet_err_rate]");
+        log_error("OpenAPI_alternative_qos_profile_convertToJSON() failed [packet_err_rate]");
         goto end;
     }
     }
@@ -107,18 +107,18 @@ OpenAPI_alternative_qos_profile_t *OpenAPI_alternative_qos_profile_parseFromJSON
     cJSON *packet_err_rate = NULL;
     index = cJSON_GetObjectItemCaseSensitive(alternative_qos_profileJSON, "index");
     if (!index) {
-        ogs_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [index]");
+        log_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [index]");
         goto end;
     }
     if (!cJSON_IsNumber(index)) {
-        ogs_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [index]");
+        log_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [index]");
         goto end;
     }
 
     gua_fbr_dl = cJSON_GetObjectItemCaseSensitive(alternative_qos_profileJSON, "guaFbrDl");
     if (gua_fbr_dl) {
     if (!cJSON_IsString(gua_fbr_dl) && !cJSON_IsNull(gua_fbr_dl)) {
-        ogs_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [gua_fbr_dl]");
+        log_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [gua_fbr_dl]");
         goto end;
     }
     }
@@ -126,7 +126,7 @@ OpenAPI_alternative_qos_profile_t *OpenAPI_alternative_qos_profile_parseFromJSON
     gua_fbr_ul = cJSON_GetObjectItemCaseSensitive(alternative_qos_profileJSON, "guaFbrUl");
     if (gua_fbr_ul) {
     if (!cJSON_IsString(gua_fbr_ul) && !cJSON_IsNull(gua_fbr_ul)) {
-        ogs_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [gua_fbr_ul]");
+        log_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [gua_fbr_ul]");
         goto end;
     }
     }
@@ -134,7 +134,7 @@ OpenAPI_alternative_qos_profile_t *OpenAPI_alternative_qos_profile_parseFromJSON
     packet_delay_budget = cJSON_GetObjectItemCaseSensitive(alternative_qos_profileJSON, "packetDelayBudget");
     if (packet_delay_budget) {
     if (!cJSON_IsNumber(packet_delay_budget)) {
-        ogs_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [packet_delay_budget]");
+        log_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [packet_delay_budget]");
         goto end;
     }
     }
@@ -142,7 +142,7 @@ OpenAPI_alternative_qos_profile_t *OpenAPI_alternative_qos_profile_parseFromJSON
     packet_err_rate = cJSON_GetObjectItemCaseSensitive(alternative_qos_profileJSON, "packetErrRate");
     if (packet_err_rate) {
     if (!cJSON_IsString(packet_err_rate) && !cJSON_IsNull(packet_err_rate)) {
-        ogs_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [packet_err_rate]");
+        log_error("OpenAPI_alternative_qos_profile_parseFromJSON() failed [packet_err_rate]");
         goto end;
     }
     }
@@ -167,10 +167,10 @@ OpenAPI_alternative_qos_profile_t *OpenAPI_alternative_qos_profile_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_alternative_qos_profile_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_alternative_qos_profile_convertToJSON() failed");
+        log_error("OpenAPI_alternative_qos_profile_convertToJSON() failed");
         return NULL;
     }
 
@@ -178,14 +178,14 @@ OpenAPI_alternative_qos_profile_t *OpenAPI_alternative_qos_profile_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -28,7 +28,7 @@ void *ogs_event_size(int id, size_t size)
     ogs_event_t *e = NULL;
 
     e = ogs_calloc(1, size);
-    ogs_assert(e);
+    log_assert(e);
 
     e->id = id;
 
@@ -42,7 +42,7 @@ ogs_event_t *ogs_event_new(int id)
 
 void ogs_event_free(void *e)
 {
-    ogs_assert(e);
+    log_assert(e);
     ogs_free(e);
 }
 
@@ -69,6 +69,6 @@ const char *ogs_event_get_name(ogs_event_t *e)
         break;
     }
 
-    ogs_error("Unknown Event[%d]", e->id);
+    log_error("Unknown Event[%d]", e->id);
     return "UNKNOWN_EVENT";
 }

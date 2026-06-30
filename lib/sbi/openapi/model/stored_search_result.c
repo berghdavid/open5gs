@@ -9,7 +9,7 @@ OpenAPI_stored_search_result_t *OpenAPI_stored_search_result_create(
 )
 {
     OpenAPI_stored_search_result_t *stored_search_result_local_var = ogs_malloc(sizeof(OpenAPI_stored_search_result_t));
-    ogs_assert(stored_search_result_local_var);
+    log_assert(stored_search_result_local_var);
 
     stored_search_result_local_var->nf_instances = nf_instances;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_stored_search_result_convertToJSON(OpenAPI_stored_search_result_t
     OpenAPI_lnode_t *node = NULL;
 
     if (stored_search_result == NULL) {
-        ogs_error("OpenAPI_stored_search_result_convertToJSON() failed [StoredSearchResult]");
+        log_error("OpenAPI_stored_search_result_convertToJSON() failed [StoredSearchResult]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!stored_search_result->nf_instances) {
-        ogs_error("OpenAPI_stored_search_result_convertToJSON() failed [nf_instances]");
+        log_error("OpenAPI_stored_search_result_convertToJSON() failed [nf_instances]");
         return NULL;
     }
     cJSON *nf_instancesList = cJSON_AddArrayToObject(item, "nfInstances");
     if (nf_instancesList == NULL) {
-        ogs_error("OpenAPI_stored_search_result_convertToJSON() failed [nf_instances]");
+        log_error("OpenAPI_stored_search_result_convertToJSON() failed [nf_instances]");
         goto end;
     }
     OpenAPI_list_for_each(stored_search_result->nf_instances, node) {
         cJSON *itemLocal = OpenAPI_nf_profile_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_stored_search_result_convertToJSON() failed [nf_instances]");
+            log_error("OpenAPI_stored_search_result_convertToJSON() failed [nf_instances]");
             goto end;
         }
         cJSON_AddItemToArray(nf_instancesList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_stored_search_result_t *OpenAPI_stored_search_result_parseFromJSON(cJSON
     OpenAPI_list_t *nf_instancesList = NULL;
     nf_instances = cJSON_GetObjectItemCaseSensitive(stored_search_resultJSON, "nfInstances");
     if (!nf_instances) {
-        ogs_error("OpenAPI_stored_search_result_parseFromJSON() failed [nf_instances]");
+        log_error("OpenAPI_stored_search_result_parseFromJSON() failed [nf_instances]");
         goto end;
     }
         cJSON *nf_instances_local = NULL;
         if (!cJSON_IsArray(nf_instances)) {
-            ogs_error("OpenAPI_stored_search_result_parseFromJSON() failed [nf_instances]");
+            log_error("OpenAPI_stored_search_result_parseFromJSON() failed [nf_instances]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_stored_search_result_t *OpenAPI_stored_search_result_parseFromJSON(cJSON
 
         cJSON_ArrayForEach(nf_instances_local, nf_instances) {
             if (!cJSON_IsObject(nf_instances_local)) {
-                ogs_error("OpenAPI_stored_search_result_parseFromJSON() failed [nf_instances]");
+                log_error("OpenAPI_stored_search_result_parseFromJSON() failed [nf_instances]");
                 goto end;
             }
             OpenAPI_nf_profile_t *nf_instancesItem = OpenAPI_nf_profile_parseFromJSON(nf_instances_local);
             if (!nf_instancesItem) {
-                ogs_error("No nf_instancesItem");
+                log_error("No nf_instancesItem");
                 goto end;
             }
             OpenAPI_list_add(nf_instancesList, nf_instancesItem);
@@ -119,10 +119,10 @@ OpenAPI_stored_search_result_t *OpenAPI_stored_search_result_copy(OpenAPI_stored
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_stored_search_result_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_stored_search_result_convertToJSON() failed");
+        log_error("OpenAPI_stored_search_result_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_stored_search_result_t *OpenAPI_stored_search_result_copy(OpenAPI_stored
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

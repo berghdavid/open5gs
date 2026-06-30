@@ -17,7 +17,7 @@ OpenAPI_seaf_data_t *OpenAPI_seaf_data_create(
 )
 {
     OpenAPI_seaf_data_t *seaf_data_local_var = ogs_malloc(sizeof(OpenAPI_seaf_data_t));
-    ogs_assert(seaf_data_local_var);
+    log_assert(seaf_data_local_var);
 
     seaf_data_local_var->ng_ksi = ng_ksi;
     seaf_data_local_var->key_amf = key_amf;
@@ -60,65 +60,65 @@ cJSON *OpenAPI_seaf_data_convertToJSON(OpenAPI_seaf_data_t *seaf_data)
     OpenAPI_lnode_t *node = NULL;
 
     if (seaf_data == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [SeafData]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [SeafData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!seaf_data->ng_ksi) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [ng_ksi]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [ng_ksi]");
         return NULL;
     }
     cJSON *ng_ksi_local_JSON = OpenAPI_ng_ksi_convertToJSON(seaf_data->ng_ksi);
     if (ng_ksi_local_JSON == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [ng_ksi]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [ng_ksi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ngKsi", ng_ksi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [ng_ksi]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [ng_ksi]");
         goto end;
     }
 
     if (!seaf_data->key_amf) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf]");
         return NULL;
     }
     cJSON *key_amf_local_JSON = OpenAPI_key_amf_convertToJSON(seaf_data->key_amf);
     if (key_amf_local_JSON == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf]");
         goto end;
     }
     cJSON_AddItemToObject(item, "keyAmf", key_amf_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf]");
         goto end;
     }
 
     if (seaf_data->nh) {
     if (cJSON_AddStringToObject(item, "nh", seaf_data->nh) == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [nh]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [nh]");
         goto end;
     }
     }
 
     if (seaf_data->is_ncc) {
     if (cJSON_AddNumberToObject(item, "ncc", seaf_data->ncc) == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [ncc]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [ncc]");
         goto end;
     }
     }
 
     if (seaf_data->is_key_amf_change_ind) {
     if (cJSON_AddBoolToObject(item, "keyAmfChangeInd", seaf_data->key_amf_change_ind) == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf_change_ind]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf_change_ind]");
         goto end;
     }
     }
 
     if (seaf_data->is_key_amf_h_derivation_ind) {
     if (cJSON_AddBoolToObject(item, "keyAmfHDerivationInd", seaf_data->key_amf_h_derivation_ind) == NULL) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf_h_derivation_ind]");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed [key_amf_h_derivation_ind]");
         goto end;
     }
     }
@@ -141,30 +141,30 @@ OpenAPI_seaf_data_t *OpenAPI_seaf_data_parseFromJSON(cJSON *seaf_dataJSON)
     cJSON *key_amf_h_derivation_ind = NULL;
     ng_ksi = cJSON_GetObjectItemCaseSensitive(seaf_dataJSON, "ngKsi");
     if (!ng_ksi) {
-        ogs_error("OpenAPI_seaf_data_parseFromJSON() failed [ng_ksi]");
+        log_error("OpenAPI_seaf_data_parseFromJSON() failed [ng_ksi]");
         goto end;
     }
     ng_ksi_local_nonprim = OpenAPI_ng_ksi_parseFromJSON(ng_ksi);
     if (!ng_ksi_local_nonprim) {
-        ogs_error("OpenAPI_ng_ksi_parseFromJSON failed [ng_ksi]");
+        log_error("OpenAPI_ng_ksi_parseFromJSON failed [ng_ksi]");
         goto end;
     }
 
     key_amf = cJSON_GetObjectItemCaseSensitive(seaf_dataJSON, "keyAmf");
     if (!key_amf) {
-        ogs_error("OpenAPI_seaf_data_parseFromJSON() failed [key_amf]");
+        log_error("OpenAPI_seaf_data_parseFromJSON() failed [key_amf]");
         goto end;
     }
     key_amf_local_nonprim = OpenAPI_key_amf_parseFromJSON(key_amf);
     if (!key_amf_local_nonprim) {
-        ogs_error("OpenAPI_key_amf_parseFromJSON failed [key_amf]");
+        log_error("OpenAPI_key_amf_parseFromJSON failed [key_amf]");
         goto end;
     }
 
     nh = cJSON_GetObjectItemCaseSensitive(seaf_dataJSON, "nh");
     if (nh) {
     if (!cJSON_IsString(nh) && !cJSON_IsNull(nh)) {
-        ogs_error("OpenAPI_seaf_data_parseFromJSON() failed [nh]");
+        log_error("OpenAPI_seaf_data_parseFromJSON() failed [nh]");
         goto end;
     }
     }
@@ -172,7 +172,7 @@ OpenAPI_seaf_data_t *OpenAPI_seaf_data_parseFromJSON(cJSON *seaf_dataJSON)
     ncc = cJSON_GetObjectItemCaseSensitive(seaf_dataJSON, "ncc");
     if (ncc) {
     if (!cJSON_IsNumber(ncc)) {
-        ogs_error("OpenAPI_seaf_data_parseFromJSON() failed [ncc]");
+        log_error("OpenAPI_seaf_data_parseFromJSON() failed [ncc]");
         goto end;
     }
     }
@@ -180,7 +180,7 @@ OpenAPI_seaf_data_t *OpenAPI_seaf_data_parseFromJSON(cJSON *seaf_dataJSON)
     key_amf_change_ind = cJSON_GetObjectItemCaseSensitive(seaf_dataJSON, "keyAmfChangeInd");
     if (key_amf_change_ind) {
     if (!cJSON_IsBool(key_amf_change_ind)) {
-        ogs_error("OpenAPI_seaf_data_parseFromJSON() failed [key_amf_change_ind]");
+        log_error("OpenAPI_seaf_data_parseFromJSON() failed [key_amf_change_ind]");
         goto end;
     }
     }
@@ -188,7 +188,7 @@ OpenAPI_seaf_data_t *OpenAPI_seaf_data_parseFromJSON(cJSON *seaf_dataJSON)
     key_amf_h_derivation_ind = cJSON_GetObjectItemCaseSensitive(seaf_dataJSON, "keyAmfHDerivationInd");
     if (key_amf_h_derivation_ind) {
     if (!cJSON_IsBool(key_amf_h_derivation_ind)) {
-        ogs_error("OpenAPI_seaf_data_parseFromJSON() failed [key_amf_h_derivation_ind]");
+        log_error("OpenAPI_seaf_data_parseFromJSON() failed [key_amf_h_derivation_ind]");
         goto end;
     }
     }
@@ -223,10 +223,10 @@ OpenAPI_seaf_data_t *OpenAPI_seaf_data_copy(OpenAPI_seaf_data_t *dst, OpenAPI_se
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_seaf_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_seaf_data_convertToJSON() failed");
+        log_error("OpenAPI_seaf_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -234,14 +234,14 @@ OpenAPI_seaf_data_t *OpenAPI_seaf_data_copy(OpenAPI_seaf_data_t *dst, OpenAPI_se
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

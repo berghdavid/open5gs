@@ -10,7 +10,7 @@ OpenAPI_wireline_service_area_restriction_t *OpenAPI_wireline_service_area_restr
 )
 {
     OpenAPI_wireline_service_area_restriction_t *wireline_service_area_restriction_local_var = ogs_malloc(sizeof(OpenAPI_wireline_service_area_restriction_t));
-    ogs_assert(wireline_service_area_restriction_local_var);
+    log_assert(wireline_service_area_restriction_local_var);
 
     wireline_service_area_restriction_local_var->restriction_type = restriction_type;
     wireline_service_area_restriction_local_var->areas = areas;
@@ -41,14 +41,14 @@ cJSON *OpenAPI_wireline_service_area_restriction_convertToJSON(OpenAPI_wireline_
     OpenAPI_lnode_t *node = NULL;
 
     if (wireline_service_area_restriction == NULL) {
-        ogs_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed [WirelineServiceAreaRestriction]");
+        log_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed [WirelineServiceAreaRestriction]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (wireline_service_area_restriction->restriction_type != OpenAPI_restriction_type_NULL) {
     if (cJSON_AddStringToObject(item, "restrictionType", OpenAPI_restriction_type_ToString(wireline_service_area_restriction->restriction_type)) == NULL) {
-        ogs_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed [restriction_type]");
+        log_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed [restriction_type]");
         goto end;
     }
     }
@@ -56,13 +56,13 @@ cJSON *OpenAPI_wireline_service_area_restriction_convertToJSON(OpenAPI_wireline_
     if (wireline_service_area_restriction->areas) {
     cJSON *areasList = cJSON_AddArrayToObject(item, "areas");
     if (areasList == NULL) {
-        ogs_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed [areas]");
+        log_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed [areas]");
         goto end;
     }
     OpenAPI_list_for_each(wireline_service_area_restriction->areas, node) {
         cJSON *itemLocal = OpenAPI_wireline_area_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed [areas]");
+            log_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed [areas]");
             goto end;
         }
         cJSON_AddItemToArray(areasList, itemLocal);
@@ -84,7 +84,7 @@ OpenAPI_wireline_service_area_restriction_t *OpenAPI_wireline_service_area_restr
     restriction_type = cJSON_GetObjectItemCaseSensitive(wireline_service_area_restrictionJSON, "restrictionType");
     if (restriction_type) {
     if (!cJSON_IsString(restriction_type)) {
-        ogs_error("OpenAPI_wireline_service_area_restriction_parseFromJSON() failed [restriction_type]");
+        log_error("OpenAPI_wireline_service_area_restriction_parseFromJSON() failed [restriction_type]");
         goto end;
     }
     restriction_typeVariable = OpenAPI_restriction_type_FromString(restriction_type->valuestring);
@@ -94,7 +94,7 @@ OpenAPI_wireline_service_area_restriction_t *OpenAPI_wireline_service_area_restr
     if (areas) {
         cJSON *areas_local = NULL;
         if (!cJSON_IsArray(areas)) {
-            ogs_error("OpenAPI_wireline_service_area_restriction_parseFromJSON() failed [areas]");
+            log_error("OpenAPI_wireline_service_area_restriction_parseFromJSON() failed [areas]");
             goto end;
         }
 
@@ -102,12 +102,12 @@ OpenAPI_wireline_service_area_restriction_t *OpenAPI_wireline_service_area_restr
 
         cJSON_ArrayForEach(areas_local, areas) {
             if (!cJSON_IsObject(areas_local)) {
-                ogs_error("OpenAPI_wireline_service_area_restriction_parseFromJSON() failed [areas]");
+                log_error("OpenAPI_wireline_service_area_restriction_parseFromJSON() failed [areas]");
                 goto end;
             }
             OpenAPI_wireline_area_t *areasItem = OpenAPI_wireline_area_parseFromJSON(areas_local);
             if (!areasItem) {
-                ogs_error("No areasItem");
+                log_error("No areasItem");
                 goto end;
             }
             OpenAPI_list_add(areasList, areasItem);
@@ -136,10 +136,10 @@ OpenAPI_wireline_service_area_restriction_t *OpenAPI_wireline_service_area_restr
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_wireline_service_area_restriction_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed");
+        log_error("OpenAPI_wireline_service_area_restriction_convertToJSON() failed");
         return NULL;
     }
 
@@ -147,14 +147,14 @@ OpenAPI_wireline_service_area_restriction_t *OpenAPI_wireline_service_area_restr
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

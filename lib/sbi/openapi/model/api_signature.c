@@ -9,7 +9,7 @@ OpenAPI_api_signature_t *OpenAPI_api_signature_create(
 )
 {
     OpenAPI_api_signature_t *api_signature_local_var = ogs_malloc(sizeof(OpenAPI_api_signature_t));
-    ogs_assert(api_signature_local_var);
+    log_assert(api_signature_local_var);
 
     api_signature_local_var->callback_type = callback_type;
 
@@ -36,17 +36,17 @@ cJSON *OpenAPI_api_signature_convertToJSON(OpenAPI_api_signature_t *api_signatur
     OpenAPI_lnode_t *node = NULL;
 
     if (api_signature == NULL) {
-        ogs_error("OpenAPI_api_signature_convertToJSON() failed [ApiSignature]");
+        log_error("OpenAPI_api_signature_convertToJSON() failed [ApiSignature]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!api_signature->callback_type) {
-        ogs_error("OpenAPI_api_signature_convertToJSON() failed [callback_type]");
+        log_error("OpenAPI_api_signature_convertToJSON() failed [callback_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "callbackType", api_signature->callback_type) == NULL) {
-        ogs_error("OpenAPI_api_signature_convertToJSON() failed [callback_type]");
+        log_error("OpenAPI_api_signature_convertToJSON() failed [callback_type]");
         goto end;
     }
 
@@ -61,11 +61,11 @@ OpenAPI_api_signature_t *OpenAPI_api_signature_parseFromJSON(cJSON *api_signatur
     cJSON *callback_type = NULL;
     callback_type = cJSON_GetObjectItemCaseSensitive(api_signatureJSON, "callbackType");
     if (!callback_type) {
-        ogs_error("OpenAPI_api_signature_parseFromJSON() failed [callback_type]");
+        log_error("OpenAPI_api_signature_parseFromJSON() failed [callback_type]");
         goto end;
     }
     if (!cJSON_IsString(callback_type)) {
-        ogs_error("OpenAPI_api_signature_parseFromJSON() failed [callback_type]");
+        log_error("OpenAPI_api_signature_parseFromJSON() failed [callback_type]");
         goto end;
     }
 
@@ -83,10 +83,10 @@ OpenAPI_api_signature_t *OpenAPI_api_signature_copy(OpenAPI_api_signature_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_api_signature_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_api_signature_convertToJSON() failed");
+        log_error("OpenAPI_api_signature_convertToJSON() failed");
         return NULL;
     }
 
@@ -94,14 +94,14 @@ OpenAPI_api_signature_t *OpenAPI_api_signature_copy(OpenAPI_api_signature_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

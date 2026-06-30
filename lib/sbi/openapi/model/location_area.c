@@ -12,7 +12,7 @@ OpenAPI_location_area_t *OpenAPI_location_area_create(
 )
 {
     OpenAPI_location_area_t *location_area_local_var = ogs_malloc(sizeof(OpenAPI_location_area_t));
-    ogs_assert(location_area_local_var);
+    log_assert(location_area_local_var);
 
     location_area_local_var->geographic_areas = geographic_areas;
     location_area_local_var->civic_addresses = civic_addresses;
@@ -60,7 +60,7 @@ cJSON *OpenAPI_location_area_convertToJSON(OpenAPI_location_area_t *location_are
     OpenAPI_lnode_t *node = NULL;
 
     if (location_area == NULL) {
-        ogs_error("OpenAPI_location_area_convertToJSON() failed [LocationArea]");
+        log_error("OpenAPI_location_area_convertToJSON() failed [LocationArea]");
         return NULL;
     }
 
@@ -68,13 +68,13 @@ cJSON *OpenAPI_location_area_convertToJSON(OpenAPI_location_area_t *location_are
     if (location_area->geographic_areas) {
     cJSON *geographic_areasList = cJSON_AddArrayToObject(item, "geographicAreas");
     if (geographic_areasList == NULL) {
-        ogs_error("OpenAPI_location_area_convertToJSON() failed [geographic_areas]");
+        log_error("OpenAPI_location_area_convertToJSON() failed [geographic_areas]");
         goto end;
     }
     OpenAPI_list_for_each(location_area->geographic_areas, node) {
         cJSON *itemLocal = OpenAPI_geographic_area_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_location_area_convertToJSON() failed [geographic_areas]");
+            log_error("OpenAPI_location_area_convertToJSON() failed [geographic_areas]");
             goto end;
         }
         cJSON_AddItemToArray(geographic_areasList, itemLocal);
@@ -84,13 +84,13 @@ cJSON *OpenAPI_location_area_convertToJSON(OpenAPI_location_area_t *location_are
     if (location_area->civic_addresses) {
     cJSON *civic_addressesList = cJSON_AddArrayToObject(item, "civicAddresses");
     if (civic_addressesList == NULL) {
-        ogs_error("OpenAPI_location_area_convertToJSON() failed [civic_addresses]");
+        log_error("OpenAPI_location_area_convertToJSON() failed [civic_addresses]");
         goto end;
     }
     OpenAPI_list_for_each(location_area->civic_addresses, node) {
         cJSON *itemLocal = OpenAPI_civic_address_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_location_area_convertToJSON() failed [civic_addresses]");
+            log_error("OpenAPI_location_area_convertToJSON() failed [civic_addresses]");
             goto end;
         }
         cJSON_AddItemToArray(civic_addressesList, itemLocal);
@@ -100,12 +100,12 @@ cJSON *OpenAPI_location_area_convertToJSON(OpenAPI_location_area_t *location_are
     if (location_area->nw_area_info) {
     cJSON *nw_area_info_local_JSON = OpenAPI_network_area_info_1_convertToJSON(location_area->nw_area_info);
     if (nw_area_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_area_convertToJSON() failed [nw_area_info]");
+        log_error("OpenAPI_location_area_convertToJSON() failed [nw_area_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nwAreaInfo", nw_area_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_area_convertToJSON() failed [nw_area_info]");
+        log_error("OpenAPI_location_area_convertToJSON() failed [nw_area_info]");
         goto end;
     }
     }
@@ -113,12 +113,12 @@ cJSON *OpenAPI_location_area_convertToJSON(OpenAPI_location_area_t *location_are
     if (location_area->umt_time) {
     cJSON *umt_time_local_JSON = OpenAPI_umt_time_convertToJSON(location_area->umt_time);
     if (umt_time_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_area_convertToJSON() failed [umt_time]");
+        log_error("OpenAPI_location_area_convertToJSON() failed [umt_time]");
         goto end;
     }
     cJSON_AddItemToObject(item, "umtTime", umt_time_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_area_convertToJSON() failed [umt_time]");
+        log_error("OpenAPI_location_area_convertToJSON() failed [umt_time]");
         goto end;
     }
     }
@@ -143,7 +143,7 @@ OpenAPI_location_area_t *OpenAPI_location_area_parseFromJSON(cJSON *location_are
     if (geographic_areas) {
         cJSON *geographic_areas_local = NULL;
         if (!cJSON_IsArray(geographic_areas)) {
-            ogs_error("OpenAPI_location_area_parseFromJSON() failed [geographic_areas]");
+            log_error("OpenAPI_location_area_parseFromJSON() failed [geographic_areas]");
             goto end;
         }
 
@@ -151,12 +151,12 @@ OpenAPI_location_area_t *OpenAPI_location_area_parseFromJSON(cJSON *location_are
 
         cJSON_ArrayForEach(geographic_areas_local, geographic_areas) {
             if (!cJSON_IsObject(geographic_areas_local)) {
-                ogs_error("OpenAPI_location_area_parseFromJSON() failed [geographic_areas]");
+                log_error("OpenAPI_location_area_parseFromJSON() failed [geographic_areas]");
                 goto end;
             }
             OpenAPI_geographic_area_t *geographic_areasItem = OpenAPI_geographic_area_parseFromJSON(geographic_areas_local);
             if (!geographic_areasItem) {
-                ogs_error("No geographic_areasItem");
+                log_error("No geographic_areasItem");
                 goto end;
             }
             OpenAPI_list_add(geographic_areasList, geographic_areasItem);
@@ -167,7 +167,7 @@ OpenAPI_location_area_t *OpenAPI_location_area_parseFromJSON(cJSON *location_are
     if (civic_addresses) {
         cJSON *civic_addresses_local = NULL;
         if (!cJSON_IsArray(civic_addresses)) {
-            ogs_error("OpenAPI_location_area_parseFromJSON() failed [civic_addresses]");
+            log_error("OpenAPI_location_area_parseFromJSON() failed [civic_addresses]");
             goto end;
         }
 
@@ -175,12 +175,12 @@ OpenAPI_location_area_t *OpenAPI_location_area_parseFromJSON(cJSON *location_are
 
         cJSON_ArrayForEach(civic_addresses_local, civic_addresses) {
             if (!cJSON_IsObject(civic_addresses_local)) {
-                ogs_error("OpenAPI_location_area_parseFromJSON() failed [civic_addresses]");
+                log_error("OpenAPI_location_area_parseFromJSON() failed [civic_addresses]");
                 goto end;
             }
             OpenAPI_civic_address_t *civic_addressesItem = OpenAPI_civic_address_parseFromJSON(civic_addresses_local);
             if (!civic_addressesItem) {
-                ogs_error("No civic_addressesItem");
+                log_error("No civic_addressesItem");
                 goto end;
             }
             OpenAPI_list_add(civic_addressesList, civic_addressesItem);
@@ -191,7 +191,7 @@ OpenAPI_location_area_t *OpenAPI_location_area_parseFromJSON(cJSON *location_are
     if (nw_area_info) {
     nw_area_info_local_nonprim = OpenAPI_network_area_info_1_parseFromJSON(nw_area_info);
     if (!nw_area_info_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_1_parseFromJSON failed [nw_area_info]");
+        log_error("OpenAPI_network_area_info_1_parseFromJSON failed [nw_area_info]");
         goto end;
     }
     }
@@ -200,7 +200,7 @@ OpenAPI_location_area_t *OpenAPI_location_area_parseFromJSON(cJSON *location_are
     if (umt_time) {
     umt_time_local_nonprim = OpenAPI_umt_time_parseFromJSON(umt_time);
     if (!umt_time_local_nonprim) {
-        ogs_error("OpenAPI_umt_time_parseFromJSON failed [umt_time]");
+        log_error("OpenAPI_umt_time_parseFromJSON failed [umt_time]");
         goto end;
     }
     }
@@ -244,10 +244,10 @@ OpenAPI_location_area_t *OpenAPI_location_area_copy(OpenAPI_location_area_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_location_area_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_location_area_convertToJSON() failed");
+        log_error("OpenAPI_location_area_convertToJSON() failed");
         return NULL;
     }
 
@@ -255,14 +255,14 @@ OpenAPI_location_area_t *OpenAPI_location_area_copy(OpenAPI_location_area_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

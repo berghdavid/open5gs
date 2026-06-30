@@ -105,7 +105,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_create(
 )
 {
     OpenAPI_hsmf_update_data_t *hsmf_update_data_local_var = ogs_malloc(sizeof(OpenAPI_hsmf_update_data_t));
-    ogs_assert(hsmf_update_data_local_var);
+    log_assert(hsmf_update_data_local_var);
 
     hsmf_update_data_local_var->request_indication = request_indication;
     hsmf_update_data_local_var->pei = pei;
@@ -391,23 +391,23 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     OpenAPI_lnode_t *node = NULL;
 
     if (hsmf_update_data == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [HsmfUpdateData]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [HsmfUpdateData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (hsmf_update_data->request_indication == OpenAPI_request_indication_NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [request_indication]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [request_indication]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "requestIndication", OpenAPI_request_indication_ToString(hsmf_update_data->request_indication)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [request_indication]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [request_indication]");
         goto end;
     }
 
     if (hsmf_update_data->pei) {
     if (cJSON_AddStringToObject(item, "pei", hsmf_update_data->pei) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pei]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pei]");
         goto end;
     }
     }
@@ -415,12 +415,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->vcn_tunnel_info) {
     cJSON *vcn_tunnel_info_local_JSON = OpenAPI_tunnel_info_convertToJSON(hsmf_update_data->vcn_tunnel_info);
     if (vcn_tunnel_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vcn_tunnel_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vcn_tunnel_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "vcnTunnelInfo", vcn_tunnel_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vcn_tunnel_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vcn_tunnel_info]");
         goto end;
     }
     }
@@ -428,12 +428,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->icn_tunnel_info) {
     cJSON *icn_tunnel_info_local_JSON = OpenAPI_tunnel_info_convertToJSON(hsmf_update_data->icn_tunnel_info);
     if (icn_tunnel_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [icn_tunnel_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [icn_tunnel_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "icnTunnelInfo", icn_tunnel_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [icn_tunnel_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [icn_tunnel_info]");
         goto end;
     }
     }
@@ -441,12 +441,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->additional_cn_tunnel_info) {
     cJSON *additional_cn_tunnel_info_local_JSON = OpenAPI_tunnel_info_convertToJSON(hsmf_update_data->additional_cn_tunnel_info);
     if (additional_cn_tunnel_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [additional_cn_tunnel_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [additional_cn_tunnel_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "additionalCnTunnelInfo", additional_cn_tunnel_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [additional_cn_tunnel_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [additional_cn_tunnel_info]");
         goto end;
     }
     }
@@ -454,33 +454,33 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->serving_network) {
     cJSON *serving_network_local_JSON = OpenAPI_plmn_id_nid_convertToJSON(hsmf_update_data->serving_network);
     if (serving_network_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [serving_network]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [serving_network]");
         goto end;
     }
     cJSON_AddItemToObject(item, "servingNetwork", serving_network_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [serving_network]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [serving_network]");
         goto end;
     }
     }
 
     if (hsmf_update_data->an_type != OpenAPI_access_type_NULL) {
     if (cJSON_AddStringToObject(item, "anType", OpenAPI_access_type_ToString(hsmf_update_data->an_type)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [an_type]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [an_type]");
         goto end;
     }
     }
 
     if (hsmf_update_data->additional_an_type != OpenAPI_access_type_NULL) {
     if (cJSON_AddStringToObject(item, "additionalAnType", OpenAPI_access_type_ToString(hsmf_update_data->additional_an_type)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [additional_an_type]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [additional_an_type]");
         goto end;
     }
     }
 
     if (hsmf_update_data->rat_type != OpenAPI_rat_type_NULL) {
     if (cJSON_AddStringToObject(item, "ratType", OpenAPI_rat_type_ToString(hsmf_update_data->rat_type)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [rat_type]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [rat_type]");
         goto end;
     }
     }
@@ -488,19 +488,19 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->ue_location) {
     cJSON *ue_location_local_JSON = OpenAPI_user_location_convertToJSON(hsmf_update_data->ue_location);
     if (ue_location_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ue_location]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ue_location]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueLocation", ue_location_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ue_location]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ue_location]");
         goto end;
     }
     }
 
     if (hsmf_update_data->ue_time_zone) {
     if (cJSON_AddStringToObject(item, "ueTimeZone", hsmf_update_data->ue_time_zone) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ue_time_zone]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ue_time_zone]");
         goto end;
     }
     }
@@ -508,26 +508,26 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->add_ue_location) {
     cJSON *add_ue_location_local_JSON = OpenAPI_user_location_convertToJSON(hsmf_update_data->add_ue_location);
     if (add_ue_location_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [add_ue_location]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [add_ue_location]");
         goto end;
     }
     cJSON_AddItemToObject(item, "addUeLocation", add_ue_location_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [add_ue_location]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [add_ue_location]");
         goto end;
     }
     }
 
     if (hsmf_update_data->is_pause_charging) {
     if (cJSON_AddBoolToObject(item, "pauseCharging", hsmf_update_data->pause_charging) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pause_charging]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pause_charging]");
         goto end;
     }
     }
 
     if (hsmf_update_data->is_pti) {
     if (cJSON_AddNumberToObject(item, "pti", hsmf_update_data->pti) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pti]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pti]");
         goto end;
     }
     }
@@ -535,12 +535,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->n1_sm_info_from_ue) {
     cJSON *n1_sm_info_from_ue_local_JSON = OpenAPI_ref_to_binary_data_convertToJSON(hsmf_update_data->n1_sm_info_from_ue);
     if (n1_sm_info_from_ue_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n1_sm_info_from_ue]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n1_sm_info_from_ue]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n1SmInfoFromUe", n1_sm_info_from_ue_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n1_sm_info_from_ue]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n1_sm_info_from_ue]");
         goto end;
     }
     }
@@ -548,12 +548,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->unknown_n1_sm_info) {
     cJSON *unknown_n1_sm_info_local_JSON = OpenAPI_ref_to_binary_data_convertToJSON(hsmf_update_data->unknown_n1_sm_info);
     if (unknown_n1_sm_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [unknown_n1_sm_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [unknown_n1_sm_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "unknownN1SmInfo", unknown_n1_sm_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [unknown_n1_sm_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [unknown_n1_sm_info]");
         goto end;
     }
     }
@@ -561,13 +561,13 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->qos_flows_rel_notify_list) {
     cJSON *qos_flows_rel_notify_listList = cJSON_AddArrayToObject(item, "qosFlowsRelNotifyList");
     if (qos_flows_rel_notify_listList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [qos_flows_rel_notify_list]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [qos_flows_rel_notify_list]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->qos_flows_rel_notify_list, node) {
         cJSON *itemLocal = OpenAPI_qos_flow_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [qos_flows_rel_notify_list]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [qos_flows_rel_notify_list]");
             goto end;
         }
         cJSON_AddItemToArray(qos_flows_rel_notify_listList, itemLocal);
@@ -577,13 +577,13 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->qos_flows_notify_list) {
     cJSON *qos_flows_notify_listList = cJSON_AddArrayToObject(item, "qosFlowsNotifyList");
     if (qos_flows_notify_listList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [qos_flows_notify_list]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [qos_flows_notify_list]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->qos_flows_notify_list, node) {
         cJSON *itemLocal = OpenAPI_qos_flow_notify_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [qos_flows_notify_list]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [qos_flows_notify_list]");
             goto end;
         }
         cJSON_AddItemToArray(qos_flows_notify_listList, itemLocal);
@@ -593,13 +593,13 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->notify_list) {
     cJSON *notify_listList = cJSON_AddArrayToObject(item, "NotifyList");
     if (notify_listList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [notify_list]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [notify_list]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->notify_list, node) {
         cJSON *itemLocal = OpenAPI_pdu_session_notify_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [notify_list]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [notify_list]");
             goto end;
         }
         cJSON_AddItemToArray(notify_listList, itemLocal);
@@ -609,16 +609,16 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->eps_bearer_id) {
     cJSON *eps_bearer_idList = cJSON_AddArrayToObject(item, "epsBearerId");
     if (eps_bearer_idList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [eps_bearer_id]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [eps_bearer_id]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->eps_bearer_id, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [eps_bearer_id]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [eps_bearer_id]");
             goto end;
         }
         if (cJSON_AddNumberToObject(eps_bearer_idList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [eps_bearer_id]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [eps_bearer_id]");
             goto end;
         }
     }
@@ -626,7 +626,7 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
 
     if (hsmf_update_data->is_ho_preparation_indication) {
     if (cJSON_AddBoolToObject(item, "hoPreparationIndication", hsmf_update_data->ho_preparation_indication) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ho_preparation_indication]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ho_preparation_indication]");
         goto end;
     }
     }
@@ -634,16 +634,16 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->revoke_ebi_list) {
     cJSON *revoke_ebi_listList = cJSON_AddArrayToObject(item, "revokeEbiList");
     if (revoke_ebi_listList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [revoke_ebi_list]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [revoke_ebi_list]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->revoke_ebi_list, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [revoke_ebi_list]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [revoke_ebi_list]");
             goto end;
         }
         if (cJSON_AddNumberToObject(revoke_ebi_listList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [revoke_ebi_list]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [revoke_ebi_list]");
             goto end;
         }
     }
@@ -651,7 +651,7 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
 
     if (hsmf_update_data->cause != OpenAPI_cause_NULL) {
     if (cJSON_AddStringToObject(item, "cause", OpenAPI_cause_ToString(hsmf_update_data->cause)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [cause]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [cause]");
         goto end;
     }
     }
@@ -659,33 +659,33 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->ng_ap_cause) {
     cJSON *ng_ap_cause_local_JSON = OpenAPI_ng_ap_cause_convertToJSON(hsmf_update_data->ng_ap_cause);
     if (ng_ap_cause_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ng_ap_cause]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ng_ap_cause]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ngApCause", ng_ap_cause_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ng_ap_cause]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ng_ap_cause]");
         goto end;
     }
     }
 
     if (hsmf_update_data->is__5g_mm_cause_value) {
     if (cJSON_AddNumberToObject(item, "5gMmCauseValue", hsmf_update_data->_5g_mm_cause_value) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [_5g_mm_cause_value]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [_5g_mm_cause_value]");
         goto end;
     }
     }
 
     if (hsmf_update_data->is_always_on_requested) {
     if (cJSON_AddBoolToObject(item, "alwaysOnRequested", hsmf_update_data->always_on_requested) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [always_on_requested]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [always_on_requested]");
         goto end;
     }
     }
 
     if (hsmf_update_data->eps_interworking_ind != OpenAPI_eps_interworking_indication_NULL) {
     if (cJSON_AddStringToObject(item, "epsInterworkingInd", OpenAPI_eps_interworking_indication_ToString(hsmf_update_data->eps_interworking_ind)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [eps_interworking_ind]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [eps_interworking_ind]");
         goto end;
     }
     }
@@ -693,13 +693,13 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->secondary_rat_usage_report) {
     cJSON *secondary_rat_usage_reportList = cJSON_AddArrayToObject(item, "secondaryRatUsageReport");
     if (secondary_rat_usage_reportList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_report]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_report]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->secondary_rat_usage_report, node) {
         cJSON *itemLocal = OpenAPI_secondary_rat_usage_report_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_report]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_report]");
             goto end;
         }
         cJSON_AddItemToArray(secondary_rat_usage_reportList, itemLocal);
@@ -709,13 +709,13 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->secondary_rat_usage_info) {
     cJSON *secondary_rat_usage_infoList = cJSON_AddArrayToObject(item, "secondaryRatUsageInfo");
     if (secondary_rat_usage_infoList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_info]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->secondary_rat_usage_info, node) {
         cJSON *itemLocal = OpenAPI_secondary_rat_usage_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_info]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_info]");
             goto end;
         }
         cJSON_AddItemToArray(secondary_rat_usage_infoList, itemLocal);
@@ -724,35 +724,35 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
 
     if (hsmf_update_data->is_an_type_can_be_changed) {
     if (cJSON_AddBoolToObject(item, "anTypeCanBeChanged", hsmf_update_data->an_type_can_be_changed) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [an_type_can_be_changed]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [an_type_can_be_changed]");
         goto end;
     }
     }
 
     if (hsmf_update_data->ma_release_ind != OpenAPI_ma_release_indication_NULL) {
     if (cJSON_AddStringToObject(item, "maReleaseInd", OpenAPI_ma_release_indication_ToString(hsmf_update_data->ma_release_ind)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ma_release_ind]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ma_release_ind]");
         goto end;
     }
     }
 
     if (hsmf_update_data->is_ma_nw_upgrade_ind) {
     if (cJSON_AddBoolToObject(item, "maNwUpgradeInd", hsmf_update_data->ma_nw_upgrade_ind) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ma_nw_upgrade_ind]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ma_nw_upgrade_ind]");
         goto end;
     }
     }
 
     if (hsmf_update_data->is_ma_request_ind) {
     if (cJSON_AddBoolToObject(item, "maRequestInd", hsmf_update_data->ma_request_ind) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ma_request_ind]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ma_request_ind]");
         goto end;
     }
     }
 
     if (hsmf_update_data->unavailable_access_ind != OpenAPI_unavailable_access_indication_NULL) {
     if (cJSON_AddStringToObject(item, "unavailableAccessInd", OpenAPI_unavailable_access_indication_ToString(hsmf_update_data->unavailable_access_ind)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [unavailable_access_ind]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [unavailable_access_ind]");
         goto end;
     }
     }
@@ -760,13 +760,13 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->psa_info) {
     cJSON *psa_infoList = cJSON_AddArrayToObject(item, "psaInfo");
     if (psa_infoList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [psa_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [psa_info]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->psa_info, node) {
         cJSON *itemLocal = OpenAPI_psa_information_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [psa_info]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [psa_info]");
             goto end;
         }
         cJSON_AddItemToArray(psa_infoList, itemLocal);
@@ -776,12 +776,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->ulcl_bp_info) {
     cJSON *ulcl_bp_info_local_JSON = OpenAPI_ulcl_bp_information_convertToJSON(hsmf_update_data->ulcl_bp_info);
     if (ulcl_bp_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ulcl_bp_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ulcl_bp_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ulclBpInfo", ulcl_bp_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ulcl_bp_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ulcl_bp_info]");
         goto end;
     }
     }
@@ -789,12 +789,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->n4_info) {
     cJSON *n4_info_local_JSON = OpenAPI_n4_information_convertToJSON(hsmf_update_data->n4_info);
     if (n4_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n4Info", n4_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info]");
         goto end;
     }
     }
@@ -802,12 +802,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->n4_info_ext1) {
     cJSON *n4_info_ext1_local_JSON = OpenAPI_n4_information_convertToJSON(hsmf_update_data->n4_info_ext1);
     if (n4_info_ext1_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info_ext1]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info_ext1]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n4InfoExt1", n4_info_ext1_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info_ext1]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info_ext1]");
         goto end;
     }
     }
@@ -815,73 +815,73 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->n4_info_ext2) {
     cJSON *n4_info_ext2_local_JSON = OpenAPI_n4_information_convertToJSON(hsmf_update_data->n4_info_ext2);
     if (n4_info_ext2_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info_ext2]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info_ext2]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n4InfoExt2", n4_info_ext2_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info_ext2]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [n4_info_ext2]");
         goto end;
     }
     }
 
     if (hsmf_update_data->presence_in_ladn != OpenAPI_presence_state_NULL) {
     if (cJSON_AddStringToObject(item, "presenceInLadn", OpenAPI_presence_state_ToString(hsmf_update_data->presence_in_ladn)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [presence_in_ladn]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [presence_in_ladn]");
         goto end;
     }
     }
 
     if (hsmf_update_data->vsmf_pdu_session_uri) {
     if (cJSON_AddStringToObject(item, "vsmfPduSessionUri", hsmf_update_data->vsmf_pdu_session_uri) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vsmf_pdu_session_uri]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vsmf_pdu_session_uri]");
         goto end;
     }
     }
 
     if (hsmf_update_data->vsmf_id) {
     if (cJSON_AddStringToObject(item, "vsmfId", hsmf_update_data->vsmf_id) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vsmf_id]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vsmf_id]");
         goto end;
     }
     }
 
     if (hsmf_update_data->v_smf_service_instance_id) {
     if (cJSON_AddStringToObject(item, "vSmfServiceInstanceId", hsmf_update_data->v_smf_service_instance_id) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [v_smf_service_instance_id]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [v_smf_service_instance_id]");
         goto end;
     }
     }
 
     if (hsmf_update_data->ismf_pdu_session_uri) {
     if (cJSON_AddStringToObject(item, "ismfPduSessionUri", hsmf_update_data->ismf_pdu_session_uri) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ismf_pdu_session_uri]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ismf_pdu_session_uri]");
         goto end;
     }
     }
 
     if (hsmf_update_data->ismf_id) {
     if (cJSON_AddStringToObject(item, "ismfId", hsmf_update_data->ismf_id) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ismf_id]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [ismf_id]");
         goto end;
     }
     }
 
     if (hsmf_update_data->i_smf_service_instance_id) {
     if (cJSON_AddStringToObject(item, "iSmfServiceInstanceId", hsmf_update_data->i_smf_service_instance_id) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [i_smf_service_instance_id]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [i_smf_service_instance_id]");
         goto end;
     }
     }
 
     if (hsmf_update_data->is_dl_serving_plmn_rate_ctl) {
     if (cJSON_AddNumberToObject(item, "dlServingPlmnRateCtl", hsmf_update_data->dl_serving_plmn_rate_ctl) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [dl_serving_plmn_rate_ctl]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [dl_serving_plmn_rate_ctl]");
         goto end;
     }
     } else if (hsmf_update_data->is_dl_serving_plmn_rate_ctl_null) {
         if (cJSON_AddNullToObject(item, "dlServingPlmnRateCtl") == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [dl_serving_plmn_rate_ctl]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [dl_serving_plmn_rate_ctl]");
             goto end;
         }
     }
@@ -889,12 +889,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->dnai_list) {
     cJSON *dnai_listList = cJSON_AddArrayToObject(item, "dnaiList");
     if (dnai_listList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [dnai_list]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [dnai_list]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->dnai_list, node) {
         if (cJSON_AddStringToObject(dnai_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [dnai_list]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [dnai_list]");
             goto end;
         }
     }
@@ -902,7 +902,7 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
 
     if (hsmf_update_data->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", hsmf_update_data->supported_features) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -910,12 +910,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->roaming_charging_profile) {
     cJSON *roaming_charging_profile_local_JSON = OpenAPI_roaming_charging_profile_convertToJSON(hsmf_update_data->roaming_charging_profile);
     if (roaming_charging_profile_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [roaming_charging_profile]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [roaming_charging_profile]");
         goto end;
     }
     cJSON_AddItemToObject(item, "roamingChargingProfile", roaming_charging_profile_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [roaming_charging_profile]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [roaming_charging_profile]");
         goto end;
     }
     }
@@ -923,12 +923,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->mo_exp_data_counter) {
     cJSON *mo_exp_data_counter_local_JSON = OpenAPI_mo_exp_data_counter_convertToJSON(hsmf_update_data->mo_exp_data_counter);
     if (mo_exp_data_counter_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [mo_exp_data_counter]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [mo_exp_data_counter]");
         goto end;
     }
     cJSON_AddItemToObject(item, "moExpDataCounter", mo_exp_data_counter_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [mo_exp_data_counter]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [mo_exp_data_counter]");
         goto end;
     }
     }
@@ -936,12 +936,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->vplmn_qos) {
     cJSON *vplmn_qos_local_JSON = OpenAPI_vplmn_qos_convertToJSON(hsmf_update_data->vplmn_qos);
     if (vplmn_qos_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vplmn_qos]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vplmn_qos]");
         goto end;
     }
     cJSON_AddItemToObject(item, "vplmnQos", vplmn_qos_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vplmn_qos]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [vplmn_qos]");
         goto end;
     }
     }
@@ -949,12 +949,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->security_result) {
     cJSON *security_result_local_JSON = OpenAPI_security_result_convertToJSON(hsmf_update_data->security_result);
     if (security_result_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [security_result]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [security_result]");
         goto end;
     }
     cJSON_AddItemToObject(item, "securityResult", security_result_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [security_result]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [security_result]");
         goto end;
     }
     }
@@ -962,19 +962,19 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->up_security_info) {
     cJSON *up_security_info_local_JSON = OpenAPI_up_security_info_convertToJSON(hsmf_update_data->up_security_info);
     if (up_security_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [up_security_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [up_security_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "upSecurityInfo", up_security_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [up_security_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [up_security_info]");
         goto end;
     }
     }
 
     if (hsmf_update_data->amf_nf_id) {
     if (cJSON_AddStringToObject(item, "amfNfId", hsmf_update_data->amf_nf_id) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [amf_nf_id]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [amf_nf_id]");
         goto end;
     }
     }
@@ -982,12 +982,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->guami) {
     cJSON *guami_local_JSON = OpenAPI_guami_convertToJSON(hsmf_update_data->guami);
     if (guami_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [guami]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [guami]");
         goto end;
     }
     cJSON_AddItemToObject(item, "guami", guami_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [guami]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [guami]");
         goto end;
     }
     }
@@ -995,12 +995,12 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->secondary_rat_usage_data_report_container) {
     cJSON *secondary_rat_usage_data_report_containerList = cJSON_AddArrayToObject(item, "secondaryRatUsageDataReportContainer");
     if (secondary_rat_usage_data_report_containerList == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_data_report_container]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_data_report_container]");
         goto end;
     }
     OpenAPI_list_for_each(hsmf_update_data->secondary_rat_usage_data_report_container, node) {
         if (cJSON_AddStringToObject(secondary_rat_usage_data_report_containerList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_data_report_container]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [secondary_rat_usage_data_report_container]");
             goto end;
         }
     }
@@ -1008,7 +1008,7 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
 
     if (hsmf_update_data->sm_policy_notify_ind != OpenAPI_hsmf_update_data_SMPOLICYNOTIFYIND_NULL) {
     if (cJSON_AddStringToObject(item, "smPolicyNotifyInd", OpenAPI_sm_policy_notify_indhsmf_update_data_ToString(hsmf_update_data->sm_policy_notify_ind)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [sm_policy_notify_ind]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [sm_policy_notify_ind]");
         goto end;
     }
     }
@@ -1016,45 +1016,45 @@ cJSON *OpenAPI_hsmf_update_data_convertToJSON(OpenAPI_hsmf_update_data_t *hsmf_u
     if (hsmf_update_data->pcf_ue_callback_info) {
     cJSON *pcf_ue_callback_info_local_JSON = OpenAPI_pcf_ue_callback_info_convertToJSON(hsmf_update_data->pcf_ue_callback_info);
     if (pcf_ue_callback_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pcf_ue_callback_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pcf_ue_callback_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "pcfUeCallbackInfo", pcf_ue_callback_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pcf_ue_callback_info]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pcf_ue_callback_info]");
         goto end;
     }
     } else if (hsmf_update_data->is_pcf_ue_callback_info_null) {
         if (cJSON_AddNullToObject(item, "pcfUeCallbackInfo") == NULL) {
-            ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pcf_ue_callback_info]");
+            log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [pcf_ue_callback_info]");
             goto end;
         }
     }
 
     if (hsmf_update_data->satellite_backhaul_cat != OpenAPI_satellite_backhaul_category_NULL) {
     if (cJSON_AddStringToObject(item, "satelliteBackhaulCat", OpenAPI_satellite_backhaul_category_ToString(hsmf_update_data->satellite_backhaul_cat)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [satellite_backhaul_cat]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [satellite_backhaul_cat]");
         goto end;
     }
     }
 
     if (hsmf_update_data->max_integrity_protected_data_rate_ul != OpenAPI_max_integrity_protected_data_rate_NULL) {
     if (cJSON_AddStringToObject(item, "maxIntegrityProtectedDataRateUl", OpenAPI_max_integrity_protected_data_rate_ToString(hsmf_update_data->max_integrity_protected_data_rate_ul)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [max_integrity_protected_data_rate_ul]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [max_integrity_protected_data_rate_ul]");
         goto end;
     }
     }
 
     if (hsmf_update_data->max_integrity_protected_data_rate_dl != OpenAPI_max_integrity_protected_data_rate_NULL) {
     if (cJSON_AddStringToObject(item, "maxIntegrityProtectedDataRateDl", OpenAPI_max_integrity_protected_data_rate_ToString(hsmf_update_data->max_integrity_protected_data_rate_dl)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [max_integrity_protected_data_rate_dl]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [max_integrity_protected_data_rate_dl]");
         goto end;
     }
     }
 
     if (hsmf_update_data->up_cnx_state != OpenAPI_up_cnx_state_NULL) {
     if (cJSON_AddStringToObject(item, "upCnxState", OpenAPI_up_cnx_state_ToString(hsmf_update_data->up_cnx_state)) == NULL) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed [up_cnx_state]");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed [up_cnx_state]");
         goto end;
     }
     }
@@ -1176,11 +1176,11 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     OpenAPI_up_cnx_state_e up_cnx_stateVariable = 0;
     request_indication = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "requestIndication");
     if (!request_indication) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [request_indication]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [request_indication]");
         goto end;
     }
     if (!cJSON_IsString(request_indication)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [request_indication]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [request_indication]");
         goto end;
     }
     request_indicationVariable = OpenAPI_request_indication_FromString(request_indication->valuestring);
@@ -1188,7 +1188,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     pei = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "pei");
     if (pei) {
     if (!cJSON_IsString(pei) && !cJSON_IsNull(pei)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [pei]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [pei]");
         goto end;
     }
     }
@@ -1197,7 +1197,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (vcn_tunnel_info) {
     vcn_tunnel_info_local_nonprim = OpenAPI_tunnel_info_parseFromJSON(vcn_tunnel_info);
     if (!vcn_tunnel_info_local_nonprim) {
-        ogs_error("OpenAPI_tunnel_info_parseFromJSON failed [vcn_tunnel_info]");
+        log_error("OpenAPI_tunnel_info_parseFromJSON failed [vcn_tunnel_info]");
         goto end;
     }
     }
@@ -1206,7 +1206,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (icn_tunnel_info) {
     icn_tunnel_info_local_nonprim = OpenAPI_tunnel_info_parseFromJSON(icn_tunnel_info);
     if (!icn_tunnel_info_local_nonprim) {
-        ogs_error("OpenAPI_tunnel_info_parseFromJSON failed [icn_tunnel_info]");
+        log_error("OpenAPI_tunnel_info_parseFromJSON failed [icn_tunnel_info]");
         goto end;
     }
     }
@@ -1215,7 +1215,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (additional_cn_tunnel_info) {
     additional_cn_tunnel_info_local_nonprim = OpenAPI_tunnel_info_parseFromJSON(additional_cn_tunnel_info);
     if (!additional_cn_tunnel_info_local_nonprim) {
-        ogs_error("OpenAPI_tunnel_info_parseFromJSON failed [additional_cn_tunnel_info]");
+        log_error("OpenAPI_tunnel_info_parseFromJSON failed [additional_cn_tunnel_info]");
         goto end;
     }
     }
@@ -1224,7 +1224,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (serving_network) {
     serving_network_local_nonprim = OpenAPI_plmn_id_nid_parseFromJSON(serving_network);
     if (!serving_network_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_nid_parseFromJSON failed [serving_network]");
+        log_error("OpenAPI_plmn_id_nid_parseFromJSON failed [serving_network]");
         goto end;
     }
     }
@@ -1232,7 +1232,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     an_type = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "anType");
     if (an_type) {
     if (!cJSON_IsString(an_type)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [an_type]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [an_type]");
         goto end;
     }
     an_typeVariable = OpenAPI_access_type_FromString(an_type->valuestring);
@@ -1241,7 +1241,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     additional_an_type = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "additionalAnType");
     if (additional_an_type) {
     if (!cJSON_IsString(additional_an_type)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [additional_an_type]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [additional_an_type]");
         goto end;
     }
     additional_an_typeVariable = OpenAPI_access_type_FromString(additional_an_type->valuestring);
@@ -1250,7 +1250,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     rat_type = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "ratType");
     if (rat_type) {
     if (!cJSON_IsString(rat_type)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [rat_type]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [rat_type]");
         goto end;
     }
     rat_typeVariable = OpenAPI_rat_type_FromString(rat_type->valuestring);
@@ -1260,7 +1260,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (ue_location) {
     ue_location_local_nonprim = OpenAPI_user_location_parseFromJSON(ue_location);
     if (!ue_location_local_nonprim) {
-        ogs_error("OpenAPI_user_location_parseFromJSON failed [ue_location]");
+        log_error("OpenAPI_user_location_parseFromJSON failed [ue_location]");
         goto end;
     }
     }
@@ -1268,7 +1268,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     ue_time_zone = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "ueTimeZone");
     if (ue_time_zone) {
     if (!cJSON_IsString(ue_time_zone) && !cJSON_IsNull(ue_time_zone)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ue_time_zone]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ue_time_zone]");
         goto end;
     }
     }
@@ -1277,7 +1277,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (add_ue_location) {
     add_ue_location_local_nonprim = OpenAPI_user_location_parseFromJSON(add_ue_location);
     if (!add_ue_location_local_nonprim) {
-        ogs_error("OpenAPI_user_location_parseFromJSON failed [add_ue_location]");
+        log_error("OpenAPI_user_location_parseFromJSON failed [add_ue_location]");
         goto end;
     }
     }
@@ -1285,7 +1285,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     pause_charging = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "pauseCharging");
     if (pause_charging) {
     if (!cJSON_IsBool(pause_charging)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [pause_charging]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [pause_charging]");
         goto end;
     }
     }
@@ -1293,7 +1293,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     pti = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "pti");
     if (pti) {
     if (!cJSON_IsNumber(pti)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [pti]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [pti]");
         goto end;
     }
     }
@@ -1302,7 +1302,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (n1_sm_info_from_ue) {
     n1_sm_info_from_ue_local_nonprim = OpenAPI_ref_to_binary_data_parseFromJSON(n1_sm_info_from_ue);
     if (!n1_sm_info_from_ue_local_nonprim) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [n1_sm_info_from_ue]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [n1_sm_info_from_ue]");
         goto end;
     }
     }
@@ -1311,7 +1311,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (unknown_n1_sm_info) {
     unknown_n1_sm_info_local_nonprim = OpenAPI_ref_to_binary_data_parseFromJSON(unknown_n1_sm_info);
     if (!unknown_n1_sm_info_local_nonprim) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [unknown_n1_sm_info]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [unknown_n1_sm_info]");
         goto end;
     }
     }
@@ -1320,7 +1320,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (qos_flows_rel_notify_list) {
         cJSON *qos_flows_rel_notify_list_local = NULL;
         if (!cJSON_IsArray(qos_flows_rel_notify_list)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [qos_flows_rel_notify_list]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [qos_flows_rel_notify_list]");
             goto end;
         }
 
@@ -1328,12 +1328,12 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
 
         cJSON_ArrayForEach(qos_flows_rel_notify_list_local, qos_flows_rel_notify_list) {
             if (!cJSON_IsObject(qos_flows_rel_notify_list_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [qos_flows_rel_notify_list]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [qos_flows_rel_notify_list]");
                 goto end;
             }
             OpenAPI_qos_flow_item_t *qos_flows_rel_notify_listItem = OpenAPI_qos_flow_item_parseFromJSON(qos_flows_rel_notify_list_local);
             if (!qos_flows_rel_notify_listItem) {
-                ogs_error("No qos_flows_rel_notify_listItem");
+                log_error("No qos_flows_rel_notify_listItem");
                 goto end;
             }
             OpenAPI_list_add(qos_flows_rel_notify_listList, qos_flows_rel_notify_listItem);
@@ -1344,7 +1344,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (qos_flows_notify_list) {
         cJSON *qos_flows_notify_list_local = NULL;
         if (!cJSON_IsArray(qos_flows_notify_list)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [qos_flows_notify_list]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [qos_flows_notify_list]");
             goto end;
         }
 
@@ -1352,12 +1352,12 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
 
         cJSON_ArrayForEach(qos_flows_notify_list_local, qos_flows_notify_list) {
             if (!cJSON_IsObject(qos_flows_notify_list_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [qos_flows_notify_list]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [qos_flows_notify_list]");
                 goto end;
             }
             OpenAPI_qos_flow_notify_item_t *qos_flows_notify_listItem = OpenAPI_qos_flow_notify_item_parseFromJSON(qos_flows_notify_list_local);
             if (!qos_flows_notify_listItem) {
-                ogs_error("No qos_flows_notify_listItem");
+                log_error("No qos_flows_notify_listItem");
                 goto end;
             }
             OpenAPI_list_add(qos_flows_notify_listList, qos_flows_notify_listItem);
@@ -1368,7 +1368,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (notify_list) {
         cJSON *notify_list_local = NULL;
         if (!cJSON_IsArray(notify_list)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [notify_list]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [notify_list]");
             goto end;
         }
 
@@ -1376,12 +1376,12 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
 
         cJSON_ArrayForEach(notify_list_local, notify_list) {
             if (!cJSON_IsObject(notify_list_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [notify_list]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [notify_list]");
                 goto end;
             }
             OpenAPI_pdu_session_notify_item_t *notify_listItem = OpenAPI_pdu_session_notify_item_parseFromJSON(notify_list_local);
             if (!notify_listItem) {
-                ogs_error("No notify_listItem");
+                log_error("No notify_listItem");
                 goto end;
             }
             OpenAPI_list_add(notify_listList, notify_listItem);
@@ -1392,7 +1392,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (eps_bearer_id) {
         cJSON *eps_bearer_id_local = NULL;
         if (!cJSON_IsArray(eps_bearer_id)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [eps_bearer_id]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [eps_bearer_id]");
             goto end;
         }
 
@@ -1402,12 +1402,12 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(eps_bearer_id_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [eps_bearer_id]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [eps_bearer_id]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [eps_bearer_id]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [eps_bearer_id]");
                 goto end;
             }
             *localDouble = eps_bearer_id_local->valuedouble;
@@ -1418,7 +1418,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     ho_preparation_indication = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "hoPreparationIndication");
     if (ho_preparation_indication) {
     if (!cJSON_IsBool(ho_preparation_indication)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ho_preparation_indication]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ho_preparation_indication]");
         goto end;
     }
     }
@@ -1427,7 +1427,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (revoke_ebi_list) {
         cJSON *revoke_ebi_list_local = NULL;
         if (!cJSON_IsArray(revoke_ebi_list)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [revoke_ebi_list]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [revoke_ebi_list]");
             goto end;
         }
 
@@ -1437,12 +1437,12 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(revoke_ebi_list_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [revoke_ebi_list]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [revoke_ebi_list]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [revoke_ebi_list]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [revoke_ebi_list]");
                 goto end;
             }
             *localDouble = revoke_ebi_list_local->valuedouble;
@@ -1453,7 +1453,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     cause = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "cause");
     if (cause) {
     if (!cJSON_IsString(cause)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [cause]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [cause]");
         goto end;
     }
     causeVariable = OpenAPI_cause_FromString(cause->valuestring);
@@ -1463,7 +1463,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (ng_ap_cause) {
     ng_ap_cause_local_nonprim = OpenAPI_ng_ap_cause_parseFromJSON(ng_ap_cause);
     if (!ng_ap_cause_local_nonprim) {
-        ogs_error("OpenAPI_ng_ap_cause_parseFromJSON failed [ng_ap_cause]");
+        log_error("OpenAPI_ng_ap_cause_parseFromJSON failed [ng_ap_cause]");
         goto end;
     }
     }
@@ -1471,7 +1471,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     _5g_mm_cause_value = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "5gMmCauseValue");
     if (_5g_mm_cause_value) {
     if (!cJSON_IsNumber(_5g_mm_cause_value)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [_5g_mm_cause_value]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [_5g_mm_cause_value]");
         goto end;
     }
     }
@@ -1479,7 +1479,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     always_on_requested = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "alwaysOnRequested");
     if (always_on_requested) {
     if (!cJSON_IsBool(always_on_requested)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [always_on_requested]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [always_on_requested]");
         goto end;
     }
     }
@@ -1487,7 +1487,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     eps_interworking_ind = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "epsInterworkingInd");
     if (eps_interworking_ind) {
     if (!cJSON_IsString(eps_interworking_ind)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [eps_interworking_ind]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [eps_interworking_ind]");
         goto end;
     }
     eps_interworking_indVariable = OpenAPI_eps_interworking_indication_FromString(eps_interworking_ind->valuestring);
@@ -1497,7 +1497,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (secondary_rat_usage_report) {
         cJSON *secondary_rat_usage_report_local = NULL;
         if (!cJSON_IsArray(secondary_rat_usage_report)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_report]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_report]");
             goto end;
         }
 
@@ -1505,12 +1505,12 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
 
         cJSON_ArrayForEach(secondary_rat_usage_report_local, secondary_rat_usage_report) {
             if (!cJSON_IsObject(secondary_rat_usage_report_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_report]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_report]");
                 goto end;
             }
             OpenAPI_secondary_rat_usage_report_t *secondary_rat_usage_reportItem = OpenAPI_secondary_rat_usage_report_parseFromJSON(secondary_rat_usage_report_local);
             if (!secondary_rat_usage_reportItem) {
-                ogs_error("No secondary_rat_usage_reportItem");
+                log_error("No secondary_rat_usage_reportItem");
                 goto end;
             }
             OpenAPI_list_add(secondary_rat_usage_reportList, secondary_rat_usage_reportItem);
@@ -1521,7 +1521,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (secondary_rat_usage_info) {
         cJSON *secondary_rat_usage_info_local = NULL;
         if (!cJSON_IsArray(secondary_rat_usage_info)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_info]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_info]");
             goto end;
         }
 
@@ -1529,12 +1529,12 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
 
         cJSON_ArrayForEach(secondary_rat_usage_info_local, secondary_rat_usage_info) {
             if (!cJSON_IsObject(secondary_rat_usage_info_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_info]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_info]");
                 goto end;
             }
             OpenAPI_secondary_rat_usage_info_t *secondary_rat_usage_infoItem = OpenAPI_secondary_rat_usage_info_parseFromJSON(secondary_rat_usage_info_local);
             if (!secondary_rat_usage_infoItem) {
-                ogs_error("No secondary_rat_usage_infoItem");
+                log_error("No secondary_rat_usage_infoItem");
                 goto end;
             }
             OpenAPI_list_add(secondary_rat_usage_infoList, secondary_rat_usage_infoItem);
@@ -1544,7 +1544,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     an_type_can_be_changed = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "anTypeCanBeChanged");
     if (an_type_can_be_changed) {
     if (!cJSON_IsBool(an_type_can_be_changed)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [an_type_can_be_changed]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [an_type_can_be_changed]");
         goto end;
     }
     }
@@ -1552,7 +1552,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     ma_release_ind = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "maReleaseInd");
     if (ma_release_ind) {
     if (!cJSON_IsString(ma_release_ind)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ma_release_ind]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ma_release_ind]");
         goto end;
     }
     ma_release_indVariable = OpenAPI_ma_release_indication_FromString(ma_release_ind->valuestring);
@@ -1561,7 +1561,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     ma_nw_upgrade_ind = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "maNwUpgradeInd");
     if (ma_nw_upgrade_ind) {
     if (!cJSON_IsBool(ma_nw_upgrade_ind)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ma_nw_upgrade_ind]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ma_nw_upgrade_ind]");
         goto end;
     }
     }
@@ -1569,7 +1569,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     ma_request_ind = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "maRequestInd");
     if (ma_request_ind) {
     if (!cJSON_IsBool(ma_request_ind)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ma_request_ind]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ma_request_ind]");
         goto end;
     }
     }
@@ -1577,7 +1577,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     unavailable_access_ind = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "unavailableAccessInd");
     if (unavailable_access_ind) {
     if (!cJSON_IsString(unavailable_access_ind)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [unavailable_access_ind]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [unavailable_access_ind]");
         goto end;
     }
     unavailable_access_indVariable = OpenAPI_unavailable_access_indication_FromString(unavailable_access_ind->valuestring);
@@ -1587,7 +1587,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (psa_info) {
         cJSON *psa_info_local = NULL;
         if (!cJSON_IsArray(psa_info)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [psa_info]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [psa_info]");
             goto end;
         }
 
@@ -1595,12 +1595,12 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
 
         cJSON_ArrayForEach(psa_info_local, psa_info) {
             if (!cJSON_IsObject(psa_info_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [psa_info]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [psa_info]");
                 goto end;
             }
             OpenAPI_psa_information_t *psa_infoItem = OpenAPI_psa_information_parseFromJSON(psa_info_local);
             if (!psa_infoItem) {
-                ogs_error("No psa_infoItem");
+                log_error("No psa_infoItem");
                 goto end;
             }
             OpenAPI_list_add(psa_infoList, psa_infoItem);
@@ -1611,7 +1611,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (ulcl_bp_info) {
     ulcl_bp_info_local_nonprim = OpenAPI_ulcl_bp_information_parseFromJSON(ulcl_bp_info);
     if (!ulcl_bp_info_local_nonprim) {
-        ogs_error("OpenAPI_ulcl_bp_information_parseFromJSON failed [ulcl_bp_info]");
+        log_error("OpenAPI_ulcl_bp_information_parseFromJSON failed [ulcl_bp_info]");
         goto end;
     }
     }
@@ -1620,7 +1620,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (n4_info) {
     n4_info_local_nonprim = OpenAPI_n4_information_parseFromJSON(n4_info);
     if (!n4_info_local_nonprim) {
-        ogs_error("OpenAPI_n4_information_parseFromJSON failed [n4_info]");
+        log_error("OpenAPI_n4_information_parseFromJSON failed [n4_info]");
         goto end;
     }
     }
@@ -1629,7 +1629,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (n4_info_ext1) {
     n4_info_ext1_local_nonprim = OpenAPI_n4_information_parseFromJSON(n4_info_ext1);
     if (!n4_info_ext1_local_nonprim) {
-        ogs_error("OpenAPI_n4_information_parseFromJSON failed [n4_info_ext1]");
+        log_error("OpenAPI_n4_information_parseFromJSON failed [n4_info_ext1]");
         goto end;
     }
     }
@@ -1638,7 +1638,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (n4_info_ext2) {
     n4_info_ext2_local_nonprim = OpenAPI_n4_information_parseFromJSON(n4_info_ext2);
     if (!n4_info_ext2_local_nonprim) {
-        ogs_error("OpenAPI_n4_information_parseFromJSON failed [n4_info_ext2]");
+        log_error("OpenAPI_n4_information_parseFromJSON failed [n4_info_ext2]");
         goto end;
     }
     }
@@ -1646,7 +1646,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     presence_in_ladn = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "presenceInLadn");
     if (presence_in_ladn) {
     if (!cJSON_IsString(presence_in_ladn)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [presence_in_ladn]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [presence_in_ladn]");
         goto end;
     }
     presence_in_ladnVariable = OpenAPI_presence_state_FromString(presence_in_ladn->valuestring);
@@ -1655,7 +1655,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     vsmf_pdu_session_uri = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "vsmfPduSessionUri");
     if (vsmf_pdu_session_uri) {
     if (!cJSON_IsString(vsmf_pdu_session_uri) && !cJSON_IsNull(vsmf_pdu_session_uri)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [vsmf_pdu_session_uri]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [vsmf_pdu_session_uri]");
         goto end;
     }
     }
@@ -1663,7 +1663,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     vsmf_id = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "vsmfId");
     if (vsmf_id) {
     if (!cJSON_IsString(vsmf_id) && !cJSON_IsNull(vsmf_id)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [vsmf_id]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [vsmf_id]");
         goto end;
     }
     }
@@ -1671,7 +1671,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     v_smf_service_instance_id = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "vSmfServiceInstanceId");
     if (v_smf_service_instance_id) {
     if (!cJSON_IsString(v_smf_service_instance_id) && !cJSON_IsNull(v_smf_service_instance_id)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [v_smf_service_instance_id]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [v_smf_service_instance_id]");
         goto end;
     }
     }
@@ -1679,7 +1679,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     ismf_pdu_session_uri = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "ismfPduSessionUri");
     if (ismf_pdu_session_uri) {
     if (!cJSON_IsString(ismf_pdu_session_uri) && !cJSON_IsNull(ismf_pdu_session_uri)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ismf_pdu_session_uri]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ismf_pdu_session_uri]");
         goto end;
     }
     }
@@ -1687,7 +1687,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     ismf_id = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "ismfId");
     if (ismf_id) {
     if (!cJSON_IsString(ismf_id) && !cJSON_IsNull(ismf_id)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ismf_id]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [ismf_id]");
         goto end;
     }
     }
@@ -1695,7 +1695,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     i_smf_service_instance_id = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "iSmfServiceInstanceId");
     if (i_smf_service_instance_id) {
     if (!cJSON_IsString(i_smf_service_instance_id) && !cJSON_IsNull(i_smf_service_instance_id)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [i_smf_service_instance_id]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [i_smf_service_instance_id]");
         goto end;
     }
     }
@@ -1704,7 +1704,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (dl_serving_plmn_rate_ctl) {
     if (!cJSON_IsNull(dl_serving_plmn_rate_ctl)) {
     if (!cJSON_IsNumber(dl_serving_plmn_rate_ctl)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [dl_serving_plmn_rate_ctl]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [dl_serving_plmn_rate_ctl]");
         goto end;
     }
     }
@@ -1714,7 +1714,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (dnai_list) {
         cJSON *dnai_list_local = NULL;
         if (!cJSON_IsArray(dnai_list)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [dnai_list]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [dnai_list]");
             goto end;
         }
 
@@ -1724,7 +1724,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(dnai_list_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [dnai_list]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [dnai_list]");
                 goto end;
             }
             OpenAPI_list_add(dnai_listList, ogs_strdup(dnai_list_local->valuestring));
@@ -1734,7 +1734,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     supported_features = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -1743,7 +1743,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (roaming_charging_profile) {
     roaming_charging_profile_local_nonprim = OpenAPI_roaming_charging_profile_parseFromJSON(roaming_charging_profile);
     if (!roaming_charging_profile_local_nonprim) {
-        ogs_error("OpenAPI_roaming_charging_profile_parseFromJSON failed [roaming_charging_profile]");
+        log_error("OpenAPI_roaming_charging_profile_parseFromJSON failed [roaming_charging_profile]");
         goto end;
     }
     }
@@ -1752,7 +1752,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (mo_exp_data_counter) {
     mo_exp_data_counter_local_nonprim = OpenAPI_mo_exp_data_counter_parseFromJSON(mo_exp_data_counter);
     if (!mo_exp_data_counter_local_nonprim) {
-        ogs_error("OpenAPI_mo_exp_data_counter_parseFromJSON failed [mo_exp_data_counter]");
+        log_error("OpenAPI_mo_exp_data_counter_parseFromJSON failed [mo_exp_data_counter]");
         goto end;
     }
     }
@@ -1761,7 +1761,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (vplmn_qos) {
     vplmn_qos_local_nonprim = OpenAPI_vplmn_qos_parseFromJSON(vplmn_qos);
     if (!vplmn_qos_local_nonprim) {
-        ogs_error("OpenAPI_vplmn_qos_parseFromJSON failed [vplmn_qos]");
+        log_error("OpenAPI_vplmn_qos_parseFromJSON failed [vplmn_qos]");
         goto end;
     }
     }
@@ -1770,7 +1770,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (security_result) {
     security_result_local_nonprim = OpenAPI_security_result_parseFromJSON(security_result);
     if (!security_result_local_nonprim) {
-        ogs_error("OpenAPI_security_result_parseFromJSON failed [security_result]");
+        log_error("OpenAPI_security_result_parseFromJSON failed [security_result]");
         goto end;
     }
     }
@@ -1779,7 +1779,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (up_security_info) {
     up_security_info_local_nonprim = OpenAPI_up_security_info_parseFromJSON(up_security_info);
     if (!up_security_info_local_nonprim) {
-        ogs_error("OpenAPI_up_security_info_parseFromJSON failed [up_security_info]");
+        log_error("OpenAPI_up_security_info_parseFromJSON failed [up_security_info]");
         goto end;
     }
     }
@@ -1787,7 +1787,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     amf_nf_id = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "amfNfId");
     if (amf_nf_id) {
     if (!cJSON_IsString(amf_nf_id) && !cJSON_IsNull(amf_nf_id)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [amf_nf_id]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [amf_nf_id]");
         goto end;
     }
     }
@@ -1796,7 +1796,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (guami) {
     guami_local_nonprim = OpenAPI_guami_parseFromJSON(guami);
     if (!guami_local_nonprim) {
-        ogs_error("OpenAPI_guami_parseFromJSON failed [guami]");
+        log_error("OpenAPI_guami_parseFromJSON failed [guami]");
         goto end;
     }
     }
@@ -1805,7 +1805,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (secondary_rat_usage_data_report_container) {
         cJSON *secondary_rat_usage_data_report_container_local = NULL;
         if (!cJSON_IsArray(secondary_rat_usage_data_report_container)) {
-            ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_data_report_container]");
+            log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_data_report_container]");
             goto end;
         }
 
@@ -1815,7 +1815,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(secondary_rat_usage_data_report_container_local)) {
-                ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_data_report_container]");
+                log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [secondary_rat_usage_data_report_container]");
                 goto end;
             }
             OpenAPI_list_add(secondary_rat_usage_data_report_containerList, ogs_strdup(secondary_rat_usage_data_report_container_local->valuestring));
@@ -1825,7 +1825,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     sm_policy_notify_ind = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "smPolicyNotifyInd");
     if (sm_policy_notify_ind) {
     if (!cJSON_IsString(sm_policy_notify_ind)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [sm_policy_notify_ind]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [sm_policy_notify_ind]");
         goto end;
     }
     sm_policy_notify_indVariable = OpenAPI_sm_policy_notify_indhsmf_update_data_FromString(sm_policy_notify_ind->valuestring);
@@ -1836,7 +1836,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     if (!cJSON_IsNull(pcf_ue_callback_info)) {
     pcf_ue_callback_info_local_nonprim = OpenAPI_pcf_ue_callback_info_parseFromJSON(pcf_ue_callback_info);
     if (!pcf_ue_callback_info_local_nonprim) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_parseFromJSON failed [pcf_ue_callback_info]");
+        log_error("OpenAPI_pcf_ue_callback_info_parseFromJSON failed [pcf_ue_callback_info]");
         goto end;
     }
     }
@@ -1845,7 +1845,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     satellite_backhaul_cat = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "satelliteBackhaulCat");
     if (satellite_backhaul_cat) {
     if (!cJSON_IsString(satellite_backhaul_cat)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [satellite_backhaul_cat]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [satellite_backhaul_cat]");
         goto end;
     }
     satellite_backhaul_catVariable = OpenAPI_satellite_backhaul_category_FromString(satellite_backhaul_cat->valuestring);
@@ -1854,7 +1854,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     max_integrity_protected_data_rate_ul = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "maxIntegrityProtectedDataRateUl");
     if (max_integrity_protected_data_rate_ul) {
     if (!cJSON_IsString(max_integrity_protected_data_rate_ul)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [max_integrity_protected_data_rate_ul]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [max_integrity_protected_data_rate_ul]");
         goto end;
     }
     max_integrity_protected_data_rate_ulVariable = OpenAPI_max_integrity_protected_data_rate_FromString(max_integrity_protected_data_rate_ul->valuestring);
@@ -1863,7 +1863,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     max_integrity_protected_data_rate_dl = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "maxIntegrityProtectedDataRateDl");
     if (max_integrity_protected_data_rate_dl) {
     if (!cJSON_IsString(max_integrity_protected_data_rate_dl)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [max_integrity_protected_data_rate_dl]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [max_integrity_protected_data_rate_dl]");
         goto end;
     }
     max_integrity_protected_data_rate_dlVariable = OpenAPI_max_integrity_protected_data_rate_FromString(max_integrity_protected_data_rate_dl->valuestring);
@@ -1872,7 +1872,7 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_parseFromJSON(cJSON *hsmf_u
     up_cnx_state = cJSON_GetObjectItemCaseSensitive(hsmf_update_dataJSON, "upCnxState");
     if (up_cnx_state) {
     if (!cJSON_IsString(up_cnx_state)) {
-        ogs_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [up_cnx_state]");
+        log_error("OpenAPI_hsmf_update_data_parseFromJSON() failed [up_cnx_state]");
         goto end;
     }
     up_cnx_stateVariable = OpenAPI_up_cnx_state_FromString(up_cnx_state->valuestring);
@@ -2115,10 +2115,10 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_copy(OpenAPI_hsmf_update_da
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_hsmf_update_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_hsmf_update_data_convertToJSON() failed");
+        log_error("OpenAPI_hsmf_update_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -2126,14 +2126,14 @@ OpenAPI_hsmf_update_data_t *OpenAPI_hsmf_update_data_copy(OpenAPI_hsmf_update_da
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -11,7 +11,7 @@ OpenAPI_spatial_validity_cond_1_t *OpenAPI_spatial_validity_cond_1_create(
 )
 {
     OpenAPI_spatial_validity_cond_1_t *spatial_validity_cond_1_local_var = ogs_malloc(sizeof(OpenAPI_spatial_validity_cond_1_t));
-    ogs_assert(spatial_validity_cond_1_local_var);
+    log_assert(spatial_validity_cond_1_local_var);
 
     spatial_validity_cond_1_local_var->tracking_area_list = tracking_area_list;
     spatial_validity_cond_1_local_var->countries = countries;
@@ -54,7 +54,7 @@ cJSON *OpenAPI_spatial_validity_cond_1_convertToJSON(OpenAPI_spatial_validity_co
     OpenAPI_lnode_t *node = NULL;
 
     if (spatial_validity_cond_1 == NULL) {
-        ogs_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [SpatialValidityCond_1]");
+        log_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [SpatialValidityCond_1]");
         return NULL;
     }
 
@@ -62,13 +62,13 @@ cJSON *OpenAPI_spatial_validity_cond_1_convertToJSON(OpenAPI_spatial_validity_co
     if (spatial_validity_cond_1->tracking_area_list) {
     cJSON *tracking_area_listList = cJSON_AddArrayToObject(item, "trackingAreaList");
     if (tracking_area_listList == NULL) {
-        ogs_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [tracking_area_list]");
+        log_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [tracking_area_list]");
         goto end;
     }
     OpenAPI_list_for_each(spatial_validity_cond_1->tracking_area_list, node) {
         cJSON *itemLocal = OpenAPI_tai_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [tracking_area_list]");
+            log_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [tracking_area_list]");
             goto end;
         }
         cJSON_AddItemToArray(tracking_area_listList, itemLocal);
@@ -78,12 +78,12 @@ cJSON *OpenAPI_spatial_validity_cond_1_convertToJSON(OpenAPI_spatial_validity_co
     if (spatial_validity_cond_1->countries) {
     cJSON *countriesList = cJSON_AddArrayToObject(item, "countries");
     if (countriesList == NULL) {
-        ogs_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [countries]");
+        log_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [countries]");
         goto end;
     }
     OpenAPI_list_for_each(spatial_validity_cond_1->countries, node) {
         if (cJSON_AddStringToObject(countriesList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [countries]");
+            log_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [countries]");
             goto end;
         }
     }
@@ -92,12 +92,12 @@ cJSON *OpenAPI_spatial_validity_cond_1_convertToJSON(OpenAPI_spatial_validity_co
     if (spatial_validity_cond_1->geographical_service_area) {
     cJSON *geographical_service_area_local_JSON = OpenAPI_geo_service_area_1_convertToJSON(spatial_validity_cond_1->geographical_service_area);
     if (geographical_service_area_local_JSON == NULL) {
-        ogs_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [geographical_service_area]");
+        log_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [geographical_service_area]");
         goto end;
     }
     cJSON_AddItemToObject(item, "geographicalServiceArea", geographical_service_area_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [geographical_service_area]");
+        log_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed [geographical_service_area]");
         goto end;
     }
     }
@@ -120,7 +120,7 @@ OpenAPI_spatial_validity_cond_1_t *OpenAPI_spatial_validity_cond_1_parseFromJSON
     if (tracking_area_list) {
         cJSON *tracking_area_list_local = NULL;
         if (!cJSON_IsArray(tracking_area_list)) {
-            ogs_error("OpenAPI_spatial_validity_cond_1_parseFromJSON() failed [tracking_area_list]");
+            log_error("OpenAPI_spatial_validity_cond_1_parseFromJSON() failed [tracking_area_list]");
             goto end;
         }
 
@@ -128,12 +128,12 @@ OpenAPI_spatial_validity_cond_1_t *OpenAPI_spatial_validity_cond_1_parseFromJSON
 
         cJSON_ArrayForEach(tracking_area_list_local, tracking_area_list) {
             if (!cJSON_IsObject(tracking_area_list_local)) {
-                ogs_error("OpenAPI_spatial_validity_cond_1_parseFromJSON() failed [tracking_area_list]");
+                log_error("OpenAPI_spatial_validity_cond_1_parseFromJSON() failed [tracking_area_list]");
                 goto end;
             }
             OpenAPI_tai_1_t *tracking_area_listItem = OpenAPI_tai_1_parseFromJSON(tracking_area_list_local);
             if (!tracking_area_listItem) {
-                ogs_error("No tracking_area_listItem");
+                log_error("No tracking_area_listItem");
                 goto end;
             }
             OpenAPI_list_add(tracking_area_listList, tracking_area_listItem);
@@ -144,7 +144,7 @@ OpenAPI_spatial_validity_cond_1_t *OpenAPI_spatial_validity_cond_1_parseFromJSON
     if (countries) {
         cJSON *countries_local = NULL;
         if (!cJSON_IsArray(countries)) {
-            ogs_error("OpenAPI_spatial_validity_cond_1_parseFromJSON() failed [countries]");
+            log_error("OpenAPI_spatial_validity_cond_1_parseFromJSON() failed [countries]");
             goto end;
         }
 
@@ -154,7 +154,7 @@ OpenAPI_spatial_validity_cond_1_t *OpenAPI_spatial_validity_cond_1_parseFromJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(countries_local)) {
-                ogs_error("OpenAPI_spatial_validity_cond_1_parseFromJSON() failed [countries]");
+                log_error("OpenAPI_spatial_validity_cond_1_parseFromJSON() failed [countries]");
                 goto end;
             }
             OpenAPI_list_add(countriesList, ogs_strdup(countries_local->valuestring));
@@ -165,7 +165,7 @@ OpenAPI_spatial_validity_cond_1_t *OpenAPI_spatial_validity_cond_1_parseFromJSON
     if (geographical_service_area) {
     geographical_service_area_local_nonprim = OpenAPI_geo_service_area_1_parseFromJSON(geographical_service_area);
     if (!geographical_service_area_local_nonprim) {
-        ogs_error("OpenAPI_geo_service_area_1_parseFromJSON failed [geographical_service_area]");
+        log_error("OpenAPI_geo_service_area_1_parseFromJSON failed [geographical_service_area]");
         goto end;
     }
     }
@@ -204,10 +204,10 @@ OpenAPI_spatial_validity_cond_1_t *OpenAPI_spatial_validity_cond_1_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_spatial_validity_cond_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed");
+        log_error("OpenAPI_spatial_validity_cond_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -215,14 +215,14 @@ OpenAPI_spatial_validity_cond_1_t *OpenAPI_spatial_validity_cond_1_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

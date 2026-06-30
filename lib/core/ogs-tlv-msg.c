@@ -90,7 +90,7 @@ static uint8_t tlv_ctype2mode(ogs_tlv_type_e ctype, uint8_t msg_mode)
         else
             return OGS_TLV_MODE_T1;
     default:
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         break;
     }
 }
@@ -111,14 +111,14 @@ static ogs_tlv_t *tlv_add_leaf(
             tlv = ogs_tlv_embed(parent_tlv, tlv_mode,
                     desc->type, 1, desc->instance, &v->u8);
             if (!tlv) {
-                ogs_error("ogs_tlv_embed()");
+                log_error("ogs_tlv_embed()");
                 return NULL;
             }
         } else {
             tlv = ogs_tlv_add(tlv, tlv_mode,
                     desc->type, 1, desc->instance, &v->u8);
             if (!tlv) {
-                ogs_error("ogs_tlv_add()");
+                log_error("ogs_tlv_add()");
                 return NULL;
             }
         }
@@ -137,14 +137,14 @@ static ogs_tlv_t *tlv_add_leaf(
             tlv = ogs_tlv_embed(parent_tlv, tlv_mode,
                     desc->type, 2, desc->instance, &v->u16);
             if (!tlv) {
-                ogs_error("ogs_tlv_embed()");
+                log_error("ogs_tlv_embed()");
                 return NULL;
             }
         } else {
             tlv = ogs_tlv_add(tlv, tlv_mode,
                     desc->type, 2, desc->instance, &v->u16);
             if (!tlv) {
-                ogs_error("ogs_tlv_add()");
+                log_error("ogs_tlv_add()");
                 return NULL;
             }
         }
@@ -164,14 +164,14 @@ static ogs_tlv_t *tlv_add_leaf(
             tlv = ogs_tlv_embed(parent_tlv, tlv_mode,
                     desc->type, 3, desc->instance, &v->u24);
             if (!tlv) {
-                ogs_error("ogs_tlv_embed()");
+                log_error("ogs_tlv_embed()");
                 return NULL;
             }
         } else {
             tlv = ogs_tlv_add(tlv, tlv_mode,
                     desc->type, 3, desc->instance, &v->u24);
             if (!tlv) {
-                ogs_error("ogs_tlv_add()");
+                log_error("ogs_tlv_add()");
                 return NULL;
             }
         }
@@ -190,14 +190,14 @@ static ogs_tlv_t *tlv_add_leaf(
             tlv = ogs_tlv_embed(parent_tlv, tlv_mode,
                     desc->type, 4, desc->instance, &v->u32);
             if (!tlv) {
-                ogs_error("ogs_tlv_embed()");
+                log_error("ogs_tlv_embed()");
                 return NULL;
             }
         } else {
             tlv = ogs_tlv_add(tlv, tlv_mode,
                     desc->type, 4, desc->instance, &v->u32);
             if (!tlv) {
-                ogs_error("ogs_tlv_add()");
+                log_error("ogs_tlv_add()");
                 return NULL;
             }
         }
@@ -212,14 +212,14 @@ static ogs_tlv_t *tlv_add_leaf(
             tlv = ogs_tlv_embed(parent_tlv, tlv_mode,
                     desc->type, desc->length, desc->instance, v->data);
             if (!tlv) {
-                ogs_error("ogs_tlv_embed()");
+                log_error("ogs_tlv_embed()");
                 return NULL;
             }
         } else {
             tlv = ogs_tlv_add(tlv, tlv_mode,
                     desc->type, desc->length, desc->instance, v->data);
             if (!tlv) {
-                ogs_error("ogs_tlv_add()");
+                log_error("ogs_tlv_add()");
                 return NULL;
             }
         }
@@ -230,7 +230,7 @@ static ogs_tlv_t *tlv_add_leaf(
         ogs_tlv_octet_t *v = (ogs_tlv_octet_t *)msg;
 
         if (v->len == 0) {
-            ogs_error("No TLV length - [%s] T:%d I:%d (vsz=%d)",
+            log_error("No TLV length - [%s] T:%d I:%d (vsz=%d)",
                     desc->name, desc->type, desc->instance, desc->vsize);
             return NULL;
         }
@@ -239,14 +239,14 @@ static ogs_tlv_t *tlv_add_leaf(
             tlv = ogs_tlv_embed(parent_tlv, tlv_mode,
                     desc->type, v->len, desc->instance, v->data);
             if (!tlv) {
-                ogs_error("ogs_tlv_embed()");
+                log_error("ogs_tlv_embed()");
                 return NULL;
             }
         } else {
             tlv = ogs_tlv_add(tlv, tlv_mode,
                     desc->type, v->len, desc->instance, v->data);
             if (!tlv) {
-                ogs_error("ogs_tlv_add()");
+                log_error("ogs_tlv_add()");
                 return NULL;
             }
         }
@@ -259,21 +259,21 @@ static ogs_tlv_t *tlv_add_leaf(
             tlv = ogs_tlv_embed(parent_tlv, tlv_mode,
                     desc->type, 0, desc->instance, NULL);
             if (!tlv) {
-                ogs_error("ogs_tlv_embed()");
+                log_error("ogs_tlv_embed()");
                 return NULL;
             }
         } else {
             tlv = ogs_tlv_add(tlv, tlv_mode,
                     desc->type, 0, desc->instance, NULL);
             if (!tlv) {
-                ogs_error("ogs_tlv_add()");
+                log_error("ogs_tlv_add()");
                 return NULL;
             }
         }
         break;
     }
     default:
-        ogs_error("Unknown type [%d]", desc->ctype);
+        log_error("Unknown type [%d]", desc->ctype);
         return NULL;
     }
 
@@ -291,11 +291,11 @@ static uint32_t tlv_add_compound(ogs_tlv_t **root, ogs_tlv_t *parent_tlv,
     int i, j, r;
     char indent[17] = "                "; /* 16 spaces */
 
-    ogs_assert(root);
-    ogs_assert(parent_desc);
-    ogs_assert(msg);
+    log_assert(root);
+    log_assert(parent_desc);
+    log_assert(msg);
 
-    ogs_assert(depth <= 8);
+    log_assert(depth <= 8);
     indent[depth*2] = 0;
 
     *root = NULL;
@@ -312,7 +312,7 @@ static uint32_t tlv_add_compound(ogs_tlv_t **root, ogs_tlv_t *parent_tlv,
                     break;
 
                 if (desc->ctype == OGS_TLV_COMPOUND) {
-                    ogs_trace("BUILD %sC#%d [%s] T:%d I:%d (vsz=%d) off:%p ",
+                    log_trace("BUILD %sC#%d [%s] T:%d I:%d (vsz=%d) off:%p ",
                             indent, i, desc->name, desc->type, desc->instance,
                             desc->vsize, p + offset2);
 
@@ -329,12 +329,12 @@ static uint32_t tlv_add_compound(ogs_tlv_t **root, ogs_tlv_t *parent_tlv,
                             p + offset2 + sizeof(ogs_tlv_presence_t),
                             depth + 1, mode);
                     if (r <= 0 || !emb_tlv) {
-                        ogs_error("tlv_add_compound() failed");
+                        log_error("tlv_add_compound() failed");
                         return 0;
                     }
                     count += 1 + r;
                 } else {
-                    ogs_trace("BUILD %sL#%d [%s] T:%d L:%d I:%d "
+                    log_trace("BUILD %sL#%d [%s] T:%d L:%d I:%d "
                             "(cls:%d vsz:%d) off:%p ",
                             indent, i, desc->name, desc->type, desc->length,
                             desc->instance, desc->ctype, desc->vsize,
@@ -343,7 +343,7 @@ static uint32_t tlv_add_compound(ogs_tlv_t **root, ogs_tlv_t *parent_tlv,
                     tlv = tlv_add_leaf(parent_tlv, tlv, desc,
                             p + offset2, mode);
                     if (!tlv) {
-                        ogs_error("tlv_add_leaf() failed");
+                        log_error("tlv_add_leaf() failed");
                         return 0;
                     }
                     count++;
@@ -361,7 +361,7 @@ static uint32_t tlv_add_compound(ogs_tlv_t **root, ogs_tlv_t *parent_tlv,
 
             if (*presence_p) {
                 if (desc->ctype == OGS_TLV_COMPOUND) {
-                    ogs_trace("BUILD %sC#%d [%s] T:%d I:%d (vsz=%d) off:%p ",
+                    log_trace("BUILD %sC#%d [%s] T:%d I:%d (vsz=%d) off:%p ",
                             indent, i, desc->name, desc->type, desc->instance,
                             desc->vsize, p + offset);
 
@@ -378,12 +378,12 @@ static uint32_t tlv_add_compound(ogs_tlv_t **root, ogs_tlv_t *parent_tlv,
                             p + offset + sizeof(ogs_tlv_presence_t),
                             depth + 1, mode);
                     if (r <= 0 || !emb_tlv) {
-                        ogs_error("tlv_add_compound() failed");
+                        log_error("tlv_add_compound() failed");
                         return 0;
                     }
                     count += 1 + r;
                 } else {
-                    ogs_trace("BUILD %sL#%d [%s] T:%d L:%d I:%d "
+                    log_trace("BUILD %sL#%d [%s] T:%d L:%d I:%d "
                             "(cls:%d vsz:%d) off:%p ",
                             indent, i, desc->name, desc->type, desc->length,
                             desc->instance, desc->ctype, desc->vsize,
@@ -391,7 +391,7 @@ static uint32_t tlv_add_compound(ogs_tlv_t **root, ogs_tlv_t *parent_tlv,
 
                     tlv = tlv_add_leaf(parent_tlv, tlv, desc, p + offset, mode);
                     if (!tlv) {
-                        ogs_error("tlv_add_leaf() failed");
+                        log_error("tlv_add_leaf() failed");
                         return 0;
                     }
                     count++;
@@ -413,15 +413,15 @@ ogs_pkbuf_t *ogs_tlv_build_msg(ogs_tlv_desc_t *desc, void *msg, int mode)
     uint32_t r, length, rendlen;
     ogs_pkbuf_t *pkbuf = NULL;
 
-    ogs_assert(desc);
-    ogs_assert(msg);
+    log_assert(desc);
+    log_assert(msg);
 
-    ogs_assert(desc->ctype == OGS_TLV_MESSAGE);
+    log_assert(desc->ctype == OGS_TLV_MESSAGE);
 
     if (desc->child_descs[0]) {
         r = tlv_add_compound(&root, NULL, desc, msg, 0, mode);
         if (r <= 0 || !root) {
-            ogs_error("tlv_add_compound() failed");
+            log_error("tlv_add_compound() failed");
             return NULL;
         }
 
@@ -431,7 +431,7 @@ ogs_pkbuf_t *ogs_tlv_build_msg(ogs_tlv_desc_t *desc, void *msg, int mode)
     }
     pkbuf = ogs_pkbuf_alloc(NULL, OGS_TLV_MAX_HEADROOM+length);
     if (!pkbuf) {
-        ogs_error("ogs_pkbuf_alloc() failed");
+        log_error("ogs_pkbuf_alloc() failed");
         return NULL;
     }
     ogs_pkbuf_reserve(pkbuf, OGS_TLV_MAX_HEADROOM);
@@ -440,7 +440,7 @@ ogs_pkbuf_t *ogs_tlv_build_msg(ogs_tlv_desc_t *desc, void *msg, int mode)
     if (desc->child_descs[0]) {
         rendlen = ogs_tlv_render(root, pkbuf->data, length);
         if (rendlen != length) {
-            ogs_error("ogs_tlv_render[rendlen:%d != length:%d] failed",
+            log_error("ogs_tlv_render[rendlen:%d != length:%d] failed",
                     rendlen, length);
             return NULL;
         }
@@ -458,7 +458,7 @@ static ogs_tlv_desc_t* tlv_find_desc_by_type_inst(uint8_t *desc_index,
     int i, offset = 0;
     unsigned match_i = 0;
 
-    ogs_assert(parent_desc);
+    log_assert(parent_desc);
 
     for (i = 0, desc = parent_desc->child_descs[i]; desc != NULL;
             i++, desc = parent_desc->child_descs[i]) {
@@ -472,7 +472,7 @@ static ogs_tlv_desc_t* tlv_find_desc_by_type_inst(uint8_t *desc_index,
         }
 
         if (desc->ctype == OGS_TLV_MORE) {
-            ogs_assert(prev_desc && prev_desc->ctype != OGS_TLV_MORE);
+            log_assert(prev_desc && prev_desc->ctype != OGS_TLV_MORE);
             offset += prev_desc->vsize * (desc->length - 1);
         } else {
             offset += desc->vsize;
@@ -486,9 +486,9 @@ static ogs_tlv_desc_t* tlv_find_desc_by_type_inst(uint8_t *desc_index,
 
 static int tlv_parse_leaf(void *msg, ogs_tlv_desc_t *desc, ogs_tlv_t *tlv)
 {
-    ogs_assert(msg);
-    ogs_assert(desc);
-    ogs_assert(tlv);
+    log_assert(msg);
+    log_assert(desc);
+    log_assert(tlv);
 
     switch (desc->ctype) {
     case OGS_TV_UINT8:
@@ -499,7 +499,7 @@ static int tlv_parse_leaf(void *msg, ogs_tlv_desc_t *desc, ogs_tlv_t *tlv)
         ogs_tlv_uint8_t *v = (ogs_tlv_uint8_t *)msg;
 
         if (tlv->length != 1) {
-            ogs_error("Invalid TLV length %d. It should be 1", tlv->length);
+            log_error("Invalid TLV length %d. It should be 1", tlv->length);
             return OGS_ERROR;
         }
         v->u8 = *(uint8_t*)(tlv->value);
@@ -513,7 +513,7 @@ static int tlv_parse_leaf(void *msg, ogs_tlv_desc_t *desc, ogs_tlv_t *tlv)
         ogs_tlv_uint16_t *v = (ogs_tlv_uint16_t *)msg;
 
         if (tlv->length < 1 || tlv->length > 2) {
-            ogs_error("Invalid TLV length %d.", tlv->length);
+            log_error("Invalid TLV length %d.", tlv->length);
             return OGS_ERROR;
         }
         v->u16 = ((((uint8_t*)tlv->value)[0]<< 8)&0xff00) |
@@ -528,7 +528,7 @@ static int tlv_parse_leaf(void *msg, ogs_tlv_desc_t *desc, ogs_tlv_t *tlv)
         ogs_tlv_uint24_t *v = (ogs_tlv_uint24_t *)msg;
 
         if (tlv->length < 1 || tlv->length > 3) {
-            ogs_error("Invalid TLV length %d.", tlv->length);
+            log_error("Invalid TLV length %d.", tlv->length);
             return OGS_ERROR;
         }
         v->u24 = ((((uint8_t*)tlv->value)[0]<<16)&0x00ff0000) |
@@ -544,7 +544,7 @@ static int tlv_parse_leaf(void *msg, ogs_tlv_desc_t *desc, ogs_tlv_t *tlv)
         ogs_tlv_uint32_t *v = (ogs_tlv_uint32_t *)msg;
 
         if (tlv->length < 1 || tlv->length > 4) {
-            ogs_error("Invalid TLV length %d.", tlv->length);
+            log_error("Invalid TLV length %d.", tlv->length);
             return OGS_ERROR;
         }
         v->u32 = ((((uint8_t*)tlv->value)[0]<<24)&0xff000000) |
@@ -560,7 +560,7 @@ static int tlv_parse_leaf(void *msg, ogs_tlv_desc_t *desc, ogs_tlv_t *tlv)
 
         if (tlv->length != desc->length)
         {
-            ogs_error("Invalid TLV length %d. It should be %d",
+            log_error("Invalid TLV length %d. It should be %d",
                     tlv->length, desc->length);
             return OGS_ERROR;
         }
@@ -581,13 +581,13 @@ static int tlv_parse_leaf(void *msg, ogs_tlv_desc_t *desc, ogs_tlv_t *tlv)
     case OGS_TLV_NULL:
     {
         if (tlv->length != 0) {
-            ogs_error("Invalid TLV length %d. It should be 0", tlv->length);
+            log_error("Invalid TLV length %d. It should be 0", tlv->length);
             return OGS_ERROR;
         }
         break;
     }
     default:
-        ogs_error("Unknown type[%d]", desc->ctype);
+        log_error("Unknown type[%d]", desc->ctype);
         return OGS_ERROR;
     }
 
@@ -627,7 +627,7 @@ static tlv_count_node_t *tlv_count_node_find(ogs_rbtree_t *tree, tlv_count_node_
 
     /* No entry, need to add one: */
     if (*count_alloc_next == count_node_arr_len) {
-        ogs_error("This TLV has to many entries, can't parse");
+        log_error("This TLV has to many entries, can't parse");
         return NULL;
     }
     this = &count_node_arr[(*count_alloc_next)++];
@@ -654,11 +654,11 @@ static int tlv_parse_compound(void *msg, ogs_tlv_desc_t *parent_desc,
     unsigned count_node_alloc_next = 0;
     char indent[17] = "                "; /* 16 spaces */
 
-    ogs_assert(msg);
-    ogs_assert(parent_desc);
-    ogs_assert(parent_tlv);
+    log_assert(msg);
+    log_assert(parent_desc);
+    log_assert(parent_tlv);
 
-    ogs_assert(depth <= 8);
+    log_assert(depth <= 8);
     indent[depth*2] = 0;
 
     tlv = parent_tlv;
@@ -669,7 +669,7 @@ static int tlv_parse_compound(void *msg, ogs_tlv_desc_t *parent_desc,
             return OGS_ERROR;
         desc = tlv_find_desc_by_type_inst(&index, &offset, parent_desc, tlv->type, tlv->instance, curr_count->count);
         if (desc == NULL) {
-            ogs_warn("Unknown TLV type [%d]", tlv->type);
+            log_warn("Unknown TLV type [%d]", tlv->type);
             tlv = tlv->next;
             continue;
         }
@@ -688,7 +688,7 @@ static int tlv_parse_compound(void *msg, ogs_tlv_desc_t *parent_desc,
                 }
             }
             if (j == next_desc->length) {
-                ogs_fatal("Multiple of the same type TLV need more room");
+                log_fatal("Multiple of the same type TLV need more room");
                 tlv = tlv->next;
                 continue;
             }
@@ -699,11 +699,11 @@ static int tlv_parse_compound(void *msg, ogs_tlv_desc_t *parent_desc,
         if (desc->ctype == OGS_TLV_COMPOUND) {
             emb_tlv = ogs_tlv_parse_embedded_block(tlv, mode);
             if (emb_tlv == NULL) {
-                ogs_error("Error while parse TLV");
+                log_error("Error while parse TLV");
                 return OGS_ERROR;
             }
 
-            ogs_trace("PARSE %sC#%d [%s] T:%d I:%d (vsz=%d) off:%p ",
+            log_trace("PARSE %sC#%d [%s] T:%d I:%d (vsz=%d) off:%p ",
                     indent, i++, desc->name, desc->type, desc->instance,
                     desc->vsize, p + offset);
 
@@ -712,20 +712,20 @@ static int tlv_parse_compound(void *msg, ogs_tlv_desc_t *parent_desc,
             rv = tlv_parse_compound(
                     p + offset, desc, emb_tlv, depth + 1, mode);
             if (rv != OGS_OK) {
-                ogs_error("Can't parse compound TLV");
+                log_error("Can't parse compound TLV");
                 return OGS_ERROR;
             }
 
             *presence_p = 1;
         } else {
-            ogs_trace("PARSE %sL#%d [%s] T:%d L:%d I:%d "
+            log_trace("PARSE %sL#%d [%s] T:%d L:%d I:%d "
                     "(cls:%d vsz:%d) off:%p ",
                     indent, i++, desc->name, desc->type, desc->length,
                     desc->instance, desc->ctype, desc->vsize, p + offset);
 
             rv = tlv_parse_leaf(p + offset, desc, tlv);
             if (rv != OGS_OK) {
-                ogs_error("Can't parse leaf TLV");
+                log_error("Can't parse leaf TLV");
                 return OGS_ERROR;
             }
 
@@ -744,19 +744,19 @@ int ogs_tlv_parse_msg(void *msg, ogs_tlv_desc_t *desc, ogs_pkbuf_t *pkbuf,
     int rv;
     ogs_tlv_t *root;
 
-    ogs_assert(msg);
-    ogs_assert(desc);
-    ogs_assert(pkbuf);
+    log_assert(msg);
+    log_assert(desc);
+    log_assert(pkbuf);
 
-    ogs_assert(desc->ctype == OGS_TLV_MESSAGE);
+    log_assert(desc->ctype == OGS_TLV_MESSAGE);
     if (!desc->child_descs[0]) {
-        ogs_fatal("No Child Descs in [%s]", desc->name);
-        ogs_assert_if_reached();
+        log_fatal("No Child Descs in [%s]", desc->name);
+        log_assert_if_reached();
     }
 
     root = ogs_tlv_parse_block(pkbuf->len, pkbuf->data, mode);
     if (root == NULL) {
-        ogs_error("Can't parse TLV message");
+        log_error("Can't parse TLV message");
         return OGS_ERROR;
     }
 
@@ -783,7 +783,7 @@ static uint16_t parse_get_element_type(uint8_t *pos, uint8_t mode)
         type += *(pos++);
         break;
     default:
-        ogs_assert_if_reached();
+        log_assert_if_reached();
         break;
     }
 
@@ -808,7 +808,7 @@ static uint8_t *tlv_get_element_desc(ogs_tlv_t *tlv, uint8_t *blk, uint8_t msg_m
     tlv_tag_pos = 0; /* All tags with same instance should use the same tlv_desc, so take the first one */
     tlv_desc = tlv_find_desc_by_type_inst(&desc_index, &tlv_offset, desc, tlv_tag, instance, tlv_tag_pos);
     if (!tlv_desc) {
-        ogs_error("Can't parse find TLV description for type %u", tlv_tag);
+        log_error("Can't parse find TLV description for type %u", tlv_tag);
         return NULL;
     }
     tlv_mode = tlv_ctype2mode(tlv_desc->ctype, msg_mode);
@@ -830,28 +830,28 @@ static ogs_tlv_t *ogs_tlv_parse_block_desc(uint32_t length, void *data, uint8_t 
 
     root = curr = ogs_tlv_get();
 
-    ogs_assert(curr);
+    log_assert(curr);
 
     pos = tlv_get_element_desc(curr, pos, msg_mode, desc);
 
-    ogs_assert(pos);
+    log_assert(pos);
 
     while(pos - blk < length) {
         prev = curr;
 
         curr = ogs_tlv_get();
-        ogs_assert(curr);
+        log_assert(curr);
         prev->next = curr;
 
         pos = tlv_get_element_desc(curr, pos, msg_mode, desc);
-        ogs_assert(pos);
+        log_assert(pos);
     }
 
     if (length != (pos - blk)) {
-        ogs_error("ogs_tlv_parse_block() failed[LEN:%d,MODE:%d]",
+        log_error("ogs_tlv_parse_block() failed[LEN:%d,MODE:%d]",
                 length, msg_mode);
-        ogs_error("POS[%p] BLK[%p] POS-BLK[%d]", pos, blk, (int)(pos - blk));
-        ogs_log_hexdump(OGS_LOG_FATAL, data, length);
+        log_error("POS[%p] BLK[%p] POS-BLK[%d]", pos, blk, (int)(pos - blk));
+        log_hexdump(LOG_FATAL, data, length);
 
         ogs_tlv_free_all(root);
         return NULL;
@@ -869,16 +869,16 @@ int ogs_tlv_parse_msg_desc(
     int rv;
     ogs_tlv_t *root;
 
-    ogs_assert(msg);
-    ogs_assert(desc);
-    ogs_assert(pkbuf);
+    log_assert(msg);
+    log_assert(desc);
+    log_assert(pkbuf);
 
-    ogs_assert(desc->ctype == OGS_TLV_MESSAGE);
-    ogs_assert(desc->child_descs[0]);
+    log_assert(desc->ctype == OGS_TLV_MESSAGE);
+    log_assert(desc->child_descs[0]);
 
     root = ogs_tlv_parse_block_desc(pkbuf->len, pkbuf->data, msg_mode, desc);
     if (root == NULL) {
-        ogs_error("Can't parse TLV message");
+        log_error("Can't parse TLV message");
         return OGS_ERROR;
     }
 

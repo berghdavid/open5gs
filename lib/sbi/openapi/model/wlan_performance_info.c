@@ -10,7 +10,7 @@ OpenAPI_wlan_performance_info_t *OpenAPI_wlan_performance_info_create(
 )
 {
     OpenAPI_wlan_performance_info_t *wlan_performance_info_local_var = ogs_malloc(sizeof(OpenAPI_wlan_performance_info_t));
-    ogs_assert(wlan_performance_info_local_var);
+    log_assert(wlan_performance_info_local_var);
 
     wlan_performance_info_local_var->network_area = network_area;
     wlan_performance_info_local_var->wlan_per_ssid_infos = wlan_per_ssid_infos;
@@ -45,7 +45,7 @@ cJSON *OpenAPI_wlan_performance_info_convertToJSON(OpenAPI_wlan_performance_info
     OpenAPI_lnode_t *node = NULL;
 
     if (wlan_performance_info == NULL) {
-        ogs_error("OpenAPI_wlan_performance_info_convertToJSON() failed [WlanPerformanceInfo]");
+        log_error("OpenAPI_wlan_performance_info_convertToJSON() failed [WlanPerformanceInfo]");
         return NULL;
     }
 
@@ -53,29 +53,29 @@ cJSON *OpenAPI_wlan_performance_info_convertToJSON(OpenAPI_wlan_performance_info
     if (wlan_performance_info->network_area) {
     cJSON *network_area_local_JSON = OpenAPI_network_area_info_convertToJSON(wlan_performance_info->network_area);
     if (network_area_local_JSON == NULL) {
-        ogs_error("OpenAPI_wlan_performance_info_convertToJSON() failed [network_area]");
+        log_error("OpenAPI_wlan_performance_info_convertToJSON() failed [network_area]");
         goto end;
     }
     cJSON_AddItemToObject(item, "networkArea", network_area_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_wlan_performance_info_convertToJSON() failed [network_area]");
+        log_error("OpenAPI_wlan_performance_info_convertToJSON() failed [network_area]");
         goto end;
     }
     }
 
     if (!wlan_performance_info->wlan_per_ssid_infos) {
-        ogs_error("OpenAPI_wlan_performance_info_convertToJSON() failed [wlan_per_ssid_infos]");
+        log_error("OpenAPI_wlan_performance_info_convertToJSON() failed [wlan_per_ssid_infos]");
         return NULL;
     }
     cJSON *wlan_per_ssid_infosList = cJSON_AddArrayToObject(item, "wlanPerSsidInfos");
     if (wlan_per_ssid_infosList == NULL) {
-        ogs_error("OpenAPI_wlan_performance_info_convertToJSON() failed [wlan_per_ssid_infos]");
+        log_error("OpenAPI_wlan_performance_info_convertToJSON() failed [wlan_per_ssid_infos]");
         goto end;
     }
     OpenAPI_list_for_each(wlan_performance_info->wlan_per_ssid_infos, node) {
         cJSON *itemLocal = OpenAPI_wlan_per_ss_id_performance_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_wlan_performance_info_convertToJSON() failed [wlan_per_ssid_infos]");
+            log_error("OpenAPI_wlan_performance_info_convertToJSON() failed [wlan_per_ssid_infos]");
             goto end;
         }
         cJSON_AddItemToArray(wlan_per_ssid_infosList, itemLocal);
@@ -97,19 +97,19 @@ OpenAPI_wlan_performance_info_t *OpenAPI_wlan_performance_info_parseFromJSON(cJS
     if (network_area) {
     network_area_local_nonprim = OpenAPI_network_area_info_parseFromJSON(network_area);
     if (!network_area_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [network_area]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [network_area]");
         goto end;
     }
     }
 
     wlan_per_ssid_infos = cJSON_GetObjectItemCaseSensitive(wlan_performance_infoJSON, "wlanPerSsidInfos");
     if (!wlan_per_ssid_infos) {
-        ogs_error("OpenAPI_wlan_performance_info_parseFromJSON() failed [wlan_per_ssid_infos]");
+        log_error("OpenAPI_wlan_performance_info_parseFromJSON() failed [wlan_per_ssid_infos]");
         goto end;
     }
         cJSON *wlan_per_ssid_infos_local = NULL;
         if (!cJSON_IsArray(wlan_per_ssid_infos)) {
-            ogs_error("OpenAPI_wlan_performance_info_parseFromJSON() failed [wlan_per_ssid_infos]");
+            log_error("OpenAPI_wlan_performance_info_parseFromJSON() failed [wlan_per_ssid_infos]");
             goto end;
         }
 
@@ -117,12 +117,12 @@ OpenAPI_wlan_performance_info_t *OpenAPI_wlan_performance_info_parseFromJSON(cJS
 
         cJSON_ArrayForEach(wlan_per_ssid_infos_local, wlan_per_ssid_infos) {
             if (!cJSON_IsObject(wlan_per_ssid_infos_local)) {
-                ogs_error("OpenAPI_wlan_performance_info_parseFromJSON() failed [wlan_per_ssid_infos]");
+                log_error("OpenAPI_wlan_performance_info_parseFromJSON() failed [wlan_per_ssid_infos]");
                 goto end;
             }
             OpenAPI_wlan_per_ss_id_performance_info_t *wlan_per_ssid_infosItem = OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON(wlan_per_ssid_infos_local);
             if (!wlan_per_ssid_infosItem) {
-                ogs_error("No wlan_per_ssid_infosItem");
+                log_error("No wlan_per_ssid_infosItem");
                 goto end;
             }
             OpenAPI_list_add(wlan_per_ssid_infosList, wlan_per_ssid_infosItem);
@@ -154,10 +154,10 @@ OpenAPI_wlan_performance_info_t *OpenAPI_wlan_performance_info_copy(OpenAPI_wlan
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_wlan_performance_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_wlan_performance_info_convertToJSON() failed");
+        log_error("OpenAPI_wlan_performance_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -165,14 +165,14 @@ OpenAPI_wlan_performance_info_t *OpenAPI_wlan_performance_info_copy(OpenAPI_wlan
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

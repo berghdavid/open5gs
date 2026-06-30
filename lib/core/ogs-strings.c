@@ -66,7 +66,7 @@ int ogs_vsnprintf(char *str, size_t size, const char *format, va_list ap)
     /* Microsoft has finally implemented snprintf in Visual Studio 2015.
      * In previous versions, I will simulate it as below. */
 #if defined(_MSC_VER) && _MSC_VER < 1900
-    ogs_assert(str);
+    log_assert(str);
 
     if (size != 0)
         r = _vsnprintf_s(str, size, _TRUNCATE, format, ap);
@@ -97,7 +97,7 @@ char *ogs_vslprintf(char *str, char *last, const char *format, va_list ap)
 {
     int r = -1;
 
-    ogs_assert(last);
+    log_assert(last);
 
     if (!str)
         return NULL;
@@ -154,7 +154,7 @@ char *ogs_talloc_strdup(const void *t, const char *p)
     ogs_thread_mutex_lock(ogs_mem_get_mutex());
 
     ptr = talloc_strdup(t, p);
-    ogs_expect(ptr);
+    log_expect(ptr);
 
     ogs_thread_mutex_unlock(ogs_mem_get_mutex());
 
@@ -168,7 +168,7 @@ char *ogs_talloc_strndup(const void *t, const char *p, size_t n)
     ogs_thread_mutex_lock(ogs_mem_get_mutex());
 
     ptr = talloc_strndup(t, p, n);
-    ogs_expect(ptr);
+    log_expect(ptr);
 
     ogs_thread_mutex_unlock(ogs_mem_get_mutex());
 
@@ -182,7 +182,7 @@ void *ogs_talloc_memdup(const void *t, const void *p, size_t size)
     ogs_thread_mutex_lock(ogs_mem_get_mutex());
 
     ptr = talloc_memdup(t, p, size);
-    ogs_expect(ptr);
+    log_expect(ptr);
 
     ogs_thread_mutex_unlock(ogs_mem_get_mutex());
 
@@ -198,7 +198,7 @@ char *ogs_talloc_asprintf(const void *t, const char *fmt, ...)
 
     va_start(ap, fmt);
     ret = talloc_vasprintf(t, fmt, ap);
-    ogs_expect(ret);
+    log_expect(ret);
     va_end(ap);
 
     ogs_thread_mutex_unlock(ogs_mem_get_mutex());
@@ -214,7 +214,7 @@ char *ogs_talloc_asprintf_append(char *s, const char *fmt, ...)
 
     va_start(ap, fmt);
     s = talloc_vasprintf_append(s, fmt, ap);
-    ogs_expect(s);
+    log_expect(s);
     va_end(ap);
 
     ogs_thread_mutex_unlock(ogs_mem_get_mutex());
@@ -238,7 +238,7 @@ char *ogs_strdup_debug(const char *s, const char *file_line)
     len = strlen(s) + 1;
     res = ogs_memdup_debug(s, len, file_line);
     if (!res) {
-        ogs_error("ogs_memdup_debug[len:%d] failed", (int)len);
+        log_error("ogs_memdup_debug[len:%d] failed", (int)len);
         return res;
     }
     return res;
@@ -258,7 +258,7 @@ char *ogs_strndup_debug(
         n = end - s;
     res = ogs_malloc_debug(n + 1, file_line);
     if (!res) {
-        ogs_error("ogs_malloc_debug[n:%d] failed", (int)n);
+        log_error("ogs_malloc_debug[n:%d] failed", (int)n);
         return res;
     }
     memcpy(res, s, n);
@@ -276,7 +276,7 @@ void *ogs_memdup_debug(
 
     res = ogs_malloc_debug(n, file_line);
     if (!res) {
-        ogs_error("ogs_malloc_debug[n:%d] failed", (int)n);
+        log_error("ogs_malloc_debug[n:%d] failed", (int)n);
         return res;
     }
     memcpy(res, m, n);

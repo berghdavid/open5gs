@@ -16,7 +16,7 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_create(
 )
 {
     OpenAPI_pgw_info_t *pgw_info_local_var = ogs_malloc(sizeof(OpenAPI_pgw_info_t));
-    ogs_assert(pgw_info_local_var);
+    log_assert(pgw_info_local_var);
 
     pgw_info_local_var->dnn = dnn;
     pgw_info_local_var->pgw_fqdn = pgw_fqdn;
@@ -70,38 +70,38 @@ cJSON *OpenAPI_pgw_info_convertToJSON(OpenAPI_pgw_info_t *pgw_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (pgw_info == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [PgwInfo]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [PgwInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!pgw_info->dnn) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [dnn]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "dnn", pgw_info->dnn) == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [dnn]");
         goto end;
     }
 
     if (!pgw_info->pgw_fqdn) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [pgw_fqdn]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [pgw_fqdn]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "pgwFqdn", pgw_info->pgw_fqdn) == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [pgw_fqdn]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [pgw_fqdn]");
         goto end;
     }
 
     if (pgw_info->pgw_ip_addr) {
     cJSON *pgw_ip_addr_local_JSON = OpenAPI_ip_address_convertToJSON(pgw_info->pgw_ip_addr);
     if (pgw_ip_addr_local_JSON == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [pgw_ip_addr]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [pgw_ip_addr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "pgwIpAddr", pgw_ip_addr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [pgw_ip_addr]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [pgw_ip_addr]");
         goto end;
     }
     }
@@ -109,33 +109,33 @@ cJSON *OpenAPI_pgw_info_convertToJSON(OpenAPI_pgw_info_t *pgw_info)
     if (pgw_info->plmn_id) {
     cJSON *plmn_id_local_JSON = OpenAPI_plmn_id_convertToJSON(pgw_info->plmn_id);
     if (plmn_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [plmn_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "plmnId", plmn_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [plmn_id]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [plmn_id]");
         goto end;
     }
     }
 
     if (pgw_info->is_epdg_ind) {
     if (cJSON_AddBoolToObject(item, "epdgInd", pgw_info->epdg_ind) == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [epdg_ind]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [epdg_ind]");
         goto end;
     }
     }
 
     if (pgw_info->pcf_id) {
     if (cJSON_AddStringToObject(item, "pcfId", pgw_info->pcf_id) == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [pcf_id]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [pcf_id]");
         goto end;
     }
     }
 
     if (pgw_info->registration_time) {
     if (cJSON_AddStringToObject(item, "registrationTime", pgw_info->registration_time) == NULL) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed [registration_time]");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed [registration_time]");
         goto end;
     }
     }
@@ -159,21 +159,21 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_parseFromJSON(cJSON *pgw_infoJSON)
     cJSON *registration_time = NULL;
     dnn = cJSON_GetObjectItemCaseSensitive(pgw_infoJSON, "dnn");
     if (!dnn) {
-        ogs_error("OpenAPI_pgw_info_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_pgw_info_parseFromJSON() failed [dnn]");
         goto end;
     }
     if (!cJSON_IsString(dnn)) {
-        ogs_error("OpenAPI_pgw_info_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_pgw_info_parseFromJSON() failed [dnn]");
         goto end;
     }
 
     pgw_fqdn = cJSON_GetObjectItemCaseSensitive(pgw_infoJSON, "pgwFqdn");
     if (!pgw_fqdn) {
-        ogs_error("OpenAPI_pgw_info_parseFromJSON() failed [pgw_fqdn]");
+        log_error("OpenAPI_pgw_info_parseFromJSON() failed [pgw_fqdn]");
         goto end;
     }
     if (!cJSON_IsString(pgw_fqdn)) {
-        ogs_error("OpenAPI_pgw_info_parseFromJSON() failed [pgw_fqdn]");
+        log_error("OpenAPI_pgw_info_parseFromJSON() failed [pgw_fqdn]");
         goto end;
     }
 
@@ -181,7 +181,7 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_parseFromJSON(cJSON *pgw_infoJSON)
     if (pgw_ip_addr) {
     pgw_ip_addr_local_nonprim = OpenAPI_ip_address_parseFromJSON(pgw_ip_addr);
     if (!pgw_ip_addr_local_nonprim) {
-        ogs_error("OpenAPI_ip_address_parseFromJSON failed [pgw_ip_addr]");
+        log_error("OpenAPI_ip_address_parseFromJSON failed [pgw_ip_addr]");
         goto end;
     }
     }
@@ -190,7 +190,7 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_parseFromJSON(cJSON *pgw_infoJSON)
     if (plmn_id) {
     plmn_id_local_nonprim = OpenAPI_plmn_id_parseFromJSON(plmn_id);
     if (!plmn_id_local_nonprim) {
-        ogs_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
+        log_error("OpenAPI_plmn_id_parseFromJSON failed [plmn_id]");
         goto end;
     }
     }
@@ -198,7 +198,7 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_parseFromJSON(cJSON *pgw_infoJSON)
     epdg_ind = cJSON_GetObjectItemCaseSensitive(pgw_infoJSON, "epdgInd");
     if (epdg_ind) {
     if (!cJSON_IsBool(epdg_ind)) {
-        ogs_error("OpenAPI_pgw_info_parseFromJSON() failed [epdg_ind]");
+        log_error("OpenAPI_pgw_info_parseFromJSON() failed [epdg_ind]");
         goto end;
     }
     }
@@ -206,7 +206,7 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_parseFromJSON(cJSON *pgw_infoJSON)
     pcf_id = cJSON_GetObjectItemCaseSensitive(pgw_infoJSON, "pcfId");
     if (pcf_id) {
     if (!cJSON_IsString(pcf_id) && !cJSON_IsNull(pcf_id)) {
-        ogs_error("OpenAPI_pgw_info_parseFromJSON() failed [pcf_id]");
+        log_error("OpenAPI_pgw_info_parseFromJSON() failed [pcf_id]");
         goto end;
     }
     }
@@ -214,7 +214,7 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_parseFromJSON(cJSON *pgw_infoJSON)
     registration_time = cJSON_GetObjectItemCaseSensitive(pgw_infoJSON, "registrationTime");
     if (registration_time) {
     if (!cJSON_IsString(registration_time) && !cJSON_IsNull(registration_time)) {
-        ogs_error("OpenAPI_pgw_info_parseFromJSON() failed [registration_time]");
+        log_error("OpenAPI_pgw_info_parseFromJSON() failed [registration_time]");
         goto end;
     }
     }
@@ -248,10 +248,10 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_copy(OpenAPI_pgw_info_t *dst, OpenAPI_pgw_i
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pgw_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pgw_info_convertToJSON() failed");
+        log_error("OpenAPI_pgw_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -259,14 +259,14 @@ OpenAPI_pgw_info_t *OpenAPI_pgw_info_copy(OpenAPI_pgw_info_t *dst, OpenAPI_pgw_i
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -10,7 +10,7 @@ OpenAPI_eas_ip_replacement_info_t *OpenAPI_eas_ip_replacement_info_create(
 )
 {
     OpenAPI_eas_ip_replacement_info_t *eas_ip_replacement_info_local_var = ogs_malloc(sizeof(OpenAPI_eas_ip_replacement_info_t));
-    ogs_assert(eas_ip_replacement_info_local_var);
+    log_assert(eas_ip_replacement_info_local_var);
 
     eas_ip_replacement_info_local_var->source = source;
     eas_ip_replacement_info_local_var->target = target;
@@ -42,38 +42,38 @@ cJSON *OpenAPI_eas_ip_replacement_info_convertToJSON(OpenAPI_eas_ip_replacement_
     OpenAPI_lnode_t *node = NULL;
 
     if (eas_ip_replacement_info == NULL) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [EasIpReplacementInfo]");
+        log_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [EasIpReplacementInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!eas_ip_replacement_info->source) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [source]");
+        log_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [source]");
         return NULL;
     }
     cJSON *source_local_JSON = OpenAPI_eas_server_address_convertToJSON(eas_ip_replacement_info->source);
     if (source_local_JSON == NULL) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [source]");
+        log_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [source]");
         goto end;
     }
     cJSON_AddItemToObject(item, "source", source_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [source]");
+        log_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [source]");
         goto end;
     }
 
     if (!eas_ip_replacement_info->target) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [target]");
+        log_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [target]");
         return NULL;
     }
     cJSON *target_local_JSON = OpenAPI_eas_server_address_convertToJSON(eas_ip_replacement_info->target);
     if (target_local_JSON == NULL) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [target]");
+        log_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [target]");
         goto end;
     }
     cJSON_AddItemToObject(item, "target", target_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [target]");
+        log_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed [target]");
         goto end;
     }
 
@@ -91,23 +91,23 @@ OpenAPI_eas_ip_replacement_info_t *OpenAPI_eas_ip_replacement_info_parseFromJSON
     OpenAPI_eas_server_address_t *target_local_nonprim = NULL;
     source = cJSON_GetObjectItemCaseSensitive(eas_ip_replacement_infoJSON, "source");
     if (!source) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_parseFromJSON() failed [source]");
+        log_error("OpenAPI_eas_ip_replacement_info_parseFromJSON() failed [source]");
         goto end;
     }
     source_local_nonprim = OpenAPI_eas_server_address_parseFromJSON(source);
     if (!source_local_nonprim) {
-        ogs_error("OpenAPI_eas_server_address_parseFromJSON failed [source]");
+        log_error("OpenAPI_eas_server_address_parseFromJSON failed [source]");
         goto end;
     }
 
     target = cJSON_GetObjectItemCaseSensitive(eas_ip_replacement_infoJSON, "target");
     if (!target) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_parseFromJSON() failed [target]");
+        log_error("OpenAPI_eas_ip_replacement_info_parseFromJSON() failed [target]");
         goto end;
     }
     target_local_nonprim = OpenAPI_eas_server_address_parseFromJSON(target);
     if (!target_local_nonprim) {
-        ogs_error("OpenAPI_eas_server_address_parseFromJSON failed [target]");
+        log_error("OpenAPI_eas_server_address_parseFromJSON failed [target]");
         goto end;
     }
 
@@ -134,10 +134,10 @@ OpenAPI_eas_ip_replacement_info_t *OpenAPI_eas_ip_replacement_info_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_eas_ip_replacement_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed");
+        log_error("OpenAPI_eas_ip_replacement_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -145,14 +145,14 @@ OpenAPI_eas_ip_replacement_info_t *OpenAPI_eas_ip_replacement_info_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

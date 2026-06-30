@@ -9,7 +9,7 @@ OpenAPI_shared_data_id_range_t *OpenAPI_shared_data_id_range_create(
 )
 {
     OpenAPI_shared_data_id_range_t *shared_data_id_range_local_var = ogs_malloc(sizeof(OpenAPI_shared_data_id_range_t));
-    ogs_assert(shared_data_id_range_local_var);
+    log_assert(shared_data_id_range_local_var);
 
     shared_data_id_range_local_var->pattern = pattern;
 
@@ -36,14 +36,14 @@ cJSON *OpenAPI_shared_data_id_range_convertToJSON(OpenAPI_shared_data_id_range_t
     OpenAPI_lnode_t *node = NULL;
 
     if (shared_data_id_range == NULL) {
-        ogs_error("OpenAPI_shared_data_id_range_convertToJSON() failed [SharedDataIdRange]");
+        log_error("OpenAPI_shared_data_id_range_convertToJSON() failed [SharedDataIdRange]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (shared_data_id_range->pattern) {
     if (cJSON_AddStringToObject(item, "pattern", shared_data_id_range->pattern) == NULL) {
-        ogs_error("OpenAPI_shared_data_id_range_convertToJSON() failed [pattern]");
+        log_error("OpenAPI_shared_data_id_range_convertToJSON() failed [pattern]");
         goto end;
     }
     }
@@ -60,7 +60,7 @@ OpenAPI_shared_data_id_range_t *OpenAPI_shared_data_id_range_parseFromJSON(cJSON
     pattern = cJSON_GetObjectItemCaseSensitive(shared_data_id_rangeJSON, "pattern");
     if (pattern) {
     if (!cJSON_IsString(pattern) && !cJSON_IsNull(pattern)) {
-        ogs_error("OpenAPI_shared_data_id_range_parseFromJSON() failed [pattern]");
+        log_error("OpenAPI_shared_data_id_range_parseFromJSON() failed [pattern]");
         goto end;
     }
     }
@@ -79,10 +79,10 @@ OpenAPI_shared_data_id_range_t *OpenAPI_shared_data_id_range_copy(OpenAPI_shared
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_shared_data_id_range_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_shared_data_id_range_convertToJSON() failed");
+        log_error("OpenAPI_shared_data_id_range_convertToJSON() failed");
         return NULL;
     }
 
@@ -90,14 +90,14 @@ OpenAPI_shared_data_id_range_t *OpenAPI_shared_data_id_range_copy(OpenAPI_shared
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

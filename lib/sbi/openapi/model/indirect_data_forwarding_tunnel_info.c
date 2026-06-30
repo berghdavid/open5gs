@@ -15,7 +15,7 @@ OpenAPI_indirect_data_forwarding_tunnel_info_t *OpenAPI_indirect_data_forwarding
 )
 {
     OpenAPI_indirect_data_forwarding_tunnel_info_t *indirect_data_forwarding_tunnel_info_local_var = ogs_malloc(sizeof(OpenAPI_indirect_data_forwarding_tunnel_info_t));
-    ogs_assert(indirect_data_forwarding_tunnel_info_local_var);
+    log_assert(indirect_data_forwarding_tunnel_info_local_var);
 
     indirect_data_forwarding_tunnel_info_local_var->ipv4_addr = ipv4_addr;
     indirect_data_forwarding_tunnel_info_local_var->ipv6_addr = ipv6_addr;
@@ -56,44 +56,44 @@ cJSON *OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON(OpenAPI_indire
     OpenAPI_lnode_t *node = NULL;
 
     if (indirect_data_forwarding_tunnel_info == NULL) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [IndirectDataForwardingTunnelInfo]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [IndirectDataForwardingTunnelInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (indirect_data_forwarding_tunnel_info->ipv4_addr) {
     if (cJSON_AddStringToObject(item, "ipv4Addr", indirect_data_forwarding_tunnel_info->ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [ipv4_addr]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [ipv4_addr]");
         goto end;
     }
     }
 
     if (indirect_data_forwarding_tunnel_info->ipv6_addr) {
     if (cJSON_AddStringToObject(item, "ipv6Addr", indirect_data_forwarding_tunnel_info->ipv6_addr) == NULL) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [ipv6_addr]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [ipv6_addr]");
         goto end;
     }
     }
 
     if (!indirect_data_forwarding_tunnel_info->gtp_teid) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [gtp_teid]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [gtp_teid]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "gtpTeid", indirect_data_forwarding_tunnel_info->gtp_teid) == NULL) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [gtp_teid]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [gtp_teid]");
         goto end;
     }
 
     if (indirect_data_forwarding_tunnel_info->is_drb_id) {
     if (cJSON_AddNumberToObject(item, "drbId", indirect_data_forwarding_tunnel_info->drb_id) == NULL) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [drb_id]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [drb_id]");
         goto end;
     }
     }
 
     if (indirect_data_forwarding_tunnel_info->is_additional_tnl_nb) {
     if (cJSON_AddNumberToObject(item, "additionalTnlNb", indirect_data_forwarding_tunnel_info->additional_tnl_nb) == NULL) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [additional_tnl_nb]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed [additional_tnl_nb]");
         goto end;
     }
     }
@@ -114,7 +114,7 @@ OpenAPI_indirect_data_forwarding_tunnel_info_t *OpenAPI_indirect_data_forwarding
     ipv4_addr = cJSON_GetObjectItemCaseSensitive(indirect_data_forwarding_tunnel_infoJSON, "ipv4Addr");
     if (ipv4_addr) {
     if (!cJSON_IsString(ipv4_addr) && !cJSON_IsNull(ipv4_addr)) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [ipv4_addr]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [ipv4_addr]");
         goto end;
     }
     }
@@ -122,25 +122,25 @@ OpenAPI_indirect_data_forwarding_tunnel_info_t *OpenAPI_indirect_data_forwarding
     ipv6_addr = cJSON_GetObjectItemCaseSensitive(indirect_data_forwarding_tunnel_infoJSON, "ipv6Addr");
     if (ipv6_addr) {
     if (!cJSON_IsString(ipv6_addr) && !cJSON_IsNull(ipv6_addr)) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [ipv6_addr]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [ipv6_addr]");
         goto end;
     }
     }
 
     gtp_teid = cJSON_GetObjectItemCaseSensitive(indirect_data_forwarding_tunnel_infoJSON, "gtpTeid");
     if (!gtp_teid) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [gtp_teid]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [gtp_teid]");
         goto end;
     }
     if (!cJSON_IsString(gtp_teid)) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [gtp_teid]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [gtp_teid]");
         goto end;
     }
 
     drb_id = cJSON_GetObjectItemCaseSensitive(indirect_data_forwarding_tunnel_infoJSON, "drbId");
     if (drb_id) {
     if (!cJSON_IsNumber(drb_id)) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [drb_id]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [drb_id]");
         goto end;
     }
     }
@@ -148,7 +148,7 @@ OpenAPI_indirect_data_forwarding_tunnel_info_t *OpenAPI_indirect_data_forwarding
     additional_tnl_nb = cJSON_GetObjectItemCaseSensitive(indirect_data_forwarding_tunnel_infoJSON, "additionalTnlNb");
     if (additional_tnl_nb) {
     if (!cJSON_IsNumber(additional_tnl_nb)) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [additional_tnl_nb]");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_parseFromJSON() failed [additional_tnl_nb]");
         goto end;
     }
     }
@@ -173,10 +173,10 @@ OpenAPI_indirect_data_forwarding_tunnel_info_t *OpenAPI_indirect_data_forwarding
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed");
+        log_error("OpenAPI_indirect_data_forwarding_tunnel_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -184,14 +184,14 @@ OpenAPI_indirect_data_forwarding_tunnel_info_t *OpenAPI_indirect_data_forwarding
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

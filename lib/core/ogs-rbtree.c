@@ -93,12 +93,12 @@ void ogs_rbtree_insert_color(ogs_rbtree_t *tree, void *rb_node)
 {
     ogs_rbnode_t *node = rb_node;
     ogs_rbnode_t *parent;
-    ogs_assert(tree);
-    ogs_assert(node);
+    log_assert(tree);
+    log_assert(node);
 
     while ((parent = node->parent) && parent->color == OGS_RBTREE_RED) {
         ogs_rbnode_t *gparent = parent->parent;
-        ogs_assert(gparent);
+        log_assert(gparent);
 
         /* parent == grandparent's left child */
         if (parent == gparent->left) {
@@ -205,7 +205,7 @@ void ogs_rbtree_insert_color(ogs_rbtree_t *tree, void *rb_node)
         }
     }
 
-    ogs_assert(tree->root);
+    log_assert(tree->root);
     tree->root->color = OGS_RBTREE_BLACK;
 }
 
@@ -213,7 +213,7 @@ static void rb_delete_color(
     ogs_rbtree_t *tree, ogs_rbnode_t *node, ogs_rbnode_t *parent)
 {
     ogs_rbnode_t *sibling;
-    ogs_assert(tree);
+    log_assert(tree);
 
 #define rb_is_black(r) ((!r) || (r)->color == OGS_RBTREE_BLACK)
     while (node != tree->root && rb_is_black(node)) {
@@ -325,8 +325,8 @@ void ogs_rbtree_delete(ogs_rbtree_t *tree, void *rb_node)
     ogs_rbnode_t *node = rb_node;
     ogs_rbnode_t *child, *parent;
     ogs_rbtree_color_e color;
-    ogs_assert(tree);
-    ogs_assert(node);
+    log_assert(tree);
+    log_assert(node);
 
     if (!node->left) {
         child = node->right;
@@ -374,7 +374,7 @@ void ogs_rbtree_delete(ogs_rbtree_t *tree, void *rb_node)
 void *ogs_rbtree_first(const ogs_rbtree_t *tree)
 {
     ogs_rbnode_t *node;
-    ogs_assert(tree);
+    log_assert(tree);
 
     node = tree->root;
     if (!node)
@@ -386,7 +386,7 @@ void *ogs_rbtree_first(const ogs_rbtree_t *tree)
 void *ogs_rbtree_last(const ogs_rbtree_t *tree)
 {
     ogs_rbnode_t *node;
-    ogs_assert(tree);
+    log_assert(tree);
 
     node = tree->root;
     if (!node)
@@ -401,7 +401,7 @@ void *ogs_rbtree_next(const void *rb_node)
 {
     const ogs_rbnode_t *node = rb_node;
     ogs_rbnode_t *parent;
-    ogs_assert(node);
+    log_assert(node);
 
     if (rb_empty_node(node))
         return NULL;
@@ -419,7 +419,7 @@ void *ogs_rbtree_prev(const void *rb_node)
 {
     const ogs_rbnode_t *node = rb_node;
     ogs_rbnode_t *parent;
-    ogs_assert(node);
+    log_assert(node);
 
     if (rb_empty_node(node))
         return NULL;

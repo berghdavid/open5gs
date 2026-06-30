@@ -17,7 +17,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
 )
 {
     OpenAPI_nrf_info_served_bsf_info_value_t *nrf_info_served_bsf_info_value_local_var = ogs_malloc(sizeof(OpenAPI_nrf_info_served_bsf_info_value_t));
-    ogs_assert(nrf_info_served_bsf_info_value_local_var);
+    log_assert(nrf_info_served_bsf_info_value_local_var);
 
     nrf_info_served_bsf_info_value_local_var->dnn_list = dnn_list;
     nrf_info_served_bsf_info_value_local_var->ip_domain_list = ip_domain_list;
@@ -102,7 +102,7 @@ cJSON *OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(OpenAPI_nrf_info_ser
     OpenAPI_lnode_t *node = NULL;
 
     if (nrf_info_served_bsf_info_value == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [NrfInfo_servedBsfInfo_value]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [NrfInfo_servedBsfInfo_value]");
         return NULL;
     }
 
@@ -110,12 +110,12 @@ cJSON *OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(OpenAPI_nrf_info_ser
     if (nrf_info_served_bsf_info_value->dnn_list) {
     cJSON *dnn_listList = cJSON_AddArrayToObject(item, "dnnList");
     if (dnn_listList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [dnn_list]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [dnn_list]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_bsf_info_value->dnn_list, node) {
         if (cJSON_AddStringToObject(dnn_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [dnn_list]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [dnn_list]");
             goto end;
         }
     }
@@ -124,12 +124,12 @@ cJSON *OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(OpenAPI_nrf_info_ser
     if (nrf_info_served_bsf_info_value->ip_domain_list) {
     cJSON *ip_domain_listList = cJSON_AddArrayToObject(item, "ipDomainList");
     if (ip_domain_listList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ip_domain_list]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ip_domain_list]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_bsf_info_value->ip_domain_list, node) {
         if (cJSON_AddStringToObject(ip_domain_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ip_domain_list]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ip_domain_list]");
             goto end;
         }
     }
@@ -138,13 +138,13 @@ cJSON *OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(OpenAPI_nrf_info_ser
     if (nrf_info_served_bsf_info_value->ipv4_address_ranges) {
     cJSON *ipv4_address_rangesList = cJSON_AddArrayToObject(item, "ipv4AddressRanges");
     if (ipv4_address_rangesList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ipv4_address_ranges]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ipv4_address_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_bsf_info_value->ipv4_address_ranges, node) {
         cJSON *itemLocal = OpenAPI_ipv4_address_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ipv4_address_ranges]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ipv4_address_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(ipv4_address_rangesList, itemLocal);
@@ -154,13 +154,13 @@ cJSON *OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(OpenAPI_nrf_info_ser
     if (nrf_info_served_bsf_info_value->ipv6_prefix_ranges) {
     cJSON *ipv6_prefix_rangesList = cJSON_AddArrayToObject(item, "ipv6PrefixRanges");
     if (ipv6_prefix_rangesList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ipv6_prefix_ranges]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ipv6_prefix_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_bsf_info_value->ipv6_prefix_ranges, node) {
         cJSON *itemLocal = OpenAPI_ipv6_prefix_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ipv6_prefix_ranges]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [ipv6_prefix_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(ipv6_prefix_rangesList, itemLocal);
@@ -169,21 +169,21 @@ cJSON *OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(OpenAPI_nrf_info_ser
 
     if (nrf_info_served_bsf_info_value->rx_diam_host) {
     if (cJSON_AddStringToObject(item, "rxDiamHost", nrf_info_served_bsf_info_value->rx_diam_host) == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [rx_diam_host]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [rx_diam_host]");
         goto end;
     }
     }
 
     if (nrf_info_served_bsf_info_value->rx_diam_realm) {
     if (cJSON_AddStringToObject(item, "rxDiamRealm", nrf_info_served_bsf_info_value->rx_diam_realm) == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [rx_diam_realm]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [rx_diam_realm]");
         goto end;
     }
     }
 
     if (nrf_info_served_bsf_info_value->group_id) {
     if (cJSON_AddStringToObject(item, "groupId", nrf_info_served_bsf_info_value->group_id) == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [group_id]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [group_id]");
         goto end;
     }
     }
@@ -191,13 +191,13 @@ cJSON *OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(OpenAPI_nrf_info_ser
     if (nrf_info_served_bsf_info_value->supi_ranges) {
     cJSON *supi_rangesList = cJSON_AddArrayToObject(item, "supiRanges");
     if (supi_rangesList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [supi_ranges]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [supi_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_bsf_info_value->supi_ranges, node) {
         cJSON *itemLocal = OpenAPI_supi_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [supi_ranges]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [supi_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(supi_rangesList, itemLocal);
@@ -207,13 +207,13 @@ cJSON *OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(OpenAPI_nrf_info_ser
     if (nrf_info_served_bsf_info_value->gpsi_ranges) {
     cJSON *gpsi_rangesList = cJSON_AddArrayToObject(item, "gpsiRanges");
     if (gpsi_rangesList == NULL) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [gpsi_ranges]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [gpsi_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(nrf_info_served_bsf_info_value->gpsi_ranges, node) {
         cJSON *itemLocal = OpenAPI_identity_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [gpsi_ranges]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed [gpsi_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(gpsi_rangesList, itemLocal);
@@ -247,7 +247,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     if (dnn_list) {
         cJSON *dnn_list_local = NULL;
         if (!cJSON_IsArray(dnn_list)) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [dnn_list]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [dnn_list]");
             goto end;
         }
 
@@ -257,7 +257,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(dnn_list_local)) {
-                ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [dnn_list]");
+                log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [dnn_list]");
                 goto end;
             }
             OpenAPI_list_add(dnn_listList, ogs_strdup(dnn_list_local->valuestring));
@@ -268,7 +268,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     if (ip_domain_list) {
         cJSON *ip_domain_list_local = NULL;
         if (!cJSON_IsArray(ip_domain_list)) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ip_domain_list]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ip_domain_list]");
             goto end;
         }
 
@@ -278,7 +278,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ip_domain_list_local)) {
-                ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ip_domain_list]");
+                log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ip_domain_list]");
                 goto end;
             }
             OpenAPI_list_add(ip_domain_listList, ogs_strdup(ip_domain_list_local->valuestring));
@@ -289,7 +289,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     if (ipv4_address_ranges) {
         cJSON *ipv4_address_ranges_local = NULL;
         if (!cJSON_IsArray(ipv4_address_ranges)) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ipv4_address_ranges]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ipv4_address_ranges]");
             goto end;
         }
 
@@ -297,12 +297,12 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
 
         cJSON_ArrayForEach(ipv4_address_ranges_local, ipv4_address_ranges) {
             if (!cJSON_IsObject(ipv4_address_ranges_local)) {
-                ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ipv4_address_ranges]");
+                log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ipv4_address_ranges]");
                 goto end;
             }
             OpenAPI_ipv4_address_range_t *ipv4_address_rangesItem = OpenAPI_ipv4_address_range_parseFromJSON(ipv4_address_ranges_local);
             if (!ipv4_address_rangesItem) {
-                ogs_error("No ipv4_address_rangesItem");
+                log_error("No ipv4_address_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(ipv4_address_rangesList, ipv4_address_rangesItem);
@@ -313,7 +313,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     if (ipv6_prefix_ranges) {
         cJSON *ipv6_prefix_ranges_local = NULL;
         if (!cJSON_IsArray(ipv6_prefix_ranges)) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ipv6_prefix_ranges]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ipv6_prefix_ranges]");
             goto end;
         }
 
@@ -321,12 +321,12 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
 
         cJSON_ArrayForEach(ipv6_prefix_ranges_local, ipv6_prefix_ranges) {
             if (!cJSON_IsObject(ipv6_prefix_ranges_local)) {
-                ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ipv6_prefix_ranges]");
+                log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [ipv6_prefix_ranges]");
                 goto end;
             }
             OpenAPI_ipv6_prefix_range_t *ipv6_prefix_rangesItem = OpenAPI_ipv6_prefix_range_parseFromJSON(ipv6_prefix_ranges_local);
             if (!ipv6_prefix_rangesItem) {
-                ogs_error("No ipv6_prefix_rangesItem");
+                log_error("No ipv6_prefix_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(ipv6_prefix_rangesList, ipv6_prefix_rangesItem);
@@ -336,7 +336,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     rx_diam_host = cJSON_GetObjectItemCaseSensitive(nrf_info_served_bsf_info_valueJSON, "rxDiamHost");
     if (rx_diam_host) {
     if (!cJSON_IsString(rx_diam_host) && !cJSON_IsNull(rx_diam_host)) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [rx_diam_host]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [rx_diam_host]");
         goto end;
     }
     }
@@ -344,7 +344,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     rx_diam_realm = cJSON_GetObjectItemCaseSensitive(nrf_info_served_bsf_info_valueJSON, "rxDiamRealm");
     if (rx_diam_realm) {
     if (!cJSON_IsString(rx_diam_realm) && !cJSON_IsNull(rx_diam_realm)) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [rx_diam_realm]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [rx_diam_realm]");
         goto end;
     }
     }
@@ -352,7 +352,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     group_id = cJSON_GetObjectItemCaseSensitive(nrf_info_served_bsf_info_valueJSON, "groupId");
     if (group_id) {
     if (!cJSON_IsString(group_id) && !cJSON_IsNull(group_id)) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [group_id]");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [group_id]");
         goto end;
     }
     }
@@ -361,7 +361,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     if (supi_ranges) {
         cJSON *supi_ranges_local = NULL;
         if (!cJSON_IsArray(supi_ranges)) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [supi_ranges]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [supi_ranges]");
             goto end;
         }
 
@@ -369,12 +369,12 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
 
         cJSON_ArrayForEach(supi_ranges_local, supi_ranges) {
             if (!cJSON_IsObject(supi_ranges_local)) {
-                ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [supi_ranges]");
+                log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [supi_ranges]");
                 goto end;
             }
             OpenAPI_supi_range_t *supi_rangesItem = OpenAPI_supi_range_parseFromJSON(supi_ranges_local);
             if (!supi_rangesItem) {
-                ogs_error("No supi_rangesItem");
+                log_error("No supi_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(supi_rangesList, supi_rangesItem);
@@ -385,7 +385,7 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     if (gpsi_ranges) {
         cJSON *gpsi_ranges_local = NULL;
         if (!cJSON_IsArray(gpsi_ranges)) {
-            ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [gpsi_ranges]");
+            log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [gpsi_ranges]");
             goto end;
         }
 
@@ -393,12 +393,12 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
 
         cJSON_ArrayForEach(gpsi_ranges_local, gpsi_ranges) {
             if (!cJSON_IsObject(gpsi_ranges_local)) {
-                ogs_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [gpsi_ranges]");
+                log_error("OpenAPI_nrf_info_served_bsf_info_value_parseFromJSON() failed [gpsi_ranges]");
                 goto end;
             }
             OpenAPI_identity_range_t *gpsi_rangesItem = OpenAPI_identity_range_parseFromJSON(gpsi_ranges_local);
             if (!gpsi_rangesItem) {
-                ogs_error("No gpsi_rangesItem");
+                log_error("No gpsi_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(gpsi_rangesList, gpsi_rangesItem);
@@ -469,10 +469,10 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nrf_info_served_bsf_info_value_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed");
+        log_error("OpenAPI_nrf_info_served_bsf_info_value_convertToJSON() failed");
         return NULL;
     }
 
@@ -480,14 +480,14 @@ OpenAPI_nrf_info_served_bsf_info_value_t *OpenAPI_nrf_info_served_bsf_info_value
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

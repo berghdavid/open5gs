@@ -14,7 +14,7 @@ OpenAPI_resource_usage_t *OpenAPI_resource_usage_create(
 )
 {
     OpenAPI_resource_usage_t *resource_usage_local_var = ogs_malloc(sizeof(OpenAPI_resource_usage_t));
-    ogs_assert(resource_usage_local_var);
+    log_assert(resource_usage_local_var);
 
     resource_usage_local_var->is_cpu_usage = is_cpu_usage;
     resource_usage_local_var->cpu_usage = cpu_usage;
@@ -42,28 +42,28 @@ cJSON *OpenAPI_resource_usage_convertToJSON(OpenAPI_resource_usage_t *resource_u
     OpenAPI_lnode_t *node = NULL;
 
     if (resource_usage == NULL) {
-        ogs_error("OpenAPI_resource_usage_convertToJSON() failed [ResourceUsage]");
+        log_error("OpenAPI_resource_usage_convertToJSON() failed [ResourceUsage]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (resource_usage->is_cpu_usage) {
     if (cJSON_AddNumberToObject(item, "cpuUsage", resource_usage->cpu_usage) == NULL) {
-        ogs_error("OpenAPI_resource_usage_convertToJSON() failed [cpu_usage]");
+        log_error("OpenAPI_resource_usage_convertToJSON() failed [cpu_usage]");
         goto end;
     }
     }
 
     if (resource_usage->is_memory_usage) {
     if (cJSON_AddNumberToObject(item, "memoryUsage", resource_usage->memory_usage) == NULL) {
-        ogs_error("OpenAPI_resource_usage_convertToJSON() failed [memory_usage]");
+        log_error("OpenAPI_resource_usage_convertToJSON() failed [memory_usage]");
         goto end;
     }
     }
 
     if (resource_usage->is_storage_usage) {
     if (cJSON_AddNumberToObject(item, "storageUsage", resource_usage->storage_usage) == NULL) {
-        ogs_error("OpenAPI_resource_usage_convertToJSON() failed [storage_usage]");
+        log_error("OpenAPI_resource_usage_convertToJSON() failed [storage_usage]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_resource_usage_t *OpenAPI_resource_usage_parseFromJSON(cJSON *resource_u
     cpu_usage = cJSON_GetObjectItemCaseSensitive(resource_usageJSON, "cpuUsage");
     if (cpu_usage) {
     if (!cJSON_IsNumber(cpu_usage)) {
-        ogs_error("OpenAPI_resource_usage_parseFromJSON() failed [cpu_usage]");
+        log_error("OpenAPI_resource_usage_parseFromJSON() failed [cpu_usage]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_resource_usage_t *OpenAPI_resource_usage_parseFromJSON(cJSON *resource_u
     memory_usage = cJSON_GetObjectItemCaseSensitive(resource_usageJSON, "memoryUsage");
     if (memory_usage) {
     if (!cJSON_IsNumber(memory_usage)) {
-        ogs_error("OpenAPI_resource_usage_parseFromJSON() failed [memory_usage]");
+        log_error("OpenAPI_resource_usage_parseFromJSON() failed [memory_usage]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_resource_usage_t *OpenAPI_resource_usage_parseFromJSON(cJSON *resource_u
     storage_usage = cJSON_GetObjectItemCaseSensitive(resource_usageJSON, "storageUsage");
     if (storage_usage) {
     if (!cJSON_IsNumber(storage_usage)) {
-        ogs_error("OpenAPI_resource_usage_parseFromJSON() failed [storage_usage]");
+        log_error("OpenAPI_resource_usage_parseFromJSON() failed [storage_usage]");
         goto end;
     }
     }
@@ -122,10 +122,10 @@ OpenAPI_resource_usage_t *OpenAPI_resource_usage_copy(OpenAPI_resource_usage_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_resource_usage_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_resource_usage_convertToJSON() failed");
+        log_error("OpenAPI_resource_usage_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_resource_usage_t *OpenAPI_resource_usage_copy(OpenAPI_resource_usage_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

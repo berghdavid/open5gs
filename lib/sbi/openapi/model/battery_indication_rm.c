@@ -14,7 +14,7 @@ OpenAPI_battery_indication_rm_t *OpenAPI_battery_indication_rm_create(
 )
 {
     OpenAPI_battery_indication_rm_t *battery_indication_rm_local_var = ogs_malloc(sizeof(OpenAPI_battery_indication_rm_t));
-    ogs_assert(battery_indication_rm_local_var);
+    log_assert(battery_indication_rm_local_var);
 
     battery_indication_rm_local_var->is_battery_ind = is_battery_ind;
     battery_indication_rm_local_var->battery_ind = battery_ind;
@@ -42,28 +42,28 @@ cJSON *OpenAPI_battery_indication_rm_convertToJSON(OpenAPI_battery_indication_rm
     OpenAPI_lnode_t *node = NULL;
 
     if (battery_indication_rm == NULL) {
-        ogs_error("OpenAPI_battery_indication_rm_convertToJSON() failed [BatteryIndicationRm]");
+        log_error("OpenAPI_battery_indication_rm_convertToJSON() failed [BatteryIndicationRm]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (battery_indication_rm->is_battery_ind) {
     if (cJSON_AddBoolToObject(item, "batteryInd", battery_indication_rm->battery_ind) == NULL) {
-        ogs_error("OpenAPI_battery_indication_rm_convertToJSON() failed [battery_ind]");
+        log_error("OpenAPI_battery_indication_rm_convertToJSON() failed [battery_ind]");
         goto end;
     }
     }
 
     if (battery_indication_rm->is_replaceable_ind) {
     if (cJSON_AddBoolToObject(item, "replaceableInd", battery_indication_rm->replaceable_ind) == NULL) {
-        ogs_error("OpenAPI_battery_indication_rm_convertToJSON() failed [replaceable_ind]");
+        log_error("OpenAPI_battery_indication_rm_convertToJSON() failed [replaceable_ind]");
         goto end;
     }
     }
 
     if (battery_indication_rm->is_rechargeable_ind) {
     if (cJSON_AddBoolToObject(item, "rechargeableInd", battery_indication_rm->rechargeable_ind) == NULL) {
-        ogs_error("OpenAPI_battery_indication_rm_convertToJSON() failed [rechargeable_ind]");
+        log_error("OpenAPI_battery_indication_rm_convertToJSON() failed [rechargeable_ind]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_battery_indication_rm_t *OpenAPI_battery_indication_rm_parseFromJSON(cJS
     battery_ind = cJSON_GetObjectItemCaseSensitive(battery_indication_rmJSON, "batteryInd");
     if (battery_ind) {
     if (!cJSON_IsBool(battery_ind)) {
-        ogs_error("OpenAPI_battery_indication_rm_parseFromJSON() failed [battery_ind]");
+        log_error("OpenAPI_battery_indication_rm_parseFromJSON() failed [battery_ind]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_battery_indication_rm_t *OpenAPI_battery_indication_rm_parseFromJSON(cJS
     replaceable_ind = cJSON_GetObjectItemCaseSensitive(battery_indication_rmJSON, "replaceableInd");
     if (replaceable_ind) {
     if (!cJSON_IsBool(replaceable_ind)) {
-        ogs_error("OpenAPI_battery_indication_rm_parseFromJSON() failed [replaceable_ind]");
+        log_error("OpenAPI_battery_indication_rm_parseFromJSON() failed [replaceable_ind]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_battery_indication_rm_t *OpenAPI_battery_indication_rm_parseFromJSON(cJS
     rechargeable_ind = cJSON_GetObjectItemCaseSensitive(battery_indication_rmJSON, "rechargeableInd");
     if (rechargeable_ind) {
     if (!cJSON_IsBool(rechargeable_ind)) {
-        ogs_error("OpenAPI_battery_indication_rm_parseFromJSON() failed [rechargeable_ind]");
+        log_error("OpenAPI_battery_indication_rm_parseFromJSON() failed [rechargeable_ind]");
         goto end;
     }
     }
@@ -122,10 +122,10 @@ OpenAPI_battery_indication_rm_t *OpenAPI_battery_indication_rm_copy(OpenAPI_batt
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_battery_indication_rm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_battery_indication_rm_convertToJSON() failed");
+        log_error("OpenAPI_battery_indication_rm_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_battery_indication_rm_t *OpenAPI_battery_indication_rm_copy(OpenAPI_batt
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

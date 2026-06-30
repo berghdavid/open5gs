@@ -15,7 +15,7 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
 )
 {
     OpenAPI_ue_n1_n2_info_subscription_create_data_t *ue_n1_n2_info_subscription_create_data_local_var = ogs_malloc(sizeof(OpenAPI_ue_n1_n2_info_subscription_create_data_t));
-    ogs_assert(ue_n1_n2_info_subscription_create_data_local_var);
+    log_assert(ue_n1_n2_info_subscription_create_data_local_var);
 
     ue_n1_n2_info_subscription_create_data_local_var->n2_information_class = n2_information_class;
     ue_n1_n2_info_subscription_create_data_local_var->n2_notify_callback_uri = n2_notify_callback_uri;
@@ -64,49 +64,49 @@ cJSON *OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON(OpenAPI_ue_n
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_n1_n2_info_subscription_create_data == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [UeN1N2InfoSubscriptionCreateData]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [UeN1N2InfoSubscriptionCreateData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ue_n1_n2_info_subscription_create_data->n2_information_class != OpenAPI_n2_information_class_NULL) {
     if (cJSON_AddStringToObject(item, "n2InformationClass", OpenAPI_n2_information_class_ToString(ue_n1_n2_info_subscription_create_data->n2_information_class)) == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [n2_information_class]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [n2_information_class]");
         goto end;
     }
     }
 
     if (ue_n1_n2_info_subscription_create_data->n2_notify_callback_uri) {
     if (cJSON_AddStringToObject(item, "n2NotifyCallbackUri", ue_n1_n2_info_subscription_create_data->n2_notify_callback_uri) == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [n2_notify_callback_uri]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [n2_notify_callback_uri]");
         goto end;
     }
     }
 
     if (ue_n1_n2_info_subscription_create_data->n1_message_class != OpenAPI_n1_message_class_NULL) {
     if (cJSON_AddStringToObject(item, "n1MessageClass", OpenAPI_n1_message_class_ToString(ue_n1_n2_info_subscription_create_data->n1_message_class)) == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [n1_message_class]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [n1_message_class]");
         goto end;
     }
     }
 
     if (ue_n1_n2_info_subscription_create_data->n1_notify_callback_uri) {
     if (cJSON_AddStringToObject(item, "n1NotifyCallbackUri", ue_n1_n2_info_subscription_create_data->n1_notify_callback_uri) == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [n1_notify_callback_uri]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [n1_notify_callback_uri]");
         goto end;
     }
     }
 
     if (ue_n1_n2_info_subscription_create_data->nf_id) {
     if (cJSON_AddStringToObject(item, "nfId", ue_n1_n2_info_subscription_create_data->nf_id) == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [nf_id]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [nf_id]");
         goto end;
     }
     }
 
     if (ue_n1_n2_info_subscription_create_data->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", ue_n1_n2_info_subscription_create_data->supported_features) == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -114,12 +114,12 @@ cJSON *OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON(OpenAPI_ue_n
     if (ue_n1_n2_info_subscription_create_data->old_guami) {
     cJSON *old_guami_local_JSON = OpenAPI_guami_convertToJSON(ue_n1_n2_info_subscription_create_data->old_guami);
     if (old_guami_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [old_guami]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [old_guami]");
         goto end;
     }
     cJSON_AddItemToObject(item, "oldGuami", old_guami_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [old_guami]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed [old_guami]");
         goto end;
     }
     }
@@ -145,7 +145,7 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     n2_information_class = cJSON_GetObjectItemCaseSensitive(ue_n1_n2_info_subscription_create_dataJSON, "n2InformationClass");
     if (n2_information_class) {
     if (!cJSON_IsString(n2_information_class)) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [n2_information_class]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [n2_information_class]");
         goto end;
     }
     n2_information_classVariable = OpenAPI_n2_information_class_FromString(n2_information_class->valuestring);
@@ -154,7 +154,7 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     n2_notify_callback_uri = cJSON_GetObjectItemCaseSensitive(ue_n1_n2_info_subscription_create_dataJSON, "n2NotifyCallbackUri");
     if (n2_notify_callback_uri) {
     if (!cJSON_IsString(n2_notify_callback_uri) && !cJSON_IsNull(n2_notify_callback_uri)) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [n2_notify_callback_uri]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [n2_notify_callback_uri]");
         goto end;
     }
     }
@@ -162,7 +162,7 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     n1_message_class = cJSON_GetObjectItemCaseSensitive(ue_n1_n2_info_subscription_create_dataJSON, "n1MessageClass");
     if (n1_message_class) {
     if (!cJSON_IsString(n1_message_class)) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [n1_message_class]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [n1_message_class]");
         goto end;
     }
     n1_message_classVariable = OpenAPI_n1_message_class_FromString(n1_message_class->valuestring);
@@ -171,7 +171,7 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     n1_notify_callback_uri = cJSON_GetObjectItemCaseSensitive(ue_n1_n2_info_subscription_create_dataJSON, "n1NotifyCallbackUri");
     if (n1_notify_callback_uri) {
     if (!cJSON_IsString(n1_notify_callback_uri) && !cJSON_IsNull(n1_notify_callback_uri)) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [n1_notify_callback_uri]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [n1_notify_callback_uri]");
         goto end;
     }
     }
@@ -179,7 +179,7 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     nf_id = cJSON_GetObjectItemCaseSensitive(ue_n1_n2_info_subscription_create_dataJSON, "nfId");
     if (nf_id) {
     if (!cJSON_IsString(nf_id) && !cJSON_IsNull(nf_id)) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [nf_id]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [nf_id]");
         goto end;
     }
     }
@@ -187,7 +187,7 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     supported_features = cJSON_GetObjectItemCaseSensitive(ue_n1_n2_info_subscription_create_dataJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -196,7 +196,7 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     if (old_guami) {
     old_guami_local_nonprim = OpenAPI_guami_parseFromJSON(old_guami);
     if (!old_guami_local_nonprim) {
-        ogs_error("OpenAPI_guami_parseFromJSON failed [old_guami]");
+        log_error("OpenAPI_guami_parseFromJSON failed [old_guami]");
         goto end;
     }
     }
@@ -225,10 +225,10 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed");
+        log_error("OpenAPI_ue_n1_n2_info_subscription_create_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -236,14 +236,14 @@ OpenAPI_ue_n1_n2_info_subscription_create_data_t *OpenAPI_ue_n1_n2_info_subscrip
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

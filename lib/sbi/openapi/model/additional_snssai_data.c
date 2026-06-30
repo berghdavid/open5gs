@@ -12,7 +12,7 @@ OpenAPI_additional_snssai_data_t *OpenAPI_additional_snssai_data_create(
 )
 {
     OpenAPI_additional_snssai_data_t *additional_snssai_data_local_var = ogs_malloc(sizeof(OpenAPI_additional_snssai_data_t));
-    ogs_assert(additional_snssai_data_local_var);
+    log_assert(additional_snssai_data_local_var);
 
     additional_snssai_data_local_var->is_required_authn_authz = is_required_authn_authz;
     additional_snssai_data_local_var->required_authn_authz = required_authn_authz;
@@ -49,14 +49,14 @@ cJSON *OpenAPI_additional_snssai_data_convertToJSON(OpenAPI_additional_snssai_da
     OpenAPI_lnode_t *node = NULL;
 
     if (additional_snssai_data == NULL) {
-        ogs_error("OpenAPI_additional_snssai_data_convertToJSON() failed [AdditionalSnssaiData]");
+        log_error("OpenAPI_additional_snssai_data_convertToJSON() failed [AdditionalSnssaiData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (additional_snssai_data->is_required_authn_authz) {
     if (cJSON_AddBoolToObject(item, "requiredAuthnAuthz", additional_snssai_data->required_authn_authz) == NULL) {
-        ogs_error("OpenAPI_additional_snssai_data_convertToJSON() failed [required_authn_authz]");
+        log_error("OpenAPI_additional_snssai_data_convertToJSON() failed [required_authn_authz]");
         goto end;
     }
     }
@@ -64,12 +64,12 @@ cJSON *OpenAPI_additional_snssai_data_convertToJSON(OpenAPI_additional_snssai_da
     if (additional_snssai_data->subscribed_ue_slice_mbr) {
     cJSON *subscribed_ue_slice_mbr_local_JSON = OpenAPI_slice_mbr_rm_convertToJSON(additional_snssai_data->subscribed_ue_slice_mbr);
     if (subscribed_ue_slice_mbr_local_JSON == NULL) {
-        ogs_error("OpenAPI_additional_snssai_data_convertToJSON() failed [subscribed_ue_slice_mbr]");
+        log_error("OpenAPI_additional_snssai_data_convertToJSON() failed [subscribed_ue_slice_mbr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "subscribedUeSliceMbr", subscribed_ue_slice_mbr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_additional_snssai_data_convertToJSON() failed [subscribed_ue_slice_mbr]");
+        log_error("OpenAPI_additional_snssai_data_convertToJSON() failed [subscribed_ue_slice_mbr]");
         goto end;
     }
     }
@@ -77,12 +77,12 @@ cJSON *OpenAPI_additional_snssai_data_convertToJSON(OpenAPI_additional_snssai_da
     if (additional_snssai_data->subscribed_ns_srg_list) {
     cJSON *subscribed_ns_srg_listList = cJSON_AddArrayToObject(item, "subscribedNsSrgList");
     if (subscribed_ns_srg_listList == NULL) {
-        ogs_error("OpenAPI_additional_snssai_data_convertToJSON() failed [subscribed_ns_srg_list]");
+        log_error("OpenAPI_additional_snssai_data_convertToJSON() failed [subscribed_ns_srg_list]");
         goto end;
     }
     OpenAPI_list_for_each(additional_snssai_data->subscribed_ns_srg_list, node) {
         if (cJSON_AddStringToObject(subscribed_ns_srg_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_additional_snssai_data_convertToJSON() failed [subscribed_ns_srg_list]");
+            log_error("OpenAPI_additional_snssai_data_convertToJSON() failed [subscribed_ns_srg_list]");
             goto end;
         }
     }
@@ -104,7 +104,7 @@ OpenAPI_additional_snssai_data_t *OpenAPI_additional_snssai_data_parseFromJSON(c
     required_authn_authz = cJSON_GetObjectItemCaseSensitive(additional_snssai_dataJSON, "requiredAuthnAuthz");
     if (required_authn_authz) {
     if (!cJSON_IsBool(required_authn_authz)) {
-        ogs_error("OpenAPI_additional_snssai_data_parseFromJSON() failed [required_authn_authz]");
+        log_error("OpenAPI_additional_snssai_data_parseFromJSON() failed [required_authn_authz]");
         goto end;
     }
     }
@@ -113,7 +113,7 @@ OpenAPI_additional_snssai_data_t *OpenAPI_additional_snssai_data_parseFromJSON(c
     if (subscribed_ue_slice_mbr) {
     subscribed_ue_slice_mbr_local_nonprim = OpenAPI_slice_mbr_rm_parseFromJSON(subscribed_ue_slice_mbr);
     if (!subscribed_ue_slice_mbr_local_nonprim) {
-        ogs_error("OpenAPI_slice_mbr_rm_parseFromJSON failed [subscribed_ue_slice_mbr]");
+        log_error("OpenAPI_slice_mbr_rm_parseFromJSON failed [subscribed_ue_slice_mbr]");
         goto end;
     }
     }
@@ -122,7 +122,7 @@ OpenAPI_additional_snssai_data_t *OpenAPI_additional_snssai_data_parseFromJSON(c
     if (subscribed_ns_srg_list) {
         cJSON *subscribed_ns_srg_list_local = NULL;
         if (!cJSON_IsArray(subscribed_ns_srg_list)) {
-            ogs_error("OpenAPI_additional_snssai_data_parseFromJSON() failed [subscribed_ns_srg_list]");
+            log_error("OpenAPI_additional_snssai_data_parseFromJSON() failed [subscribed_ns_srg_list]");
             goto end;
         }
 
@@ -132,7 +132,7 @@ OpenAPI_additional_snssai_data_t *OpenAPI_additional_snssai_data_parseFromJSON(c
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(subscribed_ns_srg_list_local)) {
-                ogs_error("OpenAPI_additional_snssai_data_parseFromJSON() failed [subscribed_ns_srg_list]");
+                log_error("OpenAPI_additional_snssai_data_parseFromJSON() failed [subscribed_ns_srg_list]");
                 goto end;
             }
             OpenAPI_list_add(subscribed_ns_srg_listList, ogs_strdup(subscribed_ns_srg_list_local->valuestring));
@@ -167,10 +167,10 @@ OpenAPI_additional_snssai_data_t *OpenAPI_additional_snssai_data_copy(OpenAPI_ad
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_additional_snssai_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_additional_snssai_data_convertToJSON() failed");
+        log_error("OpenAPI_additional_snssai_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -178,14 +178,14 @@ OpenAPI_additional_snssai_data_t *OpenAPI_additional_snssai_data_copy(OpenAPI_ad
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

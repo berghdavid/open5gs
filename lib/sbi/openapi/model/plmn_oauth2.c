@@ -10,7 +10,7 @@ OpenAPI_plmn_oauth2_t *OpenAPI_plmn_oauth2_create(
 )
 {
     OpenAPI_plmn_oauth2_t *plmn_oauth2_local_var = ogs_malloc(sizeof(OpenAPI_plmn_oauth2_t));
-    ogs_assert(plmn_oauth2_local_var);
+    log_assert(plmn_oauth2_local_var);
 
     plmn_oauth2_local_var->oauth2_required_plmn_id_list = oauth2_required_plmn_id_list;
     plmn_oauth2_local_var->oauth2_not_required_plmn_id_list = oauth2_not_required_plmn_id_list;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_plmn_oauth2_convertToJSON(OpenAPI_plmn_oauth2_t *plmn_oauth2)
     OpenAPI_lnode_t *node = NULL;
 
     if (plmn_oauth2 == NULL) {
-        ogs_error("OpenAPI_plmn_oauth2_convertToJSON() failed [PlmnOauth2]");
+        log_error("OpenAPI_plmn_oauth2_convertToJSON() failed [PlmnOauth2]");
         return NULL;
     }
 
@@ -56,13 +56,13 @@ cJSON *OpenAPI_plmn_oauth2_convertToJSON(OpenAPI_plmn_oauth2_t *plmn_oauth2)
     if (plmn_oauth2->oauth2_required_plmn_id_list) {
     cJSON *oauth2_required_plmn_id_listList = cJSON_AddArrayToObject(item, "oauth2RequiredPlmnIdList");
     if (oauth2_required_plmn_id_listList == NULL) {
-        ogs_error("OpenAPI_plmn_oauth2_convertToJSON() failed [oauth2_required_plmn_id_list]");
+        log_error("OpenAPI_plmn_oauth2_convertToJSON() failed [oauth2_required_plmn_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(plmn_oauth2->oauth2_required_plmn_id_list, node) {
         cJSON *itemLocal = OpenAPI_plmn_id_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_plmn_oauth2_convertToJSON() failed [oauth2_required_plmn_id_list]");
+            log_error("OpenAPI_plmn_oauth2_convertToJSON() failed [oauth2_required_plmn_id_list]");
             goto end;
         }
         cJSON_AddItemToArray(oauth2_required_plmn_id_listList, itemLocal);
@@ -72,13 +72,13 @@ cJSON *OpenAPI_plmn_oauth2_convertToJSON(OpenAPI_plmn_oauth2_t *plmn_oauth2)
     if (plmn_oauth2->oauth2_not_required_plmn_id_list) {
     cJSON *oauth2_not_required_plmn_id_listList = cJSON_AddArrayToObject(item, "oauth2NotRequiredPlmnIdList");
     if (oauth2_not_required_plmn_id_listList == NULL) {
-        ogs_error("OpenAPI_plmn_oauth2_convertToJSON() failed [oauth2_not_required_plmn_id_list]");
+        log_error("OpenAPI_plmn_oauth2_convertToJSON() failed [oauth2_not_required_plmn_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(plmn_oauth2->oauth2_not_required_plmn_id_list, node) {
         cJSON *itemLocal = OpenAPI_plmn_id_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_plmn_oauth2_convertToJSON() failed [oauth2_not_required_plmn_id_list]");
+            log_error("OpenAPI_plmn_oauth2_convertToJSON() failed [oauth2_not_required_plmn_id_list]");
             goto end;
         }
         cJSON_AddItemToArray(oauth2_not_required_plmn_id_listList, itemLocal);
@@ -101,7 +101,7 @@ OpenAPI_plmn_oauth2_t *OpenAPI_plmn_oauth2_parseFromJSON(cJSON *plmn_oauth2JSON)
     if (oauth2_required_plmn_id_list) {
         cJSON *oauth2_required_plmn_id_list_local = NULL;
         if (!cJSON_IsArray(oauth2_required_plmn_id_list)) {
-            ogs_error("OpenAPI_plmn_oauth2_parseFromJSON() failed [oauth2_required_plmn_id_list]");
+            log_error("OpenAPI_plmn_oauth2_parseFromJSON() failed [oauth2_required_plmn_id_list]");
             goto end;
         }
 
@@ -109,12 +109,12 @@ OpenAPI_plmn_oauth2_t *OpenAPI_plmn_oauth2_parseFromJSON(cJSON *plmn_oauth2JSON)
 
         cJSON_ArrayForEach(oauth2_required_plmn_id_list_local, oauth2_required_plmn_id_list) {
             if (!cJSON_IsObject(oauth2_required_plmn_id_list_local)) {
-                ogs_error("OpenAPI_plmn_oauth2_parseFromJSON() failed [oauth2_required_plmn_id_list]");
+                log_error("OpenAPI_plmn_oauth2_parseFromJSON() failed [oauth2_required_plmn_id_list]");
                 goto end;
             }
             OpenAPI_plmn_id_t *oauth2_required_plmn_id_listItem = OpenAPI_plmn_id_parseFromJSON(oauth2_required_plmn_id_list_local);
             if (!oauth2_required_plmn_id_listItem) {
-                ogs_error("No oauth2_required_plmn_id_listItem");
+                log_error("No oauth2_required_plmn_id_listItem");
                 goto end;
             }
             OpenAPI_list_add(oauth2_required_plmn_id_listList, oauth2_required_plmn_id_listItem);
@@ -125,7 +125,7 @@ OpenAPI_plmn_oauth2_t *OpenAPI_plmn_oauth2_parseFromJSON(cJSON *plmn_oauth2JSON)
     if (oauth2_not_required_plmn_id_list) {
         cJSON *oauth2_not_required_plmn_id_list_local = NULL;
         if (!cJSON_IsArray(oauth2_not_required_plmn_id_list)) {
-            ogs_error("OpenAPI_plmn_oauth2_parseFromJSON() failed [oauth2_not_required_plmn_id_list]");
+            log_error("OpenAPI_plmn_oauth2_parseFromJSON() failed [oauth2_not_required_plmn_id_list]");
             goto end;
         }
 
@@ -133,12 +133,12 @@ OpenAPI_plmn_oauth2_t *OpenAPI_plmn_oauth2_parseFromJSON(cJSON *plmn_oauth2JSON)
 
         cJSON_ArrayForEach(oauth2_not_required_plmn_id_list_local, oauth2_not_required_plmn_id_list) {
             if (!cJSON_IsObject(oauth2_not_required_plmn_id_list_local)) {
-                ogs_error("OpenAPI_plmn_oauth2_parseFromJSON() failed [oauth2_not_required_plmn_id_list]");
+                log_error("OpenAPI_plmn_oauth2_parseFromJSON() failed [oauth2_not_required_plmn_id_list]");
                 goto end;
             }
             OpenAPI_plmn_id_t *oauth2_not_required_plmn_id_listItem = OpenAPI_plmn_id_parseFromJSON(oauth2_not_required_plmn_id_list_local);
             if (!oauth2_not_required_plmn_id_listItem) {
-                ogs_error("No oauth2_not_required_plmn_id_listItem");
+                log_error("No oauth2_not_required_plmn_id_listItem");
                 goto end;
             }
             OpenAPI_list_add(oauth2_not_required_plmn_id_listList, oauth2_not_required_plmn_id_listItem);
@@ -174,10 +174,10 @@ OpenAPI_plmn_oauth2_t *OpenAPI_plmn_oauth2_copy(OpenAPI_plmn_oauth2_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_plmn_oauth2_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_plmn_oauth2_convertToJSON() failed");
+        log_error("OpenAPI_plmn_oauth2_convertToJSON() failed");
         return NULL;
     }
 
@@ -185,14 +185,14 @@ OpenAPI_plmn_oauth2_t *OpenAPI_plmn_oauth2_copy(OpenAPI_plmn_oauth2_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

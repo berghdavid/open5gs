@@ -8,7 +8,7 @@ OpenAPI_dnn_smf_info_item_dnai_list_inner_t *OpenAPI_dnn_smf_info_item_dnai_list
 )
 {
     OpenAPI_dnn_smf_info_item_dnai_list_inner_t *dnn_smf_info_item_dnai_list_inner_local_var = ogs_malloc(sizeof(OpenAPI_dnn_smf_info_item_dnai_list_inner_t));
-    ogs_assert(dnn_smf_info_item_dnai_list_inner_local_var);
+    log_assert(dnn_smf_info_item_dnai_list_inner_local_var);
 
 
     return dnn_smf_info_item_dnai_list_inner_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_dnn_smf_info_item_dnai_list_inner_convertToJSON(OpenAPI_dnn_smf_i
     OpenAPI_lnode_t *node = NULL;
 
     if (dnn_smf_info_item_dnai_list_inner == NULL) {
-        ogs_error("OpenAPI_dnn_smf_info_item_dnai_list_inner_convertToJSON() failed [DnnSmfInfoItem_dnaiList_inner]");
+        log_error("OpenAPI_dnn_smf_info_item_dnai_list_inner_convertToJSON() failed [DnnSmfInfoItem_dnaiList_inner]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_dnn_smf_info_item_dnai_list_inner_t *OpenAPI_dnn_smf_info_item_dnai_list
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dnn_smf_info_item_dnai_list_inner_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dnn_smf_info_item_dnai_list_inner_convertToJSON() failed");
+        log_error("OpenAPI_dnn_smf_info_item_dnai_list_inner_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_dnn_smf_info_item_dnai_list_inner_t *OpenAPI_dnn_smf_info_item_dnai_list
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

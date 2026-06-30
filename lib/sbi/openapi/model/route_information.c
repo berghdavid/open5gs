@@ -11,7 +11,7 @@ OpenAPI_route_information_t *OpenAPI_route_information_create(
 )
 {
     OpenAPI_route_information_t *route_information_local_var = ogs_malloc(sizeof(OpenAPI_route_information_t));
-    ogs_assert(route_information_local_var);
+    log_assert(route_information_local_var);
 
     route_information_local_var->ipv4_addr = ipv4_addr;
     route_information_local_var->ipv6_addr = ipv6_addr;
@@ -44,27 +44,27 @@ cJSON *OpenAPI_route_information_convertToJSON(OpenAPI_route_information_t *rout
     OpenAPI_lnode_t *node = NULL;
 
     if (route_information == NULL) {
-        ogs_error("OpenAPI_route_information_convertToJSON() failed [RouteInformation]");
+        log_error("OpenAPI_route_information_convertToJSON() failed [RouteInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (route_information->ipv4_addr) {
     if (cJSON_AddStringToObject(item, "ipv4Addr", route_information->ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_route_information_convertToJSON() failed [ipv4_addr]");
+        log_error("OpenAPI_route_information_convertToJSON() failed [ipv4_addr]");
         goto end;
     }
     }
 
     if (route_information->ipv6_addr) {
     if (cJSON_AddStringToObject(item, "ipv6Addr", route_information->ipv6_addr) == NULL) {
-        ogs_error("OpenAPI_route_information_convertToJSON() failed [ipv6_addr]");
+        log_error("OpenAPI_route_information_convertToJSON() failed [ipv6_addr]");
         goto end;
     }
     }
 
     if (cJSON_AddNumberToObject(item, "portNumber", route_information->port_number) == NULL) {
-        ogs_error("OpenAPI_route_information_convertToJSON() failed [port_number]");
+        log_error("OpenAPI_route_information_convertToJSON() failed [port_number]");
         goto end;
     }
 
@@ -82,7 +82,7 @@ OpenAPI_route_information_t *OpenAPI_route_information_parseFromJSON(cJSON *rout
     ipv4_addr = cJSON_GetObjectItemCaseSensitive(route_informationJSON, "ipv4Addr");
     if (ipv4_addr) {
     if (!cJSON_IsString(ipv4_addr) && !cJSON_IsNull(ipv4_addr)) {
-        ogs_error("OpenAPI_route_information_parseFromJSON() failed [ipv4_addr]");
+        log_error("OpenAPI_route_information_parseFromJSON() failed [ipv4_addr]");
         goto end;
     }
     }
@@ -90,18 +90,18 @@ OpenAPI_route_information_t *OpenAPI_route_information_parseFromJSON(cJSON *rout
     ipv6_addr = cJSON_GetObjectItemCaseSensitive(route_informationJSON, "ipv6Addr");
     if (ipv6_addr) {
     if (!cJSON_IsString(ipv6_addr) && !cJSON_IsNull(ipv6_addr)) {
-        ogs_error("OpenAPI_route_information_parseFromJSON() failed [ipv6_addr]");
+        log_error("OpenAPI_route_information_parseFromJSON() failed [ipv6_addr]");
         goto end;
     }
     }
 
     port_number = cJSON_GetObjectItemCaseSensitive(route_informationJSON, "portNumber");
     if (!port_number) {
-        ogs_error("OpenAPI_route_information_parseFromJSON() failed [port_number]");
+        log_error("OpenAPI_route_information_parseFromJSON() failed [port_number]");
         goto end;
     }
     if (!cJSON_IsNumber(port_number)) {
-        ogs_error("OpenAPI_route_information_parseFromJSON() failed [port_number]");
+        log_error("OpenAPI_route_information_parseFromJSON() failed [port_number]");
         goto end;
     }
 
@@ -122,10 +122,10 @@ OpenAPI_route_information_t *OpenAPI_route_information_copy(OpenAPI_route_inform
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_route_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_route_information_convertToJSON() failed");
+        log_error("OpenAPI_route_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_route_information_t *OpenAPI_route_information_copy(OpenAPI_route_inform
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

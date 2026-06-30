@@ -9,7 +9,7 @@ OpenAPI_service_specific_authorization_info_t *OpenAPI_service_specific_authoriz
 )
 {
     OpenAPI_service_specific_authorization_info_t *service_specific_authorization_info_local_var = ogs_malloc(sizeof(OpenAPI_service_specific_authorization_info_t));
-    ogs_assert(service_specific_authorization_info_local_var);
+    log_assert(service_specific_authorization_info_local_var);
 
     service_specific_authorization_info_local_var->service_specific_authorization_list = service_specific_authorization_list;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_service_specific_authorization_info_convertToJSON(OpenAPI_service
     OpenAPI_lnode_t *node = NULL;
 
     if (service_specific_authorization_info == NULL) {
-        ogs_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed [ServiceSpecificAuthorizationInfo]");
+        log_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed [ServiceSpecificAuthorizationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!service_specific_authorization_info->service_specific_authorization_list) {
-        ogs_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed [service_specific_authorization_list]");
+        log_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed [service_specific_authorization_list]");
         return NULL;
     }
     cJSON *service_specific_authorization_listList = cJSON_AddArrayToObject(item, "serviceSpecificAuthorizationList");
     if (service_specific_authorization_listList == NULL) {
-        ogs_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed [service_specific_authorization_list]");
+        log_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed [service_specific_authorization_list]");
         goto end;
     }
     OpenAPI_list_for_each(service_specific_authorization_info->service_specific_authorization_list, node) {
         cJSON *itemLocal = OpenAPI_authorization_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed [service_specific_authorization_list]");
+            log_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed [service_specific_authorization_list]");
             goto end;
         }
         cJSON_AddItemToArray(service_specific_authorization_listList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_service_specific_authorization_info_t *OpenAPI_service_specific_authoriz
     OpenAPI_list_t *service_specific_authorization_listList = NULL;
     service_specific_authorization_list = cJSON_GetObjectItemCaseSensitive(service_specific_authorization_infoJSON, "serviceSpecificAuthorizationList");
     if (!service_specific_authorization_list) {
-        ogs_error("OpenAPI_service_specific_authorization_info_parseFromJSON() failed [service_specific_authorization_list]");
+        log_error("OpenAPI_service_specific_authorization_info_parseFromJSON() failed [service_specific_authorization_list]");
         goto end;
     }
         cJSON *service_specific_authorization_list_local = NULL;
         if (!cJSON_IsArray(service_specific_authorization_list)) {
-            ogs_error("OpenAPI_service_specific_authorization_info_parseFromJSON() failed [service_specific_authorization_list]");
+            log_error("OpenAPI_service_specific_authorization_info_parseFromJSON() failed [service_specific_authorization_list]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_service_specific_authorization_info_t *OpenAPI_service_specific_authoriz
 
         cJSON_ArrayForEach(service_specific_authorization_list_local, service_specific_authorization_list) {
             if (!cJSON_IsObject(service_specific_authorization_list_local)) {
-                ogs_error("OpenAPI_service_specific_authorization_info_parseFromJSON() failed [service_specific_authorization_list]");
+                log_error("OpenAPI_service_specific_authorization_info_parseFromJSON() failed [service_specific_authorization_list]");
                 goto end;
             }
             OpenAPI_authorization_info_t *service_specific_authorization_listItem = OpenAPI_authorization_info_parseFromJSON(service_specific_authorization_list_local);
             if (!service_specific_authorization_listItem) {
-                ogs_error("No service_specific_authorization_listItem");
+                log_error("No service_specific_authorization_listItem");
                 goto end;
             }
             OpenAPI_list_add(service_specific_authorization_listList, service_specific_authorization_listItem);
@@ -119,10 +119,10 @@ OpenAPI_service_specific_authorization_info_t *OpenAPI_service_specific_authoriz
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_service_specific_authorization_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed");
+        log_error("OpenAPI_service_specific_authorization_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_service_specific_authorization_info_t *OpenAPI_service_specific_authoriz
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

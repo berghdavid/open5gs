@@ -13,7 +13,7 @@ OpenAPI_model_3_g_aka_av_t *OpenAPI_model_3_g_aka_av_create(
 )
 {
     OpenAPI_model_3_g_aka_av_t *model_3_g_aka_av_local_var = ogs_malloc(sizeof(OpenAPI_model_3_g_aka_av_t));
-    ogs_assert(model_3_g_aka_av_local_var);
+    log_assert(model_3_g_aka_av_local_var);
 
     model_3_g_aka_av_local_var->rand = rand;
     model_3_g_aka_av_local_var->xres = xres;
@@ -60,53 +60,53 @@ cJSON *OpenAPI_model_3_g_aka_av_convertToJSON(OpenAPI_model_3_g_aka_av_t *model_
     OpenAPI_lnode_t *node = NULL;
 
     if (model_3_g_aka_av == NULL) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [3GAkaAv]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [3GAkaAv]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!model_3_g_aka_av->rand) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [rand]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [rand]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "rand", model_3_g_aka_av->rand) == NULL) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [rand]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [rand]");
         goto end;
     }
 
     if (!model_3_g_aka_av->xres) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [xres]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [xres]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "xres", model_3_g_aka_av->xres) == NULL) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [xres]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [xres]");
         goto end;
     }
 
     if (!model_3_g_aka_av->autn) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [autn]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [autn]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "autn", model_3_g_aka_av->autn) == NULL) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [autn]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [autn]");
         goto end;
     }
 
     if (!model_3_g_aka_av->ck) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [ck]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [ck]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ck", model_3_g_aka_av->ck) == NULL) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [ck]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [ck]");
         goto end;
     }
 
     if (!model_3_g_aka_av->ik) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [ik]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [ik]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ik", model_3_g_aka_av->ik) == NULL) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [ik]");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed [ik]");
         goto end;
     }
 
@@ -125,51 +125,51 @@ OpenAPI_model_3_g_aka_av_t *OpenAPI_model_3_g_aka_av_parseFromJSON(cJSON *model_
     cJSON *ik = NULL;
     rand = cJSON_GetObjectItemCaseSensitive(model_3_g_aka_avJSON, "rand");
     if (!rand) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [rand]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [rand]");
         goto end;
     }
     if (!cJSON_IsString(rand)) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [rand]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [rand]");
         goto end;
     }
 
     xres = cJSON_GetObjectItemCaseSensitive(model_3_g_aka_avJSON, "xres");
     if (!xres) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [xres]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [xres]");
         goto end;
     }
     if (!cJSON_IsString(xres)) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [xres]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [xres]");
         goto end;
     }
 
     autn = cJSON_GetObjectItemCaseSensitive(model_3_g_aka_avJSON, "autn");
     if (!autn) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [autn]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [autn]");
         goto end;
     }
     if (!cJSON_IsString(autn)) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [autn]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [autn]");
         goto end;
     }
 
     ck = cJSON_GetObjectItemCaseSensitive(model_3_g_aka_avJSON, "ck");
     if (!ck) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [ck]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [ck]");
         goto end;
     }
     if (!cJSON_IsString(ck)) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [ck]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [ck]");
         goto end;
     }
 
     ik = cJSON_GetObjectItemCaseSensitive(model_3_g_aka_avJSON, "ik");
     if (!ik) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [ik]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [ik]");
         goto end;
     }
     if (!cJSON_IsString(ik)) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [ik]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON() failed [ik]");
         goto end;
     }
 
@@ -191,10 +191,10 @@ OpenAPI_model_3_g_aka_av_t *OpenAPI_model_3_g_aka_av_copy(OpenAPI_model_3_g_aka_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_model_3_g_aka_av_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed");
+        log_error("OpenAPI_model_3_g_aka_av_convertToJSON() failed");
         return NULL;
     }
 
@@ -202,14 +202,14 @@ OpenAPI_model_3_g_aka_av_t *OpenAPI_model_3_g_aka_av_copy(OpenAPI_model_3_g_aka_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

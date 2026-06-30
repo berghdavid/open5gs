@@ -25,11 +25,11 @@ int lmf_nnrf_handle_nf_discover(
     int rv;
     ogs_sbi_message_t message;
 
-    ogs_assert(response);
+    log_assert(response);
 
     if (status != OGS_OK) {
-        ogs_log_message(
-                status == OGS_DONE ? OGS_LOG_DEBUG : OGS_LOG_WARN, 0,
+        log_error_msg(
+                status == OGS_DONE ? LOG_DEBUG : LOG_WARN, 0,
                 "lmf_nnrf_handle_nf_discover() failed [%d]", status);
         ogs_sbi_response_free(response);
         return OGS_ERROR;
@@ -37,7 +37,7 @@ int lmf_nnrf_handle_nf_discover(
 
     rv = ogs_sbi_parse_response(&message, response);
     if (rv != OGS_OK) {
-        ogs_error("cannot parse HTTP response");
+        log_error("cannot parse HTTP response");
         ogs_sbi_response_free(response);
         return OGS_ERROR;
     }

@@ -10,7 +10,7 @@ OpenAPI_ipv4_address_range_t *OpenAPI_ipv4_address_range_create(
 )
 {
     OpenAPI_ipv4_address_range_t *ipv4_address_range_local_var = ogs_malloc(sizeof(OpenAPI_ipv4_address_range_t));
-    ogs_assert(ipv4_address_range_local_var);
+    log_assert(ipv4_address_range_local_var);
 
     ipv4_address_range_local_var->start = start;
     ipv4_address_range_local_var->end = end;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_ipv4_address_range_convertToJSON(OpenAPI_ipv4_address_range_t *ip
     OpenAPI_lnode_t *node = NULL;
 
     if (ipv4_address_range == NULL) {
-        ogs_error("OpenAPI_ipv4_address_range_convertToJSON() failed [Ipv4AddressRange]");
+        log_error("OpenAPI_ipv4_address_range_convertToJSON() failed [Ipv4AddressRange]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ipv4_address_range->start) {
     if (cJSON_AddStringToObject(item, "start", ipv4_address_range->start) == NULL) {
-        ogs_error("OpenAPI_ipv4_address_range_convertToJSON() failed [start]");
+        log_error("OpenAPI_ipv4_address_range_convertToJSON() failed [start]");
         goto end;
     }
     }
 
     if (ipv4_address_range->end) {
     if (cJSON_AddStringToObject(item, "end", ipv4_address_range->end) == NULL) {
-        ogs_error("OpenAPI_ipv4_address_range_convertToJSON() failed [end]");
+        log_error("OpenAPI_ipv4_address_range_convertToJSON() failed [end]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_ipv4_address_range_t *OpenAPI_ipv4_address_range_parseFromJSON(cJSON *ip
     start = cJSON_GetObjectItemCaseSensitive(ipv4_address_rangeJSON, "start");
     if (start) {
     if (!cJSON_IsString(start) && !cJSON_IsNull(start)) {
-        ogs_error("OpenAPI_ipv4_address_range_parseFromJSON() failed [start]");
+        log_error("OpenAPI_ipv4_address_range_parseFromJSON() failed [start]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_ipv4_address_range_t *OpenAPI_ipv4_address_range_parseFromJSON(cJSON *ip
     end = cJSON_GetObjectItemCaseSensitive(ipv4_address_rangeJSON, "end");
     if (end) {
     if (!cJSON_IsString(end) && !cJSON_IsNull(end)) {
-        ogs_error("OpenAPI_ipv4_address_range_parseFromJSON() failed [end]");
+        log_error("OpenAPI_ipv4_address_range_parseFromJSON() failed [end]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_ipv4_address_range_t *OpenAPI_ipv4_address_range_copy(OpenAPI_ipv4_addre
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ipv4_address_range_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ipv4_address_range_convertToJSON() failed");
+        log_error("OpenAPI_ipv4_address_range_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_ipv4_address_range_t *OpenAPI_ipv4_address_range_copy(OpenAPI_ipv4_addre
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -11,7 +11,7 @@ OpenAPI_dn_performance_req_t *OpenAPI_dn_performance_req_create(
 )
 {
     OpenAPI_dn_performance_req_t *dn_performance_req_local_var = ogs_malloc(sizeof(OpenAPI_dn_performance_req_t));
-    ogs_assert(dn_performance_req_local_var);
+    log_assert(dn_performance_req_local_var);
 
     dn_performance_req_local_var->dn_perf_order_criter = dn_perf_order_criter;
     dn_performance_req_local_var->order = order;
@@ -51,7 +51,7 @@ cJSON *OpenAPI_dn_performance_req_convertToJSON(OpenAPI_dn_performance_req_t *dn
     OpenAPI_lnode_t *node = NULL;
 
     if (dn_performance_req == NULL) {
-        ogs_error("OpenAPI_dn_performance_req_convertToJSON() failed [DnPerformanceReq]");
+        log_error("OpenAPI_dn_performance_req_convertToJSON() failed [DnPerformanceReq]");
         return NULL;
     }
 
@@ -59,12 +59,12 @@ cJSON *OpenAPI_dn_performance_req_convertToJSON(OpenAPI_dn_performance_req_t *dn
     if (dn_performance_req->dn_perf_order_criter) {
     cJSON *dn_perf_order_criter_local_JSON = OpenAPI_dn_perf_ordering_criterion_convertToJSON(dn_performance_req->dn_perf_order_criter);
     if (dn_perf_order_criter_local_JSON == NULL) {
-        ogs_error("OpenAPI_dn_performance_req_convertToJSON() failed [dn_perf_order_criter]");
+        log_error("OpenAPI_dn_performance_req_convertToJSON() failed [dn_perf_order_criter]");
         goto end;
     }
     cJSON_AddItemToObject(item, "dnPerfOrderCriter", dn_perf_order_criter_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dn_performance_req_convertToJSON() failed [dn_perf_order_criter]");
+        log_error("OpenAPI_dn_performance_req_convertToJSON() failed [dn_perf_order_criter]");
         goto end;
     }
     }
@@ -72,12 +72,12 @@ cJSON *OpenAPI_dn_performance_req_convertToJSON(OpenAPI_dn_performance_req_t *dn
     if (dn_performance_req->order) {
     cJSON *order_local_JSON = OpenAPI_matching_direction_convertToJSON(dn_performance_req->order);
     if (order_local_JSON == NULL) {
-        ogs_error("OpenAPI_dn_performance_req_convertToJSON() failed [order]");
+        log_error("OpenAPI_dn_performance_req_convertToJSON() failed [order]");
         goto end;
     }
     cJSON_AddItemToObject(item, "order", order_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dn_performance_req_convertToJSON() failed [order]");
+        log_error("OpenAPI_dn_performance_req_convertToJSON() failed [order]");
         goto end;
     }
     }
@@ -85,13 +85,13 @@ cJSON *OpenAPI_dn_performance_req_convertToJSON(OpenAPI_dn_performance_req_t *dn
     if (dn_performance_req->report_thresholds) {
     cJSON *report_thresholdsList = cJSON_AddArrayToObject(item, "reportThresholds");
     if (report_thresholdsList == NULL) {
-        ogs_error("OpenAPI_dn_performance_req_convertToJSON() failed [report_thresholds]");
+        log_error("OpenAPI_dn_performance_req_convertToJSON() failed [report_thresholds]");
         goto end;
     }
     OpenAPI_list_for_each(dn_performance_req->report_thresholds, node) {
         cJSON *itemLocal = OpenAPI_threshold_level_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_dn_performance_req_convertToJSON() failed [report_thresholds]");
+            log_error("OpenAPI_dn_performance_req_convertToJSON() failed [report_thresholds]");
             goto end;
         }
         cJSON_AddItemToArray(report_thresholdsList, itemLocal);
@@ -116,7 +116,7 @@ OpenAPI_dn_performance_req_t *OpenAPI_dn_performance_req_parseFromJSON(cJSON *dn
     if (dn_perf_order_criter) {
     dn_perf_order_criter_local_nonprim = OpenAPI_dn_perf_ordering_criterion_parseFromJSON(dn_perf_order_criter);
     if (!dn_perf_order_criter_local_nonprim) {
-        ogs_error("OpenAPI_dn_perf_ordering_criterion_parseFromJSON failed [dn_perf_order_criter]");
+        log_error("OpenAPI_dn_perf_ordering_criterion_parseFromJSON failed [dn_perf_order_criter]");
         goto end;
     }
     }
@@ -125,7 +125,7 @@ OpenAPI_dn_performance_req_t *OpenAPI_dn_performance_req_parseFromJSON(cJSON *dn
     if (order) {
     order_local_nonprim = OpenAPI_matching_direction_parseFromJSON(order);
     if (!order_local_nonprim) {
-        ogs_error("OpenAPI_matching_direction_parseFromJSON failed [order]");
+        log_error("OpenAPI_matching_direction_parseFromJSON failed [order]");
         goto end;
     }
     }
@@ -134,7 +134,7 @@ OpenAPI_dn_performance_req_t *OpenAPI_dn_performance_req_parseFromJSON(cJSON *dn
     if (report_thresholds) {
         cJSON *report_thresholds_local = NULL;
         if (!cJSON_IsArray(report_thresholds)) {
-            ogs_error("OpenAPI_dn_performance_req_parseFromJSON() failed [report_thresholds]");
+            log_error("OpenAPI_dn_performance_req_parseFromJSON() failed [report_thresholds]");
             goto end;
         }
 
@@ -142,12 +142,12 @@ OpenAPI_dn_performance_req_t *OpenAPI_dn_performance_req_parseFromJSON(cJSON *dn
 
         cJSON_ArrayForEach(report_thresholds_local, report_thresholds) {
             if (!cJSON_IsObject(report_thresholds_local)) {
-                ogs_error("OpenAPI_dn_performance_req_parseFromJSON() failed [report_thresholds]");
+                log_error("OpenAPI_dn_performance_req_parseFromJSON() failed [report_thresholds]");
                 goto end;
             }
             OpenAPI_threshold_level_t *report_thresholdsItem = OpenAPI_threshold_level_parseFromJSON(report_thresholds_local);
             if (!report_thresholdsItem) {
-                ogs_error("No report_thresholdsItem");
+                log_error("No report_thresholdsItem");
                 goto end;
             }
             OpenAPI_list_add(report_thresholdsList, report_thresholdsItem);
@@ -185,10 +185,10 @@ OpenAPI_dn_performance_req_t *OpenAPI_dn_performance_req_copy(OpenAPI_dn_perform
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dn_performance_req_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dn_performance_req_convertToJSON() failed");
+        log_error("OpenAPI_dn_performance_req_convertToJSON() failed");
         return NULL;
     }
 
@@ -196,14 +196,14 @@ OpenAPI_dn_performance_req_t *OpenAPI_dn_performance_req_copy(OpenAPI_dn_perform
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

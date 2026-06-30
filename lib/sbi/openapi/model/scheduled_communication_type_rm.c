@@ -8,7 +8,7 @@ OpenAPI_scheduled_communication_type_rm_t *OpenAPI_scheduled_communication_type_
 )
 {
     OpenAPI_scheduled_communication_type_rm_t *scheduled_communication_type_rm_local_var = ogs_malloc(sizeof(OpenAPI_scheduled_communication_type_rm_t));
-    ogs_assert(scheduled_communication_type_rm_local_var);
+    log_assert(scheduled_communication_type_rm_local_var);
 
 
     return scheduled_communication_type_rm_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_scheduled_communication_type_rm_convertToJSON(OpenAPI_scheduled_c
     OpenAPI_lnode_t *node = NULL;
 
     if (scheduled_communication_type_rm == NULL) {
-        ogs_error("OpenAPI_scheduled_communication_type_rm_convertToJSON() failed [ScheduledCommunicationTypeRm]");
+        log_error("OpenAPI_scheduled_communication_type_rm_convertToJSON() failed [ScheduledCommunicationTypeRm]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_scheduled_communication_type_rm_t *OpenAPI_scheduled_communication_type_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_scheduled_communication_type_rm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_scheduled_communication_type_rm_convertToJSON() failed");
+        log_error("OpenAPI_scheduled_communication_type_rm_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_scheduled_communication_type_rm_t *OpenAPI_scheduled_communication_type_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

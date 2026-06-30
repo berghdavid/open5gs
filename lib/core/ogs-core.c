@@ -28,7 +28,7 @@ int __ogs_tlv_domain;
 static ogs_core_context_t self = {
     .log.pool = 8,
     .log.domain_pool = 64,
-    .log.level = OGS_LOG_DEFAULT,
+    .log.level = LOG_DEFAULT,
 
     .pkbuf.pool = 8,
     .pkbuf.config_pool = 8,
@@ -39,17 +39,9 @@ static ogs_core_context_t self = {
 void ogs_core_initialize(void)
 {
     ogs_mem_init();
-    ogs_log_init();
     ogs_pkbuf_init();
     ogs_socket_init();
     ogs_tlv_init();
-
-    ogs_log_install_domain(&__ogs_mem_domain, "mem", ogs_core()->log.level);
-    ogs_log_install_domain(&__ogs_sock_domain, "sock", ogs_core()->log.level);
-    ogs_log_install_domain(&__ogs_event_domain, "event", ogs_core()->log.level);
-    ogs_log_install_domain(&__ogs_thread_domain,
-            "thread", ogs_core()->log.level);
-    ogs_log_install_domain(&__ogs_tlv_domain, "tlv", ogs_core()->log.level);
 }
 
 void ogs_core_terminate(void)
@@ -57,7 +49,6 @@ void ogs_core_terminate(void)
     ogs_tlv_final();
     ogs_socket_final();
     ogs_pkbuf_final();
-    ogs_log_final();
     ogs_mem_final();
 }
 

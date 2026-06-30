@@ -11,7 +11,7 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_create(
 )
 {
     OpenAPI_smcce_ue_list_t *smcce_ue_list_local_var = ogs_malloc(sizeof(OpenAPI_smcce_ue_list_t));
-    ogs_assert(smcce_ue_list_local_var);
+    log_assert(smcce_ue_list_local_var);
 
     smcce_ue_list_local_var->high_level = high_level;
     smcce_ue_list_local_var->medium_level = medium_level;
@@ -57,7 +57,7 @@ cJSON *OpenAPI_smcce_ue_list_convertToJSON(OpenAPI_smcce_ue_list_t *smcce_ue_lis
     OpenAPI_lnode_t *node = NULL;
 
     if (smcce_ue_list == NULL) {
-        ogs_error("OpenAPI_smcce_ue_list_convertToJSON() failed [SmcceUeList]");
+        log_error("OpenAPI_smcce_ue_list_convertToJSON() failed [SmcceUeList]");
         return NULL;
     }
 
@@ -65,12 +65,12 @@ cJSON *OpenAPI_smcce_ue_list_convertToJSON(OpenAPI_smcce_ue_list_t *smcce_ue_lis
     if (smcce_ue_list->high_level) {
     cJSON *high_levelList = cJSON_AddArrayToObject(item, "highLevel");
     if (high_levelList == NULL) {
-        ogs_error("OpenAPI_smcce_ue_list_convertToJSON() failed [high_level]");
+        log_error("OpenAPI_smcce_ue_list_convertToJSON() failed [high_level]");
         goto end;
     }
     OpenAPI_list_for_each(smcce_ue_list->high_level, node) {
         if (cJSON_AddStringToObject(high_levelList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_smcce_ue_list_convertToJSON() failed [high_level]");
+            log_error("OpenAPI_smcce_ue_list_convertToJSON() failed [high_level]");
             goto end;
         }
     }
@@ -79,12 +79,12 @@ cJSON *OpenAPI_smcce_ue_list_convertToJSON(OpenAPI_smcce_ue_list_t *smcce_ue_lis
     if (smcce_ue_list->medium_level) {
     cJSON *medium_levelList = cJSON_AddArrayToObject(item, "mediumLevel");
     if (medium_levelList == NULL) {
-        ogs_error("OpenAPI_smcce_ue_list_convertToJSON() failed [medium_level]");
+        log_error("OpenAPI_smcce_ue_list_convertToJSON() failed [medium_level]");
         goto end;
     }
     OpenAPI_list_for_each(smcce_ue_list->medium_level, node) {
         if (cJSON_AddStringToObject(medium_levelList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_smcce_ue_list_convertToJSON() failed [medium_level]");
+            log_error("OpenAPI_smcce_ue_list_convertToJSON() failed [medium_level]");
             goto end;
         }
     }
@@ -93,12 +93,12 @@ cJSON *OpenAPI_smcce_ue_list_convertToJSON(OpenAPI_smcce_ue_list_t *smcce_ue_lis
     if (smcce_ue_list->low_level) {
     cJSON *low_levelList = cJSON_AddArrayToObject(item, "lowLevel");
     if (low_levelList == NULL) {
-        ogs_error("OpenAPI_smcce_ue_list_convertToJSON() failed [low_level]");
+        log_error("OpenAPI_smcce_ue_list_convertToJSON() failed [low_level]");
         goto end;
     }
     OpenAPI_list_for_each(smcce_ue_list->low_level, node) {
         if (cJSON_AddStringToObject(low_levelList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_smcce_ue_list_convertToJSON() failed [low_level]");
+            log_error("OpenAPI_smcce_ue_list_convertToJSON() failed [low_level]");
             goto end;
         }
     }
@@ -122,7 +122,7 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_parseFromJSON(cJSON *smcce_ue_lis
     if (high_level) {
         cJSON *high_level_local = NULL;
         if (!cJSON_IsArray(high_level)) {
-            ogs_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [high_level]");
+            log_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [high_level]");
             goto end;
         }
 
@@ -132,7 +132,7 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_parseFromJSON(cJSON *smcce_ue_lis
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(high_level_local)) {
-                ogs_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [high_level]");
+                log_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [high_level]");
                 goto end;
             }
             OpenAPI_list_add(high_levelList, ogs_strdup(high_level_local->valuestring));
@@ -143,7 +143,7 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_parseFromJSON(cJSON *smcce_ue_lis
     if (medium_level) {
         cJSON *medium_level_local = NULL;
         if (!cJSON_IsArray(medium_level)) {
-            ogs_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [medium_level]");
+            log_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [medium_level]");
             goto end;
         }
 
@@ -153,7 +153,7 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_parseFromJSON(cJSON *smcce_ue_lis
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(medium_level_local)) {
-                ogs_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [medium_level]");
+                log_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [medium_level]");
                 goto end;
             }
             OpenAPI_list_add(medium_levelList, ogs_strdup(medium_level_local->valuestring));
@@ -164,7 +164,7 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_parseFromJSON(cJSON *smcce_ue_lis
     if (low_level) {
         cJSON *low_level_local = NULL;
         if (!cJSON_IsArray(low_level)) {
-            ogs_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [low_level]");
+            log_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [low_level]");
             goto end;
         }
 
@@ -174,7 +174,7 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_parseFromJSON(cJSON *smcce_ue_lis
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(low_level_local)) {
-                ogs_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [low_level]");
+                log_error("OpenAPI_smcce_ue_list_parseFromJSON() failed [low_level]");
                 goto end;
             }
             OpenAPI_list_add(low_levelList, ogs_strdup(low_level_local->valuestring));
@@ -218,10 +218,10 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_copy(OpenAPI_smcce_ue_list_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_smcce_ue_list_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_smcce_ue_list_convertToJSON() failed");
+        log_error("OpenAPI_smcce_ue_list_convertToJSON() failed");
         return NULL;
     }
 
@@ -229,14 +229,14 @@ OpenAPI_smcce_ue_list_t *OpenAPI_smcce_ue_list_copy(OpenAPI_smcce_ue_list_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

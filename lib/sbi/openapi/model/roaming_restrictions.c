@@ -10,7 +10,7 @@ OpenAPI_roaming_restrictions_t *OpenAPI_roaming_restrictions_create(
 )
 {
     OpenAPI_roaming_restrictions_t *roaming_restrictions_local_var = ogs_malloc(sizeof(OpenAPI_roaming_restrictions_t));
-    ogs_assert(roaming_restrictions_local_var);
+    log_assert(roaming_restrictions_local_var);
 
     roaming_restrictions_local_var->is_access_allowed = is_access_allowed;
     roaming_restrictions_local_var->access_allowed = access_allowed;
@@ -34,14 +34,14 @@ cJSON *OpenAPI_roaming_restrictions_convertToJSON(OpenAPI_roaming_restrictions_t
     OpenAPI_lnode_t *node = NULL;
 
     if (roaming_restrictions == NULL) {
-        ogs_error("OpenAPI_roaming_restrictions_convertToJSON() failed [RoamingRestrictions]");
+        log_error("OpenAPI_roaming_restrictions_convertToJSON() failed [RoamingRestrictions]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (roaming_restrictions->is_access_allowed) {
     if (cJSON_AddBoolToObject(item, "accessAllowed", roaming_restrictions->access_allowed) == NULL) {
-        ogs_error("OpenAPI_roaming_restrictions_convertToJSON() failed [access_allowed]");
+        log_error("OpenAPI_roaming_restrictions_convertToJSON() failed [access_allowed]");
         goto end;
     }
     }
@@ -58,7 +58,7 @@ OpenAPI_roaming_restrictions_t *OpenAPI_roaming_restrictions_parseFromJSON(cJSON
     access_allowed = cJSON_GetObjectItemCaseSensitive(roaming_restrictionsJSON, "accessAllowed");
     if (access_allowed) {
     if (!cJSON_IsBool(access_allowed)) {
-        ogs_error("OpenAPI_roaming_restrictions_parseFromJSON() failed [access_allowed]");
+        log_error("OpenAPI_roaming_restrictions_parseFromJSON() failed [access_allowed]");
         goto end;
     }
     }
@@ -78,10 +78,10 @@ OpenAPI_roaming_restrictions_t *OpenAPI_roaming_restrictions_copy(OpenAPI_roamin
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_roaming_restrictions_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_roaming_restrictions_convertToJSON() failed");
+        log_error("OpenAPI_roaming_restrictions_convertToJSON() failed");
         return NULL;
     }
 
@@ -89,14 +89,14 @@ OpenAPI_roaming_restrictions_t *OpenAPI_roaming_restrictions_copy(OpenAPI_roamin
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

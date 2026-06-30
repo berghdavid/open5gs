@@ -10,7 +10,7 @@ OpenAPI_allowed_nssai_t *OpenAPI_allowed_nssai_create(
 )
 {
     OpenAPI_allowed_nssai_t *allowed_nssai_local_var = ogs_malloc(sizeof(OpenAPI_allowed_nssai_t));
-    ogs_assert(allowed_nssai_local_var);
+    log_assert(allowed_nssai_local_var);
 
     allowed_nssai_local_var->allowed_snssai_list = allowed_snssai_list;
     allowed_nssai_local_var->access_type = access_type;
@@ -41,35 +41,35 @@ cJSON *OpenAPI_allowed_nssai_convertToJSON(OpenAPI_allowed_nssai_t *allowed_nssa
     OpenAPI_lnode_t *node = NULL;
 
     if (allowed_nssai == NULL) {
-        ogs_error("OpenAPI_allowed_nssai_convertToJSON() failed [AllowedNssai]");
+        log_error("OpenAPI_allowed_nssai_convertToJSON() failed [AllowedNssai]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!allowed_nssai->allowed_snssai_list) {
-        ogs_error("OpenAPI_allowed_nssai_convertToJSON() failed [allowed_snssai_list]");
+        log_error("OpenAPI_allowed_nssai_convertToJSON() failed [allowed_snssai_list]");
         return NULL;
     }
     cJSON *allowed_snssai_listList = cJSON_AddArrayToObject(item, "allowedSnssaiList");
     if (allowed_snssai_listList == NULL) {
-        ogs_error("OpenAPI_allowed_nssai_convertToJSON() failed [allowed_snssai_list]");
+        log_error("OpenAPI_allowed_nssai_convertToJSON() failed [allowed_snssai_list]");
         goto end;
     }
     OpenAPI_list_for_each(allowed_nssai->allowed_snssai_list, node) {
         cJSON *itemLocal = OpenAPI_allowed_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_allowed_nssai_convertToJSON() failed [allowed_snssai_list]");
+            log_error("OpenAPI_allowed_nssai_convertToJSON() failed [allowed_snssai_list]");
             goto end;
         }
         cJSON_AddItemToArray(allowed_snssai_listList, itemLocal);
     }
 
     if (allowed_nssai->access_type == OpenAPI_access_type_NULL) {
-        ogs_error("OpenAPI_allowed_nssai_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_allowed_nssai_convertToJSON() failed [access_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "accessType", OpenAPI_access_type_ToString(allowed_nssai->access_type)) == NULL) {
-        ogs_error("OpenAPI_allowed_nssai_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_allowed_nssai_convertToJSON() failed [access_type]");
         goto end;
     }
 
@@ -87,12 +87,12 @@ OpenAPI_allowed_nssai_t *OpenAPI_allowed_nssai_parseFromJSON(cJSON *allowed_nssa
     OpenAPI_access_type_e access_typeVariable = 0;
     allowed_snssai_list = cJSON_GetObjectItemCaseSensitive(allowed_nssaiJSON, "allowedSnssaiList");
     if (!allowed_snssai_list) {
-        ogs_error("OpenAPI_allowed_nssai_parseFromJSON() failed [allowed_snssai_list]");
+        log_error("OpenAPI_allowed_nssai_parseFromJSON() failed [allowed_snssai_list]");
         goto end;
     }
         cJSON *allowed_snssai_list_local = NULL;
         if (!cJSON_IsArray(allowed_snssai_list)) {
-            ogs_error("OpenAPI_allowed_nssai_parseFromJSON() failed [allowed_snssai_list]");
+            log_error("OpenAPI_allowed_nssai_parseFromJSON() failed [allowed_snssai_list]");
             goto end;
         }
 
@@ -100,12 +100,12 @@ OpenAPI_allowed_nssai_t *OpenAPI_allowed_nssai_parseFromJSON(cJSON *allowed_nssa
 
         cJSON_ArrayForEach(allowed_snssai_list_local, allowed_snssai_list) {
             if (!cJSON_IsObject(allowed_snssai_list_local)) {
-                ogs_error("OpenAPI_allowed_nssai_parseFromJSON() failed [allowed_snssai_list]");
+                log_error("OpenAPI_allowed_nssai_parseFromJSON() failed [allowed_snssai_list]");
                 goto end;
             }
             OpenAPI_allowed_snssai_t *allowed_snssai_listItem = OpenAPI_allowed_snssai_parseFromJSON(allowed_snssai_list_local);
             if (!allowed_snssai_listItem) {
-                ogs_error("No allowed_snssai_listItem");
+                log_error("No allowed_snssai_listItem");
                 goto end;
             }
             OpenAPI_list_add(allowed_snssai_listList, allowed_snssai_listItem);
@@ -113,11 +113,11 @@ OpenAPI_allowed_nssai_t *OpenAPI_allowed_nssai_parseFromJSON(cJSON *allowed_nssa
 
     access_type = cJSON_GetObjectItemCaseSensitive(allowed_nssaiJSON, "accessType");
     if (!access_type) {
-        ogs_error("OpenAPI_allowed_nssai_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_allowed_nssai_parseFromJSON() failed [access_type]");
         goto end;
     }
     if (!cJSON_IsString(access_type)) {
-        ogs_error("OpenAPI_allowed_nssai_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_allowed_nssai_parseFromJSON() failed [access_type]");
         goto end;
     }
     access_typeVariable = OpenAPI_access_type_FromString(access_type->valuestring);
@@ -144,10 +144,10 @@ OpenAPI_allowed_nssai_t *OpenAPI_allowed_nssai_copy(OpenAPI_allowed_nssai_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_allowed_nssai_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_allowed_nssai_convertToJSON() failed");
+        log_error("OpenAPI_allowed_nssai_convertToJSON() failed");
         return NULL;
     }
 
@@ -155,14 +155,14 @@ OpenAPI_allowed_nssai_t *OpenAPI_allowed_nssai_copy(OpenAPI_allowed_nssai_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

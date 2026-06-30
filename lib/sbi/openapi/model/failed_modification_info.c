@@ -10,7 +10,7 @@ OpenAPI_failed_modification_info_t *OpenAPI_failed_modification_info_create(
 )
 {
     OpenAPI_failed_modification_info_t *failed_modification_info_local_var = ogs_malloc(sizeof(OpenAPI_failed_modification_info_t));
-    ogs_assert(failed_modification_info_local_var);
+    log_assert(failed_modification_info_local_var);
 
     failed_modification_info_local_var->ipx_id = ipx_id;
     failed_modification_info_local_var->n32f_error_type = n32f_error_type;
@@ -38,26 +38,26 @@ cJSON *OpenAPI_failed_modification_info_convertToJSON(OpenAPI_failed_modificatio
     OpenAPI_lnode_t *node = NULL;
 
     if (failed_modification_info == NULL) {
-        ogs_error("OpenAPI_failed_modification_info_convertToJSON() failed [FailedModificationInfo]");
+        log_error("OpenAPI_failed_modification_info_convertToJSON() failed [FailedModificationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!failed_modification_info->ipx_id) {
-        ogs_error("OpenAPI_failed_modification_info_convertToJSON() failed [ipx_id]");
+        log_error("OpenAPI_failed_modification_info_convertToJSON() failed [ipx_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ipxId", failed_modification_info->ipx_id) == NULL) {
-        ogs_error("OpenAPI_failed_modification_info_convertToJSON() failed [ipx_id]");
+        log_error("OpenAPI_failed_modification_info_convertToJSON() failed [ipx_id]");
         goto end;
     }
 
     if (failed_modification_info->n32f_error_type == OpenAPI_n32f_error_type_NULL) {
-        ogs_error("OpenAPI_failed_modification_info_convertToJSON() failed [n32f_error_type]");
+        log_error("OpenAPI_failed_modification_info_convertToJSON() failed [n32f_error_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "n32fErrorType", OpenAPI_n32f_error_type_ToString(failed_modification_info->n32f_error_type)) == NULL) {
-        ogs_error("OpenAPI_failed_modification_info_convertToJSON() failed [n32f_error_type]");
+        log_error("OpenAPI_failed_modification_info_convertToJSON() failed [n32f_error_type]");
         goto end;
     }
 
@@ -74,21 +74,21 @@ OpenAPI_failed_modification_info_t *OpenAPI_failed_modification_info_parseFromJS
     OpenAPI_n32f_error_type_e n32f_error_typeVariable = 0;
     ipx_id = cJSON_GetObjectItemCaseSensitive(failed_modification_infoJSON, "ipxId");
     if (!ipx_id) {
-        ogs_error("OpenAPI_failed_modification_info_parseFromJSON() failed [ipx_id]");
+        log_error("OpenAPI_failed_modification_info_parseFromJSON() failed [ipx_id]");
         goto end;
     }
     if (!cJSON_IsString(ipx_id)) {
-        ogs_error("OpenAPI_failed_modification_info_parseFromJSON() failed [ipx_id]");
+        log_error("OpenAPI_failed_modification_info_parseFromJSON() failed [ipx_id]");
         goto end;
     }
 
     n32f_error_type = cJSON_GetObjectItemCaseSensitive(failed_modification_infoJSON, "n32fErrorType");
     if (!n32f_error_type) {
-        ogs_error("OpenAPI_failed_modification_info_parseFromJSON() failed [n32f_error_type]");
+        log_error("OpenAPI_failed_modification_info_parseFromJSON() failed [n32f_error_type]");
         goto end;
     }
     if (!cJSON_IsString(n32f_error_type)) {
-        ogs_error("OpenAPI_failed_modification_info_parseFromJSON() failed [n32f_error_type]");
+        log_error("OpenAPI_failed_modification_info_parseFromJSON() failed [n32f_error_type]");
         goto end;
     }
     n32f_error_typeVariable = OpenAPI_n32f_error_type_FromString(n32f_error_type->valuestring);
@@ -108,10 +108,10 @@ OpenAPI_failed_modification_info_t *OpenAPI_failed_modification_info_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_failed_modification_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_failed_modification_info_convertToJSON() failed");
+        log_error("OpenAPI_failed_modification_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -119,14 +119,14 @@ OpenAPI_failed_modification_info_t *OpenAPI_failed_modification_info_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -13,7 +13,7 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_create(
 )
 {
     OpenAPI_assign_ebi_data_t *assign_ebi_data_local_var = ogs_malloc(sizeof(OpenAPI_assign_ebi_data_t));
-    ogs_assert(assign_ebi_data_local_var);
+    log_assert(assign_ebi_data_local_var);
 
     assign_ebi_data_local_var->pdu_session_id = pdu_session_id;
     assign_ebi_data_local_var->arp_list = arp_list;
@@ -65,26 +65,26 @@ cJSON *OpenAPI_assign_ebi_data_convertToJSON(OpenAPI_assign_ebi_data_t *assign_e
     OpenAPI_lnode_t *node = NULL;
 
     if (assign_ebi_data == NULL) {
-        ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [AssignEbiData]");
+        log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [AssignEbiData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "pduSessionId", assign_ebi_data->pdu_session_id) == NULL) {
-        ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [pdu_session_id]");
+        log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [pdu_session_id]");
         goto end;
     }
 
     if (assign_ebi_data->arp_list) {
     cJSON *arp_listList = cJSON_AddArrayToObject(item, "arpList");
     if (arp_listList == NULL) {
-        ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [arp_list]");
+        log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [arp_list]");
         goto end;
     }
     OpenAPI_list_for_each(assign_ebi_data->arp_list, node) {
         cJSON *itemLocal = OpenAPI_arp_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [arp_list]");
+            log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [arp_list]");
             goto end;
         }
         cJSON_AddItemToArray(arp_listList, itemLocal);
@@ -94,16 +94,16 @@ cJSON *OpenAPI_assign_ebi_data_convertToJSON(OpenAPI_assign_ebi_data_t *assign_e
     if (assign_ebi_data->released_ebi_list) {
     cJSON *released_ebi_listList = cJSON_AddArrayToObject(item, "releasedEbiList");
     if (released_ebi_listList == NULL) {
-        ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [released_ebi_list]");
+        log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [released_ebi_list]");
         goto end;
     }
     OpenAPI_list_for_each(assign_ebi_data->released_ebi_list, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [released_ebi_list]");
+            log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [released_ebi_list]");
             goto end;
         }
         if (cJSON_AddNumberToObject(released_ebi_listList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [released_ebi_list]");
+            log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [released_ebi_list]");
             goto end;
         }
     }
@@ -112,12 +112,12 @@ cJSON *OpenAPI_assign_ebi_data_convertToJSON(OpenAPI_assign_ebi_data_t *assign_e
     if (assign_ebi_data->old_guami) {
     cJSON *old_guami_local_JSON = OpenAPI_guami_convertToJSON(assign_ebi_data->old_guami);
     if (old_guami_local_JSON == NULL) {
-        ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [old_guami]");
+        log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [old_guami]");
         goto end;
     }
     cJSON_AddItemToObject(item, "oldGuami", old_guami_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [old_guami]");
+        log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [old_guami]");
         goto end;
     }
     }
@@ -125,13 +125,13 @@ cJSON *OpenAPI_assign_ebi_data_convertToJSON(OpenAPI_assign_ebi_data_t *assign_e
     if (assign_ebi_data->modified_ebi_list) {
     cJSON *modified_ebi_listList = cJSON_AddArrayToObject(item, "modifiedEbiList");
     if (modified_ebi_listList == NULL) {
-        ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [modified_ebi_list]");
+        log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [modified_ebi_list]");
         goto end;
     }
     OpenAPI_list_for_each(assign_ebi_data->modified_ebi_list, node) {
         cJSON *itemLocal = OpenAPI_ebi_arp_mapping_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed [modified_ebi_list]");
+            log_error("OpenAPI_assign_ebi_data_convertToJSON() failed [modified_ebi_list]");
             goto end;
         }
         cJSON_AddItemToArray(modified_ebi_listList, itemLocal);
@@ -157,11 +157,11 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_parseFromJSON(cJSON *assign_e
     OpenAPI_list_t *modified_ebi_listList = NULL;
     pdu_session_id = cJSON_GetObjectItemCaseSensitive(assign_ebi_dataJSON, "pduSessionId");
     if (!pdu_session_id) {
-        ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [pdu_session_id]");
+        log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [pdu_session_id]");
         goto end;
     }
     if (!cJSON_IsNumber(pdu_session_id)) {
-        ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [pdu_session_id]");
+        log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [pdu_session_id]");
         goto end;
     }
 
@@ -169,7 +169,7 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_parseFromJSON(cJSON *assign_e
     if (arp_list) {
         cJSON *arp_list_local = NULL;
         if (!cJSON_IsArray(arp_list)) {
-            ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [arp_list]");
+            log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [arp_list]");
             goto end;
         }
 
@@ -177,12 +177,12 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_parseFromJSON(cJSON *assign_e
 
         cJSON_ArrayForEach(arp_list_local, arp_list) {
             if (!cJSON_IsObject(arp_list_local)) {
-                ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [arp_list]");
+                log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [arp_list]");
                 goto end;
             }
             OpenAPI_arp_t *arp_listItem = OpenAPI_arp_parseFromJSON(arp_list_local);
             if (!arp_listItem) {
-                ogs_error("No arp_listItem");
+                log_error("No arp_listItem");
                 goto end;
             }
             OpenAPI_list_add(arp_listList, arp_listItem);
@@ -193,7 +193,7 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_parseFromJSON(cJSON *assign_e
     if (released_ebi_list) {
         cJSON *released_ebi_list_local = NULL;
         if (!cJSON_IsArray(released_ebi_list)) {
-            ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [released_ebi_list]");
+            log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [released_ebi_list]");
             goto end;
         }
 
@@ -203,12 +203,12 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_parseFromJSON(cJSON *assign_e
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(released_ebi_list_local)) {
-                ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [released_ebi_list]");
+                log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [released_ebi_list]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [released_ebi_list]");
+                log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [released_ebi_list]");
                 goto end;
             }
             *localDouble = released_ebi_list_local->valuedouble;
@@ -220,7 +220,7 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_parseFromJSON(cJSON *assign_e
     if (old_guami) {
     old_guami_local_nonprim = OpenAPI_guami_parseFromJSON(old_guami);
     if (!old_guami_local_nonprim) {
-        ogs_error("OpenAPI_guami_parseFromJSON failed [old_guami]");
+        log_error("OpenAPI_guami_parseFromJSON failed [old_guami]");
         goto end;
     }
     }
@@ -229,7 +229,7 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_parseFromJSON(cJSON *assign_e
     if (modified_ebi_list) {
         cJSON *modified_ebi_list_local = NULL;
         if (!cJSON_IsArray(modified_ebi_list)) {
-            ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [modified_ebi_list]");
+            log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [modified_ebi_list]");
             goto end;
         }
 
@@ -237,12 +237,12 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_parseFromJSON(cJSON *assign_e
 
         cJSON_ArrayForEach(modified_ebi_list_local, modified_ebi_list) {
             if (!cJSON_IsObject(modified_ebi_list_local)) {
-                ogs_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [modified_ebi_list]");
+                log_error("OpenAPI_assign_ebi_data_parseFromJSON() failed [modified_ebi_list]");
                 goto end;
             }
             OpenAPI_ebi_arp_mapping_t *modified_ebi_listItem = OpenAPI_ebi_arp_mapping_parseFromJSON(modified_ebi_list_local);
             if (!modified_ebi_listItem) {
-                ogs_error("No modified_ebi_listItem");
+                log_error("No modified_ebi_listItem");
                 goto end;
             }
             OpenAPI_list_add(modified_ebi_listList, modified_ebi_listItem);
@@ -293,10 +293,10 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_copy(OpenAPI_assign_ebi_data_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_assign_ebi_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_assign_ebi_data_convertToJSON() failed");
+        log_error("OpenAPI_assign_ebi_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -304,14 +304,14 @@ OpenAPI_assign_ebi_data_t *OpenAPI_assign_ebi_data_copy(OpenAPI_assign_ebi_data_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

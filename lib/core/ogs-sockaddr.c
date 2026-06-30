@@ -65,8 +65,8 @@ static bool ogs_sockaddr_compare(const ogs_sockaddr_t *a,
 int ogs_getnameinfo(
     char *hostname, socklen_t hostname_len, ogs_sockaddr_t *addr, int flags)
 {
-    ogs_assert(hostname);
-    ogs_assert(addr);
+    log_assert(hostname);
+    log_assert(addr);
 
     return getnameinfo(&addr->sa, ogs_sockaddr_len(addr),
             hostname, hostname_len,
@@ -112,7 +112,7 @@ int ogs_addaddrinfo(ogs_sockaddr_t **sa_list,
 
     char buf[OGS_ADDRSTRLEN];
 
-    ogs_assert(sa_list);
+    log_assert(sa_list);
 
     /* Prepare hints for getaddrinfo() */
     memset(&hints, 0, sizeof(hints));
@@ -124,7 +124,7 @@ int ogs_addaddrinfo(ogs_sockaddr_t **sa_list,
 
     rc = getaddrinfo(hostname, service, &hints, &ai_list);
     if (rc != 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                         "getaddrinfo(%d:%s:%d:0x%x) failed: %s",
                         family, hostname ? hostname : "(null)",
                         port, flags, gai_strerror(rc));
@@ -148,7 +148,7 @@ int ogs_addaddrinfo(ogs_sockaddr_t **sa_list,
 
         new = ogs_calloc(1, sizeof(ogs_sockaddr_t));
         if (!new) {
-            ogs_error("ogs_calloc() failed");
+            log_error("ogs_calloc() failed");
             /* Clean up any partially added entries on memory failure */
             if (first_new) {
                 if (tail) {
@@ -168,12 +168,12 @@ int ogs_addaddrinfo(ogs_sockaddr_t **sa_list,
         if (hostname) {
             if (ogs_inet_pton(ai->ai_family, hostname, &tmp) == OGS_OK) {
                 /* Input string is a valid numeric IP address */
-                ogs_debug("addr:%s, port:%d", OGS_ADDR(new, buf), port);
+                log_debug("addr:%s, port:%d", OGS_ADDR(new, buf), port);
             } else {
                 /* Input string is not a numeric IP; treat it as a hostname */
                 new->hostname = ogs_strdup(hostname);
                 if (!new->hostname) {
-                    ogs_error("ogs_strdup() failed");
+                    log_error("ogs_strdup() failed");
                     /* Free the new node and any previously added nodes */
                     ogs_free(new);
                     if (first_new) {
@@ -187,7 +187,7 @@ int ogs_addaddrinfo(ogs_sockaddr_t **sa_list,
                     freeaddrinfo(ai_list);
                     return OGS_ERROR;
                 }
-                ogs_debug("name:%s, port:%d", new->hostname, port);
+                log_debug("name:%s, port:%d", new->hostname, port);
             }
         }
 
@@ -207,7 +207,7 @@ int ogs_addaddrinfo(ogs_sockaddr_t **sa_list,
 
     if (first_new == NULL) {
         /* No addresses were added (e.g., no AF_INET/AF_INET6 results) */
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                         "ogs_addaddrinfo(%d:%s:%d:0x%x) returned no addresses",
                         family, hostname ? hostname : "(null)", port, flags);
         return OGS_ERROR;
@@ -220,7 +220,7 @@ int ogs_filteraddrinfo(ogs_sockaddr_t **sa_list, int family)
 {
     ogs_sockaddr_t *addr = NULL, *prev = NULL, *next = NULL;
 
-    ogs_assert(sa_list);
+    log_assert(sa_list);
 
     prev = NULL;
     addr = *sa_list;
@@ -255,13 +255,13 @@ int ogs_copyaddrinfo(ogs_sockaddr_t **dst, const ogs_sockaddr_t *src)
         if (!d) {
             *dst = d = ogs_memdup(s, sizeof *s);
             if (!(*dst)) {
-                ogs_error("ogs_memdup() failed");
+                log_error("ogs_memdup() failed");
                 return OGS_ERROR;
             }
         } else {
             d = d->next = ogs_memdup(s, sizeof *s);
             if (!d) {
-                ogs_error("ogs_memdup() failed");
+                log_error("ogs_memdup() failed");
                 return OGS_ERROR;
             }
         }
@@ -269,7 +269,7 @@ int ogs_copyaddrinfo(ogs_sockaddr_t **dst, const ogs_sockaddr_t *src)
             if (s == src || s->hostname != src->hostname) {
                 d->hostname = ogs_strdup(s->hostname);
                 if (!d->hostname) {
-                    ogs_error("ogs_memdup() failed");
+                    log_error("ogs_memdup() failed");
                     return OGS_ERROR;
                 }
             } else {
@@ -285,7 +285,7 @@ int ogs_sortaddrinfo(ogs_sockaddr_t **sa_list, int family)
 {
     ogs_sockaddr_t *head = NULL, *addr = NULL, *new = NULL, *old = NULL;
 
-    ogs_assert(sa_list);
+    log_assert(sa_list);
 
     old = *sa_list;
     while (old) {
@@ -321,8 +321,8 @@ void ogs_merge_single_addrinfo(
     ogs_sockaddr_t *p;
     ogs_sockaddr_t *new_sa;
 
-    ogs_assert(dest);
-    ogs_assert(item);
+    log_assert(dest);
+    log_assert(item);
 
     p = *dest;
 
@@ -334,11 +334,11 @@ void ogs_merge_single_addrinfo(
         p = p->next;
     }
     new_sa = (ogs_sockaddr_t *)ogs_malloc(sizeof(*new_sa));
-    ogs_assert(new_sa);
+    log_assert(new_sa);
     memcpy(new_sa, item, sizeof(*new_sa));
     if (item->hostname) {
         new_sa->hostname = ogs_strdup(item->hostname);
-        ogs_assert(new_sa->hostname);
+        log_assert(new_sa->hostname);
     }
     new_sa->next = NULL;
     if (!(*dest)) {
@@ -373,7 +373,7 @@ ogs_sockaddr_t *ogs_link_local_addr(const char *dev, const ogs_sockaddr_t *sa)
 
     rc = getifaddrs(&iflist);
     if (rc != 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "getifaddrs failed");
+        log_error_msg(LOG_ERROR, ogs_socket_errno, "getifaddrs failed");
         return NULL;
     }
 
@@ -401,10 +401,10 @@ ogs_sockaddr_t *ogs_link_local_addr(const char *dev, const ogs_sockaddr_t *sa)
 
         addr = ogs_calloc(1, sizeof(ogs_sockaddr_t));
         if (!addr) {
-            ogs_error("ogs_calloc() failed");
+            log_error("ogs_calloc() failed");
             return NULL;
         }
-        ogs_assert(addr);
+        log_assert(addr);
         memcpy(&addr->sa, cur->ifa_addr, ogs_sockaddr_len(cur->ifa_addr));
 
         freeifaddrs(iflist);
@@ -418,13 +418,13 @@ ogs_sockaddr_t *ogs_link_local_addr(const char *dev, const ogs_sockaddr_t *sa)
 
 ogs_sockaddr_t *ogs_link_local_addr_by_dev(const char *dev)
 {
-    ogs_assert(dev);
+    log_assert(dev);
     return ogs_link_local_addr(dev, NULL);
 }
 
 ogs_sockaddr_t *ogs_link_local_addr_by_sa(const ogs_sockaddr_t *sa)
 {
-    ogs_assert(sa);
+    log_assert(sa);
     return ogs_link_local_addr(NULL, sa);
 }
 
@@ -435,19 +435,19 @@ int ogs_filter_ip_version(ogs_sockaddr_t **addr,
 
     if (no_ipv4 == 1) {
         rv = ogs_filteraddrinfo(addr, AF_INET6);
-        ogs_assert(rv == OGS_OK);
+        log_assert(rv == OGS_OK);
     }
     if (no_ipv6 == 1) {
         rv = ogs_filteraddrinfo(addr, AF_INET);
-        ogs_assert(rv == OGS_OK);
+        log_assert(rv == OGS_OK);
     }
 
     if (prefer_ipv4 == 1) {
         rv = ogs_sortaddrinfo(addr, AF_INET);
-        ogs_assert(rv == OGS_OK);
+        log_assert(rv == OGS_OK);
     } else {
         rv = ogs_sortaddrinfo(addr, AF_INET6);
-        ogs_assert(rv == OGS_OK);
+        log_assert(rv == OGS_OK);
     }
 
     return OGS_OK;
@@ -460,9 +460,9 @@ const char *ogs_inet_ntop(void *sa, char *buf, int buflen)
     ogs_sockaddr_t *sockaddr = NULL;
 
     sockaddr = sa;
-    ogs_assert(sockaddr);
-    ogs_assert(buf);
-    ogs_assert(buflen >= OGS_ADDRSTRLEN);
+    log_assert(sockaddr);
+    log_assert(buf);
+    log_assert(buflen >= OGS_ADDRSTRLEN);
 
     family = sockaddr->ogs_sa_family;
     switch (family) {
@@ -473,7 +473,7 @@ const char *ogs_inet_ntop(void *sa, char *buf, int buflen)
         return inet_ntop(family, &sockaddr->sin6.sin6_addr, buf,
                 INET6_ADDRSTRLEN);
     default:
-        ogs_fatal("Unknown family(%d)", family);
+        log_fatal("Unknown family(%d)", family);
         ogs_abort();
         return NULL;
     }
@@ -483,9 +483,9 @@ int ogs_inet_pton(int family, const char *src, void *sa)
 {
     ogs_sockaddr_t *dst = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     dst = sa;
-    ogs_assert(dst);
+    log_assert(dst);
 
     dst->ogs_sa_family = family;
     switch(family) {
@@ -496,7 +496,7 @@ int ogs_inet_pton(int family, const char *src, void *sa)
         return inet_pton(family, src, &dst->sin6.sin6_addr) == 1 ?
              OGS_OK : OGS_ERROR;
     default:
-        ogs_fatal("Unknown family(%d)", family);
+        log_fatal("Unknown family(%d)", family);
         ogs_abort();
         return OGS_ERROR;
     }
@@ -506,7 +506,7 @@ socklen_t ogs_sockaddr_len(const void *sa)
 {
     const ogs_sockaddr_t *sockaddr = sa;
 
-    ogs_assert(sa);
+    log_assert(sa);
 
     switch(sockaddr->ogs_sa_family) {
     case AF_INET:
@@ -514,7 +514,7 @@ socklen_t ogs_sockaddr_len(const void *sa)
     case AF_INET6:
         return sizeof(struct sockaddr_in6);
     default:
-        ogs_fatal("Unknown family(%d)", sockaddr->ogs_sa_family);
+        log_fatal("Unknown family(%d)", sockaddr->ogs_sa_family);
         ogs_abort();
         return OGS_ERROR;
     }
@@ -529,8 +529,8 @@ static bool ogs_sockaddr_compare(const ogs_sockaddr_t *a,
                                  const ogs_sockaddr_t *b,
                                  bool compare_port)
 {
-    ogs_assert(a);
-    ogs_assert(b);
+    log_assert(a);
+    log_assert(b);
 
     if (a->ogs_sa_family != b->ogs_sa_family)
         return false;
@@ -551,7 +551,7 @@ static bool ogs_sockaddr_compare(const ogs_sockaddr_t *a,
             return false;
         return true;
     default:
-        ogs_error("Unexpected address family %u", a->ogs_sa_family);
+        log_error("Unexpected address family %u", a->ogs_sa_family);
         ogs_abort();
         return false; /* Defensive return */
     }
@@ -679,7 +679,7 @@ static int parse_ip(
              * addresses; this of course forces the user to specify
              * IPv4 addresses in a.b.c.d style instead of ::ffff:a.b.c.d style.
              */
-            ogs_error("Cannot support IPv4-mapped IPv6: "
+            log_error("Cannot support IPv4-mapped IPv6: "
                     "Use IPv4 address in a.b.c.d style "
                     "instead of ::ffff:a.b.c.d style");
             return OGS_ERROR;
@@ -738,8 +738,8 @@ int ogs_ipsubnet(ogs_ipsubnet_t *ipsub,
     char *endptr;
     long bits, maxbits = 32;
 
-    ogs_assert(ipsub);
-    ogs_assert(ipstr);
+    log_assert(ipsub);
+    log_assert(ipstr);
 
     /* filter out stuff which doesn't look remotely like an IP address;
      * this helps callers like mod_access which have a syntax allowing
@@ -748,7 +748,7 @@ int ogs_ipsubnet(ogs_ipsubnet_t *ipsub,
      * to be an IP address
      */
     if (!looks_like_ip(ipstr)) {
-        ogs_error("looks_like_ip(%s, %s) failed", ipstr, mask_or_numbits);
+        log_error("looks_like_ip(%s, %s) failed", ipstr, mask_or_numbits);
         return OGS_ERROR;
     }
 
@@ -757,7 +757,7 @@ int ogs_ipsubnet(ogs_ipsubnet_t *ipsub,
 
     rv = parse_ip(ipsub, ipstr, mask_or_numbits == NULL);
     if (rv != OGS_OK) {
-        ogs_error("parse_ip(%s, %s) failed", ipstr, mask_or_numbits);
+        log_error("parse_ip(%s, %s) failed", ipstr, mask_or_numbits);
         return rv;
     }
 
@@ -789,7 +789,7 @@ int ogs_ipsubnet(ogs_ipsubnet_t *ipsub,
             ipsub->family == AF_INET) {
             /* valid IPv4 netmask */
         } else {
-            ogs_error("Bad netmask %s", mask_or_numbits);
+            log_error("Bad netmask %s", mask_or_numbits);
             return OGS_ERROR;
         }
     }
@@ -808,7 +808,7 @@ char *ogs_ipstrdup(ogs_sockaddr_t *addr)
 {
     char buf[OGS_ADDRSTRLEN + 1];
 
-    ogs_assert(addr);
+    log_assert(addr);
     memset(buf, 0, sizeof(buf));
 
     OGS_ADDR(addr, buf);
@@ -851,8 +851,8 @@ int ogs_sockaddr_from_ip_or_fqdn(ogs_sockaddr_t **sa_list,
     int flags = 0;
     ogs_sockaddr_t tmp;
 
-    ogs_assert(sa_list);
-    ogs_assert(ip_or_fqdn);
+    log_assert(sa_list);
+    log_assert(ip_or_fqdn);
 
     /* Determine if the input is an IP literal (numeric address).
      * If so, use AI_NUMERICHOST to avoid DNS lookup. */
@@ -866,7 +866,7 @@ int ogs_sockaddr_from_ip_or_fqdn(ogs_sockaddr_t **sa_list,
     *sa_list = NULL;
     rc = ogs_addaddrinfo(sa_list, family, ip_or_fqdn, port, flags);
     if (rc != OGS_OK) {
-        ogs_error("Failed to resolve address: %s", ip_or_fqdn);
+        log_error("Failed to resolve address: %s", ip_or_fqdn);
         /* Cleanup: free any nodes that might have been added before failure */
         if (*sa_list) {
             ogs_freeaddrinfo(*sa_list);

@@ -38,7 +38,7 @@ extern "C" {
     } else if (ogs_yaml_iter_type(ARRAY) == YAML_SCALAR_NODE) { \
         break; \
     } else \
-        ogs_assert_if_reached();
+        log_assert_if_reached();
 
 #define OGS_YAML_ARRAY_NEXT(ARRAY, ITERATOR) \
     if (ogs_yaml_iter_type(ARRAY) == YAML_SEQUENCE_NODE && \

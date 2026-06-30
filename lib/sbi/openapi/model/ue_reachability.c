@@ -8,7 +8,7 @@ OpenAPI_ue_reachability_t *OpenAPI_ue_reachability_create(
 )
 {
     OpenAPI_ue_reachability_t *ue_reachability_local_var = ogs_malloc(sizeof(OpenAPI_ue_reachability_t));
-    ogs_assert(ue_reachability_local_var);
+    log_assert(ue_reachability_local_var);
 
 
     return ue_reachability_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_ue_reachability_convertToJSON(OpenAPI_ue_reachability_t *ue_reach
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_reachability == NULL) {
-        ogs_error("OpenAPI_ue_reachability_convertToJSON() failed [UeReachability]");
+        log_error("OpenAPI_ue_reachability_convertToJSON() failed [UeReachability]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_ue_reachability_t *OpenAPI_ue_reachability_copy(OpenAPI_ue_reachability_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_reachability_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_reachability_convertToJSON() failed");
+        log_error("OpenAPI_ue_reachability_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_ue_reachability_t *OpenAPI_ue_reachability_copy(OpenAPI_ue_reachability_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

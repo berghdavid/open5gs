@@ -36,7 +36,7 @@ int ogs_env_set(const char *envvar, const char *value)
 #if defined(HAVE_SETENV)
 
     if (0 > setenv(envvar, value, 1)) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_errno, "setenv() failed");
+        log_error("setenv() failed");
         return OGS_ERROR;
     }
     return OGS_OK;
@@ -46,17 +46,17 @@ int ogs_env_set(const char *envvar, const char *value)
     char buf[OGS_HUGE_LEN];
 
     if (ogs_snprintf(buf, OGS_HUGE_LEN, "%s=%s", envvar, value) < 0) {
-        ogs_error("snprintf() failed");
+        log_error("snprintf() failed");
         return OGS_ERROR; 
     }
     if (0 > putenv(buf)) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_errno, "putenv() failed");
+        log_error("putenv() failed");
         return OGS_ERROR;
     }
     return OGS_OK;
 
 #else
-    ogs_error("Not implemented");
+    log_error("Not implemented");
     return OGS_ERROR;
 #endif
 }
@@ -67,7 +67,7 @@ int ogs_env_delete(const char *envvar)
 #ifdef HAVE_UNSETENV
 
     if (0 > unsetenv(envvar)) {
-        ogs_error("unsetenv() failed");
+        log_error("unsetenv() failed");
         return OGS_ERROR; 
     }
     return OGS_OK;
@@ -80,7 +80,7 @@ int ogs_env_delete(const char *envvar)
      *       configure check to decide when to use that form of
      *       putenv() here
      */
-    ogs_error("Not implemented");
+    log_error("Not implemented");
     return OGS_ERROR;
 #endif
 }

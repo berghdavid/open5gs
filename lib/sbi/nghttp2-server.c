@@ -205,12 +205,12 @@ static SSL_CTX *create_ssl_ctx(
     SSL_CTX *ssl_ctx;
     uint64_t ssl_opts;
 
-    ogs_assert(key_file);
-    ogs_assert(cert_file);
+    log_assert(key_file);
+    log_assert(cert_file);
 
     ssl_ctx = SSL_CTX_new(TLS_server_method());
     if (!ssl_ctx) {
-        ogs_error("Could not create SSL/TLS context: %s", ERR_error_string(ERR_get_error(), NULL));
+        log_error("Could not create SSL/TLS context: %s", ERR_error_string(ERR_get_error(), NULL));
         return NULL;
     }
 
@@ -245,7 +245,7 @@ static SSL_CTX *create_ssl_ctx(
 
 #if OPENSSL_VERSION_NUMBER >= 0x30000000L
     if (SSL_CTX_set1_curves_list(ssl_ctx, "P-256") != 1) {
-        ogs_error("SSL_CTX_set1_curves_list failed: %s", ERR_error_string(ERR_get_error(), NULL));
+        log_error("SSL_CTX_set1_curves_list failed: %s", ERR_error_string(ERR_get_error(), NULL));
         return NULL;
     }
 #endif /* !(OPENSSL_VERSION_NUMBER >= 0x30000000L) */
@@ -254,7 +254,7 @@ static SSL_CTX *create_ssl_ctx(
     SSL_CTX_set_mode(ssl_ctx, SSL_MODE_RELEASE_BUFFERS);
 
     if (SSL_CTX_set_default_verify_paths(ssl_ctx) != 1) {
-        ogs_warn("Could not load system trusted ca certificates: %s",
+        log_warn("Could not load system trusted ca certificates: %s",
                 ERR_error_string(ERR_get_error(), NULL));
     }
 
@@ -266,7 +266,7 @@ static SSL_CTX *create_ssl_ctx(
 #endif /* TLS1_3_VERSION */
     if (ssl_ctx_set_proto_versions(
                 ssl_ctx, OGS_TLS_MIN_VERSION, OGS_TLS_MAX_VERSION) != 0) {
-        ogs_error("Could not set TLS versions [%d:%d]",
+        log_error("Could not set TLS versions [%d:%d]",
                     OGS_TLS_MIN_VERSION, OGS_TLS_MAX_VERSION);
         return NULL;
     }
@@ -277,20 +277,20 @@ static SSL_CTX *create_ssl_ctx(
     "POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-" \
     "AES256-GCM-SHA384"
     if (SSL_CTX_set_cipher_list(ssl_ctx, DEFAULT_CIPHER_LIST) == 0) {
-        ogs_error("%s", ERR_error_string(ERR_get_error(), NULL));
+        log_error("%s", ERR_error_string(ERR_get_error(), NULL));
         return NULL;
     }
 
     if (SSL_CTX_use_PrivateKey_file(ssl_ctx, key_file, SSL_FILETYPE_PEM) != 1) {
-        ogs_error("Could not read private key file - key_file=%s", key_file);
+        log_error("Could not read private key file - key_file=%s", key_file);
         return NULL;
     }
     if (SSL_CTX_use_certificate_chain_file(ssl_ctx, cert_file) != 1) {
-        ogs_error("Could not read certificate file - cert_file=%s ", cert_file);
+        log_error("Could not read certificate file - cert_file=%s ", cert_file);
         return NULL;
     }
     if (SSL_CTX_check_private_key(ssl_ctx) != 1) {
-        ogs_error("SSL_CTX_check_private_key failed: %s",
+        log_error("SSL_CTX_check_private_key failed: %s",
                 ERR_error_string(ERR_get_error(), NULL));
         return NULL;
     }
@@ -312,11 +312,11 @@ static int verify_callback(int preverify_ok, X509_STORE_CTX *ctx)
         int err = X509_STORE_CTX_get_error(ctx);
         int depth = X509_STORE_CTX_get_error_depth(ctx);
         if (err == X509_V_ERR_CERT_HAS_EXPIRED && depth == 0) {
-            ogs_error("The client certificate has expired, but is accepted by "
+            log_error("The client certificate has expired, but is accepted by "
                         "configuration");
             return 1;
         }
-        ogs_error("client certificate verify error:num=%d:%s:depth=%d",
+        log_error("client certificate verify error:num=%d:%s:depth=%d",
                 err, X509_verify_cert_error_string(err), depth);
     }
     return preverify_ok;
@@ -331,7 +331,7 @@ static int server_start(ogs_sbi_server_t *server,
     char *hostname = NULL;
 
     addr = server->node.addr;
-    ogs_assert(addr);
+    log_assert(addr);
 
     /* Create SSL CTX */
     if (server->scheme == OpenAPI_uri_scheme_https) {
@@ -339,7 +339,7 @@ static int server_start(ogs_sbi_server_t *server,
         server->ssl_ctx = create_ssl_ctx(
                 server->private_key, server->cert, server->sslkeylog);
         if (!server->ssl_ctx) {
-            ogs_error("Cannot create SSL CTX");
+            log_error("Cannot create SSL CTX");
             return OGS_ERROR;
         }
 
@@ -350,7 +350,7 @@ static int server_start(ogs_sbi_server_t *server,
             if (SSL_CTX_load_verify_locations(
                         server->ssl_ctx,
                         server->verify_client_cacert, NULL) != 1) {
-                ogs_error("Could not load trusted ca certificates from %s:%s",
+                log_error("Could not load trusted ca certificates from %s:%s",
                         server->verify_client_cacert,
                         ERR_error_string(ERR_get_error(), NULL));
 
@@ -366,7 +366,7 @@ static int server_start(ogs_sbi_server_t *server,
              */
             cert_names = SSL_load_client_CA_file(server->verify_client_cacert);
             if (!cert_names) {
-                ogs_error("Could not load ca certificates from %s:%s",
+                log_error("Could not load ca certificates from %s:%s",
                     server->verify_client_cacert,
                     ERR_error_string(ERR_get_error(), NULL));
 
@@ -383,11 +383,11 @@ static int server_start(ogs_sbi_server_t *server,
                         SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
                         verify_callback);
 
-            ogs_assert(server->id >= OGS_MIN_POOL_ID &&
+            log_assert(server->id >= OGS_MIN_POOL_ID &&
                     server->id <= OGS_MAX_POOL_ID);
             context = ogs_msprintf("%d", server->id);
             if (!context) {
-                ogs_error("ogs_sbi_server_id_context() failed");
+                log_error("ogs_sbi_server_id_context() failed");
 
                 SSL_CTX_free(server->ssl_ctx);
 
@@ -397,7 +397,7 @@ static int server_start(ogs_sbi_server_t *server,
             if (!SSL_CTX_set_session_id_context(
                         server->ssl_ctx,
                         (unsigned char *)context, strlen(context))) {
-                ogs_error("SSL_CTX_set_session_id_context() failed");
+                log_error("SSL_CTX_set_session_id_context() failed");
 
                 ogs_free(context);
                 SSL_CTX_free(server->ssl_ctx);
@@ -411,7 +411,7 @@ static int server_start(ogs_sbi_server_t *server,
 
     sock = ogs_tcp_server(addr, server->node.option);
     if (!sock) {
-        ogs_error("Cannot start SBI server");
+        log_error("Cannot start SBI server");
 
         if (server->ssl_ctx)
             SSL_CTX_free(server->ssl_ctx);
@@ -427,16 +427,16 @@ static int server_start(ogs_sbi_server_t *server,
     /* Setup poll for server listening socket */
     server->node.poll = ogs_pollset_add(ogs_app()->pollset,
             OGS_POLLIN, sock->fd, accept_handler, server);
-    ogs_assert(server->node.poll);
+    log_assert(server->node.poll);
 
     hostname = ogs_gethostname(addr);
     if (hostname)
-        ogs_info("nghttp2_server(%s) [%s://%s]:%d",
+        log_info("nghttp2_server(%s) [%s://%s]:%d",
                 server->interface ? server->interface : "",
                 server->ssl_ctx ? "https" : "http",
                 hostname, OGS_PORT(addr));
     else
-        ogs_info("nghttp2_server(%s) [%s://%s]:%d",
+        log_info("nghttp2_server(%s) [%s://%s]:%d",
                 server->interface ? server->interface : "",
                 server->ssl_ctx ? "https" : "http",
                 OGS_ADDR(addr, buf), OGS_PORT(addr));
@@ -460,20 +460,20 @@ static void server_graceful_shutdown(ogs_sbi_server_t *server)
                                    NGHTTP2_NO_ERROR,
                                    NULL, 0);
         if (rv != 0) {
-            ogs_error("nghttp2_submit_goaway() failed (%d:%s)",
+            log_error("nghttp2_submit_goaway() failed (%d:%s)",
                       rv, nghttp2_strerror(rv));
         }
 
         /* Send the GOAWAY frame to the client. */
         if (session_send(sbi_sess) != OGS_OK) {
-            ogs_error("session_send() failed during graceful shutdown");
+            log_error("session_send() failed during graceful shutdown");
         }
     }
 }
 
 static void server_stop(ogs_sbi_server_t *server)
 {
-    ogs_assert(server);
+    log_assert(server);
 
     /* Free SSL CTX */
     if (server->ssl_ctx)
@@ -542,7 +542,7 @@ static char *get_date_string(char *date)
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
 
-    ogs_assert(date);
+    log_assert(date);
 
     struct tm tm;
     ogs_gmtime(ogs_time_sec(ogs_time_now()), &tm);
@@ -573,20 +573,20 @@ static ssize_t response_read_callback(nghttp2_session *session,
     ogs_sbi_response_t *response = NULL;
     ogs_sbi_stream_t *stream = NULL;
 
-    ogs_assert(session);
+    log_assert(session);
 
     stream = nghttp2_session_get_stream_user_data(session, stream_id);
     if (!stream) {
-        ogs_error("no stream [%d]", stream_id);
+        log_error("no stream [%d]", stream_id);
         return NGHTTP2_ERR_TEMPORAL_CALLBACK_FAILURE;
     }
 
-    ogs_assert(source);
+    log_assert(source);
     response = source->ptr;
-    ogs_assert(response);
+    log_assert(response);
 
-    ogs_assert(response->http.content);
-    ogs_assert(response->http.content_length);
+    log_assert(response->http.content);
+    log_assert(response->http.content_length);
 
 #if USE_SEND_DATA_WITH_NO_COPY
     *data_flags |= NGHTTP2_DATA_FLAG_NO_COPY;
@@ -599,11 +599,11 @@ static ssize_t response_read_callback(nghttp2_session *session,
 #if USE_SEND_DATA_WITH_NO_COPY
     rv = nghttp2_session_get_stream_remote_close(session, stream_id);
     if (rv == 0) {
-        ogs_warn("nghttp2_session_get_stream_remote_close() failed");
+        log_warn("nghttp2_session_get_stream_remote_close() failed");
         nghttp2_submit_rst_stream(
                 session, NGHTTP2_FLAG_NONE, stream_id, NGHTTP2_NO_ERROR);
     } else if (rv != 1) {
-        ogs_error("nghttp2_session_get_stream_remote_close() failed[%d]", rv);
+        log_error("nghttp2_session_get_stream_remote_close() failed[%d]", rv);
     }
 #endif
 
@@ -625,22 +625,22 @@ static bool server_send_rspmem_persistent(
     char srv_version[128];
     char clen[128];
 
-    ogs_assert(response);
+    log_assert(response);
 
     if (response->status >= 600) {
-        ogs_error("Invalid response status [%d]", response->status);
+        log_error("Invalid response status [%d]", response->status);
         return false;
     }
 
-    ogs_assert(stream);
+    log_assert(stream);
     sbi_sess = stream->session;
-    ogs_assert(sbi_sess);
-    ogs_assert(sbi_sess->session);
+    log_assert(sbi_sess);
+    log_assert(sbi_sess->session);
 
     sock = sbi_sess->sock;
-    ogs_assert(sock);
+    log_assert(sock);
     fd = sock->fd;
-    ogs_assert(fd != INVALID_SOCKET); /* Check if session is removed */
+    log_assert(fd != INVALID_SOCKET); /* Check if session is removed */
 
     nvlen = 3; /* :status && server && date */
 
@@ -653,16 +653,16 @@ static bool server_send_rspmem_persistent(
 
     nva = ogs_calloc(nvlen, sizeof(nghttp2_nv));
     if (!nva) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return false;
     }
 
     i = 0;
 
     if (strlen(status_string[response->status]) != 3) {
-        ogs_fatal("response status [%d]", response->status);
-        ogs_fatal("status string [%s]", status_string[response->status]);
-        ogs_assert_if_reached();
+        log_fatal("response status [%d]", response->status);
+        log_fatal("status string [%s]", status_string[response->status]);
+        log_assert_if_reached();
         return false;
     }
 
@@ -684,7 +684,7 @@ static bool server_send_rspmem_persistent(
         add_header(&nva[i++], ogs_hash_this_key(hi), ogs_hash_this_val(hi));
     }
 
-    ogs_debug("STATUS [%d]", response->status);
+    log_debug("STATUS [%d]", response->status);
 
     if (response->http.content && response->http.content_length) {
         nghttp2_data_provider data_prd;
@@ -692,8 +692,8 @@ static bool server_send_rspmem_persistent(
         data_prd.source.ptr = response;
         data_prd.read_callback = response_read_callback;
 
-        ogs_debug("SENDING...: %d", (int)response->http.content_length);
-        ogs_debug("%s", response->http.content);
+        log_debug("SENDING...: %d", (int)response->http.content_length);
+        log_debug("%s", response->http.content);
 
         rv = nghttp2_submit_response(sbi_sess->session,
                 stream->stream_id, nva, nvlen, &data_prd);
@@ -703,7 +703,7 @@ static bool server_send_rspmem_persistent(
     }
 
     if (rv != OGS_OK) {
-        ogs_error("nghttp2_submit_response(%d) failed (%d:%s)",
+        log_error("nghttp2_submit_response(%d) failed (%d:%s)",
                     (int)response->http.content_length,
                     rv, nghttp2_strerror(rv));
         nghttp2_submit_rst_stream(
@@ -711,7 +711,7 @@ static bool server_send_rspmem_persistent(
     }
 
     if (session_send(sbi_sess) != OGS_OK) {
-        ogs_error("session_send() failed");
+        log_error("session_send() failed");
         session_remove(sbi_sess);
     }
 
@@ -725,7 +725,7 @@ static bool server_send_response(
 {
     bool rc;
 
-    ogs_assert(response);
+    log_assert(response);
 
     rc = server_send_rspmem_persistent(stream, response);
 
@@ -738,10 +738,10 @@ static ogs_sbi_server_t *server_from_stream(ogs_sbi_stream_t *stream)
 {
     ogs_sbi_session_t *sbi_sess = NULL;
 
-    ogs_assert(stream);
+    log_assert(stream);
     sbi_sess = stream->session;
-    ogs_assert(sbi_sess);
-    ogs_assert(sbi_sess->server);
+    log_assert(sbi_sess);
+    log_assert(sbi_sess->server);
 
     return sbi_sess->server;
 }
@@ -751,17 +751,17 @@ static ogs_sbi_stream_t *stream_add(
 {
     ogs_sbi_stream_t *stream = NULL;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
 
     ogs_pool_id_calloc(&stream_pool, &stream);
     if (!stream) {
-        ogs_error("ogs_pool_id_calloc() failed");
+        log_error("ogs_pool_id_calloc() failed");
         return NULL;
     }
 
     stream->request = ogs_sbi_request_new();
     if (!stream->request) {
-        ogs_error("ogs_sbi_request_new() failed");
+        log_error("ogs_sbi_request_new() failed");
         ogs_pool_id_free(&stream_pool, stream);
         return NULL;
     }
@@ -780,13 +780,13 @@ static void stream_remove(ogs_sbi_stream_t *stream)
 {
     ogs_sbi_session_t *sbi_sess = NULL;
 
-    ogs_assert(stream);
+    log_assert(stream);
     sbi_sess = stream->session;
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
 
     ogs_list_remove(&sbi_sess->stream_list, stream);
 
-    ogs_assert(stream->request);
+    log_assert(stream->request);
     ogs_sbi_request_free(stream->request);
 
     ogs_pool_id_free(&stream_pool, stream);
@@ -796,7 +796,7 @@ static void stream_remove_all(ogs_sbi_session_t *sbi_sess)
 {
     ogs_sbi_stream_t *stream = NULL, *next_stream = NULL;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
 
     ogs_list_for_each_safe(&sbi_sess->stream_list, next_stream, stream)
         stream_remove(stream);
@@ -804,7 +804,7 @@ static void stream_remove_all(ogs_sbi_session_t *sbi_sess)
 
 static ogs_pool_id_t id_from_stream(ogs_sbi_stream_t *stream)
 {
-    ogs_assert(stream);
+    log_assert(stream);
     return stream->id;
 }
 
@@ -818,12 +818,12 @@ static ogs_sbi_session_t *session_add(
 {
     ogs_sbi_session_t *sbi_sess = NULL;
 
-    ogs_assert(server);
-    ogs_assert(sock);
+    log_assert(server);
+    log_assert(sock);
 
     ogs_pool_alloc(&session_pool, &sbi_sess);
     if (!sbi_sess) {
-        ogs_error("ogs_pool_alloc() failed");
+        log_error("ogs_pool_alloc() failed");
         return NULL;
     }
     memset(sbi_sess, 0, sizeof(ogs_sbi_session_t));
@@ -833,7 +833,7 @@ static ogs_sbi_session_t *session_add(
 
     sbi_sess->addr = ogs_calloc(1, sizeof(ogs_sockaddr_t));
     if (!sbi_sess->addr) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         ogs_pool_free(&session_pool, sbi_sess);
         return NULL;
     }
@@ -844,7 +844,7 @@ static ogs_sbi_session_t *session_add(
 
         sbi_sess->ssl = SSL_new(server->ssl_ctx);
         if (!sbi_sess->ssl) {
-            ogs_error("SSL_new() failed");
+            log_error("SSL_new() failed");
             ogs_free(sbi_sess->addr);
             ogs_pool_free(&session_pool, sbi_sess);
             return NULL;
@@ -853,7 +853,7 @@ static ogs_sbi_session_t *session_add(
         context = ogs_msprintf("%d",
                 (int)ogs_pool_index(&session_pool, sbi_sess));
         if (!context) {
-            ogs_error("No memory for session id context");
+            log_error("No memory for session id context");
             SSL_free(sbi_sess->ssl);
             ogs_free(sbi_sess->addr);
             ogs_pool_free(&session_pool, sbi_sess);
@@ -862,7 +862,7 @@ static ogs_sbi_session_t *session_add(
 
         if (!SSL_set_session_id_context(
                     sbi_sess->ssl, (unsigned char *)context, strlen(context))) {
-            ogs_error("SSL_set_session_id_context() failed");
+            log_error("SSL_set_session_id_context() failed");
             ogs_free(context);
             ogs_free(sbi_sess->addr);
             SSL_free(sbi_sess->ssl);
@@ -883,9 +883,9 @@ static void session_remove(ogs_sbi_session_t *sbi_sess)
     ogs_sbi_server_t *server = NULL;
     ogs_pkbuf_t *pkbuf = NULL, *next_pkbuf = NULL;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
     server = sbi_sess->server;
-    ogs_assert(server);
+    log_assert(server);
 
     ogs_list_remove(&server->session_list, sbi_sess);
 
@@ -906,10 +906,10 @@ static void session_remove(ogs_sbi_session_t *sbi_sess)
         ogs_pkbuf_free(pkbuf);
     }
 
-    ogs_assert(sbi_sess->addr);
+    log_assert(sbi_sess->addr);
     ogs_free(sbi_sess->addr);
 
-    ogs_assert(sbi_sess->sock);
+    log_assert(sbi_sess->sock);
     ogs_sock_destroy(sbi_sess->sock);
 
     ogs_pool_free(&session_pool, sbi_sess);
@@ -919,7 +919,7 @@ static void session_remove_all(ogs_sbi_server_t *server)
 {
     ogs_sbi_session_t *sbi_sess = NULL, *next_sbi_sess = NULL;
 
-    ogs_assert(server);
+    log_assert(server);
 
     ogs_list_for_each_safe(&server->session_list, next_sbi_sess, sbi_sess)
         session_remove(sbi_sess);
@@ -934,28 +934,28 @@ static void accept_handler(short when, ogs_socket_t fd, void *data)
 
     int on;
 
-    ogs_assert(data);
-    ogs_assert(fd != INVALID_SOCKET);
+    log_assert(data);
+    log_assert(fd != INVALID_SOCKET);
 
     sock = server->node.sock;
 
     new = ogs_sock_accept(sock);
     if (!new) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "accept() failed");
+        log_error_msg(LOG_ERROR, ogs_socket_errno, "accept() failed");
         return;
     }
-    ogs_assert(new->fd != INVALID_SOCKET);
+    log_assert(new->fd != INVALID_SOCKET);
 
     on = 1;
     if (setsockopt(new->fd, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) != 0) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                 "setsockopt() for SCTP_NODELAY failed");
         ogs_sock_destroy(new);
         return;
     }
 
     sbi_sess = session_add(server, new);
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
 
     if (sbi_sess->ssl) {
         int err;
@@ -963,7 +963,7 @@ static void accept_handler(short when, ogs_socket_t fd, void *data)
         SSL_set_accept_state(sbi_sess->ssl);
         err = SSL_accept(sbi_sess->ssl);
         if (err <= 0) {
-            ogs_error("SSL_accept failed [%s]", ERR_error_string(ERR_get_error(), NULL));
+            log_error("SSL_accept failed [%s]", ERR_error_string(ERR_get_error(), NULL));
             session_remove(sbi_sess);
             return;
         }
@@ -971,11 +971,11 @@ static void accept_handler(short when, ogs_socket_t fd, void *data)
 
     sbi_sess->poll.read = ogs_pollset_add(ogs_app()->pollset,
         OGS_POLLIN, new->fd, recv_handler, sbi_sess);
-    ogs_assert(sbi_sess->poll.read);
+    log_assert(sbi_sess->poll.read);
 
     if (session_set_callbacks(sbi_sess) != OGS_OK ||
         session_send_preface(sbi_sess) != OGS_OK) {
-        ogs_error("session_add() failed");
+        log_error("session_add() failed");
         session_remove(sbi_sess);
     }
 }
@@ -990,13 +990,13 @@ static void recv_handler(short when, ogs_socket_t fd, void *data)
     ssize_t readlen;
     int n;
 
-    ogs_assert(sbi_sess);
-    ogs_assert(fd != INVALID_SOCKET);
+    log_assert(sbi_sess);
+    log_assert(fd != INVALID_SOCKET);
     addr = sbi_sess->addr;
-    ogs_assert(addr);
+    log_assert(addr);
 
     pkbuf = ogs_pkbuf_alloc(NULL, OGS_MAX_SDU_LEN);
-    ogs_assert(pkbuf);
+    log_assert(pkbuf);
 
     if (sbi_sess->ssl)
         n = SSL_read(sbi_sess->ssl, pkbuf->data, OGS_MAX_SDU_LEN);
@@ -1006,11 +1006,11 @@ static void recv_handler(short when, ogs_socket_t fd, void *data)
     if (n > 0) {
         ogs_pkbuf_put(pkbuf, n);
 
-        ogs_assert(sbi_sess->session);
+        log_assert(sbi_sess->session);
         readlen = nghttp2_session_mem_recv(
                 sbi_sess->session, pkbuf->data, pkbuf->len);
         if (readlen < 0) {
-            ogs_error("nghttp2_session_mem_recv() failed (%d:%s)",
+            log_error("nghttp2_session_mem_recv() failed (%d:%s)",
                         (int)readlen, nghttp2_strerror((int)readlen));
             session_remove(sbi_sess);
         } else {
@@ -1043,11 +1043,11 @@ static void recv_handler(short when, ogs_socket_t fd, void *data)
     } else {
         if (n < 0) {
             if (errno != OGS_ECONNRESET)
-                ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+                log_error_msg(LOG_ERROR, ogs_socket_errno,
                                 "lost connection [%s]:%d",
                                 OGS_ADDR(addr, buf), OGS_PORT(addr));
         } else if (n == 0) {
-            ogs_debug("connection closed [%s]:%d",
+            log_debug("connection closed [%s]:%d",
                         OGS_ADDR(addr, buf), OGS_PORT(addr));
         }
 
@@ -1097,11 +1097,11 @@ static int session_set_callbacks(ogs_sbi_session_t *sbi_sess)
     int rv;
     nghttp2_session_callbacks *callbacks = NULL;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
 
     rv = nghttp2_session_callbacks_new(&callbacks);
     if (rv != 0) {
-        ogs_error("nghttp2_session_callbacks_new() failed (%d:%s)",
+        log_error("nghttp2_session_callbacks_new() failed (%d:%s)",
                     rv, nghttp2_strerror(rv));
         return OGS_ERROR;
     }
@@ -1139,7 +1139,7 @@ static int session_set_callbacks(ogs_sbi_session_t *sbi_sess)
 
     rv = nghttp2_session_server_new(&sbi_sess->session, callbacks, sbi_sess);
     if (rv != 0) {
-        ogs_error("nghttp2_session_callbacks_new() failed (%d:%s)",
+        log_error("nghttp2_session_callbacks_new() failed (%d:%s)",
                     rv, nghttp2_strerror(rv));
         return OGS_ERROR;
     }
@@ -1159,13 +1159,13 @@ static int on_frame_recv(nghttp2_session *session,
     ogs_sbi_stream_t *stream = NULL;
     ogs_sbi_request_t *request = NULL;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
     server = sbi_sess->server;
-    ogs_assert(server);
-    ogs_assert(server->cb);
+    log_assert(server);
+    log_assert(server->cb);
 
-    ogs_assert(session);
-    ogs_assert(frame);
+    log_assert(session);
+    log_assert(frame);
 
     switch (frame->hd.type) {
     case NGHTTP2_HEADERS:
@@ -1174,7 +1174,7 @@ static int on_frame_recv(nghttp2_session *session,
         if (!stream) return 0;
 
         request = stream->request;
-        ogs_assert(request);
+        log_assert(request);
 
         if (frame->headers.cat == NGHTTP2_HCAT_REQUEST) {
             const char *expect100 =
@@ -1186,7 +1186,7 @@ static int on_frame_recv(nghttp2_session *session,
                 rv = nghttp2_submit_headers(session, NGHTTP2_FLAG_NONE,
                            stream->stream_id, NULL, &nva, 1, NULL);
                 if (rv != 0) {
-                    ogs_error("nghttp2_submit_headers() failed (%d:%s)",
+                    log_error("nghttp2_submit_headers() failed (%d:%s)",
                             rv, nghttp2_strerror(rv));
                     nghttp2_submit_rst_stream(
                             session, NGHTTP2_FLAG_NONE, stream->stream_id, rv);
@@ -1203,33 +1203,33 @@ static int on_frame_recv(nghttp2_session *session,
         if (!stream) return 0;
 
         request = stream->request;
-        ogs_assert(request);
+        log_assert(request);
 
         /* HEADERS or DATA frame with +END_STREAM flag */
         if (frame->hd.flags & NGHTTP2_FLAG_END_STREAM) {
-            ogs_log_level_e level = OGS_LOG_DEBUG;
+            log_level_e level = LOG_DEBUG;
 
             if (stream->memory_overflow == true)
-                level = OGS_LOG_ERROR;
+                level = LOG_ERROR;
 
-            ogs_log_message(level, 0,
+            log_error_msg(level, 0,
                     "[%s] %s", request->h.method, request->h.uri);
 
             if (request->http.content_length && request->http.content) {
-                ogs_log_message(level, 0,
+                log_error_msg(level, 0,
                         "RECEIVED: %d", (int)request->http.content_length);
-                ogs_log_message(level, 0, "%s", request->http.content);
+                log_error_msg(level, 0, "%s", request->http.content);
             }
 
             if (stream->memory_overflow == true) {
-                ogs_error("[DROP] Overflow");
+                log_error("[DROP] Overflow");
                 break;
             }
 
             if (server->cb(request,
                         OGS_UINT_TO_POINTER(stream->id)) != OGS_OK) {
-                ogs_warn("server callback error");
-                ogs_assert(true ==
+                log_warn("server callback error");
+                log_assert(true ==
                     ogs_sbi_server_send_error(stream,
                         OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                         "server callback error", NULL, NULL));
@@ -1241,7 +1241,7 @@ static int on_frame_recv(nghttp2_session *session,
         }
         break;
     case NGHTTP2_SETTINGS:
-        ogs_debug("FLAGS(0x%x) [%s]",
+        log_debug("FLAGS(0x%x) [%s]",
                 frame->hd.flags,
                 frame->hd.flags & NGHTTP2_FLAG_ACK ? "ACK" : "NO-ACK");
 
@@ -1252,9 +1252,9 @@ static int on_frame_recv(nghttp2_session *session,
             sbi_sess->settings.enable_push =
                 nghttp2_session_get_remote_settings(
                     session, NGHTTP2_SETTINGS_ENABLE_PUSH);
-            ogs_debug("MAX_CONCURRENT_STREAMS = %d",
+            log_debug("MAX_CONCURRENT_STREAMS = %d",
                 sbi_sess->settings.max_concurrent_streams);
-            ogs_debug("ENABLE_PUSH = %s",
+            log_debug("ENABLE_PUSH = %s",
                 sbi_sess->settings.enable_push ? "TRUE" : "false");
 
             return 0;
@@ -1273,27 +1273,27 @@ static int on_frame_recv(nghttp2_session *session,
              session, NGHTTP2_FLAG_NONE, sbi_sess->last_stream_id,
              NGHTTP2_NO_ERROR, NULL, 0);
         if (rv != 0) {
-            ogs_error("nghttp2_submit_goaway() failed (%d:%s)",
+            log_error("nghttp2_submit_goaway() failed (%d:%s)",
                         rv, nghttp2_strerror(rv));
             return OGS_ERROR;
         }
 
         session_send(sbi_sess);
 #endif
-        ogs_info("GOAWAY received: last-stream-id=%d",
+        log_info("GOAWAY received: last-stream-id=%d",
                 frame->goaway.last_stream_id);
-        ogs_info("error_code=%d", frame->goaway.error_code);
+        log_info("error_code=%d", frame->goaway.error_code);
         break;
     case NGHTTP2_RST_STREAM:
-        ogs_info("RST_STREAM received: stream_id=%d", frame->hd.stream_id);
+        log_info("RST_STREAM received: stream_id=%d", frame->hd.stream_id);
         break;
     case NGHTTP2_PING:
         if (frame->hd.flags & NGHTTP2_FLAG_ACK)
-            ogs_info("PING ACK received");
+            log_info("PING ACK received");
         break;
     case NGHTTP2_PUSH_PROMISE:
-        ogs_info("PUSH_PROMISE recieved: stream_id=%d", frame->hd.stream_id);
-        ogs_info("promised_stream_id=%d",
+        log_info("PUSH_PROMISE recieved: stream_id=%d", frame->hd.stream_id);
+        log_info("promised_stream_id=%d",
                 frame->push_promise.promised_stream_id);
         break;
     default:
@@ -1308,22 +1308,22 @@ static int on_stream_close(nghttp2_session *session, int32_t stream_id,
 {
     ogs_sbi_stream_t *stream = NULL;
 
-    ogs_assert(session);
+    log_assert(session);
 
     stream = nghttp2_session_get_stream_user_data(session, stream_id);
     if (!stream) {
-        ogs_error("no stream [%d]", stream_id);
+        log_error("no stream [%d]", stream_id);
         return NGHTTP2_ERR_TEMPORAL_CALLBACK_FAILURE;
     }
 
     if (error_code) {
-        ogs_error("on_stream_close_callback() failed (%d:%s)",
+        log_error("on_stream_close_callback() failed (%d:%s)",
                     error_code, nghttp2_http2_strerror(error_code));
         nghttp2_submit_rst_stream(
                 session, NGHTTP2_FLAG_NONE, stream_id, error_code);
     }
 
-    ogs_debug("STREAM closed [%d]", stream_id);
+    log_debug("STREAM closed [%d]", stream_id);
     stream_remove(stream);
     return 0;
 }
@@ -1342,8 +1342,8 @@ static int on_header(nghttp2_session *session, const nghttp2_frame *frame,
     nghttp2_vec namebuf, valuebuf;
     char *namestr = NULL, *valuestr = NULL;
 
-    ogs_assert(session);
-    ogs_assert(frame);
+    log_assert(session);
+    log_assert(frame);
 
     if (frame->hd.type != NGHTTP2_HEADERS ||
         frame->headers.cat != NGHTTP2_HCAT_REQUEST) {
@@ -1352,31 +1352,31 @@ static int on_header(nghttp2_session *session, const nghttp2_frame *frame,
 
     stream = nghttp2_session_get_stream_user_data(session, frame->hd.stream_id);
     if (!stream) {
-        ogs_error("no stream [%d]", frame->hd.stream_id);
+        log_error("no stream [%d]", frame->hd.stream_id);
         return NGHTTP2_ERR_TEMPORAL_CALLBACK_FAILURE;
     }
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
 
     request = stream->request;
-    ogs_assert(request);
+    log_assert(request);
 
-    ogs_assert(name);
+    log_assert(name);
     namebuf = nghttp2_rcbuf_get_buf(name);
-    ogs_assert(namebuf.base);
-    ogs_assert(namebuf.len);
+    log_assert(namebuf.base);
+    log_assert(namebuf.len);
 
-    ogs_assert(value);
+    log_assert(value);
     valuebuf = nghttp2_rcbuf_get_buf(value);
-    ogs_assert(valuebuf.base);
+    log_assert(valuebuf.base);
 
     if (valuebuf.len == 0) return 0;
 
     namestr = ogs_strndup((const char *)namebuf.base, namebuf.len);
-    ogs_assert(namestr);
+    log_assert(namestr);
 
     valuestr = ogs_strndup((const char *)valuebuf.base, valuebuf.len);
-    ogs_assert(valuestr);
+    log_assert(valuestr);
 
     if (namebuf.len == sizeof(PATH) - 1 &&
             memcmp(PATH, namebuf.base, namebuf.len) == 0) {
@@ -1385,9 +1385,9 @@ static int on_header(nghttp2_session *session, const nghttp2_frame *frame,
         struct yuarel_param params[MAX_NUM_OF_PARAM_IN_QUERY+2];
         int j;
 
-        ogs_assert(request->h.uri == NULL);
+        log_assert(request->h.uri == NULL);
         request->h.uri = ogs_sbi_parse_uri(valuestr, "?", &saveptr);
-        ogs_assert(request->h.uri);
+        log_assert(request->h.uri);
 
         memset(params, 0, sizeof(params));
 
@@ -1401,15 +1401,15 @@ static int on_header(nghttp2_session *session, const nghttp2_frame *frame,
                 ogs_sbi_header_set(request->http.params,
                         params[j].key, params[j].val);
             else
-                ogs_warn("No KEY in Query-Parms");
+                log_warn("No KEY in Query-Parms");
 
             j++;
         }
 
         if (j >= MAX_NUM_OF_PARAM_IN_QUERY+1) {
-            ogs_fatal("Maximum number(%d) of query params reached",
+            log_fatal("Maximum number(%d) of query params reached",
                     MAX_NUM_OF_PARAM_IN_QUERY);
-            ogs_assert_if_reached();
+            log_assert_if_reached();
         }
 
         ogs_free(query);
@@ -1417,9 +1417,9 @@ static int on_header(nghttp2_session *session, const nghttp2_frame *frame,
     } else if (namebuf.len == sizeof(METHOD) - 1 &&
             memcmp(METHOD, namebuf.base, namebuf.len) == 0) {
 
-        ogs_assert(request->h.method == NULL);
+        log_assert(request->h.method == NULL);
         request->h.method = ogs_strdup(valuestr);
-        ogs_assert(request->h.method);
+        log_assert(request->h.method);
 
     } else {
 
@@ -1442,27 +1442,27 @@ static int on_data_chunk_recv(nghttp2_session *session, uint8_t flags,
 
     size_t offset = 0;
 
-    ogs_assert(session);
+    log_assert(session);
 
     stream = nghttp2_session_get_stream_user_data(session, stream_id);
     if (!stream) {
-        ogs_error("no stream [%d]", stream_id);
+        log_error("no stream [%d]", stream_id);
         return 0;
     }
 
     request = stream->request;
-    ogs_assert(request);
+    log_assert(request);
 
-    ogs_assert(data);
-    ogs_assert(len);
+    log_assert(data);
+    log_assert(len);
 
     if (request->http.content == NULL) {
-        ogs_assert(request->http.content_length == 0);
-        ogs_assert(offset == 0);
+        log_assert(request->http.content_length == 0);
+        log_assert(offset == 0);
 
         request->http.content = (char*)ogs_malloc(len + 1);
     } else {
-        ogs_assert(request->http.content_length != 0);
+        log_assert(request->http.content_length != 0);
 
         request->http.content = (char*)ogs_realloc(
                 request->http.content, request->http.content_length + len + 1);
@@ -1471,9 +1471,9 @@ static int on_data_chunk_recv(nghttp2_session *session, uint8_t flags,
     if (!request->http.content) {
         stream->memory_overflow = true;
 
-        ogs_error("Overflow : Content-Length[%d], len[%d]",
+        log_error("Overflow : Content-Length[%d], len[%d]",
                     (int)request->http.content_length, (int)len);
-        ogs_log_hexdump(OGS_LOG_ERROR, data, len);
+        log_hexdump(LOG_ERROR, data, len);
 
         return 0;
     }
@@ -1494,13 +1494,13 @@ static int error_callback(nghttp2_session *session,
     ogs_sockaddr_t *addr = NULL;
     ogs_sbi_session_t *sbi_sess = user_data;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
     addr = sbi_sess->addr;
-    ogs_assert(addr);
+    log_assert(addr);
 
-    ogs_assert(msg);
+    log_assert(msg);
 
-    ogs_error("[%s]:%d http2 error: %.*s",
+    log_error("[%s]:%d http2 error: %.*s",
             OGS_ADDR(addr, buf), OGS_PORT(addr), (int)len, msg);
 
     return 0;
@@ -1515,11 +1515,11 @@ static int on_invalid_frame_recv(nghttp2_session *session,
 
     ogs_sbi_session_t *sbi_sess = user_data;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
     addr = sbi_sess->addr;
-    ogs_assert(addr);
+    log_assert(addr);
 
-    ogs_error("[%s]:%d invalid frame (%d:%s)",
+    log_error("[%s]:%d invalid frame (%d:%s)",
             OGS_ADDR(addr, buf), OGS_PORT(addr),
             error_code, nghttp2_strerror(error_code));
     return 0;
@@ -1537,17 +1537,17 @@ static int on_invalid_header(nghttp2_session *session,
 
     ogs_sbi_session_t *sbi_sess = user_data;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
     addr = sbi_sess->addr;
-    ogs_assert(addr);
+    log_assert(addr);
 
     namestr = ogs_strndup((const char *)name, namelen);
-    ogs_assert(namestr);
+    log_assert(namestr);
 
     valuestr = ogs_strndup((const char *)value, valuelen);
-    ogs_assert(valuestr);
+    log_assert(valuestr);
 
-    ogs_error("[%s]:%d invalid header (%s:%s)",
+    log_error("[%s]:%d invalid header (%s:%s)",
             OGS_ADDR(addr, buf), OGS_PORT(addr), namestr, valuestr);
 
     ogs_free(namestr);
@@ -1563,15 +1563,15 @@ static int on_begin_frame(nghttp2_session *session, const nghttp2_frame_hd *hd,
     ogs_sockaddr_t *addr = NULL;
     ogs_sbi_session_t *sbi_sess = user_data;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
     addr = sbi_sess->addr;
-    ogs_assert(addr);
+    log_assert(addr);
 
-    ogs_assert(hd);
+    log_assert(hd);
 
     if ((hd->type == NGHTTP2_HEADERS) &&
         (hd->stream_id < sbi_sess->last_stream_id)) {
-        ogs_error("[%s]:%d invalid stream id(%d) >= last stream id(%d)",
+        log_error("[%s]:%d invalid stream id(%d) >= last stream id(%d)",
                 OGS_ADDR(addr, buf), OGS_PORT(addr),
                 hd->stream_id, sbi_sess->last_stream_id);
         return NGHTTP2_ERR_CALLBACK_FAILURE;
@@ -1586,9 +1586,9 @@ static int on_begin_headers(nghttp2_session *session,
     ogs_sbi_session_t *sbi_sess = user_data;
     ogs_sbi_stream_t *stream = NULL;
 
-    ogs_assert(sbi_sess);
-    ogs_assert(session);
-    ogs_assert(frame);
+    log_assert(sbi_sess);
+    log_assert(session);
+    log_assert(frame);
 
     if (frame->hd.type != NGHTTP2_HEADERS ||
         frame->headers.cat != NGHTTP2_HCAT_REQUEST) {
@@ -1596,8 +1596,8 @@ static int on_begin_headers(nghttp2_session *session,
     }
 
     stream = stream_add(sbi_sess, frame->hd.stream_id);
-    ogs_assert(stream);
-    ogs_debug("STREAM added [%d]", frame->hd.stream_id);
+    log_assert(stream);
+    log_debug("STREAM added [%d]", frame->hd.stream_id);
 
     nghttp2_session_set_stream_user_data(session, frame->hd.stream_id, stream);
 
@@ -1611,13 +1611,13 @@ static int session_send_preface(ogs_sbi_session_t *sbi_sess)
         { NGHTTP2_SETTINGS_MAX_CONCURRENT_STREAMS, ogs_app()->pool.stream }
     };
 
-    ogs_assert(sbi_sess);
-    ogs_assert(sbi_sess->session);
+    log_assert(sbi_sess);
+    log_assert(sbi_sess->session);
 
     rv = nghttp2_submit_settings(
             sbi_sess->session, NGHTTP2_FLAG_NONE, iv, OGS_ARRAY_SIZE(iv));
     if (rv != 0) {
-        ogs_error("nghttp2_submit_settings() failed (%d:%s)",
+        log_error("nghttp2_submit_settings() failed (%d:%s)",
                     rv, nghttp2_strerror(rv));
         return OGS_ERROR;
     }
@@ -1637,29 +1637,29 @@ static int on_send_data(nghttp2_session *session, nghttp2_frame *frame,
     ogs_pkbuf_t *pkbuf = NULL;
     size_t padlen = 0;
 
-    ogs_assert(session);
-    ogs_assert(frame);
+    log_assert(session);
+    log_assert(frame);
 
     stream = nghttp2_session_get_stream_user_data(session, frame->hd.stream_id);
     if (!stream) {
-        ogs_error("no stream [%d]", frame->hd.stream_id);
+        log_error("no stream [%d]", frame->hd.stream_id);
         return NGHTTP2_ERR_TEMPORAL_CALLBACK_FAILURE;
     }
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
 
-    ogs_assert(source);
+    log_assert(source);
     response = source->ptr;
-    ogs_assert(response);
+    log_assert(response);
 
-    ogs_assert(response->http.content);
-    ogs_assert(response->http.content_length);
+    log_assert(response->http.content);
+    log_assert(response->http.content_length);
 
-    ogs_assert(framehd);
-    ogs_assert(length);
+    log_assert(framehd);
+    log_assert(length);
 
     pkbuf = ogs_pkbuf_alloc(NULL, OGS_MAX_SDU_LEN);
-    ogs_assert(pkbuf);
+    log_assert(pkbuf);
     ogs_pkbuf_put_data(pkbuf, framehd, 9);
 
     padlen = frame->data.padlen;
@@ -1690,17 +1690,17 @@ static ssize_t send_callback(nghttp2_session *session, const uint8_t *data,
 
     ogs_pkbuf_t *pkbuf = NULL;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
     sock = sbi_sess->sock;
-    ogs_assert(sock);
+    log_assert(sock);
     fd = sock->fd;
-    ogs_assert(fd != INVALID_SOCKET);
+    log_assert(fd != INVALID_SOCKET);
 
-    ogs_assert(data);
-    ogs_assert(length);
+    log_assert(data);
+    log_assert(length);
 
     pkbuf = ogs_pkbuf_alloc(NULL, length);
-    ogs_assert(pkbuf);
+    log_assert(pkbuf);
     ogs_pkbuf_put_data(pkbuf, data, length);
 
     session_write_to_buffer(sbi_sess, pkbuf);
@@ -1717,8 +1717,8 @@ static int session_send(ogs_sbi_session_t *sbi_sess)
     int rv;
 #endif
 
-    ogs_assert(sbi_sess);
-    ogs_assert(sbi_sess->session);
+    log_assert(sbi_sess);
+    log_assert(sbi_sess->session);
 
 #if USE_SEND_DATA_WITH_NO_COPY
     for (;;) {
@@ -1727,7 +1727,7 @@ static int session_send(ogs_sbi_session_t *sbi_sess)
 
         data_len = nghttp2_session_mem_send(sbi_sess->session, &data);
         if (data_len < 0) {
-            ogs_error("nghttp2_session_mem_send() failed (%d:%s)",
+            log_error("nghttp2_session_mem_send() failed (%d:%s)",
                         (int)data_len, nghttp2_strerror((int)data_len));
             return OGS_ERROR;
         }
@@ -1737,7 +1737,7 @@ static int session_send(ogs_sbi_session_t *sbi_sess)
         }
 
         pkbuf = ogs_pkbuf_alloc(NULL, data_len);
-        ogs_assert(pkbuf);
+        log_assert(pkbuf);
         ogs_pkbuf_put_data(pkbuf, data, data_len);
 
         session_write_to_buffer(sbi_sess, pkbuf);
@@ -1745,7 +1745,7 @@ static int session_send(ogs_sbi_session_t *sbi_sess)
 #else
     rv = nghttp2_session_send(sbi_sess->session);
     if (rv != 0) {
-        ogs_error("nghttp_session_send() failed (%d:%s)",
+        log_error("nghttp_session_send() failed (%d:%s)",
                     rv, nghttp2_strerror(rv));
         return OGS_ERROR;
     }
@@ -1759,20 +1759,20 @@ static void session_write_callback(short when, ogs_socket_t fd, void *data)
     ogs_sbi_session_t *sbi_sess = data;
     ogs_pkbuf_t *pkbuf = NULL;
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
 
     if (ogs_list_empty(&sbi_sess->write_queue) == true) {
         if (sbi_sess->poll.write) {
             ogs_pollset_remove(sbi_sess->poll.write);
             sbi_sess->poll.write = NULL;
         } else
-            ogs_warn("poll.write has already been removed");
+            log_warn("poll.write has already been removed");
 
         return;
     }
 
     pkbuf = ogs_list_first(&sbi_sess->write_queue);
-    ogs_assert(pkbuf);
+    log_assert(pkbuf);
     ogs_list_remove(&sbi_sess->write_queue, pkbuf);
 
     if (sbi_sess->ssl)
@@ -1780,7 +1780,7 @@ static void session_write_callback(short when, ogs_socket_t fd, void *data)
     else
         ogs_send(fd, pkbuf->data, pkbuf->len, 0);
 
-    ogs_log_hexdump(OGS_LOG_DEBUG, pkbuf->data, pkbuf->len);
+    log_hexdump(LOG_DEBUG, pkbuf->data, pkbuf->len);
 
     ogs_pkbuf_free(pkbuf);
 }
@@ -1791,19 +1791,19 @@ static void session_write_to_buffer(
     ogs_sock_t *sock = NULL;
     ogs_socket_t fd = INVALID_SOCKET;
 
-    ogs_assert(pkbuf);
+    log_assert(pkbuf);
 
-    ogs_assert(sbi_sess);
+    log_assert(sbi_sess);
     sock = sbi_sess->sock;
-    ogs_assert(sock);
+    log_assert(sock);
     fd = sock->fd;
-    ogs_assert(fd != INVALID_SOCKET);
+    log_assert(fd != INVALID_SOCKET);
 
     ogs_list_add(&sbi_sess->write_queue, pkbuf);
 
     if (!sbi_sess->poll.write) {
         sbi_sess->poll.write = ogs_pollset_add(ogs_app()->pollset,
             OGS_POLLOUT, fd, session_write_callback, sbi_sess);
-        ogs_assert(sbi_sess->poll.write);
+        log_assert(sbi_sess->poll.write);
     }
 }

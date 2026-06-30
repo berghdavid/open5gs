@@ -10,7 +10,7 @@ OpenAPI_inter_freq_target_info_1_t *OpenAPI_inter_freq_target_info_1_create(
 )
 {
     OpenAPI_inter_freq_target_info_1_t *inter_freq_target_info_1_local_var = ogs_malloc(sizeof(OpenAPI_inter_freq_target_info_1_t));
-    ogs_assert(inter_freq_target_info_1_local_var);
+    log_assert(inter_freq_target_info_1_local_var);
 
     inter_freq_target_info_1_local_var->dl_carrier_freq = dl_carrier_freq;
     inter_freq_target_info_1_local_var->cell_id_list = cell_id_list;
@@ -41,29 +41,29 @@ cJSON *OpenAPI_inter_freq_target_info_1_convertToJSON(OpenAPI_inter_freq_target_
     OpenAPI_lnode_t *node = NULL;
 
     if (inter_freq_target_info_1 == NULL) {
-        ogs_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [InterFreqTargetInfo_1]");
+        log_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [InterFreqTargetInfo_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "dlCarrierFreq", inter_freq_target_info_1->dl_carrier_freq) == NULL) {
-        ogs_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [dl_carrier_freq]");
+        log_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [dl_carrier_freq]");
         goto end;
     }
 
     if (inter_freq_target_info_1->cell_id_list) {
     cJSON *cell_id_listList = cJSON_AddArrayToObject(item, "cellIdList");
     if (cell_id_listList == NULL) {
-        ogs_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [cell_id_list]");
+        log_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [cell_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(inter_freq_target_info_1->cell_id_list, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [cell_id_list]");
+            log_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [cell_id_list]");
             goto end;
         }
         if (cJSON_AddNumberToObject(cell_id_listList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [cell_id_list]");
+            log_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed [cell_id_list]");
             goto end;
         }
     }
@@ -82,11 +82,11 @@ OpenAPI_inter_freq_target_info_1_t *OpenAPI_inter_freq_target_info_1_parseFromJS
     OpenAPI_list_t *cell_id_listList = NULL;
     dl_carrier_freq = cJSON_GetObjectItemCaseSensitive(inter_freq_target_info_1JSON, "dlCarrierFreq");
     if (!dl_carrier_freq) {
-        ogs_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [dl_carrier_freq]");
+        log_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [dl_carrier_freq]");
         goto end;
     }
     if (!cJSON_IsNumber(dl_carrier_freq)) {
-        ogs_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [dl_carrier_freq]");
+        log_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [dl_carrier_freq]");
         goto end;
     }
 
@@ -94,7 +94,7 @@ OpenAPI_inter_freq_target_info_1_t *OpenAPI_inter_freq_target_info_1_parseFromJS
     if (cell_id_list) {
         cJSON *cell_id_list_local = NULL;
         if (!cJSON_IsArray(cell_id_list)) {
-            ogs_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [cell_id_list]");
+            log_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [cell_id_list]");
             goto end;
         }
 
@@ -104,12 +104,12 @@ OpenAPI_inter_freq_target_info_1_t *OpenAPI_inter_freq_target_info_1_parseFromJS
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(cell_id_list_local)) {
-                ogs_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [cell_id_list]");
+                log_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [cell_id_list]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [cell_id_list]");
+                log_error("OpenAPI_inter_freq_target_info_1_parseFromJSON() failed [cell_id_list]");
                 goto end;
             }
             *localDouble = cell_id_list_local->valuedouble;
@@ -140,10 +140,10 @@ OpenAPI_inter_freq_target_info_1_t *OpenAPI_inter_freq_target_info_1_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_inter_freq_target_info_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed");
+        log_error("OpenAPI_inter_freq_target_info_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -151,14 +151,14 @@ OpenAPI_inter_freq_target_info_1_t *OpenAPI_inter_freq_target_info_1_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

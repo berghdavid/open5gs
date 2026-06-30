@@ -34,7 +34,7 @@ OpenAPI_access_token_err_t *OpenAPI_access_token_err_create(
 )
 {
     OpenAPI_access_token_err_t *access_token_err_local_var = ogs_malloc(sizeof(OpenAPI_access_token_err_t));
-    ogs_assert(access_token_err_local_var);
+    log_assert(access_token_err_local_var);
 
     access_token_err_local_var->error = error;
     access_token_err_local_var->error_description = error_description;
@@ -67,30 +67,30 @@ cJSON *OpenAPI_access_token_err_convertToJSON(OpenAPI_access_token_err_t *access
     OpenAPI_lnode_t *node = NULL;
 
     if (access_token_err == NULL) {
-        ogs_error("OpenAPI_access_token_err_convertToJSON() failed [AccessTokenErr]");
+        log_error("OpenAPI_access_token_err_convertToJSON() failed [AccessTokenErr]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (access_token_err->error == OpenAPI_access_token_err_ERROR_NULL) {
-        ogs_error("OpenAPI_access_token_err_convertToJSON() failed [error]");
+        log_error("OpenAPI_access_token_err_convertToJSON() failed [error]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "error", OpenAPI_erroraccess_token_err_ToString(access_token_err->error)) == NULL) {
-        ogs_error("OpenAPI_access_token_err_convertToJSON() failed [error]");
+        log_error("OpenAPI_access_token_err_convertToJSON() failed [error]");
         goto end;
     }
 
     if (access_token_err->error_description) {
     if (cJSON_AddStringToObject(item, "error_description", access_token_err->error_description) == NULL) {
-        ogs_error("OpenAPI_access_token_err_convertToJSON() failed [error_description]");
+        log_error("OpenAPI_access_token_err_convertToJSON() failed [error_description]");
         goto end;
     }
     }
 
     if (access_token_err->error_uri) {
     if (cJSON_AddStringToObject(item, "error_uri", access_token_err->error_uri) == NULL) {
-        ogs_error("OpenAPI_access_token_err_convertToJSON() failed [error_uri]");
+        log_error("OpenAPI_access_token_err_convertToJSON() failed [error_uri]");
         goto end;
     }
     }
@@ -109,11 +109,11 @@ OpenAPI_access_token_err_t *OpenAPI_access_token_err_parseFromJSON(cJSON *access
     cJSON *error_uri = NULL;
     error = cJSON_GetObjectItemCaseSensitive(access_token_errJSON, "error");
     if (!error) {
-        ogs_error("OpenAPI_access_token_err_parseFromJSON() failed [error]");
+        log_error("OpenAPI_access_token_err_parseFromJSON() failed [error]");
         goto end;
     }
     if (!cJSON_IsString(error)) {
-        ogs_error("OpenAPI_access_token_err_parseFromJSON() failed [error]");
+        log_error("OpenAPI_access_token_err_parseFromJSON() failed [error]");
         goto end;
     }
     errorVariable = OpenAPI_erroraccess_token_err_FromString(error->valuestring);
@@ -121,7 +121,7 @@ OpenAPI_access_token_err_t *OpenAPI_access_token_err_parseFromJSON(cJSON *access
     error_description = cJSON_GetObjectItemCaseSensitive(access_token_errJSON, "error_description");
     if (error_description) {
     if (!cJSON_IsString(error_description) && !cJSON_IsNull(error_description)) {
-        ogs_error("OpenAPI_access_token_err_parseFromJSON() failed [error_description]");
+        log_error("OpenAPI_access_token_err_parseFromJSON() failed [error_description]");
         goto end;
     }
     }
@@ -129,7 +129,7 @@ OpenAPI_access_token_err_t *OpenAPI_access_token_err_parseFromJSON(cJSON *access
     error_uri = cJSON_GetObjectItemCaseSensitive(access_token_errJSON, "error_uri");
     if (error_uri) {
     if (!cJSON_IsString(error_uri) && !cJSON_IsNull(error_uri)) {
-        ogs_error("OpenAPI_access_token_err_parseFromJSON() failed [error_uri]");
+        log_error("OpenAPI_access_token_err_parseFromJSON() failed [error_uri]");
         goto end;
     }
     }
@@ -150,10 +150,10 @@ OpenAPI_access_token_err_t *OpenAPI_access_token_err_copy(OpenAPI_access_token_e
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_access_token_err_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_access_token_err_convertToJSON() failed");
+        log_error("OpenAPI_access_token_err_convertToJSON() failed");
         return NULL;
     }
 
@@ -161,14 +161,14 @@ OpenAPI_access_token_err_t *OpenAPI_access_token_err_copy(OpenAPI_access_token_e
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

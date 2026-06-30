@@ -16,7 +16,7 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
 )
 {
     OpenAPI_update_nwdaf_registration_200_response_t *update_nwdaf_registration_200_response_local_var = ogs_malloc(sizeof(OpenAPI_update_nwdaf_registration_200_response_t));
-    ogs_assert(update_nwdaf_registration_200_response_local_var);
+    log_assert(update_nwdaf_registration_200_response_local_var);
 
     update_nwdaf_registration_200_response_local_var->nwdaf_instance_id = nwdaf_instance_id;
     update_nwdaf_registration_200_response_local_var->analytics_ids = analytics_ids;
@@ -87,33 +87,33 @@ cJSON *OpenAPI_update_nwdaf_registration_200_response_convertToJSON(OpenAPI_upda
     OpenAPI_lnode_t *node = NULL;
 
     if (update_nwdaf_registration_200_response == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [UpdateNwdafRegistration_200_response]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [UpdateNwdafRegistration_200_response]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!update_nwdaf_registration_200_response->nwdaf_instance_id) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [nwdaf_instance_id]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [nwdaf_instance_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "nwdafInstanceId", update_nwdaf_registration_200_response->nwdaf_instance_id) == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [nwdaf_instance_id]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [nwdaf_instance_id]");
         goto end;
     }
 
     if (!update_nwdaf_registration_200_response->analytics_ids) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [analytics_ids]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [analytics_ids]");
         return NULL;
     }
     cJSON *analytics_idsList = cJSON_AddArrayToObject(item, "analyticsIds");
     if (analytics_idsList == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [analytics_ids]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [analytics_ids]");
         goto end;
     }
     OpenAPI_list_for_each(update_nwdaf_registration_200_response->analytics_ids, node) {
         cJSON *itemLocal = OpenAPI_event_id_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [analytics_ids]");
+            log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [analytics_ids]");
             goto end;
         }
         cJSON_AddItemToArray(analytics_idsList, itemLocal);
@@ -121,14 +121,14 @@ cJSON *OpenAPI_update_nwdaf_registration_200_response_convertToJSON(OpenAPI_upda
 
     if (update_nwdaf_registration_200_response->nwdaf_set_id) {
     if (cJSON_AddStringToObject(item, "nwdafSetId", update_nwdaf_registration_200_response->nwdaf_set_id) == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [nwdaf_set_id]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [nwdaf_set_id]");
         goto end;
     }
     }
 
     if (update_nwdaf_registration_200_response->registration_time) {
     if (cJSON_AddStringToObject(item, "registrationTime", update_nwdaf_registration_200_response->registration_time) == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [registration_time]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [registration_time]");
         goto end;
     }
     }
@@ -136,19 +136,19 @@ cJSON *OpenAPI_update_nwdaf_registration_200_response_convertToJSON(OpenAPI_upda
     if (update_nwdaf_registration_200_response->context_info) {
     cJSON *context_info_local_JSON = OpenAPI_context_info_convertToJSON(update_nwdaf_registration_200_response->context_info);
     if (context_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [context_info]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [context_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "contextInfo", context_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [context_info]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [context_info]");
         goto end;
     }
     }
 
     if (update_nwdaf_registration_200_response->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", update_nwdaf_registration_200_response->supported_features) == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -156,30 +156,30 @@ cJSON *OpenAPI_update_nwdaf_registration_200_response_convertToJSON(OpenAPI_upda
     if (update_nwdaf_registration_200_response->reset_ids) {
     cJSON *reset_idsList = cJSON_AddArrayToObject(item, "resetIds");
     if (reset_idsList == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [reset_ids]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [reset_ids]");
         goto end;
     }
     OpenAPI_list_for_each(update_nwdaf_registration_200_response->reset_ids, node) {
         if (cJSON_AddStringToObject(reset_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [reset_ids]");
+            log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [reset_ids]");
             goto end;
         }
     }
     }
 
     if (!update_nwdaf_registration_200_response->report) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [report]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [report]");
         return NULL;
     }
     cJSON *reportList = cJSON_AddArrayToObject(item, "report");
     if (reportList == NULL) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [report]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [report]");
         goto end;
     }
     OpenAPI_list_for_each(update_nwdaf_registration_200_response->report, node) {
         cJSON *itemLocal = OpenAPI_report_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [report]");
+            log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed [report]");
             goto end;
         }
         cJSON_AddItemToArray(reportList, itemLocal);
@@ -207,22 +207,22 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
     OpenAPI_list_t *reportList = NULL;
     nwdaf_instance_id = cJSON_GetObjectItemCaseSensitive(update_nwdaf_registration_200_responseJSON, "nwdafInstanceId");
     if (!nwdaf_instance_id) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [nwdaf_instance_id]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [nwdaf_instance_id]");
         goto end;
     }
     if (!cJSON_IsString(nwdaf_instance_id)) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [nwdaf_instance_id]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [nwdaf_instance_id]");
         goto end;
     }
 
     analytics_ids = cJSON_GetObjectItemCaseSensitive(update_nwdaf_registration_200_responseJSON, "analyticsIds");
     if (!analytics_ids) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [analytics_ids]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [analytics_ids]");
         goto end;
     }
         cJSON *analytics_ids_local = NULL;
         if (!cJSON_IsArray(analytics_ids)) {
-            ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [analytics_ids]");
+            log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [analytics_ids]");
             goto end;
         }
 
@@ -230,12 +230,12 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
 
         cJSON_ArrayForEach(analytics_ids_local, analytics_ids) {
             if (!cJSON_IsObject(analytics_ids_local)) {
-                ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [analytics_ids]");
+                log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [analytics_ids]");
                 goto end;
             }
             OpenAPI_event_id_t *analytics_idsItem = OpenAPI_event_id_parseFromJSON(analytics_ids_local);
             if (!analytics_idsItem) {
-                ogs_error("No analytics_idsItem");
+                log_error("No analytics_idsItem");
                 goto end;
             }
             OpenAPI_list_add(analytics_idsList, analytics_idsItem);
@@ -244,7 +244,7 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
     nwdaf_set_id = cJSON_GetObjectItemCaseSensitive(update_nwdaf_registration_200_responseJSON, "nwdafSetId");
     if (nwdaf_set_id) {
     if (!cJSON_IsString(nwdaf_set_id) && !cJSON_IsNull(nwdaf_set_id)) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [nwdaf_set_id]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [nwdaf_set_id]");
         goto end;
     }
     }
@@ -252,7 +252,7 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
     registration_time = cJSON_GetObjectItemCaseSensitive(update_nwdaf_registration_200_responseJSON, "registrationTime");
     if (registration_time) {
     if (!cJSON_IsString(registration_time) && !cJSON_IsNull(registration_time)) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [registration_time]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [registration_time]");
         goto end;
     }
     }
@@ -261,7 +261,7 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
     if (context_info) {
     context_info_local_nonprim = OpenAPI_context_info_parseFromJSON(context_info);
     if (!context_info_local_nonprim) {
-        ogs_error("OpenAPI_context_info_parseFromJSON failed [context_info]");
+        log_error("OpenAPI_context_info_parseFromJSON failed [context_info]");
         goto end;
     }
     }
@@ -269,7 +269,7 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
     supported_features = cJSON_GetObjectItemCaseSensitive(update_nwdaf_registration_200_responseJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -278,7 +278,7 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
     if (reset_ids) {
         cJSON *reset_ids_local = NULL;
         if (!cJSON_IsArray(reset_ids)) {
-            ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [reset_ids]");
+            log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [reset_ids]");
             goto end;
         }
 
@@ -288,7 +288,7 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(reset_ids_local)) {
-                ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [reset_ids]");
+                log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [reset_ids]");
                 goto end;
             }
             OpenAPI_list_add(reset_idsList, ogs_strdup(reset_ids_local->valuestring));
@@ -297,12 +297,12 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
 
     report = cJSON_GetObjectItemCaseSensitive(update_nwdaf_registration_200_responseJSON, "report");
     if (!report) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [report]");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [report]");
         goto end;
     }
         cJSON *report_local = NULL;
         if (!cJSON_IsArray(report)) {
-            ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [report]");
+            log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [report]");
             goto end;
         }
 
@@ -310,12 +310,12 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
 
         cJSON_ArrayForEach(report_local, report) {
             if (!cJSON_IsObject(report_local)) {
-                ogs_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [report]");
+                log_error("OpenAPI_update_nwdaf_registration_200_response_parseFromJSON() failed [report]");
                 goto end;
             }
             OpenAPI_report_item_t *reportItem = OpenAPI_report_item_parseFromJSON(report_local);
             if (!reportItem) {
-                ogs_error("No reportItem");
+                log_error("No reportItem");
                 goto end;
             }
             OpenAPI_list_add(reportList, reportItem);
@@ -367,10 +367,10 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_update_nwdaf_registration_200_response_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed");
+        log_error("OpenAPI_update_nwdaf_registration_200_response_convertToJSON() failed");
         return NULL;
     }
 
@@ -378,14 +378,14 @@ OpenAPI_update_nwdaf_registration_200_response_t *OpenAPI_update_nwdaf_registrat
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

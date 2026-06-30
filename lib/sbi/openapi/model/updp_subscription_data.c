@@ -12,7 +12,7 @@ OpenAPI_updp_subscription_data_t *OpenAPI_updp_subscription_data_create(
 )
 {
     OpenAPI_updp_subscription_data_t *updp_subscription_data_local_var = ogs_malloc(sizeof(OpenAPI_updp_subscription_data_t));
-    ogs_assert(updp_subscription_data_local_var);
+    log_assert(updp_subscription_data_local_var);
 
     updp_subscription_data_local_var->updp_notify_subscription_id = updp_notify_subscription_id;
     updp_subscription_data_local_var->updp_notify_callback_uri = updp_notify_callback_uri;
@@ -54,39 +54,39 @@ cJSON *OpenAPI_updp_subscription_data_convertToJSON(OpenAPI_updp_subscription_da
     OpenAPI_lnode_t *node = NULL;
 
     if (updp_subscription_data == NULL) {
-        ogs_error("OpenAPI_updp_subscription_data_convertToJSON() failed [UpdpSubscriptionData]");
+        log_error("OpenAPI_updp_subscription_data_convertToJSON() failed [UpdpSubscriptionData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!updp_subscription_data->updp_notify_subscription_id) {
-        ogs_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_notify_subscription_id]");
+        log_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_notify_subscription_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "updpNotifySubscriptionId", updp_subscription_data->updp_notify_subscription_id) == NULL) {
-        ogs_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_notify_subscription_id]");
+        log_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_notify_subscription_id]");
         goto end;
     }
 
     if (!updp_subscription_data->updp_notify_callback_uri) {
-        ogs_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_notify_callback_uri]");
+        log_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_notify_callback_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "updpNotifyCallbackUri", updp_subscription_data->updp_notify_callback_uri) == NULL) {
-        ogs_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_notify_callback_uri]");
+        log_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_notify_callback_uri]");
         goto end;
     }
 
     if (updp_subscription_data->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", updp_subscription_data->supported_features) == NULL) {
-        ogs_error("OpenAPI_updp_subscription_data_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_updp_subscription_data_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
 
     if (updp_subscription_data->updp_callback_binding) {
     if (cJSON_AddStringToObject(item, "updpCallbackBinding", updp_subscription_data->updp_callback_binding) == NULL) {
-        ogs_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_callback_binding]");
+        log_error("OpenAPI_updp_subscription_data_convertToJSON() failed [updp_callback_binding]");
         goto end;
     }
     }
@@ -105,28 +105,28 @@ OpenAPI_updp_subscription_data_t *OpenAPI_updp_subscription_data_parseFromJSON(c
     cJSON *updp_callback_binding = NULL;
     updp_notify_subscription_id = cJSON_GetObjectItemCaseSensitive(updp_subscription_dataJSON, "updpNotifySubscriptionId");
     if (!updp_notify_subscription_id) {
-        ogs_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_notify_subscription_id]");
+        log_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_notify_subscription_id]");
         goto end;
     }
     if (!cJSON_IsString(updp_notify_subscription_id)) {
-        ogs_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_notify_subscription_id]");
+        log_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_notify_subscription_id]");
         goto end;
     }
 
     updp_notify_callback_uri = cJSON_GetObjectItemCaseSensitive(updp_subscription_dataJSON, "updpNotifyCallbackUri");
     if (!updp_notify_callback_uri) {
-        ogs_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_notify_callback_uri]");
+        log_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_notify_callback_uri]");
         goto end;
     }
     if (!cJSON_IsString(updp_notify_callback_uri)) {
-        ogs_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_notify_callback_uri]");
+        log_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_notify_callback_uri]");
         goto end;
     }
 
     supported_features = cJSON_GetObjectItemCaseSensitive(updp_subscription_dataJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -134,7 +134,7 @@ OpenAPI_updp_subscription_data_t *OpenAPI_updp_subscription_data_parseFromJSON(c
     updp_callback_binding = cJSON_GetObjectItemCaseSensitive(updp_subscription_dataJSON, "updpCallbackBinding");
     if (updp_callback_binding) {
     if (!cJSON_IsString(updp_callback_binding) && !cJSON_IsNull(updp_callback_binding)) {
-        ogs_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_callback_binding]");
+        log_error("OpenAPI_updp_subscription_data_parseFromJSON() failed [updp_callback_binding]");
         goto end;
     }
     }
@@ -156,10 +156,10 @@ OpenAPI_updp_subscription_data_t *OpenAPI_updp_subscription_data_copy(OpenAPI_up
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_updp_subscription_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_updp_subscription_data_convertToJSON() failed");
+        log_error("OpenAPI_updp_subscription_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -167,14 +167,14 @@ OpenAPI_updp_subscription_data_t *OpenAPI_updp_subscription_data_copy(OpenAPI_up
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

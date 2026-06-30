@@ -77,7 +77,7 @@ char *ogs_slprintf(char *str, char *last, const char *format, ...)
     do { \
         OGS_MEM_CLEAR(__dST); \
         __dST = ogs_strdup(__sRC); \
-        ogs_assert(__dST); \
+        log_assert(__dST); \
     } while(0)
 
 char *ogs_cpystrn(char *dst, const char *src, size_t dst_size);

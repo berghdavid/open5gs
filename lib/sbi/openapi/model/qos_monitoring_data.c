@@ -32,7 +32,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_create(
 )
 {
     OpenAPI_qos_monitoring_data_t *qos_monitoring_data_local_var = ogs_malloc(sizeof(OpenAPI_qos_monitoring_data_t));
-    ogs_assert(qos_monitoring_data_local_var);
+    log_assert(qos_monitoring_data_local_var);
 
     qos_monitoring_data_local_var->qm_id = qm_id;
     qos_monitoring_data_local_var->req_qos_mon_params = req_qos_mon_params;
@@ -98,139 +98,139 @@ cJSON *OpenAPI_qos_monitoring_data_convertToJSON(OpenAPI_qos_monitoring_data_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (qos_monitoring_data == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [QosMonitoringData]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [QosMonitoringData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!qos_monitoring_data->qm_id) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [qm_id]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [qm_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "qmId", qos_monitoring_data->qm_id) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [qm_id]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [qm_id]");
         goto end;
     }
 
     if (qos_monitoring_data->req_qos_mon_params == OpenAPI_requested_qos_monitoring_parameter_NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [req_qos_mon_params]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [req_qos_mon_params]");
         return NULL;
     }
     cJSON *req_qos_mon_paramsList = cJSON_AddArrayToObject(item, "reqQosMonParams");
     if (req_qos_mon_paramsList == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [req_qos_mon_params]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [req_qos_mon_params]");
         goto end;
     }
     OpenAPI_list_for_each(qos_monitoring_data->req_qos_mon_params, node) {
         if (cJSON_AddStringToObject(req_qos_mon_paramsList, "", OpenAPI_requested_qos_monitoring_parameter_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [req_qos_mon_params]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [req_qos_mon_params]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->rep_freqs == OpenAPI_reporting_frequency_NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_freqs]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_freqs]");
         return NULL;
     }
     cJSON *rep_freqsList = cJSON_AddArrayToObject(item, "repFreqs");
     if (rep_freqsList == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_freqs]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_freqs]");
         goto end;
     }
     OpenAPI_list_for_each(qos_monitoring_data->rep_freqs, node) {
         if (cJSON_AddStringToObject(rep_freqsList, "", OpenAPI_reporting_frequency_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_freqs]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_freqs]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->is_rep_thresh_dl) {
     if (cJSON_AddNumberToObject(item, "repThreshDl", qos_monitoring_data->rep_thresh_dl) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_dl]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_dl]");
         goto end;
     }
     } else if (qos_monitoring_data->is_rep_thresh_dl_null) {
         if (cJSON_AddNullToObject(item, "repThreshDl") == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_dl]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_dl]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->is_rep_thresh_ul) {
     if (cJSON_AddNumberToObject(item, "repThreshUl", qos_monitoring_data->rep_thresh_ul) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_ul]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_ul]");
         goto end;
     }
     } else if (qos_monitoring_data->is_rep_thresh_ul_null) {
         if (cJSON_AddNullToObject(item, "repThreshUl") == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_ul]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_ul]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->is_rep_thresh_rp) {
     if (cJSON_AddNumberToObject(item, "repThreshRp", qos_monitoring_data->rep_thresh_rp) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_rp]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_rp]");
         goto end;
     }
     } else if (qos_monitoring_data->is_rep_thresh_rp_null) {
         if (cJSON_AddNullToObject(item, "repThreshRp") == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_rp]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_thresh_rp]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->is_wait_time) {
     if (cJSON_AddNumberToObject(item, "waitTime", qos_monitoring_data->wait_time) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [wait_time]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [wait_time]");
         goto end;
     }
     } else if (qos_monitoring_data->is_wait_time_null) {
         if (cJSON_AddNullToObject(item, "waitTime") == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [wait_time]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [wait_time]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->is_rep_period) {
     if (cJSON_AddNumberToObject(item, "repPeriod", qos_monitoring_data->rep_period) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_period]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_period]");
         goto end;
     }
     } else if (qos_monitoring_data->is_rep_period_null) {
         if (cJSON_AddNullToObject(item, "repPeriod") == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_period]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [rep_period]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->notify_uri) {
     if (cJSON_AddStringToObject(item, "notifyUri", qos_monitoring_data->notify_uri) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [notify_uri]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [notify_uri]");
         goto end;
     }
     } else if (qos_monitoring_data->is_notify_uri_null) {
         if (cJSON_AddNullToObject(item, "notifyUri") == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [notify_uri]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [notify_uri]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->notify_corre_id) {
     if (cJSON_AddStringToObject(item, "notifyCorreId", qos_monitoring_data->notify_corre_id) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [notify_corre_id]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [notify_corre_id]");
         goto end;
     }
     } else if (qos_monitoring_data->is_notify_corre_id_null) {
         if (cJSON_AddNullToObject(item, "notifyCorreId") == NULL) {
-            ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [notify_corre_id]");
+            log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [notify_corre_id]");
             goto end;
         }
     }
 
     if (qos_monitoring_data->is_direct_notif_ind) {
     if (cJSON_AddBoolToObject(item, "directNotifInd", qos_monitoring_data->direct_notif_ind) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [direct_notif_ind]");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed [direct_notif_ind]");
         goto end;
     }
     }
@@ -258,22 +258,22 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     cJSON *direct_notif_ind = NULL;
     qm_id = cJSON_GetObjectItemCaseSensitive(qos_monitoring_dataJSON, "qmId");
     if (!qm_id) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [qm_id]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [qm_id]");
         goto end;
     }
     if (!cJSON_IsString(qm_id)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [qm_id]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [qm_id]");
         goto end;
     }
 
     req_qos_mon_params = cJSON_GetObjectItemCaseSensitive(qos_monitoring_dataJSON, "reqQosMonParams");
     if (!req_qos_mon_params) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [req_qos_mon_params]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [req_qos_mon_params]");
         goto end;
     }
         cJSON *req_qos_mon_params_local = NULL;
         if (!cJSON_IsArray(req_qos_mon_params)) {
-            ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [req_qos_mon_params]");
+            log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [req_qos_mon_params]");
             goto end;
         }
 
@@ -282,30 +282,30 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
         cJSON_ArrayForEach(req_qos_mon_params_local, req_qos_mon_params) {
             OpenAPI_requested_qos_monitoring_parameter_e localEnum = OpenAPI_requested_qos_monitoring_parameter_NULL;
             if (!cJSON_IsString(req_qos_mon_params_local)) {
-                ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [req_qos_mon_params]");
+                log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [req_qos_mon_params]");
                 goto end;
             }
             localEnum = OpenAPI_requested_qos_monitoring_parameter_FromString(req_qos_mon_params_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"req_qos_mon_params\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"req_qos_mon_params\" is not supported. Ignoring it ...",
                          req_qos_mon_params_local->valuestring);
             } else {
                 OpenAPI_list_add(req_qos_mon_paramsList, (void *)localEnum);
             }
         }
         if (req_qos_mon_paramsList->count == 0) {
-            ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed: Expected req_qos_mon_paramsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed: Expected req_qos_mon_paramsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
 
     rep_freqs = cJSON_GetObjectItemCaseSensitive(qos_monitoring_dataJSON, "repFreqs");
     if (!rep_freqs) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_freqs]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_freqs]");
         goto end;
     }
         cJSON *rep_freqs_local = NULL;
         if (!cJSON_IsArray(rep_freqs)) {
-            ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_freqs]");
+            log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_freqs]");
             goto end;
         }
 
@@ -314,19 +314,19 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
         cJSON_ArrayForEach(rep_freqs_local, rep_freqs) {
             OpenAPI_reporting_frequency_e localEnum = OpenAPI_reporting_frequency_NULL;
             if (!cJSON_IsString(rep_freqs_local)) {
-                ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_freqs]");
+                log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_freqs]");
                 goto end;
             }
             localEnum = OpenAPI_reporting_frequency_FromString(rep_freqs_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"rep_freqs\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"rep_freqs\" is not supported. Ignoring it ...",
                          rep_freqs_local->valuestring);
             } else {
                 OpenAPI_list_add(rep_freqsList, (void *)localEnum);
             }
         }
         if (rep_freqsList->count == 0) {
-            ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed: Expected rep_freqsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed: Expected rep_freqsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
 
@@ -334,7 +334,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     if (rep_thresh_dl) {
     if (!cJSON_IsNull(rep_thresh_dl)) {
     if (!cJSON_IsNumber(rep_thresh_dl)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_thresh_dl]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_thresh_dl]");
         goto end;
     }
     }
@@ -344,7 +344,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     if (rep_thresh_ul) {
     if (!cJSON_IsNull(rep_thresh_ul)) {
     if (!cJSON_IsNumber(rep_thresh_ul)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_thresh_ul]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_thresh_ul]");
         goto end;
     }
     }
@@ -354,7 +354,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     if (rep_thresh_rp) {
     if (!cJSON_IsNull(rep_thresh_rp)) {
     if (!cJSON_IsNumber(rep_thresh_rp)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_thresh_rp]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_thresh_rp]");
         goto end;
     }
     }
@@ -364,7 +364,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     if (wait_time) {
     if (!cJSON_IsNull(wait_time)) {
     if (!cJSON_IsNumber(wait_time)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [wait_time]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [wait_time]");
         goto end;
     }
     }
@@ -374,7 +374,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     if (rep_period) {
     if (!cJSON_IsNull(rep_period)) {
     if (!cJSON_IsNumber(rep_period)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_period]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [rep_period]");
         goto end;
     }
     }
@@ -384,7 +384,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     if (notify_uri) {
     if (!cJSON_IsNull(notify_uri)) {
     if (!cJSON_IsString(notify_uri) && !cJSON_IsNull(notify_uri)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [notify_uri]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [notify_uri]");
         goto end;
     }
     }
@@ -394,7 +394,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     if (notify_corre_id) {
     if (!cJSON_IsNull(notify_corre_id)) {
     if (!cJSON_IsString(notify_corre_id) && !cJSON_IsNull(notify_corre_id)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [notify_corre_id]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [notify_corre_id]");
         goto end;
     }
     }
@@ -403,7 +403,7 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_parseFromJSON(cJSON *
     direct_notif_ind = cJSON_GetObjectItemCaseSensitive(qos_monitoring_dataJSON, "directNotifInd");
     if (direct_notif_ind) {
     if (!cJSON_IsBool(direct_notif_ind)) {
-        ogs_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [direct_notif_ind]");
+        log_error("OpenAPI_qos_monitoring_data_parseFromJSON() failed [direct_notif_ind]");
         goto end;
     }
     }
@@ -453,10 +453,10 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_copy(OpenAPI_qos_moni
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_qos_monitoring_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_qos_monitoring_data_convertToJSON() failed");
+        log_error("OpenAPI_qos_monitoring_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -464,14 +464,14 @@ OpenAPI_qos_monitoring_data_t *OpenAPI_qos_monitoring_data_copy(OpenAPI_qos_moni
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

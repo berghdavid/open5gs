@@ -14,7 +14,7 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_create(
 )
 {
     OpenAPI_analytics_metadata_info_t *analytics_metadata_info_local_var = ogs_malloc(sizeof(OpenAPI_analytics_metadata_info_t));
-    ogs_assert(analytics_metadata_info_local_var);
+    log_assert(analytics_metadata_info_local_var);
 
     analytics_metadata_info_local_var->is_num_samples = is_num_samples;
     analytics_metadata_info_local_var->num_samples = num_samples;
@@ -61,14 +61,14 @@ cJSON *OpenAPI_analytics_metadata_info_convertToJSON(OpenAPI_analytics_metadata_
     OpenAPI_lnode_t *node = NULL;
 
     if (analytics_metadata_info == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [AnalyticsMetadataInfo]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [AnalyticsMetadataInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (analytics_metadata_info->is_num_samples) {
     if (cJSON_AddNumberToObject(item, "numSamples", analytics_metadata_info->num_samples) == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [num_samples]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [num_samples]");
         goto end;
     }
     }
@@ -76,12 +76,12 @@ cJSON *OpenAPI_analytics_metadata_info_convertToJSON(OpenAPI_analytics_metadata_
     if (analytics_metadata_info->data_window) {
     cJSON *data_window_local_JSON = OpenAPI_time_window_convertToJSON(analytics_metadata_info->data_window);
     if (data_window_local_JSON == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [data_window]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [data_window]");
         goto end;
     }
     cJSON_AddItemToObject(item, "dataWindow", data_window_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [data_window]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [data_window]");
         goto end;
     }
     }
@@ -89,13 +89,13 @@ cJSON *OpenAPI_analytics_metadata_info_convertToJSON(OpenAPI_analytics_metadata_
     if (analytics_metadata_info->data_stat_props) {
     cJSON *data_stat_propsList = cJSON_AddArrayToObject(item, "dataStatProps");
     if (data_stat_propsList == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [data_stat_props]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [data_stat_props]");
         goto end;
     }
     OpenAPI_list_for_each(analytics_metadata_info->data_stat_props, node) {
         cJSON *itemLocal = OpenAPI_dataset_statistical_property_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [data_stat_props]");
+            log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [data_stat_props]");
             goto end;
         }
         cJSON_AddItemToArray(data_stat_propsList, itemLocal);
@@ -105,12 +105,12 @@ cJSON *OpenAPI_analytics_metadata_info_convertToJSON(OpenAPI_analytics_metadata_
     if (analytics_metadata_info->strategy) {
     cJSON *strategy_local_JSON = OpenAPI_output_strategy_convertToJSON(analytics_metadata_info->strategy);
     if (strategy_local_JSON == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [strategy]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [strategy]");
         goto end;
     }
     cJSON_AddItemToObject(item, "strategy", strategy_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [strategy]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [strategy]");
         goto end;
     }
     }
@@ -118,12 +118,12 @@ cJSON *OpenAPI_analytics_metadata_info_convertToJSON(OpenAPI_analytics_metadata_
     if (analytics_metadata_info->accuracy) {
     cJSON *accuracy_local_JSON = OpenAPI_accuracy_convertToJSON(analytics_metadata_info->accuracy);
     if (accuracy_local_JSON == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [accuracy]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [accuracy]");
         goto end;
     }
     cJSON_AddItemToObject(item, "accuracy", accuracy_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [accuracy]");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed [accuracy]");
         goto end;
     }
     }
@@ -148,7 +148,7 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_parseFromJSON
     num_samples = cJSON_GetObjectItemCaseSensitive(analytics_metadata_infoJSON, "numSamples");
     if (num_samples) {
     if (!cJSON_IsNumber(num_samples)) {
-        ogs_error("OpenAPI_analytics_metadata_info_parseFromJSON() failed [num_samples]");
+        log_error("OpenAPI_analytics_metadata_info_parseFromJSON() failed [num_samples]");
         goto end;
     }
     }
@@ -157,7 +157,7 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_parseFromJSON
     if (data_window) {
     data_window_local_nonprim = OpenAPI_time_window_parseFromJSON(data_window);
     if (!data_window_local_nonprim) {
-        ogs_error("OpenAPI_time_window_parseFromJSON failed [data_window]");
+        log_error("OpenAPI_time_window_parseFromJSON failed [data_window]");
         goto end;
     }
     }
@@ -166,7 +166,7 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_parseFromJSON
     if (data_stat_props) {
         cJSON *data_stat_props_local = NULL;
         if (!cJSON_IsArray(data_stat_props)) {
-            ogs_error("OpenAPI_analytics_metadata_info_parseFromJSON() failed [data_stat_props]");
+            log_error("OpenAPI_analytics_metadata_info_parseFromJSON() failed [data_stat_props]");
             goto end;
         }
 
@@ -174,12 +174,12 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_parseFromJSON
 
         cJSON_ArrayForEach(data_stat_props_local, data_stat_props) {
             if (!cJSON_IsObject(data_stat_props_local)) {
-                ogs_error("OpenAPI_analytics_metadata_info_parseFromJSON() failed [data_stat_props]");
+                log_error("OpenAPI_analytics_metadata_info_parseFromJSON() failed [data_stat_props]");
                 goto end;
             }
             OpenAPI_dataset_statistical_property_t *data_stat_propsItem = OpenAPI_dataset_statistical_property_parseFromJSON(data_stat_props_local);
             if (!data_stat_propsItem) {
-                ogs_error("No data_stat_propsItem");
+                log_error("No data_stat_propsItem");
                 goto end;
             }
             OpenAPI_list_add(data_stat_propsList, data_stat_propsItem);
@@ -190,7 +190,7 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_parseFromJSON
     if (strategy) {
     strategy_local_nonprim = OpenAPI_output_strategy_parseFromJSON(strategy);
     if (!strategy_local_nonprim) {
-        ogs_error("OpenAPI_output_strategy_parseFromJSON failed [strategy]");
+        log_error("OpenAPI_output_strategy_parseFromJSON failed [strategy]");
         goto end;
     }
     }
@@ -199,7 +199,7 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_parseFromJSON
     if (accuracy) {
     accuracy_local_nonprim = OpenAPI_accuracy_parseFromJSON(accuracy);
     if (!accuracy_local_nonprim) {
-        ogs_error("OpenAPI_accuracy_parseFromJSON failed [accuracy]");
+        log_error("OpenAPI_accuracy_parseFromJSON failed [accuracy]");
         goto end;
     }
     }
@@ -242,10 +242,10 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_analytics_metadata_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_analytics_metadata_info_convertToJSON() failed");
+        log_error("OpenAPI_analytics_metadata_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -253,14 +253,14 @@ OpenAPI_analytics_metadata_info_t *OpenAPI_analytics_metadata_info_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

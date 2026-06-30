@@ -9,7 +9,7 @@ OpenAPI_eps_interworking_info_t *OpenAPI_eps_interworking_info_create(
 )
 {
     OpenAPI_eps_interworking_info_t *eps_interworking_info_local_var = ogs_malloc(sizeof(OpenAPI_eps_interworking_info_t));
-    ogs_assert(eps_interworking_info_local_var);
+    log_assert(eps_interworking_info_local_var);
 
     eps_interworking_info_local_var->eps_iwk_pgws = eps_iwk_pgws;
 
@@ -42,7 +42,7 @@ cJSON *OpenAPI_eps_interworking_info_convertToJSON(OpenAPI_eps_interworking_info
     OpenAPI_lnode_t *node = NULL;
 
     if (eps_interworking_info == NULL) {
-        ogs_error("OpenAPI_eps_interworking_info_convertToJSON() failed [EpsInterworkingInfo]");
+        log_error("OpenAPI_eps_interworking_info_convertToJSON() failed [EpsInterworkingInfo]");
         return NULL;
     }
 
@@ -50,7 +50,7 @@ cJSON *OpenAPI_eps_interworking_info_convertToJSON(OpenAPI_eps_interworking_info
     if (eps_interworking_info->eps_iwk_pgws) {
     cJSON *eps_iwk_pgws = cJSON_AddObjectToObject(item, "epsIwkPgws");
     if (eps_iwk_pgws == NULL) {
-        ogs_error("OpenAPI_eps_interworking_info_convertToJSON() failed [eps_iwk_pgws]");
+        log_error("OpenAPI_eps_interworking_info_convertToJSON() failed [eps_iwk_pgws]");
         goto end;
     }
     cJSON *localMapObject = eps_iwk_pgws;
@@ -58,18 +58,18 @@ cJSON *OpenAPI_eps_interworking_info_convertToJSON(OpenAPI_eps_interworking_info
         OpenAPI_list_for_each(eps_interworking_info->eps_iwk_pgws, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_eps_interworking_info_convertToJSON() failed [eps_iwk_pgws]");
+                log_error("OpenAPI_eps_interworking_info_convertToJSON() failed [eps_iwk_pgws]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_eps_interworking_info_convertToJSON() failed [eps_iwk_pgws]");
+                log_error("OpenAPI_eps_interworking_info_convertToJSON() failed [eps_iwk_pgws]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_eps_iwk_pgw_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_eps_interworking_info_convertToJSON() failed [inner]");
+                log_error("OpenAPI_eps_interworking_info_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -91,7 +91,7 @@ OpenAPI_eps_interworking_info_t *OpenAPI_eps_interworking_info_parseFromJSON(cJS
     if (eps_iwk_pgws) {
         cJSON *eps_iwk_pgws_local_map = NULL;
         if (!cJSON_IsObject(eps_iwk_pgws) && !cJSON_IsNull(eps_iwk_pgws)) {
-            ogs_error("OpenAPI_eps_interworking_info_parseFromJSON() failed [eps_iwk_pgws]");
+            log_error("OpenAPI_eps_interworking_info_parseFromJSON() failed [eps_iwk_pgws]");
             goto end;
         }
         if (cJSON_IsObject(eps_iwk_pgws)) {
@@ -105,7 +105,7 @@ OpenAPI_eps_interworking_info_t *OpenAPI_eps_interworking_info_parseFromJSON(cJS
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_eps_interworking_info_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_eps_interworking_info_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(eps_iwk_pgwsList, localMapKeyPair);
@@ -137,10 +137,10 @@ OpenAPI_eps_interworking_info_t *OpenAPI_eps_interworking_info_copy(OpenAPI_eps_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_eps_interworking_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_eps_interworking_info_convertToJSON() failed");
+        log_error("OpenAPI_eps_interworking_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -148,14 +148,14 @@ OpenAPI_eps_interworking_info_t *OpenAPI_eps_interworking_info_copy(OpenAPI_eps_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

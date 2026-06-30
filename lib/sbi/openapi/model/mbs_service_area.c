@@ -10,7 +10,7 @@ OpenAPI_mbs_service_area_t *OpenAPI_mbs_service_area_create(
 )
 {
     OpenAPI_mbs_service_area_t *mbs_service_area_local_var = ogs_malloc(sizeof(OpenAPI_mbs_service_area_t));
-    ogs_assert(mbs_service_area_local_var);
+    log_assert(mbs_service_area_local_var);
 
     mbs_service_area_local_var->ncgi_list = ncgi_list;
     mbs_service_area_local_var->tai_list = tai_list;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_mbs_service_area_convertToJSON(OpenAPI_mbs_service_area_t *mbs_se
     OpenAPI_lnode_t *node = NULL;
 
     if (mbs_service_area == NULL) {
-        ogs_error("OpenAPI_mbs_service_area_convertToJSON() failed [MbsServiceArea]");
+        log_error("OpenAPI_mbs_service_area_convertToJSON() failed [MbsServiceArea]");
         return NULL;
     }
 
@@ -56,13 +56,13 @@ cJSON *OpenAPI_mbs_service_area_convertToJSON(OpenAPI_mbs_service_area_t *mbs_se
     if (mbs_service_area->ncgi_list) {
     cJSON *ncgi_listList = cJSON_AddArrayToObject(item, "ncgiList");
     if (ncgi_listList == NULL) {
-        ogs_error("OpenAPI_mbs_service_area_convertToJSON() failed [ncgi_list]");
+        log_error("OpenAPI_mbs_service_area_convertToJSON() failed [ncgi_list]");
         goto end;
     }
     OpenAPI_list_for_each(mbs_service_area->ncgi_list, node) {
         cJSON *itemLocal = OpenAPI_ncgi_tai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mbs_service_area_convertToJSON() failed [ncgi_list]");
+            log_error("OpenAPI_mbs_service_area_convertToJSON() failed [ncgi_list]");
             goto end;
         }
         cJSON_AddItemToArray(ncgi_listList, itemLocal);
@@ -72,13 +72,13 @@ cJSON *OpenAPI_mbs_service_area_convertToJSON(OpenAPI_mbs_service_area_t *mbs_se
     if (mbs_service_area->tai_list) {
     cJSON *tai_listList = cJSON_AddArrayToObject(item, "taiList");
     if (tai_listList == NULL) {
-        ogs_error("OpenAPI_mbs_service_area_convertToJSON() failed [tai_list]");
+        log_error("OpenAPI_mbs_service_area_convertToJSON() failed [tai_list]");
         goto end;
     }
     OpenAPI_list_for_each(mbs_service_area->tai_list, node) {
         cJSON *itemLocal = OpenAPI_tai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mbs_service_area_convertToJSON() failed [tai_list]");
+            log_error("OpenAPI_mbs_service_area_convertToJSON() failed [tai_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_listList, itemLocal);
@@ -101,7 +101,7 @@ OpenAPI_mbs_service_area_t *OpenAPI_mbs_service_area_parseFromJSON(cJSON *mbs_se
     if (ncgi_list) {
         cJSON *ncgi_list_local = NULL;
         if (!cJSON_IsArray(ncgi_list)) {
-            ogs_error("OpenAPI_mbs_service_area_parseFromJSON() failed [ncgi_list]");
+            log_error("OpenAPI_mbs_service_area_parseFromJSON() failed [ncgi_list]");
             goto end;
         }
 
@@ -109,12 +109,12 @@ OpenAPI_mbs_service_area_t *OpenAPI_mbs_service_area_parseFromJSON(cJSON *mbs_se
 
         cJSON_ArrayForEach(ncgi_list_local, ncgi_list) {
             if (!cJSON_IsObject(ncgi_list_local)) {
-                ogs_error("OpenAPI_mbs_service_area_parseFromJSON() failed [ncgi_list]");
+                log_error("OpenAPI_mbs_service_area_parseFromJSON() failed [ncgi_list]");
                 goto end;
             }
             OpenAPI_ncgi_tai_t *ncgi_listItem = OpenAPI_ncgi_tai_parseFromJSON(ncgi_list_local);
             if (!ncgi_listItem) {
-                ogs_error("No ncgi_listItem");
+                log_error("No ncgi_listItem");
                 goto end;
             }
             OpenAPI_list_add(ncgi_listList, ncgi_listItem);
@@ -125,7 +125,7 @@ OpenAPI_mbs_service_area_t *OpenAPI_mbs_service_area_parseFromJSON(cJSON *mbs_se
     if (tai_list) {
         cJSON *tai_list_local = NULL;
         if (!cJSON_IsArray(tai_list)) {
-            ogs_error("OpenAPI_mbs_service_area_parseFromJSON() failed [tai_list]");
+            log_error("OpenAPI_mbs_service_area_parseFromJSON() failed [tai_list]");
             goto end;
         }
 
@@ -133,12 +133,12 @@ OpenAPI_mbs_service_area_t *OpenAPI_mbs_service_area_parseFromJSON(cJSON *mbs_se
 
         cJSON_ArrayForEach(tai_list_local, tai_list) {
             if (!cJSON_IsObject(tai_list_local)) {
-                ogs_error("OpenAPI_mbs_service_area_parseFromJSON() failed [tai_list]");
+                log_error("OpenAPI_mbs_service_area_parseFromJSON() failed [tai_list]");
                 goto end;
             }
             OpenAPI_tai_t *tai_listItem = OpenAPI_tai_parseFromJSON(tai_list_local);
             if (!tai_listItem) {
-                ogs_error("No tai_listItem");
+                log_error("No tai_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_listList, tai_listItem);
@@ -174,10 +174,10 @@ OpenAPI_mbs_service_area_t *OpenAPI_mbs_service_area_copy(OpenAPI_mbs_service_ar
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_mbs_service_area_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_mbs_service_area_convertToJSON() failed");
+        log_error("OpenAPI_mbs_service_area_convertToJSON() failed");
         return NULL;
     }
 
@@ -185,14 +185,14 @@ OpenAPI_mbs_service_area_t *OpenAPI_mbs_service_area_copy(OpenAPI_mbs_service_ar
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

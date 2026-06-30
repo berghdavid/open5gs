@@ -10,7 +10,7 @@ OpenAPI_ddn_failure_sub_info_t *OpenAPI_ddn_failure_sub_info_create(
 )
 {
     OpenAPI_ddn_failure_sub_info_t *ddn_failure_sub_info_local_var = ogs_malloc(sizeof(OpenAPI_ddn_failure_sub_info_t));
-    ogs_assert(ddn_failure_sub_info_local_var);
+    log_assert(ddn_failure_sub_info_local_var);
 
     ddn_failure_sub_info_local_var->notify_correlation_id = notify_correlation_id;
     ddn_failure_sub_info_local_var->ddd_traffic_descriptor_list = ddd_traffic_descriptor_list;
@@ -45,30 +45,30 @@ cJSON *OpenAPI_ddn_failure_sub_info_convertToJSON(OpenAPI_ddn_failure_sub_info_t
     OpenAPI_lnode_t *node = NULL;
 
     if (ddn_failure_sub_info == NULL) {
-        ogs_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [DdnFailureSubInfo]");
+        log_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [DdnFailureSubInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!ddn_failure_sub_info->notify_correlation_id) {
-        ogs_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [notify_correlation_id]");
+        log_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [notify_correlation_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "notifyCorrelationId", ddn_failure_sub_info->notify_correlation_id) == NULL) {
-        ogs_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [notify_correlation_id]");
+        log_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [notify_correlation_id]");
         goto end;
     }
 
     if (ddn_failure_sub_info->ddd_traffic_descriptor_list) {
     cJSON *ddd_traffic_descriptor_listList = cJSON_AddArrayToObject(item, "dddTrafficDescriptorList");
     if (ddd_traffic_descriptor_listList == NULL) {
-        ogs_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [ddd_traffic_descriptor_list]");
+        log_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [ddd_traffic_descriptor_list]");
         goto end;
     }
     OpenAPI_list_for_each(ddn_failure_sub_info->ddd_traffic_descriptor_list, node) {
         cJSON *itemLocal = OpenAPI_ddd_traffic_descriptor_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [ddd_traffic_descriptor_list]");
+            log_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed [ddd_traffic_descriptor_list]");
             goto end;
         }
         cJSON_AddItemToArray(ddd_traffic_descriptor_listList, itemLocal);
@@ -88,11 +88,11 @@ OpenAPI_ddn_failure_sub_info_t *OpenAPI_ddn_failure_sub_info_parseFromJSON(cJSON
     OpenAPI_list_t *ddd_traffic_descriptor_listList = NULL;
     notify_correlation_id = cJSON_GetObjectItemCaseSensitive(ddn_failure_sub_infoJSON, "notifyCorrelationId");
     if (!notify_correlation_id) {
-        ogs_error("OpenAPI_ddn_failure_sub_info_parseFromJSON() failed [notify_correlation_id]");
+        log_error("OpenAPI_ddn_failure_sub_info_parseFromJSON() failed [notify_correlation_id]");
         goto end;
     }
     if (!cJSON_IsString(notify_correlation_id)) {
-        ogs_error("OpenAPI_ddn_failure_sub_info_parseFromJSON() failed [notify_correlation_id]");
+        log_error("OpenAPI_ddn_failure_sub_info_parseFromJSON() failed [notify_correlation_id]");
         goto end;
     }
 
@@ -100,7 +100,7 @@ OpenAPI_ddn_failure_sub_info_t *OpenAPI_ddn_failure_sub_info_parseFromJSON(cJSON
     if (ddd_traffic_descriptor_list) {
         cJSON *ddd_traffic_descriptor_list_local = NULL;
         if (!cJSON_IsArray(ddd_traffic_descriptor_list)) {
-            ogs_error("OpenAPI_ddn_failure_sub_info_parseFromJSON() failed [ddd_traffic_descriptor_list]");
+            log_error("OpenAPI_ddn_failure_sub_info_parseFromJSON() failed [ddd_traffic_descriptor_list]");
             goto end;
         }
 
@@ -108,12 +108,12 @@ OpenAPI_ddn_failure_sub_info_t *OpenAPI_ddn_failure_sub_info_parseFromJSON(cJSON
 
         cJSON_ArrayForEach(ddd_traffic_descriptor_list_local, ddd_traffic_descriptor_list) {
             if (!cJSON_IsObject(ddd_traffic_descriptor_list_local)) {
-                ogs_error("OpenAPI_ddn_failure_sub_info_parseFromJSON() failed [ddd_traffic_descriptor_list]");
+                log_error("OpenAPI_ddn_failure_sub_info_parseFromJSON() failed [ddd_traffic_descriptor_list]");
                 goto end;
             }
             OpenAPI_ddd_traffic_descriptor_t *ddd_traffic_descriptor_listItem = OpenAPI_ddd_traffic_descriptor_parseFromJSON(ddd_traffic_descriptor_list_local);
             if (!ddd_traffic_descriptor_listItem) {
-                ogs_error("No ddd_traffic_descriptor_listItem");
+                log_error("No ddd_traffic_descriptor_listItem");
                 goto end;
             }
             OpenAPI_list_add(ddd_traffic_descriptor_listList, ddd_traffic_descriptor_listItem);
@@ -142,10 +142,10 @@ OpenAPI_ddn_failure_sub_info_t *OpenAPI_ddn_failure_sub_info_copy(OpenAPI_ddn_fa
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ddn_failure_sub_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed");
+        log_error("OpenAPI_ddn_failure_sub_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -153,14 +153,14 @@ OpenAPI_ddn_failure_sub_info_t *OpenAPI_ddn_failure_sub_info_copy(OpenAPI_ddn_fa
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

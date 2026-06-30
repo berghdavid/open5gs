@@ -42,7 +42,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_create(
 )
 {
     OpenAPI_civic_address_t *civic_address_local_var = ogs_malloc(sizeof(OpenAPI_civic_address_t));
-    ogs_assert(civic_address_local_var);
+    log_assert(civic_address_local_var);
 
     civic_address_local_var->country = country;
     civic_address_local_var->a1 = a1;
@@ -234,245 +234,245 @@ cJSON *OpenAPI_civic_address_convertToJSON(OpenAPI_civic_address_t *civic_addres
     OpenAPI_lnode_t *node = NULL;
 
     if (civic_address == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [CivicAddress]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [CivicAddress]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (civic_address->country) {
     if (cJSON_AddStringToObject(item, "country", civic_address->country) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [country]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [country]");
         goto end;
     }
     }
 
     if (civic_address->a1) {
     if (cJSON_AddStringToObject(item, "A1", civic_address->a1) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [a1]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [a1]");
         goto end;
     }
     }
 
     if (civic_address->a2) {
     if (cJSON_AddStringToObject(item, "A2", civic_address->a2) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [a2]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [a2]");
         goto end;
     }
     }
 
     if (civic_address->a3) {
     if (cJSON_AddStringToObject(item, "A3", civic_address->a3) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [a3]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [a3]");
         goto end;
     }
     }
 
     if (civic_address->a4) {
     if (cJSON_AddStringToObject(item, "A4", civic_address->a4) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [a4]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [a4]");
         goto end;
     }
     }
 
     if (civic_address->a5) {
     if (cJSON_AddStringToObject(item, "A5", civic_address->a5) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [a5]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [a5]");
         goto end;
     }
     }
 
     if (civic_address->a6) {
     if (cJSON_AddStringToObject(item, "A6", civic_address->a6) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [a6]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [a6]");
         goto end;
     }
     }
 
     if (civic_address->prd) {
     if (cJSON_AddStringToObject(item, "PRD", civic_address->prd) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [prd]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [prd]");
         goto end;
     }
     }
 
     if (civic_address->pod) {
     if (cJSON_AddStringToObject(item, "POD", civic_address->pod) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [pod]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [pod]");
         goto end;
     }
     }
 
     if (civic_address->sts) {
     if (cJSON_AddStringToObject(item, "STS", civic_address->sts) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [sts]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [sts]");
         goto end;
     }
     }
 
     if (civic_address->hno) {
     if (cJSON_AddStringToObject(item, "HNO", civic_address->hno) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [hno]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [hno]");
         goto end;
     }
     }
 
     if (civic_address->hns) {
     if (cJSON_AddStringToObject(item, "HNS", civic_address->hns) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [hns]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [hns]");
         goto end;
     }
     }
 
     if (civic_address->lmk) {
     if (cJSON_AddStringToObject(item, "LMK", civic_address->lmk) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [lmk]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [lmk]");
         goto end;
     }
     }
 
     if (civic_address->loc) {
     if (cJSON_AddStringToObject(item, "LOC", civic_address->loc) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [loc]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [loc]");
         goto end;
     }
     }
 
     if (civic_address->nam) {
     if (cJSON_AddStringToObject(item, "NAM", civic_address->nam) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [nam]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [nam]");
         goto end;
     }
     }
 
     if (civic_address->pc) {
     if (cJSON_AddStringToObject(item, "PC", civic_address->pc) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [pc]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [pc]");
         goto end;
     }
     }
 
     if (civic_address->bld) {
     if (cJSON_AddStringToObject(item, "BLD", civic_address->bld) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [bld]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [bld]");
         goto end;
     }
     }
 
     if (civic_address->unit) {
     if (cJSON_AddStringToObject(item, "UNIT", civic_address->unit) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [unit]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [unit]");
         goto end;
     }
     }
 
     if (civic_address->flr) {
     if (cJSON_AddStringToObject(item, "FLR", civic_address->flr) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [flr]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [flr]");
         goto end;
     }
     }
 
     if (civic_address->room) {
     if (cJSON_AddStringToObject(item, "ROOM", civic_address->room) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [room]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [room]");
         goto end;
     }
     }
 
     if (civic_address->plc) {
     if (cJSON_AddStringToObject(item, "PLC", civic_address->plc) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [plc]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [plc]");
         goto end;
     }
     }
 
     if (civic_address->pcn) {
     if (cJSON_AddStringToObject(item, "PCN", civic_address->pcn) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [pcn]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [pcn]");
         goto end;
     }
     }
 
     if (civic_address->pobox) {
     if (cJSON_AddStringToObject(item, "POBOX", civic_address->pobox) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [pobox]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [pobox]");
         goto end;
     }
     }
 
     if (civic_address->addcode) {
     if (cJSON_AddStringToObject(item, "ADDCODE", civic_address->addcode) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [addcode]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [addcode]");
         goto end;
     }
     }
 
     if (civic_address->seat) {
     if (cJSON_AddStringToObject(item, "SEAT", civic_address->seat) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [seat]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [seat]");
         goto end;
     }
     }
 
     if (civic_address->rd) {
     if (cJSON_AddStringToObject(item, "RD", civic_address->rd) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [rd]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [rd]");
         goto end;
     }
     }
 
     if (civic_address->rdsec) {
     if (cJSON_AddStringToObject(item, "RDSEC", civic_address->rdsec) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [rdsec]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [rdsec]");
         goto end;
     }
     }
 
     if (civic_address->rdbr) {
     if (cJSON_AddStringToObject(item, "RDBR", civic_address->rdbr) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [rdbr]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [rdbr]");
         goto end;
     }
     }
 
     if (civic_address->rdsubbr) {
     if (cJSON_AddStringToObject(item, "RDSUBBR", civic_address->rdsubbr) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [rdsubbr]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [rdsubbr]");
         goto end;
     }
     }
 
     if (civic_address->prm) {
     if (cJSON_AddStringToObject(item, "PRM", civic_address->prm) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [prm]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [prm]");
         goto end;
     }
     }
 
     if (civic_address->pom) {
     if (cJSON_AddStringToObject(item, "POM", civic_address->pom) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [pom]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [pom]");
         goto end;
     }
     }
 
     if (civic_address->usage_rules) {
     if (cJSON_AddStringToObject(item, "usageRules", civic_address->usage_rules) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [usage_rules]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [usage_rules]");
         goto end;
     }
     }
 
     if (civic_address->method) {
     if (cJSON_AddStringToObject(item, "method", civic_address->method) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [method]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [method]");
         goto end;
     }
     }
 
     if (civic_address->provided_by) {
     if (cJSON_AddStringToObject(item, "providedBy", civic_address->provided_by) == NULL) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed [provided_by]");
+        log_error("OpenAPI_civic_address_convertToJSON() failed [provided_by]");
         goto end;
     }
     }
@@ -522,7 +522,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     country = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "country");
     if (country) {
     if (!cJSON_IsString(country) && !cJSON_IsNull(country)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [country]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [country]");
         goto end;
     }
     }
@@ -530,7 +530,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     a1 = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "A1");
     if (a1) {
     if (!cJSON_IsString(a1) && !cJSON_IsNull(a1)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [a1]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [a1]");
         goto end;
     }
     }
@@ -538,7 +538,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     a2 = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "A2");
     if (a2) {
     if (!cJSON_IsString(a2) && !cJSON_IsNull(a2)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [a2]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [a2]");
         goto end;
     }
     }
@@ -546,7 +546,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     a3 = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "A3");
     if (a3) {
     if (!cJSON_IsString(a3) && !cJSON_IsNull(a3)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [a3]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [a3]");
         goto end;
     }
     }
@@ -554,7 +554,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     a4 = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "A4");
     if (a4) {
     if (!cJSON_IsString(a4) && !cJSON_IsNull(a4)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [a4]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [a4]");
         goto end;
     }
     }
@@ -562,7 +562,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     a5 = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "A5");
     if (a5) {
     if (!cJSON_IsString(a5) && !cJSON_IsNull(a5)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [a5]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [a5]");
         goto end;
     }
     }
@@ -570,7 +570,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     a6 = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "A6");
     if (a6) {
     if (!cJSON_IsString(a6) && !cJSON_IsNull(a6)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [a6]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [a6]");
         goto end;
     }
     }
@@ -578,7 +578,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     prd = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "PRD");
     if (prd) {
     if (!cJSON_IsString(prd) && !cJSON_IsNull(prd)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [prd]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [prd]");
         goto end;
     }
     }
@@ -586,7 +586,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     pod = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "POD");
     if (pod) {
     if (!cJSON_IsString(pod) && !cJSON_IsNull(pod)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [pod]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [pod]");
         goto end;
     }
     }
@@ -594,7 +594,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     sts = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "STS");
     if (sts) {
     if (!cJSON_IsString(sts) && !cJSON_IsNull(sts)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [sts]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [sts]");
         goto end;
     }
     }
@@ -602,7 +602,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     hno = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "HNO");
     if (hno) {
     if (!cJSON_IsString(hno) && !cJSON_IsNull(hno)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [hno]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [hno]");
         goto end;
     }
     }
@@ -610,7 +610,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     hns = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "HNS");
     if (hns) {
     if (!cJSON_IsString(hns) && !cJSON_IsNull(hns)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [hns]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [hns]");
         goto end;
     }
     }
@@ -618,7 +618,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     lmk = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "LMK");
     if (lmk) {
     if (!cJSON_IsString(lmk) && !cJSON_IsNull(lmk)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [lmk]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [lmk]");
         goto end;
     }
     }
@@ -626,7 +626,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     loc = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "LOC");
     if (loc) {
     if (!cJSON_IsString(loc) && !cJSON_IsNull(loc)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [loc]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [loc]");
         goto end;
     }
     }
@@ -634,7 +634,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     nam = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "NAM");
     if (nam) {
     if (!cJSON_IsString(nam) && !cJSON_IsNull(nam)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [nam]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [nam]");
         goto end;
     }
     }
@@ -642,7 +642,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     pc = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "PC");
     if (pc) {
     if (!cJSON_IsString(pc) && !cJSON_IsNull(pc)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [pc]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [pc]");
         goto end;
     }
     }
@@ -650,7 +650,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     bld = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "BLD");
     if (bld) {
     if (!cJSON_IsString(bld) && !cJSON_IsNull(bld)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [bld]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [bld]");
         goto end;
     }
     }
@@ -658,7 +658,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     unit = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "UNIT");
     if (unit) {
     if (!cJSON_IsString(unit) && !cJSON_IsNull(unit)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [unit]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [unit]");
         goto end;
     }
     }
@@ -666,7 +666,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     flr = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "FLR");
     if (flr) {
     if (!cJSON_IsString(flr) && !cJSON_IsNull(flr)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [flr]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [flr]");
         goto end;
     }
     }
@@ -674,7 +674,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     room = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "ROOM");
     if (room) {
     if (!cJSON_IsString(room) && !cJSON_IsNull(room)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [room]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [room]");
         goto end;
     }
     }
@@ -682,7 +682,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     plc = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "PLC");
     if (plc) {
     if (!cJSON_IsString(plc) && !cJSON_IsNull(plc)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [plc]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [plc]");
         goto end;
     }
     }
@@ -690,7 +690,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     pcn = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "PCN");
     if (pcn) {
     if (!cJSON_IsString(pcn) && !cJSON_IsNull(pcn)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [pcn]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [pcn]");
         goto end;
     }
     }
@@ -698,7 +698,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     pobox = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "POBOX");
     if (pobox) {
     if (!cJSON_IsString(pobox) && !cJSON_IsNull(pobox)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [pobox]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [pobox]");
         goto end;
     }
     }
@@ -706,7 +706,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     addcode = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "ADDCODE");
     if (addcode) {
     if (!cJSON_IsString(addcode) && !cJSON_IsNull(addcode)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [addcode]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [addcode]");
         goto end;
     }
     }
@@ -714,7 +714,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     seat = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "SEAT");
     if (seat) {
     if (!cJSON_IsString(seat) && !cJSON_IsNull(seat)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [seat]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [seat]");
         goto end;
     }
     }
@@ -722,7 +722,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     rd = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "RD");
     if (rd) {
     if (!cJSON_IsString(rd) && !cJSON_IsNull(rd)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [rd]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [rd]");
         goto end;
     }
     }
@@ -730,7 +730,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     rdsec = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "RDSEC");
     if (rdsec) {
     if (!cJSON_IsString(rdsec) && !cJSON_IsNull(rdsec)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [rdsec]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [rdsec]");
         goto end;
     }
     }
@@ -738,7 +738,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     rdbr = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "RDBR");
     if (rdbr) {
     if (!cJSON_IsString(rdbr) && !cJSON_IsNull(rdbr)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [rdbr]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [rdbr]");
         goto end;
     }
     }
@@ -746,7 +746,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     rdsubbr = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "RDSUBBR");
     if (rdsubbr) {
     if (!cJSON_IsString(rdsubbr) && !cJSON_IsNull(rdsubbr)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [rdsubbr]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [rdsubbr]");
         goto end;
     }
     }
@@ -754,7 +754,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     prm = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "PRM");
     if (prm) {
     if (!cJSON_IsString(prm) && !cJSON_IsNull(prm)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [prm]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [prm]");
         goto end;
     }
     }
@@ -762,7 +762,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     pom = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "POM");
     if (pom) {
     if (!cJSON_IsString(pom) && !cJSON_IsNull(pom)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [pom]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [pom]");
         goto end;
     }
     }
@@ -770,7 +770,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     usage_rules = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "usageRules");
     if (usage_rules) {
     if (!cJSON_IsString(usage_rules) && !cJSON_IsNull(usage_rules)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [usage_rules]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [usage_rules]");
         goto end;
     }
     }
@@ -778,7 +778,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     method = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "method");
     if (method) {
     if (!cJSON_IsString(method) && !cJSON_IsNull(method)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [method]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [method]");
         goto end;
     }
     }
@@ -786,7 +786,7 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_parseFromJSON(cJSON *civic_addres
     provided_by = cJSON_GetObjectItemCaseSensitive(civic_addressJSON, "providedBy");
     if (provided_by) {
     if (!cJSON_IsString(provided_by) && !cJSON_IsNull(provided_by)) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON() failed [provided_by]");
+        log_error("OpenAPI_civic_address_parseFromJSON() failed [provided_by]");
         goto end;
     }
     }
@@ -838,10 +838,10 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_copy(OpenAPI_civic_address_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_civic_address_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_civic_address_convertToJSON() failed");
+        log_error("OpenAPI_civic_address_convertToJSON() failed");
         return NULL;
     }
 
@@ -849,14 +849,14 @@ OpenAPI_civic_address_t *OpenAPI_civic_address_copy(OpenAPI_civic_address_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

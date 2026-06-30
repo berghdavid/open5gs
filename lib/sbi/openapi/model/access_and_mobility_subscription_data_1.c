@@ -80,7 +80,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
 )
 {
     OpenAPI_access_and_mobility_subscription_data_1_t *access_and_mobility_subscription_data_1_local_var = ogs_malloc(sizeof(OpenAPI_access_and_mobility_subscription_data_1_t));
-    ogs_assert(access_and_mobility_subscription_data_1_local_var);
+    log_assert(access_and_mobility_subscription_data_1_local_var);
 
     access_and_mobility_subscription_data_1_local_var->supported_features = supported_features;
     access_and_mobility_subscription_data_1_local_var->gpsis = gpsis;
@@ -353,14 +353,14 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     OpenAPI_lnode_t *node = NULL;
 
     if (access_and_mobility_subscription_data_1 == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [AccessAndMobilitySubscriptionData_1]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [AccessAndMobilitySubscriptionData_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (access_and_mobility_subscription_data_1->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", access_and_mobility_subscription_data_1->supported_features) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -368,12 +368,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->gpsis) {
     cJSON *gpsisList = cJSON_AddArrayToObject(item, "gpsis");
     if (gpsisList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [gpsis]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [gpsis]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->gpsis, node) {
         if (cJSON_AddStringToObject(gpsisList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [gpsis]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [gpsis]");
             goto end;
         }
     }
@@ -381,7 +381,7 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
 
     if (access_and_mobility_subscription_data_1->hss_group_id) {
     if (cJSON_AddStringToObject(item, "hssGroupId", access_and_mobility_subscription_data_1->hss_group_id) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [hss_group_id]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [hss_group_id]");
         goto end;
     }
     }
@@ -389,12 +389,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->internal_group_ids) {
     cJSON *internal_group_idsList = cJSON_AddArrayToObject(item, "internalGroupIds");
     if (internal_group_idsList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [internal_group_ids]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [internal_group_ids]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->internal_group_ids, node) {
         if (cJSON_AddStringToObject(internal_group_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [internal_group_ids]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [internal_group_ids]");
             goto end;
         }
     }
@@ -403,7 +403,7 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->shared_vn_group_data_ids) {
     cJSON *shared_vn_group_data_ids = cJSON_AddObjectToObject(item, "sharedVnGroupDataIds");
     if (shared_vn_group_data_ids == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_vn_group_data_ids]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_vn_group_data_ids]");
         goto end;
     }
     cJSON *localMapObject = shared_vn_group_data_ids;
@@ -411,15 +411,15 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
         OpenAPI_list_for_each(access_and_mobility_subscription_data_1->shared_vn_group_data_ids, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_vn_group_data_ids]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_vn_group_data_ids]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_vn_group_data_ids]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_vn_group_data_ids]");
                 goto end;
             }
             if (cJSON_AddStringToObject(localMapObject, localKeyValue->key, (char*)localKeyValue->value) == NULL) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [inner]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [inner]");
                 goto end;
             }
         }
@@ -429,12 +429,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->subscribed_ue_ambr) {
     cJSON *subscribed_ue_ambr_local_JSON = OpenAPI_ambr_rm_convertToJSON(access_and_mobility_subscription_data_1->subscribed_ue_ambr);
     if (subscribed_ue_ambr_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subscribed_ue_ambr]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subscribed_ue_ambr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "subscribedUeAmbr", subscribed_ue_ambr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subscribed_ue_ambr]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subscribed_ue_ambr]");
         goto end;
     }
     }
@@ -442,17 +442,17 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->nssai) {
     cJSON *nssai_local_JSON = OpenAPI_nssai_1_convertToJSON(access_and_mobility_subscription_data_1->nssai);
     if (nssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nssai]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nssai", nssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nssai]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nssai]");
         goto end;
     }
     } else if (access_and_mobility_subscription_data_1->is_nssai_null) {
         if (cJSON_AddNullToObject(item, "nssai") == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nssai]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nssai]");
             goto end;
         }
     }
@@ -460,12 +460,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->rat_restrictions != OpenAPI_rat_type_NULL) {
     cJSON *rat_restrictionsList = cJSON_AddArrayToObject(item, "ratRestrictions");
     if (rat_restrictionsList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rat_restrictions]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rat_restrictions]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->rat_restrictions, node) {
         if (cJSON_AddStringToObject(rat_restrictionsList, "", OpenAPI_rat_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rat_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rat_restrictions]");
             goto end;
         }
     }
@@ -474,13 +474,13 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->forbidden_areas) {
     cJSON *forbidden_areasList = cJSON_AddArrayToObject(item, "forbiddenAreas");
     if (forbidden_areasList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [forbidden_areas]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [forbidden_areas]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->forbidden_areas, node) {
         cJSON *itemLocal = OpenAPI_area_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [forbidden_areas]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [forbidden_areas]");
             goto end;
         }
         cJSON_AddItemToArray(forbidden_areasList, itemLocal);
@@ -490,12 +490,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->service_area_restriction) {
     cJSON *service_area_restriction_local_JSON = OpenAPI_service_area_restriction_1_convertToJSON(access_and_mobility_subscription_data_1->service_area_restriction);
     if (service_area_restriction_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [service_area_restriction]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [service_area_restriction]");
         goto end;
     }
     cJSON_AddItemToObject(item, "serviceAreaRestriction", service_area_restriction_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [service_area_restriction]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [service_area_restriction]");
         goto end;
     }
     }
@@ -503,12 +503,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->core_network_type_restrictions != OpenAPI_core_network_type_NULL) {
     cJSON *core_network_type_restrictionsList = cJSON_AddArrayToObject(item, "coreNetworkTypeRestrictions");
     if (core_network_type_restrictionsList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [core_network_type_restrictions]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [core_network_type_restrictions]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->core_network_type_restrictions, node) {
         if (cJSON_AddStringToObject(core_network_type_restrictionsList, "", OpenAPI_core_network_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [core_network_type_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [core_network_type_restrictions]");
             goto end;
         }
     }
@@ -516,57 +516,57 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
 
     if (access_and_mobility_subscription_data_1->is_rfsp_index) {
     if (cJSON_AddNumberToObject(item, "rfspIndex", access_and_mobility_subscription_data_1->rfsp_index) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rfsp_index]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rfsp_index]");
         goto end;
     }
     } else if (access_and_mobility_subscription_data_1->is_rfsp_index_null) {
         if (cJSON_AddNullToObject(item, "rfspIndex") == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rfsp_index]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rfsp_index]");
             goto end;
         }
     }
 
     if (access_and_mobility_subscription_data_1->is_subs_reg_timer) {
     if (cJSON_AddNumberToObject(item, "subsRegTimer", access_and_mobility_subscription_data_1->subs_reg_timer) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subs_reg_timer]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subs_reg_timer]");
         goto end;
     }
     } else if (access_and_mobility_subscription_data_1->is_subs_reg_timer_null) {
         if (cJSON_AddNullToObject(item, "subsRegTimer") == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subs_reg_timer]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subs_reg_timer]");
             goto end;
         }
     }
 
     if (access_and_mobility_subscription_data_1->is_ue_usage_type) {
     if (cJSON_AddNumberToObject(item, "ueUsageType", access_and_mobility_subscription_data_1->ue_usage_type) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ue_usage_type]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ue_usage_type]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_mps_priority) {
     if (cJSON_AddBoolToObject(item, "mpsPriority", access_and_mobility_subscription_data_1->mps_priority) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mps_priority]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mps_priority]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_mcs_priority) {
     if (cJSON_AddBoolToObject(item, "mcsPriority", access_and_mobility_subscription_data_1->mcs_priority) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mcs_priority]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mcs_priority]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_active_time) {
     if (cJSON_AddNumberToObject(item, "activeTime", access_and_mobility_subscription_data_1->active_time) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [active_time]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [active_time]");
         goto end;
     }
     } else if (access_and_mobility_subscription_data_1->is_active_time_null) {
         if (cJSON_AddNullToObject(item, "activeTime") == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [active_time]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [active_time]");
             goto end;
         }
     }
@@ -574,26 +574,26 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->sor_info) {
     cJSON *sor_info_local_JSON = OpenAPI_sor_info_1_convertToJSON(access_and_mobility_subscription_data_1->sor_info);
     if (sor_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_info]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "sorInfo", sor_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_info]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_info]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_sor_info_expect_ind) {
     if (cJSON_AddBoolToObject(item, "sorInfoExpectInd", access_and_mobility_subscription_data_1->sor_info_expect_ind) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_info_expect_ind]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_info_expect_ind]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_soraf_retrieval) {
     if (cJSON_AddBoolToObject(item, "sorafRetrieval", access_and_mobility_subscription_data_1->soraf_retrieval) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [soraf_retrieval]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [soraf_retrieval]");
         goto end;
     }
     }
@@ -601,12 +601,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->sor_update_indicator_list != OpenAPI_sor_update_indicator_NULL) {
     cJSON *sor_update_indicator_listList = cJSON_AddArrayToObject(item, "sorUpdateIndicatorList");
     if (sor_update_indicator_listList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_update_indicator_list]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_update_indicator_list]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->sor_update_indicator_list, node) {
         if (cJSON_AddStringToObject(sor_update_indicator_listList, "", OpenAPI_sor_update_indicator_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_update_indicator_list]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [sor_update_indicator_list]");
             goto end;
         }
     }
@@ -615,26 +615,26 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->upu_info) {
     cJSON *upu_info_local_JSON = OpenAPI_upu_info_1_convertToJSON(access_and_mobility_subscription_data_1->upu_info);
     if (upu_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [upu_info]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [upu_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "upuInfo", upu_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [upu_info]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [upu_info]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->routing_indicator) {
     if (cJSON_AddStringToObject(item, "routingIndicator", access_and_mobility_subscription_data_1->routing_indicator) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [routing_indicator]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [routing_indicator]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_mico_allowed) {
     if (cJSON_AddBoolToObject(item, "micoAllowed", access_and_mobility_subscription_data_1->mico_allowed) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mico_allowed]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mico_allowed]");
         goto end;
     }
     }
@@ -642,12 +642,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->shared_am_data_ids) {
     cJSON *shared_am_data_idsList = cJSON_AddArrayToObject(item, "sharedAmDataIds");
     if (shared_am_data_idsList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_am_data_ids]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_am_data_ids]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->shared_am_data_ids, node) {
         if (cJSON_AddStringToObject(shared_am_data_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_am_data_ids]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [shared_am_data_ids]");
             goto end;
         }
     }
@@ -655,7 +655,7 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
 
     if (access_and_mobility_subscription_data_1->odb_packet_services != OpenAPI_odb_packet_services_NULL) {
     if (cJSON_AddStringToObject(item, "odbPacketServices", OpenAPI_odb_packet_services_ToString(access_and_mobility_subscription_data_1->odb_packet_services)) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [odb_packet_services]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [odb_packet_services]");
         goto end;
     }
     }
@@ -663,12 +663,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->subscribed_dnn_list) {
     cJSON *subscribed_dnn_listList = cJSON_AddArrayToObject(item, "subscribedDnnList");
     if (subscribed_dnn_listList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subscribed_dnn_list]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subscribed_dnn_list]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->subscribed_dnn_list, node) {
         if (cJSON_AddStringToObject(subscribed_dnn_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subscribed_dnn_list]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [subscribed_dnn_list]");
             goto end;
         }
     }
@@ -676,14 +676,14 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
 
     if (access_and_mobility_subscription_data_1->is_service_gap_time) {
     if (cJSON_AddNumberToObject(item, "serviceGapTime", access_and_mobility_subscription_data_1->service_gap_time) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [service_gap_time]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [service_gap_time]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->mdt_user_consent != OpenAPI_mdt_user_consent_NULL) {
     if (cJSON_AddStringToObject(item, "mdtUserConsent", OpenAPI_mdt_user_consent_ToString(access_and_mobility_subscription_data_1->mdt_user_consent)) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mdt_user_consent]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mdt_user_consent]");
         goto end;
     }
     }
@@ -691,12 +691,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->mdt_configuration) {
     cJSON *mdt_configuration_local_JSON = OpenAPI_mdt_configuration_1_convertToJSON(access_and_mobility_subscription_data_1->mdt_configuration);
     if (mdt_configuration_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mdt_configuration]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mdt_configuration]");
         goto end;
     }
     cJSON_AddItemToObject(item, "mdtConfiguration", mdt_configuration_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mdt_configuration]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [mdt_configuration]");
         goto end;
     }
     }
@@ -704,17 +704,17 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->trace_data) {
     cJSON *trace_data_local_JSON = OpenAPI_trace_data_convertToJSON(access_and_mobility_subscription_data_1->trace_data);
     if (trace_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [trace_data]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [trace_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "traceData", trace_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [trace_data]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [trace_data]");
         goto end;
     }
     } else if (access_and_mobility_subscription_data_1->is_trace_data_null) {
         if (cJSON_AddNullToObject(item, "traceData") == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [trace_data]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [trace_data]");
             goto end;
         }
     }
@@ -722,47 +722,47 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->cag_data) {
     cJSON *cag_data_local_JSON = OpenAPI_cag_data_1_convertToJSON(access_and_mobility_subscription_data_1->cag_data);
     if (cag_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [cag_data]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [cag_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "cagData", cag_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [cag_data]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [cag_data]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->stn_sr) {
     if (cJSON_AddStringToObject(item, "stnSr", access_and_mobility_subscription_data_1->stn_sr) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [stn_sr]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [stn_sr]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->c_msisdn) {
     if (cJSON_AddStringToObject(item, "cMsisdn", access_and_mobility_subscription_data_1->c_msisdn) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [c_msisdn]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [c_msisdn]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_nb_io_tue_priority) {
     if (cJSON_AddNumberToObject(item, "nbIoTUePriority", access_and_mobility_subscription_data_1->nb_io_tue_priority) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nb_io_tue_priority]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nb_io_tue_priority]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_nssai_inclusion_allowed) {
     if (cJSON_AddBoolToObject(item, "nssaiInclusionAllowed", access_and_mobility_subscription_data_1->nssai_inclusion_allowed) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nssai_inclusion_allowed]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [nssai_inclusion_allowed]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->rg_wireline_characteristics) {
     if (cJSON_AddStringToObject(item, "rgWirelineCharacteristics", access_and_mobility_subscription_data_1->rg_wireline_characteristics) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rg_wireline_characteristics]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [rg_wireline_characteristics]");
         goto end;
     }
     }
@@ -770,19 +770,19 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->ec_restriction_data_wb) {
     cJSON *ec_restriction_data_wb_local_JSON = OpenAPI_ec_restriction_data_wb_convertToJSON(access_and_mobility_subscription_data_1->ec_restriction_data_wb);
     if (ec_restriction_data_wb_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ec_restriction_data_wb]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ec_restriction_data_wb]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ecRestrictionDataWb", ec_restriction_data_wb_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ec_restriction_data_wb]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ec_restriction_data_wb]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_ec_restriction_data_nb) {
     if (cJSON_AddBoolToObject(item, "ecRestrictionDataNb", access_and_mobility_subscription_data_1->ec_restriction_data_nb) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ec_restriction_data_nb]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ec_restriction_data_nb]");
         goto end;
     }
     }
@@ -790,12 +790,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->expected_ue_behaviour_list) {
     cJSON *expected_ue_behaviour_list_local_JSON = OpenAPI_expected_ue_behaviour_data_1_convertToJSON(access_and_mobility_subscription_data_1->expected_ue_behaviour_list);
     if (expected_ue_behaviour_list_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [expected_ue_behaviour_list]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [expected_ue_behaviour_list]");
         goto end;
     }
     cJSON_AddItemToObject(item, "expectedUeBehaviourList", expected_ue_behaviour_list_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [expected_ue_behaviour_list]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [expected_ue_behaviour_list]");
         goto end;
     }
     }
@@ -803,12 +803,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->primary_rat_restrictions != OpenAPI_rat_type_NULL) {
     cJSON *primary_rat_restrictionsList = cJSON_AddArrayToObject(item, "primaryRatRestrictions");
     if (primary_rat_restrictionsList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [primary_rat_restrictions]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [primary_rat_restrictions]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->primary_rat_restrictions, node) {
         if (cJSON_AddStringToObject(primary_rat_restrictionsList, "", OpenAPI_rat_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [primary_rat_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [primary_rat_restrictions]");
             goto end;
         }
     }
@@ -817,12 +817,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->secondary_rat_restrictions != OpenAPI_rat_type_NULL) {
     cJSON *secondary_rat_restrictionsList = cJSON_AddArrayToObject(item, "secondaryRatRestrictions");
     if (secondary_rat_restrictionsList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [secondary_rat_restrictions]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [secondary_rat_restrictions]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->secondary_rat_restrictions, node) {
         if (cJSON_AddStringToObject(secondary_rat_restrictionsList, "", OpenAPI_rat_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [secondary_rat_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [secondary_rat_restrictions]");
             goto end;
         }
     }
@@ -831,13 +831,13 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->edrx_parameters_list) {
     cJSON *edrx_parameters_listList = cJSON_AddArrayToObject(item, "edrxParametersList");
     if (edrx_parameters_listList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [edrx_parameters_list]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [edrx_parameters_list]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->edrx_parameters_list, node) {
         cJSON *itemLocal = OpenAPI_edrx_parameters_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [edrx_parameters_list]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [edrx_parameters_list]");
             goto end;
         }
         cJSON_AddItemToArray(edrx_parameters_listList, itemLocal);
@@ -847,13 +847,13 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->ptw_parameters_list) {
     cJSON *ptw_parameters_listList = cJSON_AddArrayToObject(item, "ptwParametersList");
     if (ptw_parameters_listList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ptw_parameters_list]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ptw_parameters_list]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->ptw_parameters_list, node) {
         cJSON *itemLocal = OpenAPI_ptw_parameters_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ptw_parameters_list]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [ptw_parameters_list]");
             goto end;
         }
         cJSON_AddItemToArray(ptw_parameters_listList, itemLocal);
@@ -862,7 +862,7 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
 
     if (access_and_mobility_subscription_data_1->is_iab_operation_allowed) {
     if (cJSON_AddBoolToObject(item, "iabOperationAllowed", access_and_mobility_subscription_data_1->iab_operation_allowed) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [iab_operation_allowed]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [iab_operation_allowed]");
         goto end;
     }
     }
@@ -870,7 +870,7 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->adjacent_plmn_restrictions) {
     cJSON *adjacent_plmn_restrictions = cJSON_AddObjectToObject(item, "adjacentPlmnRestrictions");
     if (adjacent_plmn_restrictions == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [adjacent_plmn_restrictions]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [adjacent_plmn_restrictions]");
         goto end;
     }
     cJSON *localMapObject = adjacent_plmn_restrictions;
@@ -878,18 +878,18 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
         OpenAPI_list_for_each(access_and_mobility_subscription_data_1->adjacent_plmn_restrictions, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [adjacent_plmn_restrictions]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [adjacent_plmn_restrictions]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [adjacent_plmn_restrictions]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [adjacent_plmn_restrictions]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_plmn_restriction_1_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [inner]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -900,13 +900,13 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->wireline_forbidden_areas) {
     cJSON *wireline_forbidden_areasList = cJSON_AddArrayToObject(item, "wirelineForbiddenAreas");
     if (wireline_forbidden_areasList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [wireline_forbidden_areas]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [wireline_forbidden_areas]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->wireline_forbidden_areas, node) {
         cJSON *itemLocal = OpenAPI_wireline_area_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [wireline_forbidden_areas]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [wireline_forbidden_areas]");
             goto end;
         }
         cJSON_AddItemToArray(wireline_forbidden_areasList, itemLocal);
@@ -916,12 +916,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->wireline_service_area_restriction) {
     cJSON *wireline_service_area_restriction_local_JSON = OpenAPI_wireline_service_area_restriction_1_convertToJSON(access_and_mobility_subscription_data_1->wireline_service_area_restriction);
     if (wireline_service_area_restriction_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [wireline_service_area_restriction]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [wireline_service_area_restriction]");
         goto end;
     }
     cJSON_AddItemToObject(item, "wirelineServiceAreaRestriction", wireline_service_area_restriction_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [wireline_service_area_restriction]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [wireline_service_area_restriction]");
         goto end;
     }
     }
@@ -929,13 +929,13 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->pcf_selection_assistance_infos) {
     cJSON *pcf_selection_assistance_infosList = cJSON_AddArrayToObject(item, "pcfSelectionAssistanceInfos");
     if (pcf_selection_assistance_infosList == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [pcf_selection_assistance_infos]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [pcf_selection_assistance_infos]");
         goto end;
     }
     OpenAPI_list_for_each(access_and_mobility_subscription_data_1->pcf_selection_assistance_infos, node) {
         cJSON *itemLocal = OpenAPI_pcf_selection_assistance_info_1_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [pcf_selection_assistance_infos]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [pcf_selection_assistance_infos]");
             goto end;
         }
         cJSON_AddItemToArray(pcf_selection_assistance_infosList, itemLocal);
@@ -945,12 +945,12 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->aerial_ue_sub_info) {
     cJSON *aerial_ue_sub_info_local_JSON = OpenAPI_aerial_ue_subscription_info_1_convertToJSON(access_and_mobility_subscription_data_1->aerial_ue_sub_info);
     if (aerial_ue_sub_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [aerial_ue_sub_info]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [aerial_ue_sub_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "aerialUeSubInfo", aerial_ue_sub_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [aerial_ue_sub_info]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [aerial_ue_sub_info]");
         goto end;
     }
     }
@@ -958,19 +958,19 @@ cJSON *OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(OpenAPI_acc
     if (access_and_mobility_subscription_data_1->roaming_restrictions) {
     cJSON *roaming_restrictions_local_JSON = OpenAPI_roaming_restrictions_convertToJSON(access_and_mobility_subscription_data_1->roaming_restrictions);
     if (roaming_restrictions_local_JSON == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [roaming_restrictions]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [roaming_restrictions]");
         goto end;
     }
     cJSON_AddItemToObject(item, "roamingRestrictions", roaming_restrictions_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [roaming_restrictions]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [roaming_restrictions]");
         goto end;
     }
     }
 
     if (access_and_mobility_subscription_data_1->is_remote_prov_ind) {
     if (cJSON_AddBoolToObject(item, "remoteProvInd", access_and_mobility_subscription_data_1->remote_prov_ind) == NULL) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [remote_prov_ind]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed [remote_prov_ind]");
         goto end;
     }
     }
@@ -1069,7 +1069,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     supported_features = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -1078,7 +1078,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (gpsis) {
         cJSON *gpsis_local = NULL;
         if (!cJSON_IsArray(gpsis)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [gpsis]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [gpsis]");
             goto end;
         }
 
@@ -1088,7 +1088,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(gpsis_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [gpsis]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [gpsis]");
                 goto end;
             }
             OpenAPI_list_add(gpsisList, ogs_strdup(gpsis_local->valuestring));
@@ -1098,7 +1098,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     hss_group_id = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "hssGroupId");
     if (hss_group_id) {
     if (!cJSON_IsString(hss_group_id) && !cJSON_IsNull(hss_group_id)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [hss_group_id]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [hss_group_id]");
         goto end;
     }
     }
@@ -1107,7 +1107,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (internal_group_ids) {
         cJSON *internal_group_ids_local = NULL;
         if (!cJSON_IsArray(internal_group_ids)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [internal_group_ids]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [internal_group_ids]");
             goto end;
         }
 
@@ -1117,7 +1117,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(internal_group_ids_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [internal_group_ids]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [internal_group_ids]");
                 goto end;
             }
             OpenAPI_list_add(internal_group_idsList, ogs_strdup(internal_group_ids_local->valuestring));
@@ -1128,7 +1128,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (shared_vn_group_data_ids) {
         cJSON *shared_vn_group_data_ids_local_map = NULL;
         if (!cJSON_IsObject(shared_vn_group_data_ids) && !cJSON_IsNull(shared_vn_group_data_ids)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [shared_vn_group_data_ids]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [shared_vn_group_data_ids]");
             goto end;
         }
         if (cJSON_IsObject(shared_vn_group_data_ids)) {
@@ -1139,7 +1139,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
                 double *localDouble = NULL;
                 int *localInt = NULL;
                 if (!cJSON_IsString(localMapObject)) {
-                    ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), ogs_strdup(localMapObject->valuestring));
@@ -1152,7 +1152,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (subscribed_ue_ambr) {
     subscribed_ue_ambr_local_nonprim = OpenAPI_ambr_rm_parseFromJSON(subscribed_ue_ambr);
     if (!subscribed_ue_ambr_local_nonprim) {
-        ogs_error("OpenAPI_ambr_rm_parseFromJSON failed [subscribed_ue_ambr]");
+        log_error("OpenAPI_ambr_rm_parseFromJSON failed [subscribed_ue_ambr]");
         goto end;
     }
     }
@@ -1162,7 +1162,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (!cJSON_IsNull(nssai)) {
     nssai_local_nonprim = OpenAPI_nssai_1_parseFromJSON(nssai);
     if (!nssai_local_nonprim) {
-        ogs_error("OpenAPI_nssai_1_parseFromJSON failed [nssai]");
+        log_error("OpenAPI_nssai_1_parseFromJSON failed [nssai]");
         goto end;
     }
     }
@@ -1172,7 +1172,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (rat_restrictions) {
         cJSON *rat_restrictions_local = NULL;
         if (!cJSON_IsArray(rat_restrictions)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [rat_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [rat_restrictions]");
             goto end;
         }
 
@@ -1181,19 +1181,19 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
         cJSON_ArrayForEach(rat_restrictions_local, rat_restrictions) {
             OpenAPI_rat_type_e localEnum = OpenAPI_rat_type_NULL;
             if (!cJSON_IsString(rat_restrictions_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [rat_restrictions]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [rat_restrictions]");
                 goto end;
             }
             localEnum = OpenAPI_rat_type_FromString(rat_restrictions_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"rat_restrictions\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"rat_restrictions\" is not supported. Ignoring it ...",
                          rat_restrictions_local->valuestring);
             } else {
                 OpenAPI_list_add(rat_restrictionsList, (void *)localEnum);
             }
         }
         if (rat_restrictionsList->count == 0) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -1202,7 +1202,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (forbidden_areas) {
         cJSON *forbidden_areas_local = NULL;
         if (!cJSON_IsArray(forbidden_areas)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [forbidden_areas]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [forbidden_areas]");
             goto end;
         }
 
@@ -1210,12 +1210,12 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
 
         cJSON_ArrayForEach(forbidden_areas_local, forbidden_areas) {
             if (!cJSON_IsObject(forbidden_areas_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [forbidden_areas]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [forbidden_areas]");
                 goto end;
             }
             OpenAPI_area_1_t *forbidden_areasItem = OpenAPI_area_1_parseFromJSON(forbidden_areas_local);
             if (!forbidden_areasItem) {
-                ogs_error("No forbidden_areasItem");
+                log_error("No forbidden_areasItem");
                 goto end;
             }
             OpenAPI_list_add(forbidden_areasList, forbidden_areasItem);
@@ -1226,7 +1226,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (service_area_restriction) {
     service_area_restriction_local_nonprim = OpenAPI_service_area_restriction_1_parseFromJSON(service_area_restriction);
     if (!service_area_restriction_local_nonprim) {
-        ogs_error("OpenAPI_service_area_restriction_1_parseFromJSON failed [service_area_restriction]");
+        log_error("OpenAPI_service_area_restriction_1_parseFromJSON failed [service_area_restriction]");
         goto end;
     }
     }
@@ -1235,7 +1235,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (core_network_type_restrictions) {
         cJSON *core_network_type_restrictions_local = NULL;
         if (!cJSON_IsArray(core_network_type_restrictions)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [core_network_type_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [core_network_type_restrictions]");
             goto end;
         }
 
@@ -1244,19 +1244,19 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
         cJSON_ArrayForEach(core_network_type_restrictions_local, core_network_type_restrictions) {
             OpenAPI_core_network_type_e localEnum = OpenAPI_core_network_type_NULL;
             if (!cJSON_IsString(core_network_type_restrictions_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [core_network_type_restrictions]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [core_network_type_restrictions]");
                 goto end;
             }
             localEnum = OpenAPI_core_network_type_FromString(core_network_type_restrictions_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"core_network_type_restrictions\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"core_network_type_restrictions\" is not supported. Ignoring it ...",
                          core_network_type_restrictions_local->valuestring);
             } else {
                 OpenAPI_list_add(core_network_type_restrictionsList, (void *)localEnum);
             }
         }
         if (core_network_type_restrictionsList->count == 0) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected core_network_type_restrictionsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected core_network_type_restrictionsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -1265,7 +1265,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (rfsp_index) {
     if (!cJSON_IsNull(rfsp_index)) {
     if (!cJSON_IsNumber(rfsp_index)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [rfsp_index]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [rfsp_index]");
         goto end;
     }
     }
@@ -1275,7 +1275,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (subs_reg_timer) {
     if (!cJSON_IsNull(subs_reg_timer)) {
     if (!cJSON_IsNumber(subs_reg_timer)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [subs_reg_timer]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [subs_reg_timer]");
         goto end;
     }
     }
@@ -1284,7 +1284,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     ue_usage_type = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "ueUsageType");
     if (ue_usage_type) {
     if (!cJSON_IsNumber(ue_usage_type)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [ue_usage_type]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [ue_usage_type]");
         goto end;
     }
     }
@@ -1292,7 +1292,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     mps_priority = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "mpsPriority");
     if (mps_priority) {
     if (!cJSON_IsBool(mps_priority)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [mps_priority]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [mps_priority]");
         goto end;
     }
     }
@@ -1300,7 +1300,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     mcs_priority = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "mcsPriority");
     if (mcs_priority) {
     if (!cJSON_IsBool(mcs_priority)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [mcs_priority]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [mcs_priority]");
         goto end;
     }
     }
@@ -1309,7 +1309,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (active_time) {
     if (!cJSON_IsNull(active_time)) {
     if (!cJSON_IsNumber(active_time)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [active_time]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [active_time]");
         goto end;
     }
     }
@@ -1319,7 +1319,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (sor_info) {
     sor_info_local_nonprim = OpenAPI_sor_info_1_parseFromJSON(sor_info);
     if (!sor_info_local_nonprim) {
-        ogs_error("OpenAPI_sor_info_1_parseFromJSON failed [sor_info]");
+        log_error("OpenAPI_sor_info_1_parseFromJSON failed [sor_info]");
         goto end;
     }
     }
@@ -1327,7 +1327,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     sor_info_expect_ind = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "sorInfoExpectInd");
     if (sor_info_expect_ind) {
     if (!cJSON_IsBool(sor_info_expect_ind)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [sor_info_expect_ind]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [sor_info_expect_ind]");
         goto end;
     }
     }
@@ -1335,7 +1335,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     soraf_retrieval = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "sorafRetrieval");
     if (soraf_retrieval) {
     if (!cJSON_IsBool(soraf_retrieval)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [soraf_retrieval]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [soraf_retrieval]");
         goto end;
     }
     }
@@ -1344,7 +1344,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (sor_update_indicator_list) {
         cJSON *sor_update_indicator_list_local = NULL;
         if (!cJSON_IsArray(sor_update_indicator_list)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [sor_update_indicator_list]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [sor_update_indicator_list]");
             goto end;
         }
 
@@ -1353,19 +1353,19 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
         cJSON_ArrayForEach(sor_update_indicator_list_local, sor_update_indicator_list) {
             OpenAPI_sor_update_indicator_e localEnum = OpenAPI_sor_update_indicator_NULL;
             if (!cJSON_IsString(sor_update_indicator_list_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [sor_update_indicator_list]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [sor_update_indicator_list]");
                 goto end;
             }
             localEnum = OpenAPI_sor_update_indicator_FromString(sor_update_indicator_list_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"sor_update_indicator_list\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"sor_update_indicator_list\" is not supported. Ignoring it ...",
                          sor_update_indicator_list_local->valuestring);
             } else {
                 OpenAPI_list_add(sor_update_indicator_listList, (void *)localEnum);
             }
         }
         if (sor_update_indicator_listList->count == 0) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected sor_update_indicator_listList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected sor_update_indicator_listList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -1374,7 +1374,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (upu_info) {
     upu_info_local_nonprim = OpenAPI_upu_info_1_parseFromJSON(upu_info);
     if (!upu_info_local_nonprim) {
-        ogs_error("OpenAPI_upu_info_1_parseFromJSON failed [upu_info]");
+        log_error("OpenAPI_upu_info_1_parseFromJSON failed [upu_info]");
         goto end;
     }
     }
@@ -1382,7 +1382,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     routing_indicator = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "routingIndicator");
     if (routing_indicator) {
     if (!cJSON_IsString(routing_indicator) && !cJSON_IsNull(routing_indicator)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [routing_indicator]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [routing_indicator]");
         goto end;
     }
     }
@@ -1390,7 +1390,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     mico_allowed = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "micoAllowed");
     if (mico_allowed) {
     if (!cJSON_IsBool(mico_allowed)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [mico_allowed]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [mico_allowed]");
         goto end;
     }
     }
@@ -1399,7 +1399,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (shared_am_data_ids) {
         cJSON *shared_am_data_ids_local = NULL;
         if (!cJSON_IsArray(shared_am_data_ids)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [shared_am_data_ids]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [shared_am_data_ids]");
             goto end;
         }
 
@@ -1409,7 +1409,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(shared_am_data_ids_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [shared_am_data_ids]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [shared_am_data_ids]");
                 goto end;
             }
             OpenAPI_list_add(shared_am_data_idsList, ogs_strdup(shared_am_data_ids_local->valuestring));
@@ -1419,7 +1419,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     odb_packet_services = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "odbPacketServices");
     if (odb_packet_services) {
     if (!cJSON_IsString(odb_packet_services)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [odb_packet_services]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [odb_packet_services]");
         goto end;
     }
     odb_packet_servicesVariable = OpenAPI_odb_packet_services_FromString(odb_packet_services->valuestring);
@@ -1429,7 +1429,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (subscribed_dnn_list) {
         cJSON *subscribed_dnn_list_local = NULL;
         if (!cJSON_IsArray(subscribed_dnn_list)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [subscribed_dnn_list]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [subscribed_dnn_list]");
             goto end;
         }
 
@@ -1439,7 +1439,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(subscribed_dnn_list_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [subscribed_dnn_list]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [subscribed_dnn_list]");
                 goto end;
             }
             OpenAPI_list_add(subscribed_dnn_listList, ogs_strdup(subscribed_dnn_list_local->valuestring));
@@ -1449,7 +1449,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     service_gap_time = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "serviceGapTime");
     if (service_gap_time) {
     if (!cJSON_IsNumber(service_gap_time)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [service_gap_time]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [service_gap_time]");
         goto end;
     }
     }
@@ -1457,7 +1457,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     mdt_user_consent = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "mdtUserConsent");
     if (mdt_user_consent) {
     if (!cJSON_IsString(mdt_user_consent)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [mdt_user_consent]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [mdt_user_consent]");
         goto end;
     }
     mdt_user_consentVariable = OpenAPI_mdt_user_consent_FromString(mdt_user_consent->valuestring);
@@ -1467,7 +1467,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (mdt_configuration) {
     mdt_configuration_local_nonprim = OpenAPI_mdt_configuration_1_parseFromJSON(mdt_configuration);
     if (!mdt_configuration_local_nonprim) {
-        ogs_error("OpenAPI_mdt_configuration_1_parseFromJSON failed [mdt_configuration]");
+        log_error("OpenAPI_mdt_configuration_1_parseFromJSON failed [mdt_configuration]");
         goto end;
     }
     }
@@ -1477,7 +1477,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (!cJSON_IsNull(trace_data)) {
     trace_data_local_nonprim = OpenAPI_trace_data_parseFromJSON(trace_data);
     if (!trace_data_local_nonprim) {
-        ogs_error("OpenAPI_trace_data_parseFromJSON failed [trace_data]");
+        log_error("OpenAPI_trace_data_parseFromJSON failed [trace_data]");
         goto end;
     }
     }
@@ -1487,7 +1487,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (cag_data) {
     cag_data_local_nonprim = OpenAPI_cag_data_1_parseFromJSON(cag_data);
     if (!cag_data_local_nonprim) {
-        ogs_error("OpenAPI_cag_data_1_parseFromJSON failed [cag_data]");
+        log_error("OpenAPI_cag_data_1_parseFromJSON failed [cag_data]");
         goto end;
     }
     }
@@ -1495,7 +1495,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     stn_sr = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "stnSr");
     if (stn_sr) {
     if (!cJSON_IsString(stn_sr) && !cJSON_IsNull(stn_sr)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [stn_sr]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [stn_sr]");
         goto end;
     }
     }
@@ -1503,7 +1503,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     c_msisdn = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "cMsisdn");
     if (c_msisdn) {
     if (!cJSON_IsString(c_msisdn) && !cJSON_IsNull(c_msisdn)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [c_msisdn]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [c_msisdn]");
         goto end;
     }
     }
@@ -1511,7 +1511,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     nb_io_tue_priority = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "nbIoTUePriority");
     if (nb_io_tue_priority) {
     if (!cJSON_IsNumber(nb_io_tue_priority)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [nb_io_tue_priority]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [nb_io_tue_priority]");
         goto end;
     }
     }
@@ -1519,7 +1519,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     nssai_inclusion_allowed = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "nssaiInclusionAllowed");
     if (nssai_inclusion_allowed) {
     if (!cJSON_IsBool(nssai_inclusion_allowed)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [nssai_inclusion_allowed]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [nssai_inclusion_allowed]");
         goto end;
     }
     }
@@ -1527,7 +1527,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     rg_wireline_characteristics = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "rgWirelineCharacteristics");
     if (rg_wireline_characteristics) {
     if (!cJSON_IsString(rg_wireline_characteristics) && !cJSON_IsNull(rg_wireline_characteristics)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [rg_wireline_characteristics]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [rg_wireline_characteristics]");
         goto end;
     }
     }
@@ -1536,7 +1536,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (ec_restriction_data_wb) {
     ec_restriction_data_wb_local_nonprim = OpenAPI_ec_restriction_data_wb_parseFromJSON(ec_restriction_data_wb);
     if (!ec_restriction_data_wb_local_nonprim) {
-        ogs_error("OpenAPI_ec_restriction_data_wb_parseFromJSON failed [ec_restriction_data_wb]");
+        log_error("OpenAPI_ec_restriction_data_wb_parseFromJSON failed [ec_restriction_data_wb]");
         goto end;
     }
     }
@@ -1544,7 +1544,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     ec_restriction_data_nb = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "ecRestrictionDataNb");
     if (ec_restriction_data_nb) {
     if (!cJSON_IsBool(ec_restriction_data_nb)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [ec_restriction_data_nb]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [ec_restriction_data_nb]");
         goto end;
     }
     }
@@ -1553,7 +1553,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (expected_ue_behaviour_list) {
     expected_ue_behaviour_list_local_nonprim = OpenAPI_expected_ue_behaviour_data_1_parseFromJSON(expected_ue_behaviour_list);
     if (!expected_ue_behaviour_list_local_nonprim) {
-        ogs_error("OpenAPI_expected_ue_behaviour_data_1_parseFromJSON failed [expected_ue_behaviour_list]");
+        log_error("OpenAPI_expected_ue_behaviour_data_1_parseFromJSON failed [expected_ue_behaviour_list]");
         goto end;
     }
     }
@@ -1562,7 +1562,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (primary_rat_restrictions) {
         cJSON *primary_rat_restrictions_local = NULL;
         if (!cJSON_IsArray(primary_rat_restrictions)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [primary_rat_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [primary_rat_restrictions]");
             goto end;
         }
 
@@ -1571,19 +1571,19 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
         cJSON_ArrayForEach(primary_rat_restrictions_local, primary_rat_restrictions) {
             OpenAPI_rat_type_e localEnum = OpenAPI_rat_type_NULL;
             if (!cJSON_IsString(primary_rat_restrictions_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [primary_rat_restrictions]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [primary_rat_restrictions]");
                 goto end;
             }
             localEnum = OpenAPI_rat_type_FromString(primary_rat_restrictions_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"primary_rat_restrictions\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"primary_rat_restrictions\" is not supported. Ignoring it ...",
                          primary_rat_restrictions_local->valuestring);
             } else {
                 OpenAPI_list_add(primary_rat_restrictionsList, (void *)localEnum);
             }
         }
         if (primary_rat_restrictionsList->count == 0) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected primary_rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected primary_rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -1592,7 +1592,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (secondary_rat_restrictions) {
         cJSON *secondary_rat_restrictions_local = NULL;
         if (!cJSON_IsArray(secondary_rat_restrictions)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [secondary_rat_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [secondary_rat_restrictions]");
             goto end;
         }
 
@@ -1601,19 +1601,19 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
         cJSON_ArrayForEach(secondary_rat_restrictions_local, secondary_rat_restrictions) {
             OpenAPI_rat_type_e localEnum = OpenAPI_rat_type_NULL;
             if (!cJSON_IsString(secondary_rat_restrictions_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [secondary_rat_restrictions]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [secondary_rat_restrictions]");
                 goto end;
             }
             localEnum = OpenAPI_rat_type_FromString(secondary_rat_restrictions_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"secondary_rat_restrictions\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"secondary_rat_restrictions\" is not supported. Ignoring it ...",
                          secondary_rat_restrictions_local->valuestring);
             } else {
                 OpenAPI_list_add(secondary_rat_restrictionsList, (void *)localEnum);
             }
         }
         if (secondary_rat_restrictionsList->count == 0) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected secondary_rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed: Expected secondary_rat_restrictionsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -1622,7 +1622,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (edrx_parameters_list) {
         cJSON *edrx_parameters_list_local = NULL;
         if (!cJSON_IsArray(edrx_parameters_list)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [edrx_parameters_list]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [edrx_parameters_list]");
             goto end;
         }
 
@@ -1630,12 +1630,12 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
 
         cJSON_ArrayForEach(edrx_parameters_list_local, edrx_parameters_list) {
             if (!cJSON_IsObject(edrx_parameters_list_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [edrx_parameters_list]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [edrx_parameters_list]");
                 goto end;
             }
             OpenAPI_edrx_parameters_1_t *edrx_parameters_listItem = OpenAPI_edrx_parameters_1_parseFromJSON(edrx_parameters_list_local);
             if (!edrx_parameters_listItem) {
-                ogs_error("No edrx_parameters_listItem");
+                log_error("No edrx_parameters_listItem");
                 goto end;
             }
             OpenAPI_list_add(edrx_parameters_listList, edrx_parameters_listItem);
@@ -1646,7 +1646,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (ptw_parameters_list) {
         cJSON *ptw_parameters_list_local = NULL;
         if (!cJSON_IsArray(ptw_parameters_list)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [ptw_parameters_list]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [ptw_parameters_list]");
             goto end;
         }
 
@@ -1654,12 +1654,12 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
 
         cJSON_ArrayForEach(ptw_parameters_list_local, ptw_parameters_list) {
             if (!cJSON_IsObject(ptw_parameters_list_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [ptw_parameters_list]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [ptw_parameters_list]");
                 goto end;
             }
             OpenAPI_ptw_parameters_1_t *ptw_parameters_listItem = OpenAPI_ptw_parameters_1_parseFromJSON(ptw_parameters_list_local);
             if (!ptw_parameters_listItem) {
-                ogs_error("No ptw_parameters_listItem");
+                log_error("No ptw_parameters_listItem");
                 goto end;
             }
             OpenAPI_list_add(ptw_parameters_listList, ptw_parameters_listItem);
@@ -1669,7 +1669,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     iab_operation_allowed = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "iabOperationAllowed");
     if (iab_operation_allowed) {
     if (!cJSON_IsBool(iab_operation_allowed)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [iab_operation_allowed]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [iab_operation_allowed]");
         goto end;
     }
     }
@@ -1678,7 +1678,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (adjacent_plmn_restrictions) {
         cJSON *adjacent_plmn_restrictions_local_map = NULL;
         if (!cJSON_IsObject(adjacent_plmn_restrictions) && !cJSON_IsNull(adjacent_plmn_restrictions)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [adjacent_plmn_restrictions]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [adjacent_plmn_restrictions]");
             goto end;
         }
         if (cJSON_IsObject(adjacent_plmn_restrictions)) {
@@ -1692,7 +1692,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(adjacent_plmn_restrictionsList, localMapKeyPair);
@@ -1704,7 +1704,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (wireline_forbidden_areas) {
         cJSON *wireline_forbidden_areas_local = NULL;
         if (!cJSON_IsArray(wireline_forbidden_areas)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [wireline_forbidden_areas]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [wireline_forbidden_areas]");
             goto end;
         }
 
@@ -1712,12 +1712,12 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
 
         cJSON_ArrayForEach(wireline_forbidden_areas_local, wireline_forbidden_areas) {
             if (!cJSON_IsObject(wireline_forbidden_areas_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [wireline_forbidden_areas]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [wireline_forbidden_areas]");
                 goto end;
             }
             OpenAPI_wireline_area_1_t *wireline_forbidden_areasItem = OpenAPI_wireline_area_1_parseFromJSON(wireline_forbidden_areas_local);
             if (!wireline_forbidden_areasItem) {
-                ogs_error("No wireline_forbidden_areasItem");
+                log_error("No wireline_forbidden_areasItem");
                 goto end;
             }
             OpenAPI_list_add(wireline_forbidden_areasList, wireline_forbidden_areasItem);
@@ -1728,7 +1728,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (wireline_service_area_restriction) {
     wireline_service_area_restriction_local_nonprim = OpenAPI_wireline_service_area_restriction_1_parseFromJSON(wireline_service_area_restriction);
     if (!wireline_service_area_restriction_local_nonprim) {
-        ogs_error("OpenAPI_wireline_service_area_restriction_1_parseFromJSON failed [wireline_service_area_restriction]");
+        log_error("OpenAPI_wireline_service_area_restriction_1_parseFromJSON failed [wireline_service_area_restriction]");
         goto end;
     }
     }
@@ -1737,7 +1737,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (pcf_selection_assistance_infos) {
         cJSON *pcf_selection_assistance_infos_local = NULL;
         if (!cJSON_IsArray(pcf_selection_assistance_infos)) {
-            ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [pcf_selection_assistance_infos]");
+            log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [pcf_selection_assistance_infos]");
             goto end;
         }
 
@@ -1745,12 +1745,12 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
 
         cJSON_ArrayForEach(pcf_selection_assistance_infos_local, pcf_selection_assistance_infos) {
             if (!cJSON_IsObject(pcf_selection_assistance_infos_local)) {
-                ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [pcf_selection_assistance_infos]");
+                log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [pcf_selection_assistance_infos]");
                 goto end;
             }
             OpenAPI_pcf_selection_assistance_info_1_t *pcf_selection_assistance_infosItem = OpenAPI_pcf_selection_assistance_info_1_parseFromJSON(pcf_selection_assistance_infos_local);
             if (!pcf_selection_assistance_infosItem) {
-                ogs_error("No pcf_selection_assistance_infosItem");
+                log_error("No pcf_selection_assistance_infosItem");
                 goto end;
             }
             OpenAPI_list_add(pcf_selection_assistance_infosList, pcf_selection_assistance_infosItem);
@@ -1761,7 +1761,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (aerial_ue_sub_info) {
     aerial_ue_sub_info_local_nonprim = OpenAPI_aerial_ue_subscription_info_1_parseFromJSON(aerial_ue_sub_info);
     if (!aerial_ue_sub_info_local_nonprim) {
-        ogs_error("OpenAPI_aerial_ue_subscription_info_1_parseFromJSON failed [aerial_ue_sub_info]");
+        log_error("OpenAPI_aerial_ue_subscription_info_1_parseFromJSON failed [aerial_ue_sub_info]");
         goto end;
     }
     }
@@ -1770,7 +1770,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     if (roaming_restrictions) {
     roaming_restrictions_local_nonprim = OpenAPI_roaming_restrictions_parseFromJSON(roaming_restrictions);
     if (!roaming_restrictions_local_nonprim) {
-        ogs_error("OpenAPI_roaming_restrictions_parseFromJSON failed [roaming_restrictions]");
+        log_error("OpenAPI_roaming_restrictions_parseFromJSON failed [roaming_restrictions]");
         goto end;
     }
     }
@@ -1778,7 +1778,7 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     remote_prov_ind = cJSON_GetObjectItemCaseSensitive(access_and_mobility_subscription_data_1JSON, "remoteProvInd");
     if (remote_prov_ind) {
     if (!cJSON_IsBool(remote_prov_ind)) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [remote_prov_ind]");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_parseFromJSON() failed [remote_prov_ind]");
         goto end;
     }
     }
@@ -2023,10 +2023,10 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_access_and_mobility_subscription_data_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed");
+        log_error("OpenAPI_access_and_mobility_subscription_data_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -2034,14 +2034,14 @@ OpenAPI_access_and_mobility_subscription_data_1_t *OpenAPI_access_and_mobility_s
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

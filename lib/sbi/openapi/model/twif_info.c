@@ -11,7 +11,7 @@ OpenAPI_twif_info_t *OpenAPI_twif_info_create(
 )
 {
     OpenAPI_twif_info_t *twif_info_local_var = ogs_malloc(sizeof(OpenAPI_twif_info_t));
-    ogs_assert(twif_info_local_var);
+    log_assert(twif_info_local_var);
 
     twif_info_local_var->ipv4_endpoint_addresses = ipv4_endpoint_addresses;
     twif_info_local_var->ipv6_endpoint_addresses = ipv6_endpoint_addresses;
@@ -54,7 +54,7 @@ cJSON *OpenAPI_twif_info_convertToJSON(OpenAPI_twif_info_t *twif_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (twif_info == NULL) {
-        ogs_error("OpenAPI_twif_info_convertToJSON() failed [TwifInfo]");
+        log_error("OpenAPI_twif_info_convertToJSON() failed [TwifInfo]");
         return NULL;
     }
 
@@ -62,12 +62,12 @@ cJSON *OpenAPI_twif_info_convertToJSON(OpenAPI_twif_info_t *twif_info)
     if (twif_info->ipv4_endpoint_addresses) {
     cJSON *ipv4_endpoint_addressesList = cJSON_AddArrayToObject(item, "ipv4EndpointAddresses");
     if (ipv4_endpoint_addressesList == NULL) {
-        ogs_error("OpenAPI_twif_info_convertToJSON() failed [ipv4_endpoint_addresses]");
+        log_error("OpenAPI_twif_info_convertToJSON() failed [ipv4_endpoint_addresses]");
         goto end;
     }
     OpenAPI_list_for_each(twif_info->ipv4_endpoint_addresses, node) {
         if (cJSON_AddStringToObject(ipv4_endpoint_addressesList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_twif_info_convertToJSON() failed [ipv4_endpoint_addresses]");
+            log_error("OpenAPI_twif_info_convertToJSON() failed [ipv4_endpoint_addresses]");
             goto end;
         }
     }
@@ -76,12 +76,12 @@ cJSON *OpenAPI_twif_info_convertToJSON(OpenAPI_twif_info_t *twif_info)
     if (twif_info->ipv6_endpoint_addresses) {
     cJSON *ipv6_endpoint_addressesList = cJSON_AddArrayToObject(item, "ipv6EndpointAddresses");
     if (ipv6_endpoint_addressesList == NULL) {
-        ogs_error("OpenAPI_twif_info_convertToJSON() failed [ipv6_endpoint_addresses]");
+        log_error("OpenAPI_twif_info_convertToJSON() failed [ipv6_endpoint_addresses]");
         goto end;
     }
     OpenAPI_list_for_each(twif_info->ipv6_endpoint_addresses, node) {
         if (cJSON_AddStringToObject(ipv6_endpoint_addressesList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_twif_info_convertToJSON() failed [ipv6_endpoint_addresses]");
+            log_error("OpenAPI_twif_info_convertToJSON() failed [ipv6_endpoint_addresses]");
             goto end;
         }
     }
@@ -89,7 +89,7 @@ cJSON *OpenAPI_twif_info_convertToJSON(OpenAPI_twif_info_t *twif_info)
 
     if (twif_info->endpoint_fqdn) {
     if (cJSON_AddStringToObject(item, "endpointFqdn", twif_info->endpoint_fqdn) == NULL) {
-        ogs_error("OpenAPI_twif_info_convertToJSON() failed [endpoint_fqdn]");
+        log_error("OpenAPI_twif_info_convertToJSON() failed [endpoint_fqdn]");
         goto end;
     }
     }
@@ -111,7 +111,7 @@ OpenAPI_twif_info_t *OpenAPI_twif_info_parseFromJSON(cJSON *twif_infoJSON)
     if (ipv4_endpoint_addresses) {
         cJSON *ipv4_endpoint_addresses_local = NULL;
         if (!cJSON_IsArray(ipv4_endpoint_addresses)) {
-            ogs_error("OpenAPI_twif_info_parseFromJSON() failed [ipv4_endpoint_addresses]");
+            log_error("OpenAPI_twif_info_parseFromJSON() failed [ipv4_endpoint_addresses]");
             goto end;
         }
 
@@ -121,7 +121,7 @@ OpenAPI_twif_info_t *OpenAPI_twif_info_parseFromJSON(cJSON *twif_infoJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ipv4_endpoint_addresses_local)) {
-                ogs_error("OpenAPI_twif_info_parseFromJSON() failed [ipv4_endpoint_addresses]");
+                log_error("OpenAPI_twif_info_parseFromJSON() failed [ipv4_endpoint_addresses]");
                 goto end;
             }
             OpenAPI_list_add(ipv4_endpoint_addressesList, ogs_strdup(ipv4_endpoint_addresses_local->valuestring));
@@ -132,7 +132,7 @@ OpenAPI_twif_info_t *OpenAPI_twif_info_parseFromJSON(cJSON *twif_infoJSON)
     if (ipv6_endpoint_addresses) {
         cJSON *ipv6_endpoint_addresses_local = NULL;
         if (!cJSON_IsArray(ipv6_endpoint_addresses)) {
-            ogs_error("OpenAPI_twif_info_parseFromJSON() failed [ipv6_endpoint_addresses]");
+            log_error("OpenAPI_twif_info_parseFromJSON() failed [ipv6_endpoint_addresses]");
             goto end;
         }
 
@@ -142,7 +142,7 @@ OpenAPI_twif_info_t *OpenAPI_twif_info_parseFromJSON(cJSON *twif_infoJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ipv6_endpoint_addresses_local)) {
-                ogs_error("OpenAPI_twif_info_parseFromJSON() failed [ipv6_endpoint_addresses]");
+                log_error("OpenAPI_twif_info_parseFromJSON() failed [ipv6_endpoint_addresses]");
                 goto end;
             }
             OpenAPI_list_add(ipv6_endpoint_addressesList, ogs_strdup(ipv6_endpoint_addresses_local->valuestring));
@@ -152,7 +152,7 @@ OpenAPI_twif_info_t *OpenAPI_twif_info_parseFromJSON(cJSON *twif_infoJSON)
     endpoint_fqdn = cJSON_GetObjectItemCaseSensitive(twif_infoJSON, "endpointFqdn");
     if (endpoint_fqdn) {
     if (!cJSON_IsString(endpoint_fqdn) && !cJSON_IsNull(endpoint_fqdn)) {
-        ogs_error("OpenAPI_twif_info_parseFromJSON() failed [endpoint_fqdn]");
+        log_error("OpenAPI_twif_info_parseFromJSON() failed [endpoint_fqdn]");
         goto end;
     }
     }
@@ -187,10 +187,10 @@ OpenAPI_twif_info_t *OpenAPI_twif_info_copy(OpenAPI_twif_info_t *dst, OpenAPI_tw
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_twif_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_twif_info_convertToJSON() failed");
+        log_error("OpenAPI_twif_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -198,14 +198,14 @@ OpenAPI_twif_info_t *OpenAPI_twif_info_copy(OpenAPI_twif_info_t *dst, OpenAPI_tw
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

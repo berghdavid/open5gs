@@ -33,13 +33,13 @@ void lmf_namf_handler_nrppa_measurement_response(
     ogs_pkbuf_t *nrppa_pkbuf = NULL;
     lmf_nrppa_pdu_t nrppa_pdu;
 
-    ogs_assert(response);
-    ogs_assert(data);
+    log_assert(response);
+    log_assert(data);
 
     location_request = data;
 
     if (status != OGS_OK) {
-        ogs_error("[%s] NRPPa measurement request failed [%d]",
+        log_error("[%s] NRPPa measurement request failed [%d]",
                 location_request->supi ? location_request->supi : "Unknown", status);
 
         /* Check if we should fallback to CELLID */
@@ -52,17 +52,17 @@ void lmf_namf_handler_nrppa_measurement_response(
             if (response->status == OGS_SBI_HTTP_STATUS_NOT_FOUND ||
                 response->status == OGS_SBI_HTTP_STATUS_SERVICE_UNAVAILABLE) {
                 if (should_fallback) {
-                    ogs_info("[%s] ECID failed with HTTP %d (UE not found/unavailable), attempting CELLID fallback",
+                    log_info("[%s] ECID failed with HTTP %d (UE not found/unavailable), attempting CELLID fallback",
                             location_request->supi, response->status);
                 } else {
-                    ogs_warn("[%s] ECID failed with HTTP %d, but fallback not enabled (high-accuracy request). Returning error.",
+                    log_warn("[%s] ECID failed with HTTP %d, but fallback not enabled (high-accuracy request). Returning error.",
                             location_request->supi, response->status);
                 }
             }
         }
 
         if (should_fallback) {
-            ogs_info("[%s] ECID failed, falling back to CELLID positioning",
+            log_info("[%s] ECID failed, falling back to CELLID positioning",
                     location_request->supi);
             
             /* Switch to CELLID positioning method */
@@ -77,12 +77,12 @@ void lmf_namf_handler_nrppa_measurement_response(
             /* Start CELLID positioning by querying AMF for Cell ID */
             rv = lmf_amf_send_location_info_request(location_request);
             if (rv != OGS_OK) {
-                ogs_error("[%s] CELLID fallback failed: unable to query AMF for Cell ID",
+                log_error("[%s] CELLID fallback failed: unable to query AMF for Cell ID",
                         location_request->supi);
                 
                 ogs_sbi_stream_t *stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
                 if (stream) {
-                    ogs_assert(true ==
+                    log_assert(true ==
                         ogs_sbi_server_send_error(stream,
                             OGS_SBI_HTTP_STATUS_SERVICE_UNAVAILABLE, NULL,
                             "ECID failed and CELLID fallback also failed",
@@ -109,17 +109,17 @@ void lmf_namf_handler_nrppa_measurement_response(
                 error_detail = ogs_strdup("AMF NRPPa measurement request failed");
             }
 
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream, http_status, NULL,
                     "NRPPa measurement request failed", error_detail, NULL));
 
             if (error_detail)
                 ogs_free(error_detail);
 
-            ogs_info("[%s] Sent error response to client for AMF NRPPa failure",
+            log_info("[%s] Sent error response to client for AMF NRPPa failure",
                     location_request->supi ? location_request->supi : "Unknown");
         } else {
-            ogs_warn("[%s] Stream [%d] not found for error response",
+            log_warn("[%s] Stream [%d] not found for error response",
                     location_request->supi ? location_request->supi : "Unknown",
                     location_request->stream_id);
         }
@@ -129,7 +129,7 @@ void lmf_namf_handler_nrppa_measurement_response(
         return;
     }
 
-    ogs_info("[%s] Received NRPPa measurement response (HTTP %d)",
+    log_info("[%s] Received NRPPa measurement response (HTTP %d)",
             location_request->supi ? location_request->supi : "Unknown",
             response->status);
 
@@ -145,7 +145,7 @@ void lmf_namf_handler_nrppa_measurement_response(
             if (location_header) {
                 char *location_dup = ogs_strdup(location_header);
                 if (location_dup) {
-                    ogs_info("[%s] Received HTTP 202 Accepted with Location: %s. Waiting for callback notification.",
+                    log_info("[%s] Received HTTP 202 Accepted with Location: %s. Waiting for callback notification.",
                             location_request->supi, location_dup);
                     /* Store location header for reference (optional - callback will come via separate POST) */
                     if (location_request->callback_reference) {
@@ -154,13 +154,13 @@ void lmf_namf_handler_nrppa_measurement_response(
                     location_request->callback_reference = location_dup;
                 }
             } else {
-                ogs_warn("[%s] Received HTTP 202 Accepted but no Location header. Will wait for callback notification.",
+                log_warn("[%s] Received HTTP 202 Accepted but no Location header. Will wait for callback notification.",
                         location_request->supi);
             }
             /* Free parsed message (but not the response - we'll free that separately) */
             ogs_sbi_message_free(&location_message);
         } else {
-            ogs_warn("[%s] Failed to parse HTTP 202 response, but will wait for callback notification anyway.",
+            log_warn("[%s] Failed to parse HTTP 202 response, but will wait for callback notification anyway.",
                     location_request->supi);
         }
         
@@ -169,7 +169,7 @@ void lmf_namf_handler_nrppa_measurement_response(
         
         /* Note: The callback notification will come as a separate POST request
          * to a callback URI. LMF provides a callback URI when sending the NRPPa request. */
-        ogs_info("[%s] Waiting for NRPPa measurement result callback notification",
+        log_info("[%s] Waiting for NRPPa measurement result callback notification",
                 location_request->supi);
         return;
     }
@@ -190,25 +190,25 @@ void lmf_namf_handler_nrppa_measurement_response(
              * Only fallback if explicitly enabled (hAccuracy < 1m).
              * For high-accuracy requests without fallback, return error instead. */
             if (should_fallback) {
-                ogs_info("[%s] ECID failed with HTTP %d, attempting CELLID fallback",
+                log_info("[%s] ECID failed with HTTP %d, attempting CELLID fallback",
                         location_request->supi, response->status);
             } else {
-                ogs_warn("[%s] ECID failed with HTTP %d, but fallback not enabled (high-accuracy request). Returning error.",
+                log_warn("[%s] ECID failed with HTTP %d, but fallback not enabled (high-accuracy request). Returning error.",
                         location_request->supi, response->status);
             }
         } else if (response->status == OGS_SBI_HTTP_STATUS_CONFLICT) {
             /* HTTP 409 might be temporary - only fallback if explicitly enabled */
             if (should_fallback) {
-                ogs_info("[%s] ECID failed with HTTP 409 (Conflict), attempting CELLID fallback",
+                log_info("[%s] ECID failed with HTTP 409 (Conflict), attempting CELLID fallback",
                         location_request->supi);
             } else {
-                ogs_warn("[%s] ECID failed with HTTP 409 (Conflict), but fallback not enabled. Returning error.",
+                log_warn("[%s] ECID failed with HTTP 409 (Conflict), but fallback not enabled. Returning error.",
                         location_request->supi);
             }
         }
 
         if (should_fallback) {
-            ogs_info("[%s] ECID failed, falling back to CELLID positioning",
+            log_info("[%s] ECID failed, falling back to CELLID positioning",
                     location_request->supi);
             
             /* Switch to CELLID positioning method */
@@ -223,12 +223,12 @@ void lmf_namf_handler_nrppa_measurement_response(
             /* Start CELLID positioning by querying AMF for Cell ID */
             rv = lmf_amf_send_location_info_request(location_request);
             if (rv != OGS_OK) {
-                ogs_error("[%s] CELLID fallback failed: unable to query AMF for Cell ID",
+                log_error("[%s] CELLID fallback failed: unable to query AMF for Cell ID",
                         location_request->supi);
                 
                 ogs_sbi_stream_t *stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
                 if (stream) {
-                    ogs_assert(true ==
+                    log_assert(true ==
                         ogs_sbi_server_send_error(stream,
                             OGS_SBI_HTTP_STATUS_SERVICE_UNAVAILABLE, NULL,
                             "ECID failed and CELLID fallback also failed",
@@ -249,17 +249,17 @@ void lmf_namf_handler_nrppa_measurement_response(
         if (stream) {
             error_detail = ogs_msprintf("AMF returned HTTP %d for NRPPa request", response->status);
 
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream, http_status, NULL,
                     "NRPPa measurement request failed", error_detail, NULL));
 
             if (error_detail)
                 ogs_free(error_detail);
 
-            ogs_info("[%s] Sent error response to client for AMF NRPPa failure",
+            log_info("[%s] Sent error response to client for AMF NRPPa failure",
                     location_request->supi ? location_request->supi : "Unknown");
         } else {
-            ogs_warn("[%s] Stream [%d] not found for error response",
+            log_warn("[%s] Stream [%d] not found for error response",
                     location_request->supi ? location_request->supi : "Unknown",
                     location_request->stream_id);
         }
@@ -278,7 +278,7 @@ void lmf_namf_handler_nrppa_measurement_response(
     if (rv != OGS_OK) {
         ogs_sbi_stream_t *stream = NULL;
 
-        ogs_error("[%s] Failed to parse NRPPa measurement response",
+        log_error("[%s] Failed to parse NRPPa measurement response",
                 location_request->supi);
 
         /* Check if we should fallback on parse failure
@@ -286,7 +286,7 @@ void lmf_namf_handler_nrppa_measurement_response(
          * If parse fails and fallback is not enabled, return error
          */
         if (location_request->ecid_fallback_to_cellid) {
-            ogs_info("[%s] NRPPa parse failed, falling back to CELLID positioning",
+            log_info("[%s] NRPPa parse failed, falling back to CELLID positioning",
                     location_request->supi);
             
             /* Switch to CELLID positioning method */
@@ -302,12 +302,12 @@ void lmf_namf_handler_nrppa_measurement_response(
             /* Start CELLID positioning by querying AMF for Cell ID */
             rv = lmf_amf_send_location_info_request(location_request);
             if (rv != OGS_OK) {
-                ogs_error("[%s] CELLID fallback failed: unable to query AMF for Cell ID",
+                log_error("[%s] CELLID fallback failed: unable to query AMF for Cell ID",
                         location_request->supi);
                 
                 ogs_sbi_stream_t *stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
                 if (stream) {
-                    ogs_assert(true ==
+                    log_assert(true ==
                         ogs_sbi_server_send_error(stream,
                             OGS_SBI_HTTP_STATUS_SERVICE_UNAVAILABLE, NULL,
                             "ECID failed and CELLID fallback also failed",
@@ -320,7 +320,7 @@ void lmf_namf_handler_nrppa_measurement_response(
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                     "Failed to parse NRPPa measurement response",
@@ -359,12 +359,12 @@ void lmf_namf_handler_nrppa_measurement_response(
     if (!nrppa_pkbuf) {
         ogs_sbi_stream_t *stream = NULL;
 
-        ogs_error("[%s] No NRPPa PDU in measurement response",
+        log_error("[%s] No NRPPa PDU in measurement response",
                 location_request->supi);
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                     "No NRPPa PDU in measurement response",
@@ -384,12 +384,12 @@ void lmf_namf_handler_nrppa_measurement_response(
     if (rv != OGS_OK) {
         ogs_sbi_stream_t *stream = NULL;
 
-        ogs_error("[%s] Failed to parse NRPPa PDU",
+        log_error("[%s] Failed to parse NRPPa PDU",
                 location_request->supi);
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                     "Failed to parse NRPPa PDU",
@@ -413,13 +413,13 @@ void lmf_namf_handler_nrppa_measurement_response(
 
     /* Store parsed NRPPa response in location request */
     if (nrppa_pdu.message_type == NRPPA_MESSAGE_TYPE_ECID_MEASUREMENT_INITIATION_RESPONSE) {
-        ogs_info("[%s] ECID measurement response parsed successfully",
+        log_info("[%s] ECID measurement response parsed successfully",
                 location_request->supi);
 
         /* Continue with location determination process */
         rv = lmf_location_determine_ecid(location_request, &nrppa_pdu.u.ecid_response);
         if (rv != OGS_OK) {
-            ogs_error("[%s] lmf_location_determine_ecid() failed",
+            log_error("[%s] lmf_location_determine_ecid() failed",
                     location_request->supi);
         }
         
@@ -437,7 +437,7 @@ void lmf_namf_handler_nrppa_measurement_response(
         ogs_sbi_message_free(&message);
         ogs_sbi_response_free(response);
     } else if (nrppa_pdu.message_type == NRPPA_MESSAGE_TYPE_ECID_MEASUREMENT_FAILURE_INDICATION) {
-        ogs_warn("[%s] gNB rejected NRPPa measurement request (cause=%u)",
+        log_warn("[%s] gNB rejected NRPPa measurement request (cause=%u)",
                 location_request->supi, nrppa_pdu.u.ecid_failure.cause);
 
         /* Check if we should fallback to CELLID */
@@ -454,12 +454,12 @@ void lmf_namf_handler_nrppa_measurement_response(
          */
         if (cause == 2 || cause == 3) {
             should_fallback = true;
-            ogs_info("[%s] ECID failed due to UE not reachable or resource unavailable (cause=%u), attempting CELLID fallback",
+            log_info("[%s] ECID failed due to UE not reachable or resource unavailable (cause=%u), attempting CELLID fallback",
                     location_request->supi, cause);
         }
 
         if (should_fallback) {
-            ogs_info("[%s] ECID failed, falling back to CELLID positioning",
+            log_info("[%s] ECID failed, falling back to CELLID positioning",
                     location_request->supi);
             
             /* Switch to CELLID positioning method */
@@ -484,12 +484,12 @@ void lmf_namf_handler_nrppa_measurement_response(
             /* Start CELLID positioning by querying AMF for Cell ID */
             rv = lmf_amf_send_location_info_request(location_request);
             if (rv != OGS_OK) {
-                ogs_error("[%s] CELLID fallback failed: unable to query AMF for Cell ID",
+                log_error("[%s] CELLID fallback failed: unable to query AMF for Cell ID",
                         location_request->supi);
                 
                 ogs_sbi_stream_t *stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
                 if (stream) {
-                    ogs_assert(true ==
+                    log_assert(true ==
                         ogs_sbi_server_send_error(stream,
                             OGS_SBI_HTTP_STATUS_SERVICE_UNAVAILABLE, NULL,
                             "ECID failed and CELLID fallback also failed",
@@ -516,14 +516,14 @@ void lmf_namf_handler_nrppa_measurement_response(
                     "NRPPa measurement request rejected by gNB",
                     error_detail, NULL);
             if (!sent) {
-                ogs_warn("[%s] Failed to send error response (stream may be closed)",
+                log_warn("[%s] Failed to send error response (stream may be closed)",
                         location_request->supi ? location_request->supi : "Unknown");
             }
 
             if (error_detail)
                 ogs_free(error_detail);
         } else {
-            ogs_warn("[%s] Stream not found for error response (may already be closed)",
+            log_warn("[%s] Stream not found for error response (may already be closed)",
                     location_request->supi ? location_request->supi : "Unknown");
         }
 
@@ -556,7 +556,7 @@ void lmf_namf_handler_nrppa_measurement_response(
         ogs_sbi_stream_t *stream = NULL;
         char *error_detail = NULL;
 
-        ogs_error("[%s] Unexpected NRPPa message type: %u",
+        log_error("[%s] Unexpected NRPPa message type: %u",
                 location_request->supi, nrppa_pdu.message_type);
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
@@ -564,7 +564,7 @@ void lmf_namf_handler_nrppa_measurement_response(
             error_detail = ogs_msprintf("Unexpected NRPPa message type: %u",
                     nrppa_pdu.message_type);
 
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                     "Unexpected NRPPa message type",
@@ -603,13 +603,13 @@ void lmf_namf_handler_location_info_response(
     cJSON *item = NULL;
     ogs_sbi_stream_t *stream = NULL;
 
-    ogs_assert(response);
-    ogs_assert(data);
+    log_assert(response);
+    log_assert(data);
 
     location_request = data;
 
     if (status != OGS_OK) {
-        ogs_error("[%s] AMF location info request failed [%d]",
+        log_error("[%s] AMF location info request failed [%d]",
                 location_request->supi ? location_request->supi : "Unknown", status);
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
@@ -624,7 +624,7 @@ void lmf_namf_handler_location_info_response(
                 error_detail = ogs_strdup("AMF location info request failed");
             }
 
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream, http_status, NULL,
                     "Failed to get Cell ID from AMF", error_detail, NULL));
 
@@ -637,17 +637,17 @@ void lmf_namf_handler_location_info_response(
         return;
     }
 
-    ogs_info("[%s] Received location info response from AMF",
+    log_info("[%s] Received location info response from AMF",
             location_request->supi ? location_request->supi : "Unknown");
 
     /* Check response status */
     if (response->status != OGS_SBI_HTTP_STATUS_OK) {
-        ogs_error("[%s] AMF returned HTTP %d for location info request",
+        log_error("[%s] AMF returned HTTP %d for location info request",
                 location_request->supi, response->status);
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream, response->status, NULL,
                     "AMF location info request failed",
                     "AMF returned error status", NULL));
@@ -660,12 +660,12 @@ void lmf_namf_handler_location_info_response(
 
     /* Parse JSON response */
     if (!response->http.content) {
-        ogs_error("[%s] No content in AMF location info response",
+        log_error("[%s] No content in AMF location info response",
                 location_request->supi);
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                     "Invalid AMF response",
@@ -679,12 +679,12 @@ void lmf_namf_handler_location_info_response(
 
     json = cJSON_Parse(response->http.content);
     if (!json) {
-        ogs_error("[%s] Failed to parse AMF location info JSON",
+        log_error("[%s] Failed to parse AMF location info JSON",
                 location_request->supi);
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                     "Failed to parse AMF response",
@@ -699,7 +699,7 @@ void lmf_namf_handler_location_info_response(
     /* Extract NCGI from JSON */
     ncgi_json = cJSON_GetObjectItem(json, "ncgi");
     if (!ncgi_json || !cJSON_IsObject(ncgi_json)) {
-        ogs_error("[%s] No 'ncgi' object in AMF location info response",
+        log_error("[%s] No 'ncgi' object in AMF location info response",
                 location_request->supi);
 
         cJSON_Delete(json);
@@ -707,7 +707,7 @@ void lmf_namf_handler_location_info_response(
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                     "Invalid AMF response",
@@ -720,13 +720,13 @@ void lmf_namf_handler_location_info_response(
 
     /* Parse NCGI */
     location_request->ncgi_from_amf = ogs_calloc(1, sizeof(OpenAPI_ncgi_t));
-    ogs_assert(location_request->ncgi_from_amf);
+    log_assert(location_request->ncgi_from_amf);
 
     /* Parse PLMN ID */
     plmn_json = cJSON_GetObjectItem(ncgi_json, "plmnId");
     if (plmn_json && cJSON_IsObject(plmn_json)) {
         OpenAPI_plmn_id_t *plmn_id = ogs_calloc(1, sizeof(OpenAPI_plmn_id_t));
-        ogs_assert(plmn_id);
+        log_assert(plmn_id);
 
         item = cJSON_GetObjectItem(plmn_json, "mcc");
         if (item && cJSON_IsString(item)) {
@@ -748,7 +748,7 @@ void lmf_namf_handler_location_info_response(
     }
 
     if (!location_request->ncgi_from_amf->nr_cell_id) {
-        ogs_error("[%s] No 'nrCellId' in AMF location info response",
+        log_error("[%s] No 'nrCellId' in AMF location info response",
                 location_request->supi);
 
         if (location_request->ncgi_from_amf->plmn_id) {
@@ -766,7 +766,7 @@ void lmf_namf_handler_location_info_response(
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            ogs_assert(true ==
+            log_assert(true ==
                 ogs_sbi_server_send_error(stream,
                     OGS_SBI_HTTP_STATUS_INTERNAL_SERVER_ERROR, NULL,
                     "Invalid AMF response",
@@ -777,7 +777,7 @@ void lmf_namf_handler_location_info_response(
         return;
     }
 
-    ogs_info("[%s] Retrieved Cell ID from AMF: PLMN=%s/%s, CellID=%s",
+    log_info("[%s] Retrieved Cell ID from AMF: PLMN=%s/%s, CellID=%s",
             location_request->supi,
             location_request->ncgi_from_amf->plmn_id ?
                 (location_request->ncgi_from_amf->plmn_id->mcc ?
@@ -793,7 +793,7 @@ void lmf_namf_handler_location_info_response(
     /* Now continue with CELLID positioning using the retrieved NCGI */
     rv = lmf_location_determine_cellid(location_request);
     if (rv != OGS_OK) {
-        ogs_error("[%s] lmf_location_determine_cellid() failed after getting NCGI from AMF",
+        log_error("[%s] lmf_location_determine_cellid() failed after getting NCGI from AMF",
                 location_request->supi);
         /* Error response already sent by lmf_location_determine_cellid */
     }

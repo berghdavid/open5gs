@@ -10,7 +10,7 @@ OpenAPI_invalid_param_t *OpenAPI_invalid_param_create(
 )
 {
     OpenAPI_invalid_param_t *invalid_param_local_var = ogs_malloc(sizeof(OpenAPI_invalid_param_t));
-    ogs_assert(invalid_param_local_var);
+    log_assert(invalid_param_local_var);
 
     invalid_param_local_var->param = param;
     invalid_param_local_var->reason = reason;
@@ -42,23 +42,23 @@ cJSON *OpenAPI_invalid_param_convertToJSON(OpenAPI_invalid_param_t *invalid_para
     OpenAPI_lnode_t *node = NULL;
 
     if (invalid_param == NULL) {
-        ogs_error("OpenAPI_invalid_param_convertToJSON() failed [InvalidParam]");
+        log_error("OpenAPI_invalid_param_convertToJSON() failed [InvalidParam]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!invalid_param->param) {
-        ogs_error("OpenAPI_invalid_param_convertToJSON() failed [param]");
+        log_error("OpenAPI_invalid_param_convertToJSON() failed [param]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "param", invalid_param->param) == NULL) {
-        ogs_error("OpenAPI_invalid_param_convertToJSON() failed [param]");
+        log_error("OpenAPI_invalid_param_convertToJSON() failed [param]");
         goto end;
     }
 
     if (invalid_param->reason) {
     if (cJSON_AddStringToObject(item, "reason", invalid_param->reason) == NULL) {
-        ogs_error("OpenAPI_invalid_param_convertToJSON() failed [reason]");
+        log_error("OpenAPI_invalid_param_convertToJSON() failed [reason]");
         goto end;
     }
     }
@@ -75,18 +75,18 @@ OpenAPI_invalid_param_t *OpenAPI_invalid_param_parseFromJSON(cJSON *invalid_para
     cJSON *reason = NULL;
     param = cJSON_GetObjectItemCaseSensitive(invalid_paramJSON, "param");
     if (!param) {
-        ogs_error("OpenAPI_invalid_param_parseFromJSON() failed [param]");
+        log_error("OpenAPI_invalid_param_parseFromJSON() failed [param]");
         goto end;
     }
     if (!cJSON_IsString(param)) {
-        ogs_error("OpenAPI_invalid_param_parseFromJSON() failed [param]");
+        log_error("OpenAPI_invalid_param_parseFromJSON() failed [param]");
         goto end;
     }
 
     reason = cJSON_GetObjectItemCaseSensitive(invalid_paramJSON, "reason");
     if (reason) {
     if (!cJSON_IsString(reason) && !cJSON_IsNull(reason)) {
-        ogs_error("OpenAPI_invalid_param_parseFromJSON() failed [reason]");
+        log_error("OpenAPI_invalid_param_parseFromJSON() failed [reason]");
         goto end;
     }
     }
@@ -106,10 +106,10 @@ OpenAPI_invalid_param_t *OpenAPI_invalid_param_copy(OpenAPI_invalid_param_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_invalid_param_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_invalid_param_convertToJSON() failed");
+        log_error("OpenAPI_invalid_param_convertToJSON() failed");
         return NULL;
     }
 
@@ -117,14 +117,14 @@ OpenAPI_invalid_param_t *OpenAPI_invalid_param_copy(OpenAPI_invalid_param_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

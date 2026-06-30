@@ -10,7 +10,7 @@ OpenAPI_subscription_context_t *OpenAPI_subscription_context_create(
 )
 {
     OpenAPI_subscription_context_t *subscription_context_local_var = ogs_malloc(sizeof(OpenAPI_subscription_context_t));
-    ogs_assert(subscription_context_local_var);
+    log_assert(subscription_context_local_var);
 
     subscription_context_local_var->subscription_id = subscription_id;
     subscription_context_local_var->subscr_cond = subscr_cond;
@@ -42,29 +42,29 @@ cJSON *OpenAPI_subscription_context_convertToJSON(OpenAPI_subscription_context_t
     OpenAPI_lnode_t *node = NULL;
 
     if (subscription_context == NULL) {
-        ogs_error("OpenAPI_subscription_context_convertToJSON() failed [SubscriptionContext]");
+        log_error("OpenAPI_subscription_context_convertToJSON() failed [SubscriptionContext]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!subscription_context->subscription_id) {
-        ogs_error("OpenAPI_subscription_context_convertToJSON() failed [subscription_id]");
+        log_error("OpenAPI_subscription_context_convertToJSON() failed [subscription_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "subscriptionId", subscription_context->subscription_id) == NULL) {
-        ogs_error("OpenAPI_subscription_context_convertToJSON() failed [subscription_id]");
+        log_error("OpenAPI_subscription_context_convertToJSON() failed [subscription_id]");
         goto end;
     }
 
     if (subscription_context->subscr_cond) {
     cJSON *subscr_cond_local_JSON = OpenAPI_subscr_cond_convertToJSON(subscription_context->subscr_cond);
     if (subscr_cond_local_JSON == NULL) {
-        ogs_error("OpenAPI_subscription_context_convertToJSON() failed [subscr_cond]");
+        log_error("OpenAPI_subscription_context_convertToJSON() failed [subscr_cond]");
         goto end;
     }
     cJSON_AddItemToObject(item, "subscrCond", subscr_cond_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_subscription_context_convertToJSON() failed [subscr_cond]");
+        log_error("OpenAPI_subscription_context_convertToJSON() failed [subscr_cond]");
         goto end;
     }
     }
@@ -82,11 +82,11 @@ OpenAPI_subscription_context_t *OpenAPI_subscription_context_parseFromJSON(cJSON
     OpenAPI_subscr_cond_t *subscr_cond_local_nonprim = NULL;
     subscription_id = cJSON_GetObjectItemCaseSensitive(subscription_contextJSON, "subscriptionId");
     if (!subscription_id) {
-        ogs_error("OpenAPI_subscription_context_parseFromJSON() failed [subscription_id]");
+        log_error("OpenAPI_subscription_context_parseFromJSON() failed [subscription_id]");
         goto end;
     }
     if (!cJSON_IsString(subscription_id)) {
-        ogs_error("OpenAPI_subscription_context_parseFromJSON() failed [subscription_id]");
+        log_error("OpenAPI_subscription_context_parseFromJSON() failed [subscription_id]");
         goto end;
     }
 
@@ -94,7 +94,7 @@ OpenAPI_subscription_context_t *OpenAPI_subscription_context_parseFromJSON(cJSON
     if (subscr_cond) {
     subscr_cond_local_nonprim = OpenAPI_subscr_cond_parseFromJSON(subscr_cond);
     if (!subscr_cond_local_nonprim) {
-        ogs_error("OpenAPI_subscr_cond_parseFromJSON failed [subscr_cond]");
+        log_error("OpenAPI_subscr_cond_parseFromJSON failed [subscr_cond]");
         goto end;
     }
     }
@@ -118,10 +118,10 @@ OpenAPI_subscription_context_t *OpenAPI_subscription_context_copy(OpenAPI_subscr
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_subscription_context_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_subscription_context_convertToJSON() failed");
+        log_error("OpenAPI_subscription_context_convertToJSON() failed");
         return NULL;
     }
 
@@ -129,14 +129,14 @@ OpenAPI_subscription_context_t *OpenAPI_subscription_context_copy(OpenAPI_subscr
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

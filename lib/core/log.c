@@ -20,7 +20,9 @@
  * IN THE SOFTWARE.
  */
 
-#include "log.h"
+#include "ogs-core.h"
+
+#include <ctype.h>
 
 #define MAX_CALLBACKS 32
 #define LOG_DEFAULT LOG_INFO
@@ -36,7 +38,7 @@ static struct
 {
 	void *udata;
 	log_LockFn lock;
-	int level;
+	log_level_e level;
 	bool quiet;
 	Callback callbacks[MAX_CALLBACKS];
 } L;
@@ -94,7 +96,7 @@ static void unlock(void)
 	}
 }
 
-const char *log_level_string(int level)
+const char *log_level_string(log_level_e level)
 {
 	return level_strings[level];
 }
@@ -124,7 +126,7 @@ void log_set_level_str(const char *level)
 	log_error("Unrecognized log level %s, defaulting to info", level);
 }
 
-void log_set_level(int level)
+void log_set_level(log_level_e level)
 {
 	L.level = level;
 }
@@ -134,7 +136,7 @@ void log_set_quiet(bool enable)
 	L.quiet = enable;
 }
 
-int log_add_callback(log_LogFn fn, void *udata, int level)
+int log_add_callback(log_LogFn fn, void *udata, log_level_e level)
 {
 	int i;
 	for (i = 0; i < MAX_CALLBACKS; i++) {
@@ -146,7 +148,7 @@ int log_add_callback(log_LogFn fn, void *udata, int level)
 	return -1;
 }
 
-int log_add_fp(FILE *fp, int level)
+int log_add_fp(FILE *fp, log_level_e level)
 {
 	return log_add_callback(file_callback, fp, level);
 }
@@ -160,7 +162,7 @@ static void init_event(log_Event *ev, void *udata)
 	ev->udata = udata;
 }
 
-void log_log(int level, const char *file, int line, const char *fmt, ...)
+void log_log(log_level_e level, const char *file, int line, const char *fmt, ...)
 {
 	log_Event ev = {
 		.fmt = fmt,
@@ -190,4 +192,36 @@ void log_log(int level, const char *file, int line, const char *fmt, ...)
 	}
 
 	unlock();
+}
+
+void log_hexdump(log_level_e level, const unsigned char *data, size_t len)
+{
+    size_t n, m;
+    char dumpstr[OGS_HUGE_LEN];
+    char *p, *last;
+
+    last = dumpstr + OGS_HUGE_LEN;
+    p = dumpstr;
+
+    for (n = 0; n < len; n += 16) {
+        p = ogs_slprintf(p, last, "%04x: ", (int)n);
+        
+        for (m = n; m < n + 16; m++) {
+            if (m > n && (m % 4) == 0)
+                p = ogs_slprintf(p, last, " ");
+            if (m < len)
+                p = ogs_slprintf(p, last, "%02x", data[m]);
+            else
+                p = ogs_slprintf(p, last, "  ");
+        }
+
+        p = ogs_slprintf(p, last, "   ");
+
+        for (m = n; m < len && m < n + 16; m++)
+            p = ogs_slprintf(p, last, "%c", isprint(data[m]) ? data[m] : '.');
+
+        p = ogs_slprintf(p, last, "\n");
+    }
+
+    log_error_msg(level, 0, "%s", dumpstr);
 }

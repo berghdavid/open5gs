@@ -17,7 +17,7 @@ OpenAPI_small_data_rate_status_t *OpenAPI_small_data_rate_status_create(
 )
 {
     OpenAPI_small_data_rate_status_t *small_data_rate_status_local_var = ogs_malloc(sizeof(OpenAPI_small_data_rate_status_t));
-    ogs_assert(small_data_rate_status_local_var);
+    log_assert(small_data_rate_status_local_var);
 
     small_data_rate_status_local_var->is_remain_packets_ul = is_remain_packets_ul;
     small_data_rate_status_local_var->remain_packets_ul = remain_packets_ul;
@@ -52,42 +52,42 @@ cJSON *OpenAPI_small_data_rate_status_convertToJSON(OpenAPI_small_data_rate_stat
     OpenAPI_lnode_t *node = NULL;
 
     if (small_data_rate_status == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_convertToJSON() failed [SmallDataRateStatus]");
+        log_error("OpenAPI_small_data_rate_status_convertToJSON() failed [SmallDataRateStatus]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (small_data_rate_status->is_remain_packets_ul) {
     if (cJSON_AddNumberToObject(item, "remainPacketsUl", small_data_rate_status->remain_packets_ul) == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_convertToJSON() failed [remain_packets_ul]");
+        log_error("OpenAPI_small_data_rate_status_convertToJSON() failed [remain_packets_ul]");
         goto end;
     }
     }
 
     if (small_data_rate_status->is_remain_packets_dl) {
     if (cJSON_AddNumberToObject(item, "remainPacketsDl", small_data_rate_status->remain_packets_dl) == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_convertToJSON() failed [remain_packets_dl]");
+        log_error("OpenAPI_small_data_rate_status_convertToJSON() failed [remain_packets_dl]");
         goto end;
     }
     }
 
     if (small_data_rate_status->validity_time) {
     if (cJSON_AddStringToObject(item, "validityTime", small_data_rate_status->validity_time) == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_convertToJSON() failed [validity_time]");
+        log_error("OpenAPI_small_data_rate_status_convertToJSON() failed [validity_time]");
         goto end;
     }
     }
 
     if (small_data_rate_status->is_remain_ex_reports_ul) {
     if (cJSON_AddNumberToObject(item, "remainExReportsUl", small_data_rate_status->remain_ex_reports_ul) == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_convertToJSON() failed [remain_ex_reports_ul]");
+        log_error("OpenAPI_small_data_rate_status_convertToJSON() failed [remain_ex_reports_ul]");
         goto end;
     }
     }
 
     if (small_data_rate_status->is_remain_ex_reports_dl) {
     if (cJSON_AddNumberToObject(item, "remainExReportsDl", small_data_rate_status->remain_ex_reports_dl) == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_convertToJSON() failed [remain_ex_reports_dl]");
+        log_error("OpenAPI_small_data_rate_status_convertToJSON() failed [remain_ex_reports_dl]");
         goto end;
     }
     }
@@ -108,7 +108,7 @@ OpenAPI_small_data_rate_status_t *OpenAPI_small_data_rate_status_parseFromJSON(c
     remain_packets_ul = cJSON_GetObjectItemCaseSensitive(small_data_rate_statusJSON, "remainPacketsUl");
     if (remain_packets_ul) {
     if (!cJSON_IsNumber(remain_packets_ul)) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [remain_packets_ul]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [remain_packets_ul]");
         goto end;
     }
     }
@@ -116,7 +116,7 @@ OpenAPI_small_data_rate_status_t *OpenAPI_small_data_rate_status_parseFromJSON(c
     remain_packets_dl = cJSON_GetObjectItemCaseSensitive(small_data_rate_statusJSON, "remainPacketsDl");
     if (remain_packets_dl) {
     if (!cJSON_IsNumber(remain_packets_dl)) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [remain_packets_dl]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [remain_packets_dl]");
         goto end;
     }
     }
@@ -124,7 +124,7 @@ OpenAPI_small_data_rate_status_t *OpenAPI_small_data_rate_status_parseFromJSON(c
     validity_time = cJSON_GetObjectItemCaseSensitive(small_data_rate_statusJSON, "validityTime");
     if (validity_time) {
     if (!cJSON_IsString(validity_time) && !cJSON_IsNull(validity_time)) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [validity_time]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [validity_time]");
         goto end;
     }
     }
@@ -132,7 +132,7 @@ OpenAPI_small_data_rate_status_t *OpenAPI_small_data_rate_status_parseFromJSON(c
     remain_ex_reports_ul = cJSON_GetObjectItemCaseSensitive(small_data_rate_statusJSON, "remainExReportsUl");
     if (remain_ex_reports_ul) {
     if (!cJSON_IsNumber(remain_ex_reports_ul)) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [remain_ex_reports_ul]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [remain_ex_reports_ul]");
         goto end;
     }
     }
@@ -140,7 +140,7 @@ OpenAPI_small_data_rate_status_t *OpenAPI_small_data_rate_status_parseFromJSON(c
     remain_ex_reports_dl = cJSON_GetObjectItemCaseSensitive(small_data_rate_statusJSON, "remainExReportsDl");
     if (remain_ex_reports_dl) {
     if (!cJSON_IsNumber(remain_ex_reports_dl)) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [remain_ex_reports_dl]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON() failed [remain_ex_reports_dl]");
         goto end;
     }
     }
@@ -167,10 +167,10 @@ OpenAPI_small_data_rate_status_t *OpenAPI_small_data_rate_status_copy(OpenAPI_sm
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_small_data_rate_status_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_small_data_rate_status_convertToJSON() failed");
+        log_error("OpenAPI_small_data_rate_status_convertToJSON() failed");
         return NULL;
     }
 
@@ -178,14 +178,14 @@ OpenAPI_small_data_rate_status_t *OpenAPI_small_data_rate_status_copy(OpenAPI_sm
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

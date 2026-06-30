@@ -71,10 +71,10 @@ ogs_queue_t *ogs_queue_create(unsigned int capacity)
 {
     ogs_queue_t *queue = ogs_calloc(1, sizeof *queue);
     if (!queue) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
-    ogs_assert(queue);
+    log_assert(queue);
 
     ogs_thread_mutex_init(&queue->one_big_mutex);
     ogs_thread_cond_init(&queue->not_empty);
@@ -82,7 +82,7 @@ ogs_queue_t *ogs_queue_create(unsigned int capacity)
 
     queue->data = ogs_calloc(1, capacity * sizeof(void*));
     if (!queue->data) {
-        ogs_error("ogs_calloc[capacity:%d, sizeof(void*):%d] failed",
+        log_error("ogs_calloc[capacity:%d, sizeof(void*):%d] failed",
                 (int)capacity, (int)sizeof(void*));
         return NULL;
     }
@@ -99,7 +99,7 @@ ogs_queue_t *ogs_queue_create(unsigned int capacity)
 
 void ogs_queue_destroy(ogs_queue_t *queue)
 {
-    ogs_assert(queue);
+    log_assert(queue);
 
     ogs_free(queue->data);
 
@@ -144,7 +144,7 @@ static int queue_push(ogs_queue_t *queue, void *data, ogs_time_t timeout)
         }
         /* If we wake up and it's still empty, then we were interrupted */
         if (ogs_queue_full(queue)) {
-            ogs_warn("queue full (intr)");
+            log_warn("queue full (intr)");
             ogs_thread_mutex_unlock(&queue->one_big_mutex);
             if (queue->terminated) {
                 return OGS_DONE; /* no more elements ever again */
@@ -162,7 +162,7 @@ static int queue_push(ogs_queue_t *queue, void *data, ogs_time_t timeout)
     queue->nelts++;
 
     if (queue->empty_waiters) {
-        ogs_trace("signal !empty");
+        log_trace("signal !empty");
         ogs_thread_cond_signal(&queue->not_empty);
     }
 
@@ -239,7 +239,7 @@ static int queue_pop(ogs_queue_t *queue, void **data, ogs_time_t timeout)
         }
         /* If we wake up and it's still empty, then we were interrupted */
         if (ogs_queue_empty(queue)) {
-            ogs_warn("queue empty (intr)");
+            log_warn("queue empty (intr)");
             ogs_thread_mutex_unlock(&queue->one_big_mutex);
             if (queue->terminated) {
                 return OGS_DONE; /* no more elements ever again */
@@ -256,7 +256,7 @@ static int queue_pop(ogs_queue_t *queue, void **data, ogs_time_t timeout)
     if (queue->out >= queue->bounds)
         queue->out -= queue->bounds;
     if (queue->full_waiters) {
-        ogs_trace("signal !full");
+        log_trace("signal !full");
         ogs_thread_cond_signal(&queue->not_full);
     }
 
@@ -281,7 +281,7 @@ int ogs_queue_timedpop(ogs_queue_t *queue, void **data, ogs_time_t timeout)
 
 int ogs_queue_interrupt_all(ogs_queue_t *queue)
 {
-    ogs_debug("interrupt all");
+    log_debug("interrupt all");
     ogs_thread_mutex_lock(&queue->one_big_mutex);
 
     ogs_thread_cond_broadcast(&queue->not_empty);

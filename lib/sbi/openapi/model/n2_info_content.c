@@ -12,7 +12,7 @@ OpenAPI_n2_info_content_t *OpenAPI_n2_info_content_create(
 )
 {
     OpenAPI_n2_info_content_t *n2_info_content_local_var = ogs_malloc(sizeof(OpenAPI_n2_info_content_t));
-    ogs_assert(n2_info_content_local_var);
+    log_assert(n2_info_content_local_var);
 
     n2_info_content_local_var->is_ngap_message_type = is_ngap_message_type;
     n2_info_content_local_var->ngap_message_type = ngap_message_type;
@@ -42,37 +42,37 @@ cJSON *OpenAPI_n2_info_content_convertToJSON(OpenAPI_n2_info_content_t *n2_info_
     OpenAPI_lnode_t *node = NULL;
 
     if (n2_info_content == NULL) {
-        ogs_error("OpenAPI_n2_info_content_convertToJSON() failed [N2InfoContent]");
+        log_error("OpenAPI_n2_info_content_convertToJSON() failed [N2InfoContent]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (n2_info_content->is_ngap_message_type) {
     if (cJSON_AddNumberToObject(item, "ngapMessageType", n2_info_content->ngap_message_type) == NULL) {
-        ogs_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_message_type]");
+        log_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_message_type]");
         goto end;
     }
     }
 
     if (n2_info_content->ngap_ie_type != OpenAPI_ngap_ie_type_NULL) {
     if (cJSON_AddStringToObject(item, "ngapIeType", OpenAPI_ngap_ie_type_ToString(n2_info_content->ngap_ie_type)) == NULL) {
-        ogs_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_ie_type]");
+        log_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_ie_type]");
         goto end;
     }
     }
 
     if (!n2_info_content->ngap_data) {
-        ogs_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_data]");
+        log_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_data]");
         return NULL;
     }
     cJSON *ngap_data_local_JSON = OpenAPI_ref_to_binary_data_convertToJSON(n2_info_content->ngap_data);
     if (ngap_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_data]");
+        log_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ngapData", ngap_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_data]");
+        log_error("OpenAPI_n2_info_content_convertToJSON() failed [ngap_data]");
         goto end;
     }
 
@@ -92,7 +92,7 @@ OpenAPI_n2_info_content_t *OpenAPI_n2_info_content_parseFromJSON(cJSON *n2_info_
     ngap_message_type = cJSON_GetObjectItemCaseSensitive(n2_info_contentJSON, "ngapMessageType");
     if (ngap_message_type) {
     if (!cJSON_IsNumber(ngap_message_type)) {
-        ogs_error("OpenAPI_n2_info_content_parseFromJSON() failed [ngap_message_type]");
+        log_error("OpenAPI_n2_info_content_parseFromJSON() failed [ngap_message_type]");
         goto end;
     }
     }
@@ -100,7 +100,7 @@ OpenAPI_n2_info_content_t *OpenAPI_n2_info_content_parseFromJSON(cJSON *n2_info_
     ngap_ie_type = cJSON_GetObjectItemCaseSensitive(n2_info_contentJSON, "ngapIeType");
     if (ngap_ie_type) {
     if (!cJSON_IsString(ngap_ie_type)) {
-        ogs_error("OpenAPI_n2_info_content_parseFromJSON() failed [ngap_ie_type]");
+        log_error("OpenAPI_n2_info_content_parseFromJSON() failed [ngap_ie_type]");
         goto end;
     }
     ngap_ie_typeVariable = OpenAPI_ngap_ie_type_FromString(ngap_ie_type->valuestring);
@@ -108,12 +108,12 @@ OpenAPI_n2_info_content_t *OpenAPI_n2_info_content_parseFromJSON(cJSON *n2_info_
 
     ngap_data = cJSON_GetObjectItemCaseSensitive(n2_info_contentJSON, "ngapData");
     if (!ngap_data) {
-        ogs_error("OpenAPI_n2_info_content_parseFromJSON() failed [ngap_data]");
+        log_error("OpenAPI_n2_info_content_parseFromJSON() failed [ngap_data]");
         goto end;
     }
     ngap_data_local_nonprim = OpenAPI_ref_to_binary_data_parseFromJSON(ngap_data);
     if (!ngap_data_local_nonprim) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [ngap_data]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [ngap_data]");
         goto end;
     }
 
@@ -138,10 +138,10 @@ OpenAPI_n2_info_content_t *OpenAPI_n2_info_content_copy(OpenAPI_n2_info_content_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_n2_info_content_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_n2_info_content_convertToJSON() failed");
+        log_error("OpenAPI_n2_info_content_convertToJSON() failed");
         return NULL;
     }
 
@@ -149,14 +149,14 @@ OpenAPI_n2_info_content_t *OpenAPI_n2_info_content_copy(OpenAPI_n2_info_content_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -12,7 +12,7 @@ OpenAPI_ue_authentication_ctx_t *OpenAPI_ue_authentication_ctx_create(
 )
 {
     OpenAPI_ue_authentication_ctx_t *ue_authentication_ctx_local_var = ogs_malloc(sizeof(OpenAPI_ue_authentication_ctx_t));
-    ogs_assert(ue_authentication_ctx_local_var);
+    log_assert(ue_authentication_ctx_local_var);
 
     ue_authentication_ctx_local_var->auth_type = auth_type;
     ue_authentication_ctx_local_var->_5g_auth_data = _5g_auth_data;
@@ -56,42 +56,42 @@ cJSON *OpenAPI_ue_authentication_ctx_convertToJSON(OpenAPI_ue_authentication_ctx
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_authentication_ctx == NULL) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [UEAuthenticationCtx]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [UEAuthenticationCtx]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ue_authentication_ctx->auth_type == OpenAPI_auth_type_NULL) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [auth_type]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [auth_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "authType", OpenAPI_auth_type_ToString(ue_authentication_ctx->auth_type)) == NULL) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [auth_type]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [auth_type]");
         goto end;
     }
 
     if (!ue_authentication_ctx->_5g_auth_data) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_5g_auth_data]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_5g_auth_data]");
         return NULL;
     }
     cJSON *_5g_auth_data_local_JSON = OpenAPI_ue_authentication_ctx_5g_auth_data_convertToJSON(ue_authentication_ctx->_5g_auth_data);
     if (_5g_auth_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_5g_auth_data]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_5g_auth_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "5gAuthData", _5g_auth_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_5g_auth_data]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_5g_auth_data]");
         goto end;
     }
 
     if (!ue_authentication_ctx->_links) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_links]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_links]");
         return NULL;
     }
     cJSON *_links = cJSON_AddObjectToObject(item, "_links");
     if (_links == NULL) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_links]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_links]");
         goto end;
     }
     cJSON *localMapObject = _links;
@@ -99,18 +99,18 @@ cJSON *OpenAPI_ue_authentication_ctx_convertToJSON(OpenAPI_ue_authentication_ctx
         OpenAPI_list_for_each(ue_authentication_ctx->_links, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_links]");
+                log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_links]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_links]");
+                log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [_links]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_links_value_schema_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [inner]");
+                log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -119,7 +119,7 @@ cJSON *OpenAPI_ue_authentication_ctx_convertToJSON(OpenAPI_ue_authentication_ctx
 
     if (ue_authentication_ctx->serving_network_name) {
     if (cJSON_AddStringToObject(item, "servingNetworkName", ue_authentication_ctx->serving_network_name) == NULL) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [serving_network_name]");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed [serving_network_name]");
         goto end;
     }
     }
@@ -141,34 +141,34 @@ OpenAPI_ue_authentication_ctx_t *OpenAPI_ue_authentication_ctx_parseFromJSON(cJS
     cJSON *serving_network_name = NULL;
     auth_type = cJSON_GetObjectItemCaseSensitive(ue_authentication_ctxJSON, "authType");
     if (!auth_type) {
-        ogs_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [auth_type]");
+        log_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [auth_type]");
         goto end;
     }
     if (!cJSON_IsString(auth_type)) {
-        ogs_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [auth_type]");
+        log_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [auth_type]");
         goto end;
     }
     auth_typeVariable = OpenAPI_auth_type_FromString(auth_type->valuestring);
 
     _5g_auth_data = cJSON_GetObjectItemCaseSensitive(ue_authentication_ctxJSON, "5gAuthData");
     if (!_5g_auth_data) {
-        ogs_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [_5g_auth_data]");
+        log_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [_5g_auth_data]");
         goto end;
     }
     _5g_auth_data_local_nonprim = OpenAPI_ue_authentication_ctx_5g_auth_data_parseFromJSON(_5g_auth_data);
     if (!_5g_auth_data_local_nonprim) {
-        ogs_error("OpenAPI_ue_authentication_ctx_5g_auth_data_parseFromJSON failed [_5g_auth_data]");
+        log_error("OpenAPI_ue_authentication_ctx_5g_auth_data_parseFromJSON failed [_5g_auth_data]");
         goto end;
     }
 
     _links = cJSON_GetObjectItemCaseSensitive(ue_authentication_ctxJSON, "_links");
     if (!_links) {
-        ogs_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [_links]");
+        log_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [_links]");
         goto end;
     }
         cJSON *_links_local_map = NULL;
         if (!cJSON_IsObject(_links) && !cJSON_IsNull(_links)) {
-            ogs_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [_links]");
+            log_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [_links]");
             goto end;
         }
         if (cJSON_IsObject(_links)) {
@@ -182,7 +182,7 @@ OpenAPI_ue_authentication_ctx_t *OpenAPI_ue_authentication_ctx_parseFromJSON(cJS
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(_linksList, localMapKeyPair);
@@ -192,7 +192,7 @@ OpenAPI_ue_authentication_ctx_t *OpenAPI_ue_authentication_ctx_parseFromJSON(cJS
     serving_network_name = cJSON_GetObjectItemCaseSensitive(ue_authentication_ctxJSON, "servingNetworkName");
     if (serving_network_name) {
     if (!cJSON_IsString(serving_network_name) && !cJSON_IsNull(serving_network_name)) {
-        ogs_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [serving_network_name]");
+        log_error("OpenAPI_ue_authentication_ctx_parseFromJSON() failed [serving_network_name]");
         goto end;
     }
     }
@@ -228,10 +228,10 @@ OpenAPI_ue_authentication_ctx_t *OpenAPI_ue_authentication_ctx_copy(OpenAPI_ue_a
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_authentication_ctx_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed");
+        log_error("OpenAPI_ue_authentication_ctx_convertToJSON() failed");
         return NULL;
     }
 
@@ -239,14 +239,14 @@ OpenAPI_ue_authentication_ctx_t *OpenAPI_ue_authentication_ctx_copy(OpenAPI_ue_a
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

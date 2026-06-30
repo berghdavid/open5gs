@@ -10,7 +10,7 @@ OpenAPI_ambr_t *OpenAPI_ambr_create(
 )
 {
     OpenAPI_ambr_t *ambr_local_var = ogs_malloc(sizeof(OpenAPI_ambr_t));
-    ogs_assert(ambr_local_var);
+    log_assert(ambr_local_var);
 
     ambr_local_var->uplink = uplink;
     ambr_local_var->downlink = downlink;
@@ -42,26 +42,26 @@ cJSON *OpenAPI_ambr_convertToJSON(OpenAPI_ambr_t *ambr)
     OpenAPI_lnode_t *node = NULL;
 
     if (ambr == NULL) {
-        ogs_error("OpenAPI_ambr_convertToJSON() failed [Ambr]");
+        log_error("OpenAPI_ambr_convertToJSON() failed [Ambr]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!ambr->uplink) {
-        ogs_error("OpenAPI_ambr_convertToJSON() failed [uplink]");
+        log_error("OpenAPI_ambr_convertToJSON() failed [uplink]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "uplink", ambr->uplink) == NULL) {
-        ogs_error("OpenAPI_ambr_convertToJSON() failed [uplink]");
+        log_error("OpenAPI_ambr_convertToJSON() failed [uplink]");
         goto end;
     }
 
     if (!ambr->downlink) {
-        ogs_error("OpenAPI_ambr_convertToJSON() failed [downlink]");
+        log_error("OpenAPI_ambr_convertToJSON() failed [downlink]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "downlink", ambr->downlink) == NULL) {
-        ogs_error("OpenAPI_ambr_convertToJSON() failed [downlink]");
+        log_error("OpenAPI_ambr_convertToJSON() failed [downlink]");
         goto end;
     }
 
@@ -77,21 +77,21 @@ OpenAPI_ambr_t *OpenAPI_ambr_parseFromJSON(cJSON *ambrJSON)
     cJSON *downlink = NULL;
     uplink = cJSON_GetObjectItemCaseSensitive(ambrJSON, "uplink");
     if (!uplink) {
-        ogs_error("OpenAPI_ambr_parseFromJSON() failed [uplink]");
+        log_error("OpenAPI_ambr_parseFromJSON() failed [uplink]");
         goto end;
     }
     if (!cJSON_IsString(uplink)) {
-        ogs_error("OpenAPI_ambr_parseFromJSON() failed [uplink]");
+        log_error("OpenAPI_ambr_parseFromJSON() failed [uplink]");
         goto end;
     }
 
     downlink = cJSON_GetObjectItemCaseSensitive(ambrJSON, "downlink");
     if (!downlink) {
-        ogs_error("OpenAPI_ambr_parseFromJSON() failed [downlink]");
+        log_error("OpenAPI_ambr_parseFromJSON() failed [downlink]");
         goto end;
     }
     if (!cJSON_IsString(downlink)) {
-        ogs_error("OpenAPI_ambr_parseFromJSON() failed [downlink]");
+        log_error("OpenAPI_ambr_parseFromJSON() failed [downlink]");
         goto end;
     }
 
@@ -110,10 +110,10 @@ OpenAPI_ambr_t *OpenAPI_ambr_copy(OpenAPI_ambr_t *dst, OpenAPI_ambr_t *src)
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ambr_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ambr_convertToJSON() failed");
+        log_error("OpenAPI_ambr_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_ambr_t *OpenAPI_ambr_copy(OpenAPI_ambr_t *dst, OpenAPI_ambr_t *src)
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

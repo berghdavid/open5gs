@@ -10,7 +10,7 @@ OpenAPI_slice_load_level_information_t *OpenAPI_slice_load_level_information_cre
 )
 {
     OpenAPI_slice_load_level_information_t *slice_load_level_information_local_var = ogs_malloc(sizeof(OpenAPI_slice_load_level_information_t));
-    ogs_assert(slice_load_level_information_local_var);
+    log_assert(slice_load_level_information_local_var);
 
     slice_load_level_information_local_var->load_level_information = load_level_information;
     slice_load_level_information_local_var->snssais = snssais;
@@ -41,29 +41,29 @@ cJSON *OpenAPI_slice_load_level_information_convertToJSON(OpenAPI_slice_load_lev
     OpenAPI_lnode_t *node = NULL;
 
     if (slice_load_level_information == NULL) {
-        ogs_error("OpenAPI_slice_load_level_information_convertToJSON() failed [SliceLoadLevelInformation]");
+        log_error("OpenAPI_slice_load_level_information_convertToJSON() failed [SliceLoadLevelInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "loadLevelInformation", slice_load_level_information->load_level_information) == NULL) {
-        ogs_error("OpenAPI_slice_load_level_information_convertToJSON() failed [load_level_information]");
+        log_error("OpenAPI_slice_load_level_information_convertToJSON() failed [load_level_information]");
         goto end;
     }
 
     if (!slice_load_level_information->snssais) {
-        ogs_error("OpenAPI_slice_load_level_information_convertToJSON() failed [snssais]");
+        log_error("OpenAPI_slice_load_level_information_convertToJSON() failed [snssais]");
         return NULL;
     }
     cJSON *snssaisList = cJSON_AddArrayToObject(item, "snssais");
     if (snssaisList == NULL) {
-        ogs_error("OpenAPI_slice_load_level_information_convertToJSON() failed [snssais]");
+        log_error("OpenAPI_slice_load_level_information_convertToJSON() failed [snssais]");
         goto end;
     }
     OpenAPI_list_for_each(slice_load_level_information->snssais, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_slice_load_level_information_convertToJSON() failed [snssais]");
+            log_error("OpenAPI_slice_load_level_information_convertToJSON() failed [snssais]");
             goto end;
         }
         cJSON_AddItemToArray(snssaisList, itemLocal);
@@ -82,22 +82,22 @@ OpenAPI_slice_load_level_information_t *OpenAPI_slice_load_level_information_par
     OpenAPI_list_t *snssaisList = NULL;
     load_level_information = cJSON_GetObjectItemCaseSensitive(slice_load_level_informationJSON, "loadLevelInformation");
     if (!load_level_information) {
-        ogs_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [load_level_information]");
+        log_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [load_level_information]");
         goto end;
     }
     if (!cJSON_IsNumber(load_level_information)) {
-        ogs_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [load_level_information]");
+        log_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [load_level_information]");
         goto end;
     }
 
     snssais = cJSON_GetObjectItemCaseSensitive(slice_load_level_informationJSON, "snssais");
     if (!snssais) {
-        ogs_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [snssais]");
+        log_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [snssais]");
         goto end;
     }
         cJSON *snssais_local = NULL;
         if (!cJSON_IsArray(snssais)) {
-            ogs_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [snssais]");
+            log_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [snssais]");
             goto end;
         }
 
@@ -105,12 +105,12 @@ OpenAPI_slice_load_level_information_t *OpenAPI_slice_load_level_information_par
 
         cJSON_ArrayForEach(snssais_local, snssais) {
             if (!cJSON_IsObject(snssais_local)) {
-                ogs_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [snssais]");
+                log_error("OpenAPI_slice_load_level_information_parseFromJSON() failed [snssais]");
                 goto end;
             }
             OpenAPI_snssai_t *snssaisItem = OpenAPI_snssai_parseFromJSON(snssais_local);
             if (!snssaisItem) {
-                ogs_error("No snssaisItem");
+                log_error("No snssaisItem");
                 goto end;
             }
             OpenAPI_list_add(snssaisList, snssaisItem);
@@ -139,10 +139,10 @@ OpenAPI_slice_load_level_information_t *OpenAPI_slice_load_level_information_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_slice_load_level_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_slice_load_level_information_convertToJSON() failed");
+        log_error("OpenAPI_slice_load_level_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -150,14 +150,14 @@ OpenAPI_slice_load_level_information_t *OpenAPI_slice_load_level_information_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

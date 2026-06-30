@@ -11,7 +11,7 @@ OpenAPI_cag_info_1_t *OpenAPI_cag_info_1_create(
 )
 {
     OpenAPI_cag_info_1_t *cag_info_1_local_var = ogs_malloc(sizeof(OpenAPI_cag_info_1_t));
-    ogs_assert(cag_info_1_local_var);
+    log_assert(cag_info_1_local_var);
 
     cag_info_1_local_var->allowed_cag_list = allowed_cag_list;
     cag_info_1_local_var->is_cag_only_indicator = is_cag_only_indicator;
@@ -43,30 +43,30 @@ cJSON *OpenAPI_cag_info_1_convertToJSON(OpenAPI_cag_info_1_t *cag_info_1)
     OpenAPI_lnode_t *node = NULL;
 
     if (cag_info_1 == NULL) {
-        ogs_error("OpenAPI_cag_info_1_convertToJSON() failed [CagInfo_1]");
+        log_error("OpenAPI_cag_info_1_convertToJSON() failed [CagInfo_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!cag_info_1->allowed_cag_list) {
-        ogs_error("OpenAPI_cag_info_1_convertToJSON() failed [allowed_cag_list]");
+        log_error("OpenAPI_cag_info_1_convertToJSON() failed [allowed_cag_list]");
         return NULL;
     }
     cJSON *allowed_cag_listList = cJSON_AddArrayToObject(item, "allowedCagList");
     if (allowed_cag_listList == NULL) {
-        ogs_error("OpenAPI_cag_info_1_convertToJSON() failed [allowed_cag_list]");
+        log_error("OpenAPI_cag_info_1_convertToJSON() failed [allowed_cag_list]");
         goto end;
     }
     OpenAPI_list_for_each(cag_info_1->allowed_cag_list, node) {
         if (cJSON_AddStringToObject(allowed_cag_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_cag_info_1_convertToJSON() failed [allowed_cag_list]");
+            log_error("OpenAPI_cag_info_1_convertToJSON() failed [allowed_cag_list]");
             goto end;
         }
     }
 
     if (cag_info_1->is_cag_only_indicator) {
     if (cJSON_AddBoolToObject(item, "cagOnlyIndicator", cag_info_1->cag_only_indicator) == NULL) {
-        ogs_error("OpenAPI_cag_info_1_convertToJSON() failed [cag_only_indicator]");
+        log_error("OpenAPI_cag_info_1_convertToJSON() failed [cag_only_indicator]");
         goto end;
     }
     }
@@ -84,12 +84,12 @@ OpenAPI_cag_info_1_t *OpenAPI_cag_info_1_parseFromJSON(cJSON *cag_info_1JSON)
     cJSON *cag_only_indicator = NULL;
     allowed_cag_list = cJSON_GetObjectItemCaseSensitive(cag_info_1JSON, "allowedCagList");
     if (!allowed_cag_list) {
-        ogs_error("OpenAPI_cag_info_1_parseFromJSON() failed [allowed_cag_list]");
+        log_error("OpenAPI_cag_info_1_parseFromJSON() failed [allowed_cag_list]");
         goto end;
     }
         cJSON *allowed_cag_list_local = NULL;
         if (!cJSON_IsArray(allowed_cag_list)) {
-            ogs_error("OpenAPI_cag_info_1_parseFromJSON() failed [allowed_cag_list]");
+            log_error("OpenAPI_cag_info_1_parseFromJSON() failed [allowed_cag_list]");
             goto end;
         }
 
@@ -99,7 +99,7 @@ OpenAPI_cag_info_1_t *OpenAPI_cag_info_1_parseFromJSON(cJSON *cag_info_1JSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(allowed_cag_list_local)) {
-                ogs_error("OpenAPI_cag_info_1_parseFromJSON() failed [allowed_cag_list]");
+                log_error("OpenAPI_cag_info_1_parseFromJSON() failed [allowed_cag_list]");
                 goto end;
             }
             OpenAPI_list_add(allowed_cag_listList, ogs_strdup(allowed_cag_list_local->valuestring));
@@ -108,7 +108,7 @@ OpenAPI_cag_info_1_t *OpenAPI_cag_info_1_parseFromJSON(cJSON *cag_info_1JSON)
     cag_only_indicator = cJSON_GetObjectItemCaseSensitive(cag_info_1JSON, "cagOnlyIndicator");
     if (cag_only_indicator) {
     if (!cJSON_IsBool(cag_only_indicator)) {
-        ogs_error("OpenAPI_cag_info_1_parseFromJSON() failed [cag_only_indicator]");
+        log_error("OpenAPI_cag_info_1_parseFromJSON() failed [cag_only_indicator]");
         goto end;
     }
     }
@@ -136,10 +136,10 @@ OpenAPI_cag_info_1_t *OpenAPI_cag_info_1_copy(OpenAPI_cag_info_1_t *dst, OpenAPI
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_cag_info_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_cag_info_1_convertToJSON() failed");
+        log_error("OpenAPI_cag_info_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -147,14 +147,14 @@ OpenAPI_cag_info_1_t *OpenAPI_cag_info_1_copy(OpenAPI_cag_info_1_t *dst, OpenAPI
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -11,7 +11,7 @@ OpenAPI_user_identifier_t *OpenAPI_user_identifier_create(
 )
 {
     OpenAPI_user_identifier_t *user_identifier_local_var = ogs_malloc(sizeof(OpenAPI_user_identifier_t));
-    ogs_assert(user_identifier_local_var);
+    log_assert(user_identifier_local_var);
 
     user_identifier_local_var->supi = supi;
     user_identifier_local_var->gpsi = gpsi;
@@ -48,30 +48,30 @@ cJSON *OpenAPI_user_identifier_convertToJSON(OpenAPI_user_identifier_t *user_ide
     OpenAPI_lnode_t *node = NULL;
 
     if (user_identifier == NULL) {
-        ogs_error("OpenAPI_user_identifier_convertToJSON() failed [UserIdentifier]");
+        log_error("OpenAPI_user_identifier_convertToJSON() failed [UserIdentifier]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!user_identifier->supi) {
-        ogs_error("OpenAPI_user_identifier_convertToJSON() failed [supi]");
+        log_error("OpenAPI_user_identifier_convertToJSON() failed [supi]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "supi", user_identifier->supi) == NULL) {
-        ogs_error("OpenAPI_user_identifier_convertToJSON() failed [supi]");
+        log_error("OpenAPI_user_identifier_convertToJSON() failed [supi]");
         goto end;
     }
 
     if (user_identifier->gpsi) {
     if (cJSON_AddStringToObject(item, "gpsi", user_identifier->gpsi) == NULL) {
-        ogs_error("OpenAPI_user_identifier_convertToJSON() failed [gpsi]");
+        log_error("OpenAPI_user_identifier_convertToJSON() failed [gpsi]");
         goto end;
     }
     }
 
     if (user_identifier->validity_time) {
     if (cJSON_AddStringToObject(item, "validityTime", user_identifier->validity_time) == NULL) {
-        ogs_error("OpenAPI_user_identifier_convertToJSON() failed [validity_time]");
+        log_error("OpenAPI_user_identifier_convertToJSON() failed [validity_time]");
         goto end;
     }
     }
@@ -89,18 +89,18 @@ OpenAPI_user_identifier_t *OpenAPI_user_identifier_parseFromJSON(cJSON *user_ide
     cJSON *validity_time = NULL;
     supi = cJSON_GetObjectItemCaseSensitive(user_identifierJSON, "supi");
     if (!supi) {
-        ogs_error("OpenAPI_user_identifier_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_user_identifier_parseFromJSON() failed [supi]");
         goto end;
     }
     if (!cJSON_IsString(supi)) {
-        ogs_error("OpenAPI_user_identifier_parseFromJSON() failed [supi]");
+        log_error("OpenAPI_user_identifier_parseFromJSON() failed [supi]");
         goto end;
     }
 
     gpsi = cJSON_GetObjectItemCaseSensitive(user_identifierJSON, "gpsi");
     if (gpsi) {
     if (!cJSON_IsString(gpsi) && !cJSON_IsNull(gpsi)) {
-        ogs_error("OpenAPI_user_identifier_parseFromJSON() failed [gpsi]");
+        log_error("OpenAPI_user_identifier_parseFromJSON() failed [gpsi]");
         goto end;
     }
     }
@@ -108,7 +108,7 @@ OpenAPI_user_identifier_t *OpenAPI_user_identifier_parseFromJSON(cJSON *user_ide
     validity_time = cJSON_GetObjectItemCaseSensitive(user_identifierJSON, "validityTime");
     if (validity_time) {
     if (!cJSON_IsString(validity_time) && !cJSON_IsNull(validity_time)) {
-        ogs_error("OpenAPI_user_identifier_parseFromJSON() failed [validity_time]");
+        log_error("OpenAPI_user_identifier_parseFromJSON() failed [validity_time]");
         goto end;
     }
     }
@@ -129,10 +129,10 @@ OpenAPI_user_identifier_t *OpenAPI_user_identifier_copy(OpenAPI_user_identifier_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_user_identifier_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_user_identifier_convertToJSON() failed");
+        log_error("OpenAPI_user_identifier_convertToJSON() failed");
         return NULL;
     }
 
@@ -140,14 +140,14 @@ OpenAPI_user_identifier_t *OpenAPI_user_identifier_copy(OpenAPI_user_identifier_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

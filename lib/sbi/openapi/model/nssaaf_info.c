@@ -10,7 +10,7 @@ OpenAPI_nssaaf_info_t *OpenAPI_nssaaf_info_create(
 )
 {
     OpenAPI_nssaaf_info_t *nssaaf_info_local_var = ogs_malloc(sizeof(OpenAPI_nssaaf_info_t));
-    ogs_assert(nssaaf_info_local_var);
+    log_assert(nssaaf_info_local_var);
 
     nssaaf_info_local_var->supi_ranges = supi_ranges;
     nssaaf_info_local_var->internal_group_identifiers_ranges = internal_group_identifiers_ranges;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_nssaaf_info_convertToJSON(OpenAPI_nssaaf_info_t *nssaaf_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (nssaaf_info == NULL) {
-        ogs_error("OpenAPI_nssaaf_info_convertToJSON() failed [NssaafInfo]");
+        log_error("OpenAPI_nssaaf_info_convertToJSON() failed [NssaafInfo]");
         return NULL;
     }
 
@@ -56,13 +56,13 @@ cJSON *OpenAPI_nssaaf_info_convertToJSON(OpenAPI_nssaaf_info_t *nssaaf_info)
     if (nssaaf_info->supi_ranges) {
     cJSON *supi_rangesList = cJSON_AddArrayToObject(item, "supiRanges");
     if (supi_rangesList == NULL) {
-        ogs_error("OpenAPI_nssaaf_info_convertToJSON() failed [supi_ranges]");
+        log_error("OpenAPI_nssaaf_info_convertToJSON() failed [supi_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(nssaaf_info->supi_ranges, node) {
         cJSON *itemLocal = OpenAPI_supi_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nssaaf_info_convertToJSON() failed [supi_ranges]");
+            log_error("OpenAPI_nssaaf_info_convertToJSON() failed [supi_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(supi_rangesList, itemLocal);
@@ -72,13 +72,13 @@ cJSON *OpenAPI_nssaaf_info_convertToJSON(OpenAPI_nssaaf_info_t *nssaaf_info)
     if (nssaaf_info->internal_group_identifiers_ranges) {
     cJSON *internal_group_identifiers_rangesList = cJSON_AddArrayToObject(item, "internalGroupIdentifiersRanges");
     if (internal_group_identifiers_rangesList == NULL) {
-        ogs_error("OpenAPI_nssaaf_info_convertToJSON() failed [internal_group_identifiers_ranges]");
+        log_error("OpenAPI_nssaaf_info_convertToJSON() failed [internal_group_identifiers_ranges]");
         goto end;
     }
     OpenAPI_list_for_each(nssaaf_info->internal_group_identifiers_ranges, node) {
         cJSON *itemLocal = OpenAPI_internal_group_id_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nssaaf_info_convertToJSON() failed [internal_group_identifiers_ranges]");
+            log_error("OpenAPI_nssaaf_info_convertToJSON() failed [internal_group_identifiers_ranges]");
             goto end;
         }
         cJSON_AddItemToArray(internal_group_identifiers_rangesList, itemLocal);
@@ -101,7 +101,7 @@ OpenAPI_nssaaf_info_t *OpenAPI_nssaaf_info_parseFromJSON(cJSON *nssaaf_infoJSON)
     if (supi_ranges) {
         cJSON *supi_ranges_local = NULL;
         if (!cJSON_IsArray(supi_ranges)) {
-            ogs_error("OpenAPI_nssaaf_info_parseFromJSON() failed [supi_ranges]");
+            log_error("OpenAPI_nssaaf_info_parseFromJSON() failed [supi_ranges]");
             goto end;
         }
 
@@ -109,12 +109,12 @@ OpenAPI_nssaaf_info_t *OpenAPI_nssaaf_info_parseFromJSON(cJSON *nssaaf_infoJSON)
 
         cJSON_ArrayForEach(supi_ranges_local, supi_ranges) {
             if (!cJSON_IsObject(supi_ranges_local)) {
-                ogs_error("OpenAPI_nssaaf_info_parseFromJSON() failed [supi_ranges]");
+                log_error("OpenAPI_nssaaf_info_parseFromJSON() failed [supi_ranges]");
                 goto end;
             }
             OpenAPI_supi_range_t *supi_rangesItem = OpenAPI_supi_range_parseFromJSON(supi_ranges_local);
             if (!supi_rangesItem) {
-                ogs_error("No supi_rangesItem");
+                log_error("No supi_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(supi_rangesList, supi_rangesItem);
@@ -125,7 +125,7 @@ OpenAPI_nssaaf_info_t *OpenAPI_nssaaf_info_parseFromJSON(cJSON *nssaaf_infoJSON)
     if (internal_group_identifiers_ranges) {
         cJSON *internal_group_identifiers_ranges_local = NULL;
         if (!cJSON_IsArray(internal_group_identifiers_ranges)) {
-            ogs_error("OpenAPI_nssaaf_info_parseFromJSON() failed [internal_group_identifiers_ranges]");
+            log_error("OpenAPI_nssaaf_info_parseFromJSON() failed [internal_group_identifiers_ranges]");
             goto end;
         }
 
@@ -133,12 +133,12 @@ OpenAPI_nssaaf_info_t *OpenAPI_nssaaf_info_parseFromJSON(cJSON *nssaaf_infoJSON)
 
         cJSON_ArrayForEach(internal_group_identifiers_ranges_local, internal_group_identifiers_ranges) {
             if (!cJSON_IsObject(internal_group_identifiers_ranges_local)) {
-                ogs_error("OpenAPI_nssaaf_info_parseFromJSON() failed [internal_group_identifiers_ranges]");
+                log_error("OpenAPI_nssaaf_info_parseFromJSON() failed [internal_group_identifiers_ranges]");
                 goto end;
             }
             OpenAPI_internal_group_id_range_t *internal_group_identifiers_rangesItem = OpenAPI_internal_group_id_range_parseFromJSON(internal_group_identifiers_ranges_local);
             if (!internal_group_identifiers_rangesItem) {
-                ogs_error("No internal_group_identifiers_rangesItem");
+                log_error("No internal_group_identifiers_rangesItem");
                 goto end;
             }
             OpenAPI_list_add(internal_group_identifiers_rangesList, internal_group_identifiers_rangesItem);
@@ -174,10 +174,10 @@ OpenAPI_nssaaf_info_t *OpenAPI_nssaaf_info_copy(OpenAPI_nssaaf_info_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nssaaf_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nssaaf_info_convertToJSON() failed");
+        log_error("OpenAPI_nssaaf_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -185,14 +185,14 @@ OpenAPI_nssaaf_info_t *OpenAPI_nssaaf_info_copy(OpenAPI_nssaaf_info_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

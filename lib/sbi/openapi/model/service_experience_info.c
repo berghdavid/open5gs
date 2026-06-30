@@ -27,7 +27,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_create(
 )
 {
     OpenAPI_service_experience_info_t *service_experience_info_local_var = ogs_malloc(sizeof(OpenAPI_service_experience_info_t));
-    ogs_assert(service_experience_info_local_var);
+    log_assert(service_experience_info_local_var);
 
     service_experience_info_local_var->svc_exprc = svc_exprc;
     service_experience_info_local_var->is_svc_exprc_variance = is_svc_exprc_variance;
@@ -126,29 +126,29 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     OpenAPI_lnode_t *node = NULL;
 
     if (service_experience_info == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [ServiceExperienceInfo]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [ServiceExperienceInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!service_experience_info->svc_exprc) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [svc_exprc]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [svc_exprc]");
         return NULL;
     }
     cJSON *svc_exprc_local_JSON = OpenAPI_svc_experience_convertToJSON(service_experience_info->svc_exprc);
     if (svc_exprc_local_JSON == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [svc_exprc]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [svc_exprc]");
         goto end;
     }
     cJSON_AddItemToObject(item, "svcExprc", svc_exprc_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [svc_exprc]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [svc_exprc]");
         goto end;
     }
 
     if (service_experience_info->is_svc_exprc_variance) {
     if (cJSON_AddNumberToObject(item, "svcExprcVariance", service_experience_info->svc_exprc_variance) == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [svc_exprc_variance]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [svc_exprc_variance]");
         goto end;
     }
     }
@@ -156,12 +156,12 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     if (service_experience_info->supis) {
     cJSON *supisList = cJSON_AddArrayToObject(item, "supis");
     if (supisList == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [supis]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [supis]");
         goto end;
     }
     OpenAPI_list_for_each(service_experience_info->supis, node) {
         if (cJSON_AddStringToObject(supisList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [supis]");
+            log_error("OpenAPI_service_experience_info_convertToJSON() failed [supis]");
             goto end;
         }
     }
@@ -170,19 +170,19 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     if (service_experience_info->snssai) {
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(service_experience_info->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [snssai]");
         goto end;
     }
     }
 
     if (service_experience_info->app_id) {
     if (cJSON_AddStringToObject(item, "appId", service_experience_info->app_id) == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [app_id]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [app_id]");
         goto end;
     }
     }
@@ -190,12 +190,12 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     if (service_experience_info->srv_expc_type) {
     cJSON *srv_expc_type_local_JSON = OpenAPI_service_experience_type_convertToJSON(service_experience_info->srv_expc_type);
     if (srv_expc_type_local_JSON == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [srv_expc_type]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [srv_expc_type]");
         goto end;
     }
     cJSON_AddItemToObject(item, "srvExpcType", srv_expc_type_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [srv_expc_type]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [srv_expc_type]");
         goto end;
     }
     }
@@ -203,13 +203,13 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     if (service_experience_info->ue_locs) {
     cJSON *ue_locsList = cJSON_AddArrayToObject(item, "ueLocs");
     if (ue_locsList == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [ue_locs]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [ue_locs]");
         goto end;
     }
     OpenAPI_list_for_each(service_experience_info->ue_locs, node) {
         cJSON *itemLocal = OpenAPI_location_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [ue_locs]");
+            log_error("OpenAPI_service_experience_info_convertToJSON() failed [ue_locs]");
             goto end;
         }
         cJSON_AddItemToArray(ue_locsList, itemLocal);
@@ -219,19 +219,19 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     if (service_experience_info->upf_info) {
     cJSON *upf_info_local_JSON = OpenAPI_upf_information_convertToJSON(service_experience_info->upf_info);
     if (upf_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [upf_info]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [upf_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "upfInfo", upf_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [upf_info]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [upf_info]");
         goto end;
     }
     }
 
     if (service_experience_info->dnai) {
     if (cJSON_AddStringToObject(item, "dnai", service_experience_info->dnai) == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [dnai]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [dnai]");
         goto end;
     }
     }
@@ -239,26 +239,26 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     if (service_experience_info->app_server_inst) {
     cJSON *app_server_inst_local_JSON = OpenAPI_addr_fqdn_convertToJSON(service_experience_info->app_server_inst);
     if (app_server_inst_local_JSON == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [app_server_inst]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [app_server_inst]");
         goto end;
     }
     cJSON_AddItemToObject(item, "appServerInst", app_server_inst_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [app_server_inst]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [app_server_inst]");
         goto end;
     }
     }
 
     if (service_experience_info->is_confidence) {
     if (cJSON_AddNumberToObject(item, "confidence", service_experience_info->confidence) == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [confidence]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [confidence]");
         goto end;
     }
     }
 
     if (service_experience_info->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", service_experience_info->dnn) == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [dnn]");
         goto end;
     }
     }
@@ -266,26 +266,26 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     if (service_experience_info->network_area) {
     cJSON *network_area_local_JSON = OpenAPI_network_area_info_convertToJSON(service_experience_info->network_area);
     if (network_area_local_JSON == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [network_area]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [network_area]");
         goto end;
     }
     cJSON_AddItemToObject(item, "networkArea", network_area_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [network_area]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [network_area]");
         goto end;
     }
     }
 
     if (service_experience_info->nsi_id) {
     if (cJSON_AddStringToObject(item, "nsiId", service_experience_info->nsi_id) == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [nsi_id]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [nsi_id]");
         goto end;
     }
     }
 
     if (service_experience_info->is_ratio) {
     if (cJSON_AddNumberToObject(item, "ratio", service_experience_info->ratio) == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [ratio]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [ratio]");
         goto end;
     }
     }
@@ -293,12 +293,12 @@ cJSON *OpenAPI_service_experience_info_convertToJSON(OpenAPI_service_experience_
     if (service_experience_info->rat_freq) {
     cJSON *rat_freq_local_JSON = OpenAPI_rat_freq_information_convertToJSON(service_experience_info->rat_freq);
     if (rat_freq_local_JSON == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [rat_freq]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [rat_freq]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ratFreq", rat_freq_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed [rat_freq]");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed [rat_freq]");
         goto end;
     }
     }
@@ -338,19 +338,19 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     OpenAPI_rat_freq_information_t *rat_freq_local_nonprim = NULL;
     svc_exprc = cJSON_GetObjectItemCaseSensitive(service_experience_infoJSON, "svcExprc");
     if (!svc_exprc) {
-        ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [svc_exprc]");
+        log_error("OpenAPI_service_experience_info_parseFromJSON() failed [svc_exprc]");
         goto end;
     }
     svc_exprc_local_nonprim = OpenAPI_svc_experience_parseFromJSON(svc_exprc);
     if (!svc_exprc_local_nonprim) {
-        ogs_error("OpenAPI_svc_experience_parseFromJSON failed [svc_exprc]");
+        log_error("OpenAPI_svc_experience_parseFromJSON failed [svc_exprc]");
         goto end;
     }
 
     svc_exprc_variance = cJSON_GetObjectItemCaseSensitive(service_experience_infoJSON, "svcExprcVariance");
     if (svc_exprc_variance) {
     if (!cJSON_IsNumber(svc_exprc_variance)) {
-        ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [svc_exprc_variance]");
+        log_error("OpenAPI_service_experience_info_parseFromJSON() failed [svc_exprc_variance]");
         goto end;
     }
     }
@@ -359,7 +359,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     if (supis) {
         cJSON *supis_local = NULL;
         if (!cJSON_IsArray(supis)) {
-            ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [supis]");
+            log_error("OpenAPI_service_experience_info_parseFromJSON() failed [supis]");
             goto end;
         }
 
@@ -369,7 +369,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(supis_local)) {
-                ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [supis]");
+                log_error("OpenAPI_service_experience_info_parseFromJSON() failed [supis]");
                 goto end;
             }
             OpenAPI_list_add(supisList, ogs_strdup(supis_local->valuestring));
@@ -380,7 +380,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     if (snssai) {
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
     }
@@ -388,7 +388,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     app_id = cJSON_GetObjectItemCaseSensitive(service_experience_infoJSON, "appId");
     if (app_id) {
     if (!cJSON_IsString(app_id) && !cJSON_IsNull(app_id)) {
-        ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [app_id]");
+        log_error("OpenAPI_service_experience_info_parseFromJSON() failed [app_id]");
         goto end;
     }
     }
@@ -397,7 +397,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     if (srv_expc_type) {
     srv_expc_type_local_nonprim = OpenAPI_service_experience_type_parseFromJSON(srv_expc_type);
     if (!srv_expc_type_local_nonprim) {
-        ogs_error("OpenAPI_service_experience_type_parseFromJSON failed [srv_expc_type]");
+        log_error("OpenAPI_service_experience_type_parseFromJSON failed [srv_expc_type]");
         goto end;
     }
     }
@@ -406,7 +406,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     if (ue_locs) {
         cJSON *ue_locs_local = NULL;
         if (!cJSON_IsArray(ue_locs)) {
-            ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [ue_locs]");
+            log_error("OpenAPI_service_experience_info_parseFromJSON() failed [ue_locs]");
             goto end;
         }
 
@@ -414,12 +414,12 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
 
         cJSON_ArrayForEach(ue_locs_local, ue_locs) {
             if (!cJSON_IsObject(ue_locs_local)) {
-                ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [ue_locs]");
+                log_error("OpenAPI_service_experience_info_parseFromJSON() failed [ue_locs]");
                 goto end;
             }
             OpenAPI_location_info_t *ue_locsItem = OpenAPI_location_info_parseFromJSON(ue_locs_local);
             if (!ue_locsItem) {
-                ogs_error("No ue_locsItem");
+                log_error("No ue_locsItem");
                 goto end;
             }
             OpenAPI_list_add(ue_locsList, ue_locsItem);
@@ -430,7 +430,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     if (upf_info) {
     upf_info_local_nonprim = OpenAPI_upf_information_parseFromJSON(upf_info);
     if (!upf_info_local_nonprim) {
-        ogs_error("OpenAPI_upf_information_parseFromJSON failed [upf_info]");
+        log_error("OpenAPI_upf_information_parseFromJSON failed [upf_info]");
         goto end;
     }
     }
@@ -438,7 +438,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     dnai = cJSON_GetObjectItemCaseSensitive(service_experience_infoJSON, "dnai");
     if (dnai) {
     if (!cJSON_IsString(dnai) && !cJSON_IsNull(dnai)) {
-        ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [dnai]");
+        log_error("OpenAPI_service_experience_info_parseFromJSON() failed [dnai]");
         goto end;
     }
     }
@@ -447,7 +447,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     if (app_server_inst) {
     app_server_inst_local_nonprim = OpenAPI_addr_fqdn_parseFromJSON(app_server_inst);
     if (!app_server_inst_local_nonprim) {
-        ogs_error("OpenAPI_addr_fqdn_parseFromJSON failed [app_server_inst]");
+        log_error("OpenAPI_addr_fqdn_parseFromJSON failed [app_server_inst]");
         goto end;
     }
     }
@@ -455,7 +455,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     confidence = cJSON_GetObjectItemCaseSensitive(service_experience_infoJSON, "confidence");
     if (confidence) {
     if (!cJSON_IsNumber(confidence)) {
-        ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [confidence]");
+        log_error("OpenAPI_service_experience_info_parseFromJSON() failed [confidence]");
         goto end;
     }
     }
@@ -463,7 +463,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     dnn = cJSON_GetObjectItemCaseSensitive(service_experience_infoJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_service_experience_info_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
@@ -472,7 +472,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     if (network_area) {
     network_area_local_nonprim = OpenAPI_network_area_info_parseFromJSON(network_area);
     if (!network_area_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [network_area]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [network_area]");
         goto end;
     }
     }
@@ -480,7 +480,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     nsi_id = cJSON_GetObjectItemCaseSensitive(service_experience_infoJSON, "nsiId");
     if (nsi_id) {
     if (!cJSON_IsString(nsi_id) && !cJSON_IsNull(nsi_id)) {
-        ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [nsi_id]");
+        log_error("OpenAPI_service_experience_info_parseFromJSON() failed [nsi_id]");
         goto end;
     }
     }
@@ -488,7 +488,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     ratio = cJSON_GetObjectItemCaseSensitive(service_experience_infoJSON, "ratio");
     if (ratio) {
     if (!cJSON_IsNumber(ratio)) {
-        ogs_error("OpenAPI_service_experience_info_parseFromJSON() failed [ratio]");
+        log_error("OpenAPI_service_experience_info_parseFromJSON() failed [ratio]");
         goto end;
     }
     }
@@ -497,7 +497,7 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_parseFromJSON
     if (rat_freq) {
     rat_freq_local_nonprim = OpenAPI_rat_freq_information_parseFromJSON(rat_freq);
     if (!rat_freq_local_nonprim) {
-        ogs_error("OpenAPI_rat_freq_information_parseFromJSON failed [rat_freq]");
+        log_error("OpenAPI_rat_freq_information_parseFromJSON failed [rat_freq]");
         goto end;
     }
     }
@@ -576,10 +576,10 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_service_experience_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_service_experience_info_convertToJSON() failed");
+        log_error("OpenAPI_service_experience_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -587,14 +587,14 @@ OpenAPI_service_experience_info_t *OpenAPI_service_experience_info_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

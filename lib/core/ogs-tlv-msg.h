@@ -145,7 +145,7 @@ typedef struct ogs_tlv_int32_s {
 /* Octets */
 #define OGS_TLV_CLEAR_DATA(__dATA) \
     do { \
-        ogs_assert((__dATA)); \
+        log_assert((__dATA)); \
         if ((__dATA)->data) { \
             ogs_free((__dATA)->data); \
             (__dATA)->data = NULL; \
@@ -155,14 +155,14 @@ typedef struct ogs_tlv_int32_s {
     } while(0)
 #define OGS_TLV_STORE_DATA(__dST, __sRC) \
     do { \
-        ogs_assert((__sRC)); \
-        ogs_assert((__sRC)->data); \
-        ogs_assert((__dST)); \
+        log_assert((__sRC)); \
+        log_assert((__sRC)->data); \
+        log_assert((__dST)); \
         OGS_TLV_CLEAR_DATA(__dST); \
         (__dST)->presence = (__sRC)->presence; \
         (__dST)->len = (__sRC)->len; \
         (__dST)->data = ogs_calloc((__dST)->len, sizeof(uint8_t)); \
-        ogs_assert((__dST)->data); \
+        log_assert((__dST)->data); \
         memcpy((__dST)->data, (__sRC)->data, (__dST)->len); \
     } while(0)
 typedef struct ogs_tlv_octet_s {

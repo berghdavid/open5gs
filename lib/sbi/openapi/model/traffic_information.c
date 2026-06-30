@@ -16,7 +16,7 @@ OpenAPI_traffic_information_t *OpenAPI_traffic_information_create(
 )
 {
     OpenAPI_traffic_information_t *traffic_information_local_var = ogs_malloc(sizeof(OpenAPI_traffic_information_t));
-    ogs_assert(traffic_information_local_var);
+    log_assert(traffic_information_local_var);
 
     traffic_information_local_var->uplink_rate = uplink_rate;
     traffic_information_local_var->downlink_rate = downlink_rate;
@@ -54,42 +54,42 @@ cJSON *OpenAPI_traffic_information_convertToJSON(OpenAPI_traffic_information_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (traffic_information == NULL) {
-        ogs_error("OpenAPI_traffic_information_convertToJSON() failed [TrafficInformation]");
+        log_error("OpenAPI_traffic_information_convertToJSON() failed [TrafficInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (traffic_information->uplink_rate) {
     if (cJSON_AddStringToObject(item, "uplinkRate", traffic_information->uplink_rate) == NULL) {
-        ogs_error("OpenAPI_traffic_information_convertToJSON() failed [uplink_rate]");
+        log_error("OpenAPI_traffic_information_convertToJSON() failed [uplink_rate]");
         goto end;
     }
     }
 
     if (traffic_information->downlink_rate) {
     if (cJSON_AddStringToObject(item, "downlinkRate", traffic_information->downlink_rate) == NULL) {
-        ogs_error("OpenAPI_traffic_information_convertToJSON() failed [downlink_rate]");
+        log_error("OpenAPI_traffic_information_convertToJSON() failed [downlink_rate]");
         goto end;
     }
     }
 
     if (traffic_information->is_uplink_volume) {
     if (cJSON_AddNumberToObject(item, "uplinkVolume", traffic_information->uplink_volume) == NULL) {
-        ogs_error("OpenAPI_traffic_information_convertToJSON() failed [uplink_volume]");
+        log_error("OpenAPI_traffic_information_convertToJSON() failed [uplink_volume]");
         goto end;
     }
     }
 
     if (traffic_information->is_downlink_volume) {
     if (cJSON_AddNumberToObject(item, "downlinkVolume", traffic_information->downlink_volume) == NULL) {
-        ogs_error("OpenAPI_traffic_information_convertToJSON() failed [downlink_volume]");
+        log_error("OpenAPI_traffic_information_convertToJSON() failed [downlink_volume]");
         goto end;
     }
     }
 
     if (traffic_information->is_total_volume) {
     if (cJSON_AddNumberToObject(item, "totalVolume", traffic_information->total_volume) == NULL) {
-        ogs_error("OpenAPI_traffic_information_convertToJSON() failed [total_volume]");
+        log_error("OpenAPI_traffic_information_convertToJSON() failed [total_volume]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_traffic_information_t *OpenAPI_traffic_information_parseFromJSON(cJSON *
     uplink_rate = cJSON_GetObjectItemCaseSensitive(traffic_informationJSON, "uplinkRate");
     if (uplink_rate) {
     if (!cJSON_IsString(uplink_rate) && !cJSON_IsNull(uplink_rate)) {
-        ogs_error("OpenAPI_traffic_information_parseFromJSON() failed [uplink_rate]");
+        log_error("OpenAPI_traffic_information_parseFromJSON() failed [uplink_rate]");
         goto end;
     }
     }
@@ -118,7 +118,7 @@ OpenAPI_traffic_information_t *OpenAPI_traffic_information_parseFromJSON(cJSON *
     downlink_rate = cJSON_GetObjectItemCaseSensitive(traffic_informationJSON, "downlinkRate");
     if (downlink_rate) {
     if (!cJSON_IsString(downlink_rate) && !cJSON_IsNull(downlink_rate)) {
-        ogs_error("OpenAPI_traffic_information_parseFromJSON() failed [downlink_rate]");
+        log_error("OpenAPI_traffic_information_parseFromJSON() failed [downlink_rate]");
         goto end;
     }
     }
@@ -126,7 +126,7 @@ OpenAPI_traffic_information_t *OpenAPI_traffic_information_parseFromJSON(cJSON *
     uplink_volume = cJSON_GetObjectItemCaseSensitive(traffic_informationJSON, "uplinkVolume");
     if (uplink_volume) {
     if (!cJSON_IsNumber(uplink_volume)) {
-        ogs_error("OpenAPI_traffic_information_parseFromJSON() failed [uplink_volume]");
+        log_error("OpenAPI_traffic_information_parseFromJSON() failed [uplink_volume]");
         goto end;
     }
     }
@@ -134,7 +134,7 @@ OpenAPI_traffic_information_t *OpenAPI_traffic_information_parseFromJSON(cJSON *
     downlink_volume = cJSON_GetObjectItemCaseSensitive(traffic_informationJSON, "downlinkVolume");
     if (downlink_volume) {
     if (!cJSON_IsNumber(downlink_volume)) {
-        ogs_error("OpenAPI_traffic_information_parseFromJSON() failed [downlink_volume]");
+        log_error("OpenAPI_traffic_information_parseFromJSON() failed [downlink_volume]");
         goto end;
     }
     }
@@ -142,7 +142,7 @@ OpenAPI_traffic_information_t *OpenAPI_traffic_information_parseFromJSON(cJSON *
     total_volume = cJSON_GetObjectItemCaseSensitive(traffic_informationJSON, "totalVolume");
     if (total_volume) {
     if (!cJSON_IsNumber(total_volume)) {
-        ogs_error("OpenAPI_traffic_information_parseFromJSON() failed [total_volume]");
+        log_error("OpenAPI_traffic_information_parseFromJSON() failed [total_volume]");
         goto end;
     }
     }
@@ -168,10 +168,10 @@ OpenAPI_traffic_information_t *OpenAPI_traffic_information_copy(OpenAPI_traffic_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_traffic_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_traffic_information_convertToJSON() failed");
+        log_error("OpenAPI_traffic_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -179,14 +179,14 @@ OpenAPI_traffic_information_t *OpenAPI_traffic_information_copy(OpenAPI_traffic_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

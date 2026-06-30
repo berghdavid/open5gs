@@ -8,7 +8,7 @@ OpenAPI_final_unit_action_t *OpenAPI_final_unit_action_create(
 )
 {
     OpenAPI_final_unit_action_t *final_unit_action_local_var = ogs_malloc(sizeof(OpenAPI_final_unit_action_t));
-    ogs_assert(final_unit_action_local_var);
+    log_assert(final_unit_action_local_var);
 
 
     return final_unit_action_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_final_unit_action_convertToJSON(OpenAPI_final_unit_action_t *fina
     OpenAPI_lnode_t *node = NULL;
 
     if (final_unit_action == NULL) {
-        ogs_error("OpenAPI_final_unit_action_convertToJSON() failed [FinalUnitAction]");
+        log_error("OpenAPI_final_unit_action_convertToJSON() failed [FinalUnitAction]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_final_unit_action_t *OpenAPI_final_unit_action_copy(OpenAPI_final_unit_a
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_final_unit_action_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_final_unit_action_convertToJSON() failed");
+        log_error("OpenAPI_final_unit_action_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_final_unit_action_t *OpenAPI_final_unit_action_copy(OpenAPI_final_unit_a
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

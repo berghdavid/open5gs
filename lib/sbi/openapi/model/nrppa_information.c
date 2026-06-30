@@ -11,7 +11,7 @@ OpenAPI_nrppa_information_t *OpenAPI_nrppa_information_create(
 )
 {
     OpenAPI_nrppa_information_t *nrppa_information_local_var = ogs_malloc(sizeof(OpenAPI_nrppa_information_t));
-    ogs_assert(nrppa_information_local_var);
+    log_assert(nrppa_information_local_var);
 
     nrppa_information_local_var->nf_id = nf_id;
     nrppa_information_local_var->nrppa_pdu = nrppa_pdu;
@@ -48,38 +48,38 @@ cJSON *OpenAPI_nrppa_information_convertToJSON(OpenAPI_nrppa_information_t *nrpp
     OpenAPI_lnode_t *node = NULL;
 
     if (nrppa_information == NULL) {
-        ogs_error("OpenAPI_nrppa_information_convertToJSON() failed [NrppaInformation]");
+        log_error("OpenAPI_nrppa_information_convertToJSON() failed [NrppaInformation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!nrppa_information->nf_id) {
-        ogs_error("OpenAPI_nrppa_information_convertToJSON() failed [nf_id]");
+        log_error("OpenAPI_nrppa_information_convertToJSON() failed [nf_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "nfId", nrppa_information->nf_id) == NULL) {
-        ogs_error("OpenAPI_nrppa_information_convertToJSON() failed [nf_id]");
+        log_error("OpenAPI_nrppa_information_convertToJSON() failed [nf_id]");
         goto end;
     }
 
     if (!nrppa_information->nrppa_pdu) {
-        ogs_error("OpenAPI_nrppa_information_convertToJSON() failed [nrppa_pdu]");
+        log_error("OpenAPI_nrppa_information_convertToJSON() failed [nrppa_pdu]");
         return NULL;
     }
     cJSON *nrppa_pdu_local_JSON = OpenAPI_n2_info_content_convertToJSON(nrppa_information->nrppa_pdu);
     if (nrppa_pdu_local_JSON == NULL) {
-        ogs_error("OpenAPI_nrppa_information_convertToJSON() failed [nrppa_pdu]");
+        log_error("OpenAPI_nrppa_information_convertToJSON() failed [nrppa_pdu]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nrppaPdu", nrppa_pdu_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_nrppa_information_convertToJSON() failed [nrppa_pdu]");
+        log_error("OpenAPI_nrppa_information_convertToJSON() failed [nrppa_pdu]");
         goto end;
     }
 
     if (nrppa_information->service_instance_id) {
     if (cJSON_AddStringToObject(item, "serviceInstanceId", nrppa_information->service_instance_id) == NULL) {
-        ogs_error("OpenAPI_nrppa_information_convertToJSON() failed [service_instance_id]");
+        log_error("OpenAPI_nrppa_information_convertToJSON() failed [service_instance_id]");
         goto end;
     }
     }
@@ -98,29 +98,29 @@ OpenAPI_nrppa_information_t *OpenAPI_nrppa_information_parseFromJSON(cJSON *nrpp
     cJSON *service_instance_id = NULL;
     nf_id = cJSON_GetObjectItemCaseSensitive(nrppa_informationJSON, "nfId");
     if (!nf_id) {
-        ogs_error("OpenAPI_nrppa_information_parseFromJSON() failed [nf_id]");
+        log_error("OpenAPI_nrppa_information_parseFromJSON() failed [nf_id]");
         goto end;
     }
     if (!cJSON_IsString(nf_id)) {
-        ogs_error("OpenAPI_nrppa_information_parseFromJSON() failed [nf_id]");
+        log_error("OpenAPI_nrppa_information_parseFromJSON() failed [nf_id]");
         goto end;
     }
 
     nrppa_pdu = cJSON_GetObjectItemCaseSensitive(nrppa_informationJSON, "nrppaPdu");
     if (!nrppa_pdu) {
-        ogs_error("OpenAPI_nrppa_information_parseFromJSON() failed [nrppa_pdu]");
+        log_error("OpenAPI_nrppa_information_parseFromJSON() failed [nrppa_pdu]");
         goto end;
     }
     nrppa_pdu_local_nonprim = OpenAPI_n2_info_content_parseFromJSON(nrppa_pdu);
     if (!nrppa_pdu_local_nonprim) {
-        ogs_error("OpenAPI_n2_info_content_parseFromJSON failed [nrppa_pdu]");
+        log_error("OpenAPI_n2_info_content_parseFromJSON failed [nrppa_pdu]");
         goto end;
     }
 
     service_instance_id = cJSON_GetObjectItemCaseSensitive(nrppa_informationJSON, "serviceInstanceId");
     if (service_instance_id) {
     if (!cJSON_IsString(service_instance_id) && !cJSON_IsNull(service_instance_id)) {
-        ogs_error("OpenAPI_nrppa_information_parseFromJSON() failed [service_instance_id]");
+        log_error("OpenAPI_nrppa_information_parseFromJSON() failed [service_instance_id]");
         goto end;
     }
     }
@@ -145,10 +145,10 @@ OpenAPI_nrppa_information_t *OpenAPI_nrppa_information_copy(OpenAPI_nrppa_inform
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nrppa_information_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nrppa_information_convertToJSON() failed");
+        log_error("OpenAPI_nrppa_information_convertToJSON() failed");
         return NULL;
     }
 
@@ -156,14 +156,14 @@ OpenAPI_nrppa_information_t *OpenAPI_nrppa_information_copy(OpenAPI_nrppa_inform
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

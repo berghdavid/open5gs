@@ -8,7 +8,7 @@ OpenAPI_accuracy_t *OpenAPI_accuracy_create(
 )
 {
     OpenAPI_accuracy_t *accuracy_local_var = ogs_malloc(sizeof(OpenAPI_accuracy_t));
-    ogs_assert(accuracy_local_var);
+    log_assert(accuracy_local_var);
 
 
     return accuracy_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_accuracy_convertToJSON(OpenAPI_accuracy_t *accuracy)
     OpenAPI_lnode_t *node = NULL;
 
     if (accuracy == NULL) {
-        ogs_error("OpenAPI_accuracy_convertToJSON() failed [Accuracy]");
+        log_error("OpenAPI_accuracy_convertToJSON() failed [Accuracy]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_accuracy_t *OpenAPI_accuracy_copy(OpenAPI_accuracy_t *dst, OpenAPI_accur
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_accuracy_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_accuracy_convertToJSON() failed");
+        log_error("OpenAPI_accuracy_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_accuracy_t *OpenAPI_accuracy_copy(OpenAPI_accuracy_t *dst, OpenAPI_accur
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

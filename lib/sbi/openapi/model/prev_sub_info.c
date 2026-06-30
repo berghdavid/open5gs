@@ -13,7 +13,7 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_create(
 )
 {
     OpenAPI_prev_sub_info_t *prev_sub_info_local_var = ogs_malloc(sizeof(OpenAPI_prev_sub_info_t));
-    ogs_assert(prev_sub_info_local_var);
+    log_assert(prev_sub_info_local_var);
 
     prev_sub_info_local_var->producer_id = producer_id;
     prev_sub_info_local_var->producer_set_id = producer_set_id;
@@ -66,44 +66,44 @@ cJSON *OpenAPI_prev_sub_info_convertToJSON(OpenAPI_prev_sub_info_t *prev_sub_inf
     OpenAPI_lnode_t *node = NULL;
 
     if (prev_sub_info == NULL) {
-        ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [PrevSubInfo]");
+        log_error("OpenAPI_prev_sub_info_convertToJSON() failed [PrevSubInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (prev_sub_info->producer_id) {
     if (cJSON_AddStringToObject(item, "producerId", prev_sub_info->producer_id) == NULL) {
-        ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [producer_id]");
+        log_error("OpenAPI_prev_sub_info_convertToJSON() failed [producer_id]");
         goto end;
     }
     }
 
     if (prev_sub_info->producer_set_id) {
     if (cJSON_AddStringToObject(item, "producerSetId", prev_sub_info->producer_set_id) == NULL) {
-        ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [producer_set_id]");
+        log_error("OpenAPI_prev_sub_info_convertToJSON() failed [producer_set_id]");
         goto end;
     }
     }
 
     if (!prev_sub_info->subscription_id) {
-        ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [subscription_id]");
+        log_error("OpenAPI_prev_sub_info_convertToJSON() failed [subscription_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "subscriptionId", prev_sub_info->subscription_id) == NULL) {
-        ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [subscription_id]");
+        log_error("OpenAPI_prev_sub_info_convertToJSON() failed [subscription_id]");
         goto end;
     }
 
     if (prev_sub_info->nf_ana_events) {
     cJSON *nf_ana_eventsList = cJSON_AddArrayToObject(item, "nfAnaEvents");
     if (nf_ana_eventsList == NULL) {
-        ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [nf_ana_events]");
+        log_error("OpenAPI_prev_sub_info_convertToJSON() failed [nf_ana_events]");
         goto end;
     }
     OpenAPI_list_for_each(prev_sub_info->nf_ana_events, node) {
         cJSON *itemLocal = OpenAPI_nwdaf_event_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [nf_ana_events]");
+            log_error("OpenAPI_prev_sub_info_convertToJSON() failed [nf_ana_events]");
             goto end;
         }
         cJSON_AddItemToArray(nf_ana_eventsList, itemLocal);
@@ -113,13 +113,13 @@ cJSON *OpenAPI_prev_sub_info_convertToJSON(OpenAPI_prev_sub_info_t *prev_sub_inf
     if (prev_sub_info->ue_ana_events) {
     cJSON *ue_ana_eventsList = cJSON_AddArrayToObject(item, "ueAnaEvents");
     if (ue_ana_eventsList == NULL) {
-        ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [ue_ana_events]");
+        log_error("OpenAPI_prev_sub_info_convertToJSON() failed [ue_ana_events]");
         goto end;
     }
     OpenAPI_list_for_each(prev_sub_info->ue_ana_events, node) {
         cJSON *itemLocal = OpenAPI_ue_analytics_context_descriptor_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed [ue_ana_events]");
+            log_error("OpenAPI_prev_sub_info_convertToJSON() failed [ue_ana_events]");
             goto end;
         }
         cJSON_AddItemToArray(ue_ana_eventsList, itemLocal);
@@ -144,7 +144,7 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_parseFromJSON(cJSON *prev_sub_inf
     producer_id = cJSON_GetObjectItemCaseSensitive(prev_sub_infoJSON, "producerId");
     if (producer_id) {
     if (!cJSON_IsString(producer_id) && !cJSON_IsNull(producer_id)) {
-        ogs_error("OpenAPI_prev_sub_info_parseFromJSON() failed [producer_id]");
+        log_error("OpenAPI_prev_sub_info_parseFromJSON() failed [producer_id]");
         goto end;
     }
     }
@@ -152,18 +152,18 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_parseFromJSON(cJSON *prev_sub_inf
     producer_set_id = cJSON_GetObjectItemCaseSensitive(prev_sub_infoJSON, "producerSetId");
     if (producer_set_id) {
     if (!cJSON_IsString(producer_set_id) && !cJSON_IsNull(producer_set_id)) {
-        ogs_error("OpenAPI_prev_sub_info_parseFromJSON() failed [producer_set_id]");
+        log_error("OpenAPI_prev_sub_info_parseFromJSON() failed [producer_set_id]");
         goto end;
     }
     }
 
     subscription_id = cJSON_GetObjectItemCaseSensitive(prev_sub_infoJSON, "subscriptionId");
     if (!subscription_id) {
-        ogs_error("OpenAPI_prev_sub_info_parseFromJSON() failed [subscription_id]");
+        log_error("OpenAPI_prev_sub_info_parseFromJSON() failed [subscription_id]");
         goto end;
     }
     if (!cJSON_IsString(subscription_id)) {
-        ogs_error("OpenAPI_prev_sub_info_parseFromJSON() failed [subscription_id]");
+        log_error("OpenAPI_prev_sub_info_parseFromJSON() failed [subscription_id]");
         goto end;
     }
 
@@ -171,7 +171,7 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_parseFromJSON(cJSON *prev_sub_inf
     if (nf_ana_events) {
         cJSON *nf_ana_events_local = NULL;
         if (!cJSON_IsArray(nf_ana_events)) {
-            ogs_error("OpenAPI_prev_sub_info_parseFromJSON() failed [nf_ana_events]");
+            log_error("OpenAPI_prev_sub_info_parseFromJSON() failed [nf_ana_events]");
             goto end;
         }
 
@@ -179,12 +179,12 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_parseFromJSON(cJSON *prev_sub_inf
 
         cJSON_ArrayForEach(nf_ana_events_local, nf_ana_events) {
             if (!cJSON_IsObject(nf_ana_events_local)) {
-                ogs_error("OpenAPI_prev_sub_info_parseFromJSON() failed [nf_ana_events]");
+                log_error("OpenAPI_prev_sub_info_parseFromJSON() failed [nf_ana_events]");
                 goto end;
             }
             OpenAPI_nwdaf_event_t *nf_ana_eventsItem = OpenAPI_nwdaf_event_parseFromJSON(nf_ana_events_local);
             if (!nf_ana_eventsItem) {
-                ogs_error("No nf_ana_eventsItem");
+                log_error("No nf_ana_eventsItem");
                 goto end;
             }
             OpenAPI_list_add(nf_ana_eventsList, nf_ana_eventsItem);
@@ -195,7 +195,7 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_parseFromJSON(cJSON *prev_sub_inf
     if (ue_ana_events) {
         cJSON *ue_ana_events_local = NULL;
         if (!cJSON_IsArray(ue_ana_events)) {
-            ogs_error("OpenAPI_prev_sub_info_parseFromJSON() failed [ue_ana_events]");
+            log_error("OpenAPI_prev_sub_info_parseFromJSON() failed [ue_ana_events]");
             goto end;
         }
 
@@ -203,12 +203,12 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_parseFromJSON(cJSON *prev_sub_inf
 
         cJSON_ArrayForEach(ue_ana_events_local, ue_ana_events) {
             if (!cJSON_IsObject(ue_ana_events_local)) {
-                ogs_error("OpenAPI_prev_sub_info_parseFromJSON() failed [ue_ana_events]");
+                log_error("OpenAPI_prev_sub_info_parseFromJSON() failed [ue_ana_events]");
                 goto end;
             }
             OpenAPI_ue_analytics_context_descriptor_t *ue_ana_eventsItem = OpenAPI_ue_analytics_context_descriptor_parseFromJSON(ue_ana_events_local);
             if (!ue_ana_eventsItem) {
-                ogs_error("No ue_ana_eventsItem");
+                log_error("No ue_ana_eventsItem");
                 goto end;
             }
             OpenAPI_list_add(ue_ana_eventsList, ue_ana_eventsItem);
@@ -247,10 +247,10 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_copy(OpenAPI_prev_sub_info_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_prev_sub_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_prev_sub_info_convertToJSON() failed");
+        log_error("OpenAPI_prev_sub_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -258,14 +258,14 @@ OpenAPI_prev_sub_info_t *OpenAPI_prev_sub_info_copy(OpenAPI_prev_sub_info_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

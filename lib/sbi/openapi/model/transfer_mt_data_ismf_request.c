@@ -10,7 +10,7 @@ OpenAPI_transfer_mt_data_ismf_request_t *OpenAPI_transfer_mt_data_ismf_request_c
 )
 {
     OpenAPI_transfer_mt_data_ismf_request_t *transfer_mt_data_ismf_request_local_var = ogs_malloc(sizeof(OpenAPI_transfer_mt_data_ismf_request_t));
-    ogs_assert(transfer_mt_data_ismf_request_local_var);
+    log_assert(transfer_mt_data_ismf_request_local_var);
 
     transfer_mt_data_ismf_request_local_var->json_data = json_data;
     transfer_mt_data_ismf_request_local_var->binary_mt_data = binary_mt_data;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_transfer_mt_data_ismf_request_convertToJSON(OpenAPI_transfer_mt_d
     OpenAPI_lnode_t *node = NULL;
 
     if (transfer_mt_data_ismf_request == NULL) {
-        ogs_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed [TransferMtData_ismf_request]");
+        log_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed [TransferMtData_ismf_request]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_transfer_mt_data_ismf_request_convertToJSON(OpenAPI_transfer_mt_d
     if (transfer_mt_data_ismf_request->json_data) {
     cJSON *json_data_local_JSON = OpenAPI_transfer_mt_data_req_data_convertToJSON(transfer_mt_data_ismf_request->json_data);
     if (json_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed [json_data]");
+        log_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed [json_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "jsonData", json_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed [json_data]");
+        log_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed [json_data]");
         goto end;
     }
     }
@@ -63,7 +63,7 @@ cJSON *OpenAPI_transfer_mt_data_ismf_request_convertToJSON(OpenAPI_transfer_mt_d
     if (transfer_mt_data_ismf_request->binary_mt_data) {
     char* encoded_str_binary_mt_data = OpenAPI_base64encode(transfer_mt_data_ismf_request->binary_mt_data->data,transfer_mt_data_ismf_request->binary_mt_data->len);
     if (cJSON_AddStringToObject(item, "binaryMtData", encoded_str_binary_mt_data) == NULL) {
-        ogs_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed [binary_mt_data]");
+        log_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed [binary_mt_data]");
         goto end;
     }
     ogs_free(encoded_str_binary_mt_data);
@@ -85,7 +85,7 @@ OpenAPI_transfer_mt_data_ismf_request_t *OpenAPI_transfer_mt_data_ismf_request_p
     if (json_data) {
     json_data_local_nonprim = OpenAPI_transfer_mt_data_req_data_parseFromJSON(json_data);
     if (!json_data_local_nonprim) {
-        ogs_error("OpenAPI_transfer_mt_data_req_data_parseFromJSON failed [json_data]");
+        log_error("OpenAPI_transfer_mt_data_req_data_parseFromJSON failed [json_data]");
         goto end;
     }
     }
@@ -93,14 +93,14 @@ OpenAPI_transfer_mt_data_ismf_request_t *OpenAPI_transfer_mt_data_ismf_request_p
     binary_mt_data = cJSON_GetObjectItemCaseSensitive(transfer_mt_data_ismf_requestJSON, "binaryMtData");
     if (binary_mt_data) {
     decoded_str_binary_mt_data = ogs_malloc(sizeof(OpenAPI_binary_t));
-    ogs_assert(decoded_str_binary_mt_data);
+    log_assert(decoded_str_binary_mt_data);
     if (!cJSON_IsString(binary_mt_data)) {
-        ogs_error("OpenAPI_transfer_mt_data_ismf_request_parseFromJSON() failed [binary_mt_data]");
+        log_error("OpenAPI_transfer_mt_data_ismf_request_parseFromJSON() failed [binary_mt_data]");
         goto end;
     }
     decoded_str_binary_mt_data->data = OpenAPI_base64decode(binary_mt_data->valuestring, strlen(binary_mt_data->valuestring), &decoded_str_binary_mt_data->len);
     if (!decoded_str_binary_mt_data->data) {
-        ogs_error("OpenAPI_transfer_mt_data_ismf_request_parseFromJSON() failed [binary_mt_data]");
+        log_error("OpenAPI_transfer_mt_data_ismf_request_parseFromJSON() failed [binary_mt_data]");
         goto end;
     }
     }
@@ -124,10 +124,10 @@ OpenAPI_transfer_mt_data_ismf_request_t *OpenAPI_transfer_mt_data_ismf_request_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_transfer_mt_data_ismf_request_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed");
+        log_error("OpenAPI_transfer_mt_data_ismf_request_convertToJSON() failed");
         return NULL;
     }
 
@@ -135,14 +135,14 @@ OpenAPI_transfer_mt_data_ismf_request_t *OpenAPI_transfer_mt_data_ismf_request_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

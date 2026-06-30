@@ -14,7 +14,7 @@ OpenAPI_exemption_ind_t *OpenAPI_exemption_ind_create(
 )
 {
     OpenAPI_exemption_ind_t *exemption_ind_local_var = ogs_malloc(sizeof(OpenAPI_exemption_ind_t));
-    ogs_assert(exemption_ind_local_var);
+    log_assert(exemption_ind_local_var);
 
     exemption_ind_local_var->is_dnn_congestion = is_dnn_congestion;
     exemption_ind_local_var->dnn_congestion = dnn_congestion;
@@ -42,28 +42,28 @@ cJSON *OpenAPI_exemption_ind_convertToJSON(OpenAPI_exemption_ind_t *exemption_in
     OpenAPI_lnode_t *node = NULL;
 
     if (exemption_ind == NULL) {
-        ogs_error("OpenAPI_exemption_ind_convertToJSON() failed [ExemptionInd]");
+        log_error("OpenAPI_exemption_ind_convertToJSON() failed [ExemptionInd]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (exemption_ind->is_dnn_congestion) {
     if (cJSON_AddBoolToObject(item, "dnnCongestion", exemption_ind->dnn_congestion) == NULL) {
-        ogs_error("OpenAPI_exemption_ind_convertToJSON() failed [dnn_congestion]");
+        log_error("OpenAPI_exemption_ind_convertToJSON() failed [dnn_congestion]");
         goto end;
     }
     }
 
     if (exemption_ind->is_snssai_only_congestion) {
     if (cJSON_AddBoolToObject(item, "snssaiOnlyCongestion", exemption_ind->snssai_only_congestion) == NULL) {
-        ogs_error("OpenAPI_exemption_ind_convertToJSON() failed [snssai_only_congestion]");
+        log_error("OpenAPI_exemption_ind_convertToJSON() failed [snssai_only_congestion]");
         goto end;
     }
     }
 
     if (exemption_ind->is_snssai_dnn_congestion) {
     if (cJSON_AddBoolToObject(item, "snssaiDnnCongestion", exemption_ind->snssai_dnn_congestion) == NULL) {
-        ogs_error("OpenAPI_exemption_ind_convertToJSON() failed [snssai_dnn_congestion]");
+        log_error("OpenAPI_exemption_ind_convertToJSON() failed [snssai_dnn_congestion]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_exemption_ind_t *OpenAPI_exemption_ind_parseFromJSON(cJSON *exemption_in
     dnn_congestion = cJSON_GetObjectItemCaseSensitive(exemption_indJSON, "dnnCongestion");
     if (dnn_congestion) {
     if (!cJSON_IsBool(dnn_congestion)) {
-        ogs_error("OpenAPI_exemption_ind_parseFromJSON() failed [dnn_congestion]");
+        log_error("OpenAPI_exemption_ind_parseFromJSON() failed [dnn_congestion]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_exemption_ind_t *OpenAPI_exemption_ind_parseFromJSON(cJSON *exemption_in
     snssai_only_congestion = cJSON_GetObjectItemCaseSensitive(exemption_indJSON, "snssaiOnlyCongestion");
     if (snssai_only_congestion) {
     if (!cJSON_IsBool(snssai_only_congestion)) {
-        ogs_error("OpenAPI_exemption_ind_parseFromJSON() failed [snssai_only_congestion]");
+        log_error("OpenAPI_exemption_ind_parseFromJSON() failed [snssai_only_congestion]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_exemption_ind_t *OpenAPI_exemption_ind_parseFromJSON(cJSON *exemption_in
     snssai_dnn_congestion = cJSON_GetObjectItemCaseSensitive(exemption_indJSON, "snssaiDnnCongestion");
     if (snssai_dnn_congestion) {
     if (!cJSON_IsBool(snssai_dnn_congestion)) {
-        ogs_error("OpenAPI_exemption_ind_parseFromJSON() failed [snssai_dnn_congestion]");
+        log_error("OpenAPI_exemption_ind_parseFromJSON() failed [snssai_dnn_congestion]");
         goto end;
     }
     }
@@ -122,10 +122,10 @@ OpenAPI_exemption_ind_t *OpenAPI_exemption_ind_copy(OpenAPI_exemption_ind_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_exemption_ind_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_exemption_ind_convertToJSON() failed");
+        log_error("OpenAPI_exemption_ind_convertToJSON() failed");
         return NULL;
     }
 
@@ -133,14 +133,14 @@ OpenAPI_exemption_ind_t *OpenAPI_exemption_ind_copy(OpenAPI_exemption_ind_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

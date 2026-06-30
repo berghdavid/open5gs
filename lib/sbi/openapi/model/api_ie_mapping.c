@@ -11,7 +11,7 @@ OpenAPI_api_ie_mapping_t *OpenAPI_api_ie_mapping_create(
 )
 {
     OpenAPI_api_ie_mapping_t *api_ie_mapping_local_var = ogs_malloc(sizeof(OpenAPI_api_ie_mapping_t));
-    ogs_assert(api_ie_mapping_local_var);
+    log_assert(api_ie_mapping_local_var);
 
     api_ie_mapping_local_var->api_signature = api_signature;
     api_ie_mapping_local_var->api_method = api_method;
@@ -47,48 +47,48 @@ cJSON *OpenAPI_api_ie_mapping_convertToJSON(OpenAPI_api_ie_mapping_t *api_ie_map
     OpenAPI_lnode_t *node = NULL;
 
     if (api_ie_mapping == NULL) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [ApiIeMapping]");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [ApiIeMapping]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!api_ie_mapping->api_signature) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_signature]");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_signature]");
         return NULL;
     }
     cJSON *api_signature_local_JSON = OpenAPI_api_signature_convertToJSON(api_ie_mapping->api_signature);
     if (api_signature_local_JSON == NULL) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_signature]");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_signature]");
         goto end;
     }
     cJSON_AddItemToObject(item, "apiSignature", api_signature_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_signature]");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_signature]");
         goto end;
     }
 
     if (api_ie_mapping->api_method == OpenAPI_http_method_NULL) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_method]");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_method]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "apiMethod", OpenAPI_http_method_ToString(api_ie_mapping->api_method)) == NULL) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_method]");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [api_method]");
         goto end;
     }
 
     if (!api_ie_mapping->ie_list) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [ie_list]");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [ie_list]");
         return NULL;
     }
     cJSON *ie_listList = cJSON_AddArrayToObject(item, "IeList");
     if (ie_listList == NULL) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [ie_list]");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [ie_list]");
         goto end;
     }
     OpenAPI_list_for_each(api_ie_mapping->ie_list, node) {
         cJSON *itemLocal = OpenAPI_ie_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed [ie_list]");
+            log_error("OpenAPI_api_ie_mapping_convertToJSON() failed [ie_list]");
             goto end;
         }
         cJSON_AddItemToArray(ie_listList, itemLocal);
@@ -110,34 +110,34 @@ OpenAPI_api_ie_mapping_t *OpenAPI_api_ie_mapping_parseFromJSON(cJSON *api_ie_map
     OpenAPI_list_t *ie_listList = NULL;
     api_signature = cJSON_GetObjectItemCaseSensitive(api_ie_mappingJSON, "apiSignature");
     if (!api_signature) {
-        ogs_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [api_signature]");
+        log_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [api_signature]");
         goto end;
     }
     api_signature_local_nonprim = OpenAPI_api_signature_parseFromJSON(api_signature);
     if (!api_signature_local_nonprim) {
-        ogs_error("OpenAPI_api_signature_parseFromJSON failed [api_signature]");
+        log_error("OpenAPI_api_signature_parseFromJSON failed [api_signature]");
         goto end;
     }
 
     api_method = cJSON_GetObjectItemCaseSensitive(api_ie_mappingJSON, "apiMethod");
     if (!api_method) {
-        ogs_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [api_method]");
+        log_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [api_method]");
         goto end;
     }
     if (!cJSON_IsString(api_method)) {
-        ogs_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [api_method]");
+        log_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [api_method]");
         goto end;
     }
     api_methodVariable = OpenAPI_http_method_FromString(api_method->valuestring);
 
     ie_list = cJSON_GetObjectItemCaseSensitive(api_ie_mappingJSON, "IeList");
     if (!ie_list) {
-        ogs_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [ie_list]");
+        log_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [ie_list]");
         goto end;
     }
         cJSON *ie_list_local = NULL;
         if (!cJSON_IsArray(ie_list)) {
-            ogs_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [ie_list]");
+            log_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [ie_list]");
             goto end;
         }
 
@@ -145,12 +145,12 @@ OpenAPI_api_ie_mapping_t *OpenAPI_api_ie_mapping_parseFromJSON(cJSON *api_ie_map
 
         cJSON_ArrayForEach(ie_list_local, ie_list) {
             if (!cJSON_IsObject(ie_list_local)) {
-                ogs_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [ie_list]");
+                log_error("OpenAPI_api_ie_mapping_parseFromJSON() failed [ie_list]");
                 goto end;
             }
             OpenAPI_ie_info_t *ie_listItem = OpenAPI_ie_info_parseFromJSON(ie_list_local);
             if (!ie_listItem) {
-                ogs_error("No ie_listItem");
+                log_error("No ie_listItem");
                 goto end;
             }
             OpenAPI_list_add(ie_listList, ie_listItem);
@@ -183,10 +183,10 @@ OpenAPI_api_ie_mapping_t *OpenAPI_api_ie_mapping_copy(OpenAPI_api_ie_mapping_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_api_ie_mapping_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_api_ie_mapping_convertToJSON() failed");
+        log_error("OpenAPI_api_ie_mapping_convertToJSON() failed");
         return NULL;
     }
 
@@ -194,14 +194,14 @@ OpenAPI_api_ie_mapping_t *OpenAPI_api_ie_mapping_copy(OpenAPI_api_ie_mapping_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

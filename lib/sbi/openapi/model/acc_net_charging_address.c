@@ -10,7 +10,7 @@ OpenAPI_acc_net_charging_address_t *OpenAPI_acc_net_charging_address_create(
 )
 {
     OpenAPI_acc_net_charging_address_t *acc_net_charging_address_local_var = ogs_malloc(sizeof(OpenAPI_acc_net_charging_address_t));
-    ogs_assert(acc_net_charging_address_local_var);
+    log_assert(acc_net_charging_address_local_var);
 
     acc_net_charging_address_local_var->an_charg_ipv4_addr = an_charg_ipv4_addr;
     acc_net_charging_address_local_var->an_charg_ipv6_addr = an_charg_ipv6_addr;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_acc_net_charging_address_convertToJSON(OpenAPI_acc_net_charging_a
     OpenAPI_lnode_t *node = NULL;
 
     if (acc_net_charging_address == NULL) {
-        ogs_error("OpenAPI_acc_net_charging_address_convertToJSON() failed [AccNetChargingAddress]");
+        log_error("OpenAPI_acc_net_charging_address_convertToJSON() failed [AccNetChargingAddress]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (acc_net_charging_address->an_charg_ipv4_addr) {
     if (cJSON_AddStringToObject(item, "anChargIpv4Addr", acc_net_charging_address->an_charg_ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_acc_net_charging_address_convertToJSON() failed [an_charg_ipv4_addr]");
+        log_error("OpenAPI_acc_net_charging_address_convertToJSON() failed [an_charg_ipv4_addr]");
         goto end;
     }
     }
 
     if (acc_net_charging_address->an_charg_ipv6_addr) {
     if (cJSON_AddStringToObject(item, "anChargIpv6Addr", acc_net_charging_address->an_charg_ipv6_addr) == NULL) {
-        ogs_error("OpenAPI_acc_net_charging_address_convertToJSON() failed [an_charg_ipv6_addr]");
+        log_error("OpenAPI_acc_net_charging_address_convertToJSON() failed [an_charg_ipv6_addr]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_acc_net_charging_address_t *OpenAPI_acc_net_charging_address_parseFromJS
     an_charg_ipv4_addr = cJSON_GetObjectItemCaseSensitive(acc_net_charging_addressJSON, "anChargIpv4Addr");
     if (an_charg_ipv4_addr) {
     if (!cJSON_IsString(an_charg_ipv4_addr) && !cJSON_IsNull(an_charg_ipv4_addr)) {
-        ogs_error("OpenAPI_acc_net_charging_address_parseFromJSON() failed [an_charg_ipv4_addr]");
+        log_error("OpenAPI_acc_net_charging_address_parseFromJSON() failed [an_charg_ipv4_addr]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_acc_net_charging_address_t *OpenAPI_acc_net_charging_address_parseFromJS
     an_charg_ipv6_addr = cJSON_GetObjectItemCaseSensitive(acc_net_charging_addressJSON, "anChargIpv6Addr");
     if (an_charg_ipv6_addr) {
     if (!cJSON_IsString(an_charg_ipv6_addr) && !cJSON_IsNull(an_charg_ipv6_addr)) {
-        ogs_error("OpenAPI_acc_net_charging_address_parseFromJSON() failed [an_charg_ipv6_addr]");
+        log_error("OpenAPI_acc_net_charging_address_parseFromJSON() failed [an_charg_ipv6_addr]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_acc_net_charging_address_t *OpenAPI_acc_net_charging_address_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_acc_net_charging_address_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_acc_net_charging_address_convertToJSON() failed");
+        log_error("OpenAPI_acc_net_charging_address_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_acc_net_charging_address_t *OpenAPI_acc_net_charging_address_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

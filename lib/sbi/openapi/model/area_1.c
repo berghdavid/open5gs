@@ -10,7 +10,7 @@ OpenAPI_area_1_t *OpenAPI_area_1_create(
 )
 {
     OpenAPI_area_1_t *area_1_local_var = ogs_malloc(sizeof(OpenAPI_area_1_t));
-    ogs_assert(area_1_local_var);
+    log_assert(area_1_local_var);
 
     area_1_local_var->tacs = tacs;
     area_1_local_var->area_code = area_code;
@@ -45,7 +45,7 @@ cJSON *OpenAPI_area_1_convertToJSON(OpenAPI_area_1_t *area_1)
     OpenAPI_lnode_t *node = NULL;
 
     if (area_1 == NULL) {
-        ogs_error("OpenAPI_area_1_convertToJSON() failed [Area_1]");
+        log_error("OpenAPI_area_1_convertToJSON() failed [Area_1]");
         return NULL;
     }
 
@@ -53,12 +53,12 @@ cJSON *OpenAPI_area_1_convertToJSON(OpenAPI_area_1_t *area_1)
     if (area_1->tacs) {
     cJSON *tacsList = cJSON_AddArrayToObject(item, "tacs");
     if (tacsList == NULL) {
-        ogs_error("OpenAPI_area_1_convertToJSON() failed [tacs]");
+        log_error("OpenAPI_area_1_convertToJSON() failed [tacs]");
         goto end;
     }
     OpenAPI_list_for_each(area_1->tacs, node) {
         if (cJSON_AddStringToObject(tacsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_area_1_convertToJSON() failed [tacs]");
+            log_error("OpenAPI_area_1_convertToJSON() failed [tacs]");
             goto end;
         }
     }
@@ -66,7 +66,7 @@ cJSON *OpenAPI_area_1_convertToJSON(OpenAPI_area_1_t *area_1)
 
     if (area_1->area_code) {
     if (cJSON_AddStringToObject(item, "areaCode", area_1->area_code) == NULL) {
-        ogs_error("OpenAPI_area_1_convertToJSON() failed [area_code]");
+        log_error("OpenAPI_area_1_convertToJSON() failed [area_code]");
         goto end;
     }
     }
@@ -86,7 +86,7 @@ OpenAPI_area_1_t *OpenAPI_area_1_parseFromJSON(cJSON *area_1JSON)
     if (tacs) {
         cJSON *tacs_local = NULL;
         if (!cJSON_IsArray(tacs)) {
-            ogs_error("OpenAPI_area_1_parseFromJSON() failed [tacs]");
+            log_error("OpenAPI_area_1_parseFromJSON() failed [tacs]");
             goto end;
         }
 
@@ -96,7 +96,7 @@ OpenAPI_area_1_t *OpenAPI_area_1_parseFromJSON(cJSON *area_1JSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(tacs_local)) {
-                ogs_error("OpenAPI_area_1_parseFromJSON() failed [tacs]");
+                log_error("OpenAPI_area_1_parseFromJSON() failed [tacs]");
                 goto end;
             }
             OpenAPI_list_add(tacsList, ogs_strdup(tacs_local->valuestring));
@@ -106,7 +106,7 @@ OpenAPI_area_1_t *OpenAPI_area_1_parseFromJSON(cJSON *area_1JSON)
     area_code = cJSON_GetObjectItemCaseSensitive(area_1JSON, "areaCode");
     if (area_code) {
     if (!cJSON_IsString(area_code) && !cJSON_IsNull(area_code)) {
-        ogs_error("OpenAPI_area_1_parseFromJSON() failed [area_code]");
+        log_error("OpenAPI_area_1_parseFromJSON() failed [area_code]");
         goto end;
     }
     }
@@ -133,10 +133,10 @@ OpenAPI_area_1_t *OpenAPI_area_1_copy(OpenAPI_area_1_t *dst, OpenAPI_area_1_t *s
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_area_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_area_1_convertToJSON() failed");
+        log_error("OpenAPI_area_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -144,14 +144,14 @@ OpenAPI_area_1_t *OpenAPI_area_1_copy(OpenAPI_area_1_t *dst, OpenAPI_area_1_t *s
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

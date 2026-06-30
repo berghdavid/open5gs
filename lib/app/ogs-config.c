@@ -30,7 +30,7 @@ static int initialized = 0;
 
 int ogs_app_config_init(void)
 {
-    ogs_assert(initialized == 0);
+    log_assert(initialized == 0);
 
     memset(&global_conf, 0, sizeof(ogs_app_global_conf_t));
     memset(&local_conf, 0, sizeof(ogs_app_local_conf_t));
@@ -47,7 +47,7 @@ int ogs_app_config_init(void)
 
 void ogs_app_config_final(void)
 {
-    ogs_assert(initialized == 1);
+    log_assert(initialized == 1);
 
     ogs_app_policy_conf_remove_all();
 
@@ -129,7 +129,7 @@ static int global_conf_validation(void)
 {
     if (global_conf.parameter.no_ipv4 == 1 &&
         global_conf.parameter.no_ipv6 == 1) {
-        ogs_error("Both `no_ipv4` and `no_ipv6` set to `true` in `%s`",
+        log_error("Both `no_ipv4` and `no_ipv6` set to `true` in `%s`",
                 ogs_app()->file);
         return OGS_ERROR;
     }
@@ -166,18 +166,18 @@ int ogs_app_parse_global_conf(ogs_yaml_iter_t *parent)
     int rv;
     ogs_yaml_iter_t global_iter;
 
-    ogs_assert(parent);
+    log_assert(parent);
 
     ogs_yaml_iter_recurse(parent, &global_iter);
     while (ogs_yaml_iter_next(&global_iter)) {
         const char *global_key = ogs_yaml_iter_key(&global_iter);
-        ogs_assert(global_key);
+        log_assert(global_key);
         if (!strcmp(global_key, "parameter")) {
             ogs_yaml_iter_t parameter_iter;
             ogs_yaml_iter_recurse(&global_iter, &parameter_iter);
             while (ogs_yaml_iter_next(&parameter_iter)) {
                 const char *parameter_key = ogs_yaml_iter_key(&parameter_iter);
-                ogs_assert(parameter_key);
+                log_assert(parameter_key);
                 if (!strcmp(parameter_key, "no_hss")) {
                     global_conf.parameter.no_hss =
                         ogs_yaml_iter_bool(&parameter_iter);
@@ -270,7 +270,7 @@ int ogs_app_parse_global_conf(ogs_yaml_iter_t *parent)
                     global_conf.parameter.no_time_zone_information =
                         ogs_yaml_iter_bool(&parameter_iter);
                 } else
-                    ogs_warn("unknown key `%s`", parameter_key);
+                    log_warn("unknown key `%s`", parameter_key);
             }
         } else if (!strcmp(global_key, "sockopt")) {
             ogs_yaml_iter_t sockopt_iter;
@@ -278,7 +278,7 @@ int ogs_app_parse_global_conf(ogs_yaml_iter_t *parent)
             while (ogs_yaml_iter_next(&sockopt_iter)) {
                 const char *sockopt_key =
                     ogs_yaml_iter_key(&sockopt_iter);
-                ogs_assert(sockopt_key);
+                log_assert(sockopt_key);
                 if (!strcmp(sockopt_key, "no_delay")) {
                     global_conf.sockopt.no_delay =
                         ogs_yaml_iter_bool(&sockopt_iter);
@@ -288,14 +288,14 @@ int ogs_app_parse_global_conf(ogs_yaml_iter_t *parent)
                         global_conf.sockopt.l_linger = atoi(v);
                     global_conf.sockopt.l_onoff = true;
                 } else
-                    ogs_warn("unknown key `%s`", sockopt_key);
+                    log_warn("unknown key `%s`", sockopt_key);
             }
         } else if (!strcmp(global_key, "max")) {
             ogs_yaml_iter_t max_iter;
             ogs_yaml_iter_recurse(&global_iter, &max_iter);
             while (ogs_yaml_iter_next(&max_iter)) {
                 const char *max_key = ogs_yaml_iter_key(&max_iter);
-                ogs_assert(max_key);
+                log_assert(max_key);
                 if (!strcmp(max_key, "ue")) {
                     const char *v = ogs_yaml_iter_value(&max_iter);
                     if (v) global_conf.max.ue = atoi(v);
@@ -308,7 +308,7 @@ int ogs_app_parse_global_conf(ogs_yaml_iter_t *parent)
                     const char *v = ogs_yaml_iter_value(&max_iter);
                     if (v) global_conf.max.gtp_peer = atoi(v);
                 } else
-                    ogs_warn("unknown key `%s`", max_key);
+                    log_warn("unknown key `%s`", max_key);
             }
 
             recalculate_pool_size();
@@ -318,7 +318,7 @@ int ogs_app_parse_global_conf(ogs_yaml_iter_t *parent)
             ogs_yaml_iter_recurse(&global_iter, &pool_iter);
             while (ogs_yaml_iter_next(&pool_iter)) {
                 const char *pool_key = ogs_yaml_iter_key(&pool_iter);
-                ogs_assert(pool_key);
+                log_assert(pool_key);
                 if (!strcmp(pool_key, "128")) {
                     const char *v = ogs_yaml_iter_value(&pool_iter);
                     if (v) global_conf.pkbuf_config.cluster_128_pool = atoi(v);
@@ -345,7 +345,7 @@ int ogs_app_parse_global_conf(ogs_yaml_iter_t *parent)
                     const char *v = ogs_yaml_iter_value(&pool_iter);
                     if (v) global_conf.pkbuf_config.cluster_big_pool = atoi(v);
                 } else
-                    ogs_warn("unknown key `%s`", pool_key);
+                    log_warn("unknown key `%s`", pool_key);
             }
         }
     }
@@ -358,7 +358,7 @@ int ogs_app_parse_global_conf(ogs_yaml_iter_t *parent)
 
 static void regenerate_all_timer_duration(void)
 {
-    ogs_assert(local_conf.time.message.duration);
+    log_assert(local_conf.time.message.duration);
 
     local_conf.time.message.sbi.client_wait_duration =
         local_conf.time.message.duration;
@@ -377,7 +377,7 @@ static void regenerate_all_timer_duration(void)
     local_conf.time.message.pfcp.t1_response_duration =
         (local_conf.time.message.duration /
          (local_conf.time.message.pfcp.n1_response_rcount + 1));
-    ogs_assert(local_conf.time.message.pfcp.t1_response_duration);
+    log_assert(local_conf.time.message.pfcp.t1_response_duration);
 
 #define PFCP_N1_HOLDING_RETRY_COUNT 1
     local_conf.time.message.pfcp.n1_holding_rcount =
@@ -385,7 +385,7 @@ static void regenerate_all_timer_duration(void)
     local_conf.time.message.pfcp.t1_holding_duration =
         local_conf.time.message.pfcp.n1_response_rcount *
         local_conf.time.message.pfcp.t1_response_duration;
-    ogs_assert(local_conf.time.message.pfcp.t1_holding_duration);
+    log_assert(local_conf.time.message.pfcp.t1_holding_duration);
 
     local_conf.time.message.pfcp.association_interval =
         ogs_max(ogs_time_from_sec(3),
@@ -403,17 +403,17 @@ static void regenerate_all_timer_duration(void)
     local_conf.time.message.gtp.t3_response_duration =
         (local_conf.time.message.duration /
          (local_conf.time.message.gtp.n3_response_rcount + 1));
-    ogs_assert(local_conf.time.message.gtp.t3_response_duration);
+    log_assert(local_conf.time.message.gtp.t3_response_duration);
 
 #define GTP_N3_HOLDING_RETRY_COUNT 1
     local_conf.time.message.gtp.n3_holding_rcount = GTP_N3_HOLDING_RETRY_COUNT;
     local_conf.time.message.gtp.t3_holding_duration =
         local_conf.time.message.gtp.n3_response_rcount *
         local_conf.time.message.gtp.t3_response_duration;
-    ogs_assert(local_conf.time.message.gtp.t3_holding_duration);
+    log_assert(local_conf.time.message.gtp.t3_holding_duration);
 
 #if 0
-    ogs_trace("%lld, %lld, %lld, %d, %lld, %d %lld, %d, %lld, %d, %lld",
+    log_trace("%lld, %lld, %lld, %d, %lld, %d %lld, %d, %lld, %d, %lld",
         (long long)local_conf.time.message.duration,
         (long long)local_conf.time.message.sbi.client_wait_duration,
         (long long)local_conf.time.message.sbi.connection_deadline,
@@ -425,7 +425,7 @@ static void regenerate_all_timer_duration(void)
         (long long)local_conf.time.message.gtp.t3_response_duration,
         local_conf.time.message.gtp.n3_holding_rcount,
         (long long)local_conf.time.message.gtp.t3_holding_duration);
-    ogs_trace("%lld, %lld, %lld",
+    log_trace("%lld, %lld, %lld",
         (long long)local_conf.time.message.sbi.reconnect_interval,
         (long long)local_conf.time.message.pfcp.association_interval,
         (long long)local_conf.time.message.pfcp.no_heartbeat_duration);
@@ -473,10 +473,10 @@ static int local_conf_prepare(void)
 static int local_conf_validation(void)
 {
     if (local_conf.time.nf_instance.validity_duration == 0) {
-        ogs_error("NF Instance validity-time should not 0");
-        ogs_error("time:");
-        ogs_error("  nf_instance:");
-        ogs_error("    validity: 0");
+        log_error("NF Instance validity-time should not 0");
+        log_error("time:");
+        log_error("  nf_instance:");
+        log_error("    validity: 0");
 
         return OGS_ERROR;
     }
@@ -492,7 +492,7 @@ int ogs_app_parse_local_conf(const char *local)
     int idx = 0;
 
     document = ogs_app()->document;
-    ogs_assert(document);
+    log_assert(document);
 
     rv = local_conf_prepare();
     if (rv != OGS_OK) return rv;
@@ -500,27 +500,27 @@ int ogs_app_parse_local_conf(const char *local)
     ogs_yaml_iter_init(&root_iter, document);
     while (ogs_yaml_iter_next(&root_iter)) {
         const char *root_key = ogs_yaml_iter_key(&root_iter);
-        ogs_assert(root_key);
+        log_assert(root_key);
         if (!strcmp(root_key, local) &&
             (idx++ == ogs_app()->config_section_id)) {
             ogs_yaml_iter_t local_iter;
             ogs_yaml_iter_recurse(&root_iter, &local_iter);
             while (ogs_yaml_iter_next(&local_iter)) {
                 const char *local_key = ogs_yaml_iter_key(&local_iter);
-                ogs_assert(local_key);
+                log_assert(local_key);
                 if (!strcmp(local_key, "serving")) {
                     ogs_yaml_iter_t serving_array, serving_iter;
                     ogs_yaml_iter_recurse(&local_iter, &serving_array);
                     do {
                         const char *mnc = NULL, *mcc = NULL;
-                        ogs_assert(local_conf.num_of_serving_plmn_id <
+                        log_assert(local_conf.num_of_serving_plmn_id <
                                 OGS_MAX_NUM_OF_PLMN);
 
                         OGS_YAML_ARRAY_NEXT(&serving_array, &serving_iter);
                         while (ogs_yaml_iter_next(&serving_iter)) {
                             const char *serving_key =
                                 ogs_yaml_iter_key(&serving_iter);
-                            ogs_assert(serving_key);
+                            log_assert(serving_key);
                             if (!strcmp(serving_key, "plmn_id")) {
                                 ogs_yaml_iter_t plmn_id_iter;
 
@@ -529,7 +529,7 @@ int ogs_app_parse_local_conf(const char *local)
                                 while (ogs_yaml_iter_next(&plmn_id_iter)) {
                                     const char *id_key =
                                         ogs_yaml_iter_key(&plmn_id_iter);
-                                    ogs_assert(id_key);
+                                    log_assert(id_key);
                                     if (!strcmp(id_key, "mcc")) {
                                         mcc = ogs_yaml_iter_value(
                                                 &plmn_id_iter);
@@ -547,11 +547,11 @@ int ogs_app_parse_local_conf(const char *local)
                                             atoi(mcc), atoi(mnc), strlen(mnc));
                                     local_conf.num_of_serving_plmn_id++;
                                 } else {
-                                    ogs_error("Invalid [MCC:%s, MNC:%s]",
+                                    log_error("Invalid [MCC:%s, MNC:%s]",
                                             mcc, mnc);
                                 }
                             } else
-                                ogs_warn("unknown key `%s`", serving_key);
+                                log_warn("unknown key `%s`", serving_key);
                         }
                     } while (ogs_yaml_iter_type(&serving_array) ==
                             YAML_SEQUENCE_NODE);
@@ -560,7 +560,7 @@ int ogs_app_parse_local_conf(const char *local)
                     ogs_yaml_iter_recurse(&local_iter, &time_iter);
                     while (ogs_yaml_iter_next(&time_iter)) {
                         const char *time_key = ogs_yaml_iter_key(&time_iter);
-                        ogs_assert(time_key);
+                        log_assert(time_key);
                         if (!strcmp(time_key, "nf_instance")) {
                             ogs_yaml_iter_t sbi_iter;
                             ogs_yaml_iter_recurse(&time_iter, &sbi_iter);
@@ -568,7 +568,7 @@ int ogs_app_parse_local_conf(const char *local)
                             while (ogs_yaml_iter_next(&sbi_iter)) {
                                 const char *sbi_key =
                                     ogs_yaml_iter_key(&sbi_iter);
-                                ogs_assert(sbi_key);
+                                log_assert(sbi_key);
 
                                 if (!strcmp(sbi_key, "heartbeat")) {
                                     const char *v = ogs_yaml_iter_value(
@@ -583,7 +583,7 @@ int ogs_app_parse_local_conf(const char *local)
                                         local_conf.time.nf_instance.
                                             validity_duration = atoi(v);
                                 } else
-                                    ogs_warn("unknown key `%s`", sbi_key);
+                                    log_warn("unknown key `%s`", sbi_key);
                             }
                         } else if (!strcmp(time_key, "subscription")) {
                             ogs_yaml_iter_t sbi_iter;
@@ -592,7 +592,7 @@ int ogs_app_parse_local_conf(const char *local)
                             while (ogs_yaml_iter_next(&sbi_iter)) {
                                 const char *sbi_key =
                                     ogs_yaml_iter_key(&sbi_iter);
-                                ogs_assert(sbi_key);
+                                log_assert(sbi_key);
 
                                 if (!strcmp(sbi_key, "validity")) {
                                     const char *v =
@@ -601,7 +601,7 @@ int ogs_app_parse_local_conf(const char *local)
                                         local_conf.time.subscription.
                                             validity_duration = atoi(v);
                                 } else
-                                    ogs_warn("unknown key `%s`", sbi_key);
+                                    log_warn("unknown key `%s`", sbi_key);
                             }
                         } else if (!strcmp(time_key, "message")) {
                             ogs_yaml_iter_t msg_iter;
@@ -610,7 +610,7 @@ int ogs_app_parse_local_conf(const char *local)
                             while (ogs_yaml_iter_next(&msg_iter)) {
                                 const char *msg_key =
                                     ogs_yaml_iter_key(&msg_iter);
-                                ogs_assert(msg_key);
+                                log_assert(msg_key);
 
                                 if (!strcmp(msg_key, "duration")) {
                                     const char *v =
@@ -621,7 +621,7 @@ int ogs_app_parse_local_conf(const char *local)
                                         regenerate_all_timer_duration();
                                     }
                                 } else
-                                    ogs_warn("unknown key `%s`", msg_key);
+                                    log_warn("unknown key `%s`", msg_key);
                             }
                         } else if (!strcmp(time_key, "handover")) {
                             ogs_yaml_iter_t msg_iter;
@@ -630,7 +630,7 @@ int ogs_app_parse_local_conf(const char *local)
                             while (ogs_yaml_iter_next(&msg_iter)) {
                                 const char *msg_key =
                                     ogs_yaml_iter_key(&msg_iter);
-                                ogs_assert(msg_key);
+                                log_assert(msg_key);
 
                                 if (!strcmp(msg_key, "duration")) {
                                     const char *v =
@@ -640,7 +640,7 @@ int ogs_app_parse_local_conf(const char *local)
                                             ogs_time_from_msec(atoll(v));
                                     }
                                 } else
-                                    ogs_warn("unknown key `%s`", msg_key);
+                                    log_warn("unknown key `%s`", msg_key);
                             }
                         } else if (!strcmp(time_key, "t3502")) {
                             /* handle config in amf */
@@ -653,7 +653,7 @@ int ogs_app_parse_local_conf(const char *local)
                         } else if (!strcmp(time_key, "t3423")) {
                             /* handle config in mme */
                         } else
-                            ogs_warn("unknown key `%s`", time_key);
+                            log_warn("unknown key `%s`", time_key);
                     }
                 }
             }
@@ -671,15 +671,15 @@ int ogs_app_parse_sockopt_config(
 {
     ogs_yaml_iter_t sockopt_iter;
 
-    ogs_assert(parent);
-    ogs_assert(option);
+    log_assert(parent);
+    log_assert(option);
 
     ogs_sockopt_init(option);
 
     ogs_yaml_iter_recurse(parent, &sockopt_iter);
     while (ogs_yaml_iter_next(&sockopt_iter)) {
         const char *sockopt_key = ogs_yaml_iter_key(&sockopt_iter);
-        ogs_assert(sockopt_key);
+        log_assert(sockopt_key);
 
         if (!strcmp(sockopt_key, "sctp")) {
             ogs_yaml_iter_t sctp_iter;
@@ -687,7 +687,7 @@ int ogs_app_parse_sockopt_config(
 
             while (ogs_yaml_iter_next(&sctp_iter)) {
                 const char *sctp_key = ogs_yaml_iter_key(&sctp_iter);
-                ogs_assert(sctp_key);
+                log_assert(sctp_key);
                 if (!strcmp(sctp_key, "spp_hbinterval")) {
                     const char *v = ogs_yaml_iter_value(&sctp_iter);
                     if (v) option->sctp.spp_hbinterval = atoi(v);
@@ -716,7 +716,7 @@ int ogs_app_parse_sockopt_config(
                     const char *v = ogs_yaml_iter_value(&sctp_iter);
                     if (v) option->sctp.sinit_max_init_timeo = atoi(v);
                 } else {
-                    ogs_error("unknown key `%s`", sctp_key);
+                    log_error("unknown key `%s`", sctp_key);
                     return OGS_ERROR;
                 }
             }
@@ -731,7 +731,7 @@ int ogs_app_parse_sockopt_config(
 
             while (ogs_yaml_iter_next(&so_linger_iter)) {
                 const char *so_linger_key = ogs_yaml_iter_key(&so_linger_iter);
-                ogs_assert(so_linger_key);
+                log_assert(so_linger_key);
                 if (!strcmp(so_linger_key, "l_onoff")) {
                     option->so_linger.l_onoff =
                         ogs_yaml_iter_bool(&so_linger_iter);
@@ -739,7 +739,7 @@ int ogs_app_parse_sockopt_config(
                     const char *v = ogs_yaml_iter_value(&so_linger_iter);
                     if (v) option->so_linger.l_linger = atoi(v);
                 } else {
-                    ogs_error("unknown key `%s`", so_linger_key);
+                    log_error("unknown key `%s`", so_linger_key);
                     return OGS_ERROR;
                 }
             }
@@ -748,7 +748,7 @@ int ogs_app_parse_sockopt_config(
             option->so_bindtodevice = ogs_yaml_iter_value(&sockopt_iter);
 
         } else {
-            ogs_error("unknown key `%s`", sockopt_key);
+            log_error("unknown key `%s`", sockopt_key);
             return OGS_ERROR;
         }
     }
@@ -777,14 +777,14 @@ int ogs_app_parse_supi_range_conf(
 {
     ogs_yaml_iter_t range_iter;
 
-    ogs_assert(parent);
-    ogs_assert(supi_range);
+    log_assert(parent);
+    log_assert(supi_range);
 
     memset(supi_range, 0, sizeof(ogs_supi_range_t));
 
     /* Recurse into the supi_range array node */
     ogs_yaml_iter_recurse(parent, &range_iter);
-    ogs_assert(ogs_yaml_iter_type(&range_iter) != YAML_MAPPING_NODE);
+    log_assert(ogs_yaml_iter_type(&range_iter) != YAML_MAPPING_NODE);
 
     do {
         char *v = NULL;
@@ -798,18 +798,18 @@ int ogs_app_parse_supi_range_conf(
         v = (char *)ogs_yaml_iter_value(&range_iter);
 
         if (v) {
-            ogs_assert(supi_range->num < OGS_MAX_NUM_OF_SUPI_RANGE);
+            log_assert(supi_range->num < OGS_MAX_NUM_OF_SUPI_RANGE);
 
             /* Split the string on '-' */
             start_str = strsep(&v, "-");
             if (start_str == NULL || strlen(start_str) == 0) {
-                ogs_error("Invalid supi_range starter bound: %s", v);
+                log_error("Invalid supi_range starter bound: %s", v);
                 return OGS_ERROR;
             }
 
             end_str = v;
             if (end_str == NULL || strlen(end_str) == 0) {
-                ogs_error("Invalid supi_range upper bound: %s", v);
+                log_error("Invalid supi_range upper bound: %s", v);
                 return OGS_ERROR;
             }
 
@@ -830,14 +830,14 @@ static int parse_br_conf(ogs_yaml_iter_t *parent, ogs_bitrate_t *br)
 {
     ogs_yaml_iter_t br_iter;
 
-    ogs_assert(parent);
-    ogs_assert(br);
+    log_assert(parent);
+    log_assert(br);
 
     ogs_yaml_iter_recurse(parent, &br_iter);
 
     while (ogs_yaml_iter_next(&br_iter)) {
         const char *br_key = ogs_yaml_iter_key(&br_iter);
-        ogs_assert(br_key);
+        log_assert(br_key);
         if (!strcmp(br_key, OGS_DOWNLINK_STRING)) {
             uint8_t unit = 0;
             int n;
@@ -848,7 +848,7 @@ static int parse_br_conf(ogs_yaml_iter_t *parent, ogs_bitrate_t *br)
             while (ogs_yaml_iter_next(&downlink_iter)) {
                 const char *downlink_key =
                     ogs_yaml_iter_key(&downlink_iter);
-                ogs_assert(downlink_key);
+                log_assert(downlink_key);
                 if (!strcmp(downlink_key, OGS_VALUE_STRING)) {
                     const char *v = ogs_yaml_iter_value(&downlink_iter);
                     if (v) br->downlink = atoi(v);
@@ -859,12 +859,12 @@ static int parse_br_conf(ogs_yaml_iter_t *parent, ogs_bitrate_t *br)
                         if (unit == 0 || unit == 1 || unit == 2 ||
                             unit == 3 || unit == 4) {
                         } else {
-                            ogs_error("Unknown Unit [%d]", unit);
+                            log_error("Unknown Unit [%d]", unit);
                             return OGS_ERROR;
                         }
                     }
                 } else
-                    ogs_warn("unknown key `%s`", downlink_key);
+                    log_warn("unknown key `%s`", downlink_key);
             }
 
             for (n = 0; n < unit; n++)
@@ -879,7 +879,7 @@ static int parse_br_conf(ogs_yaml_iter_t *parent, ogs_bitrate_t *br)
             while (ogs_yaml_iter_next(&uplink_iter)) {
                 const char *uplink_key =
                     ogs_yaml_iter_key(&uplink_iter);
-                ogs_assert(uplink_key);
+                log_assert(uplink_key);
                 if (!strcmp(uplink_key, OGS_VALUE_STRING)) {
                     const char *v = ogs_yaml_iter_value(&uplink_iter);
                     if (v) br->uplink = atoi(v);
@@ -890,18 +890,18 @@ static int parse_br_conf(ogs_yaml_iter_t *parent, ogs_bitrate_t *br)
                         if (unit == 0 || unit == 1 || unit == 2 ||
                             unit == 3 || unit == 4) {
                         } else {
-                            ogs_error("Unknown Unit [%d]", unit);
+                            log_error("Unknown Unit [%d]", unit);
                             return OGS_ERROR;
                         }
                     }
                 } else
-                    ogs_warn("unknown key `%s`", uplink_key);
+                    log_warn("unknown key `%s`", uplink_key);
             }
 
             for (n = 0; n < unit; n++)
                 br->uplink *= 1000;
         } else
-            ogs_warn("unknown key `%s`", br_key);
+            log_warn("unknown key `%s`", br_key);
     }
 
     return OGS_OK;
@@ -912,13 +912,13 @@ static int parse_qos_conf(ogs_yaml_iter_t *parent, ogs_qos_t *qos)
     int rv;
     ogs_yaml_iter_t qos_iter;
 
-    ogs_assert(parent);
-    ogs_assert(qos);
+    log_assert(parent);
+    log_assert(qos);
 
     ogs_yaml_iter_recurse(parent, &qos_iter);
     while (ogs_yaml_iter_next(&qos_iter)) {
         const char *qos_key = ogs_yaml_iter_key(&qos_iter);
-        ogs_assert(qos_key);
+        log_assert(qos_key);
         if (!strcmp(qos_key, OGS_INDEX_STRING)) {
             const char *v = ogs_yaml_iter_value(&qos_iter);
             if (v) {
@@ -932,7 +932,7 @@ static int parse_qos_conf(ogs_yaml_iter_t *parent, ogs_qos_t *qos)
                     index == 84 || index == 85 || index == 86)
                     qos->index = index;
                 else {
-                    ogs_error("Unknown QCI [%d]", index);
+                    log_error("Unknown QCI [%d]", index);
                     return OGS_ERROR;
                 }
             }
@@ -941,7 +941,7 @@ static int parse_qos_conf(ogs_yaml_iter_t *parent, ogs_qos_t *qos)
             ogs_yaml_iter_recurse(&qos_iter, &arp_iter);
             while (ogs_yaml_iter_next(&arp_iter)) {
                 const char *arp_key = ogs_yaml_iter_key(&arp_iter);
-                ogs_assert(arp_key);
+                log_assert(arp_key);
                 if (!strcmp(arp_key, OGS_PRIORITY_LEVEL_STRING)) {
                     const char *v = ogs_yaml_iter_value(&arp_iter);
                     if (v) {
@@ -949,7 +949,7 @@ static int parse_qos_conf(ogs_yaml_iter_t *parent, ogs_qos_t *qos)
                         if (priority_level >= 1 && priority_level <= 15)
                             qos->arp.priority_level = priority_level;
                         else {
-                            ogs_error("Unknown Priority Level [%d]",
+                            log_error("Unknown Priority Level [%d]",
                                     priority_level);
                             return OGS_ERROR;
                         }
@@ -966,7 +966,7 @@ static int parse_qos_conf(ogs_yaml_iter_t *parent, ogs_qos_t *qos)
                             qos->arp.pre_emption_capability =
                                 pre_emption_capability;
                         else {
-                            ogs_error("Unknown Preemption Capability [%d]",
+                            log_error("Unknown Preemption Capability [%d]",
                                     pre_emption_capability);
                             return OGS_ERROR;
                         }
@@ -983,24 +983,24 @@ static int parse_qos_conf(ogs_yaml_iter_t *parent, ogs_qos_t *qos)
                             qos->arp.pre_emption_vulnerability =
                                 pre_emption_vulnerability;
                         else {
-                            ogs_error("Unknown Preemption Vulnerablility [%d]",
+                            log_error("Unknown Preemption Vulnerablility [%d]",
                                     pre_emption_vulnerability);
                             return OGS_ERROR;
                         }
                     }
                 } else
-                    ogs_warn("unknown key `%s`", arp_key);
+                    log_warn("unknown key `%s`", arp_key);
             }
         } else if (!strcmp(qos_key, OGS_MBR_STRING)) {
             rv = parse_br_conf(&qos_iter, &qos->mbr);
             if (rv != OGS_OK) {
-                ogs_error("parse_br_conf() failed");
+                log_error("parse_br_conf() failed");
                 return rv;
             }
         } else if (!strcmp(qos_key, OGS_GBR_STRING)) {
             rv = parse_br_conf(&qos_iter, &qos->gbr);
             if (rv != OGS_OK) {
-                ogs_error("parse_br_conf() failed");
+                log_error("parse_br_conf() failed");
                 return rv;
             }
         }
@@ -1011,7 +1011,7 @@ static int parse_qos_conf(ogs_yaml_iter_t *parent, ogs_qos_t *qos)
 
 static int session_conf_prepare(ogs_app_slice_conf_t *slice_conf)
 {
-    ogs_assert(slice_conf);
+    log_assert(slice_conf);
     return OGS_OK;
 }
 
@@ -1019,56 +1019,56 @@ static int session_conf_validation(ogs_app_slice_conf_t *slice_conf)
 {
     int rv, j, k;
     ogs_app_session_conf_t *session_conf = NULL;
-    ogs_assert(slice_conf);
+    log_assert(slice_conf);
 
     ogs_list_for_each(&slice_conf->sess_list, session_conf) {
         ogs_session_data_t *session_data = &session_conf->data;
 
-        ogs_info("NAME[%s]", session_data->session.name);
-        ogs_info("QCI[%d]", session_data->session.qos.index);
-        ogs_info("ARP[%d:%d:%d]",
+        log_info("NAME[%s]", session_data->session.name);
+        log_info("QCI[%d]", session_data->session.qos.index);
+        log_info("ARP[%d:%d:%d]",
                 session_data->session.qos.arp.priority_level,
                 session_data->session.qos.arp.pre_emption_capability,
                 session_data->session.qos.arp.pre_emption_vulnerability);
-        ogs_info("AMBR[Downlink:%lld:Uplink:%lld]",
+        log_info("AMBR[Downlink:%lld:Uplink:%lld]",
                 (long long)session_data->session.ambr.downlink,
                 (long long)session_data->session.ambr.uplink);
         for (j = 0; j < session_data->num_of_pcc_rule; j++) {
-            ogs_info("PCC_RULE[%d]", j+1);
-            ogs_info("  ID[%s]", session_data->pcc_rule[j].id);
-            ogs_info("  NAME[%s]", session_data->pcc_rule[j].name);
-            ogs_info("  QCI[%d]", session_data->pcc_rule[j].qos.index);
-            ogs_info("  ARP[%d:%d:%d]",
+            log_info("PCC_RULE[%d]", j+1);
+            log_info("  ID[%s]", session_data->pcc_rule[j].id);
+            log_info("  NAME[%s]", session_data->pcc_rule[j].name);
+            log_info("  QCI[%d]", session_data->pcc_rule[j].qos.index);
+            log_info("  ARP[%d:%d:%d]",
                     session_data->pcc_rule[j].qos.arp.priority_level,
                     session_data->pcc_rule[j].qos.arp.
                     pre_emption_capability,
                     session_data->pcc_rule[j].qos.arp.
                     pre_emption_vulnerability);
-            ogs_info("  MBR[Downlink:%lld:Uplink:%lld]",
+            log_info("  MBR[Downlink:%lld:Uplink:%lld]",
                     (long long)session_data->pcc_rule[j].qos.mbr.downlink,
                     (long long)session_data->pcc_rule[j].qos.mbr.uplink);
-            ogs_info("  GBR[Downlink:%lld:Uplink:%lld]",
+            log_info("  GBR[Downlink:%lld:Uplink:%lld]",
                     (long long)session_data->pcc_rule[j].qos.gbr.downlink,
                     (long long)session_data->pcc_rule[j].qos.gbr.uplink);
-            ogs_info("  NUM_OF_FLOW [%d]",
+            log_info("  NUM_OF_FLOW [%d]",
                 session_data->pcc_rule[j].num_of_flow);
 
             for (k = 0; k < session_data->pcc_rule[j].num_of_flow; k++) {
-                ogs_info("    DIRECTION[%d]",
+                log_info("    DIRECTION[%d]",
                         session_data->pcc_rule[j].flow[k].direction);
-                ogs_info("    DESCRIPTION[%s]",
+                log_info("    DESCRIPTION[%s]",
                         session_data->pcc_rule[j].flow[k].description);
             }
         }
 
         rv = ogs_check_br_conf(&session_data->session.ambr);
         if (rv != OGS_OK) {
-            ogs_error("check_br_conf(AMBR) failed");
+            log_error("check_br_conf(AMBR) failed");
             return rv;
         }
         rv = ogs_check_qos_conf(&session_data->session.qos);
         if (rv != OGS_OK) {
-            ogs_error("check_qos_conf(SESS) failed");
+            log_error("check_qos_conf(SESS) failed");
             return rv;
         }
     }
@@ -1082,8 +1082,8 @@ int ogs_app_parse_session_conf(
     int rv;
     ogs_yaml_iter_t session_array, session_iter;
 
-    ogs_assert(parent);
-    ogs_assert(slice_conf);
+    log_assert(parent);
+    log_assert(slice_conf);
 
     rv = session_conf_prepare(slice_conf);
     if (rv != OGS_OK) return rv;
@@ -1097,7 +1097,7 @@ int ogs_app_parse_session_conf(
         OGS_YAML_ARRAY_NEXT(&session_array, &session_iter);
         while (ogs_yaml_iter_next(&session_iter)) {
             const char *session_key = ogs_yaml_iter_key(&session_iter);
-            ogs_assert(session_key);
+            log_assert(session_key);
             if (!strcmp(session_key, OGS_NAME_STRING)) {
                 name = (char *)ogs_yaml_iter_value(&session_iter);
             }
@@ -1106,11 +1106,11 @@ int ogs_app_parse_session_conf(
         if (name) {
             session_conf = ogs_app_session_conf_add(slice_conf, (char *)name);
             if (!session_conf) {
-                ogs_error("ogs_app_session_conf_add() failed [DNN:%s]", name);
+                log_error("ogs_app_session_conf_add() failed [DNN:%s]", name);
                 return OGS_ERROR;
             }
         } else {
-            ogs_error("No APN/DNN");
+            log_error("No APN/DNN");
             return OGS_ERROR;
         }
 
@@ -1118,7 +1118,7 @@ int ogs_app_parse_session_conf(
         OGS_YAML_ARRAY_RECURSE(&session_array, &session_iter);
         while (ogs_yaml_iter_next(&session_iter)) {
             const char *session_key = ogs_yaml_iter_key(&session_iter);
-            ogs_assert(session_key);
+            log_assert(session_key);
             if (!strcmp(session_key, OGS_TYPE_STRING)) {
                 const char *v = ogs_yaml_iter_value(&session_iter);
                 if (v) {
@@ -1130,20 +1130,20 @@ int ogs_app_parse_session_conf(
                         session_type == OGS_PDU_SESSION_TYPE_ETHERNET)
                         session_data->session.session_type = session_type;
                     else {
-                        ogs_error("Unknown Session Type [%d]", session_type);
+                        log_error("Unknown Session Type [%d]", session_type);
                         return OGS_ERROR;
                     }
                 }
             } else if (!strcmp(session_key, OGS_AMBR_STRING)) {
                 rv = parse_br_conf(&session_iter, &session_data->session.ambr);
                 if (rv != OGS_OK) {
-                    ogs_error("parse_qos_conf() failed");
+                    log_error("parse_qos_conf() failed");
                     return rv;
                 }
             } else if (!strcmp(session_key, OGS_QOS_STRING)) {
                 rv = parse_qos_conf(&session_iter, &session_data->session.qos);
                 if (rv != OGS_OK) {
-                    ogs_error("parse_qos_conf() failed");
+                    log_error("parse_qos_conf() failed");
                     return rv;
                 }
             } else if (!strcmp(session_key, OGS_PCC_RULE_STRING)) {
@@ -1153,7 +1153,7 @@ int ogs_app_parse_session_conf(
                 do {
                     ogs_pcc_rule_t *pcc_rule = NULL;
 
-                    ogs_assert(session_data->num_of_pcc_rule <
+                    log_assert(session_data->num_of_pcc_rule <
                             OGS_MAX_NUM_OF_PCC_RULE);
                     pcc_rule = &session_data->
                         pcc_rule[session_data->num_of_pcc_rule];
@@ -1162,11 +1162,11 @@ int ogs_app_parse_session_conf(
                     while (ogs_yaml_iter_next(&pcc_rule_iter)) {
                         const char *pcc_rule_key =
                             ogs_yaml_iter_key(&pcc_rule_iter);
-                        ogs_assert(pcc_rule_key);
+                        log_assert(pcc_rule_key);
                         if (!strcmp(pcc_rule_key, OGS_QOS_STRING)) {
                             rv = parse_qos_conf(&pcc_rule_iter, &pcc_rule->qos);
                             if (rv != OGS_OK) {
-                                ogs_error("parse_qos_conf() failed");
+                                log_error("parse_qos_conf() failed");
                                 return rv;
                             }
                         } else if (!strcmp(pcc_rule_key, OGS_FLOW_STRING)) {
@@ -1175,7 +1175,7 @@ int ogs_app_parse_session_conf(
                             do {
                                 ogs_flow_t *flow = NULL;
 
-                                ogs_assert(pcc_rule->num_of_flow <
+                                log_assert(pcc_rule->num_of_flow <
                                         OGS_MAX_NUM_OF_FLOW_IN_PCC_RULE);
                                 flow = &pcc_rule->flow[pcc_rule->num_of_flow];
 
@@ -1183,7 +1183,7 @@ int ogs_app_parse_session_conf(
                                 while (ogs_yaml_iter_next(&flow_iter)) {
                                     const char *flow_key =
                                         ogs_yaml_iter_key(&flow_iter);
-                                    ogs_assert(flow_key);
+                                    log_assert(flow_key);
                                     if (!strcmp(flow_key,
                                                 OGS_DIRECTION_STRING)) {
                                         const char *v =
@@ -1196,7 +1196,7 @@ int ogs_app_parse_session_conf(
                                                 OGS_FLOW_UPLINK_ONLY)
                                                 flow->direction = direction;
                                             else {
-                                                ogs_error(
+                                                log_error(
                                                     "Unknown Direction [%d]",
                                                     direction);
                                                 return OGS_ERROR;
@@ -1209,7 +1209,7 @@ int ogs_app_parse_session_conf(
                                                     &flow_iter);
                                         if (v) {
                                             flow->description = ogs_strdup(v);
-                                            ogs_assert(flow->description);
+                                            log_assert(flow->description);
                                         }
                                     }
                                 }
@@ -1221,7 +1221,7 @@ int ogs_app_parse_session_conf(
                                     YAML_SEQUENCE_NODE);
 
                         } else
-                            ogs_warn("unknown key `%s`", pcc_rule_key);
+                            log_warn("unknown key `%s`", pcc_rule_key);
                     }
 
                     if (pcc_rule->qos.index &&
@@ -1230,23 +1230,23 @@ int ogs_app_parse_session_conf(
                         pcc_rule->qos.arp.pre_emption_vulnerability) {
 
                         /* EPC: Charing-Rule-Name */
-                        ogs_assert(!pcc_rule->name);
+                        log_assert(!pcc_rule->name);
                         pcc_rule->name = ogs_msprintf("%s-g%d",
                                 session_data->session.name, pcc_rule_index+1);
-                        ogs_assert(pcc_rule->name);
+                        log_assert(pcc_rule->name);
 
                         /* 5GC: PCC-Rule-Id */
-                        ogs_assert(!pcc_rule->id);
+                        log_assert(!pcc_rule->id);
                         pcc_rule->id = ogs_msprintf("%s-n%d",
                                 session_data->session.name, pcc_rule_index+1);
-                        ogs_assert(pcc_rule->id);
+                        log_assert(pcc_rule->id);
 
                         pcc_rule->precedence = pcc_rule_index+1;
                         pcc_rule_index++;
 
                         session_data->num_of_pcc_rule++;
                     } else
-                        ogs_warn("Mandatory is MISSING - "
+                        log_warn("Mandatory is MISSING - "
                                 "QCI[%d], ARP[%d:%d:%d]",
                             pcc_rule->qos.index,
                             pcc_rule->qos.arp.priority_level,
@@ -1273,11 +1273,11 @@ ogs_app_policy_conf_t *ogs_app_policy_conf_add(
 {
     ogs_app_policy_conf_t *policy_conf = NULL;
 
-    ogs_assert(supi_range || plmn_id);
+    log_assert(supi_range || plmn_id);
 
     ogs_pool_alloc(&policy_conf_pool, &policy_conf);
     if (!policy_conf) {
-        ogs_error("Maximum number of policy_conf[%d] reached",
+        log_error("Maximum number of policy_conf[%d] reached",
                 OGS_MAX_NUM_OF_PLMN);
         return NULL;
     }
@@ -1288,9 +1288,9 @@ ogs_app_policy_conf_t *ogs_app_policy_conf_add(
 
         memcpy(&policy_conf->supi_range, supi_range, sizeof(ogs_supi_range_t));
 
-        ogs_info("SUPI[%d]", policy_conf->supi_range.num);
+        log_info("SUPI[%d]", policy_conf->supi_range.num);
         for (i = 0; i < policy_conf->supi_range.num; i++)
-            ogs_info("    START[%lld]-END[%lld]",
+            log_info("    START[%lld]-END[%lld]",
                     (long long)policy_conf->supi_range.start[i],
                     (long long)policy_conf->supi_range.end[i]);
 
@@ -1298,7 +1298,7 @@ ogs_app_policy_conf_t *ogs_app_policy_conf_add(
     if (plmn_id) {
         policy_conf->plmn_id_valid = true;
         memcpy(&policy_conf->plmn_id, plmn_id, sizeof(ogs_plmn_id_t));
-        ogs_info("PLMN_ID[MCC:%03d.MNC:%03d]",
+        log_info("PLMN_ID[MCC:%03d.MNC:%03d]",
                 ogs_plmn_id_mcc(&policy_conf->plmn_id),
                 ogs_plmn_id_mnc(&policy_conf->plmn_id));
     }
@@ -1307,7 +1307,7 @@ ogs_app_policy_conf_t *ogs_app_policy_conf_add(
 
     ogs_list_add(&local_conf.policy_list, policy_conf);
 
-    ogs_info("POLICY config added [%d]",
+    log_info("POLICY config added [%d]",
             ogs_list_count(&local_conf.policy_list));
     return policy_conf;
 }
@@ -1322,12 +1322,12 @@ ogs_app_policy_conf_t *ogs_app_policy_conf_find(
     char *supi_id = NULL;
     uint64_t supi_decimal;
 
-    ogs_assert(supi);
+    log_assert(supi);
 
     supi_type = ogs_id_get_type(supi);
-    ogs_assert(supi_type);
+    log_assert(supi_type);
     supi_id = ogs_id_get_value(supi);
-    ogs_assert(supi_id);
+    log_assert(supi_id);
 
     supi_decimal = ogs_uint64_from_string_decimal(supi_id);
 
@@ -1369,7 +1369,7 @@ ogs_app_policy_conf_t *ogs_app_policy_conf_find(
 }
 void ogs_app_policy_conf_remove(ogs_app_policy_conf_t *policy_conf)
 {
-    ogs_assert(policy_conf);
+    log_assert(policy_conf);
 
     ogs_list_remove(&local_conf.policy_list, policy_conf);
 
@@ -1377,7 +1377,7 @@ void ogs_app_policy_conf_remove(ogs_app_policy_conf_t *policy_conf)
 
     ogs_pool_free(&policy_conf_pool, policy_conf);
 
-    ogs_info("POLICY config removed [%d]",
+    log_info("POLICY config removed [%d]",
             ogs_list_count(&local_conf.policy_list));
 }
 void ogs_app_policy_conf_remove_all(void)
@@ -1393,12 +1393,12 @@ ogs_app_slice_conf_t *ogs_app_slice_conf_add(
 {
     ogs_app_slice_conf_t *slice_conf = NULL;
 
-    ogs_assert(policy_conf);
-    ogs_assert(s_nssai);
+    log_assert(policy_conf);
+    log_assert(s_nssai);
 
     ogs_pool_alloc(&slice_conf_pool, &slice_conf);
     if (!slice_conf) {
-        ogs_error("Maximum number of slice_conf[%d] reached",
+        log_error("Maximum number of slice_conf[%d] reached",
                 OGS_MAX_NUM_OF_SLICE);
         return NULL;
     }
@@ -1413,7 +1413,7 @@ ogs_app_slice_conf_t *ogs_app_slice_conf_add(
 
     slice_conf->policy_conf = policy_conf;
 
-    ogs_info("SLICE config added [%d]",
+    log_info("SLICE config added [%d]",
             ogs_list_count(&policy_conf->slice_list));
     return slice_conf;
 }
@@ -1423,8 +1423,8 @@ ogs_app_slice_conf_t *ogs_app_slice_conf_find_by_s_nssai(
 {
     ogs_app_slice_conf_t *slice_conf = NULL;
 
-    ogs_assert(policy_conf);
-    ogs_assert(s_nssai);
+    log_assert(policy_conf);
+    log_assert(s_nssai);
 
     ogs_list_for_each(&policy_conf->slice_list, slice_conf) {
         if (slice_conf->data.s_nssai.sst == s_nssai->sst &&
@@ -1438,9 +1438,9 @@ void ogs_app_slice_conf_remove(ogs_app_slice_conf_t *slice_conf)
 {
     ogs_app_policy_conf_t *policy_conf = NULL;
 
-    ogs_assert(slice_conf);
+    log_assert(slice_conf);
     policy_conf = slice_conf->policy_conf;
-    ogs_assert(policy_conf);
+    log_assert(policy_conf);
 
     ogs_list_remove(&policy_conf->slice_list, slice_conf);
 
@@ -1448,14 +1448,14 @@ void ogs_app_slice_conf_remove(ogs_app_slice_conf_t *slice_conf)
 
     ogs_pool_free(&slice_conf_pool, slice_conf);
 
-    ogs_info("SLICE config removed [%d]",
+    log_info("SLICE config removed [%d]",
             ogs_list_count(&policy_conf->slice_list));
 }
 void ogs_app_slice_conf_remove_all(ogs_app_policy_conf_t *policy_conf)
 {
     ogs_app_slice_conf_t *slice_conf = NULL, *next_conf = NULL;;
 
-    ogs_assert(policy_conf);
+    log_assert(policy_conf);
 
     ogs_list_for_each_safe(&policy_conf->slice_list, next_conf, slice_conf)
         ogs_app_slice_conf_remove(slice_conf);
@@ -1474,13 +1474,13 @@ int ogs_app_check_policy_conf(void)
                 default_indicator = true;
 
             if (ogs_list_count(&slice_conf->sess_list) == 0) {
-                ogs_error("At least 1 Session is required");
+                log_error("At least 1 Session is required");
                 return OGS_ERROR;
             }
         }
 
         if (default_indicator == false) {
-            ogs_error("At least 1 Default S-NSSAI is required");
+            log_error("At least 1 Default S-NSSAI is required");
             return OGS_ERROR;
         }
     }
@@ -1493,12 +1493,12 @@ ogs_app_session_conf_t *ogs_app_session_conf_add(
 {
     ogs_app_session_conf_t *session_conf = NULL;
 
-    ogs_assert(slice_conf);
-    ogs_assert(name);
+    log_assert(slice_conf);
+    log_assert(name);
 
     ogs_pool_alloc(&session_conf_pool, &session_conf);
     if (!session_conf) {
-        ogs_error("Maximum number of session_conf[%d] reached",
+        log_error("Maximum number of session_conf[%d] reached",
                 OGS_MAX_NUM_OF_SLICE*OGS_MAX_NUM_OF_SESS);
         return NULL;
     }
@@ -1506,7 +1506,7 @@ ogs_app_session_conf_t *ogs_app_session_conf_add(
 
     session_conf->data.session.name = ogs_strdup(name);
     if (!session_conf->data.session.name) {
-        ogs_error("No memory for DNN[%s]", name);
+        log_error("No memory for DNN[%s]", name);
         ogs_pool_free(&session_conf_pool, session_conf);
         return NULL;
     }
@@ -1515,7 +1515,7 @@ ogs_app_session_conf_t *ogs_app_session_conf_add(
 
     session_conf->slice_conf = slice_conf;
 
-    ogs_info("SESSION config added [%d]",
+    log_info("SESSION config added [%d]",
             ogs_list_count(&slice_conf->sess_list));
 
     return session_conf;
@@ -1525,11 +1525,11 @@ ogs_app_session_conf_t *ogs_app_session_conf_find_by_dnn(
 {
     ogs_app_session_conf_t *session_conf = NULL;
 
-    ogs_assert(slice_conf);
-    ogs_assert(name);
+    log_assert(slice_conf);
+    log_assert(name);
 
     ogs_list_for_each(&slice_conf->sess_list, session_conf) {
-        ogs_assert(session_conf->data.session.name);
+        log_assert(session_conf->data.session.name);
         if (strcmp(session_conf->data.session.name, name) == 0)
             break;
     }
@@ -1540,9 +1540,9 @@ void ogs_app_session_conf_remove(ogs_app_session_conf_t *session_conf)
 {
     ogs_app_slice_conf_t *slice_conf = NULL;
 
-    ogs_assert(session_conf);
+    log_assert(session_conf);
     slice_conf = session_conf->slice_conf;
-    ogs_assert(slice_conf);
+    log_assert(slice_conf);
 
     ogs_list_remove(&slice_conf->sess_list, session_conf);
 
@@ -1550,14 +1550,14 @@ void ogs_app_session_conf_remove(ogs_app_session_conf_t *session_conf)
 
     ogs_pool_free(&session_conf_pool, session_conf);
 
-    ogs_info("SESSION config removed [%d]",
+    log_info("SESSION config removed [%d]",
             ogs_list_count(&slice_conf->sess_list));
 }
 void ogs_app_session_conf_remove_all(ogs_app_slice_conf_t *slice_conf)
 {
     ogs_app_session_conf_t *session_conf = NULL, *next_conf = NULL;;
 
-    ogs_assert(slice_conf);
+    log_assert(slice_conf);
 
     ogs_list_for_each_safe(&slice_conf->sess_list, next_conf, session_conf)
         ogs_app_session_conf_remove(session_conf);
@@ -1572,17 +1572,17 @@ int ogs_app_config_session_data(
     ogs_app_slice_conf_t *slice_conf = NULL;
     ogs_app_session_conf_t *session_conf = NULL;
 
-    ogs_assert(supi);
-    ogs_assert(dnn);
-    ogs_assert(session_data);
+    log_assert(supi);
+    log_assert(dnn);
+    log_assert(session_data);
 
     policy_conf = ogs_app_policy_conf_find(supi, plmn_id);
     if (!policy_conf) {
         if (plmn_id)
-            ogs_error("No POLICY [SUPI:%s] [MCC:%03d,MNC:%03d]",
+            log_error("No POLICY [SUPI:%s] [MCC:%03d,MNC:%03d]",
                     supi, ogs_plmn_id_mcc(plmn_id), ogs_plmn_id_mnc(plmn_id));
         else
-            ogs_error("No POLICY [SUPI:%s]", supi);
+            log_error("No POLICY [SUPI:%s]", supi);
 
         return OGS_ERROR;
     }
@@ -1590,20 +1590,20 @@ int ogs_app_config_session_data(
     if (s_nssai) {
         slice_conf = ogs_app_slice_conf_find_by_s_nssai(policy_conf, s_nssai);
         if (!slice_conf) {
-            ogs_error("No SLICE [SST:%d, SD:0x%x]",
+            log_error("No SLICE [SST:%d, SD:0x%x]",
                     s_nssai->sst, s_nssai->sd.v);
             return OGS_ERROR;
         }
     } else {
         slice_conf = ogs_list_first(&policy_conf->slice_list);
         if (!slice_conf) {
-            ogs_error("No default SLICE for EPC");
+            log_error("No default SLICE for EPC");
             return OGS_ERROR;
         }
     }
     session_conf = ogs_app_session_conf_find_by_dnn(slice_conf, dnn);
     if (!session_conf) {
-        ogs_error("No SESSION [%s]", dnn);
+        log_error("No SESSION [%s]", dnn);
         return OGS_ERROR;
     }
 

@@ -11,7 +11,7 @@ OpenAPI_n2_information_transfer_rsp_data_t *OpenAPI_n2_information_transfer_rsp_
 )
 {
     OpenAPI_n2_information_transfer_rsp_data_t *n2_information_transfer_rsp_data_local_var = ogs_malloc(sizeof(OpenAPI_n2_information_transfer_rsp_data_t));
-    ogs_assert(n2_information_transfer_rsp_data_local_var);
+    log_assert(n2_information_transfer_rsp_data_local_var);
 
     n2_information_transfer_rsp_data_local_var->result = result;
     n2_information_transfer_rsp_data_local_var->pws_rsp_data = pws_rsp_data;
@@ -44,36 +44,36 @@ cJSON *OpenAPI_n2_information_transfer_rsp_data_convertToJSON(OpenAPI_n2_informa
     OpenAPI_lnode_t *node = NULL;
 
     if (n2_information_transfer_rsp_data == NULL) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [N2InformationTransferRspData]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [N2InformationTransferRspData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (n2_information_transfer_rsp_data->result == OpenAPI_n2_information_transfer_result_NULL) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [result]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [result]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "result", OpenAPI_n2_information_transfer_result_ToString(n2_information_transfer_rsp_data->result)) == NULL) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [result]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [result]");
         goto end;
     }
 
     if (n2_information_transfer_rsp_data->pws_rsp_data) {
     cJSON *pws_rsp_data_local_JSON = OpenAPI_pws_response_data_convertToJSON(n2_information_transfer_rsp_data->pws_rsp_data);
     if (pws_rsp_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [pws_rsp_data]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [pws_rsp_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "pwsRspData", pws_rsp_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [pws_rsp_data]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [pws_rsp_data]");
         goto end;
     }
     }
 
     if (n2_information_transfer_rsp_data->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", n2_information_transfer_rsp_data->supported_features) == NULL) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -93,11 +93,11 @@ OpenAPI_n2_information_transfer_rsp_data_t *OpenAPI_n2_information_transfer_rsp_
     cJSON *supported_features = NULL;
     result = cJSON_GetObjectItemCaseSensitive(n2_information_transfer_rsp_dataJSON, "result");
     if (!result) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_parseFromJSON() failed [result]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_parseFromJSON() failed [result]");
         goto end;
     }
     if (!cJSON_IsString(result)) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_parseFromJSON() failed [result]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_parseFromJSON() failed [result]");
         goto end;
     }
     resultVariable = OpenAPI_n2_information_transfer_result_FromString(result->valuestring);
@@ -106,7 +106,7 @@ OpenAPI_n2_information_transfer_rsp_data_t *OpenAPI_n2_information_transfer_rsp_
     if (pws_rsp_data) {
     pws_rsp_data_local_nonprim = OpenAPI_pws_response_data_parseFromJSON(pws_rsp_data);
     if (!pws_rsp_data_local_nonprim) {
-        ogs_error("OpenAPI_pws_response_data_parseFromJSON failed [pws_rsp_data]");
+        log_error("OpenAPI_pws_response_data_parseFromJSON failed [pws_rsp_data]");
         goto end;
     }
     }
@@ -114,7 +114,7 @@ OpenAPI_n2_information_transfer_rsp_data_t *OpenAPI_n2_information_transfer_rsp_
     supported_features = cJSON_GetObjectItemCaseSensitive(n2_information_transfer_rsp_dataJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -139,10 +139,10 @@ OpenAPI_n2_information_transfer_rsp_data_t *OpenAPI_n2_information_transfer_rsp_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_n2_information_transfer_rsp_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed");
+        log_error("OpenAPI_n2_information_transfer_rsp_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -150,14 +150,14 @@ OpenAPI_n2_information_transfer_rsp_data_t *OpenAPI_n2_information_transfer_rsp_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

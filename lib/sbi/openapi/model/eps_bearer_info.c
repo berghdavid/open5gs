@@ -11,7 +11,7 @@ OpenAPI_eps_bearer_info_t *OpenAPI_eps_bearer_info_create(
 )
 {
     OpenAPI_eps_bearer_info_t *eps_bearer_info_local_var = ogs_malloc(sizeof(OpenAPI_eps_bearer_info_t));
-    ogs_assert(eps_bearer_info_local_var);
+    log_assert(eps_bearer_info_local_var);
 
     eps_bearer_info_local_var->ebi = ebi;
     eps_bearer_info_local_var->pgw_s8u_fteid = pgw_s8u_fteid;
@@ -44,31 +44,31 @@ cJSON *OpenAPI_eps_bearer_info_convertToJSON(OpenAPI_eps_bearer_info_t *eps_bear
     OpenAPI_lnode_t *node = NULL;
 
     if (eps_bearer_info == NULL) {
-        ogs_error("OpenAPI_eps_bearer_info_convertToJSON() failed [EpsBearerInfo]");
+        log_error("OpenAPI_eps_bearer_info_convertToJSON() failed [EpsBearerInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "ebi", eps_bearer_info->ebi) == NULL) {
-        ogs_error("OpenAPI_eps_bearer_info_convertToJSON() failed [ebi]");
+        log_error("OpenAPI_eps_bearer_info_convertToJSON() failed [ebi]");
         goto end;
     }
 
     if (!eps_bearer_info->pgw_s8u_fteid) {
-        ogs_error("OpenAPI_eps_bearer_info_convertToJSON() failed [pgw_s8u_fteid]");
+        log_error("OpenAPI_eps_bearer_info_convertToJSON() failed [pgw_s8u_fteid]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "pgwS8uFteid", eps_bearer_info->pgw_s8u_fteid) == NULL) {
-        ogs_error("OpenAPI_eps_bearer_info_convertToJSON() failed [pgw_s8u_fteid]");
+        log_error("OpenAPI_eps_bearer_info_convertToJSON() failed [pgw_s8u_fteid]");
         goto end;
     }
 
     if (!eps_bearer_info->bearer_level_qo_s) {
-        ogs_error("OpenAPI_eps_bearer_info_convertToJSON() failed [bearer_level_qo_s]");
+        log_error("OpenAPI_eps_bearer_info_convertToJSON() failed [bearer_level_qo_s]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "bearerLevelQoS", eps_bearer_info->bearer_level_qo_s) == NULL) {
-        ogs_error("OpenAPI_eps_bearer_info_convertToJSON() failed [bearer_level_qo_s]");
+        log_error("OpenAPI_eps_bearer_info_convertToJSON() failed [bearer_level_qo_s]");
         goto end;
     }
 
@@ -85,31 +85,31 @@ OpenAPI_eps_bearer_info_t *OpenAPI_eps_bearer_info_parseFromJSON(cJSON *eps_bear
     cJSON *bearer_level_qo_s = NULL;
     ebi = cJSON_GetObjectItemCaseSensitive(eps_bearer_infoJSON, "ebi");
     if (!ebi) {
-        ogs_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [ebi]");
+        log_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [ebi]");
         goto end;
     }
     if (!cJSON_IsNumber(ebi)) {
-        ogs_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [ebi]");
+        log_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [ebi]");
         goto end;
     }
 
     pgw_s8u_fteid = cJSON_GetObjectItemCaseSensitive(eps_bearer_infoJSON, "pgwS8uFteid");
     if (!pgw_s8u_fteid) {
-        ogs_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [pgw_s8u_fteid]");
+        log_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [pgw_s8u_fteid]");
         goto end;
     }
     if (!cJSON_IsString(pgw_s8u_fteid)) {
-        ogs_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [pgw_s8u_fteid]");
+        log_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [pgw_s8u_fteid]");
         goto end;
     }
 
     bearer_level_qo_s = cJSON_GetObjectItemCaseSensitive(eps_bearer_infoJSON, "bearerLevelQoS");
     if (!bearer_level_qo_s) {
-        ogs_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [bearer_level_qo_s]");
+        log_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [bearer_level_qo_s]");
         goto end;
     }
     if (!cJSON_IsString(bearer_level_qo_s)) {
-        ogs_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [bearer_level_qo_s]");
+        log_error("OpenAPI_eps_bearer_info_parseFromJSON() failed [bearer_level_qo_s]");
         goto end;
     }
 
@@ -130,10 +130,10 @@ OpenAPI_eps_bearer_info_t *OpenAPI_eps_bearer_info_copy(OpenAPI_eps_bearer_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_eps_bearer_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_eps_bearer_info_convertToJSON() failed");
+        log_error("OpenAPI_eps_bearer_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -141,14 +141,14 @@ OpenAPI_eps_bearer_info_t *OpenAPI_eps_bearer_info_copy(OpenAPI_eps_bearer_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

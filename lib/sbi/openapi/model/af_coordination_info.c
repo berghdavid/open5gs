@@ -12,7 +12,7 @@ OpenAPI_af_coordination_info_t *OpenAPI_af_coordination_info_create(
 )
 {
     OpenAPI_af_coordination_info_t *af_coordination_info_local_var = ogs_malloc(sizeof(OpenAPI_af_coordination_info_t));
-    ogs_assert(af_coordination_info_local_var);
+    log_assert(af_coordination_info_local_var);
 
     af_coordination_info_local_var->source_dnai = source_dnai;
     af_coordination_info_local_var->source_ue_ipv4_addr = source_ue_ipv4_addr;
@@ -57,28 +57,28 @@ cJSON *OpenAPI_af_coordination_info_convertToJSON(OpenAPI_af_coordination_info_t
     OpenAPI_lnode_t *node = NULL;
 
     if (af_coordination_info == NULL) {
-        ogs_error("OpenAPI_af_coordination_info_convertToJSON() failed [AfCoordinationInfo]");
+        log_error("OpenAPI_af_coordination_info_convertToJSON() failed [AfCoordinationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (af_coordination_info->source_dnai) {
     if (cJSON_AddStringToObject(item, "sourceDnai", af_coordination_info->source_dnai) == NULL) {
-        ogs_error("OpenAPI_af_coordination_info_convertToJSON() failed [source_dnai]");
+        log_error("OpenAPI_af_coordination_info_convertToJSON() failed [source_dnai]");
         goto end;
     }
     }
 
     if (af_coordination_info->source_ue_ipv4_addr) {
     if (cJSON_AddStringToObject(item, "sourceUeIpv4Addr", af_coordination_info->source_ue_ipv4_addr) == NULL) {
-        ogs_error("OpenAPI_af_coordination_info_convertToJSON() failed [source_ue_ipv4_addr]");
+        log_error("OpenAPI_af_coordination_info_convertToJSON() failed [source_ue_ipv4_addr]");
         goto end;
     }
     }
 
     if (af_coordination_info->source_ue_ipv6_prefix) {
     if (cJSON_AddStringToObject(item, "sourceUeIpv6Prefix", af_coordination_info->source_ue_ipv6_prefix) == NULL) {
-        ogs_error("OpenAPI_af_coordination_info_convertToJSON() failed [source_ue_ipv6_prefix]");
+        log_error("OpenAPI_af_coordination_info_convertToJSON() failed [source_ue_ipv6_prefix]");
         goto end;
     }
     }
@@ -86,13 +86,13 @@ cJSON *OpenAPI_af_coordination_info_convertToJSON(OpenAPI_af_coordination_info_t
     if (af_coordination_info->notification_info_list) {
     cJSON *notification_info_listList = cJSON_AddArrayToObject(item, "notificationInfoList");
     if (notification_info_listList == NULL) {
-        ogs_error("OpenAPI_af_coordination_info_convertToJSON() failed [notification_info_list]");
+        log_error("OpenAPI_af_coordination_info_convertToJSON() failed [notification_info_list]");
         goto end;
     }
     OpenAPI_list_for_each(af_coordination_info->notification_info_list, node) {
         cJSON *itemLocal = OpenAPI_notification_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_af_coordination_info_convertToJSON() failed [notification_info_list]");
+            log_error("OpenAPI_af_coordination_info_convertToJSON() failed [notification_info_list]");
             goto end;
         }
         cJSON_AddItemToArray(notification_info_listList, itemLocal);
@@ -115,7 +115,7 @@ OpenAPI_af_coordination_info_t *OpenAPI_af_coordination_info_parseFromJSON(cJSON
     source_dnai = cJSON_GetObjectItemCaseSensitive(af_coordination_infoJSON, "sourceDnai");
     if (source_dnai) {
     if (!cJSON_IsString(source_dnai) && !cJSON_IsNull(source_dnai)) {
-        ogs_error("OpenAPI_af_coordination_info_parseFromJSON() failed [source_dnai]");
+        log_error("OpenAPI_af_coordination_info_parseFromJSON() failed [source_dnai]");
         goto end;
     }
     }
@@ -123,7 +123,7 @@ OpenAPI_af_coordination_info_t *OpenAPI_af_coordination_info_parseFromJSON(cJSON
     source_ue_ipv4_addr = cJSON_GetObjectItemCaseSensitive(af_coordination_infoJSON, "sourceUeIpv4Addr");
     if (source_ue_ipv4_addr) {
     if (!cJSON_IsString(source_ue_ipv4_addr) && !cJSON_IsNull(source_ue_ipv4_addr)) {
-        ogs_error("OpenAPI_af_coordination_info_parseFromJSON() failed [source_ue_ipv4_addr]");
+        log_error("OpenAPI_af_coordination_info_parseFromJSON() failed [source_ue_ipv4_addr]");
         goto end;
     }
     }
@@ -131,7 +131,7 @@ OpenAPI_af_coordination_info_t *OpenAPI_af_coordination_info_parseFromJSON(cJSON
     source_ue_ipv6_prefix = cJSON_GetObjectItemCaseSensitive(af_coordination_infoJSON, "sourceUeIpv6Prefix");
     if (source_ue_ipv6_prefix) {
     if (!cJSON_IsString(source_ue_ipv6_prefix) && !cJSON_IsNull(source_ue_ipv6_prefix)) {
-        ogs_error("OpenAPI_af_coordination_info_parseFromJSON() failed [source_ue_ipv6_prefix]");
+        log_error("OpenAPI_af_coordination_info_parseFromJSON() failed [source_ue_ipv6_prefix]");
         goto end;
     }
     }
@@ -140,7 +140,7 @@ OpenAPI_af_coordination_info_t *OpenAPI_af_coordination_info_parseFromJSON(cJSON
     if (notification_info_list) {
         cJSON *notification_info_list_local = NULL;
         if (!cJSON_IsArray(notification_info_list)) {
-            ogs_error("OpenAPI_af_coordination_info_parseFromJSON() failed [notification_info_list]");
+            log_error("OpenAPI_af_coordination_info_parseFromJSON() failed [notification_info_list]");
             goto end;
         }
 
@@ -148,12 +148,12 @@ OpenAPI_af_coordination_info_t *OpenAPI_af_coordination_info_parseFromJSON(cJSON
 
         cJSON_ArrayForEach(notification_info_list_local, notification_info_list) {
             if (!cJSON_IsObject(notification_info_list_local)) {
-                ogs_error("OpenAPI_af_coordination_info_parseFromJSON() failed [notification_info_list]");
+                log_error("OpenAPI_af_coordination_info_parseFromJSON() failed [notification_info_list]");
                 goto end;
             }
             OpenAPI_notification_info_t *notification_info_listItem = OpenAPI_notification_info_parseFromJSON(notification_info_list_local);
             if (!notification_info_listItem) {
-                ogs_error("No notification_info_listItem");
+                log_error("No notification_info_listItem");
                 goto end;
             }
             OpenAPI_list_add(notification_info_listList, notification_info_listItem);
@@ -184,10 +184,10 @@ OpenAPI_af_coordination_info_t *OpenAPI_af_coordination_info_copy(OpenAPI_af_coo
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_af_coordination_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_af_coordination_info_convertToJSON() failed");
+        log_error("OpenAPI_af_coordination_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -195,14 +195,14 @@ OpenAPI_af_coordination_info_t *OpenAPI_af_coordination_info_copy(OpenAPI_af_coo
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

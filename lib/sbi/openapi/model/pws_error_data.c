@@ -9,7 +9,7 @@ OpenAPI_pws_error_data_t *OpenAPI_pws_error_data_create(
 )
 {
     OpenAPI_pws_error_data_t *pws_error_data_local_var = ogs_malloc(sizeof(OpenAPI_pws_error_data_t));
-    ogs_assert(pws_error_data_local_var);
+    log_assert(pws_error_data_local_var);
 
     pws_error_data_local_var->namf_cause = namf_cause;
 
@@ -32,13 +32,13 @@ cJSON *OpenAPI_pws_error_data_convertToJSON(OpenAPI_pws_error_data_t *pws_error_
     OpenAPI_lnode_t *node = NULL;
 
     if (pws_error_data == NULL) {
-        ogs_error("OpenAPI_pws_error_data_convertToJSON() failed [PWSErrorData]");
+        log_error("OpenAPI_pws_error_data_convertToJSON() failed [PWSErrorData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "namfCause", pws_error_data->namf_cause) == NULL) {
-        ogs_error("OpenAPI_pws_error_data_convertToJSON() failed [namf_cause]");
+        log_error("OpenAPI_pws_error_data_convertToJSON() failed [namf_cause]");
         goto end;
     }
 
@@ -53,11 +53,11 @@ OpenAPI_pws_error_data_t *OpenAPI_pws_error_data_parseFromJSON(cJSON *pws_error_
     cJSON *namf_cause = NULL;
     namf_cause = cJSON_GetObjectItemCaseSensitive(pws_error_dataJSON, "namfCause");
     if (!namf_cause) {
-        ogs_error("OpenAPI_pws_error_data_parseFromJSON() failed [namf_cause]");
+        log_error("OpenAPI_pws_error_data_parseFromJSON() failed [namf_cause]");
         goto end;
     }
     if (!cJSON_IsNumber(namf_cause)) {
-        ogs_error("OpenAPI_pws_error_data_parseFromJSON() failed [namf_cause]");
+        log_error("OpenAPI_pws_error_data_parseFromJSON() failed [namf_cause]");
         goto end;
     }
 
@@ -76,10 +76,10 @@ OpenAPI_pws_error_data_t *OpenAPI_pws_error_data_copy(OpenAPI_pws_error_data_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pws_error_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pws_error_data_convertToJSON() failed");
+        log_error("OpenAPI_pws_error_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -87,14 +87,14 @@ OpenAPI_pws_error_data_t *OpenAPI_pws_error_data_copy(OpenAPI_pws_error_data_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

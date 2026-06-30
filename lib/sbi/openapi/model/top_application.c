@@ -12,7 +12,7 @@ OpenAPI_top_application_t *OpenAPI_top_application_create(
 )
 {
     OpenAPI_top_application_t *top_application_local_var = ogs_malloc(sizeof(OpenAPI_top_application_t));
-    ogs_assert(top_application_local_var);
+    log_assert(top_application_local_var);
 
     top_application_local_var->app_id = app_id;
     top_application_local_var->ip_traffic_filter = ip_traffic_filter;
@@ -46,14 +46,14 @@ cJSON *OpenAPI_top_application_convertToJSON(OpenAPI_top_application_t *top_appl
     OpenAPI_lnode_t *node = NULL;
 
     if (top_application == NULL) {
-        ogs_error("OpenAPI_top_application_convertToJSON() failed [TopApplication]");
+        log_error("OpenAPI_top_application_convertToJSON() failed [TopApplication]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (top_application->app_id) {
     if (cJSON_AddStringToObject(item, "appId", top_application->app_id) == NULL) {
-        ogs_error("OpenAPI_top_application_convertToJSON() failed [app_id]");
+        log_error("OpenAPI_top_application_convertToJSON() failed [app_id]");
         goto end;
     }
     }
@@ -61,19 +61,19 @@ cJSON *OpenAPI_top_application_convertToJSON(OpenAPI_top_application_t *top_appl
     if (top_application->ip_traffic_filter) {
     cJSON *ip_traffic_filter_local_JSON = OpenAPI_flow_info_convertToJSON(top_application->ip_traffic_filter);
     if (ip_traffic_filter_local_JSON == NULL) {
-        ogs_error("OpenAPI_top_application_convertToJSON() failed [ip_traffic_filter]");
+        log_error("OpenAPI_top_application_convertToJSON() failed [ip_traffic_filter]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ipTrafficFilter", ip_traffic_filter_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_top_application_convertToJSON() failed [ip_traffic_filter]");
+        log_error("OpenAPI_top_application_convertToJSON() failed [ip_traffic_filter]");
         goto end;
     }
     }
 
     if (top_application->is_ratio) {
     if (cJSON_AddNumberToObject(item, "ratio", top_application->ratio) == NULL) {
-        ogs_error("OpenAPI_top_application_convertToJSON() failed [ratio]");
+        log_error("OpenAPI_top_application_convertToJSON() failed [ratio]");
         goto end;
     }
     }
@@ -93,7 +93,7 @@ OpenAPI_top_application_t *OpenAPI_top_application_parseFromJSON(cJSON *top_appl
     app_id = cJSON_GetObjectItemCaseSensitive(top_applicationJSON, "appId");
     if (app_id) {
     if (!cJSON_IsString(app_id) && !cJSON_IsNull(app_id)) {
-        ogs_error("OpenAPI_top_application_parseFromJSON() failed [app_id]");
+        log_error("OpenAPI_top_application_parseFromJSON() failed [app_id]");
         goto end;
     }
     }
@@ -102,7 +102,7 @@ OpenAPI_top_application_t *OpenAPI_top_application_parseFromJSON(cJSON *top_appl
     if (ip_traffic_filter) {
     ip_traffic_filter_local_nonprim = OpenAPI_flow_info_parseFromJSON(ip_traffic_filter);
     if (!ip_traffic_filter_local_nonprim) {
-        ogs_error("OpenAPI_flow_info_parseFromJSON failed [ip_traffic_filter]");
+        log_error("OpenAPI_flow_info_parseFromJSON failed [ip_traffic_filter]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_top_application_t *OpenAPI_top_application_parseFromJSON(cJSON *top_appl
     ratio = cJSON_GetObjectItemCaseSensitive(top_applicationJSON, "ratio");
     if (ratio) {
     if (!cJSON_IsNumber(ratio)) {
-        ogs_error("OpenAPI_top_application_parseFromJSON() failed [ratio]");
+        log_error("OpenAPI_top_application_parseFromJSON() failed [ratio]");
         goto end;
     }
     }
@@ -136,10 +136,10 @@ OpenAPI_top_application_t *OpenAPI_top_application_copy(OpenAPI_top_application_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_top_application_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_top_application_convertToJSON() failed");
+        log_error("OpenAPI_top_application_convertToJSON() failed");
         return NULL;
     }
 
@@ -147,14 +147,14 @@ OpenAPI_top_application_t *OpenAPI_top_application_copy(OpenAPI_top_application_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

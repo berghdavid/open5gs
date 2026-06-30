@@ -15,7 +15,7 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_create(
 )
 {
     OpenAPI_pfd_data_for_app_ext_t *pfd_data_for_app_ext_local_var = ogs_malloc(sizeof(OpenAPI_pfd_data_for_app_ext_t));
-    ogs_assert(pfd_data_for_app_ext_local_var);
+    log_assert(pfd_data_for_app_ext_local_var);
 
     pfd_data_for_app_ext_local_var->application_id = application_id;
     pfd_data_for_app_ext_local_var->pfds = pfds;
@@ -70,33 +70,33 @@ cJSON *OpenAPI_pfd_data_for_app_ext_convertToJSON(OpenAPI_pfd_data_for_app_ext_t
     OpenAPI_lnode_t *node = NULL;
 
     if (pfd_data_for_app_ext == NULL) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [PfdDataForAppExt]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [PfdDataForAppExt]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!pfd_data_for_app_ext->application_id) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [application_id]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [application_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "applicationId", pfd_data_for_app_ext->application_id) == NULL) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [application_id]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [application_id]");
         goto end;
     }
 
     if (!pfd_data_for_app_ext->pfds) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [pfds]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [pfds]");
         return NULL;
     }
     cJSON *pfdsList = cJSON_AddArrayToObject(item, "pfds");
     if (pfdsList == NULL) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [pfds]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [pfds]");
         goto end;
     }
     OpenAPI_list_for_each(pfd_data_for_app_ext->pfds, node) {
         cJSON *itemLocal = OpenAPI_pfd_content_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [pfds]");
+            log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [pfds]");
             goto end;
         }
         cJSON_AddItemToArray(pfdsList, itemLocal);
@@ -104,14 +104,14 @@ cJSON *OpenAPI_pfd_data_for_app_ext_convertToJSON(OpenAPI_pfd_data_for_app_ext_t
 
     if (pfd_data_for_app_ext->caching_time) {
     if (cJSON_AddStringToObject(item, "cachingTime", pfd_data_for_app_ext->caching_time) == NULL) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [caching_time]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [caching_time]");
         goto end;
     }
     }
 
     if (pfd_data_for_app_ext->supp_feat) {
     if (cJSON_AddStringToObject(item, "suppFeat", pfd_data_for_app_ext->supp_feat) == NULL) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [supp_feat]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [supp_feat]");
         goto end;
     }
     }
@@ -119,12 +119,12 @@ cJSON *OpenAPI_pfd_data_for_app_ext_convertToJSON(OpenAPI_pfd_data_for_app_ext_t
     if (pfd_data_for_app_ext->reset_ids) {
     cJSON *reset_idsList = cJSON_AddArrayToObject(item, "resetIds");
     if (reset_idsList == NULL) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [reset_ids]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [reset_ids]");
         goto end;
     }
     OpenAPI_list_for_each(pfd_data_for_app_ext->reset_ids, node) {
         if (cJSON_AddStringToObject(reset_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [reset_ids]");
+            log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [reset_ids]");
             goto end;
         }
     }
@@ -132,7 +132,7 @@ cJSON *OpenAPI_pfd_data_for_app_ext_convertToJSON(OpenAPI_pfd_data_for_app_ext_t
 
     if (pfd_data_for_app_ext->is_allowed_delay) {
     if (cJSON_AddNumberToObject(item, "allowedDelay", pfd_data_for_app_ext->allowed_delay) == NULL) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [allowed_delay]");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed [allowed_delay]");
         goto end;
     }
     }
@@ -155,22 +155,22 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_parseFromJSON(cJSON
     cJSON *allowed_delay = NULL;
     application_id = cJSON_GetObjectItemCaseSensitive(pfd_data_for_app_extJSON, "applicationId");
     if (!application_id) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [application_id]");
+        log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [application_id]");
         goto end;
     }
     if (!cJSON_IsString(application_id)) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [application_id]");
+        log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [application_id]");
         goto end;
     }
 
     pfds = cJSON_GetObjectItemCaseSensitive(pfd_data_for_app_extJSON, "pfds");
     if (!pfds) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [pfds]");
+        log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [pfds]");
         goto end;
     }
         cJSON *pfds_local = NULL;
         if (!cJSON_IsArray(pfds)) {
-            ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [pfds]");
+            log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [pfds]");
             goto end;
         }
 
@@ -178,12 +178,12 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_parseFromJSON(cJSON
 
         cJSON_ArrayForEach(pfds_local, pfds) {
             if (!cJSON_IsObject(pfds_local)) {
-                ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [pfds]");
+                log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [pfds]");
                 goto end;
             }
             OpenAPI_pfd_content_t *pfdsItem = OpenAPI_pfd_content_parseFromJSON(pfds_local);
             if (!pfdsItem) {
-                ogs_error("No pfdsItem");
+                log_error("No pfdsItem");
                 goto end;
             }
             OpenAPI_list_add(pfdsList, pfdsItem);
@@ -192,7 +192,7 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_parseFromJSON(cJSON
     caching_time = cJSON_GetObjectItemCaseSensitive(pfd_data_for_app_extJSON, "cachingTime");
     if (caching_time) {
     if (!cJSON_IsString(caching_time) && !cJSON_IsNull(caching_time)) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [caching_time]");
+        log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [caching_time]");
         goto end;
     }
     }
@@ -200,7 +200,7 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_parseFromJSON(cJSON
     supp_feat = cJSON_GetObjectItemCaseSensitive(pfd_data_for_app_extJSON, "suppFeat");
     if (supp_feat) {
     if (!cJSON_IsString(supp_feat) && !cJSON_IsNull(supp_feat)) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [supp_feat]");
+        log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [supp_feat]");
         goto end;
     }
     }
@@ -209,7 +209,7 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_parseFromJSON(cJSON
     if (reset_ids) {
         cJSON *reset_ids_local = NULL;
         if (!cJSON_IsArray(reset_ids)) {
-            ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [reset_ids]");
+            log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [reset_ids]");
             goto end;
         }
 
@@ -219,7 +219,7 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_parseFromJSON(cJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(reset_ids_local)) {
-                ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [reset_ids]");
+                log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [reset_ids]");
                 goto end;
             }
             OpenAPI_list_add(reset_idsList, ogs_strdup(reset_ids_local->valuestring));
@@ -229,7 +229,7 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_parseFromJSON(cJSON
     allowed_delay = cJSON_GetObjectItemCaseSensitive(pfd_data_for_app_extJSON, "allowedDelay");
     if (allowed_delay) {
     if (!cJSON_IsNumber(allowed_delay)) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [allowed_delay]");
+        log_error("OpenAPI_pfd_data_for_app_ext_parseFromJSON() failed [allowed_delay]");
         goto end;
     }
     }
@@ -268,10 +268,10 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_copy(OpenAPI_pfd_da
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pfd_data_for_app_ext_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed");
+        log_error("OpenAPI_pfd_data_for_app_ext_convertToJSON() failed");
         return NULL;
     }
 
@@ -279,14 +279,14 @@ OpenAPI_pfd_data_for_app_ext_t *OpenAPI_pfd_data_for_app_ext_copy(OpenAPI_pfd_da
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -12,7 +12,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_create(
 )
 {
     OpenAPI_area_scope_t *area_scope_local_var = ogs_malloc(sizeof(OpenAPI_area_scope_t));
-    ogs_assert(area_scope_local_var);
+    log_assert(area_scope_local_var);
 
     area_scope_local_var->eutra_cell_id_list = eutra_cell_id_list;
     area_scope_local_var->nr_cell_id_list = nr_cell_id_list;
@@ -69,7 +69,7 @@ cJSON *OpenAPI_area_scope_convertToJSON(OpenAPI_area_scope_t *area_scope)
     OpenAPI_lnode_t *node = NULL;
 
     if (area_scope == NULL) {
-        ogs_error("OpenAPI_area_scope_convertToJSON() failed [AreaScope]");
+        log_error("OpenAPI_area_scope_convertToJSON() failed [AreaScope]");
         return NULL;
     }
 
@@ -77,12 +77,12 @@ cJSON *OpenAPI_area_scope_convertToJSON(OpenAPI_area_scope_t *area_scope)
     if (area_scope->eutra_cell_id_list) {
     cJSON *eutra_cell_id_listList = cJSON_AddArrayToObject(item, "eutraCellIdList");
     if (eutra_cell_id_listList == NULL) {
-        ogs_error("OpenAPI_area_scope_convertToJSON() failed [eutra_cell_id_list]");
+        log_error("OpenAPI_area_scope_convertToJSON() failed [eutra_cell_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(area_scope->eutra_cell_id_list, node) {
         if (cJSON_AddStringToObject(eutra_cell_id_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_area_scope_convertToJSON() failed [eutra_cell_id_list]");
+            log_error("OpenAPI_area_scope_convertToJSON() failed [eutra_cell_id_list]");
             goto end;
         }
     }
@@ -91,12 +91,12 @@ cJSON *OpenAPI_area_scope_convertToJSON(OpenAPI_area_scope_t *area_scope)
     if (area_scope->nr_cell_id_list) {
     cJSON *nr_cell_id_listList = cJSON_AddArrayToObject(item, "nrCellIdList");
     if (nr_cell_id_listList == NULL) {
-        ogs_error("OpenAPI_area_scope_convertToJSON() failed [nr_cell_id_list]");
+        log_error("OpenAPI_area_scope_convertToJSON() failed [nr_cell_id_list]");
         goto end;
     }
     OpenAPI_list_for_each(area_scope->nr_cell_id_list, node) {
         if (cJSON_AddStringToObject(nr_cell_id_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_area_scope_convertToJSON() failed [nr_cell_id_list]");
+            log_error("OpenAPI_area_scope_convertToJSON() failed [nr_cell_id_list]");
             goto end;
         }
     }
@@ -105,12 +105,12 @@ cJSON *OpenAPI_area_scope_convertToJSON(OpenAPI_area_scope_t *area_scope)
     if (area_scope->tac_list) {
     cJSON *tac_listList = cJSON_AddArrayToObject(item, "tacList");
     if (tac_listList == NULL) {
-        ogs_error("OpenAPI_area_scope_convertToJSON() failed [tac_list]");
+        log_error("OpenAPI_area_scope_convertToJSON() failed [tac_list]");
         goto end;
     }
     OpenAPI_list_for_each(area_scope->tac_list, node) {
         if (cJSON_AddStringToObject(tac_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_area_scope_convertToJSON() failed [tac_list]");
+            log_error("OpenAPI_area_scope_convertToJSON() failed [tac_list]");
             goto end;
         }
     }
@@ -119,7 +119,7 @@ cJSON *OpenAPI_area_scope_convertToJSON(OpenAPI_area_scope_t *area_scope)
     if (area_scope->tac_info_per_plmn) {
     cJSON *tac_info_per_plmn = cJSON_AddObjectToObject(item, "tacInfoPerPlmn");
     if (tac_info_per_plmn == NULL) {
-        ogs_error("OpenAPI_area_scope_convertToJSON() failed [tac_info_per_plmn]");
+        log_error("OpenAPI_area_scope_convertToJSON() failed [tac_info_per_plmn]");
         goto end;
     }
     cJSON *localMapObject = tac_info_per_plmn;
@@ -127,18 +127,18 @@ cJSON *OpenAPI_area_scope_convertToJSON(OpenAPI_area_scope_t *area_scope)
         OpenAPI_list_for_each(area_scope->tac_info_per_plmn, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_area_scope_convertToJSON() failed [tac_info_per_plmn]");
+                log_error("OpenAPI_area_scope_convertToJSON() failed [tac_info_per_plmn]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_area_scope_convertToJSON() failed [tac_info_per_plmn]");
+                log_error("OpenAPI_area_scope_convertToJSON() failed [tac_info_per_plmn]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_tac_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_area_scope_convertToJSON() failed [inner]");
+                log_error("OpenAPI_area_scope_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -166,7 +166,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_parseFromJSON(cJSON *area_scopeJSON)
     if (eutra_cell_id_list) {
         cJSON *eutra_cell_id_list_local = NULL;
         if (!cJSON_IsArray(eutra_cell_id_list)) {
-            ogs_error("OpenAPI_area_scope_parseFromJSON() failed [eutra_cell_id_list]");
+            log_error("OpenAPI_area_scope_parseFromJSON() failed [eutra_cell_id_list]");
             goto end;
         }
 
@@ -176,7 +176,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_parseFromJSON(cJSON *area_scopeJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(eutra_cell_id_list_local)) {
-                ogs_error("OpenAPI_area_scope_parseFromJSON() failed [eutra_cell_id_list]");
+                log_error("OpenAPI_area_scope_parseFromJSON() failed [eutra_cell_id_list]");
                 goto end;
             }
             OpenAPI_list_add(eutra_cell_id_listList, ogs_strdup(eutra_cell_id_list_local->valuestring));
@@ -187,7 +187,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_parseFromJSON(cJSON *area_scopeJSON)
     if (nr_cell_id_list) {
         cJSON *nr_cell_id_list_local = NULL;
         if (!cJSON_IsArray(nr_cell_id_list)) {
-            ogs_error("OpenAPI_area_scope_parseFromJSON() failed [nr_cell_id_list]");
+            log_error("OpenAPI_area_scope_parseFromJSON() failed [nr_cell_id_list]");
             goto end;
         }
 
@@ -197,7 +197,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_parseFromJSON(cJSON *area_scopeJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(nr_cell_id_list_local)) {
-                ogs_error("OpenAPI_area_scope_parseFromJSON() failed [nr_cell_id_list]");
+                log_error("OpenAPI_area_scope_parseFromJSON() failed [nr_cell_id_list]");
                 goto end;
             }
             OpenAPI_list_add(nr_cell_id_listList, ogs_strdup(nr_cell_id_list_local->valuestring));
@@ -208,7 +208,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_parseFromJSON(cJSON *area_scopeJSON)
     if (tac_list) {
         cJSON *tac_list_local = NULL;
         if (!cJSON_IsArray(tac_list)) {
-            ogs_error("OpenAPI_area_scope_parseFromJSON() failed [tac_list]");
+            log_error("OpenAPI_area_scope_parseFromJSON() failed [tac_list]");
             goto end;
         }
 
@@ -218,7 +218,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_parseFromJSON(cJSON *area_scopeJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(tac_list_local)) {
-                ogs_error("OpenAPI_area_scope_parseFromJSON() failed [tac_list]");
+                log_error("OpenAPI_area_scope_parseFromJSON() failed [tac_list]");
                 goto end;
             }
             OpenAPI_list_add(tac_listList, ogs_strdup(tac_list_local->valuestring));
@@ -229,7 +229,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_parseFromJSON(cJSON *area_scopeJSON)
     if (tac_info_per_plmn) {
         cJSON *tac_info_per_plmn_local_map = NULL;
         if (!cJSON_IsObject(tac_info_per_plmn) && !cJSON_IsNull(tac_info_per_plmn)) {
-            ogs_error("OpenAPI_area_scope_parseFromJSON() failed [tac_info_per_plmn]");
+            log_error("OpenAPI_area_scope_parseFromJSON() failed [tac_info_per_plmn]");
             goto end;
         }
         if (cJSON_IsObject(tac_info_per_plmn)) {
@@ -243,7 +243,7 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_parseFromJSON(cJSON *area_scopeJSON)
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_area_scope_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_area_scope_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(tac_info_per_plmnList, localMapKeyPair);
@@ -299,10 +299,10 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_copy(OpenAPI_area_scope_t *dst, OpenAPI
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_area_scope_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_area_scope_convertToJSON() failed");
+        log_error("OpenAPI_area_scope_convertToJSON() failed");
         return NULL;
     }
 
@@ -310,14 +310,14 @@ OpenAPI_area_scope_t *OpenAPI_area_scope_copy(OpenAPI_area_scope_t *dst, OpenAPI
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

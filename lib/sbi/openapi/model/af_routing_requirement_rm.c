@@ -34,7 +34,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_create(
 )
 {
     OpenAPI_af_routing_requirement_rm_t *af_routing_requirement_rm_local_var = ogs_malloc(sizeof(OpenAPI_af_routing_requirement_rm_t));
-    ogs_assert(af_routing_requirement_rm_local_var);
+    log_assert(af_routing_requirement_rm_local_var);
 
     af_routing_requirement_rm_local_var->is_app_reloc = is_app_reloc;
     af_routing_requirement_rm_local_var->app_reloc = app_reloc;
@@ -111,14 +111,14 @@ cJSON *OpenAPI_af_routing_requirement_rm_convertToJSON(OpenAPI_af_routing_requir
     OpenAPI_lnode_t *node = NULL;
 
     if (af_routing_requirement_rm == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [AfRoutingRequirementRm]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [AfRoutingRequirementRm]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (af_routing_requirement_rm->is_app_reloc) {
     if (cJSON_AddBoolToObject(item, "appReloc", af_routing_requirement_rm->app_reloc) == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [app_reloc]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [app_reloc]");
         goto end;
     }
     }
@@ -126,20 +126,20 @@ cJSON *OpenAPI_af_routing_requirement_rm_convertToJSON(OpenAPI_af_routing_requir
     if (af_routing_requirement_rm->route_to_locs) {
     cJSON *route_to_locsList = cJSON_AddArrayToObject(item, "routeToLocs");
     if (route_to_locsList == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [route_to_locs]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [route_to_locs]");
         goto end;
     }
     OpenAPI_list_for_each(af_routing_requirement_rm->route_to_locs, node) {
         cJSON *itemLocal = OpenAPI_route_to_location_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [route_to_locs]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [route_to_locs]");
             goto end;
         }
         cJSON_AddItemToArray(route_to_locsList, itemLocal);
     }
     } else if (af_routing_requirement_rm->is_route_to_locs_null) {
         if (cJSON_AddNullToObject(item, "routeToLocs") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [route_to_locs]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [route_to_locs]");
             goto end;
         }
     }
@@ -147,17 +147,17 @@ cJSON *OpenAPI_af_routing_requirement_rm_convertToJSON(OpenAPI_af_routing_requir
     if (af_routing_requirement_rm->sp_val) {
     cJSON *sp_val_local_JSON = OpenAPI_spatial_validity_rm_convertToJSON(af_routing_requirement_rm->sp_val);
     if (sp_val_local_JSON == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sp_val]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sp_val]");
         goto end;
     }
     cJSON_AddItemToObject(item, "spVal", sp_val_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sp_val]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sp_val]");
         goto end;
     }
     } else if (af_routing_requirement_rm->is_sp_val_null) {
         if (cJSON_AddNullToObject(item, "spVal") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sp_val]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sp_val]");
             goto end;
         }
     }
@@ -165,20 +165,20 @@ cJSON *OpenAPI_af_routing_requirement_rm_convertToJSON(OpenAPI_af_routing_requir
     if (af_routing_requirement_rm->temp_vals) {
     cJSON *temp_valsList = cJSON_AddArrayToObject(item, "tempVals");
     if (temp_valsList == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [temp_vals]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [temp_vals]");
         goto end;
     }
     OpenAPI_list_for_each(af_routing_requirement_rm->temp_vals, node) {
         cJSON *itemLocal = OpenAPI_temporal_validity_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [temp_vals]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [temp_vals]");
             goto end;
         }
         cJSON_AddItemToArray(temp_valsList, itemLocal);
     }
     } else if (af_routing_requirement_rm->is_temp_vals_null) {
         if (cJSON_AddNullToObject(item, "tempVals") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [temp_vals]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [temp_vals]");
             goto end;
         }
     }
@@ -186,53 +186,53 @@ cJSON *OpenAPI_af_routing_requirement_rm_convertToJSON(OpenAPI_af_routing_requir
     if (af_routing_requirement_rm->up_path_chg_sub) {
     cJSON *up_path_chg_sub_local_JSON = OpenAPI_up_path_chg_event_convertToJSON(af_routing_requirement_rm->up_path_chg_sub);
     if (up_path_chg_sub_local_JSON == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [up_path_chg_sub]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [up_path_chg_sub]");
         goto end;
     }
     cJSON_AddItemToObject(item, "upPathChgSub", up_path_chg_sub_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [up_path_chg_sub]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [up_path_chg_sub]");
         goto end;
     }
     } else if (af_routing_requirement_rm->is_up_path_chg_sub_null) {
         if (cJSON_AddNullToObject(item, "upPathChgSub") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [up_path_chg_sub]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [up_path_chg_sub]");
             goto end;
         }
     }
 
     if (af_routing_requirement_rm->is_addr_preser_ind) {
     if (cJSON_AddBoolToObject(item, "addrPreserInd", af_routing_requirement_rm->addr_preser_ind) == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [addr_preser_ind]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [addr_preser_ind]");
         goto end;
     }
     } else if (af_routing_requirement_rm->is_addr_preser_ind_null) {
         if (cJSON_AddNullToObject(item, "addrPreserInd") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [addr_preser_ind]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [addr_preser_ind]");
             goto end;
         }
     }
 
     if (af_routing_requirement_rm->is_sim_conn_ind) {
     if (cJSON_AddBoolToObject(item, "simConnInd", af_routing_requirement_rm->sim_conn_ind) == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sim_conn_ind]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sim_conn_ind]");
         goto end;
     }
     } else if (af_routing_requirement_rm->is_sim_conn_ind_null) {
         if (cJSON_AddNullToObject(item, "simConnInd") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sim_conn_ind]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sim_conn_ind]");
             goto end;
         }
     }
 
     if (af_routing_requirement_rm->is_sim_conn_term) {
     if (cJSON_AddNumberToObject(item, "simConnTerm", af_routing_requirement_rm->sim_conn_term) == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sim_conn_term]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sim_conn_term]");
         goto end;
     }
     } else if (af_routing_requirement_rm->is_sim_conn_term_null) {
         if (cJSON_AddNullToObject(item, "simConnTerm") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sim_conn_term]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [sim_conn_term]");
             goto end;
         }
     }
@@ -240,39 +240,39 @@ cJSON *OpenAPI_af_routing_requirement_rm_convertToJSON(OpenAPI_af_routing_requir
     if (af_routing_requirement_rm->eas_ip_replace_infos) {
     cJSON *eas_ip_replace_infosList = cJSON_AddArrayToObject(item, "easIpReplaceInfos");
     if (eas_ip_replace_infosList == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [eas_ip_replace_infos]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [eas_ip_replace_infos]");
         goto end;
     }
     OpenAPI_list_for_each(af_routing_requirement_rm->eas_ip_replace_infos, node) {
         cJSON *itemLocal = OpenAPI_eas_ip_replacement_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [eas_ip_replace_infos]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [eas_ip_replace_infos]");
             goto end;
         }
         cJSON_AddItemToArray(eas_ip_replace_infosList, itemLocal);
     }
     } else if (af_routing_requirement_rm->is_eas_ip_replace_infos_null) {
         if (cJSON_AddNullToObject(item, "easIpReplaceInfos") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [eas_ip_replace_infos]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [eas_ip_replace_infos]");
             goto end;
         }
     }
 
     if (af_routing_requirement_rm->is_eas_redis_ind) {
     if (cJSON_AddBoolToObject(item, "easRedisInd", af_routing_requirement_rm->eas_redis_ind) == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [eas_redis_ind]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [eas_redis_ind]");
         goto end;
     }
     }
 
     if (af_routing_requirement_rm->is_max_allowed_up_lat) {
     if (cJSON_AddNumberToObject(item, "maxAllowedUpLat", af_routing_requirement_rm->max_allowed_up_lat) == NULL) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [max_allowed_up_lat]");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [max_allowed_up_lat]");
         goto end;
     }
     } else if (af_routing_requirement_rm->is_max_allowed_up_lat_null) {
         if (cJSON_AddNullToObject(item, "maxAllowedUpLat") == NULL) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [max_allowed_up_lat]");
+            log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed [max_allowed_up_lat]");
             goto end;
         }
     }
@@ -304,7 +304,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     app_reloc = cJSON_GetObjectItemCaseSensitive(af_routing_requirement_rmJSON, "appReloc");
     if (app_reloc) {
     if (!cJSON_IsBool(app_reloc)) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [app_reloc]");
+        log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [app_reloc]");
         goto end;
     }
     }
@@ -314,7 +314,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (!cJSON_IsNull(route_to_locs)) {
         cJSON *route_to_locs_local = NULL;
         if (!cJSON_IsArray(route_to_locs)) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [route_to_locs]");
+            log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [route_to_locs]");
             goto end;
         }
 
@@ -322,12 +322,12 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
 
         cJSON_ArrayForEach(route_to_locs_local, route_to_locs) {
             if (!cJSON_IsObject(route_to_locs_local)) {
-                ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [route_to_locs]");
+                log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [route_to_locs]");
                 goto end;
             }
             OpenAPI_route_to_location_t *route_to_locsItem = OpenAPI_route_to_location_parseFromJSON(route_to_locs_local);
             if (!route_to_locsItem) {
-                ogs_error("No route_to_locsItem");
+                log_error("No route_to_locsItem");
                 goto end;
             }
             OpenAPI_list_add(route_to_locsList, route_to_locsItem);
@@ -340,7 +340,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (!cJSON_IsNull(sp_val)) {
     sp_val_local_nonprim = OpenAPI_spatial_validity_rm_parseFromJSON(sp_val);
     if (!sp_val_local_nonprim) {
-        ogs_error("OpenAPI_spatial_validity_rm_parseFromJSON failed [sp_val]");
+        log_error("OpenAPI_spatial_validity_rm_parseFromJSON failed [sp_val]");
         goto end;
     }
     }
@@ -351,7 +351,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (!cJSON_IsNull(temp_vals)) {
         cJSON *temp_vals_local = NULL;
         if (!cJSON_IsArray(temp_vals)) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [temp_vals]");
+            log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [temp_vals]");
             goto end;
         }
 
@@ -359,12 +359,12 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
 
         cJSON_ArrayForEach(temp_vals_local, temp_vals) {
             if (!cJSON_IsObject(temp_vals_local)) {
-                ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [temp_vals]");
+                log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [temp_vals]");
                 goto end;
             }
             OpenAPI_temporal_validity_t *temp_valsItem = OpenAPI_temporal_validity_parseFromJSON(temp_vals_local);
             if (!temp_valsItem) {
-                ogs_error("No temp_valsItem");
+                log_error("No temp_valsItem");
                 goto end;
             }
             OpenAPI_list_add(temp_valsList, temp_valsItem);
@@ -377,7 +377,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (!cJSON_IsNull(up_path_chg_sub)) {
     up_path_chg_sub_local_nonprim = OpenAPI_up_path_chg_event_parseFromJSON(up_path_chg_sub);
     if (!up_path_chg_sub_local_nonprim) {
-        ogs_error("OpenAPI_up_path_chg_event_parseFromJSON failed [up_path_chg_sub]");
+        log_error("OpenAPI_up_path_chg_event_parseFromJSON failed [up_path_chg_sub]");
         goto end;
     }
     }
@@ -387,7 +387,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (addr_preser_ind) {
     if (!cJSON_IsNull(addr_preser_ind)) {
     if (!cJSON_IsBool(addr_preser_ind)) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [addr_preser_ind]");
+        log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [addr_preser_ind]");
         goto end;
     }
     }
@@ -397,7 +397,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (sim_conn_ind) {
     if (!cJSON_IsNull(sim_conn_ind)) {
     if (!cJSON_IsBool(sim_conn_ind)) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [sim_conn_ind]");
+        log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [sim_conn_ind]");
         goto end;
     }
     }
@@ -407,7 +407,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (sim_conn_term) {
     if (!cJSON_IsNull(sim_conn_term)) {
     if (!cJSON_IsNumber(sim_conn_term)) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [sim_conn_term]");
+        log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [sim_conn_term]");
         goto end;
     }
     }
@@ -418,7 +418,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (!cJSON_IsNull(eas_ip_replace_infos)) {
         cJSON *eas_ip_replace_infos_local = NULL;
         if (!cJSON_IsArray(eas_ip_replace_infos)) {
-            ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [eas_ip_replace_infos]");
+            log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [eas_ip_replace_infos]");
             goto end;
         }
 
@@ -426,12 +426,12 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
 
         cJSON_ArrayForEach(eas_ip_replace_infos_local, eas_ip_replace_infos) {
             if (!cJSON_IsObject(eas_ip_replace_infos_local)) {
-                ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [eas_ip_replace_infos]");
+                log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [eas_ip_replace_infos]");
                 goto end;
             }
             OpenAPI_eas_ip_replacement_info_t *eas_ip_replace_infosItem = OpenAPI_eas_ip_replacement_info_parseFromJSON(eas_ip_replace_infos_local);
             if (!eas_ip_replace_infosItem) {
-                ogs_error("No eas_ip_replace_infosItem");
+                log_error("No eas_ip_replace_infosItem");
                 goto end;
             }
             OpenAPI_list_add(eas_ip_replace_infosList, eas_ip_replace_infosItem);
@@ -442,7 +442,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     eas_redis_ind = cJSON_GetObjectItemCaseSensitive(af_routing_requirement_rmJSON, "easRedisInd");
     if (eas_redis_ind) {
     if (!cJSON_IsBool(eas_redis_ind)) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [eas_redis_ind]");
+        log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [eas_redis_ind]");
         goto end;
     }
     }
@@ -451,7 +451,7 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_parseFrom
     if (max_allowed_up_lat) {
     if (!cJSON_IsNull(max_allowed_up_lat)) {
     if (!cJSON_IsNumber(max_allowed_up_lat)) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [max_allowed_up_lat]");
+        log_error("OpenAPI_af_routing_requirement_rm_parseFromJSON() failed [max_allowed_up_lat]");
         goto end;
     }
     }
@@ -525,10 +525,10 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_af_routing_requirement_rm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed");
+        log_error("OpenAPI_af_routing_requirement_rm_convertToJSON() failed");
         return NULL;
     }
 
@@ -536,14 +536,14 @@ OpenAPI_af_routing_requirement_rm_t *OpenAPI_af_routing_requirement_rm_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

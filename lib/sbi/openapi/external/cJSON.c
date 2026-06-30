@@ -184,7 +184,7 @@ static void * CJSON_CDECL internal_realloc(void *pointer, size_t size)
 static void *internal_malloc(size_t size)
 {
     void *ptr = ogs_malloc(size);
-    ogs_assert(ptr);
+    log_assert(ptr);
     return ptr;
 }
 static void internal_free(void *pointer)
@@ -194,7 +194,7 @@ static void internal_free(void *pointer)
 static void *internal_realloc(void *pointer, size_t size)
 {
     void *ptr = ogs_realloc(pointer, size);
-    ogs_assert(ptr);
+    log_assert(ptr);
     return ptr;
 }
 #endif

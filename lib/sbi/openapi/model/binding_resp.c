@@ -10,7 +10,7 @@ OpenAPI_binding_resp_t *OpenAPI_binding_resp_create(
 )
 {
     OpenAPI_binding_resp_t *binding_resp_local_var = ogs_malloc(sizeof(OpenAPI_binding_resp_t));
-    ogs_assert(binding_resp_local_var);
+    log_assert(binding_resp_local_var);
 
     binding_resp_local_var->pcf_sm_fqdn = pcf_sm_fqdn;
     binding_resp_local_var->pcf_sm_ip_end_points = pcf_sm_ip_end_points;
@@ -45,14 +45,14 @@ cJSON *OpenAPI_binding_resp_convertToJSON(OpenAPI_binding_resp_t *binding_resp)
     OpenAPI_lnode_t *node = NULL;
 
     if (binding_resp == NULL) {
-        ogs_error("OpenAPI_binding_resp_convertToJSON() failed [BindingResp]");
+        log_error("OpenAPI_binding_resp_convertToJSON() failed [BindingResp]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (binding_resp->pcf_sm_fqdn) {
     if (cJSON_AddStringToObject(item, "pcfSmFqdn", binding_resp->pcf_sm_fqdn) == NULL) {
-        ogs_error("OpenAPI_binding_resp_convertToJSON() failed [pcf_sm_fqdn]");
+        log_error("OpenAPI_binding_resp_convertToJSON() failed [pcf_sm_fqdn]");
         goto end;
     }
     }
@@ -60,13 +60,13 @@ cJSON *OpenAPI_binding_resp_convertToJSON(OpenAPI_binding_resp_t *binding_resp)
     if (binding_resp->pcf_sm_ip_end_points) {
     cJSON *pcf_sm_ip_end_pointsList = cJSON_AddArrayToObject(item, "pcfSmIpEndPoints");
     if (pcf_sm_ip_end_pointsList == NULL) {
-        ogs_error("OpenAPI_binding_resp_convertToJSON() failed [pcf_sm_ip_end_points]");
+        log_error("OpenAPI_binding_resp_convertToJSON() failed [pcf_sm_ip_end_points]");
         goto end;
     }
     OpenAPI_list_for_each(binding_resp->pcf_sm_ip_end_points, node) {
         cJSON *itemLocal = OpenAPI_ip_end_point_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_binding_resp_convertToJSON() failed [pcf_sm_ip_end_points]");
+            log_error("OpenAPI_binding_resp_convertToJSON() failed [pcf_sm_ip_end_points]");
             goto end;
         }
         cJSON_AddItemToArray(pcf_sm_ip_end_pointsList, itemLocal);
@@ -87,7 +87,7 @@ OpenAPI_binding_resp_t *OpenAPI_binding_resp_parseFromJSON(cJSON *binding_respJS
     pcf_sm_fqdn = cJSON_GetObjectItemCaseSensitive(binding_respJSON, "pcfSmFqdn");
     if (pcf_sm_fqdn) {
     if (!cJSON_IsString(pcf_sm_fqdn) && !cJSON_IsNull(pcf_sm_fqdn)) {
-        ogs_error("OpenAPI_binding_resp_parseFromJSON() failed [pcf_sm_fqdn]");
+        log_error("OpenAPI_binding_resp_parseFromJSON() failed [pcf_sm_fqdn]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_binding_resp_t *OpenAPI_binding_resp_parseFromJSON(cJSON *binding_respJS
     if (pcf_sm_ip_end_points) {
         cJSON *pcf_sm_ip_end_points_local = NULL;
         if (!cJSON_IsArray(pcf_sm_ip_end_points)) {
-            ogs_error("OpenAPI_binding_resp_parseFromJSON() failed [pcf_sm_ip_end_points]");
+            log_error("OpenAPI_binding_resp_parseFromJSON() failed [pcf_sm_ip_end_points]");
             goto end;
         }
 
@@ -104,12 +104,12 @@ OpenAPI_binding_resp_t *OpenAPI_binding_resp_parseFromJSON(cJSON *binding_respJS
 
         cJSON_ArrayForEach(pcf_sm_ip_end_points_local, pcf_sm_ip_end_points) {
             if (!cJSON_IsObject(pcf_sm_ip_end_points_local)) {
-                ogs_error("OpenAPI_binding_resp_parseFromJSON() failed [pcf_sm_ip_end_points]");
+                log_error("OpenAPI_binding_resp_parseFromJSON() failed [pcf_sm_ip_end_points]");
                 goto end;
             }
             OpenAPI_ip_end_point_t *pcf_sm_ip_end_pointsItem = OpenAPI_ip_end_point_parseFromJSON(pcf_sm_ip_end_points_local);
             if (!pcf_sm_ip_end_pointsItem) {
-                ogs_error("No pcf_sm_ip_end_pointsItem");
+                log_error("No pcf_sm_ip_end_pointsItem");
                 goto end;
             }
             OpenAPI_list_add(pcf_sm_ip_end_pointsList, pcf_sm_ip_end_pointsItem);
@@ -138,10 +138,10 @@ OpenAPI_binding_resp_t *OpenAPI_binding_resp_copy(OpenAPI_binding_resp_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_binding_resp_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_binding_resp_convertToJSON() failed");
+        log_error("OpenAPI_binding_resp_convertToJSON() failed");
         return NULL;
     }
 
@@ -149,14 +149,14 @@ OpenAPI_binding_resp_t *OpenAPI_binding_resp_copy(OpenAPI_binding_resp_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

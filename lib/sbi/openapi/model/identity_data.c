@@ -12,7 +12,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_create(
 )
 {
     OpenAPI_identity_data_t *identity_data_local_var = ogs_malloc(sizeof(OpenAPI_identity_data_t));
-    ogs_assert(identity_data_local_var);
+    log_assert(identity_data_local_var);
 
     identity_data_local_var->supi_list = supi_list;
     identity_data_local_var->gpsi_list = gpsi_list;
@@ -69,7 +69,7 @@ cJSON *OpenAPI_identity_data_convertToJSON(OpenAPI_identity_data_t *identity_dat
     OpenAPI_lnode_t *node = NULL;
 
     if (identity_data == NULL) {
-        ogs_error("OpenAPI_identity_data_convertToJSON() failed [IdentityData]");
+        log_error("OpenAPI_identity_data_convertToJSON() failed [IdentityData]");
         return NULL;
     }
 
@@ -77,12 +77,12 @@ cJSON *OpenAPI_identity_data_convertToJSON(OpenAPI_identity_data_t *identity_dat
     if (identity_data->supi_list) {
     cJSON *supi_listList = cJSON_AddArrayToObject(item, "supiList");
     if (supi_listList == NULL) {
-        ogs_error("OpenAPI_identity_data_convertToJSON() failed [supi_list]");
+        log_error("OpenAPI_identity_data_convertToJSON() failed [supi_list]");
         goto end;
     }
     OpenAPI_list_for_each(identity_data->supi_list, node) {
         if (cJSON_AddStringToObject(supi_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_identity_data_convertToJSON() failed [supi_list]");
+            log_error("OpenAPI_identity_data_convertToJSON() failed [supi_list]");
             goto end;
         }
     }
@@ -91,12 +91,12 @@ cJSON *OpenAPI_identity_data_convertToJSON(OpenAPI_identity_data_t *identity_dat
     if (identity_data->gpsi_list) {
     cJSON *gpsi_listList = cJSON_AddArrayToObject(item, "gpsiList");
     if (gpsi_listList == NULL) {
-        ogs_error("OpenAPI_identity_data_convertToJSON() failed [gpsi_list]");
+        log_error("OpenAPI_identity_data_convertToJSON() failed [gpsi_list]");
         goto end;
     }
     OpenAPI_list_for_each(identity_data->gpsi_list, node) {
         if (cJSON_AddStringToObject(gpsi_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_identity_data_convertToJSON() failed [gpsi_list]");
+            log_error("OpenAPI_identity_data_convertToJSON() failed [gpsi_list]");
             goto end;
         }
     }
@@ -105,12 +105,12 @@ cJSON *OpenAPI_identity_data_convertToJSON(OpenAPI_identity_data_t *identity_dat
     if (identity_data->allowed_af_ids) {
     cJSON *allowed_af_idsList = cJSON_AddArrayToObject(item, "allowedAfIds");
     if (allowed_af_idsList == NULL) {
-        ogs_error("OpenAPI_identity_data_convertToJSON() failed [allowed_af_ids]");
+        log_error("OpenAPI_identity_data_convertToJSON() failed [allowed_af_ids]");
         goto end;
     }
     OpenAPI_list_for_each(identity_data->allowed_af_ids, node) {
         if (cJSON_AddStringToObject(allowed_af_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_identity_data_convertToJSON() failed [allowed_af_ids]");
+            log_error("OpenAPI_identity_data_convertToJSON() failed [allowed_af_ids]");
             goto end;
         }
     }
@@ -119,7 +119,7 @@ cJSON *OpenAPI_identity_data_convertToJSON(OpenAPI_identity_data_t *identity_dat
     if (identity_data->application_port_ids) {
     cJSON *application_port_ids = cJSON_AddObjectToObject(item, "applicationPortIds");
     if (application_port_ids == NULL) {
-        ogs_error("OpenAPI_identity_data_convertToJSON() failed [application_port_ids]");
+        log_error("OpenAPI_identity_data_convertToJSON() failed [application_port_ids]");
         goto end;
     }
     cJSON *localMapObject = application_port_ids;
@@ -127,15 +127,15 @@ cJSON *OpenAPI_identity_data_convertToJSON(OpenAPI_identity_data_t *identity_dat
         OpenAPI_list_for_each(identity_data->application_port_ids, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_identity_data_convertToJSON() failed [application_port_ids]");
+                log_error("OpenAPI_identity_data_convertToJSON() failed [application_port_ids]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_identity_data_convertToJSON() failed [application_port_ids]");
+                log_error("OpenAPI_identity_data_convertToJSON() failed [application_port_ids]");
                 goto end;
             }
             if (cJSON_AddStringToObject(localMapObject, localKeyValue->key, (char*)localKeyValue->value) == NULL) {
-                ogs_error("OpenAPI_identity_data_convertToJSON() failed [inner]");
+                log_error("OpenAPI_identity_data_convertToJSON() failed [inner]");
                 goto end;
             }
         }
@@ -162,7 +162,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_parseFromJSON(cJSON *identity_dat
     if (supi_list) {
         cJSON *supi_list_local = NULL;
         if (!cJSON_IsArray(supi_list)) {
-            ogs_error("OpenAPI_identity_data_parseFromJSON() failed [supi_list]");
+            log_error("OpenAPI_identity_data_parseFromJSON() failed [supi_list]");
             goto end;
         }
 
@@ -172,7 +172,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_parseFromJSON(cJSON *identity_dat
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(supi_list_local)) {
-                ogs_error("OpenAPI_identity_data_parseFromJSON() failed [supi_list]");
+                log_error("OpenAPI_identity_data_parseFromJSON() failed [supi_list]");
                 goto end;
             }
             OpenAPI_list_add(supi_listList, ogs_strdup(supi_list_local->valuestring));
@@ -183,7 +183,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_parseFromJSON(cJSON *identity_dat
     if (gpsi_list) {
         cJSON *gpsi_list_local = NULL;
         if (!cJSON_IsArray(gpsi_list)) {
-            ogs_error("OpenAPI_identity_data_parseFromJSON() failed [gpsi_list]");
+            log_error("OpenAPI_identity_data_parseFromJSON() failed [gpsi_list]");
             goto end;
         }
 
@@ -193,7 +193,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_parseFromJSON(cJSON *identity_dat
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(gpsi_list_local)) {
-                ogs_error("OpenAPI_identity_data_parseFromJSON() failed [gpsi_list]");
+                log_error("OpenAPI_identity_data_parseFromJSON() failed [gpsi_list]");
                 goto end;
             }
             OpenAPI_list_add(gpsi_listList, ogs_strdup(gpsi_list_local->valuestring));
@@ -204,7 +204,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_parseFromJSON(cJSON *identity_dat
     if (allowed_af_ids) {
         cJSON *allowed_af_ids_local = NULL;
         if (!cJSON_IsArray(allowed_af_ids)) {
-            ogs_error("OpenAPI_identity_data_parseFromJSON() failed [allowed_af_ids]");
+            log_error("OpenAPI_identity_data_parseFromJSON() failed [allowed_af_ids]");
             goto end;
         }
 
@@ -214,7 +214,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_parseFromJSON(cJSON *identity_dat
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(allowed_af_ids_local)) {
-                ogs_error("OpenAPI_identity_data_parseFromJSON() failed [allowed_af_ids]");
+                log_error("OpenAPI_identity_data_parseFromJSON() failed [allowed_af_ids]");
                 goto end;
             }
             OpenAPI_list_add(allowed_af_idsList, ogs_strdup(allowed_af_ids_local->valuestring));
@@ -225,7 +225,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_parseFromJSON(cJSON *identity_dat
     if (application_port_ids) {
         cJSON *application_port_ids_local_map = NULL;
         if (!cJSON_IsObject(application_port_ids) && !cJSON_IsNull(application_port_ids)) {
-            ogs_error("OpenAPI_identity_data_parseFromJSON() failed [application_port_ids]");
+            log_error("OpenAPI_identity_data_parseFromJSON() failed [application_port_ids]");
             goto end;
         }
         if (cJSON_IsObject(application_port_ids)) {
@@ -236,7 +236,7 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_parseFromJSON(cJSON *identity_dat
                 double *localDouble = NULL;
                 int *localInt = NULL;
                 if (!cJSON_IsString(localMapObject)) {
-                    ogs_error("OpenAPI_identity_data_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_identity_data_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), ogs_strdup(localMapObject->valuestring));
@@ -293,10 +293,10 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_copy(OpenAPI_identity_data_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_identity_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_identity_data_convertToJSON() failed");
+        log_error("OpenAPI_identity_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -304,14 +304,14 @@ OpenAPI_identity_data_t *OpenAPI_identity_data_copy(OpenAPI_identity_data_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -31,24 +31,24 @@ extern "C" {
 #define OGS_SBI_SETUP_CLIENT(__cTX, __pClient) \
     do { \
         char buf[OGS_ADDRSTRLEN]; \
-        ogs_assert((__cTX)); \
-        ogs_assert((__pClient)); \
+        log_assert((__cTX)); \
+        log_assert((__pClient)); \
         \
         if ((__cTX)->client) { \
             ogs_sbi_client_t *client = NULL; \
             \
             client = ((__cTX)->client); \
-            ogs_assert(client); \
+            log_assert(client); \
             if (client->fqdn) { \
-                ogs_warn("UnRef NF EndPoint(fqdn) [%s:%d]", \
+                log_warn("UnRef NF EndPoint(fqdn) [%s:%d]", \
                         client->fqdn, client->fqdn_port); \
             } \
             if (client->addr) { \
-                ogs_warn("UnRef NF EndPoint(addr) [%s:%d]", \
+                log_warn("UnRef NF EndPoint(addr) [%s:%d]", \
                     OGS_ADDR(client->addr, buf), OGS_PORT(client->addr)); \
             } \
             if (client->addr6) { \
-                ogs_warn("UnRef NF EndPoint(addr6) [%s:%d]", \
+                log_warn("UnRef NF EndPoint(addr6) [%s:%d]", \
                     OGS_ADDR(client->addr6, buf), OGS_PORT(client->addr6)); \
             } \
             ogs_sbi_client_remove(client); \
@@ -56,17 +56,17 @@ extern "C" {
         \
         OGS_OBJECT_REF(__pClient); \
         ((__cTX)->client) = (__pClient); \
-        ogs_debug("CLIENT Ref [%d]", (__pClient)->reference_count); \
+        log_debug("CLIENT Ref [%d]", (__pClient)->reference_count); \
         if ((__pClient)->fqdn) { \
-            ogs_info("Setup NF EndPoint(fqdn) [%s:%d]", \
+            log_info("Setup NF EndPoint(fqdn) [%s:%d]", \
                     (__pClient)->fqdn, (__pClient)->fqdn_port); \
         } \
         if ((__pClient)->addr) { \
-            ogs_info("Setup NF EndPoint(addr) [%s:%d]", \
+            log_info("Setup NF EndPoint(addr) [%s:%d]", \
                 OGS_ADDR((__pClient)->addr, buf), OGS_PORT((__pClient)->addr)); \
         } \
         if ((__pClient)->addr6) { \
-            ogs_info("Setup NF EndPoint(addr6) [%s:%d]", \
+            log_info("Setup NF EndPoint(addr6) [%s:%d]", \
                 OGS_ADDR((__pClient)->addr6, buf), \
                 OGS_PORT((__pClient)->addr6)); \
         } \

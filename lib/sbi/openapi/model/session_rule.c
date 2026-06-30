@@ -17,7 +17,7 @@ OpenAPI_session_rule_t *OpenAPI_session_rule_create(
 )
 {
     OpenAPI_session_rule_t *session_rule_local_var = ogs_malloc(sizeof(OpenAPI_session_rule_t));
-    ogs_assert(session_rule_local_var);
+    log_assert(session_rule_local_var);
 
     session_rule_local_var->auth_sess_ambr = auth_sess_ambr;
     session_rule_local_var->auth_def_qos = auth_def_qos;
@@ -72,7 +72,7 @@ cJSON *OpenAPI_session_rule_convertToJSON(OpenAPI_session_rule_t *session_rule)
     OpenAPI_lnode_t *node = NULL;
 
     if (session_rule == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [SessionRule]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [SessionRule]");
         return NULL;
     }
 
@@ -80,12 +80,12 @@ cJSON *OpenAPI_session_rule_convertToJSON(OpenAPI_session_rule_t *session_rule)
     if (session_rule->auth_sess_ambr) {
     cJSON *auth_sess_ambr_local_JSON = OpenAPI_ambr_convertToJSON(session_rule->auth_sess_ambr);
     if (auth_sess_ambr_local_JSON == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [auth_sess_ambr]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [auth_sess_ambr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "authSessAmbr", auth_sess_ambr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [auth_sess_ambr]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [auth_sess_ambr]");
         goto end;
     }
     }
@@ -93,57 +93,57 @@ cJSON *OpenAPI_session_rule_convertToJSON(OpenAPI_session_rule_t *session_rule)
     if (session_rule->auth_def_qos) {
     cJSON *auth_def_qos_local_JSON = OpenAPI_authorized_default_qos_convertToJSON(session_rule->auth_def_qos);
     if (auth_def_qos_local_JSON == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [auth_def_qos]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [auth_def_qos]");
         goto end;
     }
     cJSON_AddItemToObject(item, "authDefQos", auth_def_qos_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [auth_def_qos]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [auth_def_qos]");
         goto end;
     }
     }
 
     if (!session_rule->sess_rule_id) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [sess_rule_id]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [sess_rule_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "sessRuleId", session_rule->sess_rule_id) == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [sess_rule_id]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [sess_rule_id]");
         goto end;
     }
 
     if (session_rule->ref_um_data) {
     if (cJSON_AddStringToObject(item, "refUmData", session_rule->ref_um_data) == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [ref_um_data]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [ref_um_data]");
         goto end;
     }
     } else if (session_rule->is_ref_um_data_null) {
         if (cJSON_AddNullToObject(item, "refUmData") == NULL) {
-            ogs_error("OpenAPI_session_rule_convertToJSON() failed [ref_um_data]");
+            log_error("OpenAPI_session_rule_convertToJSON() failed [ref_um_data]");
             goto end;
         }
     }
 
     if (session_rule->ref_um_n3g_data) {
     if (cJSON_AddStringToObject(item, "refUmN3gData", session_rule->ref_um_n3g_data) == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [ref_um_n3g_data]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [ref_um_n3g_data]");
         goto end;
     }
     } else if (session_rule->is_ref_um_n3g_data_null) {
         if (cJSON_AddNullToObject(item, "refUmN3gData") == NULL) {
-            ogs_error("OpenAPI_session_rule_convertToJSON() failed [ref_um_n3g_data]");
+            log_error("OpenAPI_session_rule_convertToJSON() failed [ref_um_n3g_data]");
             goto end;
         }
     }
 
     if (session_rule->ref_cond_data) {
     if (cJSON_AddStringToObject(item, "refCondData", session_rule->ref_cond_data) == NULL) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed [ref_cond_data]");
+        log_error("OpenAPI_session_rule_convertToJSON() failed [ref_cond_data]");
         goto end;
     }
     } else if (session_rule->is_ref_cond_data_null) {
         if (cJSON_AddNullToObject(item, "refCondData") == NULL) {
-            ogs_error("OpenAPI_session_rule_convertToJSON() failed [ref_cond_data]");
+            log_error("OpenAPI_session_rule_convertToJSON() failed [ref_cond_data]");
             goto end;
         }
     }
@@ -168,7 +168,7 @@ OpenAPI_session_rule_t *OpenAPI_session_rule_parseFromJSON(cJSON *session_ruleJS
     if (auth_sess_ambr) {
     auth_sess_ambr_local_nonprim = OpenAPI_ambr_parseFromJSON(auth_sess_ambr);
     if (!auth_sess_ambr_local_nonprim) {
-        ogs_error("OpenAPI_ambr_parseFromJSON failed [auth_sess_ambr]");
+        log_error("OpenAPI_ambr_parseFromJSON failed [auth_sess_ambr]");
         goto end;
     }
     }
@@ -177,18 +177,18 @@ OpenAPI_session_rule_t *OpenAPI_session_rule_parseFromJSON(cJSON *session_ruleJS
     if (auth_def_qos) {
     auth_def_qos_local_nonprim = OpenAPI_authorized_default_qos_parseFromJSON(auth_def_qos);
     if (!auth_def_qos_local_nonprim) {
-        ogs_error("OpenAPI_authorized_default_qos_parseFromJSON failed [auth_def_qos]");
+        log_error("OpenAPI_authorized_default_qos_parseFromJSON failed [auth_def_qos]");
         goto end;
     }
     }
 
     sess_rule_id = cJSON_GetObjectItemCaseSensitive(session_ruleJSON, "sessRuleId");
     if (!sess_rule_id) {
-        ogs_error("OpenAPI_session_rule_parseFromJSON() failed [sess_rule_id]");
+        log_error("OpenAPI_session_rule_parseFromJSON() failed [sess_rule_id]");
         goto end;
     }
     if (!cJSON_IsString(sess_rule_id)) {
-        ogs_error("OpenAPI_session_rule_parseFromJSON() failed [sess_rule_id]");
+        log_error("OpenAPI_session_rule_parseFromJSON() failed [sess_rule_id]");
         goto end;
     }
 
@@ -196,7 +196,7 @@ OpenAPI_session_rule_t *OpenAPI_session_rule_parseFromJSON(cJSON *session_ruleJS
     if (ref_um_data) {
     if (!cJSON_IsNull(ref_um_data)) {
     if (!cJSON_IsString(ref_um_data) && !cJSON_IsNull(ref_um_data)) {
-        ogs_error("OpenAPI_session_rule_parseFromJSON() failed [ref_um_data]");
+        log_error("OpenAPI_session_rule_parseFromJSON() failed [ref_um_data]");
         goto end;
     }
     }
@@ -206,7 +206,7 @@ OpenAPI_session_rule_t *OpenAPI_session_rule_parseFromJSON(cJSON *session_ruleJS
     if (ref_um_n3g_data) {
     if (!cJSON_IsNull(ref_um_n3g_data)) {
     if (!cJSON_IsString(ref_um_n3g_data) && !cJSON_IsNull(ref_um_n3g_data)) {
-        ogs_error("OpenAPI_session_rule_parseFromJSON() failed [ref_um_n3g_data]");
+        log_error("OpenAPI_session_rule_parseFromJSON() failed [ref_um_n3g_data]");
         goto end;
     }
     }
@@ -216,7 +216,7 @@ OpenAPI_session_rule_t *OpenAPI_session_rule_parseFromJSON(cJSON *session_ruleJS
     if (ref_cond_data) {
     if (!cJSON_IsNull(ref_cond_data)) {
     if (!cJSON_IsString(ref_cond_data) && !cJSON_IsNull(ref_cond_data)) {
-        ogs_error("OpenAPI_session_rule_parseFromJSON() failed [ref_cond_data]");
+        log_error("OpenAPI_session_rule_parseFromJSON() failed [ref_cond_data]");
         goto end;
     }
     }
@@ -252,10 +252,10 @@ OpenAPI_session_rule_t *OpenAPI_session_rule_copy(OpenAPI_session_rule_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_session_rule_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_session_rule_convertToJSON() failed");
+        log_error("OpenAPI_session_rule_convertToJSON() failed");
         return NULL;
     }
 
@@ -263,14 +263,14 @@ OpenAPI_session_rule_t *OpenAPI_session_rule_copy(OpenAPI_session_rule_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

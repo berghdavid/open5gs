@@ -9,7 +9,7 @@ OpenAPI_ue_reg_status_update_rsp_data_t *OpenAPI_ue_reg_status_update_rsp_data_c
 )
 {
     OpenAPI_ue_reg_status_update_rsp_data_t *ue_reg_status_update_rsp_data_local_var = ogs_malloc(sizeof(OpenAPI_ue_reg_status_update_rsp_data_t));
-    ogs_assert(ue_reg_status_update_rsp_data_local_var);
+    log_assert(ue_reg_status_update_rsp_data_local_var);
 
     ue_reg_status_update_rsp_data_local_var->reg_status_transfer_complete = reg_status_transfer_complete;
 
@@ -32,13 +32,13 @@ cJSON *OpenAPI_ue_reg_status_update_rsp_data_convertToJSON(OpenAPI_ue_reg_status
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_reg_status_update_rsp_data == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_rsp_data_convertToJSON() failed [UeRegStatusUpdateRspData]");
+        log_error("OpenAPI_ue_reg_status_update_rsp_data_convertToJSON() failed [UeRegStatusUpdateRspData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddBoolToObject(item, "regStatusTransferComplete", ue_reg_status_update_rsp_data->reg_status_transfer_complete) == NULL) {
-        ogs_error("OpenAPI_ue_reg_status_update_rsp_data_convertToJSON() failed [reg_status_transfer_complete]");
+        log_error("OpenAPI_ue_reg_status_update_rsp_data_convertToJSON() failed [reg_status_transfer_complete]");
         goto end;
     }
 
@@ -53,11 +53,11 @@ OpenAPI_ue_reg_status_update_rsp_data_t *OpenAPI_ue_reg_status_update_rsp_data_p
     cJSON *reg_status_transfer_complete = NULL;
     reg_status_transfer_complete = cJSON_GetObjectItemCaseSensitive(ue_reg_status_update_rsp_dataJSON, "regStatusTransferComplete");
     if (!reg_status_transfer_complete) {
-        ogs_error("OpenAPI_ue_reg_status_update_rsp_data_parseFromJSON() failed [reg_status_transfer_complete]");
+        log_error("OpenAPI_ue_reg_status_update_rsp_data_parseFromJSON() failed [reg_status_transfer_complete]");
         goto end;
     }
     if (!cJSON_IsBool(reg_status_transfer_complete)) {
-        ogs_error("OpenAPI_ue_reg_status_update_rsp_data_parseFromJSON() failed [reg_status_transfer_complete]");
+        log_error("OpenAPI_ue_reg_status_update_rsp_data_parseFromJSON() failed [reg_status_transfer_complete]");
         goto end;
     }
 
@@ -76,10 +76,10 @@ OpenAPI_ue_reg_status_update_rsp_data_t *OpenAPI_ue_reg_status_update_rsp_data_c
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_reg_status_update_rsp_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_reg_status_update_rsp_data_convertToJSON() failed");
+        log_error("OpenAPI_ue_reg_status_update_rsp_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -87,14 +87,14 @@ OpenAPI_ue_reg_status_update_rsp_data_t *OpenAPI_ue_reg_status_update_rsp_data_c
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

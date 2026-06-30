@@ -212,7 +212,7 @@ cpydata(const uint8_t *data, int data_size, uint8_t **result, int *result_size)
 
 	*result = ogs_malloc(data_size + 1);
 	if (*result == NULL) {
-        ogs_error("ogs_malloc failed[%d]", data_size+1);
+        log_error("ogs_malloc failed[%d]", data_size+1);
         return OGS_ERROR;
     }
 
@@ -231,7 +231,7 @@ cpydata(const uint8_t *data, int data_size, uint8_t **result, int *result_size)
 
 	if (j==0) {
         ogs_free(*result);
-        ogs_error("No Data");
+        log_error("No Data");
 		return OGS_ERROR;
 	}
 
@@ -254,10 +254,10 @@ int ogs_fbase64_decode(const char *header,
     int bufcoded_len;
     char *p, *last;
 
-    ogs_assert(header);
-    ogs_assert(data);
-    ogs_assert(data_size);
-    ogs_assert(result);
+    log_assert(header);
+    log_assert(data);
+    log_assert(data_size);
+    log_assert(result);
 
     memset(result, 0, sizeof(*result));
 
@@ -270,17 +270,17 @@ int ogs_fbase64_decode(const char *header,
 
     rdata = memmem(data, data_size, pem_header, strlen(pem_header));
     if (rdata == NULL) {
-        ogs_error("Cound not find [%s]", pem_header);
-        ogs_log_hexdump(OGS_LOG_ERROR, data, data_size);
+        log_error("Cound not find [%s]", pem_header);
+        log_hexdump(LOG_ERROR, data, data_size);
         return OGS_ERROR;
     }
 
     data_size -= MEMSUB(rdata, data);
 
     if (data_size < 4 + strlen(bottom)) {
-        ogs_error("Not enough data (%d < 4 + %d)",
+        log_error("Not enough data (%d < 4 + %d)",
                 (int)data_size, (int)strlen(bottom));
-        ogs_log_hexdump(OGS_LOG_ERROR, data, data_size);
+        log_hexdump(LOG_ERROR, data, data_size);
         return OGS_ERROR;
     }
 
@@ -289,8 +289,8 @@ int ogs_fbase64_decode(const char *header,
     /* allow CR as well.
      */
     if (kdata == NULL) {
-        ogs_error("Cound not find [%s]", ENDSTR);
-        ogs_log_hexdump(OGS_LOG_ERROR, data, data_size);
+        log_error("Cound not find [%s]", ENDSTR);
+        log_hexdump(LOG_ERROR, data, data_size);
         return OGS_ERROR;
     }
     data_size -= strlen(ENDSTR);
@@ -302,8 +302,8 @@ int ogs_fbase64_decode(const char *header,
 
     kdata = memmem(rdata, data_size, bottom, strlen(bottom));
     if (kdata == NULL) {
-        ogs_error("Cound not find [%s]", bottom);
-        ogs_log_hexdump(OGS_LOG_ERROR, data, data_size);
+        log_error("Cound not find [%s]", bottom);
+        log_hexdump(LOG_ERROR, data, data_size);
         return OGS_ERROR;
     }
 
@@ -312,20 +312,20 @@ int ogs_fbase64_decode(const char *header,
     rdata_size = MEMSUB(kdata, rdata);
 
     if (rdata_size < 4) {
-        ogs_error("Not enough data [%d]", rdata_size);
-        ogs_log_hexdump(OGS_LOG_ERROR, data, data_size);
+        log_error("Not enough data [%d]", rdata_size);
+        log_hexdump(LOG_ERROR, data, data_size);
         return OGS_ERROR;
     }
 
     if (cpydata(rdata, rdata_size, &bufcoded, &bufcoded_len) == OGS_ERROR) {
-        ogs_error("cpydata() failed");
-        ogs_log_hexdump(OGS_LOG_ERROR, rdata, rdata_size);
+        log_error("cpydata() failed");
+        log_hexdump(LOG_ERROR, rdata, rdata_size);
         return OGS_ERROR;
     }
 
     result->data = ogs_calloc(1, bufcoded_len);
     if (result->data == NULL) {
-        ogs_error("ogs_calloc() failed [%d]", bufcoded_len);
+        log_error("ogs_calloc() failed [%d]", bufcoded_len);
         ogs_free(bufcoded);
         return OGS_ERROR;
     }
@@ -333,8 +333,8 @@ int ogs_fbase64_decode(const char *header,
     result->size = ogs_base64_decode_binary(
             result->data, (const char *)bufcoded);
     if (result->size == 0) {
-        ogs_error("ogs_base64_decode_binary() failed");
-        ogs_log_hexdump(OGS_LOG_ERROR, bufcoded, bufcoded_len);
+        log_error("ogs_base64_decode_binary() failed");
+        log_hexdump(LOG_ERROR, bufcoded, bufcoded_len);
         ogs_free(bufcoded);
         return OGS_ERROR;
     }
@@ -356,34 +356,34 @@ int ogs_pem_decode_curve25519_key(const char *filename, uint8_t *key)
     const char *_header = "302e0201 00300506 032b656e 04220420";
     uint8_t header[CURVE25519_HEADER_LEN];
 
-    ogs_assert(filename);
-    ogs_assert(key);
+    log_assert(filename);
+    log_assert(key);
 
     rv = ogs_file_read_full(filename, buf, OGS_HUGE_LEN, &bytes_read);
     if (rv != OGS_OK) {
-        ogs_error("ogs_file_read_full[%s] failed", filename);
+        log_error("ogs_file_read_full[%s] failed", filename);
         return OGS_ERROR;
     }
 
     rv = ogs_fbase64_decode("PRIVATE KEY", buf, bytes_read, &result);
     if (rv != OGS_OK) {
-        ogs_error("ogs_fbase64_decode[%s] failed", filename);
-        ogs_log_hexdump(OGS_LOG_ERROR, result.data, result.size);
+        log_error("ogs_fbase64_decode[%s] failed", filename);
+        log_hexdump(LOG_ERROR, result.data, result.size);
         return OGS_ERROR;
     }
 
     rv = OGS_OK;
 
     if (result.size != 48) {
-        ogs_error("Invalid size [%d]", (int)result.size);
+        log_error("Invalid size [%d]", (int)result.size);
         rv = OGS_ERROR;
         goto cleanup;
     }
 
     if (memcmp(ogs_hex_from_string(_header, header, sizeof(header)),
                 result.data, CURVE25519_HEADER_LEN) != 0) {
-        ogs_error("Invalid header [%d]", (int)result.size);
-        ogs_log_hexdump(OGS_LOG_FATAL, result.data, result.size);
+        log_error("Invalid header [%d]", (int)result.size);
+        log_hexdump(LOG_FATAL, result.data, result.size);
         rv = OGS_ERROR;
         goto cleanup;
     }
@@ -409,34 +409,34 @@ int ogs_pem_decode_secp256r1_key(const char *filename, uint8_t *key)
     const char *_header = "30770201 010420";
     uint8_t header[SECP256R1_HEADER_LEN];
 
-    ogs_assert(filename);
-    ogs_assert(key);
+    log_assert(filename);
+    log_assert(key);
 
     rv = ogs_file_read_full(filename, buf, OGS_HUGE_LEN, &bytes_read);
     if (rv != OGS_OK) {
-        ogs_error("ogs_file_read_full[%s] failed", filename);
+        log_error("ogs_file_read_full[%s] failed", filename);
         return OGS_ERROR;
     }
 
     rv = ogs_fbase64_decode("EC PRIVATE KEY", buf, bytes_read, &result);
     if (rv != OGS_OK) {
-        ogs_error("ogs_fbase64_decode[%s] failed", filename);
-        ogs_log_hexdump(OGS_LOG_ERROR, result.data, result.size);
+        log_error("ogs_fbase64_decode[%s] failed", filename);
+        log_hexdump(LOG_ERROR, result.data, result.size);
         return OGS_ERROR;
     }
 
     rv = OGS_OK;
 
     if (result.size != 121) {
-        ogs_error("Invalid size [%d]", (int)result.size);
+        log_error("Invalid size [%d]", (int)result.size);
         rv = OGS_ERROR;
         goto cleanup;
     }
 
     if (memcmp(ogs_hex_from_string(_header, header, sizeof(header)),
                 result.data, SECP256R1_HEADER_LEN) != 0) {
-        ogs_error("Invalid header [%d]", (int)result.size);
-        ogs_log_hexdump(OGS_LOG_FATAL, result.data, result.size);
+        log_error("Invalid header [%d]", (int)result.size);
+        log_hexdump(LOG_FATAL, result.data, result.size);
         rv = OGS_ERROR;
         goto cleanup;
     }

@@ -10,7 +10,7 @@ OpenAPI_redundant_transmission_exp_req_t *OpenAPI_redundant_transmission_exp_req
 )
 {
     OpenAPI_redundant_transmission_exp_req_t *redundant_transmission_exp_req_local_var = ogs_malloc(sizeof(OpenAPI_redundant_transmission_exp_req_t));
-    ogs_assert(redundant_transmission_exp_req_local_var);
+    log_assert(redundant_transmission_exp_req_local_var);
 
     redundant_transmission_exp_req_local_var->red_t_order_criter = red_t_order_criter;
     redundant_transmission_exp_req_local_var->order = order;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_redundant_transmission_exp_req_convertToJSON(OpenAPI_redundant_tr
     OpenAPI_lnode_t *node = NULL;
 
     if (redundant_transmission_exp_req == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [RedundantTransmissionExpReq]");
+        log_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [RedundantTransmissionExpReq]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_redundant_transmission_exp_req_convertToJSON(OpenAPI_redundant_tr
     if (redundant_transmission_exp_req->red_t_order_criter) {
     cJSON *red_t_order_criter_local_JSON = OpenAPI_red_trans_exp_ordering_criterion_convertToJSON(redundant_transmission_exp_req->red_t_order_criter);
     if (red_t_order_criter_local_JSON == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [red_t_order_criter]");
+        log_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [red_t_order_criter]");
         goto end;
     }
     cJSON_AddItemToObject(item, "redTOrderCriter", red_t_order_criter_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [red_t_order_criter]");
+        log_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [red_t_order_criter]");
         goto end;
     }
     }
@@ -63,12 +63,12 @@ cJSON *OpenAPI_redundant_transmission_exp_req_convertToJSON(OpenAPI_redundant_tr
     if (redundant_transmission_exp_req->order) {
     cJSON *order_local_JSON = OpenAPI_matching_direction_convertToJSON(redundant_transmission_exp_req->order);
     if (order_local_JSON == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [order]");
+        log_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [order]");
         goto end;
     }
     cJSON_AddItemToObject(item, "order", order_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [order]");
+        log_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed [order]");
         goto end;
     }
     }
@@ -89,7 +89,7 @@ OpenAPI_redundant_transmission_exp_req_t *OpenAPI_redundant_transmission_exp_req
     if (red_t_order_criter) {
     red_t_order_criter_local_nonprim = OpenAPI_red_trans_exp_ordering_criterion_parseFromJSON(red_t_order_criter);
     if (!red_t_order_criter_local_nonprim) {
-        ogs_error("OpenAPI_red_trans_exp_ordering_criterion_parseFromJSON failed [red_t_order_criter]");
+        log_error("OpenAPI_red_trans_exp_ordering_criterion_parseFromJSON failed [red_t_order_criter]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_redundant_transmission_exp_req_t *OpenAPI_redundant_transmission_exp_req
     if (order) {
     order_local_nonprim = OpenAPI_matching_direction_parseFromJSON(order);
     if (!order_local_nonprim) {
-        ogs_error("OpenAPI_matching_direction_parseFromJSON failed [order]");
+        log_error("OpenAPI_matching_direction_parseFromJSON failed [order]");
         goto end;
     }
     }
@@ -126,10 +126,10 @@ OpenAPI_redundant_transmission_exp_req_t *OpenAPI_redundant_transmission_exp_req
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_redundant_transmission_exp_req_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed");
+        log_error("OpenAPI_redundant_transmission_exp_req_convertToJSON() failed");
         return NULL;
     }
 
@@ -137,14 +137,14 @@ OpenAPI_redundant_transmission_exp_req_t *OpenAPI_redundant_transmission_exp_req
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -62,7 +62,7 @@ void *ogs_talloc_size(const void *ctx, size_t size, const char *name)
     ogs_thread_mutex_lock(&mutex);
 
     ptr = talloc_named_const(ctx, size, name);
-    ogs_expect(ptr);
+    log_expect(ptr);
 
     ogs_thread_mutex_unlock(&mutex);
 
@@ -76,7 +76,7 @@ void *ogs_talloc_zero_size(const void *ctx, size_t size, const char *name)
     ogs_thread_mutex_lock(&mutex);
 
     ptr = _talloc_zero(ctx, size, name);
-    ogs_expect(ptr);
+    log_expect(ptr);
 
     ogs_thread_mutex_unlock(&mutex);
 
@@ -91,7 +91,7 @@ void *ogs_talloc_realloc_size(
     ogs_thread_mutex_lock(&mutex);
 
     ptr = _talloc_realloc(context, oldptr, size, name);
-    ogs_expect(ptr);
+    log_expect(ptr);
 
     ogs_thread_mutex_unlock(&mutex);
 
@@ -150,12 +150,12 @@ void *ogs_malloc_debug(size_t size, const char *file_line)
     size_t headroom = 0;
     ogs_pkbuf_t *pkbuf = NULL;
 
-    ogs_assert(size);
+    log_assert(size);
 
     headroom = sizeof(ogs_pkbuf_t *);
     pkbuf = ogs_pkbuf_alloc_debug(NULL, headroom + size, file_line);
     if (!pkbuf) {
-        ogs_error("ogs_pkbuf_alloc_debug[headroom:%d, size:%d] failed",
+        log_error("ogs_pkbuf_alloc_debug[headroom:%d, size:%d] failed",
                 (int)headroom, (int)size);
         return NULL;
     }
@@ -177,7 +177,7 @@ int ogs_free_debug(void *ptr)
 
     headroom = sizeof(ogs_pkbuf_t *);
     memcpy(&pkbuf, (unsigned char*)ptr - headroom, headroom);
-    ogs_assert(pkbuf);
+    log_assert(pkbuf);
 
     ogs_pkbuf_free(pkbuf);
 
@@ -190,7 +190,7 @@ void *ogs_calloc_debug(size_t nmemb, size_t size, const char *file_line)
 
     ptr = ogs_malloc_debug(nmemb * size, file_line);
     if (!ptr) {
-        ogs_error("ogs_malloc_debug[nmemb:%d, size:%d] failed",
+        log_error("ogs_malloc_debug[nmemb:%d, size:%d] failed",
                 (int)nmemb, (int)size);
         return NULL;
     }
@@ -213,14 +213,14 @@ void *ogs_realloc_debug(void *ptr, size_t size, const char *file_line)
     memcpy(&pkbuf, (unsigned char*)ptr - headroom, headroom);
 
     if (!pkbuf) {
-        ogs_error("Cannot get pkbuf from ptr[%p], headroom[%d]",
+        log_error("Cannot get pkbuf from ptr[%p], headroom[%d]",
                 ptr, (int)headroom);
         return NULL;
     }
 
     cluster = pkbuf->cluster;
     if (!cluster) {
-        ogs_error("No cluster");
+        log_error("No cluster");
         return NULL;
     }
 
@@ -234,7 +234,7 @@ void *ogs_realloc_debug(void *ptr, size_t size, const char *file_line)
 
         new = ogs_malloc_debug(size, file_line);
         if (!new) {
-            ogs_error("ogs_malloc_debug[%d] failed", (int)size);
+            log_error("ogs_malloc_debug[%d] failed", (int)size);
             return NULL;
         }
 

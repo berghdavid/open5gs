@@ -10,7 +10,7 @@ OpenAPI_no_profile_match_info_t *OpenAPI_no_profile_match_info_create(
 )
 {
     OpenAPI_no_profile_match_info_t *no_profile_match_info_local_var = ogs_malloc(sizeof(OpenAPI_no_profile_match_info_t));
-    ogs_assert(no_profile_match_info_local_var);
+    log_assert(no_profile_match_info_local_var);
 
     no_profile_match_info_local_var->reason = reason;
     no_profile_match_info_local_var->query_param_combination_list = query_param_combination_list;
@@ -45,36 +45,36 @@ cJSON *OpenAPI_no_profile_match_info_convertToJSON(OpenAPI_no_profile_match_info
     OpenAPI_lnode_t *node = NULL;
 
     if (no_profile_match_info == NULL) {
-        ogs_error("OpenAPI_no_profile_match_info_convertToJSON() failed [NoProfileMatchInfo]");
+        log_error("OpenAPI_no_profile_match_info_convertToJSON() failed [NoProfileMatchInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!no_profile_match_info->reason) {
-        ogs_error("OpenAPI_no_profile_match_info_convertToJSON() failed [reason]");
+        log_error("OpenAPI_no_profile_match_info_convertToJSON() failed [reason]");
         return NULL;
     }
     cJSON *reason_local_JSON = OpenAPI_no_profile_match_reason_convertToJSON(no_profile_match_info->reason);
     if (reason_local_JSON == NULL) {
-        ogs_error("OpenAPI_no_profile_match_info_convertToJSON() failed [reason]");
+        log_error("OpenAPI_no_profile_match_info_convertToJSON() failed [reason]");
         goto end;
     }
     cJSON_AddItemToObject(item, "reason", reason_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_no_profile_match_info_convertToJSON() failed [reason]");
+        log_error("OpenAPI_no_profile_match_info_convertToJSON() failed [reason]");
         goto end;
     }
 
     if (no_profile_match_info->query_param_combination_list) {
     cJSON *query_param_combination_listList = cJSON_AddArrayToObject(item, "queryParamCombinationList");
     if (query_param_combination_listList == NULL) {
-        ogs_error("OpenAPI_no_profile_match_info_convertToJSON() failed [query_param_combination_list]");
+        log_error("OpenAPI_no_profile_match_info_convertToJSON() failed [query_param_combination_list]");
         goto end;
     }
     OpenAPI_list_for_each(no_profile_match_info->query_param_combination_list, node) {
         cJSON *itemLocal = OpenAPI_query_param_combination_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_no_profile_match_info_convertToJSON() failed [query_param_combination_list]");
+            log_error("OpenAPI_no_profile_match_info_convertToJSON() failed [query_param_combination_list]");
             goto end;
         }
         cJSON_AddItemToArray(query_param_combination_listList, itemLocal);
@@ -95,12 +95,12 @@ OpenAPI_no_profile_match_info_t *OpenAPI_no_profile_match_info_parseFromJSON(cJS
     OpenAPI_list_t *query_param_combination_listList = NULL;
     reason = cJSON_GetObjectItemCaseSensitive(no_profile_match_infoJSON, "reason");
     if (!reason) {
-        ogs_error("OpenAPI_no_profile_match_info_parseFromJSON() failed [reason]");
+        log_error("OpenAPI_no_profile_match_info_parseFromJSON() failed [reason]");
         goto end;
     }
     reason_local_nonprim = OpenAPI_no_profile_match_reason_parseFromJSON(reason);
     if (!reason_local_nonprim) {
-        ogs_error("OpenAPI_no_profile_match_reason_parseFromJSON failed [reason]");
+        log_error("OpenAPI_no_profile_match_reason_parseFromJSON failed [reason]");
         goto end;
     }
 
@@ -108,7 +108,7 @@ OpenAPI_no_profile_match_info_t *OpenAPI_no_profile_match_info_parseFromJSON(cJS
     if (query_param_combination_list) {
         cJSON *query_param_combination_list_local = NULL;
         if (!cJSON_IsArray(query_param_combination_list)) {
-            ogs_error("OpenAPI_no_profile_match_info_parseFromJSON() failed [query_param_combination_list]");
+            log_error("OpenAPI_no_profile_match_info_parseFromJSON() failed [query_param_combination_list]");
             goto end;
         }
 
@@ -116,12 +116,12 @@ OpenAPI_no_profile_match_info_t *OpenAPI_no_profile_match_info_parseFromJSON(cJS
 
         cJSON_ArrayForEach(query_param_combination_list_local, query_param_combination_list) {
             if (!cJSON_IsObject(query_param_combination_list_local)) {
-                ogs_error("OpenAPI_no_profile_match_info_parseFromJSON() failed [query_param_combination_list]");
+                log_error("OpenAPI_no_profile_match_info_parseFromJSON() failed [query_param_combination_list]");
                 goto end;
             }
             OpenAPI_query_param_combination_t *query_param_combination_listItem = OpenAPI_query_param_combination_parseFromJSON(query_param_combination_list_local);
             if (!query_param_combination_listItem) {
-                ogs_error("No query_param_combination_listItem");
+                log_error("No query_param_combination_listItem");
                 goto end;
             }
             OpenAPI_list_add(query_param_combination_listList, query_param_combination_listItem);
@@ -154,10 +154,10 @@ OpenAPI_no_profile_match_info_t *OpenAPI_no_profile_match_info_copy(OpenAPI_no_p
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_no_profile_match_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_no_profile_match_info_convertToJSON() failed");
+        log_error("OpenAPI_no_profile_match_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -165,14 +165,14 @@ OpenAPI_no_profile_match_info_t *OpenAPI_no_profile_match_info_copy(OpenAPI_no_p
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -13,7 +13,7 @@ OpenAPI_bw_requirement_t *OpenAPI_bw_requirement_create(
 )
 {
     OpenAPI_bw_requirement_t *bw_requirement_local_var = ogs_malloc(sizeof(OpenAPI_bw_requirement_t));
-    ogs_assert(bw_requirement_local_var);
+    log_assert(bw_requirement_local_var);
 
     bw_requirement_local_var->app_id = app_id;
     bw_requirement_local_var->mar_bw_dl = mar_bw_dl;
@@ -60,44 +60,44 @@ cJSON *OpenAPI_bw_requirement_convertToJSON(OpenAPI_bw_requirement_t *bw_require
     OpenAPI_lnode_t *node = NULL;
 
     if (bw_requirement == NULL) {
-        ogs_error("OpenAPI_bw_requirement_convertToJSON() failed [BwRequirement]");
+        log_error("OpenAPI_bw_requirement_convertToJSON() failed [BwRequirement]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!bw_requirement->app_id) {
-        ogs_error("OpenAPI_bw_requirement_convertToJSON() failed [app_id]");
+        log_error("OpenAPI_bw_requirement_convertToJSON() failed [app_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "appId", bw_requirement->app_id) == NULL) {
-        ogs_error("OpenAPI_bw_requirement_convertToJSON() failed [app_id]");
+        log_error("OpenAPI_bw_requirement_convertToJSON() failed [app_id]");
         goto end;
     }
 
     if (bw_requirement->mar_bw_dl) {
     if (cJSON_AddStringToObject(item, "marBwDl", bw_requirement->mar_bw_dl) == NULL) {
-        ogs_error("OpenAPI_bw_requirement_convertToJSON() failed [mar_bw_dl]");
+        log_error("OpenAPI_bw_requirement_convertToJSON() failed [mar_bw_dl]");
         goto end;
     }
     }
 
     if (bw_requirement->mar_bw_ul) {
     if (cJSON_AddStringToObject(item, "marBwUl", bw_requirement->mar_bw_ul) == NULL) {
-        ogs_error("OpenAPI_bw_requirement_convertToJSON() failed [mar_bw_ul]");
+        log_error("OpenAPI_bw_requirement_convertToJSON() failed [mar_bw_ul]");
         goto end;
     }
     }
 
     if (bw_requirement->mir_bw_dl) {
     if (cJSON_AddStringToObject(item, "mirBwDl", bw_requirement->mir_bw_dl) == NULL) {
-        ogs_error("OpenAPI_bw_requirement_convertToJSON() failed [mir_bw_dl]");
+        log_error("OpenAPI_bw_requirement_convertToJSON() failed [mir_bw_dl]");
         goto end;
     }
     }
 
     if (bw_requirement->mir_bw_ul) {
     if (cJSON_AddStringToObject(item, "mirBwUl", bw_requirement->mir_bw_ul) == NULL) {
-        ogs_error("OpenAPI_bw_requirement_convertToJSON() failed [mir_bw_ul]");
+        log_error("OpenAPI_bw_requirement_convertToJSON() failed [mir_bw_ul]");
         goto end;
     }
     }
@@ -117,18 +117,18 @@ OpenAPI_bw_requirement_t *OpenAPI_bw_requirement_parseFromJSON(cJSON *bw_require
     cJSON *mir_bw_ul = NULL;
     app_id = cJSON_GetObjectItemCaseSensitive(bw_requirementJSON, "appId");
     if (!app_id) {
-        ogs_error("OpenAPI_bw_requirement_parseFromJSON() failed [app_id]");
+        log_error("OpenAPI_bw_requirement_parseFromJSON() failed [app_id]");
         goto end;
     }
     if (!cJSON_IsString(app_id)) {
-        ogs_error("OpenAPI_bw_requirement_parseFromJSON() failed [app_id]");
+        log_error("OpenAPI_bw_requirement_parseFromJSON() failed [app_id]");
         goto end;
     }
 
     mar_bw_dl = cJSON_GetObjectItemCaseSensitive(bw_requirementJSON, "marBwDl");
     if (mar_bw_dl) {
     if (!cJSON_IsString(mar_bw_dl) && !cJSON_IsNull(mar_bw_dl)) {
-        ogs_error("OpenAPI_bw_requirement_parseFromJSON() failed [mar_bw_dl]");
+        log_error("OpenAPI_bw_requirement_parseFromJSON() failed [mar_bw_dl]");
         goto end;
     }
     }
@@ -136,7 +136,7 @@ OpenAPI_bw_requirement_t *OpenAPI_bw_requirement_parseFromJSON(cJSON *bw_require
     mar_bw_ul = cJSON_GetObjectItemCaseSensitive(bw_requirementJSON, "marBwUl");
     if (mar_bw_ul) {
     if (!cJSON_IsString(mar_bw_ul) && !cJSON_IsNull(mar_bw_ul)) {
-        ogs_error("OpenAPI_bw_requirement_parseFromJSON() failed [mar_bw_ul]");
+        log_error("OpenAPI_bw_requirement_parseFromJSON() failed [mar_bw_ul]");
         goto end;
     }
     }
@@ -144,7 +144,7 @@ OpenAPI_bw_requirement_t *OpenAPI_bw_requirement_parseFromJSON(cJSON *bw_require
     mir_bw_dl = cJSON_GetObjectItemCaseSensitive(bw_requirementJSON, "mirBwDl");
     if (mir_bw_dl) {
     if (!cJSON_IsString(mir_bw_dl) && !cJSON_IsNull(mir_bw_dl)) {
-        ogs_error("OpenAPI_bw_requirement_parseFromJSON() failed [mir_bw_dl]");
+        log_error("OpenAPI_bw_requirement_parseFromJSON() failed [mir_bw_dl]");
         goto end;
     }
     }
@@ -152,7 +152,7 @@ OpenAPI_bw_requirement_t *OpenAPI_bw_requirement_parseFromJSON(cJSON *bw_require
     mir_bw_ul = cJSON_GetObjectItemCaseSensitive(bw_requirementJSON, "mirBwUl");
     if (mir_bw_ul) {
     if (!cJSON_IsString(mir_bw_ul) && !cJSON_IsNull(mir_bw_ul)) {
-        ogs_error("OpenAPI_bw_requirement_parseFromJSON() failed [mir_bw_ul]");
+        log_error("OpenAPI_bw_requirement_parseFromJSON() failed [mir_bw_ul]");
         goto end;
     }
     }
@@ -175,10 +175,10 @@ OpenAPI_bw_requirement_t *OpenAPI_bw_requirement_copy(OpenAPI_bw_requirement_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_bw_requirement_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_bw_requirement_convertToJSON() failed");
+        log_error("OpenAPI_bw_requirement_convertToJSON() failed");
         return NULL;
     }
 
@@ -186,14 +186,14 @@ OpenAPI_bw_requirement_t *OpenAPI_bw_requirement_copy(OpenAPI_bw_requirement_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

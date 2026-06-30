@@ -32,7 +32,7 @@ ogs_sock_t *ogs_tcp_server(
     ogs_sockaddr_t *addr;
     ogs_sockopt_t option;
 
-    ogs_assert(sa_list);
+    log_assert(sa_list);
 
     ogs_sockopt_init(&option);
     if (socket_option)
@@ -44,20 +44,20 @@ ogs_sock_t *ogs_tcp_server(
         if (new) {
             if (option.tcp_nodelay == true) {
                 rv = ogs_tcp_nodelay(new->fd, true);
-                ogs_assert(rv == OGS_OK);
+                log_assert(rv == OGS_OK);
             } else
-                ogs_warn("TCP NO_DELAY Disabled");
+                log_warn("TCP NO_DELAY Disabled");
 
             if (option.so_linger.l_onoff == true) {
                 rv = ogs_so_linger(new->fd, option.so_linger.l_linger);
-                ogs_assert(rv == OGS_OK);
+                log_assert(rv == OGS_OK);
             }
 
             rv = ogs_listen_reusable(new->fd, true);
-            ogs_assert(rv == OGS_OK);
+            log_assert(rv == OGS_OK);
 
             if (ogs_sock_bind(new, addr) == OGS_OK) {
-                ogs_debug("tcp_server() [%s]:%d",
+                log_debug("tcp_server() [%s]:%d",
                         OGS_ADDR(addr, buf), OGS_PORT(addr));
                 break;
             }
@@ -69,14 +69,14 @@ ogs_sock_t *ogs_tcp_server(
     }
 
     if (addr == NULL) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                 "tcp_server() [%s]:%d failed",
                 OGS_ADDR(sa_list, buf), OGS_PORT(sa_list));
         return NULL;
     }
 
     rv = ogs_sock_listen(new);
-    ogs_assert(rv == OGS_OK);
+    log_assert(rv == OGS_OK);
 
     return new;
 }
@@ -91,7 +91,7 @@ ogs_sock_t *ogs_tcp_client(
     ogs_sockaddr_t *addr;
     ogs_sockopt_t option;
 
-    ogs_assert(sa_list);
+    log_assert(sa_list);
 
     ogs_sockopt_init(&option);
     if (socket_option)
@@ -103,17 +103,17 @@ ogs_sock_t *ogs_tcp_client(
         if (new) {
             if (option.sctp_nodelay == true) {
                 rv = ogs_tcp_nodelay(new->fd, true);
-                ogs_assert(rv == OGS_OK);
+                log_assert(rv == OGS_OK);
             } else
-                ogs_warn("TCP NO_DELAY Disabled");
+                log_warn("TCP NO_DELAY Disabled");
 
             if (option.so_linger.l_onoff == true) {
                 rv = ogs_so_linger(new->fd, option.so_linger.l_linger);
-                ogs_assert(rv == OGS_OK);
+                log_assert(rv == OGS_OK);
             }
 
             if (ogs_sock_connect(new, addr) == OGS_OK) {
-                ogs_debug("tcp_client() [%s]:%d",
+                log_debug("tcp_client() [%s]:%d",
                         OGS_ADDR(addr, buf), OGS_PORT(addr));
                 break;
             }
@@ -125,7 +125,7 @@ ogs_sock_t *ogs_tcp_client(
     }
 
     if (addr == NULL) {
-        ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+        log_error_msg(LOG_ERROR, ogs_socket_errno,
                 "tcp_client() [%s]:%d failed",
                 OGS_ADDR(sa_list, buf), OGS_PORT(sa_list));
         return NULL;

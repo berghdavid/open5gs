@@ -10,7 +10,7 @@ OpenAPI_n1_n2_msg_txfr_failure_notification_t *OpenAPI_n1_n2_msg_txfr_failure_no
 )
 {
     OpenAPI_n1_n2_msg_txfr_failure_notification_t *n1_n2_msg_txfr_failure_notification_local_var = ogs_malloc(sizeof(OpenAPI_n1_n2_msg_txfr_failure_notification_t));
-    ogs_assert(n1_n2_msg_txfr_failure_notification_local_var);
+    log_assert(n1_n2_msg_txfr_failure_notification_local_var);
 
     n1_n2_msg_txfr_failure_notification_local_var->cause = cause;
     n1_n2_msg_txfr_failure_notification_local_var->n1n2_msg_data_uri = n1n2_msg_data_uri;
@@ -38,26 +38,26 @@ cJSON *OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON(OpenAPI_n1_n2_m
     OpenAPI_lnode_t *node = NULL;
 
     if (n1_n2_msg_txfr_failure_notification == NULL) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [N1N2MsgTxfrFailureNotification]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [N1N2MsgTxfrFailureNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (n1_n2_msg_txfr_failure_notification->cause == OpenAPI_n1_n2_message_transfer_cause_NULL) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [cause]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [cause]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "cause", OpenAPI_n1_n2_message_transfer_cause_ToString(n1_n2_msg_txfr_failure_notification->cause)) == NULL) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [cause]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [cause]");
         goto end;
     }
 
     if (!n1_n2_msg_txfr_failure_notification->n1n2_msg_data_uri) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [n1n2_msg_data_uri]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [n1n2_msg_data_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "n1n2MsgDataUri", n1_n2_msg_txfr_failure_notification->n1n2_msg_data_uri) == NULL) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [n1n2_msg_data_uri]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed [n1n2_msg_data_uri]");
         goto end;
     }
 
@@ -74,22 +74,22 @@ OpenAPI_n1_n2_msg_txfr_failure_notification_t *OpenAPI_n1_n2_msg_txfr_failure_no
     cJSON *n1n2_msg_data_uri = NULL;
     cause = cJSON_GetObjectItemCaseSensitive(n1_n2_msg_txfr_failure_notificationJSON, "cause");
     if (!cause) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_parseFromJSON() failed [cause]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_parseFromJSON() failed [cause]");
         goto end;
     }
     if (!cJSON_IsString(cause)) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_parseFromJSON() failed [cause]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_parseFromJSON() failed [cause]");
         goto end;
     }
     causeVariable = OpenAPI_n1_n2_message_transfer_cause_FromString(cause->valuestring);
 
     n1n2_msg_data_uri = cJSON_GetObjectItemCaseSensitive(n1_n2_msg_txfr_failure_notificationJSON, "n1n2MsgDataUri");
     if (!n1n2_msg_data_uri) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_parseFromJSON() failed [n1n2_msg_data_uri]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_parseFromJSON() failed [n1n2_msg_data_uri]");
         goto end;
     }
     if (!cJSON_IsString(n1n2_msg_data_uri)) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_parseFromJSON() failed [n1n2_msg_data_uri]");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_parseFromJSON() failed [n1n2_msg_data_uri]");
         goto end;
     }
 
@@ -108,10 +108,10 @@ OpenAPI_n1_n2_msg_txfr_failure_notification_t *OpenAPI_n1_n2_msg_txfr_failure_no
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed");
+        log_error("OpenAPI_n1_n2_msg_txfr_failure_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -119,14 +119,14 @@ OpenAPI_n1_n2_msg_txfr_failure_notification_t *OpenAPI_n1_n2_msg_txfr_failure_no
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

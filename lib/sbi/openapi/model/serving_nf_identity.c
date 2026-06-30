@@ -12,7 +12,7 @@ OpenAPI_serving_nf_identity_t *OpenAPI_serving_nf_identity_create(
 )
 {
     OpenAPI_serving_nf_identity_t *serving_nf_identity_local_var = ogs_malloc(sizeof(OpenAPI_serving_nf_identity_t));
-    ogs_assert(serving_nf_identity_local_var);
+    log_assert(serving_nf_identity_local_var);
 
     serving_nf_identity_local_var->serv_nf_inst_id = serv_nf_inst_id;
     serving_nf_identity_local_var->guami = guami;
@@ -54,14 +54,14 @@ cJSON *OpenAPI_serving_nf_identity_convertToJSON(OpenAPI_serving_nf_identity_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (serving_nf_identity == NULL) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed [ServingNfIdentity]");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed [ServingNfIdentity]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (serving_nf_identity->serv_nf_inst_id) {
     if (cJSON_AddStringToObject(item, "servNfInstId", serving_nf_identity->serv_nf_inst_id) == NULL) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed [serv_nf_inst_id]");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed [serv_nf_inst_id]");
         goto end;
     }
     }
@@ -69,12 +69,12 @@ cJSON *OpenAPI_serving_nf_identity_convertToJSON(OpenAPI_serving_nf_identity_t *
     if (serving_nf_identity->guami) {
     cJSON *guami_local_JSON = OpenAPI_guami_convertToJSON(serving_nf_identity->guami);
     if (guami_local_JSON == NULL) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed [guami]");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed [guami]");
         goto end;
     }
     cJSON_AddItemToObject(item, "guami", guami_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed [guami]");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed [guami]");
         goto end;
     }
     }
@@ -82,12 +82,12 @@ cJSON *OpenAPI_serving_nf_identity_convertToJSON(OpenAPI_serving_nf_identity_t *
     if (serving_nf_identity->an_gw_addr) {
     cJSON *an_gw_addr_local_JSON = OpenAPI_an_gw_address_convertToJSON(serving_nf_identity->an_gw_addr);
     if (an_gw_addr_local_JSON == NULL) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed [an_gw_addr]");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed [an_gw_addr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "anGwAddr", an_gw_addr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed [an_gw_addr]");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed [an_gw_addr]");
         goto end;
     }
     }
@@ -95,12 +95,12 @@ cJSON *OpenAPI_serving_nf_identity_convertToJSON(OpenAPI_serving_nf_identity_t *
     if (serving_nf_identity->sgsn_addr) {
     cJSON *sgsn_addr_local_JSON = OpenAPI_sgsn_address_convertToJSON(serving_nf_identity->sgsn_addr);
     if (sgsn_addr_local_JSON == NULL) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed [sgsn_addr]");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed [sgsn_addr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "sgsnAddr", sgsn_addr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed [sgsn_addr]");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed [sgsn_addr]");
         goto end;
     }
     }
@@ -123,7 +123,7 @@ OpenAPI_serving_nf_identity_t *OpenAPI_serving_nf_identity_parseFromJSON(cJSON *
     serv_nf_inst_id = cJSON_GetObjectItemCaseSensitive(serving_nf_identityJSON, "servNfInstId");
     if (serv_nf_inst_id) {
     if (!cJSON_IsString(serv_nf_inst_id) && !cJSON_IsNull(serv_nf_inst_id)) {
-        ogs_error("OpenAPI_serving_nf_identity_parseFromJSON() failed [serv_nf_inst_id]");
+        log_error("OpenAPI_serving_nf_identity_parseFromJSON() failed [serv_nf_inst_id]");
         goto end;
     }
     }
@@ -132,7 +132,7 @@ OpenAPI_serving_nf_identity_t *OpenAPI_serving_nf_identity_parseFromJSON(cJSON *
     if (guami) {
     guami_local_nonprim = OpenAPI_guami_parseFromJSON(guami);
     if (!guami_local_nonprim) {
-        ogs_error("OpenAPI_guami_parseFromJSON failed [guami]");
+        log_error("OpenAPI_guami_parseFromJSON failed [guami]");
         goto end;
     }
     }
@@ -141,7 +141,7 @@ OpenAPI_serving_nf_identity_t *OpenAPI_serving_nf_identity_parseFromJSON(cJSON *
     if (an_gw_addr) {
     an_gw_addr_local_nonprim = OpenAPI_an_gw_address_parseFromJSON(an_gw_addr);
     if (!an_gw_addr_local_nonprim) {
-        ogs_error("OpenAPI_an_gw_address_parseFromJSON failed [an_gw_addr]");
+        log_error("OpenAPI_an_gw_address_parseFromJSON failed [an_gw_addr]");
         goto end;
     }
     }
@@ -150,7 +150,7 @@ OpenAPI_serving_nf_identity_t *OpenAPI_serving_nf_identity_parseFromJSON(cJSON *
     if (sgsn_addr) {
     sgsn_addr_local_nonprim = OpenAPI_sgsn_address_parseFromJSON(sgsn_addr);
     if (!sgsn_addr_local_nonprim) {
-        ogs_error("OpenAPI_sgsn_address_parseFromJSON failed [sgsn_addr]");
+        log_error("OpenAPI_sgsn_address_parseFromJSON failed [sgsn_addr]");
         goto end;
     }
     }
@@ -184,10 +184,10 @@ OpenAPI_serving_nf_identity_t *OpenAPI_serving_nf_identity_copy(OpenAPI_serving_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_serving_nf_identity_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_serving_nf_identity_convertToJSON() failed");
+        log_error("OpenAPI_serving_nf_identity_convertToJSON() failed");
         return NULL;
     }
 
@@ -195,14 +195,14 @@ OpenAPI_serving_nf_identity_t *OpenAPI_serving_nf_identity_copy(OpenAPI_serving_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

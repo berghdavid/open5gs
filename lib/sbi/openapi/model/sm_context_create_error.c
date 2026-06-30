@@ -13,7 +13,7 @@ OpenAPI_sm_context_create_error_t *OpenAPI_sm_context_create_error_create(
 )
 {
     OpenAPI_sm_context_create_error_t *sm_context_create_error_local_var = ogs_malloc(sizeof(OpenAPI_sm_context_create_error_t));
-    ogs_assert(sm_context_create_error_local_var);
+    log_assert(sm_context_create_error_local_var);
 
     sm_context_create_error_local_var->error = error;
     sm_context_create_error_local_var->n1_sm_msg = n1_sm_msg;
@@ -56,35 +56,35 @@ cJSON *OpenAPI_sm_context_create_error_convertToJSON(OpenAPI_sm_context_create_e
     OpenAPI_lnode_t *node = NULL;
 
     if (sm_context_create_error == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [SmContextCreateError]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [SmContextCreateError]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!sm_context_create_error->error) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [error]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [error]");
         return NULL;
     }
     cJSON *error_local_JSON = OpenAPI_ext_problem_details_convertToJSON(sm_context_create_error->error);
     if (error_local_JSON == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [error]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [error]");
         goto end;
     }
     cJSON_AddItemToObject(item, "error", error_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [error]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [error]");
         goto end;
     }
 
     if (sm_context_create_error->n1_sm_msg) {
     cJSON *n1_sm_msg_local_JSON = OpenAPI_ref_to_binary_data_convertToJSON(sm_context_create_error->n1_sm_msg);
     if (n1_sm_msg_local_JSON == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n1_sm_msg]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n1_sm_msg]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n1SmMsg", n1_sm_msg_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n1_sm_msg]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n1_sm_msg]");
         goto end;
     }
     }
@@ -92,26 +92,26 @@ cJSON *OpenAPI_sm_context_create_error_convertToJSON(OpenAPI_sm_context_create_e
     if (sm_context_create_error->n2_sm_info) {
     cJSON *n2_sm_info_local_JSON = OpenAPI_ref_to_binary_data_convertToJSON(sm_context_create_error->n2_sm_info);
     if (n2_sm_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n2_sm_info]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n2_sm_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n2SmInfo", n2_sm_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n2_sm_info]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n2_sm_info]");
         goto end;
     }
     }
 
     if (sm_context_create_error->n2_sm_info_type != OpenAPI_n2_sm_info_type_NULL) {
     if (cJSON_AddStringToObject(item, "n2SmInfoType", OpenAPI_n2_sm_info_type_ToString(sm_context_create_error->n2_sm_info_type)) == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n2_sm_info_type]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [n2_sm_info_type]");
         goto end;
     }
     }
 
     if (sm_context_create_error->recovery_time) {
     if (cJSON_AddStringToObject(item, "recoveryTime", sm_context_create_error->recovery_time) == NULL) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed [recovery_time]");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed [recovery_time]");
         goto end;
     }
     }
@@ -135,12 +135,12 @@ OpenAPI_sm_context_create_error_t *OpenAPI_sm_context_create_error_parseFromJSON
     cJSON *recovery_time = NULL;
     error = cJSON_GetObjectItemCaseSensitive(sm_context_create_errorJSON, "error");
     if (!error) {
-        ogs_error("OpenAPI_sm_context_create_error_parseFromJSON() failed [error]");
+        log_error("OpenAPI_sm_context_create_error_parseFromJSON() failed [error]");
         goto end;
     }
     error_local_nonprim = OpenAPI_ext_problem_details_parseFromJSON(error);
     if (!error_local_nonprim) {
-        ogs_error("OpenAPI_ext_problem_details_parseFromJSON failed [error]");
+        log_error("OpenAPI_ext_problem_details_parseFromJSON failed [error]");
         goto end;
     }
 
@@ -148,7 +148,7 @@ OpenAPI_sm_context_create_error_t *OpenAPI_sm_context_create_error_parseFromJSON
     if (n1_sm_msg) {
     n1_sm_msg_local_nonprim = OpenAPI_ref_to_binary_data_parseFromJSON(n1_sm_msg);
     if (!n1_sm_msg_local_nonprim) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [n1_sm_msg]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [n1_sm_msg]");
         goto end;
     }
     }
@@ -157,7 +157,7 @@ OpenAPI_sm_context_create_error_t *OpenAPI_sm_context_create_error_parseFromJSON
     if (n2_sm_info) {
     n2_sm_info_local_nonprim = OpenAPI_ref_to_binary_data_parseFromJSON(n2_sm_info);
     if (!n2_sm_info_local_nonprim) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [n2_sm_info]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [n2_sm_info]");
         goto end;
     }
     }
@@ -165,7 +165,7 @@ OpenAPI_sm_context_create_error_t *OpenAPI_sm_context_create_error_parseFromJSON
     n2_sm_info_type = cJSON_GetObjectItemCaseSensitive(sm_context_create_errorJSON, "n2SmInfoType");
     if (n2_sm_info_type) {
     if (!cJSON_IsString(n2_sm_info_type)) {
-        ogs_error("OpenAPI_sm_context_create_error_parseFromJSON() failed [n2_sm_info_type]");
+        log_error("OpenAPI_sm_context_create_error_parseFromJSON() failed [n2_sm_info_type]");
         goto end;
     }
     n2_sm_info_typeVariable = OpenAPI_n2_sm_info_type_FromString(n2_sm_info_type->valuestring);
@@ -174,7 +174,7 @@ OpenAPI_sm_context_create_error_t *OpenAPI_sm_context_create_error_parseFromJSON
     recovery_time = cJSON_GetObjectItemCaseSensitive(sm_context_create_errorJSON, "recoveryTime");
     if (recovery_time) {
     if (!cJSON_IsString(recovery_time) && !cJSON_IsNull(recovery_time)) {
-        ogs_error("OpenAPI_sm_context_create_error_parseFromJSON() failed [recovery_time]");
+        log_error("OpenAPI_sm_context_create_error_parseFromJSON() failed [recovery_time]");
         goto end;
     }
     }
@@ -209,10 +209,10 @@ OpenAPI_sm_context_create_error_t *OpenAPI_sm_context_create_error_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sm_context_create_error_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sm_context_create_error_convertToJSON() failed");
+        log_error("OpenAPI_sm_context_create_error_convertToJSON() failed");
         return NULL;
     }
 
@@ -220,14 +220,14 @@ OpenAPI_sm_context_create_error_t *OpenAPI_sm_context_create_error_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

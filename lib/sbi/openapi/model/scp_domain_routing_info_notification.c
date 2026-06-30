@@ -11,7 +11,7 @@ OpenAPI_scp_domain_routing_info_notification_t *OpenAPI_scp_domain_routing_info_
 )
 {
     OpenAPI_scp_domain_routing_info_notification_t *scp_domain_routing_info_notification_local_var = ogs_malloc(sizeof(OpenAPI_scp_domain_routing_info_notification_t));
-    ogs_assert(scp_domain_routing_info_notification_local_var);
+    log_assert(scp_domain_routing_info_notification_local_var);
 
     scp_domain_routing_info_notification_local_var->routing_info = routing_info;
     scp_domain_routing_info_notification_local_var->is_local_ind = is_local_ind;
@@ -40,29 +40,29 @@ cJSON *OpenAPI_scp_domain_routing_info_notification_convertToJSON(OpenAPI_scp_do
     OpenAPI_lnode_t *node = NULL;
 
     if (scp_domain_routing_info_notification == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [ScpDomainRoutingInfoNotification]");
+        log_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [ScpDomainRoutingInfoNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!scp_domain_routing_info_notification->routing_info) {
-        ogs_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [routing_info]");
+        log_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [routing_info]");
         return NULL;
     }
     cJSON *routing_info_local_JSON = OpenAPI_scp_domain_routing_information_convertToJSON(scp_domain_routing_info_notification->routing_info);
     if (routing_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [routing_info]");
+        log_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [routing_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "routingInfo", routing_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [routing_info]");
+        log_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [routing_info]");
         goto end;
     }
 
     if (scp_domain_routing_info_notification->is_local_ind) {
     if (cJSON_AddBoolToObject(item, "localInd", scp_domain_routing_info_notification->local_ind) == NULL) {
-        ogs_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [local_ind]");
+        log_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed [local_ind]");
         goto end;
     }
     }
@@ -80,19 +80,19 @@ OpenAPI_scp_domain_routing_info_notification_t *OpenAPI_scp_domain_routing_info_
     cJSON *local_ind = NULL;
     routing_info = cJSON_GetObjectItemCaseSensitive(scp_domain_routing_info_notificationJSON, "routingInfo");
     if (!routing_info) {
-        ogs_error("OpenAPI_scp_domain_routing_info_notification_parseFromJSON() failed [routing_info]");
+        log_error("OpenAPI_scp_domain_routing_info_notification_parseFromJSON() failed [routing_info]");
         goto end;
     }
     routing_info_local_nonprim = OpenAPI_scp_domain_routing_information_parseFromJSON(routing_info);
     if (!routing_info_local_nonprim) {
-        ogs_error("OpenAPI_scp_domain_routing_information_parseFromJSON failed [routing_info]");
+        log_error("OpenAPI_scp_domain_routing_information_parseFromJSON failed [routing_info]");
         goto end;
     }
 
     local_ind = cJSON_GetObjectItemCaseSensitive(scp_domain_routing_info_notificationJSON, "localInd");
     if (local_ind) {
     if (!cJSON_IsBool(local_ind)) {
-        ogs_error("OpenAPI_scp_domain_routing_info_notification_parseFromJSON() failed [local_ind]");
+        log_error("OpenAPI_scp_domain_routing_info_notification_parseFromJSON() failed [local_ind]");
         goto end;
     }
     }
@@ -117,10 +117,10 @@ OpenAPI_scp_domain_routing_info_notification_t *OpenAPI_scp_domain_routing_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_scp_domain_routing_info_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed");
+        log_error("OpenAPI_scp_domain_routing_info_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -128,14 +128,14 @@ OpenAPI_scp_domain_routing_info_notification_t *OpenAPI_scp_domain_routing_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

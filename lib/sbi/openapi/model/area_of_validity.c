@@ -9,7 +9,7 @@ OpenAPI_area_of_validity_t *OpenAPI_area_of_validity_create(
 )
 {
     OpenAPI_area_of_validity_t *area_of_validity_local_var = ogs_malloc(sizeof(OpenAPI_area_of_validity_t));
-    ogs_assert(area_of_validity_local_var);
+    log_assert(area_of_validity_local_var);
 
     area_of_validity_local_var->tai_list = tai_list;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_area_of_validity_convertToJSON(OpenAPI_area_of_validity_t *area_o
     OpenAPI_lnode_t *node = NULL;
 
     if (area_of_validity == NULL) {
-        ogs_error("OpenAPI_area_of_validity_convertToJSON() failed [AreaOfValidity]");
+        log_error("OpenAPI_area_of_validity_convertToJSON() failed [AreaOfValidity]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!area_of_validity->tai_list) {
-        ogs_error("OpenAPI_area_of_validity_convertToJSON() failed [tai_list]");
+        log_error("OpenAPI_area_of_validity_convertToJSON() failed [tai_list]");
         return NULL;
     }
     cJSON *tai_listList = cJSON_AddArrayToObject(item, "taiList");
     if (tai_listList == NULL) {
-        ogs_error("OpenAPI_area_of_validity_convertToJSON() failed [tai_list]");
+        log_error("OpenAPI_area_of_validity_convertToJSON() failed [tai_list]");
         goto end;
     }
     OpenAPI_list_for_each(area_of_validity->tai_list, node) {
         cJSON *itemLocal = OpenAPI_tai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_area_of_validity_convertToJSON() failed [tai_list]");
+            log_error("OpenAPI_area_of_validity_convertToJSON() failed [tai_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_listList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_area_of_validity_t *OpenAPI_area_of_validity_parseFromJSON(cJSON *area_o
     OpenAPI_list_t *tai_listList = NULL;
     tai_list = cJSON_GetObjectItemCaseSensitive(area_of_validityJSON, "taiList");
     if (!tai_list) {
-        ogs_error("OpenAPI_area_of_validity_parseFromJSON() failed [tai_list]");
+        log_error("OpenAPI_area_of_validity_parseFromJSON() failed [tai_list]");
         goto end;
     }
         cJSON *tai_list_local = NULL;
         if (!cJSON_IsArray(tai_list)) {
-            ogs_error("OpenAPI_area_of_validity_parseFromJSON() failed [tai_list]");
+            log_error("OpenAPI_area_of_validity_parseFromJSON() failed [tai_list]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_area_of_validity_t *OpenAPI_area_of_validity_parseFromJSON(cJSON *area_o
 
         cJSON_ArrayForEach(tai_list_local, tai_list) {
             if (!cJSON_IsObject(tai_list_local)) {
-                ogs_error("OpenAPI_area_of_validity_parseFromJSON() failed [tai_list]");
+                log_error("OpenAPI_area_of_validity_parseFromJSON() failed [tai_list]");
                 goto end;
             }
             OpenAPI_tai_t *tai_listItem = OpenAPI_tai_parseFromJSON(tai_list_local);
             if (!tai_listItem) {
-                ogs_error("No tai_listItem");
+                log_error("No tai_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_listList, tai_listItem);
@@ -119,10 +119,10 @@ OpenAPI_area_of_validity_t *OpenAPI_area_of_validity_copy(OpenAPI_area_of_validi
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_area_of_validity_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_area_of_validity_convertToJSON() failed");
+        log_error("OpenAPI_area_of_validity_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_area_of_validity_t *OpenAPI_area_of_validity_copy(OpenAPI_area_of_validi
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

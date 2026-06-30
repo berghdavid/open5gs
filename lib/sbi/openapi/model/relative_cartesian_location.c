@@ -12,7 +12,7 @@ OpenAPI_relative_cartesian_location_t *OpenAPI_relative_cartesian_location_creat
 )
 {
     OpenAPI_relative_cartesian_location_t *relative_cartesian_location_local_var = ogs_malloc(sizeof(OpenAPI_relative_cartesian_location_t));
-    ogs_assert(relative_cartesian_location_local_var);
+    log_assert(relative_cartesian_location_local_var);
 
     relative_cartesian_location_local_var->x = x;
     relative_cartesian_location_local_var->y = y;
@@ -38,24 +38,24 @@ cJSON *OpenAPI_relative_cartesian_location_convertToJSON(OpenAPI_relative_cartes
     OpenAPI_lnode_t *node = NULL;
 
     if (relative_cartesian_location == NULL) {
-        ogs_error("OpenAPI_relative_cartesian_location_convertToJSON() failed [RelativeCartesianLocation]");
+        log_error("OpenAPI_relative_cartesian_location_convertToJSON() failed [RelativeCartesianLocation]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "x", relative_cartesian_location->x) == NULL) {
-        ogs_error("OpenAPI_relative_cartesian_location_convertToJSON() failed [x]");
+        log_error("OpenAPI_relative_cartesian_location_convertToJSON() failed [x]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "y", relative_cartesian_location->y) == NULL) {
-        ogs_error("OpenAPI_relative_cartesian_location_convertToJSON() failed [y]");
+        log_error("OpenAPI_relative_cartesian_location_convertToJSON() failed [y]");
         goto end;
     }
 
     if (relative_cartesian_location->is_z) {
     if (cJSON_AddNumberToObject(item, "z", relative_cartesian_location->z) == NULL) {
-        ogs_error("OpenAPI_relative_cartesian_location_convertToJSON() failed [z]");
+        log_error("OpenAPI_relative_cartesian_location_convertToJSON() failed [z]");
         goto end;
     }
     }
@@ -73,28 +73,28 @@ OpenAPI_relative_cartesian_location_t *OpenAPI_relative_cartesian_location_parse
     cJSON *z = NULL;
     x = cJSON_GetObjectItemCaseSensitive(relative_cartesian_locationJSON, "x");
     if (!x) {
-        ogs_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [x]");
+        log_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [x]");
         goto end;
     }
     if (!cJSON_IsNumber(x)) {
-        ogs_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [x]");
+        log_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [x]");
         goto end;
     }
 
     y = cJSON_GetObjectItemCaseSensitive(relative_cartesian_locationJSON, "y");
     if (!y) {
-        ogs_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [y]");
+        log_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [y]");
         goto end;
     }
     if (!cJSON_IsNumber(y)) {
-        ogs_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [y]");
+        log_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [y]");
         goto end;
     }
 
     z = cJSON_GetObjectItemCaseSensitive(relative_cartesian_locationJSON, "z");
     if (z) {
     if (!cJSON_IsNumber(z)) {
-        ogs_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [z]");
+        log_error("OpenAPI_relative_cartesian_location_parseFromJSON() failed [z]");
         goto end;
     }
     }
@@ -118,10 +118,10 @@ OpenAPI_relative_cartesian_location_t *OpenAPI_relative_cartesian_location_copy(
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_relative_cartesian_location_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_relative_cartesian_location_convertToJSON() failed");
+        log_error("OpenAPI_relative_cartesian_location_convertToJSON() failed");
         return NULL;
     }
 
@@ -129,14 +129,14 @@ OpenAPI_relative_cartesian_location_t *OpenAPI_relative_cartesian_location_copy(
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

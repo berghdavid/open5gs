@@ -8,7 +8,7 @@ OpenAPI_access_type_rm_t *OpenAPI_access_type_rm_create(
 )
 {
     OpenAPI_access_type_rm_t *access_type_rm_local_var = ogs_malloc(sizeof(OpenAPI_access_type_rm_t));
-    ogs_assert(access_type_rm_local_var);
+    log_assert(access_type_rm_local_var);
 
 
     return access_type_rm_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_access_type_rm_convertToJSON(OpenAPI_access_type_rm_t *access_typ
     OpenAPI_lnode_t *node = NULL;
 
     if (access_type_rm == NULL) {
-        ogs_error("OpenAPI_access_type_rm_convertToJSON() failed [AccessTypeRm]");
+        log_error("OpenAPI_access_type_rm_convertToJSON() failed [AccessTypeRm]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_access_type_rm_t *OpenAPI_access_type_rm_copy(OpenAPI_access_type_rm_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_access_type_rm_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_access_type_rm_convertToJSON() failed");
+        log_error("OpenAPI_access_type_rm_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_access_type_rm_t *OpenAPI_access_type_rm_copy(OpenAPI_access_type_rm_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

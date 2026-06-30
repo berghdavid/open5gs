@@ -9,7 +9,7 @@ OpenAPI_amf_dereg_info_t *OpenAPI_amf_dereg_info_create(
 )
 {
     OpenAPI_amf_dereg_info_t *amf_dereg_info_local_var = ogs_malloc(sizeof(OpenAPI_amf_dereg_info_t));
-    ogs_assert(amf_dereg_info_local_var);
+    log_assert(amf_dereg_info_local_var);
 
     amf_dereg_info_local_var->dereg_reason = dereg_reason;
 
@@ -32,17 +32,17 @@ cJSON *OpenAPI_amf_dereg_info_convertToJSON(OpenAPI_amf_dereg_info_t *amf_dereg_
     OpenAPI_lnode_t *node = NULL;
 
     if (amf_dereg_info == NULL) {
-        ogs_error("OpenAPI_amf_dereg_info_convertToJSON() failed [AmfDeregInfo]");
+        log_error("OpenAPI_amf_dereg_info_convertToJSON() failed [AmfDeregInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (amf_dereg_info->dereg_reason == OpenAPI_deregistration_reason_NULL) {
-        ogs_error("OpenAPI_amf_dereg_info_convertToJSON() failed [dereg_reason]");
+        log_error("OpenAPI_amf_dereg_info_convertToJSON() failed [dereg_reason]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "deregReason", OpenAPI_deregistration_reason_ToString(amf_dereg_info->dereg_reason)) == NULL) {
-        ogs_error("OpenAPI_amf_dereg_info_convertToJSON() failed [dereg_reason]");
+        log_error("OpenAPI_amf_dereg_info_convertToJSON() failed [dereg_reason]");
         goto end;
     }
 
@@ -58,11 +58,11 @@ OpenAPI_amf_dereg_info_t *OpenAPI_amf_dereg_info_parseFromJSON(cJSON *amf_dereg_
     OpenAPI_deregistration_reason_e dereg_reasonVariable = 0;
     dereg_reason = cJSON_GetObjectItemCaseSensitive(amf_dereg_infoJSON, "deregReason");
     if (!dereg_reason) {
-        ogs_error("OpenAPI_amf_dereg_info_parseFromJSON() failed [dereg_reason]");
+        log_error("OpenAPI_amf_dereg_info_parseFromJSON() failed [dereg_reason]");
         goto end;
     }
     if (!cJSON_IsString(dereg_reason)) {
-        ogs_error("OpenAPI_amf_dereg_info_parseFromJSON() failed [dereg_reason]");
+        log_error("OpenAPI_amf_dereg_info_parseFromJSON() failed [dereg_reason]");
         goto end;
     }
     dereg_reasonVariable = OpenAPI_deregistration_reason_FromString(dereg_reason->valuestring);
@@ -81,10 +81,10 @@ OpenAPI_amf_dereg_info_t *OpenAPI_amf_dereg_info_copy(OpenAPI_amf_dereg_info_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_amf_dereg_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_amf_dereg_info_convertToJSON() failed");
+        log_error("OpenAPI_amf_dereg_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -92,14 +92,14 @@ OpenAPI_amf_dereg_info_t *OpenAPI_amf_dereg_info_copy(OpenAPI_amf_dereg_info_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

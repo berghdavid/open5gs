@@ -14,7 +14,7 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_create(
 )
 {
     OpenAPI_additional_measurement_t *additional_measurement_local_var = ogs_malloc(sizeof(OpenAPI_additional_measurement_t));
-    ogs_assert(additional_measurement_local_var);
+    log_assert(additional_measurement_local_var);
 
     additional_measurement_local_var->unexp_loc = unexp_loc;
     additional_measurement_local_var->unexp_flow_teps = unexp_flow_teps;
@@ -75,7 +75,7 @@ cJSON *OpenAPI_additional_measurement_convertToJSON(OpenAPI_additional_measureme
     OpenAPI_lnode_t *node = NULL;
 
     if (additional_measurement == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [AdditionalMeasurement]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [AdditionalMeasurement]");
         return NULL;
     }
 
@@ -83,12 +83,12 @@ cJSON *OpenAPI_additional_measurement_convertToJSON(OpenAPI_additional_measureme
     if (additional_measurement->unexp_loc) {
     cJSON *unexp_loc_local_JSON = OpenAPI_network_area_info_convertToJSON(additional_measurement->unexp_loc);
     if (unexp_loc_local_JSON == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_loc]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_loc]");
         goto end;
     }
     cJSON_AddItemToObject(item, "unexpLoc", unexp_loc_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_loc]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_loc]");
         goto end;
     }
     }
@@ -96,13 +96,13 @@ cJSON *OpenAPI_additional_measurement_convertToJSON(OpenAPI_additional_measureme
     if (additional_measurement->unexp_flow_teps) {
     cJSON *unexp_flow_tepsList = cJSON_AddArrayToObject(item, "unexpFlowTeps");
     if (unexp_flow_tepsList == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_flow_teps]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_flow_teps]");
         goto end;
     }
     OpenAPI_list_for_each(additional_measurement->unexp_flow_teps, node) {
         cJSON *itemLocal = OpenAPI_ip_eth_flow_description_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_flow_teps]");
+            log_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_flow_teps]");
             goto end;
         }
         cJSON_AddItemToArray(unexp_flow_tepsList, itemLocal);
@@ -112,7 +112,7 @@ cJSON *OpenAPI_additional_measurement_convertToJSON(OpenAPI_additional_measureme
     if (additional_measurement->unexp_wakes) {
     cJSON *unexp_wakesList = cJSON_AddArrayToObject(item, "unexpWakes");
     if (unexp_wakesList == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_wakes]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [unexp_wakes]");
         goto end;
     }
     OpenAPI_list_for_each(additional_measurement->unexp_wakes, node) {
@@ -122,12 +122,12 @@ cJSON *OpenAPI_additional_measurement_convertToJSON(OpenAPI_additional_measureme
     if (additional_measurement->ddos_attack) {
     cJSON *ddos_attack_local_JSON = OpenAPI_address_list_convertToJSON(additional_measurement->ddos_attack);
     if (ddos_attack_local_JSON == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [ddos_attack]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [ddos_attack]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ddosAttack", ddos_attack_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [ddos_attack]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [ddos_attack]");
         goto end;
     }
     }
@@ -135,12 +135,12 @@ cJSON *OpenAPI_additional_measurement_convertToJSON(OpenAPI_additional_measureme
     if (additional_measurement->wrg_dest) {
     cJSON *wrg_dest_local_JSON = OpenAPI_address_list_convertToJSON(additional_measurement->wrg_dest);
     if (wrg_dest_local_JSON == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [wrg_dest]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [wrg_dest]");
         goto end;
     }
     cJSON_AddItemToObject(item, "wrgDest", wrg_dest_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [wrg_dest]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [wrg_dest]");
         goto end;
     }
     }
@@ -148,13 +148,13 @@ cJSON *OpenAPI_additional_measurement_convertToJSON(OpenAPI_additional_measureme
     if (additional_measurement->circums) {
     cJSON *circumsList = cJSON_AddArrayToObject(item, "circums");
     if (circumsList == NULL) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [circums]");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed [circums]");
         goto end;
     }
     OpenAPI_list_for_each(additional_measurement->circums, node) {
         cJSON *itemLocal = OpenAPI_circumstance_description_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_additional_measurement_convertToJSON() failed [circums]");
+            log_error("OpenAPI_additional_measurement_convertToJSON() failed [circums]");
             goto end;
         }
         cJSON_AddItemToArray(circumsList, itemLocal);
@@ -185,7 +185,7 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_parseFromJSON(c
     if (unexp_loc) {
     unexp_loc_local_nonprim = OpenAPI_network_area_info_parseFromJSON(unexp_loc);
     if (!unexp_loc_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [unexp_loc]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [unexp_loc]");
         goto end;
     }
     }
@@ -194,7 +194,7 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_parseFromJSON(c
     if (unexp_flow_teps) {
         cJSON *unexp_flow_teps_local = NULL;
         if (!cJSON_IsArray(unexp_flow_teps)) {
-            ogs_error("OpenAPI_additional_measurement_parseFromJSON() failed [unexp_flow_teps]");
+            log_error("OpenAPI_additional_measurement_parseFromJSON() failed [unexp_flow_teps]");
             goto end;
         }
 
@@ -202,12 +202,12 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_parseFromJSON(c
 
         cJSON_ArrayForEach(unexp_flow_teps_local, unexp_flow_teps) {
             if (!cJSON_IsObject(unexp_flow_teps_local)) {
-                ogs_error("OpenAPI_additional_measurement_parseFromJSON() failed [unexp_flow_teps]");
+                log_error("OpenAPI_additional_measurement_parseFromJSON() failed [unexp_flow_teps]");
                 goto end;
             }
             OpenAPI_ip_eth_flow_description_t *unexp_flow_tepsItem = OpenAPI_ip_eth_flow_description_parseFromJSON(unexp_flow_teps_local);
             if (!unexp_flow_tepsItem) {
-                ogs_error("No unexp_flow_tepsItem");
+                log_error("No unexp_flow_tepsItem");
                 goto end;
             }
             OpenAPI_list_add(unexp_flow_tepsList, unexp_flow_tepsItem);
@@ -218,7 +218,7 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_parseFromJSON(c
     if (unexp_wakes) {
         cJSON *unexp_wakes_local = NULL;
         if (!cJSON_IsArray(unexp_wakes)) {
-            ogs_error("OpenAPI_additional_measurement_parseFromJSON() failed [unexp_wakes]");
+            log_error("OpenAPI_additional_measurement_parseFromJSON() failed [unexp_wakes]");
             goto end;
         }
 
@@ -234,7 +234,7 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_parseFromJSON(c
     if (ddos_attack) {
     ddos_attack_local_nonprim = OpenAPI_address_list_parseFromJSON(ddos_attack);
     if (!ddos_attack_local_nonprim) {
-        ogs_error("OpenAPI_address_list_parseFromJSON failed [ddos_attack]");
+        log_error("OpenAPI_address_list_parseFromJSON failed [ddos_attack]");
         goto end;
     }
     }
@@ -243,7 +243,7 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_parseFromJSON(c
     if (wrg_dest) {
     wrg_dest_local_nonprim = OpenAPI_address_list_parseFromJSON(wrg_dest);
     if (!wrg_dest_local_nonprim) {
-        ogs_error("OpenAPI_address_list_parseFromJSON failed [wrg_dest]");
+        log_error("OpenAPI_address_list_parseFromJSON failed [wrg_dest]");
         goto end;
     }
     }
@@ -252,7 +252,7 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_parseFromJSON(c
     if (circums) {
         cJSON *circums_local = NULL;
         if (!cJSON_IsArray(circums)) {
-            ogs_error("OpenAPI_additional_measurement_parseFromJSON() failed [circums]");
+            log_error("OpenAPI_additional_measurement_parseFromJSON() failed [circums]");
             goto end;
         }
 
@@ -260,12 +260,12 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_parseFromJSON(c
 
         cJSON_ArrayForEach(circums_local, circums) {
             if (!cJSON_IsObject(circums_local)) {
-                ogs_error("OpenAPI_additional_measurement_parseFromJSON() failed [circums]");
+                log_error("OpenAPI_additional_measurement_parseFromJSON() failed [circums]");
                 goto end;
             }
             OpenAPI_circumstance_description_t *circumsItem = OpenAPI_circumstance_description_parseFromJSON(circums_local);
             if (!circumsItem) {
-                ogs_error("No circumsItem");
+                log_error("No circumsItem");
                 goto end;
             }
             OpenAPI_list_add(circumsList, circumsItem);
@@ -324,10 +324,10 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_copy(OpenAPI_ad
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_additional_measurement_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_additional_measurement_convertToJSON() failed");
+        log_error("OpenAPI_additional_measurement_convertToJSON() failed");
         return NULL;
     }
 
@@ -335,14 +335,14 @@ OpenAPI_additional_measurement_t *OpenAPI_additional_measurement_copy(OpenAPI_ad
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -10,7 +10,7 @@ OpenAPI_gba_authentication_info_result_t *OpenAPI_gba_authentication_info_result
 )
 {
     OpenAPI_gba_authentication_info_result_t *gba_authentication_info_result_local_var = ogs_malloc(sizeof(OpenAPI_gba_authentication_info_result_t));
-    ogs_assert(gba_authentication_info_result_local_var);
+    log_assert(gba_authentication_info_result_local_var);
 
     gba_authentication_info_result_local_var->_3g_aka_av = _3g_aka_av;
     gba_authentication_info_result_local_var->supported_features = supported_features;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_gba_authentication_info_result_convertToJSON(OpenAPI_gba_authenti
     OpenAPI_lnode_t *node = NULL;
 
     if (gba_authentication_info_result == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed [GbaAuthenticationInfoResult]");
+        log_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed [GbaAuthenticationInfoResult]");
         return NULL;
     }
 
@@ -50,19 +50,19 @@ cJSON *OpenAPI_gba_authentication_info_result_convertToJSON(OpenAPI_gba_authenti
     if (gba_authentication_info_result->_3g_aka_av) {
     cJSON *_3g_aka_av_local_JSON = OpenAPI_model_3_g_aka_av_convertToJSON(gba_authentication_info_result->_3g_aka_av);
     if (_3g_aka_av_local_JSON == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed [_3g_aka_av]");
+        log_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed [_3g_aka_av]");
         goto end;
     }
     cJSON_AddItemToObject(item, "3gAkaAv", _3g_aka_av_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed [_3g_aka_av]");
+        log_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed [_3g_aka_av]");
         goto end;
     }
     }
 
     if (gba_authentication_info_result->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", gba_authentication_info_result->supported_features) == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_gba_authentication_info_result_t *OpenAPI_gba_authentication_info_result
     if (_3g_aka_av) {
     _3g_aka_av_local_nonprim = OpenAPI_model_3_g_aka_av_parseFromJSON(_3g_aka_av);
     if (!_3g_aka_av_local_nonprim) {
-        ogs_error("OpenAPI_model_3_g_aka_av_parseFromJSON failed [_3g_aka_av]");
+        log_error("OpenAPI_model_3_g_aka_av_parseFromJSON failed [_3g_aka_av]");
         goto end;
     }
     }
@@ -90,7 +90,7 @@ OpenAPI_gba_authentication_info_result_t *OpenAPI_gba_authentication_info_result
     supported_features = cJSON_GetObjectItemCaseSensitive(gba_authentication_info_resultJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_gba_authentication_info_result_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_gba_authentication_info_result_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -114,10 +114,10 @@ OpenAPI_gba_authentication_info_result_t *OpenAPI_gba_authentication_info_result
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_gba_authentication_info_result_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed");
+        log_error("OpenAPI_gba_authentication_info_result_convertToJSON() failed");
         return NULL;
     }
 
@@ -125,14 +125,14 @@ OpenAPI_gba_authentication_info_result_t *OpenAPI_gba_authentication_info_result
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

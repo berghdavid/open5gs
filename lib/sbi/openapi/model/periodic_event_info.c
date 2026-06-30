@@ -10,7 +10,7 @@ OpenAPI_periodic_event_info_t *OpenAPI_periodic_event_info_create(
 )
 {
     OpenAPI_periodic_event_info_t *periodic_event_info_local_var = ogs_malloc(sizeof(OpenAPI_periodic_event_info_t));
-    ogs_assert(periodic_event_info_local_var);
+    log_assert(periodic_event_info_local_var);
 
     periodic_event_info_local_var->reporting_amount = reporting_amount;
     periodic_event_info_local_var->reporting_interval = reporting_interval;
@@ -34,18 +34,18 @@ cJSON *OpenAPI_periodic_event_info_convertToJSON(OpenAPI_periodic_event_info_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (periodic_event_info == NULL) {
-        ogs_error("OpenAPI_periodic_event_info_convertToJSON() failed [PeriodicEventInfo]");
+        log_error("OpenAPI_periodic_event_info_convertToJSON() failed [PeriodicEventInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "reportingAmount", periodic_event_info->reporting_amount) == NULL) {
-        ogs_error("OpenAPI_periodic_event_info_convertToJSON() failed [reporting_amount]");
+        log_error("OpenAPI_periodic_event_info_convertToJSON() failed [reporting_amount]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "reportingInterval", periodic_event_info->reporting_interval) == NULL) {
-        ogs_error("OpenAPI_periodic_event_info_convertToJSON() failed [reporting_interval]");
+        log_error("OpenAPI_periodic_event_info_convertToJSON() failed [reporting_interval]");
         goto end;
     }
 
@@ -61,21 +61,21 @@ OpenAPI_periodic_event_info_t *OpenAPI_periodic_event_info_parseFromJSON(cJSON *
     cJSON *reporting_interval = NULL;
     reporting_amount = cJSON_GetObjectItemCaseSensitive(periodic_event_infoJSON, "reportingAmount");
     if (!reporting_amount) {
-        ogs_error("OpenAPI_periodic_event_info_parseFromJSON() failed [reporting_amount]");
+        log_error("OpenAPI_periodic_event_info_parseFromJSON() failed [reporting_amount]");
         goto end;
     }
     if (!cJSON_IsNumber(reporting_amount)) {
-        ogs_error("OpenAPI_periodic_event_info_parseFromJSON() failed [reporting_amount]");
+        log_error("OpenAPI_periodic_event_info_parseFromJSON() failed [reporting_amount]");
         goto end;
     }
 
     reporting_interval = cJSON_GetObjectItemCaseSensitive(periodic_event_infoJSON, "reportingInterval");
     if (!reporting_interval) {
-        ogs_error("OpenAPI_periodic_event_info_parseFromJSON() failed [reporting_interval]");
+        log_error("OpenAPI_periodic_event_info_parseFromJSON() failed [reporting_interval]");
         goto end;
     }
     if (!cJSON_IsNumber(reporting_interval)) {
-        ogs_error("OpenAPI_periodic_event_info_parseFromJSON() failed [reporting_interval]");
+        log_error("OpenAPI_periodic_event_info_parseFromJSON() failed [reporting_interval]");
         goto end;
     }
 
@@ -96,10 +96,10 @@ OpenAPI_periodic_event_info_t *OpenAPI_periodic_event_info_copy(OpenAPI_periodic
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_periodic_event_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_periodic_event_info_convertToJSON() failed");
+        log_error("OpenAPI_periodic_event_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -107,14 +107,14 @@ OpenAPI_periodic_event_info_t *OpenAPI_periodic_event_info_copy(OpenAPI_periodic
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

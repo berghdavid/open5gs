@@ -15,7 +15,7 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_create(
 )
 {
     OpenAPI_ue_mobility_t *ue_mobility_local_var = ogs_malloc(sizeof(OpenAPI_ue_mobility_t));
-    ogs_assert(ue_mobility_local_var);
+    log_assert(ue_mobility_local_var);
 
     ue_mobility_local_var->ts = ts;
     ue_mobility_local_var->recurring_time = recurring_time;
@@ -59,14 +59,14 @@ cJSON *OpenAPI_ue_mobility_convertToJSON(OpenAPI_ue_mobility_t *ue_mobility)
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_mobility == NULL) {
-        ogs_error("OpenAPI_ue_mobility_convertToJSON() failed [UeMobility]");
+        log_error("OpenAPI_ue_mobility_convertToJSON() failed [UeMobility]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ue_mobility->ts) {
     if (cJSON_AddStringToObject(item, "ts", ue_mobility->ts) == NULL) {
-        ogs_error("OpenAPI_ue_mobility_convertToJSON() failed [ts]");
+        log_error("OpenAPI_ue_mobility_convertToJSON() failed [ts]");
         goto end;
     }
     }
@@ -74,26 +74,26 @@ cJSON *OpenAPI_ue_mobility_convertToJSON(OpenAPI_ue_mobility_t *ue_mobility)
     if (ue_mobility->recurring_time) {
     cJSON *recurring_time_local_JSON = OpenAPI_scheduled_communication_time_1_convertToJSON(ue_mobility->recurring_time);
     if (recurring_time_local_JSON == NULL) {
-        ogs_error("OpenAPI_ue_mobility_convertToJSON() failed [recurring_time]");
+        log_error("OpenAPI_ue_mobility_convertToJSON() failed [recurring_time]");
         goto end;
     }
     cJSON_AddItemToObject(item, "recurringTime", recurring_time_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ue_mobility_convertToJSON() failed [recurring_time]");
+        log_error("OpenAPI_ue_mobility_convertToJSON() failed [recurring_time]");
         goto end;
     }
     }
 
     if (ue_mobility->is_duration) {
     if (cJSON_AddNumberToObject(item, "duration", ue_mobility->duration) == NULL) {
-        ogs_error("OpenAPI_ue_mobility_convertToJSON() failed [duration]");
+        log_error("OpenAPI_ue_mobility_convertToJSON() failed [duration]");
         goto end;
     }
     }
 
     if (ue_mobility->is_duration_variance) {
     if (cJSON_AddNumberToObject(item, "durationVariance", ue_mobility->duration_variance) == NULL) {
-        ogs_error("OpenAPI_ue_mobility_convertToJSON() failed [duration_variance]");
+        log_error("OpenAPI_ue_mobility_convertToJSON() failed [duration_variance]");
         goto end;
     }
     }
@@ -101,13 +101,13 @@ cJSON *OpenAPI_ue_mobility_convertToJSON(OpenAPI_ue_mobility_t *ue_mobility)
     if (ue_mobility->loc_infos) {
     cJSON *loc_infosList = cJSON_AddArrayToObject(item, "locInfos");
     if (loc_infosList == NULL) {
-        ogs_error("OpenAPI_ue_mobility_convertToJSON() failed [loc_infos]");
+        log_error("OpenAPI_ue_mobility_convertToJSON() failed [loc_infos]");
         goto end;
     }
     OpenAPI_list_for_each(ue_mobility->loc_infos, node) {
         cJSON *itemLocal = OpenAPI_location_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_ue_mobility_convertToJSON() failed [loc_infos]");
+            log_error("OpenAPI_ue_mobility_convertToJSON() failed [loc_infos]");
             goto end;
         }
         cJSON_AddItemToArray(loc_infosList, itemLocal);
@@ -132,7 +132,7 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_parseFromJSON(cJSON *ue_mobilityJSON)
     ts = cJSON_GetObjectItemCaseSensitive(ue_mobilityJSON, "ts");
     if (ts) {
     if (!cJSON_IsString(ts) && !cJSON_IsNull(ts)) {
-        ogs_error("OpenAPI_ue_mobility_parseFromJSON() failed [ts]");
+        log_error("OpenAPI_ue_mobility_parseFromJSON() failed [ts]");
         goto end;
     }
     }
@@ -141,7 +141,7 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_parseFromJSON(cJSON *ue_mobilityJSON)
     if (recurring_time) {
     recurring_time_local_nonprim = OpenAPI_scheduled_communication_time_1_parseFromJSON(recurring_time);
     if (!recurring_time_local_nonprim) {
-        ogs_error("OpenAPI_scheduled_communication_time_1_parseFromJSON failed [recurring_time]");
+        log_error("OpenAPI_scheduled_communication_time_1_parseFromJSON failed [recurring_time]");
         goto end;
     }
     }
@@ -149,7 +149,7 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_parseFromJSON(cJSON *ue_mobilityJSON)
     duration = cJSON_GetObjectItemCaseSensitive(ue_mobilityJSON, "duration");
     if (duration) {
     if (!cJSON_IsNumber(duration)) {
-        ogs_error("OpenAPI_ue_mobility_parseFromJSON() failed [duration]");
+        log_error("OpenAPI_ue_mobility_parseFromJSON() failed [duration]");
         goto end;
     }
     }
@@ -157,7 +157,7 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_parseFromJSON(cJSON *ue_mobilityJSON)
     duration_variance = cJSON_GetObjectItemCaseSensitive(ue_mobilityJSON, "durationVariance");
     if (duration_variance) {
     if (!cJSON_IsNumber(duration_variance)) {
-        ogs_error("OpenAPI_ue_mobility_parseFromJSON() failed [duration_variance]");
+        log_error("OpenAPI_ue_mobility_parseFromJSON() failed [duration_variance]");
         goto end;
     }
     }
@@ -166,7 +166,7 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_parseFromJSON(cJSON *ue_mobilityJSON)
     if (loc_infos) {
         cJSON *loc_infos_local = NULL;
         if (!cJSON_IsArray(loc_infos)) {
-            ogs_error("OpenAPI_ue_mobility_parseFromJSON() failed [loc_infos]");
+            log_error("OpenAPI_ue_mobility_parseFromJSON() failed [loc_infos]");
             goto end;
         }
 
@@ -174,12 +174,12 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_parseFromJSON(cJSON *ue_mobilityJSON)
 
         cJSON_ArrayForEach(loc_infos_local, loc_infos) {
             if (!cJSON_IsObject(loc_infos_local)) {
-                ogs_error("OpenAPI_ue_mobility_parseFromJSON() failed [loc_infos]");
+                log_error("OpenAPI_ue_mobility_parseFromJSON() failed [loc_infos]");
                 goto end;
             }
             OpenAPI_location_info_t *loc_infosItem = OpenAPI_location_info_parseFromJSON(loc_infos_local);
             if (!loc_infosItem) {
-                ogs_error("No loc_infosItem");
+                log_error("No loc_infosItem");
                 goto end;
             }
             OpenAPI_list_add(loc_infosList, loc_infosItem);
@@ -217,10 +217,10 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_copy(OpenAPI_ue_mobility_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_mobility_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_mobility_convertToJSON() failed");
+        log_error("OpenAPI_ue_mobility_convertToJSON() failed");
         return NULL;
     }
 
@@ -228,14 +228,14 @@ OpenAPI_ue_mobility_t *OpenAPI_ue_mobility_copy(OpenAPI_ue_mobility_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

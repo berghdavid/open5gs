@@ -10,7 +10,7 @@ OpenAPI_snssai_route_selection_descriptor_t *OpenAPI_snssai_route_selection_desc
 )
 {
     OpenAPI_snssai_route_selection_descriptor_t *snssai_route_selection_descriptor_local_var = ogs_malloc(sizeof(OpenAPI_snssai_route_selection_descriptor_t));
-    ogs_assert(snssai_route_selection_descriptor_local_var);
+    log_assert(snssai_route_selection_descriptor_local_var);
 
     snssai_route_selection_descriptor_local_var->snssai = snssai;
     snssai_route_selection_descriptor_local_var->dnn_route_sel_descs = dnn_route_sel_descs;
@@ -45,36 +45,36 @@ cJSON *OpenAPI_snssai_route_selection_descriptor_convertToJSON(OpenAPI_snssai_ro
     OpenAPI_lnode_t *node = NULL;
 
     if (snssai_route_selection_descriptor == NULL) {
-        ogs_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [SnssaiRouteSelectionDescriptor]");
+        log_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [SnssaiRouteSelectionDescriptor]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!snssai_route_selection_descriptor->snssai) {
-        ogs_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [snssai]");
         return NULL;
     }
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(snssai_route_selection_descriptor->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [snssai]");
         goto end;
     }
 
     if (snssai_route_selection_descriptor->dnn_route_sel_descs) {
     cJSON *dnn_route_sel_descsList = cJSON_AddArrayToObject(item, "dnnRouteSelDescs");
     if (dnn_route_sel_descsList == NULL) {
-        ogs_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [dnn_route_sel_descs]");
+        log_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [dnn_route_sel_descs]");
         goto end;
     }
     OpenAPI_list_for_each(snssai_route_selection_descriptor->dnn_route_sel_descs, node) {
         cJSON *itemLocal = OpenAPI_dnn_route_selection_descriptor_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [dnn_route_sel_descs]");
+            log_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed [dnn_route_sel_descs]");
             goto end;
         }
         cJSON_AddItemToArray(dnn_route_sel_descsList, itemLocal);
@@ -95,12 +95,12 @@ OpenAPI_snssai_route_selection_descriptor_t *OpenAPI_snssai_route_selection_desc
     OpenAPI_list_t *dnn_route_sel_descsList = NULL;
     snssai = cJSON_GetObjectItemCaseSensitive(snssai_route_selection_descriptorJSON, "snssai");
     if (!snssai) {
-        ogs_error("OpenAPI_snssai_route_selection_descriptor_parseFromJSON() failed [snssai]");
+        log_error("OpenAPI_snssai_route_selection_descriptor_parseFromJSON() failed [snssai]");
         goto end;
     }
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
 
@@ -108,7 +108,7 @@ OpenAPI_snssai_route_selection_descriptor_t *OpenAPI_snssai_route_selection_desc
     if (dnn_route_sel_descs) {
         cJSON *dnn_route_sel_descs_local = NULL;
         if (!cJSON_IsArray(dnn_route_sel_descs)) {
-            ogs_error("OpenAPI_snssai_route_selection_descriptor_parseFromJSON() failed [dnn_route_sel_descs]");
+            log_error("OpenAPI_snssai_route_selection_descriptor_parseFromJSON() failed [dnn_route_sel_descs]");
             goto end;
         }
 
@@ -116,12 +116,12 @@ OpenAPI_snssai_route_selection_descriptor_t *OpenAPI_snssai_route_selection_desc
 
         cJSON_ArrayForEach(dnn_route_sel_descs_local, dnn_route_sel_descs) {
             if (!cJSON_IsObject(dnn_route_sel_descs_local)) {
-                ogs_error("OpenAPI_snssai_route_selection_descriptor_parseFromJSON() failed [dnn_route_sel_descs]");
+                log_error("OpenAPI_snssai_route_selection_descriptor_parseFromJSON() failed [dnn_route_sel_descs]");
                 goto end;
             }
             OpenAPI_dnn_route_selection_descriptor_t *dnn_route_sel_descsItem = OpenAPI_dnn_route_selection_descriptor_parseFromJSON(dnn_route_sel_descs_local);
             if (!dnn_route_sel_descsItem) {
-                ogs_error("No dnn_route_sel_descsItem");
+                log_error("No dnn_route_sel_descsItem");
                 goto end;
             }
             OpenAPI_list_add(dnn_route_sel_descsList, dnn_route_sel_descsItem);
@@ -154,10 +154,10 @@ OpenAPI_snssai_route_selection_descriptor_t *OpenAPI_snssai_route_selection_desc
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_snssai_route_selection_descriptor_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed");
+        log_error("OpenAPI_snssai_route_selection_descriptor_convertToJSON() failed");
         return NULL;
     }
 
@@ -165,14 +165,14 @@ OpenAPI_snssai_route_selection_descriptor_t *OpenAPI_snssai_route_selection_desc
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -9,7 +9,7 @@ OpenAPI_ref_to_binary_data_t *OpenAPI_ref_to_binary_data_create(
 )
 {
     OpenAPI_ref_to_binary_data_t *ref_to_binary_data_local_var = ogs_malloc(sizeof(OpenAPI_ref_to_binary_data_t));
-    ogs_assert(ref_to_binary_data_local_var);
+    log_assert(ref_to_binary_data_local_var);
 
     ref_to_binary_data_local_var->content_id = content_id;
 
@@ -36,17 +36,17 @@ cJSON *OpenAPI_ref_to_binary_data_convertToJSON(OpenAPI_ref_to_binary_data_t *re
     OpenAPI_lnode_t *node = NULL;
 
     if (ref_to_binary_data == NULL) {
-        ogs_error("OpenAPI_ref_to_binary_data_convertToJSON() failed [RefToBinaryData]");
+        log_error("OpenAPI_ref_to_binary_data_convertToJSON() failed [RefToBinaryData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!ref_to_binary_data->content_id) {
-        ogs_error("OpenAPI_ref_to_binary_data_convertToJSON() failed [content_id]");
+        log_error("OpenAPI_ref_to_binary_data_convertToJSON() failed [content_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "contentId", ref_to_binary_data->content_id) == NULL) {
-        ogs_error("OpenAPI_ref_to_binary_data_convertToJSON() failed [content_id]");
+        log_error("OpenAPI_ref_to_binary_data_convertToJSON() failed [content_id]");
         goto end;
     }
 
@@ -61,11 +61,11 @@ OpenAPI_ref_to_binary_data_t *OpenAPI_ref_to_binary_data_parseFromJSON(cJSON *re
     cJSON *content_id = NULL;
     content_id = cJSON_GetObjectItemCaseSensitive(ref_to_binary_dataJSON, "contentId");
     if (!content_id) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON() failed [content_id]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON() failed [content_id]");
         goto end;
     }
     if (!cJSON_IsString(content_id)) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON() failed [content_id]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON() failed [content_id]");
         goto end;
     }
 
@@ -83,10 +83,10 @@ OpenAPI_ref_to_binary_data_t *OpenAPI_ref_to_binary_data_copy(OpenAPI_ref_to_bin
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ref_to_binary_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ref_to_binary_data_convertToJSON() failed");
+        log_error("OpenAPI_ref_to_binary_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -94,14 +94,14 @@ OpenAPI_ref_to_binary_data_t *OpenAPI_ref_to_binary_data_copy(OpenAPI_ref_to_bin
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

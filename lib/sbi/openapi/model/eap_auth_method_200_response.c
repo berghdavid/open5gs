@@ -11,7 +11,7 @@ OpenAPI_eap_auth_method_200_response_t *OpenAPI_eap_auth_method_200_response_cre
 )
 {
     OpenAPI_eap_auth_method_200_response_t *eap_auth_method_200_response_local_var = ogs_malloc(sizeof(OpenAPI_eap_auth_method_200_response_t));
-    ogs_assert(eap_auth_method_200_response_local_var);
+    log_assert(eap_auth_method_200_response_local_var);
 
     eap_auth_method_200_response_local_var->is_eap_payload_null = is_eap_payload_null;
     eap_auth_method_200_response_local_var->eap_payload = eap_payload;
@@ -50,27 +50,27 @@ cJSON *OpenAPI_eap_auth_method_200_response_convertToJSON(OpenAPI_eap_auth_metho
     OpenAPI_lnode_t *node = NULL;
 
     if (eap_auth_method_200_response == NULL) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [EapAuthMethod_200_response]");
+        log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [EapAuthMethod_200_response]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!eap_auth_method_200_response->eap_payload) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [eap_payload]");
+        log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [eap_payload]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "eapPayload", eap_auth_method_200_response->eap_payload) == NULL) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [eap_payload]");
+        log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [eap_payload]");
         goto end;
     }
 
     if (!eap_auth_method_200_response->_links) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [_links]");
+        log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [_links]");
         return NULL;
     }
     cJSON *_links = cJSON_AddObjectToObject(item, "_links");
     if (_links == NULL) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [_links]");
+        log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [_links]");
         goto end;
     }
     cJSON *localMapObject = _links;
@@ -78,18 +78,18 @@ cJSON *OpenAPI_eap_auth_method_200_response_convertToJSON(OpenAPI_eap_auth_metho
         OpenAPI_list_for_each(eap_auth_method_200_response->_links, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [_links]");
+                log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [_links]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [_links]");
+                log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [_links]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_links_value_schema_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [inner]");
+                log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -109,22 +109,22 @@ OpenAPI_eap_auth_method_200_response_t *OpenAPI_eap_auth_method_200_response_par
     OpenAPI_list_t *_linksList = NULL;
     eap_payload = cJSON_GetObjectItemCaseSensitive(eap_auth_method_200_responseJSON, "eapPayload");
     if (!eap_payload) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [eap_payload]");
+        log_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [eap_payload]");
         goto end;
     }
     if (!cJSON_IsString(eap_payload)) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [eap_payload]");
+        log_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [eap_payload]");
         goto end;
     }
 
     _links = cJSON_GetObjectItemCaseSensitive(eap_auth_method_200_responseJSON, "_links");
     if (!_links) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [_links]");
+        log_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [_links]");
         goto end;
     }
         cJSON *_links_local_map = NULL;
         if (!cJSON_IsObject(_links) && !cJSON_IsNull(_links)) {
-            ogs_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [_links]");
+            log_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [_links]");
             goto end;
         }
         if (cJSON_IsObject(_links)) {
@@ -138,7 +138,7 @@ OpenAPI_eap_auth_method_200_response_t *OpenAPI_eap_auth_method_200_response_par
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_eap_auth_method_200_response_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(_linksList, localMapKeyPair);
@@ -171,10 +171,10 @@ OpenAPI_eap_auth_method_200_response_t *OpenAPI_eap_auth_method_200_response_cop
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_eap_auth_method_200_response_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed");
+        log_error("OpenAPI_eap_auth_method_200_response_convertToJSON() failed");
         return NULL;
     }
 
@@ -182,14 +182,14 @@ OpenAPI_eap_auth_method_200_response_t *OpenAPI_eap_auth_method_200_response_cop
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

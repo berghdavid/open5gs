@@ -10,7 +10,7 @@ OpenAPI_pcf_ue_callback_info_t *OpenAPI_pcf_ue_callback_info_create(
 )
 {
     OpenAPI_pcf_ue_callback_info_t *pcf_ue_callback_info_local_var = ogs_malloc(sizeof(OpenAPI_pcf_ue_callback_info_t));
-    ogs_assert(pcf_ue_callback_info_local_var);
+    log_assert(pcf_ue_callback_info_local_var);
 
     pcf_ue_callback_info_local_var->callback_uri = callback_uri;
     pcf_ue_callback_info_local_var->binding_info = binding_info;
@@ -42,23 +42,23 @@ cJSON *OpenAPI_pcf_ue_callback_info_convertToJSON(OpenAPI_pcf_ue_callback_info_t
     OpenAPI_lnode_t *node = NULL;
 
     if (pcf_ue_callback_info == NULL) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed [PcfUeCallbackInfo]");
+        log_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed [PcfUeCallbackInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!pcf_ue_callback_info->callback_uri) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed [callback_uri]");
+        log_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed [callback_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "callbackUri", pcf_ue_callback_info->callback_uri) == NULL) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed [callback_uri]");
+        log_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed [callback_uri]");
         goto end;
     }
 
     if (pcf_ue_callback_info->binding_info) {
     if (cJSON_AddStringToObject(item, "bindingInfo", pcf_ue_callback_info->binding_info) == NULL) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed [binding_info]");
+        log_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed [binding_info]");
         goto end;
     }
     }
@@ -75,18 +75,18 @@ OpenAPI_pcf_ue_callback_info_t *OpenAPI_pcf_ue_callback_info_parseFromJSON(cJSON
     cJSON *binding_info = NULL;
     callback_uri = cJSON_GetObjectItemCaseSensitive(pcf_ue_callback_infoJSON, "callbackUri");
     if (!callback_uri) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_parseFromJSON() failed [callback_uri]");
+        log_error("OpenAPI_pcf_ue_callback_info_parseFromJSON() failed [callback_uri]");
         goto end;
     }
     if (!cJSON_IsString(callback_uri)) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_parseFromJSON() failed [callback_uri]");
+        log_error("OpenAPI_pcf_ue_callback_info_parseFromJSON() failed [callback_uri]");
         goto end;
     }
 
     binding_info = cJSON_GetObjectItemCaseSensitive(pcf_ue_callback_infoJSON, "bindingInfo");
     if (binding_info) {
     if (!cJSON_IsString(binding_info) && !cJSON_IsNull(binding_info)) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_parseFromJSON() failed [binding_info]");
+        log_error("OpenAPI_pcf_ue_callback_info_parseFromJSON() failed [binding_info]");
         goto end;
     }
     }
@@ -106,10 +106,10 @@ OpenAPI_pcf_ue_callback_info_t *OpenAPI_pcf_ue_callback_info_copy(OpenAPI_pcf_ue
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pcf_ue_callback_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed");
+        log_error("OpenAPI_pcf_ue_callback_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -117,14 +117,14 @@ OpenAPI_pcf_ue_callback_info_t *OpenAPI_pcf_ue_callback_info_copy(OpenAPI_pcf_ue
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

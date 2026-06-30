@@ -62,7 +62,7 @@ struct ogs_hash_t {
 static ogs_hash_entry_t **alloc_array(ogs_hash_t *ht, unsigned int max)
 {
     ogs_hash_entry_t **ptr = ogs_calloc(1, sizeof(*ht->array) * (max + 1));
-    ogs_assert(ptr);
+    log_assert(ptr);
     return ptr;
 }
 
@@ -73,7 +73,7 @@ ogs_hash_t *ogs_hash_make(void)
 
     ht = ogs_malloc(sizeof(ogs_hash_t));
     if (!ht) {
-        ogs_error("ogs_malloc() failed");
+        log_error("ogs_malloc() failed");
         return NULL;
     }
 
@@ -92,7 +92,7 @@ ogs_hash_t *ogs_hash_make_custom(ogs_hashfunc_t hash_func)
 {
     ogs_hash_t *ht = ogs_hash_make();
     if (!ht) {
-        ogs_error("ogs_hash_make() failed");
+        log_error("ogs_hash_make() failed");
         return NULL;
     }
     ht->hash_func = hash_func;
@@ -103,8 +103,8 @@ void ogs_hash_destroy(ogs_hash_t *ht)
 {
     ogs_hash_entry_t *he = NULL, *next_he = NULL;
 
-    ogs_assert(ht);
-    ogs_assert(ht->array);
+    log_assert(ht);
+    log_assert(ht->array);
 
     ogs_hash_clear(ht);
 
@@ -122,7 +122,7 @@ void ogs_hash_destroy(ogs_hash_t *ht)
 
 ogs_hash_index_t *ogs_hash_next(ogs_hash_index_t *hi)
 {
-    ogs_assert(hi);
+    log_assert(hi);
 
     hi->this = hi->next;
     while (!hi->this) {
@@ -139,7 +139,7 @@ ogs_hash_index_t *ogs_hash_first(ogs_hash_t *ht)
 {
     ogs_hash_index_t *hi;
 
-    ogs_assert(ht);
+    log_assert(ht);
 
     hi = &ht->iterator;
 
@@ -153,7 +153,7 @@ ogs_hash_index_t *ogs_hash_first(ogs_hash_t *ht)
 void ogs_hash_this(ogs_hash_index_t *hi,
         const void **key, int *klen, void **val)
 {
-    ogs_assert(hi);
+    log_assert(hi);
 
     if (key)  *key  = hi->this->key;
     if (klen) *klen = hi->this->klen;
@@ -294,7 +294,7 @@ static ogs_hash_entry_t **find_entry(ogs_hash_t *ht,
         ht->free = he->next;
     else {
         he = ogs_malloc(sizeof(*he));
-        ogs_assert(he);
+        log_assert(he);
     }
     he->next = NULL;
     he->hash = hash;
@@ -311,9 +311,9 @@ void *ogs_hash_get_debug(ogs_hash_t *ht,
 {
     ogs_hash_entry_t *he;
 
-    ogs_assert(ht);
-    ogs_assert(key);
-    ogs_assert(klen);
+    log_assert(ht);
+    log_assert(key);
+    log_assert(klen);
 
     he = *find_entry(ht, key, klen, NULL, file_line);
     if (he)
@@ -327,9 +327,9 @@ void ogs_hash_set_debug(ogs_hash_t *ht,
 {
     ogs_hash_entry_t **hep;
 
-    ogs_assert(ht);
-    ogs_assert(key);
-    ogs_assert(klen);
+    log_assert(ht);
+    log_assert(key);
+    log_assert(klen);
 
     hep = find_entry(ht, key, klen, val, file_line);
     if (*hep) {
@@ -357,9 +357,9 @@ void *ogs_hash_get_or_set_debug(ogs_hash_t *ht,
 {
     ogs_hash_entry_t **hep;
 
-    ogs_assert(ht);
-    ogs_assert(key);
-    ogs_assert(klen);
+    log_assert(ht);
+    log_assert(key);
+    log_assert(klen);
 
     hep = find_entry(ht, key, klen, val, file_line);
     if (*hep) {
@@ -376,7 +376,7 @@ void *ogs_hash_get_or_set_debug(ogs_hash_t *ht,
 
 unsigned int ogs_hash_count(ogs_hash_t *ht)
 {
-    ogs_assert(ht);
+    log_assert(ht);
     return ht->count;
 }
 
@@ -384,7 +384,7 @@ void ogs_hash_clear(ogs_hash_t *ht)
 {
     ogs_hash_index_t *hi;
 
-    ogs_assert(ht);
+    log_assert(ht);
 
     for (hi = ogs_hash_first(ht); hi; hi = ogs_hash_next(hi))
         ogs_hash_set(ht, hi->this->key, hi->this->klen, NULL);

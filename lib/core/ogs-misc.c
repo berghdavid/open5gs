@@ -44,7 +44,7 @@ static void path_canonicalize(char *dir)
     size_t len = strlen (dir);
     size_t orig_len = len;
 
-    ogs_assert(dir);
+    log_assert(dir);
 
     while ((len > 0) && (dir[len - 1] == PATH_SEPARATOR))
         len--;
@@ -59,8 +59,8 @@ void ogs_path_remove_last_component(char *dir, const char *path)
     int i;
     int len = 0;
 
-    ogs_assert(dir);
-    ogs_assert(path);
+    log_assert(dir);
+    log_assert(path);
 
     strcpy(dir, path);
     path_canonicalize (dir);
@@ -75,7 +75,7 @@ void ogs_path_remove_last_component(char *dir, const char *path)
 
 bool ogs_path_is_absolute(const char *filename)
 {
-    ogs_assert(filename);
+    log_assert(filename);
 
     if (OGS_IS_DIR_SEPARATOR(filename[0]))
         return true;

@@ -11,7 +11,7 @@ OpenAPI_app_session_context_t *OpenAPI_app_session_context_create(
 )
 {
     OpenAPI_app_session_context_t *app_session_context_local_var = ogs_malloc(sizeof(OpenAPI_app_session_context_t));
-    ogs_assert(app_session_context_local_var);
+    log_assert(app_session_context_local_var);
 
     app_session_context_local_var->asc_req_data = asc_req_data;
     app_session_context_local_var->asc_resp_data = asc_resp_data;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_app_session_context_convertToJSON(OpenAPI_app_session_context_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (app_session_context == NULL) {
-        ogs_error("OpenAPI_app_session_context_convertToJSON() failed [AppSessionContext]");
+        log_error("OpenAPI_app_session_context_convertToJSON() failed [AppSessionContext]");
         return NULL;
     }
 
@@ -56,12 +56,12 @@ cJSON *OpenAPI_app_session_context_convertToJSON(OpenAPI_app_session_context_t *
     if (app_session_context->asc_req_data) {
     cJSON *asc_req_data_local_JSON = OpenAPI_app_session_context_req_data_convertToJSON(app_session_context->asc_req_data);
     if (asc_req_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_app_session_context_convertToJSON() failed [asc_req_data]");
+        log_error("OpenAPI_app_session_context_convertToJSON() failed [asc_req_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ascReqData", asc_req_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_app_session_context_convertToJSON() failed [asc_req_data]");
+        log_error("OpenAPI_app_session_context_convertToJSON() failed [asc_req_data]");
         goto end;
     }
     }
@@ -69,12 +69,12 @@ cJSON *OpenAPI_app_session_context_convertToJSON(OpenAPI_app_session_context_t *
     if (app_session_context->asc_resp_data) {
     cJSON *asc_resp_data_local_JSON = OpenAPI_app_session_context_resp_data_convertToJSON(app_session_context->asc_resp_data);
     if (asc_resp_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_app_session_context_convertToJSON() failed [asc_resp_data]");
+        log_error("OpenAPI_app_session_context_convertToJSON() failed [asc_resp_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ascRespData", asc_resp_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_app_session_context_convertToJSON() failed [asc_resp_data]");
+        log_error("OpenAPI_app_session_context_convertToJSON() failed [asc_resp_data]");
         goto end;
     }
     }
@@ -82,12 +82,12 @@ cJSON *OpenAPI_app_session_context_convertToJSON(OpenAPI_app_session_context_t *
     if (app_session_context->evs_notif) {
     cJSON *evs_notif_local_JSON = OpenAPI_events_notification_convertToJSON(app_session_context->evs_notif);
     if (evs_notif_local_JSON == NULL) {
-        ogs_error("OpenAPI_app_session_context_convertToJSON() failed [evs_notif]");
+        log_error("OpenAPI_app_session_context_convertToJSON() failed [evs_notif]");
         goto end;
     }
     cJSON_AddItemToObject(item, "evsNotif", evs_notif_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_app_session_context_convertToJSON() failed [evs_notif]");
+        log_error("OpenAPI_app_session_context_convertToJSON() failed [evs_notif]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_app_session_context_t *OpenAPI_app_session_context_parseFromJSON(cJSON *
     if (asc_req_data) {
     asc_req_data_local_nonprim = OpenAPI_app_session_context_req_data_parseFromJSON(asc_req_data);
     if (!asc_req_data_local_nonprim) {
-        ogs_error("OpenAPI_app_session_context_req_data_parseFromJSON failed [asc_req_data]");
+        log_error("OpenAPI_app_session_context_req_data_parseFromJSON failed [asc_req_data]");
         goto end;
     }
     }
@@ -119,7 +119,7 @@ OpenAPI_app_session_context_t *OpenAPI_app_session_context_parseFromJSON(cJSON *
     if (asc_resp_data) {
     asc_resp_data_local_nonprim = OpenAPI_app_session_context_resp_data_parseFromJSON(asc_resp_data);
     if (!asc_resp_data_local_nonprim) {
-        ogs_error("OpenAPI_app_session_context_resp_data_parseFromJSON failed [asc_resp_data]");
+        log_error("OpenAPI_app_session_context_resp_data_parseFromJSON failed [asc_resp_data]");
         goto end;
     }
     }
@@ -128,7 +128,7 @@ OpenAPI_app_session_context_t *OpenAPI_app_session_context_parseFromJSON(cJSON *
     if (evs_notif) {
     evs_notif_local_nonprim = OpenAPI_events_notification_parseFromJSON(evs_notif);
     if (!evs_notif_local_nonprim) {
-        ogs_error("OpenAPI_events_notification_parseFromJSON failed [evs_notif]");
+        log_error("OpenAPI_events_notification_parseFromJSON failed [evs_notif]");
         goto end;
     }
     }
@@ -161,10 +161,10 @@ OpenAPI_app_session_context_t *OpenAPI_app_session_context_copy(OpenAPI_app_sess
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_app_session_context_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_app_session_context_convertToJSON() failed");
+        log_error("OpenAPI_app_session_context_convertToJSON() failed");
         return NULL;
     }
 
@@ -172,14 +172,14 @@ OpenAPI_app_session_context_t *OpenAPI_app_session_context_copy(OpenAPI_app_sess
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

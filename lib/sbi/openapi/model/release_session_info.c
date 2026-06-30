@@ -10,7 +10,7 @@ OpenAPI_release_session_info_t *OpenAPI_release_session_info_create(
 )
 {
     OpenAPI_release_session_info_t *release_session_info_local_var = ogs_malloc(sizeof(OpenAPI_release_session_info_t));
-    ogs_assert(release_session_info_local_var);
+    log_assert(release_session_info_local_var);
 
     release_session_info_local_var->release_session_list = release_session_list;
     release_session_info_local_var->release_cause = release_cause;
@@ -41,37 +41,37 @@ cJSON *OpenAPI_release_session_info_convertToJSON(OpenAPI_release_session_info_t
     OpenAPI_lnode_t *node = NULL;
 
     if (release_session_info == NULL) {
-        ogs_error("OpenAPI_release_session_info_convertToJSON() failed [ReleaseSessionInfo]");
+        log_error("OpenAPI_release_session_info_convertToJSON() failed [ReleaseSessionInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!release_session_info->release_session_list) {
-        ogs_error("OpenAPI_release_session_info_convertToJSON() failed [release_session_list]");
+        log_error("OpenAPI_release_session_info_convertToJSON() failed [release_session_list]");
         return NULL;
     }
     cJSON *release_session_listList = cJSON_AddArrayToObject(item, "releaseSessionList");
     if (release_session_listList == NULL) {
-        ogs_error("OpenAPI_release_session_info_convertToJSON() failed [release_session_list]");
+        log_error("OpenAPI_release_session_info_convertToJSON() failed [release_session_list]");
         goto end;
     }
     OpenAPI_list_for_each(release_session_info->release_session_list, node) {
         if (node->data == NULL) {
-            ogs_error("OpenAPI_release_session_info_convertToJSON() failed [release_session_list]");
+            log_error("OpenAPI_release_session_info_convertToJSON() failed [release_session_list]");
             goto end;
         }
         if (cJSON_AddNumberToObject(release_session_listList, "", *(double *)node->data) == NULL) {
-            ogs_error("OpenAPI_release_session_info_convertToJSON() failed [release_session_list]");
+            log_error("OpenAPI_release_session_info_convertToJSON() failed [release_session_list]");
             goto end;
         }
     }
 
     if (release_session_info->release_cause == OpenAPI_release_cause_NULL) {
-        ogs_error("OpenAPI_release_session_info_convertToJSON() failed [release_cause]");
+        log_error("OpenAPI_release_session_info_convertToJSON() failed [release_cause]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "releaseCause", OpenAPI_release_cause_ToString(release_session_info->release_cause)) == NULL) {
-        ogs_error("OpenAPI_release_session_info_convertToJSON() failed [release_cause]");
+        log_error("OpenAPI_release_session_info_convertToJSON() failed [release_cause]");
         goto end;
     }
 
@@ -89,12 +89,12 @@ OpenAPI_release_session_info_t *OpenAPI_release_session_info_parseFromJSON(cJSON
     OpenAPI_release_cause_e release_causeVariable = 0;
     release_session_list = cJSON_GetObjectItemCaseSensitive(release_session_infoJSON, "releaseSessionList");
     if (!release_session_list) {
-        ogs_error("OpenAPI_release_session_info_parseFromJSON() failed [release_session_list]");
+        log_error("OpenAPI_release_session_info_parseFromJSON() failed [release_session_list]");
         goto end;
     }
         cJSON *release_session_list_local = NULL;
         if (!cJSON_IsArray(release_session_list)) {
-            ogs_error("OpenAPI_release_session_info_parseFromJSON() failed [release_session_list]");
+            log_error("OpenAPI_release_session_info_parseFromJSON() failed [release_session_list]");
             goto end;
         }
 
@@ -104,12 +104,12 @@ OpenAPI_release_session_info_t *OpenAPI_release_session_info_parseFromJSON(cJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsNumber(release_session_list_local)) {
-                ogs_error("OpenAPI_release_session_info_parseFromJSON() failed [release_session_list]");
+                log_error("OpenAPI_release_session_info_parseFromJSON() failed [release_session_list]");
                 goto end;
             }
             localDouble = (double *)ogs_calloc(1, sizeof(double));
             if (!localDouble) {
-                ogs_error("OpenAPI_release_session_info_parseFromJSON() failed [release_session_list]");
+                log_error("OpenAPI_release_session_info_parseFromJSON() failed [release_session_list]");
                 goto end;
             }
             *localDouble = release_session_list_local->valuedouble;
@@ -118,11 +118,11 @@ OpenAPI_release_session_info_t *OpenAPI_release_session_info_parseFromJSON(cJSON
 
     release_cause = cJSON_GetObjectItemCaseSensitive(release_session_infoJSON, "releaseCause");
     if (!release_cause) {
-        ogs_error("OpenAPI_release_session_info_parseFromJSON() failed [release_cause]");
+        log_error("OpenAPI_release_session_info_parseFromJSON() failed [release_cause]");
         goto end;
     }
     if (!cJSON_IsString(release_cause)) {
-        ogs_error("OpenAPI_release_session_info_parseFromJSON() failed [release_cause]");
+        log_error("OpenAPI_release_session_info_parseFromJSON() failed [release_cause]");
         goto end;
     }
     release_causeVariable = OpenAPI_release_cause_FromString(release_cause->valuestring);
@@ -149,10 +149,10 @@ OpenAPI_release_session_info_t *OpenAPI_release_session_info_copy(OpenAPI_releas
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_release_session_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_release_session_info_convertToJSON() failed");
+        log_error("OpenAPI_release_session_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -160,14 +160,14 @@ OpenAPI_release_session_info_t *OpenAPI_release_session_info_copy(OpenAPI_releas
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

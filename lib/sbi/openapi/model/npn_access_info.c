@@ -9,7 +9,7 @@ OpenAPI_npn_access_info_t *OpenAPI_npn_access_info_create(
 )
 {
     OpenAPI_npn_access_info_t *npn_access_info_local_var = ogs_malloc(sizeof(OpenAPI_npn_access_info_t));
-    ogs_assert(npn_access_info_local_var);
+    log_assert(npn_access_info_local_var);
 
     npn_access_info_local_var->cell_cag_info = cell_cag_info;
 
@@ -39,7 +39,7 @@ cJSON *OpenAPI_npn_access_info_convertToJSON(OpenAPI_npn_access_info_t *npn_acce
     OpenAPI_lnode_t *node = NULL;
 
     if (npn_access_info == NULL) {
-        ogs_error("OpenAPI_npn_access_info_convertToJSON() failed [NpnAccessInfo]");
+        log_error("OpenAPI_npn_access_info_convertToJSON() failed [NpnAccessInfo]");
         return NULL;
     }
 
@@ -47,12 +47,12 @@ cJSON *OpenAPI_npn_access_info_convertToJSON(OpenAPI_npn_access_info_t *npn_acce
     if (npn_access_info->cell_cag_info) {
     cJSON *cell_cag_infoList = cJSON_AddArrayToObject(item, "cellCagInfo");
     if (cell_cag_infoList == NULL) {
-        ogs_error("OpenAPI_npn_access_info_convertToJSON() failed [cell_cag_info]");
+        log_error("OpenAPI_npn_access_info_convertToJSON() failed [cell_cag_info]");
         goto end;
     }
     OpenAPI_list_for_each(npn_access_info->cell_cag_info, node) {
         if (cJSON_AddStringToObject(cell_cag_infoList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_npn_access_info_convertToJSON() failed [cell_cag_info]");
+            log_error("OpenAPI_npn_access_info_convertToJSON() failed [cell_cag_info]");
             goto end;
         }
     }
@@ -72,7 +72,7 @@ OpenAPI_npn_access_info_t *OpenAPI_npn_access_info_parseFromJSON(cJSON *npn_acce
     if (cell_cag_info) {
         cJSON *cell_cag_info_local = NULL;
         if (!cJSON_IsArray(cell_cag_info)) {
-            ogs_error("OpenAPI_npn_access_info_parseFromJSON() failed [cell_cag_info]");
+            log_error("OpenAPI_npn_access_info_parseFromJSON() failed [cell_cag_info]");
             goto end;
         }
 
@@ -82,7 +82,7 @@ OpenAPI_npn_access_info_t *OpenAPI_npn_access_info_parseFromJSON(cJSON *npn_acce
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(cell_cag_info_local)) {
-                ogs_error("OpenAPI_npn_access_info_parseFromJSON() failed [cell_cag_info]");
+                log_error("OpenAPI_npn_access_info_parseFromJSON() failed [cell_cag_info]");
                 goto end;
             }
             OpenAPI_list_add(cell_cag_infoList, ogs_strdup(cell_cag_info_local->valuestring));
@@ -110,10 +110,10 @@ OpenAPI_npn_access_info_t *OpenAPI_npn_access_info_copy(OpenAPI_npn_access_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_npn_access_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_npn_access_info_convertToJSON() failed");
+        log_error("OpenAPI_npn_access_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -121,14 +121,14 @@ OpenAPI_npn_access_info_t *OpenAPI_npn_access_info_copy(OpenAPI_npn_access_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

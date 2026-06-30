@@ -109,12 +109,12 @@ ogs_sbi_client_t *ogs_sbi_client_add(
     ogs_sbi_client_t *client = NULL;
     CURLM *multi = NULL;
 
-    ogs_assert(scheme);
-    ogs_assert(fqdn || addr || addr6);
+    log_assert(scheme);
+    log_assert(fqdn || addr || addr6);
 
     ogs_pool_alloc(&client_pool, &client);
     if (!client) {
-        ogs_error("No memory in client_pool");
+        log_error("No memory in client_pool");
         return NULL;
     }
     memset(client, 0, sizeof(ogs_sbi_client_t));
@@ -138,27 +138,27 @@ ogs_sbi_client_t *ogs_sbi_client_add(
     if (ogs_sbi_self()->local_if)
        client->local_if = ogs_strdup(ogs_sbi_self()->local_if);
 
-    ogs_debug("ogs_sbi_client_add [%s]", OpenAPI_uri_scheme_ToString(scheme));
+    log_debug("ogs_sbi_client_add [%s]", OpenAPI_uri_scheme_ToString(scheme));
     OGS_OBJECT_REF(client);
 
     if (fqdn)
-        ogs_assert((client->fqdn = ogs_strdup(fqdn)));
+        log_assert((client->fqdn = ogs_strdup(fqdn)));
     client->fqdn_port = fqdn_port;
     if (addr)
-        ogs_assert(OGS_OK == ogs_copyaddrinfo(&client->addr, addr));
+        log_assert(OGS_OK == ogs_copyaddrinfo(&client->addr, addr));
     if (addr6)
-        ogs_assert(OGS_OK == ogs_copyaddrinfo(&client->addr6, addr6));
+        log_assert(OGS_OK == ogs_copyaddrinfo(&client->addr6, addr6));
 
     client->t_curl = ogs_timer_add(
             ogs_app()->timer_mgr, multi_timer_expired, client);
     if (!client->t_curl) {
-        ogs_error("ogs_timer_add() failed");
+        log_error("ogs_timer_add() failed");
         ogs_pool_free(&client_pool, client);
         return NULL;
     }
 
     multi = client->multi = curl_multi_init();
-    ogs_assert(multi);
+    log_assert(multi);
     curl_multi_setopt(multi, CURLMOPT_SOCKETFUNCTION, sock_cb);
     curl_multi_setopt(multi, CURLMOPT_SOCKETDATA, client);
     curl_multi_setopt(multi, CURLMOPT_TIMERFUNCTION, multi_timer_cb);
@@ -172,7 +172,7 @@ ogs_sbi_client_t *ogs_sbi_client_add(
 
     ogs_list_add(&ogs_sbi_self()->client_list, client);
 
-    ogs_debug("CLIENT added with Ref [%d]", client->reference_count);
+    log_debug("CLIENT added with Ref [%d]", client->reference_count);
 
     return client;
 }
@@ -181,18 +181,18 @@ void ogs_sbi_client_remove(ogs_sbi_client_t *client)
 {
     char buf[OGS_ADDRSTRLEN];
 
-    ogs_assert(client);
+    log_assert(client);
 
-    ogs_debug("CLIENT UnRef [%d]", client->reference_count);
+    log_debug("CLIENT UnRef [%d]", client->reference_count);
     if (client->fqdn)
-        ogs_debug("- fqdn [%s:%d]", client->fqdn, client->fqdn_port);
+        log_debug("- fqdn [%s:%d]", client->fqdn, client->fqdn_port);
     if (client->resolve)
-        ogs_debug("- resolve [%s]", client->resolve);
+        log_debug("- resolve [%s]", client->resolve);
     if (client->addr)
-        ogs_debug("- addr [%s:%d]",
+        log_debug("- addr [%s:%d]",
                 OGS_ADDR(client->addr, buf), OGS_PORT(client->addr));
     if (client->addr6)
-        ogs_debug("- addr6 [%s:%d]",
+        log_debug("- addr6 [%s:%d]",
                 OGS_ADDR(client->addr6, buf), OGS_PORT(client->addr6));
 
     /* ogs_sbi_client_t is always created with reference context */
@@ -201,17 +201,17 @@ void ogs_sbi_client_remove(ogs_sbi_client_t *client)
         return;
     }
 
-    ogs_debug("CLIENT removed [%d]", client->reference_count);
+    log_debug("CLIENT removed [%d]", client->reference_count);
 
     ogs_list_remove(&ogs_sbi_self()->client_list, client);
 
     connection_remove_all(client);
 
-    ogs_assert(client->t_curl);
+    log_assert(client->t_curl);
     ogs_timer_delete(client->t_curl);
     client->t_curl = NULL;
 
-    ogs_assert(client->multi);
+    log_assert(client->multi);
     curl_multi_cleanup(client->multi);
 
     if (client->cacert)
@@ -253,7 +253,7 @@ ogs_sbi_client_t *ogs_sbi_client_find(
 {
     ogs_sbi_client_t *client = NULL;
 
-    ogs_assert(scheme);
+    log_assert(scheme);
 
     ogs_list_for_each(&ogs_sbi_self()->client_list, client) {
         if (client->scheme != scheme)
@@ -295,10 +295,10 @@ void ogs_sbi_client_stop(ogs_sbi_client_t *client)
 {
     connection_t *conn = NULL;
 
-    ogs_assert(client);
+    log_assert(client);
 
     ogs_list_for_each(&client->connection_list, conn) {
-        ogs_assert(conn->client_cb);
+        log_assert(conn->client_cb);
         conn->client_cb(OGS_DONE, NULL, conn->data);
     }
 }
@@ -327,12 +327,12 @@ static void mcode_or_die(const char *where, CURLMcode code)
             mycase(CURLM_LAST); break;
             default: s = "CURLM_unknown"; break;
             mycase(CURLM_BAD_SOCKET);
-            ogs_error("ERROR: %s returns %s", where, s);
+            log_error("ERROR: %s returns %s", where, s);
             /* ignore this error */
             return;
         }
-        ogs_fatal("ERROR: %s returns %s", where, s);
-        ogs_assert_if_reached();
+        log_fatal("ERROR: %s returns %s", where, s);
+        log_assert_if_reached();
     }
 }
 
@@ -342,10 +342,10 @@ static char *add_params_to_uri(CURL *easy, char *uri, ogs_hash_t *params)
     int has_params = 0;
     const char *fp = "?", *np = "&";
 
-    ogs_assert(easy);
-    ogs_assert(uri);
-    ogs_assert(params);
-    ogs_assert(ogs_hash_count(params));
+    log_assert(easy);
+    log_assert(uri);
+    log_assert(params);
+    log_assert(ogs_hash_count(params));
 
     has_params = (strchr(uri, '?') != NULL);
 
@@ -356,22 +356,22 @@ static char *add_params_to_uri(CURL *easy, char *uri, ogs_hash_t *params)
         char *val_esc = NULL;
 
         key = ogs_hash_this_key(hi);
-        ogs_assert(key);
+        log_assert(key);
         val = ogs_hash_this_val(hi);
-        ogs_assert(val);
+        log_assert(val);
 
         key_esc = curl_easy_escape(easy, key, 0);
-        ogs_assert(key_esc);
+        log_assert(key_esc);
         val_esc = curl_easy_escape(easy, val, 0);
-        ogs_assert(val_esc);
+        log_assert(val_esc);
 
         if (!has_params) {
             uri = ogs_mstrcatf(uri, "%s%s=%s", fp, key_esc, val_esc);
-            ogs_expect(uri);
+            log_expect(uri);
             has_params = 1;
         } else {
             uri = ogs_mstrcatf(uri, "%s%s=%s", np, key_esc, val_esc);
-            ogs_expect(uri);
+            log_expect(uri);
         }
 
         curl_free(val_esc);
@@ -387,8 +387,8 @@ static CURLcode sslctx_callback(CURL *curl, void *sslctx, void *userdata)
     SSL_CTX *ctx = (SSL_CTX *)sslctx;
     ogs_sbi_client_t *client = userdata;
 
-    ogs_assert(ctx);
-    ogs_assert(userdata);
+    log_assert(ctx);
+    log_assert(userdata);
 
     /* Ensure app data is set for SSL objects */
     SSL_CTX_set_app_data(ctx, client->sslkeylog);
@@ -410,14 +410,14 @@ static connection_t *connection_add(
     connection_t *conn = NULL;
     CURLMcode rc;
 
-    ogs_assert(client);
-    ogs_assert(client_cb);
-    ogs_assert(request);
-    ogs_assert(request->h.method);
+    log_assert(client);
+    log_assert(client_cb);
+    log_assert(request);
+    log_assert(request->h.method);
 
     ogs_pool_id_calloc(&connection_pool, &conn);
     if (!conn) {
-        ogs_error("ogs_pool_alloc() failed");
+        log_error("ogs_pool_alloc() failed");
         return NULL;
     }
 
@@ -427,7 +427,7 @@ static connection_t *connection_add(
 
     conn->method = ogs_strdup(request->h.method);
     if (!conn->method) {
-        ogs_error("conn->method is NULL");
+        log_error("conn->method is NULL");
         connection_free(conn);
         return NULL;
     }
@@ -436,7 +436,7 @@ static connection_t *connection_add(
     if (conn->num_of_header) {
         conn->headers = ogs_calloc(conn->num_of_header, sizeof(char *));
         if (!conn->headers) {
-            ogs_error("conn->headers is NULL");
+            log_error("conn->headers is NULL");
             connection_free(conn);
             return NULL;
         }
@@ -447,7 +447,7 @@ static connection_t *connection_add(
 
             conn->headers[i] = ogs_msprintf("%s: %s", key, val);
             if (!conn->headers[i]) {
-                ogs_error("conn->headers[i=%d] is NULL", i);
+                log_error("conn->headers[i=%d] is NULL", i);
                 connection_free(conn);
                 return NULL;
             }
@@ -460,7 +460,7 @@ static connection_t *connection_add(
             ogs_app()->timer_mgr, connection_timer_expired,
             OGS_UINT_TO_POINTER(conn->id));
     if (!conn->timer) {
-        ogs_error("conn->timer is NULL");
+        log_error("conn->timer is NULL");
         connection_free(conn);
         return NULL;
     }
@@ -472,7 +472,7 @@ static connection_t *connection_add(
 
     conn->easy = curl_easy_init();
     if (!conn->easy) {
-        ogs_error("conn->easy is NULL");
+        log_error("conn->easy is NULL");
         connection_free(conn);
         return NULL;
     }
@@ -481,7 +481,7 @@ static connection_t *connection_add(
         char *uri = add_params_to_uri(conn->easy,
                             request->h.uri, request->http.params);
         if (!uri) {
-            ogs_error("add_params_to_uri() failed");
+            log_error("add_params_to_uri() failed");
             connection_free(conn);
             return NULL;
         }
@@ -529,7 +529,7 @@ static connection_t *connection_add(
             conn->content = ogs_memdup(
                     request->http.content, request->http.content_length);
             if (!conn->content) {
-                ogs_error("conn->content is NULL");
+                log_error("conn->content is NULL");
                 connection_free(conn);
                 return NULL;
             }
@@ -543,9 +543,9 @@ static connection_t *connection_add(
 #else
             curl_easy_setopt(conn->easy, CURLOPT_EXPECT_100_TIMEOUT_MS, 0L);
 #endif
-            ogs_debug("SENDING...[%d]", (int)request->http.content_length);
+            log_debug("SENDING...[%d]", (int)request->http.content_length);
             if (request->http.content_length)
-                ogs_debug("%s", request->http.content);
+                log_debug("%s", request->http.content);
         }
     }
 
@@ -576,7 +576,7 @@ static connection_t *connection_add(
     curl_easy_setopt(conn->easy, CURLOPT_HEADERDATA, conn);
     curl_easy_setopt(conn->easy, CURLOPT_ERRORBUFFER, conn->error);
 
-    ogs_assert(client->multi);
+    log_assert(client->multi);
     rc = curl_multi_add_handle(client->multi, conn->easy);
     mcode_or_die("connection_add: curl_multi_add_handle", rc);
 
@@ -587,13 +587,13 @@ static void connection_remove(connection_t *conn)
 {
     ogs_sbi_client_t *client = NULL;
 
-    ogs_assert(conn);
+    log_assert(conn);
     client = conn->client;
-    ogs_assert(client);
+    log_assert(client);
 
     ogs_list_remove(&client->connection_list, conn);
 
-    ogs_assert(client->multi);
+    log_assert(client->multi);
     curl_multi_remove_handle(client->multi, conn->easy);
 
     connection_free(conn);
@@ -603,7 +603,7 @@ static void connection_free(connection_t *conn)
 {
     int i;
 
-    ogs_assert(conn);
+    log_assert(conn);
 
     if (conn->content)
         ogs_free(conn->content);
@@ -642,7 +642,7 @@ static void connection_remove_all(ogs_sbi_client_t *client)
 {
     connection_t *conn = NULL, *next_conn = NULL;
 
-    ogs_assert(client);
+    log_assert(client);
 
     ogs_list_for_each_safe(&client->connection_list, next_conn, conn)
         connection_remove(conn);
@@ -658,22 +658,22 @@ static void connection_timer_expired(void *data)
     if (conn_id >= OGS_MIN_POOL_ID && conn_id <= OGS_MAX_POOL_ID)
         conn = ogs_pool_find_by_id(&connection_pool, conn_id);
     else
-        ogs_error("Invalid Connection ID [%d]", conn_id);
+        log_error("Invalid Connection ID [%d]", conn_id);
 
     if (!conn) {
-        ogs_error("No Connection");
+        log_error("No Connection");
         return;
     }
 
-    ogs_error("Connection timer expired [METHOD:%s]", conn->method);
+    log_error("Connection timer expired [METHOD:%s]", conn->method);
 
     res = curl_easy_getinfo(conn->easy, CURLINFO_EFFECTIVE_URL, &effective_url);
     if ((res == CURLE_OK) && effective_url)
-        ogs_error("Effective URL: %s", effective_url);
+        log_error("Effective URL: %s", effective_url);
     else
-        ogs_error("curl_easy_getinfo() failed [%s]", curl_easy_strerror(res));
+        log_error("curl_easy_getinfo() failed [%s]", curl_easy_strerror(res));
 
-    ogs_assert(conn->client_cb);
+    log_assert(conn->client_cb);
     conn->client_cb(OGS_TIMEUP, NULL, conn->data);
 
     connection_remove(conn);
@@ -689,23 +689,23 @@ static void check_multi_info(ogs_sbi_client_t *client)
     connection_t *conn = NULL;
     ogs_sbi_response_t *response = NULL;
 
-    ogs_assert(client);
+    log_assert(client);
     multi = client->multi;
-    ogs_assert(multi);
+    log_assert(multi);
 
     while ((resource = curl_multi_info_read(multi, &pending))) {
         char *url;
         char *content_type = NULL;
         long res_status;
-        ogs_assert(resource);
+        log_assert(resource);
 
         switch (resource->msg) {
         case CURLMSG_DONE:
             easy = resource->easy_handle;
-            ogs_assert(easy);
+            log_assert(easy);
 
             curl_easy_getinfo(easy, CURLINFO_PRIVATE, &conn);
-            ogs_assert(conn);
+            log_assert(conn);
 
             curl_easy_getinfo(easy, CURLINFO_EFFECTIVE_URL, &url);
             curl_easy_getinfo(easy, CURLINFO_RESPONSE_CODE, &res_status);
@@ -713,20 +713,20 @@ static void check_multi_info(ogs_sbi_client_t *client)
 
             res = resource->data.result;
             if (res == CURLE_OK) {
-                ogs_log_level_e level = OGS_LOG_DEBUG;
+                log_level_e level = LOG_DEBUG;
 
                 response = ogs_sbi_response_new();
-                ogs_assert(response);
+                log_assert(response);
 
                 response->status = res_status;
 
-                ogs_assert(conn->method);
+                log_assert(conn->method);
                 response->h.method = ogs_strdup(conn->method);
-                ogs_assert(response->h.method);
+                log_assert(response->h.method);
 
                 /* remove https://localhost:8000 */
                 response->h.uri = ogs_strdup(url);
-                ogs_assert(response->h.uri);
+                log_assert(response->h.uri);
 
                 if (content_type)
                     ogs_sbi_header_set(response->http.headers,
@@ -739,23 +739,23 @@ static void check_multi_info(ogs_sbi_client_t *client)
                             OGS_SBI_CUSTOM_PRODUCER_ID, conn->producer_id);
 
                 if (conn->memory_overflow == true)
-                    level = OGS_LOG_ERROR;
+                    level = LOG_ERROR;
 
-                ogs_log_message(level, 0, "[%d:%s] %s",
+                log_error_msg(level, 0, "[%d:%s] %s",
                         response->status, response->h.method, response->h.uri);
 
                 if (conn->memory) {
                     response->http.content =
                         ogs_memdup(conn->memory, conn->size + 1);
-                    ogs_assert(response->http.content);
+                    log_assert(response->http.content);
                     response->http.content_length = conn->size;
-                    ogs_assert(response->http.content_length);
+                    log_assert(response->http.content_length);
                 }
 
-                ogs_log_message(level, 0, "RECEIVED[%d]",
+                log_error_msg(level, 0, "RECEIVED[%d]",
                         (int)response->http.content_length);
                 if (response->http.content_length && response->http.content)
-                    ogs_log_message(level, 0, "%s", response->http.content);
+                    log_error_msg(level, 0, "%s", response->http.content);
 
                 if (conn->memory_overflow == true) {
                     ogs_sbi_response_free(response);
@@ -764,9 +764,9 @@ static void check_multi_info(ogs_sbi_client_t *client)
                 }
 
             } else
-                ogs_warn("%s (%d): %s", curl_easy_strerror(res), res, conn->error);
+                log_warn("%s (%d): %s", curl_easy_strerror(res), res, conn->error);
 
-            ogs_assert(conn->client_cb);
+            log_assert(conn->client_cb);
             if (res == CURLE_OK)
                 conn->client_cb(OGS_OK, response, conn->data);
             else
@@ -775,7 +775,7 @@ static void check_multi_info(ogs_sbi_client_t *client)
             connection_remove(conn);
             break;
         default:
-            ogs_error("Unknown CURL resource[%d]", resource->msg);
+            log_error("Unknown CURL resource[%d]", resource->msg);
             break;
         }
     }
@@ -787,18 +787,18 @@ bool ogs_sbi_client_send_request(
 {
     connection_t *conn = NULL;
 
-    ogs_assert(client);
-    ogs_assert(request);
+    log_assert(client);
+    log_assert(request);
     if (request->h.uri == NULL) {
         request->h.uri = ogs_sbi_client_uri(client, &request->h);
-        ogs_assert(request->h.method);
-        ogs_assert(request->h.uri);
+        log_assert(request->h.method);
+        log_assert(request->h.uri);
     }
-    ogs_debug("[%s] %s", request->h.method, request->h.uri);
+    log_debug("[%s] %s", request->h.method, request->h.uri);
 
     conn = connection_add(client, client_cb, request, data);
     if (!conn) {
-        ogs_error("connection_add() failed");
+        log_error("connection_add() failed");
         return false;
     }
 
@@ -811,8 +811,8 @@ bool ogs_sbi_client_send_via_scp_or_sepp(
 {
     bool rc;
 
-    ogs_assert(request);
-    ogs_assert(client);
+    log_assert(request);
+    log_assert(client);
 
     if (request->h.uri) {
         /*
@@ -831,15 +831,15 @@ bool ogs_sbi_client_send_via_scp_or_sepp(
         old = request->h.uri;
 
         apiroot = ogs_sbi_client_apiroot(client);
-        ogs_assert(apiroot);
+        log_assert(apiroot);
 
         rc = ogs_sbi_getpath_from_uri(&path, request->h.uri);
-        ogs_assert(path);
+        log_assert(path);
 
         request->h.uri = ogs_msprintf("%s/%s", apiroot, path);
-        ogs_assert(request->h.method);
-        ogs_assert(request->h.uri);
-        ogs_debug("[%s] %s", request->h.method, request->h.uri);
+        log_assert(request->h.method);
+        log_assert(request->h.uri);
+        log_debug("[%s] %s", request->h.method, request->h.uri);
 
         ogs_free(apiroot);
         ogs_free(path);
@@ -847,7 +847,7 @@ bool ogs_sbi_client_send_via_scp_or_sepp(
     }
 
     rc = ogs_sbi_client_send_request(client, client_cb, request, data);
-    ogs_expect(rc == true);
+    log_expect(rc == true);
 
     return rc;
 }
@@ -859,16 +859,16 @@ static size_t write_cb(void *contents, size_t size, size_t nmemb, void *data)
     char *ptr = NULL;
 
     conn = data;
-    ogs_assert(conn);
+    log_assert(conn);
 
     realsize = size * nmemb;
     ptr = ogs_realloc(conn->memory, conn->size + realsize + 1);
     if(!ptr) {
         conn->memory_overflow = true;
 
-        ogs_error("Overflow : conn->size[%d], realsize[%d]",
+        log_error("Overflow : conn->size[%d], realsize[%d]",
                     (int)conn->size, (int)realsize);
-        ogs_log_hexdump(OGS_LOG_ERROR, contents, realsize);
+        log_hexdump(LOG_ERROR, contents, realsize);
 
         return 0;
     }
@@ -886,7 +886,7 @@ static size_t header_cb(void *ptr, size_t size, size_t nmemb, void *data)
     connection_t *conn = NULL;
 
     conn = data;
-    ogs_assert(conn);
+    log_assert(conn);
 
     if (ogs_strncasecmp(ptr, OGS_SBI_LOCATION, strlen(OGS_SBI_LOCATION)) == 0) {
     /* ptr : "Location: http://xxx/xxx/xxx\r\n"
@@ -897,7 +897,7 @@ static size_t header_cb(void *ptr, size_t size, size_t nmemb, void *data)
             conn->location = ogs_memdup(
                     (char *)ptr + strlen(OGS_SBI_LOCATION) + 2,
                     len+1);
-            ogs_assert(conn->location);
+            log_assert(conn->location);
             conn->location[len] = 0;
         }
     } else if (ogs_strncasecmp(ptr,
@@ -912,7 +912,7 @@ static size_t header_cb(void *ptr, size_t size, size_t nmemb, void *data)
             conn->producer_id = ogs_memdup(
                     (char *)ptr + strlen(OGS_SBI_CUSTOM_PRODUCER_ID) + 2,
                     len+1);
-            ogs_assert(conn->producer_id);
+            log_assert(conn->producer_id);
             conn->producer_id[len] = 0;
         }
     }
@@ -931,11 +931,11 @@ static void event_cb(short when, ogs_socket_t fd, void *data)
                     ((when & OGS_POLLOUT) ? CURL_CSELECT_OUT : 0);
 
     sockinfo = data;
-    ogs_assert(sockinfo);
+    log_assert(sockinfo);
     client = sockinfo->client;
-    ogs_assert(client);
+    log_assert(client);
     multi = client->multi;
-    ogs_assert(multi);
+    log_assert(multi);
 
     rc = curl_multi_socket_action(multi, fd, action, &client->still_running);
     mcode_or_die("event_cb: curl_multi_socket_action", rc);
@@ -966,7 +966,7 @@ static void sock_set(sockinfo_t *sockinfo, curl_socket_t s,
 
     sockinfo->poll = ogs_pollset_add(
             ogs_app()->pollset, kind, s, event_cb, sockinfo);
-    ogs_assert(sockinfo->poll);
+    log_assert(sockinfo->poll);
 }
 
 /* Initialize a new sockinfo_t structure */
@@ -976,12 +976,12 @@ static void sock_new(curl_socket_t s,
     sockinfo_t *sockinfo = NULL;
     CURLM *multi = NULL;
 
-    ogs_assert(client);
+    log_assert(client);
     multi = client->multi;
-    ogs_assert(multi);
+    log_assert(multi);
 
     ogs_pool_alloc(&sockinfo_pool, &sockinfo);
-    ogs_assert(sockinfo);
+    log_assert(sockinfo);
     memset(sockinfo, 0, sizeof(sockinfo_t));
 
     sockinfo->client = client;
@@ -992,8 +992,8 @@ static void sock_new(curl_socket_t s,
 /* Clean up the sockinfo_t structure */
 static void sock_free(sockinfo_t *sockinfo, ogs_sbi_client_t *client)
 {
-    ogs_assert(sockinfo);
-    ogs_assert(sockinfo->poll);
+    log_assert(sockinfo);
+    log_assert(sockinfo->poll);
 
     ogs_pollset_remove(sockinfo->poll);
     ogs_pool_free(&sockinfo_pool, sockinfo);
@@ -1024,9 +1024,9 @@ static void multi_timer_expired(void *data)
     CURLM *multi = NULL;
 
     client = data;
-    ogs_assert(client);
+    log_assert(client);
     multi = client->multi;
-    ogs_assert(multi);
+    log_assert(multi);
 
     rc = curl_multi_socket_action(
             multi, CURL_SOCKET_TIMEOUT, 0, &client->still_running);
@@ -1040,9 +1040,9 @@ static int multi_timer_cb(CURLM *multi, long timeout_ms, void *cbp)
     ogs_timer_t *timer = NULL;
 
     client = cbp;
-    ogs_assert(client);
+    log_assert(client);
     timer = client->t_curl;
-    ogs_assert(timer);
+    log_assert(timer);
 
     if (timeout_ms > 0) {
         ogs_timer_start(timer, ogs_time_from_msec(timeout_ms));

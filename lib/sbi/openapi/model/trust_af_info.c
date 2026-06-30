@@ -14,7 +14,7 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_create(
 )
 {
     OpenAPI_trust_af_info_t *trust_af_info_local_var = ogs_malloc(sizeof(OpenAPI_trust_af_info_t));
-    ogs_assert(trust_af_info_local_var);
+    log_assert(trust_af_info_local_var);
 
     trust_af_info_local_var->s_nssai_info_list = s_nssai_info_list;
     trust_af_info_local_var->af_events = af_events;
@@ -67,7 +67,7 @@ cJSON *OpenAPI_trust_af_info_convertToJSON(OpenAPI_trust_af_info_t *trust_af_inf
     OpenAPI_lnode_t *node = NULL;
 
     if (trust_af_info == NULL) {
-        ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [TrustAfInfo]");
+        log_error("OpenAPI_trust_af_info_convertToJSON() failed [TrustAfInfo]");
         return NULL;
     }
 
@@ -75,13 +75,13 @@ cJSON *OpenAPI_trust_af_info_convertToJSON(OpenAPI_trust_af_info_t *trust_af_inf
     if (trust_af_info->s_nssai_info_list) {
     cJSON *s_nssai_info_listList = cJSON_AddArrayToObject(item, "sNssaiInfoList");
     if (s_nssai_info_listList == NULL) {
-        ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [s_nssai_info_list]");
+        log_error("OpenAPI_trust_af_info_convertToJSON() failed [s_nssai_info_list]");
         goto end;
     }
     OpenAPI_list_for_each(trust_af_info->s_nssai_info_list, node) {
         cJSON *itemLocal = OpenAPI_snssai_info_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [s_nssai_info_list]");
+            log_error("OpenAPI_trust_af_info_convertToJSON() failed [s_nssai_info_list]");
             goto end;
         }
         cJSON_AddItemToArray(s_nssai_info_listList, itemLocal);
@@ -91,12 +91,12 @@ cJSON *OpenAPI_trust_af_info_convertToJSON(OpenAPI_trust_af_info_t *trust_af_inf
     if (trust_af_info->af_events != OpenAPI_af_event_NULL) {
     cJSON *af_eventsList = cJSON_AddArrayToObject(item, "afEvents");
     if (af_eventsList == NULL) {
-        ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [af_events]");
+        log_error("OpenAPI_trust_af_info_convertToJSON() failed [af_events]");
         goto end;
     }
     OpenAPI_list_for_each(trust_af_info->af_events, node) {
         if (cJSON_AddStringToObject(af_eventsList, "", OpenAPI_af_event_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [af_events]");
+            log_error("OpenAPI_trust_af_info_convertToJSON() failed [af_events]");
             goto end;
         }
     }
@@ -105,12 +105,12 @@ cJSON *OpenAPI_trust_af_info_convertToJSON(OpenAPI_trust_af_info_t *trust_af_inf
     if (trust_af_info->app_ids) {
     cJSON *app_idsList = cJSON_AddArrayToObject(item, "appIds");
     if (app_idsList == NULL) {
-        ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [app_ids]");
+        log_error("OpenAPI_trust_af_info_convertToJSON() failed [app_ids]");
         goto end;
     }
     OpenAPI_list_for_each(trust_af_info->app_ids, node) {
         if (cJSON_AddStringToObject(app_idsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [app_ids]");
+            log_error("OpenAPI_trust_af_info_convertToJSON() failed [app_ids]");
             goto end;
         }
     }
@@ -119,12 +119,12 @@ cJSON *OpenAPI_trust_af_info_convertToJSON(OpenAPI_trust_af_info_t *trust_af_inf
     if (trust_af_info->internal_group_id) {
     cJSON *internal_group_idList = cJSON_AddArrayToObject(item, "internalGroupId");
     if (internal_group_idList == NULL) {
-        ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [internal_group_id]");
+        log_error("OpenAPI_trust_af_info_convertToJSON() failed [internal_group_id]");
         goto end;
     }
     OpenAPI_list_for_each(trust_af_info->internal_group_id, node) {
         if (cJSON_AddStringToObject(internal_group_idList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [internal_group_id]");
+            log_error("OpenAPI_trust_af_info_convertToJSON() failed [internal_group_id]");
             goto end;
         }
     }
@@ -132,7 +132,7 @@ cJSON *OpenAPI_trust_af_info_convertToJSON(OpenAPI_trust_af_info_t *trust_af_inf
 
     if (trust_af_info->is_mapping_ind) {
     if (cJSON_AddBoolToObject(item, "mappingInd", trust_af_info->mapping_ind) == NULL) {
-        ogs_error("OpenAPI_trust_af_info_convertToJSON() failed [mapping_ind]");
+        log_error("OpenAPI_trust_af_info_convertToJSON() failed [mapping_ind]");
         goto end;
     }
     }
@@ -158,7 +158,7 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
     if (s_nssai_info_list) {
         cJSON *s_nssai_info_list_local = NULL;
         if (!cJSON_IsArray(s_nssai_info_list)) {
-            ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [s_nssai_info_list]");
+            log_error("OpenAPI_trust_af_info_parseFromJSON() failed [s_nssai_info_list]");
             goto end;
         }
 
@@ -166,12 +166,12 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
 
         cJSON_ArrayForEach(s_nssai_info_list_local, s_nssai_info_list) {
             if (!cJSON_IsObject(s_nssai_info_list_local)) {
-                ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [s_nssai_info_list]");
+                log_error("OpenAPI_trust_af_info_parseFromJSON() failed [s_nssai_info_list]");
                 goto end;
             }
             OpenAPI_snssai_info_item_t *s_nssai_info_listItem = OpenAPI_snssai_info_item_parseFromJSON(s_nssai_info_list_local);
             if (!s_nssai_info_listItem) {
-                ogs_error("No s_nssai_info_listItem");
+                log_error("No s_nssai_info_listItem");
                 goto end;
             }
             OpenAPI_list_add(s_nssai_info_listList, s_nssai_info_listItem);
@@ -182,7 +182,7 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
     if (af_events) {
         cJSON *af_events_local = NULL;
         if (!cJSON_IsArray(af_events)) {
-            ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [af_events]");
+            log_error("OpenAPI_trust_af_info_parseFromJSON() failed [af_events]");
             goto end;
         }
 
@@ -191,19 +191,19 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
         cJSON_ArrayForEach(af_events_local, af_events) {
             OpenAPI_af_event_e localEnum = OpenAPI_af_event_NULL;
             if (!cJSON_IsString(af_events_local)) {
-                ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [af_events]");
+                log_error("OpenAPI_trust_af_info_parseFromJSON() failed [af_events]");
                 goto end;
             }
             localEnum = OpenAPI_af_event_FromString(af_events_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"af_events\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"af_events\" is not supported. Ignoring it ...",
                          af_events_local->valuestring);
             } else {
                 OpenAPI_list_add(af_eventsList, (void *)localEnum);
             }
         }
         if (af_eventsList->count == 0) {
-            ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed: Expected af_eventsList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_trust_af_info_parseFromJSON() failed: Expected af_eventsList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -212,7 +212,7 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
     if (app_ids) {
         cJSON *app_ids_local = NULL;
         if (!cJSON_IsArray(app_ids)) {
-            ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [app_ids]");
+            log_error("OpenAPI_trust_af_info_parseFromJSON() failed [app_ids]");
             goto end;
         }
 
@@ -222,7 +222,7 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(app_ids_local)) {
-                ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [app_ids]");
+                log_error("OpenAPI_trust_af_info_parseFromJSON() failed [app_ids]");
                 goto end;
             }
             OpenAPI_list_add(app_idsList, ogs_strdup(app_ids_local->valuestring));
@@ -233,7 +233,7 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
     if (internal_group_id) {
         cJSON *internal_group_id_local = NULL;
         if (!cJSON_IsArray(internal_group_id)) {
-            ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [internal_group_id]");
+            log_error("OpenAPI_trust_af_info_parseFromJSON() failed [internal_group_id]");
             goto end;
         }
 
@@ -243,7 +243,7 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(internal_group_id_local)) {
-                ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [internal_group_id]");
+                log_error("OpenAPI_trust_af_info_parseFromJSON() failed [internal_group_id]");
                 goto end;
             }
             OpenAPI_list_add(internal_group_idList, ogs_strdup(internal_group_id_local->valuestring));
@@ -253,7 +253,7 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_parseFromJSON(cJSON *trust_af_inf
     mapping_ind = cJSON_GetObjectItemCaseSensitive(trust_af_infoJSON, "mappingInd");
     if (mapping_ind) {
     if (!cJSON_IsBool(mapping_ind)) {
-        ogs_error("OpenAPI_trust_af_info_parseFromJSON() failed [mapping_ind]");
+        log_error("OpenAPI_trust_af_info_parseFromJSON() failed [mapping_ind]");
         goto end;
     }
     }
@@ -302,10 +302,10 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_copy(OpenAPI_trust_af_info_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_trust_af_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_trust_af_info_convertToJSON() failed");
+        log_error("OpenAPI_trust_af_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -313,14 +313,14 @@ OpenAPI_trust_af_info_t *OpenAPI_trust_af_info_copy(OpenAPI_trust_af_info_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

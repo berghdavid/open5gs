@@ -11,7 +11,7 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_create(
 )
 {
     OpenAPI_easdf_info_t *easdf_info_local_var = ogs_malloc(sizeof(OpenAPI_easdf_info_t));
-    ogs_assert(easdf_info_local_var);
+    log_assert(easdf_info_local_var);
 
     easdf_info_local_var->s_nssai_easdf_info_list = s_nssai_easdf_info_list;
     easdf_info_local_var->easdf_n6_ip_address_list = easdf_n6_ip_address_list;
@@ -57,7 +57,7 @@ cJSON *OpenAPI_easdf_info_convertToJSON(OpenAPI_easdf_info_t *easdf_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (easdf_info == NULL) {
-        ogs_error("OpenAPI_easdf_info_convertToJSON() failed [EasdfInfo]");
+        log_error("OpenAPI_easdf_info_convertToJSON() failed [EasdfInfo]");
         return NULL;
     }
 
@@ -65,13 +65,13 @@ cJSON *OpenAPI_easdf_info_convertToJSON(OpenAPI_easdf_info_t *easdf_info)
     if (easdf_info->s_nssai_easdf_info_list) {
     cJSON *s_nssai_easdf_info_listList = cJSON_AddArrayToObject(item, "sNssaiEasdfInfoList");
     if (s_nssai_easdf_info_listList == NULL) {
-        ogs_error("OpenAPI_easdf_info_convertToJSON() failed [s_nssai_easdf_info_list]");
+        log_error("OpenAPI_easdf_info_convertToJSON() failed [s_nssai_easdf_info_list]");
         goto end;
     }
     OpenAPI_list_for_each(easdf_info->s_nssai_easdf_info_list, node) {
         cJSON *itemLocal = OpenAPI_snssai_easdf_info_item_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_easdf_info_convertToJSON() failed [s_nssai_easdf_info_list]");
+            log_error("OpenAPI_easdf_info_convertToJSON() failed [s_nssai_easdf_info_list]");
             goto end;
         }
         cJSON_AddItemToArray(s_nssai_easdf_info_listList, itemLocal);
@@ -81,13 +81,13 @@ cJSON *OpenAPI_easdf_info_convertToJSON(OpenAPI_easdf_info_t *easdf_info)
     if (easdf_info->easdf_n6_ip_address_list) {
     cJSON *easdf_n6_ip_address_listList = cJSON_AddArrayToObject(item, "easdfN6IpAddressList");
     if (easdf_n6_ip_address_listList == NULL) {
-        ogs_error("OpenAPI_easdf_info_convertToJSON() failed [easdf_n6_ip_address_list]");
+        log_error("OpenAPI_easdf_info_convertToJSON() failed [easdf_n6_ip_address_list]");
         goto end;
     }
     OpenAPI_list_for_each(easdf_info->easdf_n6_ip_address_list, node) {
         cJSON *itemLocal = OpenAPI_ip_addr_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_easdf_info_convertToJSON() failed [easdf_n6_ip_address_list]");
+            log_error("OpenAPI_easdf_info_convertToJSON() failed [easdf_n6_ip_address_list]");
             goto end;
         }
         cJSON_AddItemToArray(easdf_n6_ip_address_listList, itemLocal);
@@ -97,13 +97,13 @@ cJSON *OpenAPI_easdf_info_convertToJSON(OpenAPI_easdf_info_t *easdf_info)
     if (easdf_info->upf_n6_ip_address_list) {
     cJSON *upf_n6_ip_address_listList = cJSON_AddArrayToObject(item, "upfN6IpAddressList");
     if (upf_n6_ip_address_listList == NULL) {
-        ogs_error("OpenAPI_easdf_info_convertToJSON() failed [upf_n6_ip_address_list]");
+        log_error("OpenAPI_easdf_info_convertToJSON() failed [upf_n6_ip_address_list]");
         goto end;
     }
     OpenAPI_list_for_each(easdf_info->upf_n6_ip_address_list, node) {
         cJSON *itemLocal = OpenAPI_ip_addr_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_easdf_info_convertToJSON() failed [upf_n6_ip_address_list]");
+            log_error("OpenAPI_easdf_info_convertToJSON() failed [upf_n6_ip_address_list]");
             goto end;
         }
         cJSON_AddItemToArray(upf_n6_ip_address_listList, itemLocal);
@@ -128,7 +128,7 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_parseFromJSON(cJSON *easdf_infoJSON)
     if (s_nssai_easdf_info_list) {
         cJSON *s_nssai_easdf_info_list_local = NULL;
         if (!cJSON_IsArray(s_nssai_easdf_info_list)) {
-            ogs_error("OpenAPI_easdf_info_parseFromJSON() failed [s_nssai_easdf_info_list]");
+            log_error("OpenAPI_easdf_info_parseFromJSON() failed [s_nssai_easdf_info_list]");
             goto end;
         }
 
@@ -136,12 +136,12 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_parseFromJSON(cJSON *easdf_infoJSON)
 
         cJSON_ArrayForEach(s_nssai_easdf_info_list_local, s_nssai_easdf_info_list) {
             if (!cJSON_IsObject(s_nssai_easdf_info_list_local)) {
-                ogs_error("OpenAPI_easdf_info_parseFromJSON() failed [s_nssai_easdf_info_list]");
+                log_error("OpenAPI_easdf_info_parseFromJSON() failed [s_nssai_easdf_info_list]");
                 goto end;
             }
             OpenAPI_snssai_easdf_info_item_t *s_nssai_easdf_info_listItem = OpenAPI_snssai_easdf_info_item_parseFromJSON(s_nssai_easdf_info_list_local);
             if (!s_nssai_easdf_info_listItem) {
-                ogs_error("No s_nssai_easdf_info_listItem");
+                log_error("No s_nssai_easdf_info_listItem");
                 goto end;
             }
             OpenAPI_list_add(s_nssai_easdf_info_listList, s_nssai_easdf_info_listItem);
@@ -152,7 +152,7 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_parseFromJSON(cJSON *easdf_infoJSON)
     if (easdf_n6_ip_address_list) {
         cJSON *easdf_n6_ip_address_list_local = NULL;
         if (!cJSON_IsArray(easdf_n6_ip_address_list)) {
-            ogs_error("OpenAPI_easdf_info_parseFromJSON() failed [easdf_n6_ip_address_list]");
+            log_error("OpenAPI_easdf_info_parseFromJSON() failed [easdf_n6_ip_address_list]");
             goto end;
         }
 
@@ -160,12 +160,12 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_parseFromJSON(cJSON *easdf_infoJSON)
 
         cJSON_ArrayForEach(easdf_n6_ip_address_list_local, easdf_n6_ip_address_list) {
             if (!cJSON_IsObject(easdf_n6_ip_address_list_local)) {
-                ogs_error("OpenAPI_easdf_info_parseFromJSON() failed [easdf_n6_ip_address_list]");
+                log_error("OpenAPI_easdf_info_parseFromJSON() failed [easdf_n6_ip_address_list]");
                 goto end;
             }
             OpenAPI_ip_addr_t *easdf_n6_ip_address_listItem = OpenAPI_ip_addr_parseFromJSON(easdf_n6_ip_address_list_local);
             if (!easdf_n6_ip_address_listItem) {
-                ogs_error("No easdf_n6_ip_address_listItem");
+                log_error("No easdf_n6_ip_address_listItem");
                 goto end;
             }
             OpenAPI_list_add(easdf_n6_ip_address_listList, easdf_n6_ip_address_listItem);
@@ -176,7 +176,7 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_parseFromJSON(cJSON *easdf_infoJSON)
     if (upf_n6_ip_address_list) {
         cJSON *upf_n6_ip_address_list_local = NULL;
         if (!cJSON_IsArray(upf_n6_ip_address_list)) {
-            ogs_error("OpenAPI_easdf_info_parseFromJSON() failed [upf_n6_ip_address_list]");
+            log_error("OpenAPI_easdf_info_parseFromJSON() failed [upf_n6_ip_address_list]");
             goto end;
         }
 
@@ -184,12 +184,12 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_parseFromJSON(cJSON *easdf_infoJSON)
 
         cJSON_ArrayForEach(upf_n6_ip_address_list_local, upf_n6_ip_address_list) {
             if (!cJSON_IsObject(upf_n6_ip_address_list_local)) {
-                ogs_error("OpenAPI_easdf_info_parseFromJSON() failed [upf_n6_ip_address_list]");
+                log_error("OpenAPI_easdf_info_parseFromJSON() failed [upf_n6_ip_address_list]");
                 goto end;
             }
             OpenAPI_ip_addr_t *upf_n6_ip_address_listItem = OpenAPI_ip_addr_parseFromJSON(upf_n6_ip_address_list_local);
             if (!upf_n6_ip_address_listItem) {
-                ogs_error("No upf_n6_ip_address_listItem");
+                log_error("No upf_n6_ip_address_listItem");
                 goto end;
             }
             OpenAPI_list_add(upf_n6_ip_address_listList, upf_n6_ip_address_listItem);
@@ -233,10 +233,10 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_copy(OpenAPI_easdf_info_t *dst, OpenAPI
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_easdf_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_easdf_info_convertToJSON() failed");
+        log_error("OpenAPI_easdf_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -244,14 +244,14 @@ OpenAPI_easdf_info_t *OpenAPI_easdf_info_copy(OpenAPI_easdf_info_t *dst, OpenAPI
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -11,7 +11,7 @@ OpenAPI_imsi_range_t *OpenAPI_imsi_range_create(
 )
 {
     OpenAPI_imsi_range_t *imsi_range_local_var = ogs_malloc(sizeof(OpenAPI_imsi_range_t));
-    ogs_assert(imsi_range_local_var);
+    log_assert(imsi_range_local_var);
 
     imsi_range_local_var->start = start;
     imsi_range_local_var->end = end;
@@ -48,28 +48,28 @@ cJSON *OpenAPI_imsi_range_convertToJSON(OpenAPI_imsi_range_t *imsi_range)
     OpenAPI_lnode_t *node = NULL;
 
     if (imsi_range == NULL) {
-        ogs_error("OpenAPI_imsi_range_convertToJSON() failed [ImsiRange]");
+        log_error("OpenAPI_imsi_range_convertToJSON() failed [ImsiRange]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (imsi_range->start) {
     if (cJSON_AddStringToObject(item, "start", imsi_range->start) == NULL) {
-        ogs_error("OpenAPI_imsi_range_convertToJSON() failed [start]");
+        log_error("OpenAPI_imsi_range_convertToJSON() failed [start]");
         goto end;
     }
     }
 
     if (imsi_range->end) {
     if (cJSON_AddStringToObject(item, "end", imsi_range->end) == NULL) {
-        ogs_error("OpenAPI_imsi_range_convertToJSON() failed [end]");
+        log_error("OpenAPI_imsi_range_convertToJSON() failed [end]");
         goto end;
     }
     }
 
     if (imsi_range->pattern) {
     if (cJSON_AddStringToObject(item, "pattern", imsi_range->pattern) == NULL) {
-        ogs_error("OpenAPI_imsi_range_convertToJSON() failed [pattern]");
+        log_error("OpenAPI_imsi_range_convertToJSON() failed [pattern]");
         goto end;
     }
     }
@@ -88,7 +88,7 @@ OpenAPI_imsi_range_t *OpenAPI_imsi_range_parseFromJSON(cJSON *imsi_rangeJSON)
     start = cJSON_GetObjectItemCaseSensitive(imsi_rangeJSON, "start");
     if (start) {
     if (!cJSON_IsString(start) && !cJSON_IsNull(start)) {
-        ogs_error("OpenAPI_imsi_range_parseFromJSON() failed [start]");
+        log_error("OpenAPI_imsi_range_parseFromJSON() failed [start]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_imsi_range_t *OpenAPI_imsi_range_parseFromJSON(cJSON *imsi_rangeJSON)
     end = cJSON_GetObjectItemCaseSensitive(imsi_rangeJSON, "end");
     if (end) {
     if (!cJSON_IsString(end) && !cJSON_IsNull(end)) {
-        ogs_error("OpenAPI_imsi_range_parseFromJSON() failed [end]");
+        log_error("OpenAPI_imsi_range_parseFromJSON() failed [end]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_imsi_range_t *OpenAPI_imsi_range_parseFromJSON(cJSON *imsi_rangeJSON)
     pattern = cJSON_GetObjectItemCaseSensitive(imsi_rangeJSON, "pattern");
     if (pattern) {
     if (!cJSON_IsString(pattern) && !cJSON_IsNull(pattern)) {
-        ogs_error("OpenAPI_imsi_range_parseFromJSON() failed [pattern]");
+        log_error("OpenAPI_imsi_range_parseFromJSON() failed [pattern]");
         goto end;
     }
     }
@@ -125,10 +125,10 @@ OpenAPI_imsi_range_t *OpenAPI_imsi_range_copy(OpenAPI_imsi_range_t *dst, OpenAPI
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_imsi_range_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_imsi_range_convertToJSON() failed");
+        log_error("OpenAPI_imsi_range_convertToJSON() failed");
         return NULL;
     }
 
@@ -136,14 +136,14 @@ OpenAPI_imsi_range_t *OpenAPI_imsi_range_copy(OpenAPI_imsi_range_t *dst, OpenAPI
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

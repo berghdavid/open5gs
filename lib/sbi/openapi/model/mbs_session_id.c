@@ -11,7 +11,7 @@ OpenAPI_mbs_session_id_t *OpenAPI_mbs_session_id_create(
 )
 {
     OpenAPI_mbs_session_id_t *mbs_session_id_local_var = ogs_malloc(sizeof(OpenAPI_mbs_session_id_t));
-    ogs_assert(mbs_session_id_local_var);
+    log_assert(mbs_session_id_local_var);
 
     mbs_session_id_local_var->tmgi = tmgi;
     mbs_session_id_local_var->ssm = ssm;
@@ -48,7 +48,7 @@ cJSON *OpenAPI_mbs_session_id_convertToJSON(OpenAPI_mbs_session_id_t *mbs_sessio
     OpenAPI_lnode_t *node = NULL;
 
     if (mbs_session_id == NULL) {
-        ogs_error("OpenAPI_mbs_session_id_convertToJSON() failed [MbsSessionId]");
+        log_error("OpenAPI_mbs_session_id_convertToJSON() failed [MbsSessionId]");
         return NULL;
     }
 
@@ -56,12 +56,12 @@ cJSON *OpenAPI_mbs_session_id_convertToJSON(OpenAPI_mbs_session_id_t *mbs_sessio
     if (mbs_session_id->tmgi) {
     cJSON *tmgi_local_JSON = OpenAPI_tmgi_convertToJSON(mbs_session_id->tmgi);
     if (tmgi_local_JSON == NULL) {
-        ogs_error("OpenAPI_mbs_session_id_convertToJSON() failed [tmgi]");
+        log_error("OpenAPI_mbs_session_id_convertToJSON() failed [tmgi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "tmgi", tmgi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mbs_session_id_convertToJSON() failed [tmgi]");
+        log_error("OpenAPI_mbs_session_id_convertToJSON() failed [tmgi]");
         goto end;
     }
     }
@@ -69,19 +69,19 @@ cJSON *OpenAPI_mbs_session_id_convertToJSON(OpenAPI_mbs_session_id_t *mbs_sessio
     if (mbs_session_id->ssm) {
     cJSON *ssm_local_JSON = OpenAPI_ssm_convertToJSON(mbs_session_id->ssm);
     if (ssm_local_JSON == NULL) {
-        ogs_error("OpenAPI_mbs_session_id_convertToJSON() failed [ssm]");
+        log_error("OpenAPI_mbs_session_id_convertToJSON() failed [ssm]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ssm", ssm_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mbs_session_id_convertToJSON() failed [ssm]");
+        log_error("OpenAPI_mbs_session_id_convertToJSON() failed [ssm]");
         goto end;
     }
     }
 
     if (mbs_session_id->nid) {
     if (cJSON_AddStringToObject(item, "nid", mbs_session_id->nid) == NULL) {
-        ogs_error("OpenAPI_mbs_session_id_convertToJSON() failed [nid]");
+        log_error("OpenAPI_mbs_session_id_convertToJSON() failed [nid]");
         goto end;
     }
     }
@@ -103,7 +103,7 @@ OpenAPI_mbs_session_id_t *OpenAPI_mbs_session_id_parseFromJSON(cJSON *mbs_sessio
     if (tmgi) {
     tmgi_local_nonprim = OpenAPI_tmgi_parseFromJSON(tmgi);
     if (!tmgi_local_nonprim) {
-        ogs_error("OpenAPI_tmgi_parseFromJSON failed [tmgi]");
+        log_error("OpenAPI_tmgi_parseFromJSON failed [tmgi]");
         goto end;
     }
     }
@@ -112,7 +112,7 @@ OpenAPI_mbs_session_id_t *OpenAPI_mbs_session_id_parseFromJSON(cJSON *mbs_sessio
     if (ssm) {
     ssm_local_nonprim = OpenAPI_ssm_parseFromJSON(ssm);
     if (!ssm_local_nonprim) {
-        ogs_error("OpenAPI_ssm_parseFromJSON failed [ssm]");
+        log_error("OpenAPI_ssm_parseFromJSON failed [ssm]");
         goto end;
     }
     }
@@ -120,7 +120,7 @@ OpenAPI_mbs_session_id_t *OpenAPI_mbs_session_id_parseFromJSON(cJSON *mbs_sessio
     nid = cJSON_GetObjectItemCaseSensitive(mbs_session_idJSON, "nid");
     if (nid) {
     if (!cJSON_IsString(nid) && !cJSON_IsNull(nid)) {
-        ogs_error("OpenAPI_mbs_session_id_parseFromJSON() failed [nid]");
+        log_error("OpenAPI_mbs_session_id_parseFromJSON() failed [nid]");
         goto end;
     }
     }
@@ -149,10 +149,10 @@ OpenAPI_mbs_session_id_t *OpenAPI_mbs_session_id_copy(OpenAPI_mbs_session_id_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_mbs_session_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_mbs_session_id_convertToJSON() failed");
+        log_error("OpenAPI_mbs_session_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -160,14 +160,14 @@ OpenAPI_mbs_session_id_t *OpenAPI_mbs_session_id_copy(OpenAPI_mbs_session_id_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -11,7 +11,7 @@ OpenAPI_gba_authentication_info_request_t *OpenAPI_gba_authentication_info_reque
 )
 {
     OpenAPI_gba_authentication_info_request_t *gba_authentication_info_request_local_var = ogs_malloc(sizeof(OpenAPI_gba_authentication_info_request_t));
-    ogs_assert(gba_authentication_info_request_local_var);
+    log_assert(gba_authentication_info_request_local_var);
 
     gba_authentication_info_request_local_var->auth_type = auth_type;
     gba_authentication_info_request_local_var->resynchronization_info = resynchronization_info;
@@ -44,36 +44,36 @@ cJSON *OpenAPI_gba_authentication_info_request_convertToJSON(OpenAPI_gba_authent
     OpenAPI_lnode_t *node = NULL;
 
     if (gba_authentication_info_request == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [GbaAuthenticationInfoRequest]");
+        log_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [GbaAuthenticationInfoRequest]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (gba_authentication_info_request->auth_type == OpenAPI_gba_auth_type_NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [auth_type]");
+        log_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [auth_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "authType", OpenAPI_gba_auth_type_ToString(gba_authentication_info_request->auth_type)) == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [auth_type]");
+        log_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [auth_type]");
         goto end;
     }
 
     if (gba_authentication_info_request->resynchronization_info) {
     cJSON *resynchronization_info_local_JSON = OpenAPI_resynchronization_info_1_convertToJSON(gba_authentication_info_request->resynchronization_info);
     if (resynchronization_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [resynchronization_info]");
+        log_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [resynchronization_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "resynchronizationInfo", resynchronization_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [resynchronization_info]");
+        log_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [resynchronization_info]");
         goto end;
     }
     }
 
     if (gba_authentication_info_request->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", gba_authentication_info_request->supported_features) == NULL) {
-        ogs_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -93,11 +93,11 @@ OpenAPI_gba_authentication_info_request_t *OpenAPI_gba_authentication_info_reque
     cJSON *supported_features = NULL;
     auth_type = cJSON_GetObjectItemCaseSensitive(gba_authentication_info_requestJSON, "authType");
     if (!auth_type) {
-        ogs_error("OpenAPI_gba_authentication_info_request_parseFromJSON() failed [auth_type]");
+        log_error("OpenAPI_gba_authentication_info_request_parseFromJSON() failed [auth_type]");
         goto end;
     }
     if (!cJSON_IsString(auth_type)) {
-        ogs_error("OpenAPI_gba_authentication_info_request_parseFromJSON() failed [auth_type]");
+        log_error("OpenAPI_gba_authentication_info_request_parseFromJSON() failed [auth_type]");
         goto end;
     }
     auth_typeVariable = OpenAPI_gba_auth_type_FromString(auth_type->valuestring);
@@ -106,7 +106,7 @@ OpenAPI_gba_authentication_info_request_t *OpenAPI_gba_authentication_info_reque
     if (resynchronization_info) {
     resynchronization_info_local_nonprim = OpenAPI_resynchronization_info_1_parseFromJSON(resynchronization_info);
     if (!resynchronization_info_local_nonprim) {
-        ogs_error("OpenAPI_resynchronization_info_1_parseFromJSON failed [resynchronization_info]");
+        log_error("OpenAPI_resynchronization_info_1_parseFromJSON failed [resynchronization_info]");
         goto end;
     }
     }
@@ -114,7 +114,7 @@ OpenAPI_gba_authentication_info_request_t *OpenAPI_gba_authentication_info_reque
     supported_features = cJSON_GetObjectItemCaseSensitive(gba_authentication_info_requestJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_gba_authentication_info_request_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_gba_authentication_info_request_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -139,10 +139,10 @@ OpenAPI_gba_authentication_info_request_t *OpenAPI_gba_authentication_info_reque
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_gba_authentication_info_request_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed");
+        log_error("OpenAPI_gba_authentication_info_request_convertToJSON() failed");
         return NULL;
     }
 
@@ -150,14 +150,14 @@ OpenAPI_gba_authentication_info_request_t *OpenAPI_gba_authentication_info_reque
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

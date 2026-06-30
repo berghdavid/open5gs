@@ -11,7 +11,7 @@ OpenAPI_routing_info_sm_request_t *OpenAPI_routing_info_sm_request_create(
 )
 {
     OpenAPI_routing_info_sm_request_t *routing_info_sm_request_local_var = ogs_malloc(sizeof(OpenAPI_routing_info_sm_request_t));
-    ogs_assert(routing_info_sm_request_local_var);
+    log_assert(routing_info_sm_request_local_var);
 
     routing_info_sm_request_local_var->is_ip_sm_gw_ind = is_ip_sm_gw_ind;
     routing_info_sm_request_local_var->ip_sm_gw_ind = ip_sm_gw_ind;
@@ -40,21 +40,21 @@ cJSON *OpenAPI_routing_info_sm_request_convertToJSON(OpenAPI_routing_info_sm_req
     OpenAPI_lnode_t *node = NULL;
 
     if (routing_info_sm_request == NULL) {
-        ogs_error("OpenAPI_routing_info_sm_request_convertToJSON() failed [RoutingInfoSmRequest]");
+        log_error("OpenAPI_routing_info_sm_request_convertToJSON() failed [RoutingInfoSmRequest]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (routing_info_sm_request->is_ip_sm_gw_ind) {
     if (cJSON_AddBoolToObject(item, "ipSmGwInd", routing_info_sm_request->ip_sm_gw_ind) == NULL) {
-        ogs_error("OpenAPI_routing_info_sm_request_convertToJSON() failed [ip_sm_gw_ind]");
+        log_error("OpenAPI_routing_info_sm_request_convertToJSON() failed [ip_sm_gw_ind]");
         goto end;
     }
     }
 
     if (routing_info_sm_request->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", routing_info_sm_request->supported_features) == NULL) {
-        ogs_error("OpenAPI_routing_info_sm_request_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_routing_info_sm_request_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -72,7 +72,7 @@ OpenAPI_routing_info_sm_request_t *OpenAPI_routing_info_sm_request_parseFromJSON
     ip_sm_gw_ind = cJSON_GetObjectItemCaseSensitive(routing_info_sm_requestJSON, "ipSmGwInd");
     if (ip_sm_gw_ind) {
     if (!cJSON_IsBool(ip_sm_gw_ind)) {
-        ogs_error("OpenAPI_routing_info_sm_request_parseFromJSON() failed [ip_sm_gw_ind]");
+        log_error("OpenAPI_routing_info_sm_request_parseFromJSON() failed [ip_sm_gw_ind]");
         goto end;
     }
     }
@@ -80,7 +80,7 @@ OpenAPI_routing_info_sm_request_t *OpenAPI_routing_info_sm_request_parseFromJSON
     supported_features = cJSON_GetObjectItemCaseSensitive(routing_info_sm_requestJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_routing_info_sm_request_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_routing_info_sm_request_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -101,10 +101,10 @@ OpenAPI_routing_info_sm_request_t *OpenAPI_routing_info_sm_request_copy(OpenAPI_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_routing_info_sm_request_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_routing_info_sm_request_convertToJSON() failed");
+        log_error("OpenAPI_routing_info_sm_request_convertToJSON() failed");
         return NULL;
     }
 
@@ -112,14 +112,14 @@ OpenAPI_routing_info_sm_request_t *OpenAPI_routing_info_sm_request_copy(OpenAPI_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

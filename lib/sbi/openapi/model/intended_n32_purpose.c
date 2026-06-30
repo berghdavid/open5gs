@@ -11,7 +11,7 @@ OpenAPI_intended_n32_purpose_t *OpenAPI_intended_n32_purpose_create(
 )
 {
     OpenAPI_intended_n32_purpose_t *intended_n32_purpose_local_var = ogs_malloc(sizeof(OpenAPI_intended_n32_purpose_t));
-    ogs_assert(intended_n32_purpose_local_var);
+    log_assert(intended_n32_purpose_local_var);
 
     intended_n32_purpose_local_var->usage_purpose = usage_purpose;
     intended_n32_purpose_local_var->additional_info = additional_info;
@@ -44,30 +44,30 @@ cJSON *OpenAPI_intended_n32_purpose_convertToJSON(OpenAPI_intended_n32_purpose_t
     OpenAPI_lnode_t *node = NULL;
 
     if (intended_n32_purpose == NULL) {
-        ogs_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [IntendedN32Purpose]");
+        log_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [IntendedN32Purpose]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (intended_n32_purpose->usage_purpose == OpenAPI_n32_purpose_NULL) {
-        ogs_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [usage_purpose]");
+        log_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [usage_purpose]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "usagePurpose", OpenAPI_n32_purpose_ToString(intended_n32_purpose->usage_purpose)) == NULL) {
-        ogs_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [usage_purpose]");
+        log_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [usage_purpose]");
         goto end;
     }
 
     if (intended_n32_purpose->additional_info) {
     if (cJSON_AddStringToObject(item, "additionalInfo", intended_n32_purpose->additional_info) == NULL) {
-        ogs_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [additional_info]");
+        log_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [additional_info]");
         goto end;
     }
     }
 
     if (intended_n32_purpose->cause) {
     if (cJSON_AddStringToObject(item, "cause", intended_n32_purpose->cause) == NULL) {
-        ogs_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [cause]");
+        log_error("OpenAPI_intended_n32_purpose_convertToJSON() failed [cause]");
         goto end;
     }
     }
@@ -86,11 +86,11 @@ OpenAPI_intended_n32_purpose_t *OpenAPI_intended_n32_purpose_parseFromJSON(cJSON
     cJSON *cause = NULL;
     usage_purpose = cJSON_GetObjectItemCaseSensitive(intended_n32_purposeJSON, "usagePurpose");
     if (!usage_purpose) {
-        ogs_error("OpenAPI_intended_n32_purpose_parseFromJSON() failed [usage_purpose]");
+        log_error("OpenAPI_intended_n32_purpose_parseFromJSON() failed [usage_purpose]");
         goto end;
     }
     if (!cJSON_IsString(usage_purpose)) {
-        ogs_error("OpenAPI_intended_n32_purpose_parseFromJSON() failed [usage_purpose]");
+        log_error("OpenAPI_intended_n32_purpose_parseFromJSON() failed [usage_purpose]");
         goto end;
     }
     usage_purposeVariable = OpenAPI_n32_purpose_FromString(usage_purpose->valuestring);
@@ -98,7 +98,7 @@ OpenAPI_intended_n32_purpose_t *OpenAPI_intended_n32_purpose_parseFromJSON(cJSON
     additional_info = cJSON_GetObjectItemCaseSensitive(intended_n32_purposeJSON, "additionalInfo");
     if (additional_info) {
     if (!cJSON_IsString(additional_info) && !cJSON_IsNull(additional_info)) {
-        ogs_error("OpenAPI_intended_n32_purpose_parseFromJSON() failed [additional_info]");
+        log_error("OpenAPI_intended_n32_purpose_parseFromJSON() failed [additional_info]");
         goto end;
     }
     }
@@ -106,7 +106,7 @@ OpenAPI_intended_n32_purpose_t *OpenAPI_intended_n32_purpose_parseFromJSON(cJSON
     cause = cJSON_GetObjectItemCaseSensitive(intended_n32_purposeJSON, "cause");
     if (cause) {
     if (!cJSON_IsString(cause) && !cJSON_IsNull(cause)) {
-        ogs_error("OpenAPI_intended_n32_purpose_parseFromJSON() failed [cause]");
+        log_error("OpenAPI_intended_n32_purpose_parseFromJSON() failed [cause]");
         goto end;
     }
     }
@@ -127,10 +127,10 @@ OpenAPI_intended_n32_purpose_t *OpenAPI_intended_n32_purpose_copy(OpenAPI_intend
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_intended_n32_purpose_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_intended_n32_purpose_convertToJSON() failed");
+        log_error("OpenAPI_intended_n32_purpose_convertToJSON() failed");
         return NULL;
     }
 
@@ -138,14 +138,14 @@ OpenAPI_intended_n32_purpose_t *OpenAPI_intended_n32_purpose_copy(OpenAPI_intend
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

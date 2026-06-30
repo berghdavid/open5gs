@@ -10,7 +10,7 @@ OpenAPI_sd_range_t *OpenAPI_sd_range_create(
 )
 {
     OpenAPI_sd_range_t *sd_range_local_var = ogs_malloc(sizeof(OpenAPI_sd_range_t));
-    ogs_assert(sd_range_local_var);
+    log_assert(sd_range_local_var);
 
     sd_range_local_var->start = start;
     sd_range_local_var->end = end;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_sd_range_convertToJSON(OpenAPI_sd_range_t *sd_range)
     OpenAPI_lnode_t *node = NULL;
 
     if (sd_range == NULL) {
-        ogs_error("OpenAPI_sd_range_convertToJSON() failed [SdRange]");
+        log_error("OpenAPI_sd_range_convertToJSON() failed [SdRange]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (sd_range->start) {
     if (cJSON_AddStringToObject(item, "start", sd_range->start) == NULL) {
-        ogs_error("OpenAPI_sd_range_convertToJSON() failed [start]");
+        log_error("OpenAPI_sd_range_convertToJSON() failed [start]");
         goto end;
     }
     }
 
     if (sd_range->end) {
     if (cJSON_AddStringToObject(item, "end", sd_range->end) == NULL) {
-        ogs_error("OpenAPI_sd_range_convertToJSON() failed [end]");
+        log_error("OpenAPI_sd_range_convertToJSON() failed [end]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_sd_range_t *OpenAPI_sd_range_parseFromJSON(cJSON *sd_rangeJSON)
     start = cJSON_GetObjectItemCaseSensitive(sd_rangeJSON, "start");
     if (start) {
     if (!cJSON_IsString(start) && !cJSON_IsNull(start)) {
-        ogs_error("OpenAPI_sd_range_parseFromJSON() failed [start]");
+        log_error("OpenAPI_sd_range_parseFromJSON() failed [start]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_sd_range_t *OpenAPI_sd_range_parseFromJSON(cJSON *sd_rangeJSON)
     end = cJSON_GetObjectItemCaseSensitive(sd_rangeJSON, "end");
     if (end) {
     if (!cJSON_IsString(end) && !cJSON_IsNull(end)) {
-        ogs_error("OpenAPI_sd_range_parseFromJSON() failed [end]");
+        log_error("OpenAPI_sd_range_parseFromJSON() failed [end]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_sd_range_t *OpenAPI_sd_range_copy(OpenAPI_sd_range_t *dst, OpenAPI_sd_ra
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sd_range_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sd_range_convertToJSON() failed");
+        log_error("OpenAPI_sd_range_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_sd_range_t *OpenAPI_sd_range_copy(OpenAPI_sd_range_t *dst, OpenAPI_sd_ra
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -10,7 +10,7 @@ OpenAPI_usage_mon_data_scope_t *OpenAPI_usage_mon_data_scope_create(
 )
 {
     OpenAPI_usage_mon_data_scope_t *usage_mon_data_scope_local_var = ogs_malloc(sizeof(OpenAPI_usage_mon_data_scope_t));
-    ogs_assert(usage_mon_data_scope_local_var);
+    log_assert(usage_mon_data_scope_local_var);
 
     usage_mon_data_scope_local_var->snssai = snssai;
     usage_mon_data_scope_local_var->dnn = dnn;
@@ -45,35 +45,35 @@ cJSON *OpenAPI_usage_mon_data_scope_convertToJSON(OpenAPI_usage_mon_data_scope_t
     OpenAPI_lnode_t *node = NULL;
 
     if (usage_mon_data_scope == NULL) {
-        ogs_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [UsageMonDataScope]");
+        log_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [UsageMonDataScope]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!usage_mon_data_scope->snssai) {
-        ogs_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [snssai]");
         return NULL;
     }
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(usage_mon_data_scope->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [snssai]");
         goto end;
     }
 
     if (usage_mon_data_scope->dnn) {
     cJSON *dnnList = cJSON_AddArrayToObject(item, "dnn");
     if (dnnList == NULL) {
-        ogs_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [dnn]");
         goto end;
     }
     OpenAPI_list_for_each(usage_mon_data_scope->dnn, node) {
         if (cJSON_AddStringToObject(dnnList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [dnn]");
+            log_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed [dnn]");
             goto end;
         }
     }
@@ -93,12 +93,12 @@ OpenAPI_usage_mon_data_scope_t *OpenAPI_usage_mon_data_scope_parseFromJSON(cJSON
     OpenAPI_list_t *dnnList = NULL;
     snssai = cJSON_GetObjectItemCaseSensitive(usage_mon_data_scopeJSON, "snssai");
     if (!snssai) {
-        ogs_error("OpenAPI_usage_mon_data_scope_parseFromJSON() failed [snssai]");
+        log_error("OpenAPI_usage_mon_data_scope_parseFromJSON() failed [snssai]");
         goto end;
     }
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
 
@@ -106,7 +106,7 @@ OpenAPI_usage_mon_data_scope_t *OpenAPI_usage_mon_data_scope_parseFromJSON(cJSON
     if (dnn) {
         cJSON *dnn_local = NULL;
         if (!cJSON_IsArray(dnn)) {
-            ogs_error("OpenAPI_usage_mon_data_scope_parseFromJSON() failed [dnn]");
+            log_error("OpenAPI_usage_mon_data_scope_parseFromJSON() failed [dnn]");
             goto end;
         }
 
@@ -116,7 +116,7 @@ OpenAPI_usage_mon_data_scope_t *OpenAPI_usage_mon_data_scope_parseFromJSON(cJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(dnn_local)) {
-                ogs_error("OpenAPI_usage_mon_data_scope_parseFromJSON() failed [dnn]");
+                log_error("OpenAPI_usage_mon_data_scope_parseFromJSON() failed [dnn]");
                 goto end;
             }
             OpenAPI_list_add(dnnList, ogs_strdup(dnn_local->valuestring));
@@ -149,10 +149,10 @@ OpenAPI_usage_mon_data_scope_t *OpenAPI_usage_mon_data_scope_copy(OpenAPI_usage_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_usage_mon_data_scope_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed");
+        log_error("OpenAPI_usage_mon_data_scope_convertToJSON() failed");
         return NULL;
     }
 
@@ -160,14 +160,14 @@ OpenAPI_usage_mon_data_scope_t *OpenAPI_usage_mon_data_scope_copy(OpenAPI_usage_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

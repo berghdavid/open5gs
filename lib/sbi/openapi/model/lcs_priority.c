@@ -8,7 +8,7 @@ OpenAPI_lcs_priority_t *OpenAPI_lcs_priority_create(
 )
 {
     OpenAPI_lcs_priority_t *lcs_priority_local_var = ogs_malloc(sizeof(OpenAPI_lcs_priority_t));
-    ogs_assert(lcs_priority_local_var);
+    log_assert(lcs_priority_local_var);
 
 
     return lcs_priority_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_lcs_priority_convertToJSON(OpenAPI_lcs_priority_t *lcs_priority)
     OpenAPI_lnode_t *node = NULL;
 
     if (lcs_priority == NULL) {
-        ogs_error("OpenAPI_lcs_priority_convertToJSON() failed [LcsPriority]");
+        log_error("OpenAPI_lcs_priority_convertToJSON() failed [LcsPriority]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_lcs_priority_t *OpenAPI_lcs_priority_copy(OpenAPI_lcs_priority_t *dst, O
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_lcs_priority_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_lcs_priority_convertToJSON() failed");
+        log_error("OpenAPI_lcs_priority_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_lcs_priority_t *OpenAPI_lcs_priority_copy(OpenAPI_lcs_priority_t *dst, O
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

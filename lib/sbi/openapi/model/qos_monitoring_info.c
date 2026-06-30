@@ -10,7 +10,7 @@ OpenAPI_qos_monitoring_info_t *OpenAPI_qos_monitoring_info_create(
 )
 {
     OpenAPI_qos_monitoring_info_t *qos_monitoring_info_local_var = ogs_malloc(sizeof(OpenAPI_qos_monitoring_info_t));
-    ogs_assert(qos_monitoring_info_local_var);
+    log_assert(qos_monitoring_info_local_var);
 
     qos_monitoring_info_local_var->is_qos_monitoring_ind = is_qos_monitoring_ind;
     qos_monitoring_info_local_var->qos_monitoring_ind = qos_monitoring_ind;
@@ -34,14 +34,14 @@ cJSON *OpenAPI_qos_monitoring_info_convertToJSON(OpenAPI_qos_monitoring_info_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (qos_monitoring_info == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_info_convertToJSON() failed [QosMonitoringInfo]");
+        log_error("OpenAPI_qos_monitoring_info_convertToJSON() failed [QosMonitoringInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (qos_monitoring_info->is_qos_monitoring_ind) {
     if (cJSON_AddBoolToObject(item, "qosMonitoringInd", qos_monitoring_info->qos_monitoring_ind) == NULL) {
-        ogs_error("OpenAPI_qos_monitoring_info_convertToJSON() failed [qos_monitoring_ind]");
+        log_error("OpenAPI_qos_monitoring_info_convertToJSON() failed [qos_monitoring_ind]");
         goto end;
     }
     }
@@ -58,7 +58,7 @@ OpenAPI_qos_monitoring_info_t *OpenAPI_qos_monitoring_info_parseFromJSON(cJSON *
     qos_monitoring_ind = cJSON_GetObjectItemCaseSensitive(qos_monitoring_infoJSON, "qosMonitoringInd");
     if (qos_monitoring_ind) {
     if (!cJSON_IsBool(qos_monitoring_ind)) {
-        ogs_error("OpenAPI_qos_monitoring_info_parseFromJSON() failed [qos_monitoring_ind]");
+        log_error("OpenAPI_qos_monitoring_info_parseFromJSON() failed [qos_monitoring_ind]");
         goto end;
     }
     }
@@ -78,10 +78,10 @@ OpenAPI_qos_monitoring_info_t *OpenAPI_qos_monitoring_info_copy(OpenAPI_qos_moni
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_qos_monitoring_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_qos_monitoring_info_convertToJSON() failed");
+        log_error("OpenAPI_qos_monitoring_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -89,14 +89,14 @@ OpenAPI_qos_monitoring_info_t *OpenAPI_qos_monitoring_info_copy(OpenAPI_qos_moni
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

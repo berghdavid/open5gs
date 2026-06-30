@@ -10,7 +10,7 @@ OpenAPI_app_descriptor_1_t *OpenAPI_app_descriptor_1_create(
 )
 {
     OpenAPI_app_descriptor_1_t *app_descriptor_1_local_var = ogs_malloc(sizeof(OpenAPI_app_descriptor_1_t));
-    ogs_assert(app_descriptor_1_local_var);
+    log_assert(app_descriptor_1_local_var);
 
     app_descriptor_1_local_var->os_id = os_id;
     app_descriptor_1_local_var->app_ids = app_ids;
@@ -48,27 +48,27 @@ cJSON *OpenAPI_app_descriptor_1_convertToJSON(OpenAPI_app_descriptor_1_t *app_de
     OpenAPI_lnode_t *node = NULL;
 
     if (app_descriptor_1 == NULL) {
-        ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed [AppDescriptor_1]");
+        log_error("OpenAPI_app_descriptor_1_convertToJSON() failed [AppDescriptor_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!app_descriptor_1->os_id) {
-        ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed [os_id]");
+        log_error("OpenAPI_app_descriptor_1_convertToJSON() failed [os_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "osId", app_descriptor_1->os_id) == NULL) {
-        ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed [os_id]");
+        log_error("OpenAPI_app_descriptor_1_convertToJSON() failed [os_id]");
         goto end;
     }
 
     if (!app_descriptor_1->app_ids) {
-        ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed [app_ids]");
+        log_error("OpenAPI_app_descriptor_1_convertToJSON() failed [app_ids]");
         return NULL;
     }
     cJSON *app_ids = cJSON_AddObjectToObject(item, "appIds");
     if (app_ids == NULL) {
-        ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed [app_ids]");
+        log_error("OpenAPI_app_descriptor_1_convertToJSON() failed [app_ids]");
         goto end;
     }
     cJSON *localMapObject = app_ids;
@@ -76,15 +76,15 @@ cJSON *OpenAPI_app_descriptor_1_convertToJSON(OpenAPI_app_descriptor_1_t *app_de
         OpenAPI_list_for_each(app_descriptor_1->app_ids, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed [app_ids]");
+                log_error("OpenAPI_app_descriptor_1_convertToJSON() failed [app_ids]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed [app_ids]");
+                log_error("OpenAPI_app_descriptor_1_convertToJSON() failed [app_ids]");
                 goto end;
             }
             if (cJSON_AddStringToObject(localMapObject, localKeyValue->key, (char*)localKeyValue->value) == NULL) {
-                ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed [inner]");
+                log_error("OpenAPI_app_descriptor_1_convertToJSON() failed [inner]");
                 goto end;
             }
         }
@@ -103,22 +103,22 @@ OpenAPI_app_descriptor_1_t *OpenAPI_app_descriptor_1_parseFromJSON(cJSON *app_de
     OpenAPI_list_t *app_idsList = NULL;
     os_id = cJSON_GetObjectItemCaseSensitive(app_descriptor_1JSON, "osId");
     if (!os_id) {
-        ogs_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [os_id]");
+        log_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [os_id]");
         goto end;
     }
     if (!cJSON_IsString(os_id)) {
-        ogs_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [os_id]");
+        log_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [os_id]");
         goto end;
     }
 
     app_ids = cJSON_GetObjectItemCaseSensitive(app_descriptor_1JSON, "appIds");
     if (!app_ids) {
-        ogs_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [app_ids]");
+        log_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [app_ids]");
         goto end;
     }
         cJSON *app_ids_local_map = NULL;
         if (!cJSON_IsObject(app_ids) && !cJSON_IsNull(app_ids)) {
-            ogs_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [app_ids]");
+            log_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [app_ids]");
             goto end;
         }
         if (cJSON_IsObject(app_ids)) {
@@ -129,7 +129,7 @@ OpenAPI_app_descriptor_1_t *OpenAPI_app_descriptor_1_parseFromJSON(cJSON *app_de
                 double *localDouble = NULL;
                 int *localInt = NULL;
                 if (!cJSON_IsString(localMapObject)) {
-                    ogs_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_app_descriptor_1_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), ogs_strdup(localMapObject->valuestring));
@@ -162,10 +162,10 @@ OpenAPI_app_descriptor_1_t *OpenAPI_app_descriptor_1_copy(OpenAPI_app_descriptor
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_app_descriptor_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_app_descriptor_1_convertToJSON() failed");
+        log_error("OpenAPI_app_descriptor_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -173,14 +173,14 @@ OpenAPI_app_descriptor_1_t *OpenAPI_app_descriptor_1_copy(OpenAPI_app_descriptor
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

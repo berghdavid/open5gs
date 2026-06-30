@@ -14,7 +14,7 @@ OpenAPI_pro_se_authentication_info_t *OpenAPI_pro_se_authentication_info_create(
 )
 {
     OpenAPI_pro_se_authentication_info_t *pro_se_authentication_info_local_var = ogs_malloc(sizeof(OpenAPI_pro_se_authentication_info_t));
-    ogs_assert(pro_se_authentication_info_local_var);
+    log_assert(pro_se_authentication_info_local_var);
 
     pro_se_authentication_info_local_var->supi_or_suci = supi_or_suci;
     pro_se_authentication_info_local_var->_5g_pruk_id = _5g_pruk_id;
@@ -58,42 +58,42 @@ cJSON *OpenAPI_pro_se_authentication_info_convertToJSON(OpenAPI_pro_se_authentic
     OpenAPI_lnode_t *node = NULL;
 
     if (pro_se_authentication_info == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [ProSeAuthenticationInfo]");
+        log_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [ProSeAuthenticationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (pro_se_authentication_info->supi_or_suci) {
     if (cJSON_AddStringToObject(item, "supiOrSuci", pro_se_authentication_info->supi_or_suci) == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [supi_or_suci]");
+        log_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [supi_or_suci]");
         goto end;
     }
     }
 
     if (pro_se_authentication_info->_5g_pruk_id) {
     if (cJSON_AddStringToObject(item, "5gPrukId", pro_se_authentication_info->_5g_pruk_id) == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [_5g_pruk_id]");
+        log_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [_5g_pruk_id]");
         goto end;
     }
     }
 
     if (cJSON_AddNumberToObject(item, "relayServiceCode", pro_se_authentication_info->relay_service_code) == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [relay_service_code]");
+        log_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [relay_service_code]");
         goto end;
     }
 
     if (!pro_se_authentication_info->nonce1) {
-        ogs_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [nonce1]");
+        log_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [nonce1]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "nonce1", pro_se_authentication_info->nonce1) == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [nonce1]");
+        log_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [nonce1]");
         goto end;
     }
 
     if (pro_se_authentication_info->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", pro_se_authentication_info->supported_features) == NULL) {
-        ogs_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -114,7 +114,7 @@ OpenAPI_pro_se_authentication_info_t *OpenAPI_pro_se_authentication_info_parseFr
     supi_or_suci = cJSON_GetObjectItemCaseSensitive(pro_se_authentication_infoJSON, "supiOrSuci");
     if (supi_or_suci) {
     if (!cJSON_IsString(supi_or_suci) && !cJSON_IsNull(supi_or_suci)) {
-        ogs_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [supi_or_suci]");
+        log_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [supi_or_suci]");
         goto end;
     }
     }
@@ -122,35 +122,35 @@ OpenAPI_pro_se_authentication_info_t *OpenAPI_pro_se_authentication_info_parseFr
     _5g_pruk_id = cJSON_GetObjectItemCaseSensitive(pro_se_authentication_infoJSON, "5gPrukId");
     if (_5g_pruk_id) {
     if (!cJSON_IsString(_5g_pruk_id) && !cJSON_IsNull(_5g_pruk_id)) {
-        ogs_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [_5g_pruk_id]");
+        log_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [_5g_pruk_id]");
         goto end;
     }
     }
 
     relay_service_code = cJSON_GetObjectItemCaseSensitive(pro_se_authentication_infoJSON, "relayServiceCode");
     if (!relay_service_code) {
-        ogs_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [relay_service_code]");
+        log_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [relay_service_code]");
         goto end;
     }
     if (!cJSON_IsNumber(relay_service_code)) {
-        ogs_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [relay_service_code]");
+        log_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [relay_service_code]");
         goto end;
     }
 
     nonce1 = cJSON_GetObjectItemCaseSensitive(pro_se_authentication_infoJSON, "nonce1");
     if (!nonce1) {
-        ogs_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [nonce1]");
+        log_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [nonce1]");
         goto end;
     }
     if (!cJSON_IsString(nonce1)) {
-        ogs_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [nonce1]");
+        log_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [nonce1]");
         goto end;
     }
 
     supported_features = cJSON_GetObjectItemCaseSensitive(pro_se_authentication_infoJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_pro_se_authentication_info_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -175,10 +175,10 @@ OpenAPI_pro_se_authentication_info_t *OpenAPI_pro_se_authentication_info_copy(Op
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pro_se_authentication_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed");
+        log_error("OpenAPI_pro_se_authentication_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -186,14 +186,14 @@ OpenAPI_pro_se_authentication_info_t *OpenAPI_pro_se_authentication_info_copy(Op
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

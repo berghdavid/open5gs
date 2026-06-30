@@ -55,6 +55,6 @@ const char *ogs_timer_get_name(int timer_id)
        break;
     }
 
-    ogs_error("Unknown Timer[%d]", timer_id);
+    log_error("Unknown Timer[%d]", timer_id);
     return "UNKNOWN_TIMER";
 }

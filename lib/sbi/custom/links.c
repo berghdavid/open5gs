@@ -15,17 +15,17 @@ cJSON *ogs_sbi_links_convertToJSON(ogs_sbi_links_t *links)
 
     OpenAPI_lnode_t *node;
 
-    ogs_assert(links);
+    log_assert(links);
 
     /* _links.items */
     itemsJSON = cJSON_CreateArray();
-    ogs_assert(itemsJSON);
+    log_assert(itemsJSON);
 
     OpenAPI_list_for_each(links->items, node) {
         if (!node->data) continue;
 
         object = cJSON_CreateObject();
-        ogs_assert(object);
+        log_assert(object);
 
         cJSON_AddItemToObject(object, "href", cJSON_CreateString(node->data));
         cJSON_AddItemToArray(itemsJSON, object);
@@ -33,17 +33,17 @@ cJSON *ogs_sbi_links_convertToJSON(ogs_sbi_links_t *links)
 
     /* _links.self */
     selfJSON = cJSON_CreateObject();
-    ogs_assert(selfJSON);
+    log_assert(selfJSON);
 
-    ogs_assert(links->self);
+    log_assert(links->self);
     object = cJSON_CreateString(links->self);
-    ogs_assert(object);
+    log_assert(object);
 
     cJSON_AddItemToObject(selfJSON, "href", object);
 
     /* _links */
     linksJSON = cJSON_CreateObject();
-    ogs_assert(linksJSON);
+    log_assert(linksJSON);
 
     cJSON_AddItemToObject(linksJSON, "item", itemsJSON);
     cJSON_AddItemToObject(linksJSON, "self", selfJSON);
@@ -51,7 +51,7 @@ cJSON *ogs_sbi_links_convertToJSON(ogs_sbi_links_t *links)
 
     /* root */
     root = cJSON_CreateObject();
-    ogs_assert(root);
+    log_assert(root);
 
     cJSON_AddItemToObject(root, "_links", linksJSON);
 
@@ -65,27 +65,27 @@ ogs_sbi_links_t *ogs_sbi_links_parseFromJSON(cJSON *json)
     cJSON *_items = NULL, *_item = NULL;
     cJSON *_self = NULL;
 
-    ogs_assert(json);
+    log_assert(json);
 
     _links = cJSON_GetObjectItemCaseSensitive(json, "_links");
     if (!_links) {
-        ogs_error("No _links");
+        log_error("No _links");
         return NULL;
     }
 
     _items = cJSON_GetObjectItemCaseSensitive(_links, "item");
     if (!_items) {
-        ogs_error("No item");
+        log_error("No item");
         return NULL;
     }
 
 
     links = ogs_malloc(sizeof(ogs_sbi_links_t));
-    ogs_assert(links);
+    log_assert(links);
 
     memset(links, 0, sizeof(*links));
     links->items = OpenAPI_list_create();
-    ogs_assert(links->items);
+    log_assert(links->items);
 
 
     cJSON_ArrayForEach(_item, _items) {

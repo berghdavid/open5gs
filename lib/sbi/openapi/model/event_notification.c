@@ -31,7 +31,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_create(
 )
 {
     OpenAPI_event_notification_t *event_notification_local_var = ogs_malloc(sizeof(OpenAPI_event_notification_t));
-    ogs_assert(event_notification_local_var);
+    log_assert(event_notification_local_var);
 
     event_notification_local_var->event = event;
     event_notification_local_var->start = start;
@@ -202,43 +202,43 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     OpenAPI_lnode_t *node = NULL;
 
     if (event_notification == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [EventNotification]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [EventNotification]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!event_notification->event) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [event]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [event]");
         return NULL;
     }
     cJSON *event_local_JSON = OpenAPI_nwdaf_event_convertToJSON(event_notification->event);
     if (event_local_JSON == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [event]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [event]");
         goto end;
     }
     cJSON_AddItemToObject(item, "event", event_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [event]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [event]");
         goto end;
     }
 
     if (event_notification->start) {
     if (cJSON_AddStringToObject(item, "start", event_notification->start) == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [start]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [start]");
         goto end;
     }
     }
 
     if (event_notification->expiry) {
     if (cJSON_AddStringToObject(item, "expiry", event_notification->expiry) == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [expiry]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [expiry]");
         goto end;
     }
     }
 
     if (event_notification->time_stamp_gen) {
     if (cJSON_AddStringToObject(item, "timeStampGen", event_notification->time_stamp_gen) == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [time_stamp_gen]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [time_stamp_gen]");
         goto end;
     }
     }
@@ -246,19 +246,19 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->fail_notify_code) {
     cJSON *fail_notify_code_local_JSON = OpenAPI_nwdaf_failure_code_convertToJSON(event_notification->fail_notify_code);
     if (fail_notify_code_local_JSON == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [fail_notify_code]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [fail_notify_code]");
         goto end;
     }
     cJSON_AddItemToObject(item, "failNotifyCode", fail_notify_code_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [fail_notify_code]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [fail_notify_code]");
         goto end;
     }
     }
 
     if (event_notification->is_rv_wait_time) {
     if (cJSON_AddNumberToObject(item, "rvWaitTime", event_notification->rv_wait_time) == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [rv_wait_time]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [rv_wait_time]");
         goto end;
     }
     }
@@ -266,12 +266,12 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->ana_meta_info) {
     cJSON *ana_meta_info_local_JSON = OpenAPI_analytics_metadata_info_convertToJSON(event_notification->ana_meta_info);
     if (ana_meta_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [ana_meta_info]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [ana_meta_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "anaMetaInfo", ana_meta_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [ana_meta_info]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [ana_meta_info]");
         goto end;
     }
     }
@@ -279,13 +279,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->nf_load_level_infos) {
     cJSON *nf_load_level_infosList = cJSON_AddArrayToObject(item, "nfLoadLevelInfos");
     if (nf_load_level_infosList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [nf_load_level_infos]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [nf_load_level_infos]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->nf_load_level_infos, node) {
         cJSON *itemLocal = OpenAPI_nf_load_level_information_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [nf_load_level_infos]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [nf_load_level_infos]");
             goto end;
         }
         cJSON_AddItemToArray(nf_load_level_infosList, itemLocal);
@@ -295,13 +295,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->nsi_load_level_infos) {
     cJSON *nsi_load_level_infosList = cJSON_AddArrayToObject(item, "nsiLoadLevelInfos");
     if (nsi_load_level_infosList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [nsi_load_level_infos]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [nsi_load_level_infos]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->nsi_load_level_infos, node) {
         cJSON *itemLocal = OpenAPI_nsi_load_level_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [nsi_load_level_infos]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [nsi_load_level_infos]");
             goto end;
         }
         cJSON_AddItemToArray(nsi_load_level_infosList, itemLocal);
@@ -311,12 +311,12 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->slice_load_level_info) {
     cJSON *slice_load_level_info_local_JSON = OpenAPI_slice_load_level_information_convertToJSON(event_notification->slice_load_level_info);
     if (slice_load_level_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [slice_load_level_info]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [slice_load_level_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "sliceLoadLevelInfo", slice_load_level_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [slice_load_level_info]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [slice_load_level_info]");
         goto end;
     }
     }
@@ -324,13 +324,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->svc_exps) {
     cJSON *svc_expsList = cJSON_AddArrayToObject(item, "svcExps");
     if (svc_expsList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [svc_exps]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [svc_exps]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->svc_exps, node) {
         cJSON *itemLocal = OpenAPI_service_experience_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [svc_exps]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [svc_exps]");
             goto end;
         }
         cJSON_AddItemToArray(svc_expsList, itemLocal);
@@ -340,13 +340,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->qos_sustain_infos) {
     cJSON *qos_sustain_infosList = cJSON_AddArrayToObject(item, "qosSustainInfos");
     if (qos_sustain_infosList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [qos_sustain_infos]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [qos_sustain_infos]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->qos_sustain_infos, node) {
         cJSON *itemLocal = OpenAPI_qos_sustainability_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [qos_sustain_infos]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [qos_sustain_infos]");
             goto end;
         }
         cJSON_AddItemToArray(qos_sustain_infosList, itemLocal);
@@ -356,13 +356,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->ue_comms) {
     cJSON *ue_commsList = cJSON_AddArrayToObject(item, "ueComms");
     if (ue_commsList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [ue_comms]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [ue_comms]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->ue_comms, node) {
         cJSON *itemLocal = OpenAPI_ue_communication_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [ue_comms]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [ue_comms]");
             goto end;
         }
         cJSON_AddItemToArray(ue_commsList, itemLocal);
@@ -372,13 +372,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->ue_mobs) {
     cJSON *ue_mobsList = cJSON_AddArrayToObject(item, "ueMobs");
     if (ue_mobsList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [ue_mobs]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [ue_mobs]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->ue_mobs, node) {
         cJSON *itemLocal = OpenAPI_ue_mobility_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [ue_mobs]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [ue_mobs]");
             goto end;
         }
         cJSON_AddItemToArray(ue_mobsList, itemLocal);
@@ -388,13 +388,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->user_data_cong_infos) {
     cJSON *user_data_cong_infosList = cJSON_AddArrayToObject(item, "userDataCongInfos");
     if (user_data_cong_infosList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [user_data_cong_infos]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [user_data_cong_infos]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->user_data_cong_infos, node) {
         cJSON *itemLocal = OpenAPI_user_data_congestion_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [user_data_cong_infos]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [user_data_cong_infos]");
             goto end;
         }
         cJSON_AddItemToArray(user_data_cong_infosList, itemLocal);
@@ -404,13 +404,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->abnor_behavrs) {
     cJSON *abnor_behavrsList = cJSON_AddArrayToObject(item, "abnorBehavrs");
     if (abnor_behavrsList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [abnor_behavrs]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [abnor_behavrs]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->abnor_behavrs, node) {
         cJSON *itemLocal = OpenAPI_abnormal_behaviour_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [abnor_behavrs]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [abnor_behavrs]");
             goto end;
         }
         cJSON_AddItemToArray(abnor_behavrsList, itemLocal);
@@ -420,13 +420,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->nw_perfs) {
     cJSON *nw_perfsList = cJSON_AddArrayToObject(item, "nwPerfs");
     if (nw_perfsList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [nw_perfs]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [nw_perfs]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->nw_perfs, node) {
         cJSON *itemLocal = OpenAPI_network_perf_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [nw_perfs]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [nw_perfs]");
             goto end;
         }
         cJSON_AddItemToArray(nw_perfsList, itemLocal);
@@ -436,13 +436,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->dn_perf_infos) {
     cJSON *dn_perf_infosList = cJSON_AddArrayToObject(item, "dnPerfInfos");
     if (dn_perf_infosList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [dn_perf_infos]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [dn_perf_infos]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->dn_perf_infos, node) {
         cJSON *itemLocal = OpenAPI_dn_perf_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [dn_perf_infos]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [dn_perf_infos]");
             goto end;
         }
         cJSON_AddItemToArray(dn_perf_infosList, itemLocal);
@@ -452,13 +452,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->disper_infos) {
     cJSON *disper_infosList = cJSON_AddArrayToObject(item, "disperInfos");
     if (disper_infosList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [disper_infos]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [disper_infos]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->disper_infos, node) {
         cJSON *itemLocal = OpenAPI_dispersion_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [disper_infos]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [disper_infos]");
             goto end;
         }
         cJSON_AddItemToArray(disper_infosList, itemLocal);
@@ -468,13 +468,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->red_trans_infos) {
     cJSON *red_trans_infosList = cJSON_AddArrayToObject(item, "redTransInfos");
     if (red_trans_infosList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [red_trans_infos]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [red_trans_infos]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->red_trans_infos, node) {
         cJSON *itemLocal = OpenAPI_redundant_transmission_exp_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [red_trans_infos]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [red_trans_infos]");
             goto end;
         }
         cJSON_AddItemToArray(red_trans_infosList, itemLocal);
@@ -484,13 +484,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->wlan_infos) {
     cJSON *wlan_infosList = cJSON_AddArrayToObject(item, "wlanInfos");
     if (wlan_infosList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [wlan_infos]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [wlan_infos]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->wlan_infos, node) {
         cJSON *itemLocal = OpenAPI_wlan_performance_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [wlan_infos]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [wlan_infos]");
             goto end;
         }
         cJSON_AddItemToArray(wlan_infosList, itemLocal);
@@ -500,13 +500,13 @@ cJSON *OpenAPI_event_notification_convertToJSON(OpenAPI_event_notification_t *ev
     if (event_notification->smcc_exps) {
     cJSON *smcc_expsList = cJSON_AddArrayToObject(item, "smccExps");
     if (smcc_expsList == NULL) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed [smcc_exps]");
+        log_error("OpenAPI_event_notification_convertToJSON() failed [smcc_exps]");
         goto end;
     }
     OpenAPI_list_for_each(event_notification->smcc_exps, node) {
         cJSON *itemLocal = OpenAPI_smcce_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_event_notification_convertToJSON() failed [smcc_exps]");
+            log_error("OpenAPI_event_notification_convertToJSON() failed [smcc_exps]");
             goto end;
         }
         cJSON_AddItemToArray(smcc_expsList, itemLocal);
@@ -563,19 +563,19 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     OpenAPI_list_t *smcc_expsList = NULL;
     event = cJSON_GetObjectItemCaseSensitive(event_notificationJSON, "event");
     if (!event) {
-        ogs_error("OpenAPI_event_notification_parseFromJSON() failed [event]");
+        log_error("OpenAPI_event_notification_parseFromJSON() failed [event]");
         goto end;
     }
     event_local_nonprim = OpenAPI_nwdaf_event_parseFromJSON(event);
     if (!event_local_nonprim) {
-        ogs_error("OpenAPI_nwdaf_event_parseFromJSON failed [event]");
+        log_error("OpenAPI_nwdaf_event_parseFromJSON failed [event]");
         goto end;
     }
 
     start = cJSON_GetObjectItemCaseSensitive(event_notificationJSON, "start");
     if (start) {
     if (!cJSON_IsString(start) && !cJSON_IsNull(start)) {
-        ogs_error("OpenAPI_event_notification_parseFromJSON() failed [start]");
+        log_error("OpenAPI_event_notification_parseFromJSON() failed [start]");
         goto end;
     }
     }
@@ -583,7 +583,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     expiry = cJSON_GetObjectItemCaseSensitive(event_notificationJSON, "expiry");
     if (expiry) {
     if (!cJSON_IsString(expiry) && !cJSON_IsNull(expiry)) {
-        ogs_error("OpenAPI_event_notification_parseFromJSON() failed [expiry]");
+        log_error("OpenAPI_event_notification_parseFromJSON() failed [expiry]");
         goto end;
     }
     }
@@ -591,7 +591,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     time_stamp_gen = cJSON_GetObjectItemCaseSensitive(event_notificationJSON, "timeStampGen");
     if (time_stamp_gen) {
     if (!cJSON_IsString(time_stamp_gen) && !cJSON_IsNull(time_stamp_gen)) {
-        ogs_error("OpenAPI_event_notification_parseFromJSON() failed [time_stamp_gen]");
+        log_error("OpenAPI_event_notification_parseFromJSON() failed [time_stamp_gen]");
         goto end;
     }
     }
@@ -600,7 +600,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (fail_notify_code) {
     fail_notify_code_local_nonprim = OpenAPI_nwdaf_failure_code_parseFromJSON(fail_notify_code);
     if (!fail_notify_code_local_nonprim) {
-        ogs_error("OpenAPI_nwdaf_failure_code_parseFromJSON failed [fail_notify_code]");
+        log_error("OpenAPI_nwdaf_failure_code_parseFromJSON failed [fail_notify_code]");
         goto end;
     }
     }
@@ -608,7 +608,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     rv_wait_time = cJSON_GetObjectItemCaseSensitive(event_notificationJSON, "rvWaitTime");
     if (rv_wait_time) {
     if (!cJSON_IsNumber(rv_wait_time)) {
-        ogs_error("OpenAPI_event_notification_parseFromJSON() failed [rv_wait_time]");
+        log_error("OpenAPI_event_notification_parseFromJSON() failed [rv_wait_time]");
         goto end;
     }
     }
@@ -617,7 +617,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (ana_meta_info) {
     ana_meta_info_local_nonprim = OpenAPI_analytics_metadata_info_parseFromJSON(ana_meta_info);
     if (!ana_meta_info_local_nonprim) {
-        ogs_error("OpenAPI_analytics_metadata_info_parseFromJSON failed [ana_meta_info]");
+        log_error("OpenAPI_analytics_metadata_info_parseFromJSON failed [ana_meta_info]");
         goto end;
     }
     }
@@ -626,7 +626,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (nf_load_level_infos) {
         cJSON *nf_load_level_infos_local = NULL;
         if (!cJSON_IsArray(nf_load_level_infos)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [nf_load_level_infos]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [nf_load_level_infos]");
             goto end;
         }
 
@@ -634,12 +634,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(nf_load_level_infos_local, nf_load_level_infos) {
             if (!cJSON_IsObject(nf_load_level_infos_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [nf_load_level_infos]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [nf_load_level_infos]");
                 goto end;
             }
             OpenAPI_nf_load_level_information_t *nf_load_level_infosItem = OpenAPI_nf_load_level_information_parseFromJSON(nf_load_level_infos_local);
             if (!nf_load_level_infosItem) {
-                ogs_error("No nf_load_level_infosItem");
+                log_error("No nf_load_level_infosItem");
                 goto end;
             }
             OpenAPI_list_add(nf_load_level_infosList, nf_load_level_infosItem);
@@ -650,7 +650,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (nsi_load_level_infos) {
         cJSON *nsi_load_level_infos_local = NULL;
         if (!cJSON_IsArray(nsi_load_level_infos)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [nsi_load_level_infos]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [nsi_load_level_infos]");
             goto end;
         }
 
@@ -658,12 +658,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(nsi_load_level_infos_local, nsi_load_level_infos) {
             if (!cJSON_IsObject(nsi_load_level_infos_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [nsi_load_level_infos]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [nsi_load_level_infos]");
                 goto end;
             }
             OpenAPI_nsi_load_level_info_t *nsi_load_level_infosItem = OpenAPI_nsi_load_level_info_parseFromJSON(nsi_load_level_infos_local);
             if (!nsi_load_level_infosItem) {
-                ogs_error("No nsi_load_level_infosItem");
+                log_error("No nsi_load_level_infosItem");
                 goto end;
             }
             OpenAPI_list_add(nsi_load_level_infosList, nsi_load_level_infosItem);
@@ -674,7 +674,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (slice_load_level_info) {
     slice_load_level_info_local_nonprim = OpenAPI_slice_load_level_information_parseFromJSON(slice_load_level_info);
     if (!slice_load_level_info_local_nonprim) {
-        ogs_error("OpenAPI_slice_load_level_information_parseFromJSON failed [slice_load_level_info]");
+        log_error("OpenAPI_slice_load_level_information_parseFromJSON failed [slice_load_level_info]");
         goto end;
     }
     }
@@ -683,7 +683,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (svc_exps) {
         cJSON *svc_exps_local = NULL;
         if (!cJSON_IsArray(svc_exps)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [svc_exps]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [svc_exps]");
             goto end;
         }
 
@@ -691,12 +691,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(svc_exps_local, svc_exps) {
             if (!cJSON_IsObject(svc_exps_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [svc_exps]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [svc_exps]");
                 goto end;
             }
             OpenAPI_service_experience_info_t *svc_expsItem = OpenAPI_service_experience_info_parseFromJSON(svc_exps_local);
             if (!svc_expsItem) {
-                ogs_error("No svc_expsItem");
+                log_error("No svc_expsItem");
                 goto end;
             }
             OpenAPI_list_add(svc_expsList, svc_expsItem);
@@ -707,7 +707,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (qos_sustain_infos) {
         cJSON *qos_sustain_infos_local = NULL;
         if (!cJSON_IsArray(qos_sustain_infos)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [qos_sustain_infos]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [qos_sustain_infos]");
             goto end;
         }
 
@@ -715,12 +715,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(qos_sustain_infos_local, qos_sustain_infos) {
             if (!cJSON_IsObject(qos_sustain_infos_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [qos_sustain_infos]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [qos_sustain_infos]");
                 goto end;
             }
             OpenAPI_qos_sustainability_info_t *qos_sustain_infosItem = OpenAPI_qos_sustainability_info_parseFromJSON(qos_sustain_infos_local);
             if (!qos_sustain_infosItem) {
-                ogs_error("No qos_sustain_infosItem");
+                log_error("No qos_sustain_infosItem");
                 goto end;
             }
             OpenAPI_list_add(qos_sustain_infosList, qos_sustain_infosItem);
@@ -731,7 +731,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (ue_comms) {
         cJSON *ue_comms_local = NULL;
         if (!cJSON_IsArray(ue_comms)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [ue_comms]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [ue_comms]");
             goto end;
         }
 
@@ -739,12 +739,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(ue_comms_local, ue_comms) {
             if (!cJSON_IsObject(ue_comms_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [ue_comms]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [ue_comms]");
                 goto end;
             }
             OpenAPI_ue_communication_t *ue_commsItem = OpenAPI_ue_communication_parseFromJSON(ue_comms_local);
             if (!ue_commsItem) {
-                ogs_error("No ue_commsItem");
+                log_error("No ue_commsItem");
                 goto end;
             }
             OpenAPI_list_add(ue_commsList, ue_commsItem);
@@ -755,7 +755,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (ue_mobs) {
         cJSON *ue_mobs_local = NULL;
         if (!cJSON_IsArray(ue_mobs)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [ue_mobs]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [ue_mobs]");
             goto end;
         }
 
@@ -763,12 +763,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(ue_mobs_local, ue_mobs) {
             if (!cJSON_IsObject(ue_mobs_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [ue_mobs]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [ue_mobs]");
                 goto end;
             }
             OpenAPI_ue_mobility_t *ue_mobsItem = OpenAPI_ue_mobility_parseFromJSON(ue_mobs_local);
             if (!ue_mobsItem) {
-                ogs_error("No ue_mobsItem");
+                log_error("No ue_mobsItem");
                 goto end;
             }
             OpenAPI_list_add(ue_mobsList, ue_mobsItem);
@@ -779,7 +779,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (user_data_cong_infos) {
         cJSON *user_data_cong_infos_local = NULL;
         if (!cJSON_IsArray(user_data_cong_infos)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [user_data_cong_infos]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [user_data_cong_infos]");
             goto end;
         }
 
@@ -787,12 +787,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(user_data_cong_infos_local, user_data_cong_infos) {
             if (!cJSON_IsObject(user_data_cong_infos_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [user_data_cong_infos]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [user_data_cong_infos]");
                 goto end;
             }
             OpenAPI_user_data_congestion_info_t *user_data_cong_infosItem = OpenAPI_user_data_congestion_info_parseFromJSON(user_data_cong_infos_local);
             if (!user_data_cong_infosItem) {
-                ogs_error("No user_data_cong_infosItem");
+                log_error("No user_data_cong_infosItem");
                 goto end;
             }
             OpenAPI_list_add(user_data_cong_infosList, user_data_cong_infosItem);
@@ -803,7 +803,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (abnor_behavrs) {
         cJSON *abnor_behavrs_local = NULL;
         if (!cJSON_IsArray(abnor_behavrs)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [abnor_behavrs]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [abnor_behavrs]");
             goto end;
         }
 
@@ -811,12 +811,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(abnor_behavrs_local, abnor_behavrs) {
             if (!cJSON_IsObject(abnor_behavrs_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [abnor_behavrs]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [abnor_behavrs]");
                 goto end;
             }
             OpenAPI_abnormal_behaviour_t *abnor_behavrsItem = OpenAPI_abnormal_behaviour_parseFromJSON(abnor_behavrs_local);
             if (!abnor_behavrsItem) {
-                ogs_error("No abnor_behavrsItem");
+                log_error("No abnor_behavrsItem");
                 goto end;
             }
             OpenAPI_list_add(abnor_behavrsList, abnor_behavrsItem);
@@ -827,7 +827,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (nw_perfs) {
         cJSON *nw_perfs_local = NULL;
         if (!cJSON_IsArray(nw_perfs)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [nw_perfs]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [nw_perfs]");
             goto end;
         }
 
@@ -835,12 +835,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(nw_perfs_local, nw_perfs) {
             if (!cJSON_IsObject(nw_perfs_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [nw_perfs]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [nw_perfs]");
                 goto end;
             }
             OpenAPI_network_perf_info_t *nw_perfsItem = OpenAPI_network_perf_info_parseFromJSON(nw_perfs_local);
             if (!nw_perfsItem) {
-                ogs_error("No nw_perfsItem");
+                log_error("No nw_perfsItem");
                 goto end;
             }
             OpenAPI_list_add(nw_perfsList, nw_perfsItem);
@@ -851,7 +851,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (dn_perf_infos) {
         cJSON *dn_perf_infos_local = NULL;
         if (!cJSON_IsArray(dn_perf_infos)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [dn_perf_infos]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [dn_perf_infos]");
             goto end;
         }
 
@@ -859,12 +859,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(dn_perf_infos_local, dn_perf_infos) {
             if (!cJSON_IsObject(dn_perf_infos_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [dn_perf_infos]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [dn_perf_infos]");
                 goto end;
             }
             OpenAPI_dn_perf_info_t *dn_perf_infosItem = OpenAPI_dn_perf_info_parseFromJSON(dn_perf_infos_local);
             if (!dn_perf_infosItem) {
-                ogs_error("No dn_perf_infosItem");
+                log_error("No dn_perf_infosItem");
                 goto end;
             }
             OpenAPI_list_add(dn_perf_infosList, dn_perf_infosItem);
@@ -875,7 +875,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (disper_infos) {
         cJSON *disper_infos_local = NULL;
         if (!cJSON_IsArray(disper_infos)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [disper_infos]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [disper_infos]");
             goto end;
         }
 
@@ -883,12 +883,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(disper_infos_local, disper_infos) {
             if (!cJSON_IsObject(disper_infos_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [disper_infos]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [disper_infos]");
                 goto end;
             }
             OpenAPI_dispersion_info_t *disper_infosItem = OpenAPI_dispersion_info_parseFromJSON(disper_infos_local);
             if (!disper_infosItem) {
-                ogs_error("No disper_infosItem");
+                log_error("No disper_infosItem");
                 goto end;
             }
             OpenAPI_list_add(disper_infosList, disper_infosItem);
@@ -899,7 +899,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (red_trans_infos) {
         cJSON *red_trans_infos_local = NULL;
         if (!cJSON_IsArray(red_trans_infos)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [red_trans_infos]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [red_trans_infos]");
             goto end;
         }
 
@@ -907,12 +907,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(red_trans_infos_local, red_trans_infos) {
             if (!cJSON_IsObject(red_trans_infos_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [red_trans_infos]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [red_trans_infos]");
                 goto end;
             }
             OpenAPI_redundant_transmission_exp_info_t *red_trans_infosItem = OpenAPI_redundant_transmission_exp_info_parseFromJSON(red_trans_infos_local);
             if (!red_trans_infosItem) {
-                ogs_error("No red_trans_infosItem");
+                log_error("No red_trans_infosItem");
                 goto end;
             }
             OpenAPI_list_add(red_trans_infosList, red_trans_infosItem);
@@ -923,7 +923,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (wlan_infos) {
         cJSON *wlan_infos_local = NULL;
         if (!cJSON_IsArray(wlan_infos)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [wlan_infos]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [wlan_infos]");
             goto end;
         }
 
@@ -931,12 +931,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(wlan_infos_local, wlan_infos) {
             if (!cJSON_IsObject(wlan_infos_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [wlan_infos]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [wlan_infos]");
                 goto end;
             }
             OpenAPI_wlan_performance_info_t *wlan_infosItem = OpenAPI_wlan_performance_info_parseFromJSON(wlan_infos_local);
             if (!wlan_infosItem) {
-                ogs_error("No wlan_infosItem");
+                log_error("No wlan_infosItem");
                 goto end;
             }
             OpenAPI_list_add(wlan_infosList, wlan_infosItem);
@@ -947,7 +947,7 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
     if (smcc_exps) {
         cJSON *smcc_exps_local = NULL;
         if (!cJSON_IsArray(smcc_exps)) {
-            ogs_error("OpenAPI_event_notification_parseFromJSON() failed [smcc_exps]");
+            log_error("OpenAPI_event_notification_parseFromJSON() failed [smcc_exps]");
             goto end;
         }
 
@@ -955,12 +955,12 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_parseFromJSON(cJSON *ev
 
         cJSON_ArrayForEach(smcc_exps_local, smcc_exps) {
             if (!cJSON_IsObject(smcc_exps_local)) {
-                ogs_error("OpenAPI_event_notification_parseFromJSON() failed [smcc_exps]");
+                log_error("OpenAPI_event_notification_parseFromJSON() failed [smcc_exps]");
                 goto end;
             }
             OpenAPI_smcce_info_t *smcc_expsItem = OpenAPI_smcce_info_parseFromJSON(smcc_exps_local);
             if (!smcc_expsItem) {
-                ogs_error("No smcc_expsItem");
+                log_error("No smcc_expsItem");
                 goto end;
             }
             OpenAPI_list_add(smcc_expsList, smcc_expsItem);
@@ -1117,10 +1117,10 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_copy(OpenAPI_event_noti
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_event_notification_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_event_notification_convertToJSON() failed");
+        log_error("OpenAPI_event_notification_convertToJSON() failed");
         return NULL;
     }
 
@@ -1128,14 +1128,14 @@ OpenAPI_event_notification_t *OpenAPI_event_notification_copy(OpenAPI_event_noti
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

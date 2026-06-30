@@ -10,7 +10,7 @@ OpenAPI_edrx_parameters_t *OpenAPI_edrx_parameters_create(
 )
 {
     OpenAPI_edrx_parameters_t *edrx_parameters_local_var = ogs_malloc(sizeof(OpenAPI_edrx_parameters_t));
-    ogs_assert(edrx_parameters_local_var);
+    log_assert(edrx_parameters_local_var);
 
     edrx_parameters_local_var->rat_type = rat_type;
     edrx_parameters_local_var->edrx_value = edrx_value;
@@ -38,26 +38,26 @@ cJSON *OpenAPI_edrx_parameters_convertToJSON(OpenAPI_edrx_parameters_t *edrx_par
     OpenAPI_lnode_t *node = NULL;
 
     if (edrx_parameters == NULL) {
-        ogs_error("OpenAPI_edrx_parameters_convertToJSON() failed [EdrxParameters]");
+        log_error("OpenAPI_edrx_parameters_convertToJSON() failed [EdrxParameters]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (edrx_parameters->rat_type == OpenAPI_rat_type_NULL) {
-        ogs_error("OpenAPI_edrx_parameters_convertToJSON() failed [rat_type]");
+        log_error("OpenAPI_edrx_parameters_convertToJSON() failed [rat_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ratType", OpenAPI_rat_type_ToString(edrx_parameters->rat_type)) == NULL) {
-        ogs_error("OpenAPI_edrx_parameters_convertToJSON() failed [rat_type]");
+        log_error("OpenAPI_edrx_parameters_convertToJSON() failed [rat_type]");
         goto end;
     }
 
     if (!edrx_parameters->edrx_value) {
-        ogs_error("OpenAPI_edrx_parameters_convertToJSON() failed [edrx_value]");
+        log_error("OpenAPI_edrx_parameters_convertToJSON() failed [edrx_value]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "edrxValue", edrx_parameters->edrx_value) == NULL) {
-        ogs_error("OpenAPI_edrx_parameters_convertToJSON() failed [edrx_value]");
+        log_error("OpenAPI_edrx_parameters_convertToJSON() failed [edrx_value]");
         goto end;
     }
 
@@ -74,22 +74,22 @@ OpenAPI_edrx_parameters_t *OpenAPI_edrx_parameters_parseFromJSON(cJSON *edrx_par
     cJSON *edrx_value = NULL;
     rat_type = cJSON_GetObjectItemCaseSensitive(edrx_parametersJSON, "ratType");
     if (!rat_type) {
-        ogs_error("OpenAPI_edrx_parameters_parseFromJSON() failed [rat_type]");
+        log_error("OpenAPI_edrx_parameters_parseFromJSON() failed [rat_type]");
         goto end;
     }
     if (!cJSON_IsString(rat_type)) {
-        ogs_error("OpenAPI_edrx_parameters_parseFromJSON() failed [rat_type]");
+        log_error("OpenAPI_edrx_parameters_parseFromJSON() failed [rat_type]");
         goto end;
     }
     rat_typeVariable = OpenAPI_rat_type_FromString(rat_type->valuestring);
 
     edrx_value = cJSON_GetObjectItemCaseSensitive(edrx_parametersJSON, "edrxValue");
     if (!edrx_value) {
-        ogs_error("OpenAPI_edrx_parameters_parseFromJSON() failed [edrx_value]");
+        log_error("OpenAPI_edrx_parameters_parseFromJSON() failed [edrx_value]");
         goto end;
     }
     if (!cJSON_IsString(edrx_value)) {
-        ogs_error("OpenAPI_edrx_parameters_parseFromJSON() failed [edrx_value]");
+        log_error("OpenAPI_edrx_parameters_parseFromJSON() failed [edrx_value]");
         goto end;
     }
 
@@ -108,10 +108,10 @@ OpenAPI_edrx_parameters_t *OpenAPI_edrx_parameters_copy(OpenAPI_edrx_parameters_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_edrx_parameters_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_edrx_parameters_convertToJSON() failed");
+        log_error("OpenAPI_edrx_parameters_convertToJSON() failed");
         return NULL;
     }
 
@@ -119,14 +119,14 @@ OpenAPI_edrx_parameters_t *OpenAPI_edrx_parameters_copy(OpenAPI_edrx_parameters_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

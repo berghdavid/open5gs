@@ -22,7 +22,7 @@
 void ogs_asn_uint8_to_OCTET_STRING(
         uint8_t uint8, OCTET_STRING_t *octet_string)
 {
-    ogs_assert(octet_string);
+    log_assert(octet_string);
 
     octet_string->size = 1;
     octet_string->buf = CALLOC(octet_string->size, sizeof(uint8_t));
@@ -33,7 +33,7 @@ void ogs_asn_uint8_to_OCTET_STRING(
 void ogs_asn_uint16_to_OCTET_STRING(
         uint16_t uint16, OCTET_STRING_t *octet_string)
 {
-    ogs_assert(octet_string);
+    log_assert(octet_string);
 
     octet_string->size = 2;
     octet_string->buf = CALLOC(octet_string->size, sizeof(uint8_t));
@@ -45,7 +45,7 @@ void ogs_asn_uint16_to_OCTET_STRING(
 void ogs_asn_uint24_to_OCTET_STRING(
         ogs_uint24_t uint24, OCTET_STRING_t *octet_string)
 {
-    ogs_assert(octet_string);
+    log_assert(octet_string);
 
     octet_string->size = 3;
     octet_string->buf = CALLOC(octet_string->size, sizeof(uint8_t));
@@ -58,7 +58,7 @@ void ogs_asn_uint24_to_OCTET_STRING(
 void ogs_asn_uint32_to_OCTET_STRING(
         uint32_t uint32, OCTET_STRING_t *octet_string)
 {
-    ogs_assert(octet_string);
+    log_assert(octet_string);
 
     octet_string->size = 4;
     octet_string->buf = CALLOC(octet_string->size, sizeof(uint8_t));
@@ -72,24 +72,24 @@ void ogs_asn_uint32_to_OCTET_STRING(
 void ogs_asn_OCTET_STRING_to_uint8(
         OCTET_STRING_t *octet_string, uint8_t *uint8)
 {
-    ogs_assert(octet_string);
-    ogs_assert(uint8);
+    log_assert(octet_string);
+    log_assert(uint8);
 
     *uint8 = octet_string->buf[0];
 }
 void ogs_asn_OCTET_STRING_to_uint16(
         OCTET_STRING_t *octet_string, uint16_t *uint16)
 {
-    ogs_assert(octet_string);
-    ogs_assert(uint16);
+    log_assert(octet_string);
+    log_assert(uint16);
 
     *uint16 = (octet_string->buf[0] << 8) + octet_string->buf[1];
 }
 void ogs_asn_OCTET_STRING_to_uint24(
         OCTET_STRING_t *octet_string, ogs_uint24_t *uint24)
 {
-    ogs_assert(octet_string);
-    ogs_assert(uint24);
+    log_assert(octet_string);
+    log_assert(uint24);
 
     memcpy(uint24, octet_string->buf, sizeof(ogs_uint24_t));
     *uint24 = ogs_be24toh(*uint24);
@@ -97,8 +97,8 @@ void ogs_asn_OCTET_STRING_to_uint24(
 void ogs_asn_OCTET_STRING_to_uint32(
         OCTET_STRING_t *octet_string, uint32_t *uint32)
 {
-    ogs_assert(octet_string);
-    ogs_assert(uint32);
+    log_assert(octet_string);
+    log_assert(uint32);
 
     *uint32 = (octet_string->buf[0] << 24) + (octet_string->buf[1] << 16) +
                 (octet_string->buf[2] << 8) + octet_string->buf[3];
@@ -128,7 +128,7 @@ void ogs_asn_uint32_to_BIT_STRING(
 {
     char tmp[32];
     uint64_t uint64;
-    ogs_assert(bit_string);
+    log_assert(bit_string);
 
     uint64 = uint32;
     ogs_uint64_to_buffer(
@@ -139,8 +139,8 @@ void ogs_asn_uint32_to_BIT_STRING(
 
 void ogs_asn_BIT_STRING_to_uint32(BIT_STRING_t *bit_string, uint32_t *uint32)
 {
-    ogs_assert(bit_string);
-    ogs_assert(uint32);
+    log_assert(bit_string);
+    log_assert(uint32);
 
     *uint32 = ogs_buffer_to_uint64(bit_string->buf, bit_string->size)
                     >> bit_string->bits_unused;
@@ -150,8 +150,8 @@ int ogs_asn_BIT_STRING_to_ip(BIT_STRING_t *bit_string, ogs_ip_t *ip)
 {
     char buf[OGS_ADDRSTRLEN], buf2[OGS_ADDRSTRLEN];
 
-    ogs_assert(bit_string);
-    ogs_assert(ip);
+    log_assert(bit_string);
+    log_assert(ip);
 
     memset(ip, 0, sizeof(*ip));
 
@@ -160,19 +160,19 @@ int ogs_asn_BIT_STRING_to_ip(BIT_STRING_t *bit_string, ogs_ip_t *ip)
         ip->ipv6 = 1;
         memcpy(&ip->addr, bit_string->buf, OGS_IPV4_LEN);
         memcpy(&ip->addr6, bit_string->buf+OGS_IPV4_LEN, OGS_IPV6_LEN);
-        ogs_debug("    IPv4[%s] IPv6[%s]",
+        log_debug("    IPv4[%s] IPv6[%s]",
             OGS_INET_NTOP(&ip->addr, buf),
             OGS_INET6_NTOP(&ip->addr6, buf2));
     } else if (bit_string->size == OGS_IPV4_LEN) {
         ip->ipv4 = 1;
         memcpy(&ip->addr, bit_string->buf, OGS_IPV4_LEN);
-        ogs_debug("    IPv4[%s]", OGS_INET_NTOP(&ip->addr, buf));
+        log_debug("    IPv4[%s]", OGS_INET_NTOP(&ip->addr, buf));
     } else if (bit_string->size == OGS_IPV6_LEN) {
         ip->ipv6 = 1;
         memcpy(&ip->addr6, bit_string->buf, OGS_IPV6_LEN);
-        ogs_debug("    IPv6[%s]", OGS_INET6_NTOP(&ip->addr6, buf));
+        log_debug("    IPv6[%s]", OGS_INET6_NTOP(&ip->addr6, buf));
     } else {
-        ogs_error("ogs_asn_BIT_STRING_to_ip(size=%d) failed", bit_string->size);
+        log_error("ogs_asn_BIT_STRING_to_ip(size=%d) failed", bit_string->size);
         return OGS_ERROR;
     }
 
@@ -184,29 +184,29 @@ int ogs_asn_ip_to_BIT_STRING(ogs_ip_t *ip, BIT_STRING_t *bit_string)
 {
     char buf[OGS_ADDRSTRLEN], buf2[OGS_ADDRSTRLEN];
 
-    ogs_assert(ip);
-    ogs_assert(bit_string);
+    log_assert(ip);
+    log_assert(bit_string);
 
     if (ip->ipv4 && ip->ipv6) {
         bit_string->size = OGS_IPV4V6_LEN;
         bit_string->buf = CALLOC(bit_string->size, sizeof(uint8_t));
         memcpy(bit_string->buf, &ip->addr, OGS_IPV4_LEN);
         memcpy(bit_string->buf+OGS_IPV4_LEN, &ip->addr6, OGS_IPV6_LEN);
-        ogs_debug("    IPv4[%s] IPv6[%s]",
+        log_debug("    IPv4[%s] IPv6[%s]",
             OGS_INET_NTOP(&ip->addr, buf),
             OGS_INET6_NTOP(&ip->addr6, buf2));
     } else if (ip->ipv4) {
         bit_string->size = OGS_IPV4_LEN;
         bit_string->buf = CALLOC(bit_string->size, sizeof(uint8_t));
         memcpy(bit_string->buf, &ip->addr, OGS_IPV4_LEN);
-        ogs_debug("    IPv4[%s]", OGS_INET_NTOP(&ip->addr, buf));
+        log_debug("    IPv4[%s]", OGS_INET_NTOP(&ip->addr, buf));
     } else if (ip->ipv6) {
         bit_string->size = OGS_IPV6_LEN;
         bit_string->buf = CALLOC(bit_string->size, sizeof(uint8_t));
         memcpy(bit_string->buf, &ip->addr6, OGS_IPV6_LEN);
-        ogs_debug("    IPv6[%s]", OGS_INET6_NTOP(&ip->addr6, buf));
+        log_debug("    IPv6[%s]", OGS_INET6_NTOP(&ip->addr6, buf));
     } else {
-        ogs_error("No IPv4 or IPv6");
+        log_error("No IPv4 or IPv6");
         return OGS_ERROR;
     }
 
@@ -219,19 +219,19 @@ int ogs_asn_copy_ie(const asn_TYPE_descriptor_t *td, void *src, void *dst)
     asn_dec_rval_t dec_ret = {0};
     uint8_t *buffer = NULL;
 
-    ogs_assert(td);
-    ogs_assert(src);
-    ogs_assert(dst);
+    log_assert(td);
+    log_assert(src);
+    log_assert(dst);
 
     buffer = ogs_calloc(1, OGS_MAX_SDU_LEN);
     if (!buffer) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return OGS_ERROR;
     }
 
     enc_ret = aper_encode_to_buffer(td, NULL, src, buffer, OGS_MAX_SDU_LEN);
     if (enc_ret.encoded < 0) {
-        ogs_error("aper_encode_to_buffer() failed[%d]", (int)enc_ret.encoded);
+        log_error("aper_encode_to_buffer() failed[%d]", (int)enc_ret.encoded);
         ogs_free(buffer);
         return OGS_ERROR;
     }
@@ -240,7 +240,7 @@ int ogs_asn_copy_ie(const asn_TYPE_descriptor_t *td, void *src, void *dst)
             buffer, ((enc_ret.encoded + 7) / 8), 0, 0);
 
     if (dec_ret.code != RC_OK) {
-        ogs_error("aper_decode() failed[%d]", dec_ret.code);
+        log_error("aper_decode() failed[%d]", dec_ret.code);
         ogs_free(buffer);
         return OGS_ERROR;
     }

@@ -32,8 +32,8 @@ static void add_timer_node(
 {
     ogs_rbnode_t **new = NULL;
     ogs_rbnode_t *parent = NULL;
-    ogs_assert(tree);
-    ogs_assert(timer);
+    log_assert(tree);
+    log_assert(timer);
 
     timer->timeout = ogs_get_monotonic_time() + duration;
 
@@ -56,7 +56,7 @@ ogs_timer_mgr_t *ogs_timer_mgr_create(unsigned int capacity)
 {
     ogs_timer_mgr_t *manager = ogs_calloc(1, sizeof *manager);
     if (!manager) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
@@ -67,7 +67,7 @@ ogs_timer_mgr_t *ogs_timer_mgr_create(unsigned int capacity)
 
 void ogs_timer_mgr_destroy(ogs_timer_mgr_t *manager)
 {
-    ogs_assert(manager);
+    log_assert(manager);
 
     ogs_pool_final(&manager->pool);
     ogs_free(manager);
@@ -77,11 +77,11 @@ ogs_timer_t *ogs_timer_add(
         ogs_timer_mgr_t *manager, void (*cb)(void *data), void *data)
 {
     ogs_timer_t *timer = NULL;
-    ogs_assert(manager);
+    log_assert(manager);
 
     ogs_pool_alloc(&manager->pool, &timer);
     if (!timer) {
-        ogs_fatal("ogs_pool_alloc() failed");
+        log_fatal("ogs_pool_alloc() failed");
         return NULL;
     }
 
@@ -97,9 +97,9 @@ ogs_timer_t *ogs_timer_add(
 void ogs_timer_delete_debug(ogs_timer_t *timer, const char *file_line)
 {
     ogs_timer_mgr_t *manager;
-    ogs_assert(timer);
+    log_assert(timer);
     manager = timer->manager;
-    ogs_assert(manager);
+    log_assert(manager);
 
     ogs_timer_stop(timer);
 
@@ -110,11 +110,11 @@ void ogs_timer_start_debug(
         ogs_timer_t *timer, ogs_time_t duration, const char *file_line)
 {
     ogs_timer_mgr_t *manager = NULL;
-    ogs_assert(timer);
-    ogs_assert(duration);
+    log_assert(timer);
+    log_assert(duration);
 
     manager = timer->manager;
-    ogs_assert(manager);
+    log_assert(manager);
 
     if (timer->running == true)
         ogs_rbtree_delete(&manager->tree, timer);
@@ -126,9 +126,9 @@ void ogs_timer_start_debug(
 void ogs_timer_stop_debug(ogs_timer_t *timer, const char *file_line)
 {
     ogs_timer_mgr_t *manager = NULL;
-    ogs_assert(timer);
+    log_assert(timer);
     manager = timer->manager;
-    ogs_assert(manager);
+    log_assert(manager);
 
     if (timer->running == false)
         return;
@@ -141,7 +141,7 @@ ogs_time_t ogs_timer_mgr_next(ogs_timer_mgr_t *manager)
 {
     ogs_time_t current;
     ogs_rbnode_t *rbnode = NULL;
-    ogs_assert(manager);
+    log_assert(manager);
 
     current = ogs_get_monotonic_time();
     rbnode = ogs_rbtree_first(&manager->tree);
@@ -165,7 +165,7 @@ void ogs_timer_mgr_expire(ogs_timer_mgr_t *manager)
     ogs_time_t current;
     ogs_rbnode_t *rbnode;
     ogs_timer_t *this;
-    ogs_assert(manager);
+    log_assert(manager);
 
     current = ogs_get_monotonic_time();
 

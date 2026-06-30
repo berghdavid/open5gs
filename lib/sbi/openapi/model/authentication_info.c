@@ -26,7 +26,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_create(
 )
 {
     OpenAPI_authentication_info_t *authentication_info_local_var = ogs_malloc(sizeof(OpenAPI_authentication_info_t));
-    ogs_assert(authentication_info_local_var);
+    log_assert(authentication_info_local_var);
 
     authentication_info_local_var->supi_or_suci = supi_or_suci;
     authentication_info_local_var->serving_network_name = serving_network_name;
@@ -105,45 +105,45 @@ cJSON *OpenAPI_authentication_info_convertToJSON(OpenAPI_authentication_info_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (authentication_info == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [AuthenticationInfo]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [AuthenticationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!authentication_info->supi_or_suci) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [supi_or_suci]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [supi_or_suci]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "supiOrSuci", authentication_info->supi_or_suci) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [supi_or_suci]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [supi_or_suci]");
         goto end;
     }
 
     if (!authentication_info->serving_network_name) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [serving_network_name]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [serving_network_name]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "servingNetworkName", authentication_info->serving_network_name) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [serving_network_name]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [serving_network_name]");
         goto end;
     }
 
     if (authentication_info->resynchronization_info) {
     cJSON *resynchronization_info_local_JSON = OpenAPI_resynchronization_info_convertToJSON(authentication_info->resynchronization_info);
     if (resynchronization_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [resynchronization_info]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [resynchronization_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "resynchronizationInfo", resynchronization_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [resynchronization_info]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [resynchronization_info]");
         goto end;
     }
     }
 
     if (authentication_info->pei) {
     if (cJSON_AddStringToObject(item, "pei", authentication_info->pei) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [pei]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [pei]");
         goto end;
     }
     }
@@ -151,31 +151,31 @@ cJSON *OpenAPI_authentication_info_convertToJSON(OpenAPI_authentication_info_t *
     if (authentication_info->trace_data) {
     cJSON *trace_data_local_JSON = OpenAPI_trace_data_convertToJSON(authentication_info->trace_data);
     if (trace_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [trace_data]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [trace_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "traceData", trace_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [trace_data]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [trace_data]");
         goto end;
     }
     } else if (authentication_info->is_trace_data_null) {
         if (cJSON_AddNullToObject(item, "traceData") == NULL) {
-            ogs_error("OpenAPI_authentication_info_convertToJSON() failed [trace_data]");
+            log_error("OpenAPI_authentication_info_convertToJSON() failed [trace_data]");
             goto end;
         }
     }
 
     if (authentication_info->udm_group_id) {
     if (cJSON_AddStringToObject(item, "udmGroupId", authentication_info->udm_group_id) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [udm_group_id]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [udm_group_id]");
         goto end;
     }
     }
 
     if (authentication_info->routing_indicator) {
     if (cJSON_AddStringToObject(item, "routingIndicator", authentication_info->routing_indicator) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [routing_indicator]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [routing_indicator]");
         goto end;
     }
     }
@@ -183,12 +183,12 @@ cJSON *OpenAPI_authentication_info_convertToJSON(OpenAPI_authentication_info_t *
     if (authentication_info->cell_cag_info) {
     cJSON *cell_cag_infoList = cJSON_AddArrayToObject(item, "cellCagInfo");
     if (cell_cag_infoList == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [cell_cag_info]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [cell_cag_info]");
         goto end;
     }
     OpenAPI_list_for_each(authentication_info->cell_cag_info, node) {
         if (cJSON_AddStringToObject(cell_cag_infoList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_authentication_info_convertToJSON() failed [cell_cag_info]");
+            log_error("OpenAPI_authentication_info_convertToJSON() failed [cell_cag_info]");
             goto end;
         }
     }
@@ -196,35 +196,35 @@ cJSON *OpenAPI_authentication_info_convertToJSON(OpenAPI_authentication_info_t *
 
     if (authentication_info->is_n5gc_ind) {
     if (cJSON_AddBoolToObject(item, "n5gcInd", authentication_info->n5gc_ind) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [n5gc_ind]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [n5gc_ind]");
         goto end;
     }
     }
 
     if (authentication_info->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", authentication_info->supported_features) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
 
     if (authentication_info->is_nswo_ind) {
     if (cJSON_AddBoolToObject(item, "nswoInd", authentication_info->nswo_ind) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [nswo_ind]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [nswo_ind]");
         goto end;
     }
     }
 
     if (authentication_info->is_disaster_roaming_ind) {
     if (cJSON_AddBoolToObject(item, "disasterRoamingInd", authentication_info->disaster_roaming_ind) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [disaster_roaming_ind]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [disaster_roaming_ind]");
         goto end;
     }
     }
 
     if (authentication_info->is_onboarding_ind) {
     if (cJSON_AddBoolToObject(item, "onboardingInd", authentication_info->onboarding_ind) == NULL) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed [onboarding_ind]");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed [onboarding_ind]");
         goto end;
     }
     }
@@ -255,21 +255,21 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     cJSON *onboarding_ind = NULL;
     supi_or_suci = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "supiOrSuci");
     if (!supi_or_suci) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [supi_or_suci]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [supi_or_suci]");
         goto end;
     }
     if (!cJSON_IsString(supi_or_suci)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [supi_or_suci]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [supi_or_suci]");
         goto end;
     }
 
     serving_network_name = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "servingNetworkName");
     if (!serving_network_name) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [serving_network_name]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [serving_network_name]");
         goto end;
     }
     if (!cJSON_IsString(serving_network_name)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [serving_network_name]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [serving_network_name]");
         goto end;
     }
 
@@ -277,7 +277,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     if (resynchronization_info) {
     resynchronization_info_local_nonprim = OpenAPI_resynchronization_info_parseFromJSON(resynchronization_info);
     if (!resynchronization_info_local_nonprim) {
-        ogs_error("OpenAPI_resynchronization_info_parseFromJSON failed [resynchronization_info]");
+        log_error("OpenAPI_resynchronization_info_parseFromJSON failed [resynchronization_info]");
         goto end;
     }
     }
@@ -285,7 +285,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     pei = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "pei");
     if (pei) {
     if (!cJSON_IsString(pei) && !cJSON_IsNull(pei)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [pei]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [pei]");
         goto end;
     }
     }
@@ -295,7 +295,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     if (!cJSON_IsNull(trace_data)) {
     trace_data_local_nonprim = OpenAPI_trace_data_parseFromJSON(trace_data);
     if (!trace_data_local_nonprim) {
-        ogs_error("OpenAPI_trace_data_parseFromJSON failed [trace_data]");
+        log_error("OpenAPI_trace_data_parseFromJSON failed [trace_data]");
         goto end;
     }
     }
@@ -304,7 +304,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     udm_group_id = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "udmGroupId");
     if (udm_group_id) {
     if (!cJSON_IsString(udm_group_id) && !cJSON_IsNull(udm_group_id)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [udm_group_id]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [udm_group_id]");
         goto end;
     }
     }
@@ -312,7 +312,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     routing_indicator = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "routingIndicator");
     if (routing_indicator) {
     if (!cJSON_IsString(routing_indicator) && !cJSON_IsNull(routing_indicator)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [routing_indicator]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [routing_indicator]");
         goto end;
     }
     }
@@ -321,7 +321,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     if (cell_cag_info) {
         cJSON *cell_cag_info_local = NULL;
         if (!cJSON_IsArray(cell_cag_info)) {
-            ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [cell_cag_info]");
+            log_error("OpenAPI_authentication_info_parseFromJSON() failed [cell_cag_info]");
             goto end;
         }
 
@@ -331,7 +331,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(cell_cag_info_local)) {
-                ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [cell_cag_info]");
+                log_error("OpenAPI_authentication_info_parseFromJSON() failed [cell_cag_info]");
                 goto end;
             }
             OpenAPI_list_add(cell_cag_infoList, ogs_strdup(cell_cag_info_local->valuestring));
@@ -341,7 +341,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     n5gc_ind = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "n5gcInd");
     if (n5gc_ind) {
     if (!cJSON_IsBool(n5gc_ind)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [n5gc_ind]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [n5gc_ind]");
         goto end;
     }
     }
@@ -349,7 +349,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     supported_features = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -357,7 +357,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     nswo_ind = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "nswoInd");
     if (nswo_ind) {
     if (!cJSON_IsBool(nswo_ind)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [nswo_ind]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [nswo_ind]");
         goto end;
     }
     }
@@ -365,7 +365,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     disaster_roaming_ind = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "disasterRoamingInd");
     if (disaster_roaming_ind) {
     if (!cJSON_IsBool(disaster_roaming_ind)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [disaster_roaming_ind]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [disaster_roaming_ind]");
         goto end;
     }
     }
@@ -373,7 +373,7 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_parseFromJSON(cJSON *
     onboarding_ind = cJSON_GetObjectItemCaseSensitive(authentication_infoJSON, "onboardingInd");
     if (onboarding_ind) {
     if (!cJSON_IsBool(onboarding_ind)) {
-        ogs_error("OpenAPI_authentication_info_parseFromJSON() failed [onboarding_ind]");
+        log_error("OpenAPI_authentication_info_parseFromJSON() failed [onboarding_ind]");
         goto end;
     }
     }
@@ -424,10 +424,10 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_copy(OpenAPI_authenti
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_authentication_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_authentication_info_convertToJSON() failed");
+        log_error("OpenAPI_authentication_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -435,14 +435,14 @@ OpenAPI_authentication_info_t *OpenAPI_authentication_info_copy(OpenAPI_authenti
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

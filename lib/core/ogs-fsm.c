@@ -36,8 +36,8 @@ const char *OGS_FSM_NAME_EXIT_SIG = "EXIT";
 
 static void fsm_entry(ogs_fsm_t *sm, ogs_fsm_handler_t state, fsm_event_t *e)
 {
-    ogs_assert(sm);
-    ogs_assert(state);
+    log_assert(sm);
+    log_assert(state);
 
     if (e) {
         e->id = OGS_FSM_ENTRY_SIG;
@@ -49,8 +49,8 @@ static void fsm_entry(ogs_fsm_t *sm, ogs_fsm_handler_t state, fsm_event_t *e)
 
 static void fsm_exit(ogs_fsm_t *sm, ogs_fsm_handler_t state, fsm_event_t *e)
 {
-    ogs_assert(sm);
-    ogs_assert(state);
+    log_assert(sm);
+    log_assert(state);
 
     if (e) {
         e->id = OGS_FSM_EXIT_SIG;
@@ -66,9 +66,9 @@ static void fsm_change(
         ogs_fsm_handler_t newstate,
         fsm_event_t *e)
 {
-    ogs_assert(sm);
-    ogs_assert(oldstate);
-    ogs_assert(newstate);
+    log_assert(sm);
+    log_assert(oldstate);
+    log_assert(newstate);
 
     fsm_exit(sm, oldstate, e);
     fsm_entry(sm, newstate, e);
@@ -79,7 +79,7 @@ void ogs_fsm_init(void *fsm, void *init, void *fini, void *event)
     ogs_fsm_t *sm = fsm;
     fsm_event_t *e = event;
 
-    ogs_assert(sm);
+    log_assert(sm);
 
     sm->init = sm->state = init;
     sm->fini = fini;
@@ -88,7 +88,7 @@ void ogs_fsm_init(void *fsm, void *init, void *fini, void *event)
         (*sm->init)(sm, e);
 
         if (sm->init != sm->state) {
-            ogs_assert(sm->state);
+            log_assert(sm->state);
             fsm_entry(sm, sm->state, e);
         }
     }
@@ -100,13 +100,13 @@ void ogs_fsm_tran(void *fsm, void *state, void *event)
     fsm_event_t *e = event;
     ogs_fsm_handler_t tmp = NULL;
 
-    ogs_assert(sm);
+    log_assert(sm);
 
     tmp = sm->state;
-    ogs_assert(tmp);
+    log_assert(tmp);
 
     sm->state = state;
-    ogs_assert(sm->state);
+    log_assert(sm->state);
 
     if (sm->state != tmp)
         fsm_change(fsm, tmp, sm->state, e);
@@ -118,10 +118,10 @@ void ogs_fsm_dispatch(void *fsm, void *event)
     fsm_event_t *e = event;
     ogs_fsm_handler_t tmp = NULL;
 
-    ogs_assert(sm);
+    log_assert(sm);
 
     tmp = sm->state;
-    ogs_assert(tmp);
+    log_assert(tmp);
 
     if (e)
         (*tmp)(sm, e);
@@ -135,10 +135,10 @@ void ogs_fsm_fini(void *fsm, void *event)
     ogs_fsm_t *sm = fsm;
     fsm_event_t *e = event;
 
-    ogs_assert(sm);
+    log_assert(sm);
 
     if (sm->fini != sm->state) {
-        ogs_assert(sm->state);
+        log_assert(sm->state);
         fsm_exit(sm, sm->state, e);
 
         if (sm->fini)

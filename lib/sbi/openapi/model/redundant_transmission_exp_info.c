@@ -11,7 +11,7 @@ OpenAPI_redundant_transmission_exp_info_t *OpenAPI_redundant_transmission_exp_in
 )
 {
     OpenAPI_redundant_transmission_exp_info_t *redundant_transmission_exp_info_local_var = ogs_malloc(sizeof(OpenAPI_redundant_transmission_exp_info_t));
-    ogs_assert(redundant_transmission_exp_info_local_var);
+    log_assert(redundant_transmission_exp_info_local_var);
 
     redundant_transmission_exp_info_local_var->spatial_valid_con = spatial_valid_con;
     redundant_transmission_exp_info_local_var->dnn = dnn;
@@ -51,7 +51,7 @@ cJSON *OpenAPI_redundant_transmission_exp_info_convertToJSON(OpenAPI_redundant_t
     OpenAPI_lnode_t *node = NULL;
 
     if (redundant_transmission_exp_info == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [RedundantTransmissionExpInfo]");
+        log_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [RedundantTransmissionExpInfo]");
         return NULL;
     }
 
@@ -59,36 +59,36 @@ cJSON *OpenAPI_redundant_transmission_exp_info_convertToJSON(OpenAPI_redundant_t
     if (redundant_transmission_exp_info->spatial_valid_con) {
     cJSON *spatial_valid_con_local_JSON = OpenAPI_network_area_info_convertToJSON(redundant_transmission_exp_info->spatial_valid_con);
     if (spatial_valid_con_local_JSON == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [spatial_valid_con]");
+        log_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [spatial_valid_con]");
         goto end;
     }
     cJSON_AddItemToObject(item, "spatialValidCon", spatial_valid_con_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [spatial_valid_con]");
+        log_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [spatial_valid_con]");
         goto end;
     }
     }
 
     if (redundant_transmission_exp_info->dnn) {
     if (cJSON_AddStringToObject(item, "dnn", redundant_transmission_exp_info->dnn) == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [dnn]");
         goto end;
     }
     }
 
     if (!redundant_transmission_exp_info->red_trans_exps) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [red_trans_exps]");
+        log_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [red_trans_exps]");
         return NULL;
     }
     cJSON *red_trans_expsList = cJSON_AddArrayToObject(item, "redTransExps");
     if (red_trans_expsList == NULL) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [red_trans_exps]");
+        log_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [red_trans_exps]");
         goto end;
     }
     OpenAPI_list_for_each(redundant_transmission_exp_info->red_trans_exps, node) {
         cJSON *itemLocal = OpenAPI_redundant_transmission_exp_per_ts_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [red_trans_exps]");
+            log_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed [red_trans_exps]");
             goto end;
         }
         cJSON_AddItemToArray(red_trans_expsList, itemLocal);
@@ -111,7 +111,7 @@ OpenAPI_redundant_transmission_exp_info_t *OpenAPI_redundant_transmission_exp_in
     if (spatial_valid_con) {
     spatial_valid_con_local_nonprim = OpenAPI_network_area_info_parseFromJSON(spatial_valid_con);
     if (!spatial_valid_con_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [spatial_valid_con]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [spatial_valid_con]");
         goto end;
     }
     }
@@ -119,19 +119,19 @@ OpenAPI_redundant_transmission_exp_info_t *OpenAPI_redundant_transmission_exp_in
     dnn = cJSON_GetObjectItemCaseSensitive(redundant_transmission_exp_infoJSON, "dnn");
     if (dnn) {
     if (!cJSON_IsString(dnn) && !cJSON_IsNull(dnn)) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_redundant_transmission_exp_info_parseFromJSON() failed [dnn]");
         goto end;
     }
     }
 
     red_trans_exps = cJSON_GetObjectItemCaseSensitive(redundant_transmission_exp_infoJSON, "redTransExps");
     if (!red_trans_exps) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_parseFromJSON() failed [red_trans_exps]");
+        log_error("OpenAPI_redundant_transmission_exp_info_parseFromJSON() failed [red_trans_exps]");
         goto end;
     }
         cJSON *red_trans_exps_local = NULL;
         if (!cJSON_IsArray(red_trans_exps)) {
-            ogs_error("OpenAPI_redundant_transmission_exp_info_parseFromJSON() failed [red_trans_exps]");
+            log_error("OpenAPI_redundant_transmission_exp_info_parseFromJSON() failed [red_trans_exps]");
             goto end;
         }
 
@@ -139,12 +139,12 @@ OpenAPI_redundant_transmission_exp_info_t *OpenAPI_redundant_transmission_exp_in
 
         cJSON_ArrayForEach(red_trans_exps_local, red_trans_exps) {
             if (!cJSON_IsObject(red_trans_exps_local)) {
-                ogs_error("OpenAPI_redundant_transmission_exp_info_parseFromJSON() failed [red_trans_exps]");
+                log_error("OpenAPI_redundant_transmission_exp_info_parseFromJSON() failed [red_trans_exps]");
                 goto end;
             }
             OpenAPI_redundant_transmission_exp_per_ts_t *red_trans_expsItem = OpenAPI_redundant_transmission_exp_per_ts_parseFromJSON(red_trans_exps_local);
             if (!red_trans_expsItem) {
-                ogs_error("No red_trans_expsItem");
+                log_error("No red_trans_expsItem");
                 goto end;
             }
             OpenAPI_list_add(red_trans_expsList, red_trans_expsItem);
@@ -177,10 +177,10 @@ OpenAPI_redundant_transmission_exp_info_t *OpenAPI_redundant_transmission_exp_in
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_redundant_transmission_exp_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed");
+        log_error("OpenAPI_redundant_transmission_exp_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -188,14 +188,14 @@ OpenAPI_redundant_transmission_exp_info_t *OpenAPI_redundant_transmission_exp_in
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

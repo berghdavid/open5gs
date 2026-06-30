@@ -14,7 +14,7 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_create(
 )
 {
     OpenAPI_sequence_number_t *sequence_number_local_var = ogs_malloc(sizeof(OpenAPI_sequence_number_t));
-    ogs_assert(sequence_number_local_var);
+    log_assert(sequence_number_local_var);
 
     sequence_number_local_var->sqn_scheme = sqn_scheme;
     sequence_number_local_var->sqn = sqn;
@@ -56,21 +56,21 @@ cJSON *OpenAPI_sequence_number_convertToJSON(OpenAPI_sequence_number_t *sequence
     OpenAPI_lnode_t *node = NULL;
 
     if (sequence_number == NULL) {
-        ogs_error("OpenAPI_sequence_number_convertToJSON() failed [SequenceNumber]");
+        log_error("OpenAPI_sequence_number_convertToJSON() failed [SequenceNumber]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (sequence_number->sqn_scheme != OpenAPI_sqn_scheme_NULL) {
     if (cJSON_AddStringToObject(item, "sqnScheme", OpenAPI_sqn_scheme_ToString(sequence_number->sqn_scheme)) == NULL) {
-        ogs_error("OpenAPI_sequence_number_convertToJSON() failed [sqn_scheme]");
+        log_error("OpenAPI_sequence_number_convertToJSON() failed [sqn_scheme]");
         goto end;
     }
     }
 
     if (sequence_number->sqn) {
     if (cJSON_AddStringToObject(item, "sqn", sequence_number->sqn) == NULL) {
-        ogs_error("OpenAPI_sequence_number_convertToJSON() failed [sqn]");
+        log_error("OpenAPI_sequence_number_convertToJSON() failed [sqn]");
         goto end;
     }
     }
@@ -78,7 +78,7 @@ cJSON *OpenAPI_sequence_number_convertToJSON(OpenAPI_sequence_number_t *sequence
     if (sequence_number->last_indexes) {
     cJSON *last_indexes = cJSON_AddObjectToObject(item, "lastIndexes");
     if (last_indexes == NULL) {
-        ogs_error("OpenAPI_sequence_number_convertToJSON() failed [last_indexes]");
+        log_error("OpenAPI_sequence_number_convertToJSON() failed [last_indexes]");
         goto end;
     }
     cJSON *localMapObject = last_indexes;
@@ -86,19 +86,19 @@ cJSON *OpenAPI_sequence_number_convertToJSON(OpenAPI_sequence_number_t *sequence
         OpenAPI_list_for_each(sequence_number->last_indexes, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_sequence_number_convertToJSON() failed [last_indexes]");
+                log_error("OpenAPI_sequence_number_convertToJSON() failed [last_indexes]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_sequence_number_convertToJSON() failed [last_indexes]");
+                log_error("OpenAPI_sequence_number_convertToJSON() failed [last_indexes]");
                 goto end;
             }
             if (localKeyValue->value == NULL) {
-                ogs_error("OpenAPI_sequence_number_convertToJSON() failed [inner]");
+                log_error("OpenAPI_sequence_number_convertToJSON() failed [inner]");
                 goto end;
             }
             if (cJSON_AddNumberToObject(localMapObject, localKeyValue->key, *(double *)localKeyValue->value) == NULL) {
-                ogs_error("OpenAPI_sequence_number_convertToJSON() failed [inner]");
+                log_error("OpenAPI_sequence_number_convertToJSON() failed [inner]");
                 goto end;
             }
         }
@@ -107,14 +107,14 @@ cJSON *OpenAPI_sequence_number_convertToJSON(OpenAPI_sequence_number_t *sequence
 
     if (sequence_number->is_ind_length) {
     if (cJSON_AddNumberToObject(item, "indLength", sequence_number->ind_length) == NULL) {
-        ogs_error("OpenAPI_sequence_number_convertToJSON() failed [ind_length]");
+        log_error("OpenAPI_sequence_number_convertToJSON() failed [ind_length]");
         goto end;
     }
     }
 
     if (sequence_number->dif_sign != OpenAPI_sign_NULL) {
     if (cJSON_AddStringToObject(item, "difSign", OpenAPI_sign_ToString(sequence_number->dif_sign)) == NULL) {
-        ogs_error("OpenAPI_sequence_number_convertToJSON() failed [dif_sign]");
+        log_error("OpenAPI_sequence_number_convertToJSON() failed [dif_sign]");
         goto end;
     }
     }
@@ -138,7 +138,7 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_parseFromJSON(cJSON *sequence
     sqn_scheme = cJSON_GetObjectItemCaseSensitive(sequence_numberJSON, "sqnScheme");
     if (sqn_scheme) {
     if (!cJSON_IsString(sqn_scheme)) {
-        ogs_error("OpenAPI_sequence_number_parseFromJSON() failed [sqn_scheme]");
+        log_error("OpenAPI_sequence_number_parseFromJSON() failed [sqn_scheme]");
         goto end;
     }
     sqn_schemeVariable = OpenAPI_sqn_scheme_FromString(sqn_scheme->valuestring);
@@ -147,7 +147,7 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_parseFromJSON(cJSON *sequence
     sqn = cJSON_GetObjectItemCaseSensitive(sequence_numberJSON, "sqn");
     if (sqn) {
     if (!cJSON_IsString(sqn) && !cJSON_IsNull(sqn)) {
-        ogs_error("OpenAPI_sequence_number_parseFromJSON() failed [sqn]");
+        log_error("OpenAPI_sequence_number_parseFromJSON() failed [sqn]");
         goto end;
     }
     }
@@ -156,7 +156,7 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_parseFromJSON(cJSON *sequence
     if (last_indexes) {
         cJSON *last_indexes_local_map = NULL;
         if (!cJSON_IsObject(last_indexes) && !cJSON_IsNull(last_indexes)) {
-            ogs_error("OpenAPI_sequence_number_parseFromJSON() failed [last_indexes]");
+            log_error("OpenAPI_sequence_number_parseFromJSON() failed [last_indexes]");
             goto end;
         }
         if (cJSON_IsObject(last_indexes)) {
@@ -167,12 +167,12 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_parseFromJSON(cJSON *sequence
                 double *localDouble = NULL;
                 int *localInt = NULL;
                 if (!cJSON_IsNumber(localMapObject)) {
-                    ogs_error("OpenAPI_sequence_number_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_sequence_number_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 localDouble = (double *)ogs_calloc(1, sizeof(double));
                 if (!localDouble) {
-                    ogs_error("OpenAPI_sequence_number_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_sequence_number_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 *localDouble = localMapObject->valuedouble;
@@ -185,7 +185,7 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_parseFromJSON(cJSON *sequence
     ind_length = cJSON_GetObjectItemCaseSensitive(sequence_numberJSON, "indLength");
     if (ind_length) {
     if (!cJSON_IsNumber(ind_length)) {
-        ogs_error("OpenAPI_sequence_number_parseFromJSON() failed [ind_length]");
+        log_error("OpenAPI_sequence_number_parseFromJSON() failed [ind_length]");
         goto end;
     }
     }
@@ -193,7 +193,7 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_parseFromJSON(cJSON *sequence
     dif_sign = cJSON_GetObjectItemCaseSensitive(sequence_numberJSON, "difSign");
     if (dif_sign) {
     if (!cJSON_IsString(dif_sign)) {
-        ogs_error("OpenAPI_sequence_number_parseFromJSON() failed [dif_sign]");
+        log_error("OpenAPI_sequence_number_parseFromJSON() failed [dif_sign]");
         goto end;
     }
     dif_signVariable = OpenAPI_sign_FromString(dif_sign->valuestring);
@@ -228,10 +228,10 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_copy(OpenAPI_sequence_number_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sequence_number_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sequence_number_convertToJSON() failed");
+        log_error("OpenAPI_sequence_number_convertToJSON() failed");
         return NULL;
     }
 
@@ -239,14 +239,14 @@ OpenAPI_sequence_number_t *OpenAPI_sequence_number_copy(OpenAPI_sequence_number_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

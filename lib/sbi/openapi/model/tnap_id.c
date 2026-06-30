@@ -11,7 +11,7 @@ OpenAPI_tnap_id_t *OpenAPI_tnap_id_create(
 )
 {
     OpenAPI_tnap_id_t *tnap_id_local_var = ogs_malloc(sizeof(OpenAPI_tnap_id_t));
-    ogs_assert(tnap_id_local_var);
+    log_assert(tnap_id_local_var);
 
     tnap_id_local_var->ss_id = ss_id;
     tnap_id_local_var->bss_id = bss_id;
@@ -48,28 +48,28 @@ cJSON *OpenAPI_tnap_id_convertToJSON(OpenAPI_tnap_id_t *tnap_id)
     OpenAPI_lnode_t *node = NULL;
 
     if (tnap_id == NULL) {
-        ogs_error("OpenAPI_tnap_id_convertToJSON() failed [TnapId]");
+        log_error("OpenAPI_tnap_id_convertToJSON() failed [TnapId]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (tnap_id->ss_id) {
     if (cJSON_AddStringToObject(item, "ssId", tnap_id->ss_id) == NULL) {
-        ogs_error("OpenAPI_tnap_id_convertToJSON() failed [ss_id]");
+        log_error("OpenAPI_tnap_id_convertToJSON() failed [ss_id]");
         goto end;
     }
     }
 
     if (tnap_id->bss_id) {
     if (cJSON_AddStringToObject(item, "bssId", tnap_id->bss_id) == NULL) {
-        ogs_error("OpenAPI_tnap_id_convertToJSON() failed [bss_id]");
+        log_error("OpenAPI_tnap_id_convertToJSON() failed [bss_id]");
         goto end;
     }
     }
 
     if (tnap_id->civic_address) {
     if (cJSON_AddStringToObject(item, "civicAddress", tnap_id->civic_address) == NULL) {
-        ogs_error("OpenAPI_tnap_id_convertToJSON() failed [civic_address]");
+        log_error("OpenAPI_tnap_id_convertToJSON() failed [civic_address]");
         goto end;
     }
     }
@@ -88,7 +88,7 @@ OpenAPI_tnap_id_t *OpenAPI_tnap_id_parseFromJSON(cJSON *tnap_idJSON)
     ss_id = cJSON_GetObjectItemCaseSensitive(tnap_idJSON, "ssId");
     if (ss_id) {
     if (!cJSON_IsString(ss_id) && !cJSON_IsNull(ss_id)) {
-        ogs_error("OpenAPI_tnap_id_parseFromJSON() failed [ss_id]");
+        log_error("OpenAPI_tnap_id_parseFromJSON() failed [ss_id]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_tnap_id_t *OpenAPI_tnap_id_parseFromJSON(cJSON *tnap_idJSON)
     bss_id = cJSON_GetObjectItemCaseSensitive(tnap_idJSON, "bssId");
     if (bss_id) {
     if (!cJSON_IsString(bss_id) && !cJSON_IsNull(bss_id)) {
-        ogs_error("OpenAPI_tnap_id_parseFromJSON() failed [bss_id]");
+        log_error("OpenAPI_tnap_id_parseFromJSON() failed [bss_id]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_tnap_id_t *OpenAPI_tnap_id_parseFromJSON(cJSON *tnap_idJSON)
     civic_address = cJSON_GetObjectItemCaseSensitive(tnap_idJSON, "civicAddress");
     if (civic_address) {
     if (!cJSON_IsString(civic_address) && !cJSON_IsNull(civic_address)) {
-        ogs_error("OpenAPI_tnap_id_parseFromJSON() failed [civic_address]");
+        log_error("OpenAPI_tnap_id_parseFromJSON() failed [civic_address]");
         goto end;
     }
     }
@@ -125,10 +125,10 @@ OpenAPI_tnap_id_t *OpenAPI_tnap_id_copy(OpenAPI_tnap_id_t *dst, OpenAPI_tnap_id_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_tnap_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_tnap_id_convertToJSON() failed");
+        log_error("OpenAPI_tnap_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -136,14 +136,14 @@ OpenAPI_tnap_id_t *OpenAPI_tnap_id_copy(OpenAPI_tnap_id_t *dst, OpenAPI_tnap_id_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

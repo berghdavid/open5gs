@@ -14,7 +14,7 @@ OpenAPI_dn_perf_t *OpenAPI_dn_perf_create(
 )
 {
     OpenAPI_dn_perf_t *dn_perf_local_var = ogs_malloc(sizeof(OpenAPI_dn_perf_t));
-    ogs_assert(dn_perf_local_var);
+    log_assert(dn_perf_local_var);
 
     dn_perf_local_var->app_server_ins_addr = app_server_ins_addr;
     dn_perf_local_var->upf_info = upf_info;
@@ -66,7 +66,7 @@ cJSON *OpenAPI_dn_perf_convertToJSON(OpenAPI_dn_perf_t *dn_perf)
     OpenAPI_lnode_t *node = NULL;
 
     if (dn_perf == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [DnPerf]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [DnPerf]");
         return NULL;
     }
 
@@ -74,12 +74,12 @@ cJSON *OpenAPI_dn_perf_convertToJSON(OpenAPI_dn_perf_t *dn_perf)
     if (dn_perf->app_server_ins_addr) {
     cJSON *app_server_ins_addr_local_JSON = OpenAPI_addr_fqdn_convertToJSON(dn_perf->app_server_ins_addr);
     if (app_server_ins_addr_local_JSON == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [app_server_ins_addr]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [app_server_ins_addr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "appServerInsAddr", app_server_ins_addr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [app_server_ins_addr]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [app_server_ins_addr]");
         goto end;
     }
     }
@@ -87,47 +87,47 @@ cJSON *OpenAPI_dn_perf_convertToJSON(OpenAPI_dn_perf_t *dn_perf)
     if (dn_perf->upf_info) {
     cJSON *upf_info_local_JSON = OpenAPI_upf_information_convertToJSON(dn_perf->upf_info);
     if (upf_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [upf_info]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [upf_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "upfInfo", upf_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [upf_info]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [upf_info]");
         goto end;
     }
     }
 
     if (dn_perf->dnai) {
     if (cJSON_AddStringToObject(item, "dnai", dn_perf->dnai) == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [dnai]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [dnai]");
         goto end;
     }
     }
 
     if (!dn_perf->perf_data) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [perf_data]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [perf_data]");
         return NULL;
     }
     cJSON *perf_data_local_JSON = OpenAPI_perf_data_convertToJSON(dn_perf->perf_data);
     if (perf_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [perf_data]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [perf_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "perfData", perf_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [perf_data]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [perf_data]");
         goto end;
     }
 
     if (dn_perf->spatial_valid_con) {
     cJSON *spatial_valid_con_local_JSON = OpenAPI_network_area_info_convertToJSON(dn_perf->spatial_valid_con);
     if (spatial_valid_con_local_JSON == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [spatial_valid_con]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [spatial_valid_con]");
         goto end;
     }
     cJSON_AddItemToObject(item, "spatialValidCon", spatial_valid_con_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [spatial_valid_con]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [spatial_valid_con]");
         goto end;
     }
     }
@@ -135,12 +135,12 @@ cJSON *OpenAPI_dn_perf_convertToJSON(OpenAPI_dn_perf_t *dn_perf)
     if (dn_perf->temporal_valid_con) {
     cJSON *temporal_valid_con_local_JSON = OpenAPI_time_window_convertToJSON(dn_perf->temporal_valid_con);
     if (temporal_valid_con_local_JSON == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [temporal_valid_con]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [temporal_valid_con]");
         goto end;
     }
     cJSON_AddItemToObject(item, "temporalValidCon", temporal_valid_con_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed [temporal_valid_con]");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed [temporal_valid_con]");
         goto end;
     }
     }
@@ -168,7 +168,7 @@ OpenAPI_dn_perf_t *OpenAPI_dn_perf_parseFromJSON(cJSON *dn_perfJSON)
     if (app_server_ins_addr) {
     app_server_ins_addr_local_nonprim = OpenAPI_addr_fqdn_parseFromJSON(app_server_ins_addr);
     if (!app_server_ins_addr_local_nonprim) {
-        ogs_error("OpenAPI_addr_fqdn_parseFromJSON failed [app_server_ins_addr]");
+        log_error("OpenAPI_addr_fqdn_parseFromJSON failed [app_server_ins_addr]");
         goto end;
     }
     }
@@ -177,7 +177,7 @@ OpenAPI_dn_perf_t *OpenAPI_dn_perf_parseFromJSON(cJSON *dn_perfJSON)
     if (upf_info) {
     upf_info_local_nonprim = OpenAPI_upf_information_parseFromJSON(upf_info);
     if (!upf_info_local_nonprim) {
-        ogs_error("OpenAPI_upf_information_parseFromJSON failed [upf_info]");
+        log_error("OpenAPI_upf_information_parseFromJSON failed [upf_info]");
         goto end;
     }
     }
@@ -185,19 +185,19 @@ OpenAPI_dn_perf_t *OpenAPI_dn_perf_parseFromJSON(cJSON *dn_perfJSON)
     dnai = cJSON_GetObjectItemCaseSensitive(dn_perfJSON, "dnai");
     if (dnai) {
     if (!cJSON_IsString(dnai) && !cJSON_IsNull(dnai)) {
-        ogs_error("OpenAPI_dn_perf_parseFromJSON() failed [dnai]");
+        log_error("OpenAPI_dn_perf_parseFromJSON() failed [dnai]");
         goto end;
     }
     }
 
     perf_data = cJSON_GetObjectItemCaseSensitive(dn_perfJSON, "perfData");
     if (!perf_data) {
-        ogs_error("OpenAPI_dn_perf_parseFromJSON() failed [perf_data]");
+        log_error("OpenAPI_dn_perf_parseFromJSON() failed [perf_data]");
         goto end;
     }
     perf_data_local_nonprim = OpenAPI_perf_data_parseFromJSON(perf_data);
     if (!perf_data_local_nonprim) {
-        ogs_error("OpenAPI_perf_data_parseFromJSON failed [perf_data]");
+        log_error("OpenAPI_perf_data_parseFromJSON failed [perf_data]");
         goto end;
     }
 
@@ -205,7 +205,7 @@ OpenAPI_dn_perf_t *OpenAPI_dn_perf_parseFromJSON(cJSON *dn_perfJSON)
     if (spatial_valid_con) {
     spatial_valid_con_local_nonprim = OpenAPI_network_area_info_parseFromJSON(spatial_valid_con);
     if (!spatial_valid_con_local_nonprim) {
-        ogs_error("OpenAPI_network_area_info_parseFromJSON failed [spatial_valid_con]");
+        log_error("OpenAPI_network_area_info_parseFromJSON failed [spatial_valid_con]");
         goto end;
     }
     }
@@ -214,7 +214,7 @@ OpenAPI_dn_perf_t *OpenAPI_dn_perf_parseFromJSON(cJSON *dn_perfJSON)
     if (temporal_valid_con) {
     temporal_valid_con_local_nonprim = OpenAPI_time_window_parseFromJSON(temporal_valid_con);
     if (!temporal_valid_con_local_nonprim) {
-        ogs_error("OpenAPI_time_window_parseFromJSON failed [temporal_valid_con]");
+        log_error("OpenAPI_time_window_parseFromJSON failed [temporal_valid_con]");
         goto end;
     }
     }
@@ -258,10 +258,10 @@ OpenAPI_dn_perf_t *OpenAPI_dn_perf_copy(OpenAPI_dn_perf_t *dst, OpenAPI_dn_perf_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_dn_perf_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_dn_perf_convertToJSON() failed");
+        log_error("OpenAPI_dn_perf_convertToJSON() failed");
         return NULL;
     }
 
@@ -269,14 +269,14 @@ OpenAPI_dn_perf_t *OpenAPI_dn_perf_copy(OpenAPI_dn_perf_t *dst, OpenAPI_dn_perf_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

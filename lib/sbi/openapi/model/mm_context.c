@@ -34,7 +34,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_create(
 )
 {
     OpenAPI_mm_context_t *mm_context_local_var = ogs_malloc(sizeof(OpenAPI_mm_context_t));
-    ogs_assert(mm_context_local_var);
+    log_assert(mm_context_local_var);
 
     mm_context_local_var->access_type = access_type;
     mm_context_local_var->nas_security_mode = nas_security_mode;
@@ -172,29 +172,29 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     OpenAPI_lnode_t *node = NULL;
 
     if (mm_context == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [MmContext]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [MmContext]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (mm_context->access_type == OpenAPI_access_type_NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [access_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "accessType", OpenAPI_access_type_ToString(mm_context->access_type)) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [access_type]");
         goto end;
     }
 
     if (mm_context->nas_security_mode) {
     cJSON *nas_security_mode_local_JSON = OpenAPI_nas_security_mode_convertToJSON(mm_context->nas_security_mode);
     if (nas_security_mode_local_JSON == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [nas_security_mode]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [nas_security_mode]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nasSecurityMode", nas_security_mode_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [nas_security_mode]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [nas_security_mode]");
         goto end;
     }
     }
@@ -202,40 +202,40 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->eps_nas_security_mode) {
     cJSON *eps_nas_security_mode_local_JSON = OpenAPI_eps_nas_security_mode_convertToJSON(mm_context->eps_nas_security_mode);
     if (eps_nas_security_mode_local_JSON == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [eps_nas_security_mode]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [eps_nas_security_mode]");
         goto end;
     }
     cJSON_AddItemToObject(item, "epsNasSecurityMode", eps_nas_security_mode_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [eps_nas_security_mode]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [eps_nas_security_mode]");
         goto end;
     }
     }
 
     if (mm_context->is_nas_downlink_count) {
     if (cJSON_AddNumberToObject(item, "nasDownlinkCount", mm_context->nas_downlink_count) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [nas_downlink_count]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [nas_downlink_count]");
         goto end;
     }
     }
 
     if (mm_context->is_nas_uplink_count) {
     if (cJSON_AddNumberToObject(item, "nasUplinkCount", mm_context->nas_uplink_count) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [nas_uplink_count]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [nas_uplink_count]");
         goto end;
     }
     }
 
     if (mm_context->ue_security_capability) {
     if (cJSON_AddStringToObject(item, "ueSecurityCapability", mm_context->ue_security_capability) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [ue_security_capability]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [ue_security_capability]");
         goto end;
     }
     }
 
     if (mm_context->s1_ue_network_capability) {
     if (cJSON_AddStringToObject(item, "s1UeNetworkCapability", mm_context->s1_ue_network_capability) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [s1_ue_network_capability]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [s1_ue_network_capability]");
         goto end;
     }
     }
@@ -243,13 +243,13 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->allowed_nssai) {
     cJSON *allowed_nssaiList = cJSON_AddArrayToObject(item, "allowedNssai");
     if (allowed_nssaiList == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [allowed_nssai]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [allowed_nssai]");
         goto end;
     }
     OpenAPI_list_for_each(mm_context->allowed_nssai, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mm_context_convertToJSON() failed [allowed_nssai]");
+            log_error("OpenAPI_mm_context_convertToJSON() failed [allowed_nssai]");
             goto end;
         }
         cJSON_AddItemToArray(allowed_nssaiList, itemLocal);
@@ -259,13 +259,13 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->nssai_mapping_list) {
     cJSON *nssai_mapping_listList = cJSON_AddArrayToObject(item, "nssaiMappingList");
     if (nssai_mapping_listList == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [nssai_mapping_list]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [nssai_mapping_list]");
         goto end;
     }
     OpenAPI_list_for_each(mm_context->nssai_mapping_list, node) {
         cJSON *itemLocal = OpenAPI_nssai_mapping_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mm_context_convertToJSON() failed [nssai_mapping_list]");
+            log_error("OpenAPI_mm_context_convertToJSON() failed [nssai_mapping_list]");
             goto end;
         }
         cJSON_AddItemToArray(nssai_mapping_listList, itemLocal);
@@ -275,13 +275,13 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->allowed_home_nssai) {
     cJSON *allowed_home_nssaiList = cJSON_AddArrayToObject(item, "allowedHomeNssai");
     if (allowed_home_nssaiList == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [allowed_home_nssai]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [allowed_home_nssai]");
         goto end;
     }
     OpenAPI_list_for_each(mm_context->allowed_home_nssai, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mm_context_convertToJSON() failed [allowed_home_nssai]");
+            log_error("OpenAPI_mm_context_convertToJSON() failed [allowed_home_nssai]");
             goto end;
         }
         cJSON_AddItemToArray(allowed_home_nssaiList, itemLocal);
@@ -291,12 +291,12 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->ns_instance_list) {
     cJSON *ns_instance_listList = cJSON_AddArrayToObject(item, "nsInstanceList");
     if (ns_instance_listList == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [ns_instance_list]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [ns_instance_list]");
         goto end;
     }
     OpenAPI_list_for_each(mm_context->ns_instance_list, node) {
         if (cJSON_AddStringToObject(ns_instance_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_mm_context_convertToJSON() failed [ns_instance_list]");
+            log_error("OpenAPI_mm_context_convertToJSON() failed [ns_instance_list]");
             goto end;
         }
     }
@@ -305,12 +305,12 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->expected_u_ebehavior) {
     cJSON *expected_u_ebehavior_local_JSON = OpenAPI_expected_ue_behavior_convertToJSON(mm_context->expected_u_ebehavior);
     if (expected_u_ebehavior_local_JSON == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [expected_u_ebehavior]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [expected_u_ebehavior]");
         goto end;
     }
     cJSON_AddItemToObject(item, "expectedUEbehavior", expected_u_ebehavior_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [expected_u_ebehavior]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [expected_u_ebehavior]");
         goto end;
     }
     }
@@ -318,33 +318,33 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->ue_differentiation_info) {
     cJSON *ue_differentiation_info_local_JSON = OpenAPI_ue_differentiation_info_convertToJSON(mm_context->ue_differentiation_info);
     if (ue_differentiation_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [ue_differentiation_info]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [ue_differentiation_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueDifferentiationInfo", ue_differentiation_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [ue_differentiation_info]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [ue_differentiation_info]");
         goto end;
     }
     }
 
     if (mm_context->plmn_assi_ue_radio_cap_id) {
     if (cJSON_AddStringToObject(item, "plmnAssiUeRadioCapId", mm_context->plmn_assi_ue_radio_cap_id) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [plmn_assi_ue_radio_cap_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [plmn_assi_ue_radio_cap_id]");
         goto end;
     }
     }
 
     if (mm_context->man_assi_ue_radio_cap_id) {
     if (cJSON_AddStringToObject(item, "manAssiUeRadioCapId", mm_context->man_assi_ue_radio_cap_id) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [man_assi_ue_radio_cap_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [man_assi_ue_radio_cap_id]");
         goto end;
     }
     }
 
     if (mm_context->ucmf_dic_entry_id) {
     if (cJSON_AddStringToObject(item, "ucmfDicEntryId", mm_context->ucmf_dic_entry_id) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [ucmf_dic_entry_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [ucmf_dic_entry_id]");
         goto end;
     }
     }
@@ -352,12 +352,12 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->n3_iwf_id) {
     cJSON *n3_iwf_id_local_JSON = OpenAPI_global_ran_node_id_convertToJSON(mm_context->n3_iwf_id);
     if (n3_iwf_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [n3_iwf_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [n3_iwf_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "n3IwfId", n3_iwf_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [n3_iwf_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [n3_iwf_id]");
         goto end;
     }
     }
@@ -365,12 +365,12 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->wagf_id) {
     cJSON *wagf_id_local_JSON = OpenAPI_global_ran_node_id_convertToJSON(mm_context->wagf_id);
     if (wagf_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [wagf_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [wagf_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "wagfId", wagf_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [wagf_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [wagf_id]");
         goto end;
     }
     }
@@ -378,19 +378,19 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->tngf_id) {
     cJSON *tngf_id_local_JSON = OpenAPI_global_ran_node_id_convertToJSON(mm_context->tngf_id);
     if (tngf_id_local_JSON == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [tngf_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [tngf_id]");
         goto end;
     }
     cJSON_AddItemToObject(item, "tngfId", tngf_id_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [tngf_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [tngf_id]");
         goto end;
     }
     }
 
     if (mm_context->is_an_n2_ap_id) {
     if (cJSON_AddNumberToObject(item, "anN2ApId", mm_context->an_n2_ap_id) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [an_n2_ap_id]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [an_n2_ap_id]");
         goto end;
     }
     }
@@ -398,13 +398,13 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->nssaa_status_list) {
     cJSON *nssaa_status_listList = cJSON_AddArrayToObject(item, "nssaaStatusList");
     if (nssaa_status_listList == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [nssaa_status_list]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [nssaa_status_list]");
         goto end;
     }
     OpenAPI_list_for_each(mm_context->nssaa_status_list, node) {
         cJSON *itemLocal = OpenAPI_nssaa_status_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mm_context_convertToJSON() failed [nssaa_status_list]");
+            log_error("OpenAPI_mm_context_convertToJSON() failed [nssaa_status_list]");
             goto end;
         }
         cJSON_AddItemToArray(nssaa_status_listList, itemLocal);
@@ -414,13 +414,13 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
     if (mm_context->pending_nssai_mapping_list) {
     cJSON *pending_nssai_mapping_listList = cJSON_AddArrayToObject(item, "pendingNssaiMappingList");
     if (pending_nssai_mapping_listList == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [pending_nssai_mapping_list]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [pending_nssai_mapping_list]");
         goto end;
     }
     OpenAPI_list_for_each(mm_context->pending_nssai_mapping_list, node) {
         cJSON *itemLocal = OpenAPI_nssai_mapping_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_mm_context_convertToJSON() failed [pending_nssai_mapping_list]");
+            log_error("OpenAPI_mm_context_convertToJSON() failed [pending_nssai_mapping_list]");
             goto end;
         }
         cJSON_AddItemToArray(pending_nssai_mapping_listList, itemLocal);
@@ -429,7 +429,7 @@ cJSON *OpenAPI_mm_context_convertToJSON(OpenAPI_mm_context_t *mm_context)
 
     if (mm_context->uuaa_mm_status != OpenAPI_uuaa_mm_status_NULL) {
     if (cJSON_AddStringToObject(item, "uuaaMmStatus", OpenAPI_uuaa_mm_status_ToString(mm_context->uuaa_mm_status)) == NULL) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed [uuaa_mm_status]");
+        log_error("OpenAPI_mm_context_convertToJSON() failed [uuaa_mm_status]");
         goto end;
     }
     }
@@ -482,11 +482,11 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     OpenAPI_uuaa_mm_status_e uuaa_mm_statusVariable = 0;
     access_type = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "accessType");
     if (!access_type) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [access_type]");
         goto end;
     }
     if (!cJSON_IsString(access_type)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [access_type]");
         goto end;
     }
     access_typeVariable = OpenAPI_access_type_FromString(access_type->valuestring);
@@ -495,7 +495,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (nas_security_mode) {
     nas_security_mode_local_nonprim = OpenAPI_nas_security_mode_parseFromJSON(nas_security_mode);
     if (!nas_security_mode_local_nonprim) {
-        ogs_error("OpenAPI_nas_security_mode_parseFromJSON failed [nas_security_mode]");
+        log_error("OpenAPI_nas_security_mode_parseFromJSON failed [nas_security_mode]");
         goto end;
     }
     }
@@ -504,7 +504,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (eps_nas_security_mode) {
     eps_nas_security_mode_local_nonprim = OpenAPI_eps_nas_security_mode_parseFromJSON(eps_nas_security_mode);
     if (!eps_nas_security_mode_local_nonprim) {
-        ogs_error("OpenAPI_eps_nas_security_mode_parseFromJSON failed [eps_nas_security_mode]");
+        log_error("OpenAPI_eps_nas_security_mode_parseFromJSON failed [eps_nas_security_mode]");
         goto end;
     }
     }
@@ -512,7 +512,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     nas_downlink_count = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "nasDownlinkCount");
     if (nas_downlink_count) {
     if (!cJSON_IsNumber(nas_downlink_count)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [nas_downlink_count]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [nas_downlink_count]");
         goto end;
     }
     }
@@ -520,7 +520,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     nas_uplink_count = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "nasUplinkCount");
     if (nas_uplink_count) {
     if (!cJSON_IsNumber(nas_uplink_count)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [nas_uplink_count]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [nas_uplink_count]");
         goto end;
     }
     }
@@ -528,7 +528,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     ue_security_capability = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "ueSecurityCapability");
     if (ue_security_capability) {
     if (!cJSON_IsString(ue_security_capability) && !cJSON_IsNull(ue_security_capability)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [ue_security_capability]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [ue_security_capability]");
         goto end;
     }
     }
@@ -536,7 +536,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     s1_ue_network_capability = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "s1UeNetworkCapability");
     if (s1_ue_network_capability) {
     if (!cJSON_IsString(s1_ue_network_capability) && !cJSON_IsNull(s1_ue_network_capability)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [s1_ue_network_capability]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [s1_ue_network_capability]");
         goto end;
     }
     }
@@ -545,7 +545,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (allowed_nssai) {
         cJSON *allowed_nssai_local = NULL;
         if (!cJSON_IsArray(allowed_nssai)) {
-            ogs_error("OpenAPI_mm_context_parseFromJSON() failed [allowed_nssai]");
+            log_error("OpenAPI_mm_context_parseFromJSON() failed [allowed_nssai]");
             goto end;
         }
 
@@ -553,12 +553,12 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
 
         cJSON_ArrayForEach(allowed_nssai_local, allowed_nssai) {
             if (!cJSON_IsObject(allowed_nssai_local)) {
-                ogs_error("OpenAPI_mm_context_parseFromJSON() failed [allowed_nssai]");
+                log_error("OpenAPI_mm_context_parseFromJSON() failed [allowed_nssai]");
                 goto end;
             }
             OpenAPI_snssai_t *allowed_nssaiItem = OpenAPI_snssai_parseFromJSON(allowed_nssai_local);
             if (!allowed_nssaiItem) {
-                ogs_error("No allowed_nssaiItem");
+                log_error("No allowed_nssaiItem");
                 goto end;
             }
             OpenAPI_list_add(allowed_nssaiList, allowed_nssaiItem);
@@ -569,7 +569,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (nssai_mapping_list) {
         cJSON *nssai_mapping_list_local = NULL;
         if (!cJSON_IsArray(nssai_mapping_list)) {
-            ogs_error("OpenAPI_mm_context_parseFromJSON() failed [nssai_mapping_list]");
+            log_error("OpenAPI_mm_context_parseFromJSON() failed [nssai_mapping_list]");
             goto end;
         }
 
@@ -577,12 +577,12 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
 
         cJSON_ArrayForEach(nssai_mapping_list_local, nssai_mapping_list) {
             if (!cJSON_IsObject(nssai_mapping_list_local)) {
-                ogs_error("OpenAPI_mm_context_parseFromJSON() failed [nssai_mapping_list]");
+                log_error("OpenAPI_mm_context_parseFromJSON() failed [nssai_mapping_list]");
                 goto end;
             }
             OpenAPI_nssai_mapping_t *nssai_mapping_listItem = OpenAPI_nssai_mapping_parseFromJSON(nssai_mapping_list_local);
             if (!nssai_mapping_listItem) {
-                ogs_error("No nssai_mapping_listItem");
+                log_error("No nssai_mapping_listItem");
                 goto end;
             }
             OpenAPI_list_add(nssai_mapping_listList, nssai_mapping_listItem);
@@ -593,7 +593,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (allowed_home_nssai) {
         cJSON *allowed_home_nssai_local = NULL;
         if (!cJSON_IsArray(allowed_home_nssai)) {
-            ogs_error("OpenAPI_mm_context_parseFromJSON() failed [allowed_home_nssai]");
+            log_error("OpenAPI_mm_context_parseFromJSON() failed [allowed_home_nssai]");
             goto end;
         }
 
@@ -601,12 +601,12 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
 
         cJSON_ArrayForEach(allowed_home_nssai_local, allowed_home_nssai) {
             if (!cJSON_IsObject(allowed_home_nssai_local)) {
-                ogs_error("OpenAPI_mm_context_parseFromJSON() failed [allowed_home_nssai]");
+                log_error("OpenAPI_mm_context_parseFromJSON() failed [allowed_home_nssai]");
                 goto end;
             }
             OpenAPI_snssai_t *allowed_home_nssaiItem = OpenAPI_snssai_parseFromJSON(allowed_home_nssai_local);
             if (!allowed_home_nssaiItem) {
-                ogs_error("No allowed_home_nssaiItem");
+                log_error("No allowed_home_nssaiItem");
                 goto end;
             }
             OpenAPI_list_add(allowed_home_nssaiList, allowed_home_nssaiItem);
@@ -617,7 +617,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (ns_instance_list) {
         cJSON *ns_instance_list_local = NULL;
         if (!cJSON_IsArray(ns_instance_list)) {
-            ogs_error("OpenAPI_mm_context_parseFromJSON() failed [ns_instance_list]");
+            log_error("OpenAPI_mm_context_parseFromJSON() failed [ns_instance_list]");
             goto end;
         }
 
@@ -627,7 +627,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ns_instance_list_local)) {
-                ogs_error("OpenAPI_mm_context_parseFromJSON() failed [ns_instance_list]");
+                log_error("OpenAPI_mm_context_parseFromJSON() failed [ns_instance_list]");
                 goto end;
             }
             OpenAPI_list_add(ns_instance_listList, ogs_strdup(ns_instance_list_local->valuestring));
@@ -638,7 +638,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (expected_u_ebehavior) {
     expected_u_ebehavior_local_nonprim = OpenAPI_expected_ue_behavior_parseFromJSON(expected_u_ebehavior);
     if (!expected_u_ebehavior_local_nonprim) {
-        ogs_error("OpenAPI_expected_ue_behavior_parseFromJSON failed [expected_u_ebehavior]");
+        log_error("OpenAPI_expected_ue_behavior_parseFromJSON failed [expected_u_ebehavior]");
         goto end;
     }
     }
@@ -647,7 +647,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (ue_differentiation_info) {
     ue_differentiation_info_local_nonprim = OpenAPI_ue_differentiation_info_parseFromJSON(ue_differentiation_info);
     if (!ue_differentiation_info_local_nonprim) {
-        ogs_error("OpenAPI_ue_differentiation_info_parseFromJSON failed [ue_differentiation_info]");
+        log_error("OpenAPI_ue_differentiation_info_parseFromJSON failed [ue_differentiation_info]");
         goto end;
     }
     }
@@ -655,7 +655,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     plmn_assi_ue_radio_cap_id = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "plmnAssiUeRadioCapId");
     if (plmn_assi_ue_radio_cap_id) {
     if (!cJSON_IsString(plmn_assi_ue_radio_cap_id) && !cJSON_IsNull(plmn_assi_ue_radio_cap_id)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [plmn_assi_ue_radio_cap_id]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [plmn_assi_ue_radio_cap_id]");
         goto end;
     }
     }
@@ -663,7 +663,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     man_assi_ue_radio_cap_id = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "manAssiUeRadioCapId");
     if (man_assi_ue_radio_cap_id) {
     if (!cJSON_IsString(man_assi_ue_radio_cap_id) && !cJSON_IsNull(man_assi_ue_radio_cap_id)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [man_assi_ue_radio_cap_id]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [man_assi_ue_radio_cap_id]");
         goto end;
     }
     }
@@ -671,7 +671,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     ucmf_dic_entry_id = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "ucmfDicEntryId");
     if (ucmf_dic_entry_id) {
     if (!cJSON_IsString(ucmf_dic_entry_id) && !cJSON_IsNull(ucmf_dic_entry_id)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [ucmf_dic_entry_id]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [ucmf_dic_entry_id]");
         goto end;
     }
     }
@@ -680,7 +680,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (n3_iwf_id) {
     n3_iwf_id_local_nonprim = OpenAPI_global_ran_node_id_parseFromJSON(n3_iwf_id);
     if (!n3_iwf_id_local_nonprim) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON failed [n3_iwf_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON failed [n3_iwf_id]");
         goto end;
     }
     }
@@ -689,7 +689,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (wagf_id) {
     wagf_id_local_nonprim = OpenAPI_global_ran_node_id_parseFromJSON(wagf_id);
     if (!wagf_id_local_nonprim) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON failed [wagf_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON failed [wagf_id]");
         goto end;
     }
     }
@@ -698,7 +698,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (tngf_id) {
     tngf_id_local_nonprim = OpenAPI_global_ran_node_id_parseFromJSON(tngf_id);
     if (!tngf_id_local_nonprim) {
-        ogs_error("OpenAPI_global_ran_node_id_parseFromJSON failed [tngf_id]");
+        log_error("OpenAPI_global_ran_node_id_parseFromJSON failed [tngf_id]");
         goto end;
     }
     }
@@ -706,7 +706,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     an_n2_ap_id = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "anN2ApId");
     if (an_n2_ap_id) {
     if (!cJSON_IsNumber(an_n2_ap_id)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [an_n2_ap_id]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [an_n2_ap_id]");
         goto end;
     }
     }
@@ -715,7 +715,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (nssaa_status_list) {
         cJSON *nssaa_status_list_local = NULL;
         if (!cJSON_IsArray(nssaa_status_list)) {
-            ogs_error("OpenAPI_mm_context_parseFromJSON() failed [nssaa_status_list]");
+            log_error("OpenAPI_mm_context_parseFromJSON() failed [nssaa_status_list]");
             goto end;
         }
 
@@ -723,12 +723,12 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
 
         cJSON_ArrayForEach(nssaa_status_list_local, nssaa_status_list) {
             if (!cJSON_IsObject(nssaa_status_list_local)) {
-                ogs_error("OpenAPI_mm_context_parseFromJSON() failed [nssaa_status_list]");
+                log_error("OpenAPI_mm_context_parseFromJSON() failed [nssaa_status_list]");
                 goto end;
             }
             OpenAPI_nssaa_status_t *nssaa_status_listItem = OpenAPI_nssaa_status_parseFromJSON(nssaa_status_list_local);
             if (!nssaa_status_listItem) {
-                ogs_error("No nssaa_status_listItem");
+                log_error("No nssaa_status_listItem");
                 goto end;
             }
             OpenAPI_list_add(nssaa_status_listList, nssaa_status_listItem);
@@ -739,7 +739,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     if (pending_nssai_mapping_list) {
         cJSON *pending_nssai_mapping_list_local = NULL;
         if (!cJSON_IsArray(pending_nssai_mapping_list)) {
-            ogs_error("OpenAPI_mm_context_parseFromJSON() failed [pending_nssai_mapping_list]");
+            log_error("OpenAPI_mm_context_parseFromJSON() failed [pending_nssai_mapping_list]");
             goto end;
         }
 
@@ -747,12 +747,12 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
 
         cJSON_ArrayForEach(pending_nssai_mapping_list_local, pending_nssai_mapping_list) {
             if (!cJSON_IsObject(pending_nssai_mapping_list_local)) {
-                ogs_error("OpenAPI_mm_context_parseFromJSON() failed [pending_nssai_mapping_list]");
+                log_error("OpenAPI_mm_context_parseFromJSON() failed [pending_nssai_mapping_list]");
                 goto end;
             }
             OpenAPI_nssai_mapping_t *pending_nssai_mapping_listItem = OpenAPI_nssai_mapping_parseFromJSON(pending_nssai_mapping_list_local);
             if (!pending_nssai_mapping_listItem) {
-                ogs_error("No pending_nssai_mapping_listItem");
+                log_error("No pending_nssai_mapping_listItem");
                 goto end;
             }
             OpenAPI_list_add(pending_nssai_mapping_listList, pending_nssai_mapping_listItem);
@@ -762,7 +762,7 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_parseFromJSON(cJSON *mm_contextJSON)
     uuaa_mm_status = cJSON_GetObjectItemCaseSensitive(mm_contextJSON, "uuaaMmStatus");
     if (uuaa_mm_status) {
     if (!cJSON_IsString(uuaa_mm_status)) {
-        ogs_error("OpenAPI_mm_context_parseFromJSON() failed [uuaa_mm_status]");
+        log_error("OpenAPI_mm_context_parseFromJSON() failed [uuaa_mm_status]");
         goto end;
     }
     uuaa_mm_statusVariable = OpenAPI_uuaa_mm_status_FromString(uuaa_mm_status->valuestring);
@@ -877,10 +877,10 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_copy(OpenAPI_mm_context_t *dst, OpenAPI
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_mm_context_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_mm_context_convertToJSON() failed");
+        log_error("OpenAPI_mm_context_convertToJSON() failed");
         return NULL;
     }
 
@@ -888,14 +888,14 @@ OpenAPI_mm_context_t *OpenAPI_mm_context_copy(OpenAPI_mm_context_t *dst, OpenAPI
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

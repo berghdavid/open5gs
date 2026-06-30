@@ -11,7 +11,7 @@ OpenAPI_pcf_for_ue_binding_patch_t *OpenAPI_pcf_for_ue_binding_patch_create(
 )
 {
     OpenAPI_pcf_for_ue_binding_patch_t *pcf_for_ue_binding_patch_local_var = ogs_malloc(sizeof(OpenAPI_pcf_for_ue_binding_patch_t));
-    ogs_assert(pcf_for_ue_binding_patch_local_var);
+    log_assert(pcf_for_ue_binding_patch_local_var);
 
     pcf_for_ue_binding_patch_local_var->pcf_for_ue_fqdn = pcf_for_ue_fqdn;
     pcf_for_ue_binding_patch_local_var->pcf_for_ue_ip_end_points = pcf_for_ue_ip_end_points;
@@ -51,14 +51,14 @@ cJSON *OpenAPI_pcf_for_ue_binding_patch_convertToJSON(OpenAPI_pcf_for_ue_binding
     OpenAPI_lnode_t *node = NULL;
 
     if (pcf_for_ue_binding_patch == NULL) {
-        ogs_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [PcfForUeBindingPatch]");
+        log_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [PcfForUeBindingPatch]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (pcf_for_ue_binding_patch->pcf_for_ue_fqdn) {
     if (cJSON_AddStringToObject(item, "pcfForUeFqdn", pcf_for_ue_binding_patch->pcf_for_ue_fqdn) == NULL) {
-        ogs_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [pcf_for_ue_fqdn]");
+        log_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [pcf_for_ue_fqdn]");
         goto end;
     }
     }
@@ -66,13 +66,13 @@ cJSON *OpenAPI_pcf_for_ue_binding_patch_convertToJSON(OpenAPI_pcf_for_ue_binding
     if (pcf_for_ue_binding_patch->pcf_for_ue_ip_end_points) {
     cJSON *pcf_for_ue_ip_end_pointsList = cJSON_AddArrayToObject(item, "pcfForUeIpEndPoints");
     if (pcf_for_ue_ip_end_pointsList == NULL) {
-        ogs_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [pcf_for_ue_ip_end_points]");
+        log_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [pcf_for_ue_ip_end_points]");
         goto end;
     }
     OpenAPI_list_for_each(pcf_for_ue_binding_patch->pcf_for_ue_ip_end_points, node) {
         cJSON *itemLocal = OpenAPI_ip_end_point_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [pcf_for_ue_ip_end_points]");
+            log_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [pcf_for_ue_ip_end_points]");
             goto end;
         }
         cJSON_AddItemToArray(pcf_for_ue_ip_end_pointsList, itemLocal);
@@ -81,7 +81,7 @@ cJSON *OpenAPI_pcf_for_ue_binding_patch_convertToJSON(OpenAPI_pcf_for_ue_binding
 
     if (pcf_for_ue_binding_patch->pcf_id) {
     if (cJSON_AddStringToObject(item, "pcfId", pcf_for_ue_binding_patch->pcf_id) == NULL) {
-        ogs_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [pcf_id]");
+        log_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed [pcf_id]");
         goto end;
     }
     }
@@ -101,7 +101,7 @@ OpenAPI_pcf_for_ue_binding_patch_t *OpenAPI_pcf_for_ue_binding_patch_parseFromJS
     pcf_for_ue_fqdn = cJSON_GetObjectItemCaseSensitive(pcf_for_ue_binding_patchJSON, "pcfForUeFqdn");
     if (pcf_for_ue_fqdn) {
     if (!cJSON_IsString(pcf_for_ue_fqdn) && !cJSON_IsNull(pcf_for_ue_fqdn)) {
-        ogs_error("OpenAPI_pcf_for_ue_binding_patch_parseFromJSON() failed [pcf_for_ue_fqdn]");
+        log_error("OpenAPI_pcf_for_ue_binding_patch_parseFromJSON() failed [pcf_for_ue_fqdn]");
         goto end;
     }
     }
@@ -110,7 +110,7 @@ OpenAPI_pcf_for_ue_binding_patch_t *OpenAPI_pcf_for_ue_binding_patch_parseFromJS
     if (pcf_for_ue_ip_end_points) {
         cJSON *pcf_for_ue_ip_end_points_local = NULL;
         if (!cJSON_IsArray(pcf_for_ue_ip_end_points)) {
-            ogs_error("OpenAPI_pcf_for_ue_binding_patch_parseFromJSON() failed [pcf_for_ue_ip_end_points]");
+            log_error("OpenAPI_pcf_for_ue_binding_patch_parseFromJSON() failed [pcf_for_ue_ip_end_points]");
             goto end;
         }
 
@@ -118,12 +118,12 @@ OpenAPI_pcf_for_ue_binding_patch_t *OpenAPI_pcf_for_ue_binding_patch_parseFromJS
 
         cJSON_ArrayForEach(pcf_for_ue_ip_end_points_local, pcf_for_ue_ip_end_points) {
             if (!cJSON_IsObject(pcf_for_ue_ip_end_points_local)) {
-                ogs_error("OpenAPI_pcf_for_ue_binding_patch_parseFromJSON() failed [pcf_for_ue_ip_end_points]");
+                log_error("OpenAPI_pcf_for_ue_binding_patch_parseFromJSON() failed [pcf_for_ue_ip_end_points]");
                 goto end;
             }
             OpenAPI_ip_end_point_t *pcf_for_ue_ip_end_pointsItem = OpenAPI_ip_end_point_parseFromJSON(pcf_for_ue_ip_end_points_local);
             if (!pcf_for_ue_ip_end_pointsItem) {
-                ogs_error("No pcf_for_ue_ip_end_pointsItem");
+                log_error("No pcf_for_ue_ip_end_pointsItem");
                 goto end;
             }
             OpenAPI_list_add(pcf_for_ue_ip_end_pointsList, pcf_for_ue_ip_end_pointsItem);
@@ -133,7 +133,7 @@ OpenAPI_pcf_for_ue_binding_patch_t *OpenAPI_pcf_for_ue_binding_patch_parseFromJS
     pcf_id = cJSON_GetObjectItemCaseSensitive(pcf_for_ue_binding_patchJSON, "pcfId");
     if (pcf_id) {
     if (!cJSON_IsString(pcf_id) && !cJSON_IsNull(pcf_id)) {
-        ogs_error("OpenAPI_pcf_for_ue_binding_patch_parseFromJSON() failed [pcf_id]");
+        log_error("OpenAPI_pcf_for_ue_binding_patch_parseFromJSON() failed [pcf_id]");
         goto end;
     }
     }
@@ -161,10 +161,10 @@ OpenAPI_pcf_for_ue_binding_patch_t *OpenAPI_pcf_for_ue_binding_patch_copy(OpenAP
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_pcf_for_ue_binding_patch_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed");
+        log_error("OpenAPI_pcf_for_ue_binding_patch_convertToJSON() failed");
         return NULL;
     }
 
@@ -172,14 +172,14 @@ OpenAPI_pcf_for_ue_binding_patch_t *OpenAPI_pcf_for_ue_binding_patch_copy(OpenAP
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -14,7 +14,7 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_create(
 )
 {
     OpenAPI_am_requested_value_rep_t *am_requested_value_rep_local_var = ogs_malloc(sizeof(OpenAPI_am_requested_value_rep_t));
-    ogs_assert(am_requested_value_rep_local_var);
+    log_assert(am_requested_value_rep_local_var);
 
     am_requested_value_rep_local_var->user_loc = user_loc;
     am_requested_value_rep_local_var->pra_statuses = pra_statuses;
@@ -78,7 +78,7 @@ cJSON *OpenAPI_am_requested_value_rep_convertToJSON(OpenAPI_am_requested_value_r
     OpenAPI_lnode_t *node = NULL;
 
     if (am_requested_value_rep == NULL) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [AmRequestedValueRep]");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [AmRequestedValueRep]");
         return NULL;
     }
 
@@ -86,12 +86,12 @@ cJSON *OpenAPI_am_requested_value_rep_convertToJSON(OpenAPI_am_requested_value_r
     if (am_requested_value_rep->user_loc) {
     cJSON *user_loc_local_JSON = OpenAPI_user_location_convertToJSON(am_requested_value_rep->user_loc);
     if (user_loc_local_JSON == NULL) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [user_loc]");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [user_loc]");
         goto end;
     }
     cJSON_AddItemToObject(item, "userLoc", user_loc_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [user_loc]");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [user_loc]");
         goto end;
     }
     }
@@ -99,7 +99,7 @@ cJSON *OpenAPI_am_requested_value_rep_convertToJSON(OpenAPI_am_requested_value_r
     if (am_requested_value_rep->pra_statuses) {
     cJSON *pra_statuses = cJSON_AddObjectToObject(item, "praStatuses");
     if (pra_statuses == NULL) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [pra_statuses]");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [pra_statuses]");
         goto end;
     }
     cJSON *localMapObject = pra_statuses;
@@ -107,18 +107,18 @@ cJSON *OpenAPI_am_requested_value_rep_convertToJSON(OpenAPI_am_requested_value_r
         OpenAPI_list_for_each(am_requested_value_rep->pra_statuses, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [pra_statuses]");
+                log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [pra_statuses]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [pra_statuses]");
+                log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [pra_statuses]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_presence_info_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [inner]");
+                log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -129,12 +129,12 @@ cJSON *OpenAPI_am_requested_value_rep_convertToJSON(OpenAPI_am_requested_value_r
     if (am_requested_value_rep->access_types != OpenAPI_access_type_NULL) {
     cJSON *access_typesList = cJSON_AddArrayToObject(item, "accessTypes");
     if (access_typesList == NULL) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [access_types]");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [access_types]");
         goto end;
     }
     OpenAPI_list_for_each(am_requested_value_rep->access_types, node) {
         if (cJSON_AddStringToObject(access_typesList, "", OpenAPI_access_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [access_types]");
+            log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [access_types]");
             goto end;
         }
     }
@@ -143,12 +143,12 @@ cJSON *OpenAPI_am_requested_value_rep_convertToJSON(OpenAPI_am_requested_value_r
     if (am_requested_value_rep->rat_types != OpenAPI_rat_type_NULL) {
     cJSON *rat_typesList = cJSON_AddArrayToObject(item, "ratTypes");
     if (rat_typesList == NULL) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [rat_types]");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [rat_types]");
         goto end;
     }
     OpenAPI_list_for_each(am_requested_value_rep->rat_types, node) {
         if (cJSON_AddStringToObject(rat_typesList, "", OpenAPI_rat_type_ToString((intptr_t)node->data)) == NULL) {
-            ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [rat_types]");
+            log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [rat_types]");
             goto end;
         }
     }
@@ -157,13 +157,13 @@ cJSON *OpenAPI_am_requested_value_rep_convertToJSON(OpenAPI_am_requested_value_r
     if (am_requested_value_rep->allowed_snssais) {
     cJSON *allowed_snssaisList = cJSON_AddArrayToObject(item, "allowedSnssais");
     if (allowed_snssaisList == NULL) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [allowed_snssais]");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [allowed_snssais]");
         goto end;
     }
     OpenAPI_list_for_each(am_requested_value_rep->allowed_snssais, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [allowed_snssais]");
+            log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [allowed_snssais]");
             goto end;
         }
         cJSON_AddItemToArray(allowed_snssaisList, itemLocal);
@@ -173,13 +173,13 @@ cJSON *OpenAPI_am_requested_value_rep_convertToJSON(OpenAPI_am_requested_value_r
     if (am_requested_value_rep->n3g_allowed_snssais) {
     cJSON *n3g_allowed_snssaisList = cJSON_AddArrayToObject(item, "n3gAllowedSnssais");
     if (n3g_allowed_snssaisList == NULL) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [n3g_allowed_snssais]");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [n3g_allowed_snssais]");
         goto end;
     }
     OpenAPI_list_for_each(am_requested_value_rep->n3g_allowed_snssais, node) {
         cJSON *itemLocal = OpenAPI_snssai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [n3g_allowed_snssais]");
+            log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed [n3g_allowed_snssais]");
             goto end;
         }
         cJSON_AddItemToArray(n3g_allowed_snssaisList, itemLocal);
@@ -210,7 +210,7 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
     if (user_loc) {
     user_loc_local_nonprim = OpenAPI_user_location_parseFromJSON(user_loc);
     if (!user_loc_local_nonprim) {
-        ogs_error("OpenAPI_user_location_parseFromJSON failed [user_loc]");
+        log_error("OpenAPI_user_location_parseFromJSON failed [user_loc]");
         goto end;
     }
     }
@@ -219,7 +219,7 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
     if (pra_statuses) {
         cJSON *pra_statuses_local_map = NULL;
         if (!cJSON_IsObject(pra_statuses) && !cJSON_IsNull(pra_statuses)) {
-            ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [pra_statuses]");
+            log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [pra_statuses]");
             goto end;
         }
         if (cJSON_IsObject(pra_statuses)) {
@@ -233,7 +233,7 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(pra_statusesList, localMapKeyPair);
@@ -245,7 +245,7 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
     if (access_types) {
         cJSON *access_types_local = NULL;
         if (!cJSON_IsArray(access_types)) {
-            ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [access_types]");
+            log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [access_types]");
             goto end;
         }
 
@@ -254,19 +254,19 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
         cJSON_ArrayForEach(access_types_local, access_types) {
             OpenAPI_access_type_e localEnum = OpenAPI_access_type_NULL;
             if (!cJSON_IsString(access_types_local)) {
-                ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [access_types]");
+                log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [access_types]");
                 goto end;
             }
             localEnum = OpenAPI_access_type_FromString(access_types_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"access_types\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"access_types\" is not supported. Ignoring it ...",
                          access_types_local->valuestring);
             } else {
                 OpenAPI_list_add(access_typesList, (void *)localEnum);
             }
         }
         if (access_typesList->count == 0) {
-            ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed: Expected access_typesList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed: Expected access_typesList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -275,7 +275,7 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
     if (rat_types) {
         cJSON *rat_types_local = NULL;
         if (!cJSON_IsArray(rat_types)) {
-            ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [rat_types]");
+            log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [rat_types]");
             goto end;
         }
 
@@ -284,19 +284,19 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
         cJSON_ArrayForEach(rat_types_local, rat_types) {
             OpenAPI_rat_type_e localEnum = OpenAPI_rat_type_NULL;
             if (!cJSON_IsString(rat_types_local)) {
-                ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [rat_types]");
+                log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [rat_types]");
                 goto end;
             }
             localEnum = OpenAPI_rat_type_FromString(rat_types_local->valuestring);
             if (!localEnum) {
-                ogs_info("Enum value \"%s\" for field \"rat_types\" is not supported. Ignoring it ...",
+                log_info("Enum value \"%s\" for field \"rat_types\" is not supported. Ignoring it ...",
                          rat_types_local->valuestring);
             } else {
                 OpenAPI_list_add(rat_typesList, (void *)localEnum);
             }
         }
         if (rat_typesList->count == 0) {
-            ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed: Expected rat_typesList to not be empty (after ignoring unsupported enum values).");
+            log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed: Expected rat_typesList to not be empty (after ignoring unsupported enum values).");
             goto end;
         }
     }
@@ -305,7 +305,7 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
     if (allowed_snssais) {
         cJSON *allowed_snssais_local = NULL;
         if (!cJSON_IsArray(allowed_snssais)) {
-            ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [allowed_snssais]");
+            log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [allowed_snssais]");
             goto end;
         }
 
@@ -313,12 +313,12 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
 
         cJSON_ArrayForEach(allowed_snssais_local, allowed_snssais) {
             if (!cJSON_IsObject(allowed_snssais_local)) {
-                ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [allowed_snssais]");
+                log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [allowed_snssais]");
                 goto end;
             }
             OpenAPI_snssai_t *allowed_snssaisItem = OpenAPI_snssai_parseFromJSON(allowed_snssais_local);
             if (!allowed_snssaisItem) {
-                ogs_error("No allowed_snssaisItem");
+                log_error("No allowed_snssaisItem");
                 goto end;
             }
             OpenAPI_list_add(allowed_snssaisList, allowed_snssaisItem);
@@ -329,7 +329,7 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
     if (n3g_allowed_snssais) {
         cJSON *n3g_allowed_snssais_local = NULL;
         if (!cJSON_IsArray(n3g_allowed_snssais)) {
-            ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [n3g_allowed_snssais]");
+            log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [n3g_allowed_snssais]");
             goto end;
         }
 
@@ -337,12 +337,12 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_parseFromJSON(c
 
         cJSON_ArrayForEach(n3g_allowed_snssais_local, n3g_allowed_snssais) {
             if (!cJSON_IsObject(n3g_allowed_snssais_local)) {
-                ogs_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [n3g_allowed_snssais]");
+                log_error("OpenAPI_am_requested_value_rep_parseFromJSON() failed [n3g_allowed_snssais]");
                 goto end;
             }
             OpenAPI_snssai_t *n3g_allowed_snssaisItem = OpenAPI_snssai_parseFromJSON(n3g_allowed_snssais_local);
             if (!n3g_allowed_snssaisItem) {
-                ogs_error("No n3g_allowed_snssaisItem");
+                log_error("No n3g_allowed_snssaisItem");
                 goto end;
             }
             OpenAPI_list_add(n3g_allowed_snssaisList, n3g_allowed_snssaisItem);
@@ -404,10 +404,10 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_copy(OpenAPI_am
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_am_requested_value_rep_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_am_requested_value_rep_convertToJSON() failed");
+        log_error("OpenAPI_am_requested_value_rep_convertToJSON() failed");
         return NULL;
     }
 
@@ -415,14 +415,14 @@ OpenAPI_am_requested_value_rep_t *OpenAPI_am_requested_value_rep_copy(OpenAPI_am
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

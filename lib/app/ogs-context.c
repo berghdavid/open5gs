@@ -25,7 +25,7 @@ static int initialized = 0;
 
 int ogs_app_context_init(void)
 {
-    ogs_assert(initialized == 0);
+    log_assert(initialized == 0);
 
     memset(&self, 0, sizeof(ogs_app_context_t));
 
@@ -36,7 +36,7 @@ int ogs_app_context_init(void)
 
 void ogs_app_context_final(void)
 {
-    ogs_assert(initialized == 1);
+    log_assert(initialized == 1);
 
     if (self.document) {
         yaml_document_delete(self.document);

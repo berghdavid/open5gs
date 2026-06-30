@@ -10,7 +10,7 @@ OpenAPI_additional_access_info_t *OpenAPI_additional_access_info_create(
 )
 {
     OpenAPI_additional_access_info_t *additional_access_info_local_var = ogs_malloc(sizeof(OpenAPI_additional_access_info_t));
-    ogs_assert(additional_access_info_local_var);
+    log_assert(additional_access_info_local_var);
 
     additional_access_info_local_var->access_type = access_type;
     additional_access_info_local_var->rat_type = rat_type;
@@ -34,23 +34,23 @@ cJSON *OpenAPI_additional_access_info_convertToJSON(OpenAPI_additional_access_in
     OpenAPI_lnode_t *node = NULL;
 
     if (additional_access_info == NULL) {
-        ogs_error("OpenAPI_additional_access_info_convertToJSON() failed [AdditionalAccessInfo]");
+        log_error("OpenAPI_additional_access_info_convertToJSON() failed [AdditionalAccessInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (additional_access_info->access_type == OpenAPI_access_type_NULL) {
-        ogs_error("OpenAPI_additional_access_info_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_additional_access_info_convertToJSON() failed [access_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "accessType", OpenAPI_access_type_ToString(additional_access_info->access_type)) == NULL) {
-        ogs_error("OpenAPI_additional_access_info_convertToJSON() failed [access_type]");
+        log_error("OpenAPI_additional_access_info_convertToJSON() failed [access_type]");
         goto end;
     }
 
     if (additional_access_info->rat_type != OpenAPI_rat_type_NULL) {
     if (cJSON_AddStringToObject(item, "ratType", OpenAPI_rat_type_ToString(additional_access_info->rat_type)) == NULL) {
-        ogs_error("OpenAPI_additional_access_info_convertToJSON() failed [rat_type]");
+        log_error("OpenAPI_additional_access_info_convertToJSON() failed [rat_type]");
         goto end;
     }
     }
@@ -69,11 +69,11 @@ OpenAPI_additional_access_info_t *OpenAPI_additional_access_info_parseFromJSON(c
     OpenAPI_rat_type_e rat_typeVariable = 0;
     access_type = cJSON_GetObjectItemCaseSensitive(additional_access_infoJSON, "accessType");
     if (!access_type) {
-        ogs_error("OpenAPI_additional_access_info_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_additional_access_info_parseFromJSON() failed [access_type]");
         goto end;
     }
     if (!cJSON_IsString(access_type)) {
-        ogs_error("OpenAPI_additional_access_info_parseFromJSON() failed [access_type]");
+        log_error("OpenAPI_additional_access_info_parseFromJSON() failed [access_type]");
         goto end;
     }
     access_typeVariable = OpenAPI_access_type_FromString(access_type->valuestring);
@@ -81,7 +81,7 @@ OpenAPI_additional_access_info_t *OpenAPI_additional_access_info_parseFromJSON(c
     rat_type = cJSON_GetObjectItemCaseSensitive(additional_access_infoJSON, "ratType");
     if (rat_type) {
     if (!cJSON_IsString(rat_type)) {
-        ogs_error("OpenAPI_additional_access_info_parseFromJSON() failed [rat_type]");
+        log_error("OpenAPI_additional_access_info_parseFromJSON() failed [rat_type]");
         goto end;
     }
     rat_typeVariable = OpenAPI_rat_type_FromString(rat_type->valuestring);
@@ -102,10 +102,10 @@ OpenAPI_additional_access_info_t *OpenAPI_additional_access_info_copy(OpenAPI_ad
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_additional_access_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_additional_access_info_convertToJSON() failed");
+        log_error("OpenAPI_additional_access_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_additional_access_info_t *OpenAPI_additional_access_info_copy(OpenAPI_ad
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -11,7 +11,7 @@ OpenAPI_nsacf_info_t *OpenAPI_nsacf_info_create(
 )
 {
     OpenAPI_nsacf_info_t *nsacf_info_local_var = ogs_malloc(sizeof(OpenAPI_nsacf_info_t));
-    ogs_assert(nsacf_info_local_var);
+    log_assert(nsacf_info_local_var);
 
     nsacf_info_local_var->nsacf_capability = nsacf_capability;
     nsacf_info_local_var->tai_list = tai_list;
@@ -54,36 +54,36 @@ cJSON *OpenAPI_nsacf_info_convertToJSON(OpenAPI_nsacf_info_t *nsacf_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (nsacf_info == NULL) {
-        ogs_error("OpenAPI_nsacf_info_convertToJSON() failed [NsacfInfo]");
+        log_error("OpenAPI_nsacf_info_convertToJSON() failed [NsacfInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!nsacf_info->nsacf_capability) {
-        ogs_error("OpenAPI_nsacf_info_convertToJSON() failed [nsacf_capability]");
+        log_error("OpenAPI_nsacf_info_convertToJSON() failed [nsacf_capability]");
         return NULL;
     }
     cJSON *nsacf_capability_local_JSON = OpenAPI_nsacf_capability_convertToJSON(nsacf_info->nsacf_capability);
     if (nsacf_capability_local_JSON == NULL) {
-        ogs_error("OpenAPI_nsacf_info_convertToJSON() failed [nsacf_capability]");
+        log_error("OpenAPI_nsacf_info_convertToJSON() failed [nsacf_capability]");
         goto end;
     }
     cJSON_AddItemToObject(item, "nsacfCapability", nsacf_capability_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_nsacf_info_convertToJSON() failed [nsacf_capability]");
+        log_error("OpenAPI_nsacf_info_convertToJSON() failed [nsacf_capability]");
         goto end;
     }
 
     if (nsacf_info->tai_list) {
     cJSON *tai_listList = cJSON_AddArrayToObject(item, "taiList");
     if (tai_listList == NULL) {
-        ogs_error("OpenAPI_nsacf_info_convertToJSON() failed [tai_list]");
+        log_error("OpenAPI_nsacf_info_convertToJSON() failed [tai_list]");
         goto end;
     }
     OpenAPI_list_for_each(nsacf_info->tai_list, node) {
         cJSON *itemLocal = OpenAPI_tai_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nsacf_info_convertToJSON() failed [tai_list]");
+            log_error("OpenAPI_nsacf_info_convertToJSON() failed [tai_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_listList, itemLocal);
@@ -93,13 +93,13 @@ cJSON *OpenAPI_nsacf_info_convertToJSON(OpenAPI_nsacf_info_t *nsacf_info)
     if (nsacf_info->tai_range_list) {
     cJSON *tai_range_listList = cJSON_AddArrayToObject(item, "taiRangeList");
     if (tai_range_listList == NULL) {
-        ogs_error("OpenAPI_nsacf_info_convertToJSON() failed [tai_range_list]");
+        log_error("OpenAPI_nsacf_info_convertToJSON() failed [tai_range_list]");
         goto end;
     }
     OpenAPI_list_for_each(nsacf_info->tai_range_list, node) {
         cJSON *itemLocal = OpenAPI_tai_range_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_nsacf_info_convertToJSON() failed [tai_range_list]");
+            log_error("OpenAPI_nsacf_info_convertToJSON() failed [tai_range_list]");
             goto end;
         }
         cJSON_AddItemToArray(tai_range_listList, itemLocal);
@@ -122,12 +122,12 @@ OpenAPI_nsacf_info_t *OpenAPI_nsacf_info_parseFromJSON(cJSON *nsacf_infoJSON)
     OpenAPI_list_t *tai_range_listList = NULL;
     nsacf_capability = cJSON_GetObjectItemCaseSensitive(nsacf_infoJSON, "nsacfCapability");
     if (!nsacf_capability) {
-        ogs_error("OpenAPI_nsacf_info_parseFromJSON() failed [nsacf_capability]");
+        log_error("OpenAPI_nsacf_info_parseFromJSON() failed [nsacf_capability]");
         goto end;
     }
     nsacf_capability_local_nonprim = OpenAPI_nsacf_capability_parseFromJSON(nsacf_capability);
     if (!nsacf_capability_local_nonprim) {
-        ogs_error("OpenAPI_nsacf_capability_parseFromJSON failed [nsacf_capability]");
+        log_error("OpenAPI_nsacf_capability_parseFromJSON failed [nsacf_capability]");
         goto end;
     }
 
@@ -135,7 +135,7 @@ OpenAPI_nsacf_info_t *OpenAPI_nsacf_info_parseFromJSON(cJSON *nsacf_infoJSON)
     if (tai_list) {
         cJSON *tai_list_local = NULL;
         if (!cJSON_IsArray(tai_list)) {
-            ogs_error("OpenAPI_nsacf_info_parseFromJSON() failed [tai_list]");
+            log_error("OpenAPI_nsacf_info_parseFromJSON() failed [tai_list]");
             goto end;
         }
 
@@ -143,12 +143,12 @@ OpenAPI_nsacf_info_t *OpenAPI_nsacf_info_parseFromJSON(cJSON *nsacf_infoJSON)
 
         cJSON_ArrayForEach(tai_list_local, tai_list) {
             if (!cJSON_IsObject(tai_list_local)) {
-                ogs_error("OpenAPI_nsacf_info_parseFromJSON() failed [tai_list]");
+                log_error("OpenAPI_nsacf_info_parseFromJSON() failed [tai_list]");
                 goto end;
             }
             OpenAPI_tai_t *tai_listItem = OpenAPI_tai_parseFromJSON(tai_list_local);
             if (!tai_listItem) {
-                ogs_error("No tai_listItem");
+                log_error("No tai_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_listList, tai_listItem);
@@ -159,7 +159,7 @@ OpenAPI_nsacf_info_t *OpenAPI_nsacf_info_parseFromJSON(cJSON *nsacf_infoJSON)
     if (tai_range_list) {
         cJSON *tai_range_list_local = NULL;
         if (!cJSON_IsArray(tai_range_list)) {
-            ogs_error("OpenAPI_nsacf_info_parseFromJSON() failed [tai_range_list]");
+            log_error("OpenAPI_nsacf_info_parseFromJSON() failed [tai_range_list]");
             goto end;
         }
 
@@ -167,12 +167,12 @@ OpenAPI_nsacf_info_t *OpenAPI_nsacf_info_parseFromJSON(cJSON *nsacf_infoJSON)
 
         cJSON_ArrayForEach(tai_range_list_local, tai_range_list) {
             if (!cJSON_IsObject(tai_range_list_local)) {
-                ogs_error("OpenAPI_nsacf_info_parseFromJSON() failed [tai_range_list]");
+                log_error("OpenAPI_nsacf_info_parseFromJSON() failed [tai_range_list]");
                 goto end;
             }
             OpenAPI_tai_range_t *tai_range_listItem = OpenAPI_tai_range_parseFromJSON(tai_range_list_local);
             if (!tai_range_listItem) {
-                ogs_error("No tai_range_listItem");
+                log_error("No tai_range_listItem");
                 goto end;
             }
             OpenAPI_list_add(tai_range_listList, tai_range_listItem);
@@ -213,10 +213,10 @@ OpenAPI_nsacf_info_t *OpenAPI_nsacf_info_copy(OpenAPI_nsacf_info_t *dst, OpenAPI
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_nsacf_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_nsacf_info_convertToJSON() failed");
+        log_error("OpenAPI_nsacf_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -224,14 +224,14 @@ OpenAPI_nsacf_info_t *OpenAPI_nsacf_info_copy(OpenAPI_nsacf_info_t *dst, OpenAPI
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

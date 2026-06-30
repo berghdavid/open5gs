@@ -10,7 +10,7 @@ OpenAPI_ip_sm_gw_info_t *OpenAPI_ip_sm_gw_info_create(
 )
 {
     OpenAPI_ip_sm_gw_info_t *ip_sm_gw_info_local_var = ogs_malloc(sizeof(OpenAPI_ip_sm_gw_info_t));
-    ogs_assert(ip_sm_gw_info_local_var);
+    log_assert(ip_sm_gw_info_local_var);
 
     ip_sm_gw_info_local_var->ip_sm_gw_registration = ip_sm_gw_registration;
     ip_sm_gw_info_local_var->ip_sm_gw_guidance = ip_sm_gw_guidance;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_ip_sm_gw_info_convertToJSON(OpenAPI_ip_sm_gw_info_t *ip_sm_gw_inf
     OpenAPI_lnode_t *node = NULL;
 
     if (ip_sm_gw_info == NULL) {
-        ogs_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [IpSmGwInfo]");
+        log_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [IpSmGwInfo]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_ip_sm_gw_info_convertToJSON(OpenAPI_ip_sm_gw_info_t *ip_sm_gw_inf
     if (ip_sm_gw_info->ip_sm_gw_registration) {
     cJSON *ip_sm_gw_registration_local_JSON = OpenAPI_ip_sm_gw_registration_convertToJSON(ip_sm_gw_info->ip_sm_gw_registration);
     if (ip_sm_gw_registration_local_JSON == NULL) {
-        ogs_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [ip_sm_gw_registration]");
+        log_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [ip_sm_gw_registration]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ipSmGwRegistration", ip_sm_gw_registration_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [ip_sm_gw_registration]");
+        log_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [ip_sm_gw_registration]");
         goto end;
     }
     }
@@ -63,12 +63,12 @@ cJSON *OpenAPI_ip_sm_gw_info_convertToJSON(OpenAPI_ip_sm_gw_info_t *ip_sm_gw_inf
     if (ip_sm_gw_info->ip_sm_gw_guidance) {
     cJSON *ip_sm_gw_guidance_local_JSON = OpenAPI_ip_sm_gw_guidance_convertToJSON(ip_sm_gw_info->ip_sm_gw_guidance);
     if (ip_sm_gw_guidance_local_JSON == NULL) {
-        ogs_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [ip_sm_gw_guidance]");
+        log_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [ip_sm_gw_guidance]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ipSmGwGuidance", ip_sm_gw_guidance_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [ip_sm_gw_guidance]");
+        log_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed [ip_sm_gw_guidance]");
         goto end;
     }
     }
@@ -89,7 +89,7 @@ OpenAPI_ip_sm_gw_info_t *OpenAPI_ip_sm_gw_info_parseFromJSON(cJSON *ip_sm_gw_inf
     if (ip_sm_gw_registration) {
     ip_sm_gw_registration_local_nonprim = OpenAPI_ip_sm_gw_registration_parseFromJSON(ip_sm_gw_registration);
     if (!ip_sm_gw_registration_local_nonprim) {
-        ogs_error("OpenAPI_ip_sm_gw_registration_parseFromJSON failed [ip_sm_gw_registration]");
+        log_error("OpenAPI_ip_sm_gw_registration_parseFromJSON failed [ip_sm_gw_registration]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_ip_sm_gw_info_t *OpenAPI_ip_sm_gw_info_parseFromJSON(cJSON *ip_sm_gw_inf
     if (ip_sm_gw_guidance) {
     ip_sm_gw_guidance_local_nonprim = OpenAPI_ip_sm_gw_guidance_parseFromJSON(ip_sm_gw_guidance);
     if (!ip_sm_gw_guidance_local_nonprim) {
-        ogs_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON failed [ip_sm_gw_guidance]");
+        log_error("OpenAPI_ip_sm_gw_guidance_parseFromJSON failed [ip_sm_gw_guidance]");
         goto end;
     }
     }
@@ -126,10 +126,10 @@ OpenAPI_ip_sm_gw_info_t *OpenAPI_ip_sm_gw_info_copy(OpenAPI_ip_sm_gw_info_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ip_sm_gw_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed");
+        log_error("OpenAPI_ip_sm_gw_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -137,14 +137,14 @@ OpenAPI_ip_sm_gw_info_t *OpenAPI_ip_sm_gw_info_copy(OpenAPI_ip_sm_gw_info_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

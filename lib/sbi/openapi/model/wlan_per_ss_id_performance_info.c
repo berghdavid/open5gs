@@ -10,7 +10,7 @@ OpenAPI_wlan_per_ss_id_performance_info_t *OpenAPI_wlan_per_ss_id_performance_in
 )
 {
     OpenAPI_wlan_per_ss_id_performance_info_t *wlan_per_ss_id_performance_info_local_var = ogs_malloc(sizeof(OpenAPI_wlan_per_ss_id_performance_info_t));
-    ogs_assert(wlan_per_ss_id_performance_info_local_var);
+    log_assert(wlan_per_ss_id_performance_info_local_var);
 
     wlan_per_ss_id_performance_info_local_var->ss_id = ss_id;
     wlan_per_ss_id_performance_info_local_var->wlan_per_ts_infos = wlan_per_ts_infos;
@@ -45,33 +45,33 @@ cJSON *OpenAPI_wlan_per_ss_id_performance_info_convertToJSON(OpenAPI_wlan_per_ss
     OpenAPI_lnode_t *node = NULL;
 
     if (wlan_per_ss_id_performance_info == NULL) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [WlanPerSsIdPerformanceInfo]");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [WlanPerSsIdPerformanceInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!wlan_per_ss_id_performance_info->ss_id) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [ss_id]");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [ss_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "ssId", wlan_per_ss_id_performance_info->ss_id) == NULL) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [ss_id]");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [ss_id]");
         goto end;
     }
 
     if (!wlan_per_ss_id_performance_info->wlan_per_ts_infos) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [wlan_per_ts_infos]");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [wlan_per_ts_infos]");
         return NULL;
     }
     cJSON *wlan_per_ts_infosList = cJSON_AddArrayToObject(item, "wlanPerTsInfos");
     if (wlan_per_ts_infosList == NULL) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [wlan_per_ts_infos]");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [wlan_per_ts_infos]");
         goto end;
     }
     OpenAPI_list_for_each(wlan_per_ss_id_performance_info->wlan_per_ts_infos, node) {
         cJSON *itemLocal = OpenAPI_wlan_per_ts_performance_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [wlan_per_ts_infos]");
+            log_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed [wlan_per_ts_infos]");
             goto end;
         }
         cJSON_AddItemToArray(wlan_per_ts_infosList, itemLocal);
@@ -90,22 +90,22 @@ OpenAPI_wlan_per_ss_id_performance_info_t *OpenAPI_wlan_per_ss_id_performance_in
     OpenAPI_list_t *wlan_per_ts_infosList = NULL;
     ss_id = cJSON_GetObjectItemCaseSensitive(wlan_per_ss_id_performance_infoJSON, "ssId");
     if (!ss_id) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [ss_id]");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [ss_id]");
         goto end;
     }
     if (!cJSON_IsString(ss_id)) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [ss_id]");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [ss_id]");
         goto end;
     }
 
     wlan_per_ts_infos = cJSON_GetObjectItemCaseSensitive(wlan_per_ss_id_performance_infoJSON, "wlanPerTsInfos");
     if (!wlan_per_ts_infos) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [wlan_per_ts_infos]");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [wlan_per_ts_infos]");
         goto end;
     }
         cJSON *wlan_per_ts_infos_local = NULL;
         if (!cJSON_IsArray(wlan_per_ts_infos)) {
-            ogs_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [wlan_per_ts_infos]");
+            log_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [wlan_per_ts_infos]");
             goto end;
         }
 
@@ -113,12 +113,12 @@ OpenAPI_wlan_per_ss_id_performance_info_t *OpenAPI_wlan_per_ss_id_performance_in
 
         cJSON_ArrayForEach(wlan_per_ts_infos_local, wlan_per_ts_infos) {
             if (!cJSON_IsObject(wlan_per_ts_infos_local)) {
-                ogs_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [wlan_per_ts_infos]");
+                log_error("OpenAPI_wlan_per_ss_id_performance_info_parseFromJSON() failed [wlan_per_ts_infos]");
                 goto end;
             }
             OpenAPI_wlan_per_ts_performance_info_t *wlan_per_ts_infosItem = OpenAPI_wlan_per_ts_performance_info_parseFromJSON(wlan_per_ts_infos_local);
             if (!wlan_per_ts_infosItem) {
-                ogs_error("No wlan_per_ts_infosItem");
+                log_error("No wlan_per_ts_infosItem");
                 goto end;
             }
             OpenAPI_list_add(wlan_per_ts_infosList, wlan_per_ts_infosItem);
@@ -146,10 +146,10 @@ OpenAPI_wlan_per_ss_id_performance_info_t *OpenAPI_wlan_per_ss_id_performance_in
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_wlan_per_ss_id_performance_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed");
+        log_error("OpenAPI_wlan_per_ss_id_performance_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -157,14 +157,14 @@ OpenAPI_wlan_per_ss_id_performance_info_t *OpenAPI_wlan_per_ss_id_performance_in
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

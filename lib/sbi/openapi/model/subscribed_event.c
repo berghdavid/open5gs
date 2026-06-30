@@ -8,7 +8,7 @@ OpenAPI_subscribed_event_t *OpenAPI_subscribed_event_create(
 )
 {
     OpenAPI_subscribed_event_t *subscribed_event_local_var = ogs_malloc(sizeof(OpenAPI_subscribed_event_t));
-    ogs_assert(subscribed_event_local_var);
+    log_assert(subscribed_event_local_var);
 
 
     return subscribed_event_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_subscribed_event_convertToJSON(OpenAPI_subscribed_event_t *subscr
     OpenAPI_lnode_t *node = NULL;
 
     if (subscribed_event == NULL) {
-        ogs_error("OpenAPI_subscribed_event_convertToJSON() failed [SubscribedEvent]");
+        log_error("OpenAPI_subscribed_event_convertToJSON() failed [SubscribedEvent]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_subscribed_event_t *OpenAPI_subscribed_event_copy(OpenAPI_subscribed_eve
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_subscribed_event_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_subscribed_event_convertToJSON() failed");
+        log_error("OpenAPI_subscribed_event_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_subscribed_event_t *OpenAPI_subscribed_event_copy(OpenAPI_subscribed_eve
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

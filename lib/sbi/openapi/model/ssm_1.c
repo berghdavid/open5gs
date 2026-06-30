@@ -10,7 +10,7 @@ OpenAPI_ssm_1_t *OpenAPI_ssm_1_create(
 )
 {
     OpenAPI_ssm_1_t *ssm_1_local_var = ogs_malloc(sizeof(OpenAPI_ssm_1_t));
-    ogs_assert(ssm_1_local_var);
+    log_assert(ssm_1_local_var);
 
     ssm_1_local_var->source_ip_addr = source_ip_addr;
     ssm_1_local_var->dest_ip_addr = dest_ip_addr;
@@ -42,38 +42,38 @@ cJSON *OpenAPI_ssm_1_convertToJSON(OpenAPI_ssm_1_t *ssm_1)
     OpenAPI_lnode_t *node = NULL;
 
     if (ssm_1 == NULL) {
-        ogs_error("OpenAPI_ssm_1_convertToJSON() failed [Ssm_1]");
+        log_error("OpenAPI_ssm_1_convertToJSON() failed [Ssm_1]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!ssm_1->source_ip_addr) {
-        ogs_error("OpenAPI_ssm_1_convertToJSON() failed [source_ip_addr]");
+        log_error("OpenAPI_ssm_1_convertToJSON() failed [source_ip_addr]");
         return NULL;
     }
     cJSON *source_ip_addr_local_JSON = OpenAPI_ip_addr_1_convertToJSON(ssm_1->source_ip_addr);
     if (source_ip_addr_local_JSON == NULL) {
-        ogs_error("OpenAPI_ssm_1_convertToJSON() failed [source_ip_addr]");
+        log_error("OpenAPI_ssm_1_convertToJSON() failed [source_ip_addr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "sourceIpAddr", source_ip_addr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ssm_1_convertToJSON() failed [source_ip_addr]");
+        log_error("OpenAPI_ssm_1_convertToJSON() failed [source_ip_addr]");
         goto end;
     }
 
     if (!ssm_1->dest_ip_addr) {
-        ogs_error("OpenAPI_ssm_1_convertToJSON() failed [dest_ip_addr]");
+        log_error("OpenAPI_ssm_1_convertToJSON() failed [dest_ip_addr]");
         return NULL;
     }
     cJSON *dest_ip_addr_local_JSON = OpenAPI_ip_addr_1_convertToJSON(ssm_1->dest_ip_addr);
     if (dest_ip_addr_local_JSON == NULL) {
-        ogs_error("OpenAPI_ssm_1_convertToJSON() failed [dest_ip_addr]");
+        log_error("OpenAPI_ssm_1_convertToJSON() failed [dest_ip_addr]");
         goto end;
     }
     cJSON_AddItemToObject(item, "destIpAddr", dest_ip_addr_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_ssm_1_convertToJSON() failed [dest_ip_addr]");
+        log_error("OpenAPI_ssm_1_convertToJSON() failed [dest_ip_addr]");
         goto end;
     }
 
@@ -91,23 +91,23 @@ OpenAPI_ssm_1_t *OpenAPI_ssm_1_parseFromJSON(cJSON *ssm_1JSON)
     OpenAPI_ip_addr_1_t *dest_ip_addr_local_nonprim = NULL;
     source_ip_addr = cJSON_GetObjectItemCaseSensitive(ssm_1JSON, "sourceIpAddr");
     if (!source_ip_addr) {
-        ogs_error("OpenAPI_ssm_1_parseFromJSON() failed [source_ip_addr]");
+        log_error("OpenAPI_ssm_1_parseFromJSON() failed [source_ip_addr]");
         goto end;
     }
     source_ip_addr_local_nonprim = OpenAPI_ip_addr_1_parseFromJSON(source_ip_addr);
     if (!source_ip_addr_local_nonprim) {
-        ogs_error("OpenAPI_ip_addr_1_parseFromJSON failed [source_ip_addr]");
+        log_error("OpenAPI_ip_addr_1_parseFromJSON failed [source_ip_addr]");
         goto end;
     }
 
     dest_ip_addr = cJSON_GetObjectItemCaseSensitive(ssm_1JSON, "destIpAddr");
     if (!dest_ip_addr) {
-        ogs_error("OpenAPI_ssm_1_parseFromJSON() failed [dest_ip_addr]");
+        log_error("OpenAPI_ssm_1_parseFromJSON() failed [dest_ip_addr]");
         goto end;
     }
     dest_ip_addr_local_nonprim = OpenAPI_ip_addr_1_parseFromJSON(dest_ip_addr);
     if (!dest_ip_addr_local_nonprim) {
-        ogs_error("OpenAPI_ip_addr_1_parseFromJSON failed [dest_ip_addr]");
+        log_error("OpenAPI_ip_addr_1_parseFromJSON failed [dest_ip_addr]");
         goto end;
     }
 
@@ -134,10 +134,10 @@ OpenAPI_ssm_1_t *OpenAPI_ssm_1_copy(OpenAPI_ssm_1_t *dst, OpenAPI_ssm_1_t *src)
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ssm_1_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ssm_1_convertToJSON() failed");
+        log_error("OpenAPI_ssm_1_convertToJSON() failed");
         return NULL;
     }
 
@@ -145,14 +145,14 @@ OpenAPI_ssm_1_t *OpenAPI_ssm_1_copy(OpenAPI_ssm_1_t *dst, OpenAPI_ssm_1_t *src)
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

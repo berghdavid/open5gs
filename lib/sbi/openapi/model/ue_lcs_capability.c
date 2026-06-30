@@ -12,7 +12,7 @@ OpenAPI_ue_lcs_capability_t *OpenAPI_ue_lcs_capability_create(
 )
 {
     OpenAPI_ue_lcs_capability_t *ue_lcs_capability_local_var = ogs_malloc(sizeof(OpenAPI_ue_lcs_capability_t));
-    ogs_assert(ue_lcs_capability_local_var);
+    log_assert(ue_lcs_capability_local_var);
 
     ue_lcs_capability_local_var->is_lpp_support = is_lpp_support;
     ue_lcs_capability_local_var->lpp_support = lpp_support;
@@ -38,21 +38,21 @@ cJSON *OpenAPI_ue_lcs_capability_convertToJSON(OpenAPI_ue_lcs_capability_t *ue_l
     OpenAPI_lnode_t *node = NULL;
 
     if (ue_lcs_capability == NULL) {
-        ogs_error("OpenAPI_ue_lcs_capability_convertToJSON() failed [UeLcsCapability]");
+        log_error("OpenAPI_ue_lcs_capability_convertToJSON() failed [UeLcsCapability]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (ue_lcs_capability->is_lpp_support) {
     if (cJSON_AddBoolToObject(item, "lppSupport", ue_lcs_capability->lpp_support) == NULL) {
-        ogs_error("OpenAPI_ue_lcs_capability_convertToJSON() failed [lpp_support]");
+        log_error("OpenAPI_ue_lcs_capability_convertToJSON() failed [lpp_support]");
         goto end;
     }
     }
 
     if (ue_lcs_capability->is_ciot_optimisation) {
     if (cJSON_AddBoolToObject(item, "ciotOptimisation", ue_lcs_capability->ciot_optimisation) == NULL) {
-        ogs_error("OpenAPI_ue_lcs_capability_convertToJSON() failed [ciot_optimisation]");
+        log_error("OpenAPI_ue_lcs_capability_convertToJSON() failed [ciot_optimisation]");
         goto end;
     }
     }
@@ -70,7 +70,7 @@ OpenAPI_ue_lcs_capability_t *OpenAPI_ue_lcs_capability_parseFromJSON(cJSON *ue_l
     lpp_support = cJSON_GetObjectItemCaseSensitive(ue_lcs_capabilityJSON, "lppSupport");
     if (lpp_support) {
     if (!cJSON_IsBool(lpp_support)) {
-        ogs_error("OpenAPI_ue_lcs_capability_parseFromJSON() failed [lpp_support]");
+        log_error("OpenAPI_ue_lcs_capability_parseFromJSON() failed [lpp_support]");
         goto end;
     }
     }
@@ -78,7 +78,7 @@ OpenAPI_ue_lcs_capability_t *OpenAPI_ue_lcs_capability_parseFromJSON(cJSON *ue_l
     ciot_optimisation = cJSON_GetObjectItemCaseSensitive(ue_lcs_capabilityJSON, "ciotOptimisation");
     if (ciot_optimisation) {
     if (!cJSON_IsBool(ciot_optimisation)) {
-        ogs_error("OpenAPI_ue_lcs_capability_parseFromJSON() failed [ciot_optimisation]");
+        log_error("OpenAPI_ue_lcs_capability_parseFromJSON() failed [ciot_optimisation]");
         goto end;
     }
     }
@@ -100,10 +100,10 @@ OpenAPI_ue_lcs_capability_t *OpenAPI_ue_lcs_capability_copy(OpenAPI_ue_lcs_capab
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ue_lcs_capability_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ue_lcs_capability_convertToJSON() failed");
+        log_error("OpenAPI_ue_lcs_capability_convertToJSON() failed");
         return NULL;
     }
 
@@ -111,14 +111,14 @@ OpenAPI_ue_lcs_capability_t *OpenAPI_ue_lcs_capability_copy(OpenAPI_ue_lcs_capab
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

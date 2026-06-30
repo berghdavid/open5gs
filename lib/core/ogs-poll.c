@@ -36,7 +36,7 @@ ogs_pollset_t *ogs_pollset_create(unsigned int capacity)
 {
     ogs_pollset_t *pollset = ogs_calloc(1, sizeof *pollset);
     if (!pollset) {
-        ogs_error("ogs_calloc() failed");
+        log_error("ogs_calloc() failed");
         return NULL;
     }
 
@@ -62,7 +62,7 @@ ogs_pollset_t *ogs_pollset_create(unsigned int capacity)
 
 void ogs_pollset_destroy(ogs_pollset_t *pollset)
 {
-    ogs_assert(pollset);
+    log_assert(pollset);
 
     ogs_pollset_actions.cleanup(pollset);
 
@@ -76,18 +76,18 @@ ogs_poll_t *ogs_pollset_add(ogs_pollset_t *pollset, short when,
     ogs_poll_t *poll = NULL;
     int rc;
 
-    ogs_assert(pollset);
+    log_assert(pollset);
 
-    ogs_assert(fd != INVALID_SOCKET);
-    ogs_assert(handler);
+    log_assert(fd != INVALID_SOCKET);
+    log_assert(handler);
 
     ogs_pool_alloc(&pollset->pool, &poll);
-    ogs_assert(poll);
+    log_assert(poll);
 
     rc = ogs_nonblocking(fd);
-    ogs_assert(rc == OGS_OK);
+    log_assert(rc == OGS_OK);
     rc = ogs_closeonexec(fd);
-    ogs_assert(rc == OGS_OK);
+    log_assert(rc == OGS_OK);
 
     poll->when = when;
     poll->fd = fd;
@@ -102,7 +102,7 @@ ogs_poll_t *ogs_pollset_add(ogs_pollset_t *pollset, short when,
 
     rc = ogs_pollset_actions.add(poll);
     if (rc != OGS_OK) {
-        ogs_error("cannot add poll");
+        log_error("cannot add poll");
         ogs_pool_free(&pollset->pool, poll);
         return NULL;
     }
@@ -115,13 +115,13 @@ void ogs_pollset_remove(ogs_poll_t *poll)
     int rc;
     ogs_pollset_t *pollset = NULL;
 
-    ogs_assert(poll);
+    log_assert(poll);
     pollset = poll->pollset;
-    ogs_assert(pollset);
+    log_assert(pollset);
 
     rc = ogs_pollset_actions.remove(poll);
     if (rc != OGS_OK) {
-        ogs_error("cannot delete poll");
+        log_error("cannot delete poll");
     }
 
     ogs_pool_free(&pollset->pool, poll);

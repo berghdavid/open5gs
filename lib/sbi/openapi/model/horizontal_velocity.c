@@ -10,7 +10,7 @@ OpenAPI_horizontal_velocity_t *OpenAPI_horizontal_velocity_create(
 )
 {
     OpenAPI_horizontal_velocity_t *horizontal_velocity_local_var = ogs_malloc(sizeof(OpenAPI_horizontal_velocity_t));
-    ogs_assert(horizontal_velocity_local_var);
+    log_assert(horizontal_velocity_local_var);
 
     horizontal_velocity_local_var->h_speed = h_speed;
     horizontal_velocity_local_var->bearing = bearing;
@@ -34,18 +34,18 @@ cJSON *OpenAPI_horizontal_velocity_convertToJSON(OpenAPI_horizontal_velocity_t *
     OpenAPI_lnode_t *node = NULL;
 
     if (horizontal_velocity == NULL) {
-        ogs_error("OpenAPI_horizontal_velocity_convertToJSON() failed [HorizontalVelocity]");
+        log_error("OpenAPI_horizontal_velocity_convertToJSON() failed [HorizontalVelocity]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "hSpeed", horizontal_velocity->h_speed) == NULL) {
-        ogs_error("OpenAPI_horizontal_velocity_convertToJSON() failed [h_speed]");
+        log_error("OpenAPI_horizontal_velocity_convertToJSON() failed [h_speed]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "bearing", horizontal_velocity->bearing) == NULL) {
-        ogs_error("OpenAPI_horizontal_velocity_convertToJSON() failed [bearing]");
+        log_error("OpenAPI_horizontal_velocity_convertToJSON() failed [bearing]");
         goto end;
     }
 
@@ -61,21 +61,21 @@ OpenAPI_horizontal_velocity_t *OpenAPI_horizontal_velocity_parseFromJSON(cJSON *
     cJSON *bearing = NULL;
     h_speed = cJSON_GetObjectItemCaseSensitive(horizontal_velocityJSON, "hSpeed");
     if (!h_speed) {
-        ogs_error("OpenAPI_horizontal_velocity_parseFromJSON() failed [h_speed]");
+        log_error("OpenAPI_horizontal_velocity_parseFromJSON() failed [h_speed]");
         goto end;
     }
     if (!cJSON_IsNumber(h_speed)) {
-        ogs_error("OpenAPI_horizontal_velocity_parseFromJSON() failed [h_speed]");
+        log_error("OpenAPI_horizontal_velocity_parseFromJSON() failed [h_speed]");
         goto end;
     }
 
     bearing = cJSON_GetObjectItemCaseSensitive(horizontal_velocityJSON, "bearing");
     if (!bearing) {
-        ogs_error("OpenAPI_horizontal_velocity_parseFromJSON() failed [bearing]");
+        log_error("OpenAPI_horizontal_velocity_parseFromJSON() failed [bearing]");
         goto end;
     }
     if (!cJSON_IsNumber(bearing)) {
-        ogs_error("OpenAPI_horizontal_velocity_parseFromJSON() failed [bearing]");
+        log_error("OpenAPI_horizontal_velocity_parseFromJSON() failed [bearing]");
         goto end;
     }
 
@@ -96,10 +96,10 @@ OpenAPI_horizontal_velocity_t *OpenAPI_horizontal_velocity_copy(OpenAPI_horizont
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_horizontal_velocity_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_horizontal_velocity_convertToJSON() failed");
+        log_error("OpenAPI_horizontal_velocity_convertToJSON() failed");
         return NULL;
     }
 
@@ -107,14 +107,14 @@ OpenAPI_horizontal_velocity_t *OpenAPI_horizontal_velocity_copy(OpenAPI_horizont
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

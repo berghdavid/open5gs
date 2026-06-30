@@ -12,7 +12,7 @@ OpenAPI_number_average_t *OpenAPI_number_average_create(
 )
 {
     OpenAPI_number_average_t *number_average_local_var = ogs_malloc(sizeof(OpenAPI_number_average_t));
-    ogs_assert(number_average_local_var);
+    log_assert(number_average_local_var);
 
     number_average_local_var->number = number;
     number_average_local_var->variance = variance;
@@ -38,24 +38,24 @@ cJSON *OpenAPI_number_average_convertToJSON(OpenAPI_number_average_t *number_ave
     OpenAPI_lnode_t *node = NULL;
 
     if (number_average == NULL) {
-        ogs_error("OpenAPI_number_average_convertToJSON() failed [NumberAverage]");
+        log_error("OpenAPI_number_average_convertToJSON() failed [NumberAverage]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (cJSON_AddNumberToObject(item, "number", number_average->number) == NULL) {
-        ogs_error("OpenAPI_number_average_convertToJSON() failed [number]");
+        log_error("OpenAPI_number_average_convertToJSON() failed [number]");
         goto end;
     }
 
     if (cJSON_AddNumberToObject(item, "variance", number_average->variance) == NULL) {
-        ogs_error("OpenAPI_number_average_convertToJSON() failed [variance]");
+        log_error("OpenAPI_number_average_convertToJSON() failed [variance]");
         goto end;
     }
 
     if (number_average->is_skewness) {
     if (cJSON_AddNumberToObject(item, "skewness", number_average->skewness) == NULL) {
-        ogs_error("OpenAPI_number_average_convertToJSON() failed [skewness]");
+        log_error("OpenAPI_number_average_convertToJSON() failed [skewness]");
         goto end;
     }
     }
@@ -73,28 +73,28 @@ OpenAPI_number_average_t *OpenAPI_number_average_parseFromJSON(cJSON *number_ave
     cJSON *skewness = NULL;
     number = cJSON_GetObjectItemCaseSensitive(number_averageJSON, "number");
     if (!number) {
-        ogs_error("OpenAPI_number_average_parseFromJSON() failed [number]");
+        log_error("OpenAPI_number_average_parseFromJSON() failed [number]");
         goto end;
     }
     if (!cJSON_IsNumber(number)) {
-        ogs_error("OpenAPI_number_average_parseFromJSON() failed [number]");
+        log_error("OpenAPI_number_average_parseFromJSON() failed [number]");
         goto end;
     }
 
     variance = cJSON_GetObjectItemCaseSensitive(number_averageJSON, "variance");
     if (!variance) {
-        ogs_error("OpenAPI_number_average_parseFromJSON() failed [variance]");
+        log_error("OpenAPI_number_average_parseFromJSON() failed [variance]");
         goto end;
     }
     if (!cJSON_IsNumber(variance)) {
-        ogs_error("OpenAPI_number_average_parseFromJSON() failed [variance]");
+        log_error("OpenAPI_number_average_parseFromJSON() failed [variance]");
         goto end;
     }
 
     skewness = cJSON_GetObjectItemCaseSensitive(number_averageJSON, "skewness");
     if (skewness) {
     if (!cJSON_IsNumber(skewness)) {
-        ogs_error("OpenAPI_number_average_parseFromJSON() failed [skewness]");
+        log_error("OpenAPI_number_average_parseFromJSON() failed [skewness]");
         goto end;
     }
     }
@@ -118,10 +118,10 @@ OpenAPI_number_average_t *OpenAPI_number_average_copy(OpenAPI_number_average_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_number_average_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_number_average_convertToJSON() failed");
+        log_error("OpenAPI_number_average_convertToJSON() failed");
         return NULL;
     }
 
@@ -129,14 +129,14 @@ OpenAPI_number_average_t *OpenAPI_number_average_copy(OpenAPI_number_average_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -8,7 +8,7 @@ OpenAPI_gnss_id_t *OpenAPI_gnss_id_create(
 )
 {
     OpenAPI_gnss_id_t *gnss_id_local_var = ogs_malloc(sizeof(OpenAPI_gnss_id_t));
-    ogs_assert(gnss_id_local_var);
+    log_assert(gnss_id_local_var);
 
 
     return gnss_id_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_gnss_id_convertToJSON(OpenAPI_gnss_id_t *gnss_id)
     OpenAPI_lnode_t *node = NULL;
 
     if (gnss_id == NULL) {
-        ogs_error("OpenAPI_gnss_id_convertToJSON() failed [GnssId]");
+        log_error("OpenAPI_gnss_id_convertToJSON() failed [GnssId]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_gnss_id_t *OpenAPI_gnss_id_copy(OpenAPI_gnss_id_t *dst, OpenAPI_gnss_id_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_gnss_id_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_gnss_id_convertToJSON() failed");
+        log_error("OpenAPI_gnss_id_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_gnss_id_t *OpenAPI_gnss_id_copy(OpenAPI_gnss_id_t *dst, OpenAPI_gnss_id_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

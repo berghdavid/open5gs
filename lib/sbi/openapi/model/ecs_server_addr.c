@@ -12,7 +12,7 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_create(
 )
 {
     OpenAPI_ecs_server_addr_t *ecs_server_addr_local_var = ogs_malloc(sizeof(OpenAPI_ecs_server_addr_t));
-    ogs_assert(ecs_server_addr_local_var);
+    log_assert(ecs_server_addr_local_var);
 
     ecs_server_addr_local_var->ecs_fqdn_list = ecs_fqdn_list;
     ecs_server_addr_local_var->ecs_ip_address_list = ecs_ip_address_list;
@@ -63,7 +63,7 @@ cJSON *OpenAPI_ecs_server_addr_convertToJSON(OpenAPI_ecs_server_addr_t *ecs_serv
     OpenAPI_lnode_t *node = NULL;
 
     if (ecs_server_addr == NULL) {
-        ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed [EcsServerAddr]");
+        log_error("OpenAPI_ecs_server_addr_convertToJSON() failed [EcsServerAddr]");
         return NULL;
     }
 
@@ -71,12 +71,12 @@ cJSON *OpenAPI_ecs_server_addr_convertToJSON(OpenAPI_ecs_server_addr_t *ecs_serv
     if (ecs_server_addr->ecs_fqdn_list) {
     cJSON *ecs_fqdn_listList = cJSON_AddArrayToObject(item, "ecsFqdnList");
     if (ecs_fqdn_listList == NULL) {
-        ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_fqdn_list]");
+        log_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_fqdn_list]");
         goto end;
     }
     OpenAPI_list_for_each(ecs_server_addr->ecs_fqdn_list, node) {
         if (cJSON_AddStringToObject(ecs_fqdn_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_fqdn_list]");
+            log_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_fqdn_list]");
             goto end;
         }
     }
@@ -85,13 +85,13 @@ cJSON *OpenAPI_ecs_server_addr_convertToJSON(OpenAPI_ecs_server_addr_t *ecs_serv
     if (ecs_server_addr->ecs_ip_address_list) {
     cJSON *ecs_ip_address_listList = cJSON_AddArrayToObject(item, "ecsIpAddressList");
     if (ecs_ip_address_listList == NULL) {
-        ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_ip_address_list]");
+        log_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_ip_address_list]");
         goto end;
     }
     OpenAPI_list_for_each(ecs_server_addr->ecs_ip_address_list, node) {
         cJSON *itemLocal = OpenAPI_ip_addr_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_ip_address_list]");
+            log_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_ip_address_list]");
             goto end;
         }
         cJSON_AddItemToArray(ecs_ip_address_listList, itemLocal);
@@ -101,12 +101,12 @@ cJSON *OpenAPI_ecs_server_addr_convertToJSON(OpenAPI_ecs_server_addr_t *ecs_serv
     if (ecs_server_addr->ecs_uri_list) {
     cJSON *ecs_uri_listList = cJSON_AddArrayToObject(item, "ecsUriList");
     if (ecs_uri_listList == NULL) {
-        ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_uri_list]");
+        log_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_uri_list]");
         goto end;
     }
     OpenAPI_list_for_each(ecs_server_addr->ecs_uri_list, node) {
         if (cJSON_AddStringToObject(ecs_uri_listList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_uri_list]");
+            log_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_uri_list]");
             goto end;
         }
     }
@@ -114,7 +114,7 @@ cJSON *OpenAPI_ecs_server_addr_convertToJSON(OpenAPI_ecs_server_addr_t *ecs_serv
 
     if (ecs_server_addr->ecs_provider_id) {
     if (cJSON_AddStringToObject(item, "ecsProviderId", ecs_server_addr->ecs_provider_id) == NULL) {
-        ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_provider_id]");
+        log_error("OpenAPI_ecs_server_addr_convertToJSON() failed [ecs_provider_id]");
         goto end;
     }
     }
@@ -138,7 +138,7 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_parseFromJSON(cJSON *ecs_serv
     if (ecs_fqdn_list) {
         cJSON *ecs_fqdn_list_local = NULL;
         if (!cJSON_IsArray(ecs_fqdn_list)) {
-            ogs_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_fqdn_list]");
+            log_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_fqdn_list]");
             goto end;
         }
 
@@ -148,7 +148,7 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_parseFromJSON(cJSON *ecs_serv
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ecs_fqdn_list_local)) {
-                ogs_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_fqdn_list]");
+                log_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_fqdn_list]");
                 goto end;
             }
             OpenAPI_list_add(ecs_fqdn_listList, ogs_strdup(ecs_fqdn_list_local->valuestring));
@@ -159,7 +159,7 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_parseFromJSON(cJSON *ecs_serv
     if (ecs_ip_address_list) {
         cJSON *ecs_ip_address_list_local = NULL;
         if (!cJSON_IsArray(ecs_ip_address_list)) {
-            ogs_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_ip_address_list]");
+            log_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_ip_address_list]");
             goto end;
         }
 
@@ -167,12 +167,12 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_parseFromJSON(cJSON *ecs_serv
 
         cJSON_ArrayForEach(ecs_ip_address_list_local, ecs_ip_address_list) {
             if (!cJSON_IsObject(ecs_ip_address_list_local)) {
-                ogs_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_ip_address_list]");
+                log_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_ip_address_list]");
                 goto end;
             }
             OpenAPI_ip_addr_t *ecs_ip_address_listItem = OpenAPI_ip_addr_parseFromJSON(ecs_ip_address_list_local);
             if (!ecs_ip_address_listItem) {
-                ogs_error("No ecs_ip_address_listItem");
+                log_error("No ecs_ip_address_listItem");
                 goto end;
             }
             OpenAPI_list_add(ecs_ip_address_listList, ecs_ip_address_listItem);
@@ -183,7 +183,7 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_parseFromJSON(cJSON *ecs_serv
     if (ecs_uri_list) {
         cJSON *ecs_uri_list_local = NULL;
         if (!cJSON_IsArray(ecs_uri_list)) {
-            ogs_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_uri_list]");
+            log_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_uri_list]");
             goto end;
         }
 
@@ -193,7 +193,7 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_parseFromJSON(cJSON *ecs_serv
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(ecs_uri_list_local)) {
-                ogs_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_uri_list]");
+                log_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_uri_list]");
                 goto end;
             }
             OpenAPI_list_add(ecs_uri_listList, ogs_strdup(ecs_uri_list_local->valuestring));
@@ -203,7 +203,7 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_parseFromJSON(cJSON *ecs_serv
     ecs_provider_id = cJSON_GetObjectItemCaseSensitive(ecs_server_addrJSON, "ecsProviderId");
     if (ecs_provider_id) {
     if (!cJSON_IsString(ecs_provider_id) && !cJSON_IsNull(ecs_provider_id)) {
-        ogs_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_provider_id]");
+        log_error("OpenAPI_ecs_server_addr_parseFromJSON() failed [ecs_provider_id]");
         goto end;
     }
     }
@@ -246,10 +246,10 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_copy(OpenAPI_ecs_server_addr_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_ecs_server_addr_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_ecs_server_addr_convertToJSON() failed");
+        log_error("OpenAPI_ecs_server_addr_convertToJSON() failed");
         return NULL;
     }
 
@@ -257,14 +257,14 @@ OpenAPI_ecs_server_addr_t *OpenAPI_ecs_server_addr_copy(OpenAPI_ecs_server_addr_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -21,15 +21,15 @@
 
 void ogs_yaml_iter_init(ogs_yaml_iter_t *iter, yaml_document_t *document)
 {
-    ogs_assert(iter);
-    ogs_assert(document);
+    log_assert(iter);
+    log_assert(document);
 
     memset(iter, 0, sizeof(ogs_yaml_iter_t));
 
     iter->document = document;
     iter->node = yaml_document_get_root_node(document);
 
-    ogs_assert(iter->node);
+    log_assert(iter->node);
     if (iter->node->type == YAML_MAPPING_NODE)
         iter->pair = iter->node->data.mapping.pairs.start - 1;
     else if (iter->node->type == YAML_SEQUENCE_NODE)
@@ -38,9 +38,9 @@ void ogs_yaml_iter_init(ogs_yaml_iter_t *iter, yaml_document_t *document)
 
 int ogs_yaml_iter_next(ogs_yaml_iter_t *iter)
 {
-    ogs_assert(iter);
-    ogs_assert(iter->document);
-    ogs_assert(iter->node);
+    log_assert(iter);
+    log_assert(iter->document);
+    log_assert(iter->node);
 
     if (iter->node->type == YAML_MAPPING_NODE)
     {
@@ -67,10 +67,10 @@ int ogs_yaml_iter_next(ogs_yaml_iter_t *iter)
 
 void ogs_yaml_iter_recurse(ogs_yaml_iter_t *parent, ogs_yaml_iter_t *iter)
 {
-    ogs_assert(parent);
-    ogs_assert(parent->document);
-    ogs_assert(parent->node);
-    ogs_assert(iter);
+    log_assert(parent);
+    log_assert(parent->document);
+    log_assert(parent->node);
+    log_assert(iter);
 
     memset(iter, 0, sizeof(ogs_yaml_iter_t));
 
@@ -78,10 +78,10 @@ void ogs_yaml_iter_recurse(ogs_yaml_iter_t *parent, ogs_yaml_iter_t *iter)
 
     if (parent->node->type == YAML_MAPPING_NODE)
     {
-        ogs_assert(parent->pair);
+        log_assert(parent->pair);
         iter->node = yaml_document_get_node(
                 parent->document, parent->pair->value);
-        ogs_assert(iter->node);
+        log_assert(iter->node);
         if (iter->node->type == YAML_MAPPING_NODE)
             iter->pair = iter->node->data.mapping.pairs.start - 1;
         else if (iter->node->type == YAML_SEQUENCE_NODE)
@@ -89,22 +89,22 @@ void ogs_yaml_iter_recurse(ogs_yaml_iter_t *parent, ogs_yaml_iter_t *iter)
     }
     else if (parent->node->type == YAML_SEQUENCE_NODE)
     {
-        ogs_assert(parent->item);
+        log_assert(parent->item);
         iter->node = yaml_document_get_node(parent->document, *parent->item);
-        ogs_assert(iter->node);
+        log_assert(iter->node);
         if (iter->node->type == YAML_MAPPING_NODE)
             iter->pair = iter->node->data.mapping.pairs.start - 1;
         else if (iter->node->type == YAML_SEQUENCE_NODE)
             iter->item = iter->node->data.sequence.items.start - 1;
     }
     else
-        ogs_assert_if_reached();
+        log_assert_if_reached();
 }
 
 int ogs_yaml_iter_type(ogs_yaml_iter_t *iter)
 {
-    ogs_assert(iter);
-    ogs_assert(iter->node);
+    log_assert(iter);
+    log_assert(iter->node);
 
     return iter->node->type;
 }
@@ -114,38 +114,38 @@ const char *ogs_yaml_iter_key(ogs_yaml_iter_t *iter)
 {
     yaml_node_t *node = NULL;
 
-    ogs_assert(iter);
-    ogs_assert(iter->document);
-    ogs_assert(iter->node);
+    log_assert(iter);
+    log_assert(iter->document);
+    log_assert(iter->node);
 
     if (iter->node->type == YAML_MAPPING_NODE)
     {
-        ogs_assert(iter->pair);
+        log_assert(iter->pair);
         node = yaml_document_get_node(iter->document, iter->pair->key);
-        ogs_assert(node);
-        ogs_assert(node->type == YAML_SCALAR_NODE);
+        log_assert(node);
+        log_assert(node->type == YAML_SCALAR_NODE);
 
         return (const char *)node->data.scalar.value;
     }
     else if (iter->node->type == YAML_SEQUENCE_NODE)
     {
-        ogs_assert(iter->item);
+        log_assert(iter->item);
         node = yaml_document_get_node(iter->document, *iter->item);
-        ogs_assert(node);
-        ogs_assert(node->type == YAML_SCALAR_NODE);
+        log_assert(node);
+        log_assert(node->type == YAML_SCALAR_NODE);
 
         return (const char *)node->data.scalar.value;
     }
 
-    ogs_assert_if_reached();
+    log_assert_if_reached();
     return NULL;
 }
 
 const char *ogs_yaml_iter_value(ogs_yaml_iter_t *iter)
 {
-    ogs_assert(iter);
-    ogs_assert(iter->document);
-    ogs_assert(iter->node);
+    log_assert(iter);
+    log_assert(iter->document);
+    log_assert(iter->node);
 
     if (iter->node->type == YAML_SCALAR_NODE)
     {
@@ -155,10 +155,10 @@ const char *ogs_yaml_iter_value(ogs_yaml_iter_t *iter)
     {
         yaml_node_t *node = NULL;
 
-        ogs_assert(iter->pair);
+        log_assert(iter->pair);
         node = yaml_document_get_node(iter->document, iter->pair->value);
-        ogs_assert(node);
-        ogs_assert(node->type == YAML_SCALAR_NODE);
+        log_assert(node);
+        log_assert(node->type == YAML_SCALAR_NODE);
 
         return (const char *)node->data.scalar.value;
     }
@@ -166,43 +166,43 @@ const char *ogs_yaml_iter_value(ogs_yaml_iter_t *iter)
     {
         yaml_node_t *node = NULL;
 
-        ogs_assert(iter->item);
+        log_assert(iter->item);
         node = yaml_document_get_node(iter->document, *iter->item);
-        ogs_assert(node);
-        ogs_assert(node->type == YAML_SCALAR_NODE);
+        log_assert(node);
+        log_assert(node->type == YAML_SCALAR_NODE);
 
         return (const char *)node->data.scalar.value;
     }
 
-    ogs_assert_if_reached();
+    log_assert_if_reached();
     return NULL;
 }
 
 int ogs_yaml_iter_has_value(ogs_yaml_iter_t *iter)
 {
-    ogs_assert(iter);
-    ogs_assert(iter->document);
-    ogs_assert(iter->node);
+    log_assert(iter);
+    log_assert(iter->document);
+    log_assert(iter->node);
 
     if (iter->node->type == YAML_SCALAR_NODE) {
         return 1;
     } else if (iter->node->type == YAML_MAPPING_NODE) {
         yaml_node_t *node = NULL;
 
-        ogs_assert(iter->pair);
+        log_assert(iter->pair);
         node = yaml_document_get_node(iter->document, iter->pair->value);
-        ogs_assert(node);
+        log_assert(node);
         return node->type == YAML_SCALAR_NODE;
     } else if (iter->node->type == YAML_SEQUENCE_NODE) {
         yaml_node_t *node = NULL;
 
-        ogs_assert(iter->item);
+        log_assert(iter->item);
         node = yaml_document_get_node(iter->document, *iter->item);
-        ogs_assert(node);
+        log_assert(node);
         return node->type == YAML_SCALAR_NODE;
     }
 
-    ogs_assert_if_reached();
+    log_assert_if_reached();
     return 0;
 }
 

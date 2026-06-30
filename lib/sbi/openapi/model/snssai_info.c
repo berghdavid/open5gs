@@ -9,7 +9,7 @@ OpenAPI_snssai_info_t *OpenAPI_snssai_info_create(
 )
 {
     OpenAPI_snssai_info_t *snssai_info_local_var = ogs_malloc(sizeof(OpenAPI_snssai_info_t));
-    ogs_assert(snssai_info_local_var);
+    log_assert(snssai_info_local_var);
 
     snssai_info_local_var->dnn_infos = dnn_infos;
 
@@ -39,24 +39,24 @@ cJSON *OpenAPI_snssai_info_convertToJSON(OpenAPI_snssai_info_t *snssai_info)
     OpenAPI_lnode_t *node = NULL;
 
     if (snssai_info == NULL) {
-        ogs_error("OpenAPI_snssai_info_convertToJSON() failed [SnssaiInfo]");
+        log_error("OpenAPI_snssai_info_convertToJSON() failed [SnssaiInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!snssai_info->dnn_infos) {
-        ogs_error("OpenAPI_snssai_info_convertToJSON() failed [dnn_infos]");
+        log_error("OpenAPI_snssai_info_convertToJSON() failed [dnn_infos]");
         return NULL;
     }
     cJSON *dnn_infosList = cJSON_AddArrayToObject(item, "dnnInfos");
     if (dnn_infosList == NULL) {
-        ogs_error("OpenAPI_snssai_info_convertToJSON() failed [dnn_infos]");
+        log_error("OpenAPI_snssai_info_convertToJSON() failed [dnn_infos]");
         goto end;
     }
     OpenAPI_list_for_each(snssai_info->dnn_infos, node) {
         cJSON *itemLocal = OpenAPI_dnn_info_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_snssai_info_convertToJSON() failed [dnn_infos]");
+            log_error("OpenAPI_snssai_info_convertToJSON() failed [dnn_infos]");
             goto end;
         }
         cJSON_AddItemToArray(dnn_infosList, itemLocal);
@@ -74,12 +74,12 @@ OpenAPI_snssai_info_t *OpenAPI_snssai_info_parseFromJSON(cJSON *snssai_infoJSON)
     OpenAPI_list_t *dnn_infosList = NULL;
     dnn_infos = cJSON_GetObjectItemCaseSensitive(snssai_infoJSON, "dnnInfos");
     if (!dnn_infos) {
-        ogs_error("OpenAPI_snssai_info_parseFromJSON() failed [dnn_infos]");
+        log_error("OpenAPI_snssai_info_parseFromJSON() failed [dnn_infos]");
         goto end;
     }
         cJSON *dnn_infos_local = NULL;
         if (!cJSON_IsArray(dnn_infos)) {
-            ogs_error("OpenAPI_snssai_info_parseFromJSON() failed [dnn_infos]");
+            log_error("OpenAPI_snssai_info_parseFromJSON() failed [dnn_infos]");
             goto end;
         }
 
@@ -87,12 +87,12 @@ OpenAPI_snssai_info_t *OpenAPI_snssai_info_parseFromJSON(cJSON *snssai_infoJSON)
 
         cJSON_ArrayForEach(dnn_infos_local, dnn_infos) {
             if (!cJSON_IsObject(dnn_infos_local)) {
-                ogs_error("OpenAPI_snssai_info_parseFromJSON() failed [dnn_infos]");
+                log_error("OpenAPI_snssai_info_parseFromJSON() failed [dnn_infos]");
                 goto end;
             }
             OpenAPI_dnn_info_t *dnn_infosItem = OpenAPI_dnn_info_parseFromJSON(dnn_infos_local);
             if (!dnn_infosItem) {
-                ogs_error("No dnn_infosItem");
+                log_error("No dnn_infosItem");
                 goto end;
             }
             OpenAPI_list_add(dnn_infosList, dnn_infosItem);
@@ -119,10 +119,10 @@ OpenAPI_snssai_info_t *OpenAPI_snssai_info_copy(OpenAPI_snssai_info_t *dst, Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_snssai_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_snssai_info_convertToJSON() failed");
+        log_error("OpenAPI_snssai_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -130,14 +130,14 @@ OpenAPI_snssai_info_t *OpenAPI_snssai_info_copy(OpenAPI_snssai_info_t *dst, Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -13,7 +13,7 @@ OpenAPI_location_info_t *OpenAPI_location_info_create(
 )
 {
     OpenAPI_location_info_t *location_info_local_var = ogs_malloc(sizeof(OpenAPI_location_info_t));
-    ogs_assert(location_info_local_var);
+    log_assert(location_info_local_var);
 
     location_info_local_var->loc = loc;
     location_info_local_var->is_ratio = is_ratio;
@@ -44,36 +44,36 @@ cJSON *OpenAPI_location_info_convertToJSON(OpenAPI_location_info_t *location_inf
     OpenAPI_lnode_t *node = NULL;
 
     if (location_info == NULL) {
-        ogs_error("OpenAPI_location_info_convertToJSON() failed [LocationInfo]");
+        log_error("OpenAPI_location_info_convertToJSON() failed [LocationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!location_info->loc) {
-        ogs_error("OpenAPI_location_info_convertToJSON() failed [loc]");
+        log_error("OpenAPI_location_info_convertToJSON() failed [loc]");
         return NULL;
     }
     cJSON *loc_local_JSON = OpenAPI_user_location_convertToJSON(location_info->loc);
     if (loc_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_info_convertToJSON() failed [loc]");
+        log_error("OpenAPI_location_info_convertToJSON() failed [loc]");
         goto end;
     }
     cJSON_AddItemToObject(item, "loc", loc_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_info_convertToJSON() failed [loc]");
+        log_error("OpenAPI_location_info_convertToJSON() failed [loc]");
         goto end;
     }
 
     if (location_info->is_ratio) {
     if (cJSON_AddNumberToObject(item, "ratio", location_info->ratio) == NULL) {
-        ogs_error("OpenAPI_location_info_convertToJSON() failed [ratio]");
+        log_error("OpenAPI_location_info_convertToJSON() failed [ratio]");
         goto end;
     }
     }
 
     if (location_info->is_confidence) {
     if (cJSON_AddNumberToObject(item, "confidence", location_info->confidence) == NULL) {
-        ogs_error("OpenAPI_location_info_convertToJSON() failed [confidence]");
+        log_error("OpenAPI_location_info_convertToJSON() failed [confidence]");
         goto end;
     }
     }
@@ -92,19 +92,19 @@ OpenAPI_location_info_t *OpenAPI_location_info_parseFromJSON(cJSON *location_inf
     cJSON *confidence = NULL;
     loc = cJSON_GetObjectItemCaseSensitive(location_infoJSON, "loc");
     if (!loc) {
-        ogs_error("OpenAPI_location_info_parseFromJSON() failed [loc]");
+        log_error("OpenAPI_location_info_parseFromJSON() failed [loc]");
         goto end;
     }
     loc_local_nonprim = OpenAPI_user_location_parseFromJSON(loc);
     if (!loc_local_nonprim) {
-        ogs_error("OpenAPI_user_location_parseFromJSON failed [loc]");
+        log_error("OpenAPI_user_location_parseFromJSON failed [loc]");
         goto end;
     }
 
     ratio = cJSON_GetObjectItemCaseSensitive(location_infoJSON, "ratio");
     if (ratio) {
     if (!cJSON_IsNumber(ratio)) {
-        ogs_error("OpenAPI_location_info_parseFromJSON() failed [ratio]");
+        log_error("OpenAPI_location_info_parseFromJSON() failed [ratio]");
         goto end;
     }
     }
@@ -112,7 +112,7 @@ OpenAPI_location_info_t *OpenAPI_location_info_parseFromJSON(cJSON *location_inf
     confidence = cJSON_GetObjectItemCaseSensitive(location_infoJSON, "confidence");
     if (confidence) {
     if (!cJSON_IsNumber(confidence)) {
-        ogs_error("OpenAPI_location_info_parseFromJSON() failed [confidence]");
+        log_error("OpenAPI_location_info_parseFromJSON() failed [confidence]");
         goto end;
     }
     }
@@ -139,10 +139,10 @@ OpenAPI_location_info_t *OpenAPI_location_info_copy(OpenAPI_location_info_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_location_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_location_info_convertToJSON() failed");
+        log_error("OpenAPI_location_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -150,14 +150,14 @@ OpenAPI_location_info_t *OpenAPI_location_info_copy(OpenAPI_location_info_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

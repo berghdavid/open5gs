@@ -11,7 +11,7 @@ OpenAPI_small_data_rate_status_info_t *OpenAPI_small_data_rate_status_info_creat
 )
 {
     OpenAPI_small_data_rate_status_info_t *small_data_rate_status_info_local_var = ogs_malloc(sizeof(OpenAPI_small_data_rate_status_info_t));
-    ogs_assert(small_data_rate_status_info_local_var);
+    log_assert(small_data_rate_status_info_local_var);
 
     small_data_rate_status_info_local_var->snssai = snssai;
     small_data_rate_status_info_local_var->dnn = dnn;
@@ -48,47 +48,47 @@ cJSON *OpenAPI_small_data_rate_status_info_convertToJSON(OpenAPI_small_data_rate
     OpenAPI_lnode_t *node = NULL;
 
     if (small_data_rate_status_info == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [SmallDataRateStatusInfo]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [SmallDataRateStatusInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!small_data_rate_status_info->snssai) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [snssai]");
         return NULL;
     }
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(small_data_rate_status_info->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "Snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [snssai]");
         goto end;
     }
 
     if (!small_data_rate_status_info->dnn) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [dnn]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "Dnn", small_data_rate_status_info->dnn) == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [dnn]");
         goto end;
     }
 
     if (!small_data_rate_status_info->small_data_rate_status) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [small_data_rate_status]");
         return NULL;
     }
     cJSON *small_data_rate_status_local_JSON = OpenAPI_small_data_rate_status_convertToJSON(small_data_rate_status_info->small_data_rate_status);
     if (small_data_rate_status_local_JSON == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [small_data_rate_status]");
         goto end;
     }
     cJSON_AddItemToObject(item, "SmallDataRateStatus", small_data_rate_status_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed [small_data_rate_status]");
         goto end;
     }
 
@@ -107,33 +107,33 @@ OpenAPI_small_data_rate_status_info_t *OpenAPI_small_data_rate_status_info_parse
     OpenAPI_small_data_rate_status_t *small_data_rate_status_local_nonprim = NULL;
     snssai = cJSON_GetObjectItemCaseSensitive(small_data_rate_status_infoJSON, "Snssai");
     if (!snssai) {
-        ogs_error("OpenAPI_small_data_rate_status_info_parseFromJSON() failed [snssai]");
+        log_error("OpenAPI_small_data_rate_status_info_parseFromJSON() failed [snssai]");
         goto end;
     }
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
 
     dnn = cJSON_GetObjectItemCaseSensitive(small_data_rate_status_infoJSON, "Dnn");
     if (!dnn) {
-        ogs_error("OpenAPI_small_data_rate_status_info_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_small_data_rate_status_info_parseFromJSON() failed [dnn]");
         goto end;
     }
     if (!cJSON_IsString(dnn)) {
-        ogs_error("OpenAPI_small_data_rate_status_info_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_small_data_rate_status_info_parseFromJSON() failed [dnn]");
         goto end;
     }
 
     small_data_rate_status = cJSON_GetObjectItemCaseSensitive(small_data_rate_status_infoJSON, "SmallDataRateStatus");
     if (!small_data_rate_status) {
-        ogs_error("OpenAPI_small_data_rate_status_info_parseFromJSON() failed [small_data_rate_status]");
+        log_error("OpenAPI_small_data_rate_status_info_parseFromJSON() failed [small_data_rate_status]");
         goto end;
     }
     small_data_rate_status_local_nonprim = OpenAPI_small_data_rate_status_parseFromJSON(small_data_rate_status);
     if (!small_data_rate_status_local_nonprim) {
-        ogs_error("OpenAPI_small_data_rate_status_parseFromJSON failed [small_data_rate_status]");
+        log_error("OpenAPI_small_data_rate_status_parseFromJSON failed [small_data_rate_status]");
         goto end;
     }
 
@@ -161,10 +161,10 @@ OpenAPI_small_data_rate_status_info_t *OpenAPI_small_data_rate_status_info_copy(
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_small_data_rate_status_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed");
+        log_error("OpenAPI_small_data_rate_status_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -172,14 +172,14 @@ OpenAPI_small_data_rate_status_info_t *OpenAPI_small_data_rate_status_info_copy(
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

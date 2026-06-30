@@ -11,7 +11,7 @@ OpenAPI_vgmlc_address_t *OpenAPI_vgmlc_address_create(
 )
 {
     OpenAPI_vgmlc_address_t *vgmlc_address_local_var = ogs_malloc(sizeof(OpenAPI_vgmlc_address_t));
-    ogs_assert(vgmlc_address_local_var);
+    log_assert(vgmlc_address_local_var);
 
     vgmlc_address_local_var->vgmlc_address_ipv4 = vgmlc_address_ipv4;
     vgmlc_address_local_var->vgmlc_address_ipv6 = vgmlc_address_ipv6;
@@ -48,28 +48,28 @@ cJSON *OpenAPI_vgmlc_address_convertToJSON(OpenAPI_vgmlc_address_t *vgmlc_addres
     OpenAPI_lnode_t *node = NULL;
 
     if (vgmlc_address == NULL) {
-        ogs_error("OpenAPI_vgmlc_address_convertToJSON() failed [VgmlcAddress]");
+        log_error("OpenAPI_vgmlc_address_convertToJSON() failed [VgmlcAddress]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (vgmlc_address->vgmlc_address_ipv4) {
     if (cJSON_AddStringToObject(item, "vgmlcAddressIpv4", vgmlc_address->vgmlc_address_ipv4) == NULL) {
-        ogs_error("OpenAPI_vgmlc_address_convertToJSON() failed [vgmlc_address_ipv4]");
+        log_error("OpenAPI_vgmlc_address_convertToJSON() failed [vgmlc_address_ipv4]");
         goto end;
     }
     }
 
     if (vgmlc_address->vgmlc_address_ipv6) {
     if (cJSON_AddStringToObject(item, "vgmlcAddressIpv6", vgmlc_address->vgmlc_address_ipv6) == NULL) {
-        ogs_error("OpenAPI_vgmlc_address_convertToJSON() failed [vgmlc_address_ipv6]");
+        log_error("OpenAPI_vgmlc_address_convertToJSON() failed [vgmlc_address_ipv6]");
         goto end;
     }
     }
 
     if (vgmlc_address->vgmlc_fqdn) {
     if (cJSON_AddStringToObject(item, "vgmlcFqdn", vgmlc_address->vgmlc_fqdn) == NULL) {
-        ogs_error("OpenAPI_vgmlc_address_convertToJSON() failed [vgmlc_fqdn]");
+        log_error("OpenAPI_vgmlc_address_convertToJSON() failed [vgmlc_fqdn]");
         goto end;
     }
     }
@@ -88,7 +88,7 @@ OpenAPI_vgmlc_address_t *OpenAPI_vgmlc_address_parseFromJSON(cJSON *vgmlc_addres
     vgmlc_address_ipv4 = cJSON_GetObjectItemCaseSensitive(vgmlc_addressJSON, "vgmlcAddressIpv4");
     if (vgmlc_address_ipv4) {
     if (!cJSON_IsString(vgmlc_address_ipv4) && !cJSON_IsNull(vgmlc_address_ipv4)) {
-        ogs_error("OpenAPI_vgmlc_address_parseFromJSON() failed [vgmlc_address_ipv4]");
+        log_error("OpenAPI_vgmlc_address_parseFromJSON() failed [vgmlc_address_ipv4]");
         goto end;
     }
     }
@@ -96,7 +96,7 @@ OpenAPI_vgmlc_address_t *OpenAPI_vgmlc_address_parseFromJSON(cJSON *vgmlc_addres
     vgmlc_address_ipv6 = cJSON_GetObjectItemCaseSensitive(vgmlc_addressJSON, "vgmlcAddressIpv6");
     if (vgmlc_address_ipv6) {
     if (!cJSON_IsString(vgmlc_address_ipv6) && !cJSON_IsNull(vgmlc_address_ipv6)) {
-        ogs_error("OpenAPI_vgmlc_address_parseFromJSON() failed [vgmlc_address_ipv6]");
+        log_error("OpenAPI_vgmlc_address_parseFromJSON() failed [vgmlc_address_ipv6]");
         goto end;
     }
     }
@@ -104,7 +104,7 @@ OpenAPI_vgmlc_address_t *OpenAPI_vgmlc_address_parseFromJSON(cJSON *vgmlc_addres
     vgmlc_fqdn = cJSON_GetObjectItemCaseSensitive(vgmlc_addressJSON, "vgmlcFqdn");
     if (vgmlc_fqdn) {
     if (!cJSON_IsString(vgmlc_fqdn) && !cJSON_IsNull(vgmlc_fqdn)) {
-        ogs_error("OpenAPI_vgmlc_address_parseFromJSON() failed [vgmlc_fqdn]");
+        log_error("OpenAPI_vgmlc_address_parseFromJSON() failed [vgmlc_fqdn]");
         goto end;
     }
     }
@@ -125,10 +125,10 @@ OpenAPI_vgmlc_address_t *OpenAPI_vgmlc_address_copy(OpenAPI_vgmlc_address_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_vgmlc_address_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_vgmlc_address_convertToJSON() failed");
+        log_error("OpenAPI_vgmlc_address_convertToJSON() failed");
         return NULL;
     }
 
@@ -136,14 +136,14 @@ OpenAPI_vgmlc_address_t *OpenAPI_vgmlc_address_copy(OpenAPI_vgmlc_address_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

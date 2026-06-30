@@ -9,7 +9,7 @@ OpenAPI_iptv_config_data_patch_t *OpenAPI_iptv_config_data_patch_create(
 )
 {
     OpenAPI_iptv_config_data_patch_t *iptv_config_data_patch_local_var = ogs_malloc(sizeof(OpenAPI_iptv_config_data_patch_t));
-    ogs_assert(iptv_config_data_patch_local_var);
+    log_assert(iptv_config_data_patch_local_var);
 
     iptv_config_data_patch_local_var->multi_acc_ctrls = multi_acc_ctrls;
 
@@ -42,7 +42,7 @@ cJSON *OpenAPI_iptv_config_data_patch_convertToJSON(OpenAPI_iptv_config_data_pat
     OpenAPI_lnode_t *node = NULL;
 
     if (iptv_config_data_patch == NULL) {
-        ogs_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [IptvConfigDataPatch]");
+        log_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [IptvConfigDataPatch]");
         return NULL;
     }
 
@@ -50,7 +50,7 @@ cJSON *OpenAPI_iptv_config_data_patch_convertToJSON(OpenAPI_iptv_config_data_pat
     if (iptv_config_data_patch->multi_acc_ctrls) {
     cJSON *multi_acc_ctrls = cJSON_AddObjectToObject(item, "multiAccCtrls");
     if (multi_acc_ctrls == NULL) {
-        ogs_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [multi_acc_ctrls]");
+        log_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [multi_acc_ctrls]");
         goto end;
     }
     cJSON *localMapObject = multi_acc_ctrls;
@@ -58,18 +58,18 @@ cJSON *OpenAPI_iptv_config_data_patch_convertToJSON(OpenAPI_iptv_config_data_pat
         OpenAPI_list_for_each(iptv_config_data_patch->multi_acc_ctrls, node) {
             OpenAPI_map_t *localKeyValue = (OpenAPI_map_t*)node->data;
             if (localKeyValue == NULL) {
-                ogs_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [multi_acc_ctrls]");
+                log_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [multi_acc_ctrls]");
                 goto end;
             }
             if (localKeyValue->key == NULL) {
-                ogs_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [multi_acc_ctrls]");
+                log_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [multi_acc_ctrls]");
                 goto end;
             }
             cJSON *itemLocal = localKeyValue->value ?
                 OpenAPI_multicast_access_control_convertToJSON(localKeyValue->value) :
                 cJSON_CreateNull();
             if (itemLocal == NULL) {
-                ogs_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [inner]");
+                log_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed [inner]");
                 goto end;
             }
             cJSON_AddItemToObject(localMapObject, localKeyValue->key, itemLocal);
@@ -91,7 +91,7 @@ OpenAPI_iptv_config_data_patch_t *OpenAPI_iptv_config_data_patch_parseFromJSON(c
     if (multi_acc_ctrls) {
         cJSON *multi_acc_ctrls_local_map = NULL;
         if (!cJSON_IsObject(multi_acc_ctrls) && !cJSON_IsNull(multi_acc_ctrls)) {
-            ogs_error("OpenAPI_iptv_config_data_patch_parseFromJSON() failed [multi_acc_ctrls]");
+            log_error("OpenAPI_iptv_config_data_patch_parseFromJSON() failed [multi_acc_ctrls]");
             goto end;
         }
         if (cJSON_IsObject(multi_acc_ctrls)) {
@@ -105,7 +105,7 @@ OpenAPI_iptv_config_data_patch_t *OpenAPI_iptv_config_data_patch_parseFromJSON(c
                 } else if (cJSON_IsNull(localMapObject)) {
                     localMapKeyPair = OpenAPI_map_create(ogs_strdup(localMapObject->string), NULL);
                 } else {
-                    ogs_error("OpenAPI_iptv_config_data_patch_parseFromJSON() failed [inner]");
+                    log_error("OpenAPI_iptv_config_data_patch_parseFromJSON() failed [inner]");
                     goto end;
                 }
                 OpenAPI_list_add(multi_acc_ctrlsList, localMapKeyPair);
@@ -137,10 +137,10 @@ OpenAPI_iptv_config_data_patch_t *OpenAPI_iptv_config_data_patch_copy(OpenAPI_ip
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_iptv_config_data_patch_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed");
+        log_error("OpenAPI_iptv_config_data_patch_convertToJSON() failed");
         return NULL;
     }
 
@@ -148,14 +148,14 @@ OpenAPI_iptv_config_data_patch_t *OpenAPI_iptv_config_data_patch_copy(OpenAPI_ip
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

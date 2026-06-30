@@ -9,7 +9,7 @@ OpenAPI_options_response_t *OpenAPI_options_response_create(
 )
 {
     OpenAPI_options_response_t *options_response_local_var = ogs_malloc(sizeof(OpenAPI_options_response_t));
-    ogs_assert(options_response_local_var);
+    log_assert(options_response_local_var);
 
     options_response_local_var->supported_features = supported_features;
 
@@ -36,14 +36,14 @@ cJSON *OpenAPI_options_response_convertToJSON(OpenAPI_options_response_t *option
     OpenAPI_lnode_t *node = NULL;
 
     if (options_response == NULL) {
-        ogs_error("OpenAPI_options_response_convertToJSON() failed [OptionsResponse]");
+        log_error("OpenAPI_options_response_convertToJSON() failed [OptionsResponse]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (options_response->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", options_response->supported_features) == NULL) {
-        ogs_error("OpenAPI_options_response_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_options_response_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -60,7 +60,7 @@ OpenAPI_options_response_t *OpenAPI_options_response_parseFromJSON(cJSON *option
     supported_features = cJSON_GetObjectItemCaseSensitive(options_responseJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_options_response_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_options_response_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -79,10 +79,10 @@ OpenAPI_options_response_t *OpenAPI_options_response_copy(OpenAPI_options_respon
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_options_response_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_options_response_convertToJSON() failed");
+        log_error("OpenAPI_options_response_convertToJSON() failed");
         return NULL;
     }
 
@@ -90,14 +90,14 @@ OpenAPI_options_response_t *OpenAPI_options_response_copy(OpenAPI_options_respon
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

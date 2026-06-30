@@ -8,7 +8,7 @@ OpenAPI_occurrence_info_t *OpenAPI_occurrence_info_create(
 )
 {
     OpenAPI_occurrence_info_t *occurrence_info_local_var = ogs_malloc(sizeof(OpenAPI_occurrence_info_t));
-    ogs_assert(occurrence_info_local_var);
+    log_assert(occurrence_info_local_var);
 
 
     return occurrence_info_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_occurrence_info_convertToJSON(OpenAPI_occurrence_info_t *occurren
     OpenAPI_lnode_t *node = NULL;
 
     if (occurrence_info == NULL) {
-        ogs_error("OpenAPI_occurrence_info_convertToJSON() failed [OccurrenceInfo]");
+        log_error("OpenAPI_occurrence_info_convertToJSON() failed [OccurrenceInfo]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_occurrence_info_t *OpenAPI_occurrence_info_copy(OpenAPI_occurrence_info_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_occurrence_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_occurrence_info_convertToJSON() failed");
+        log_error("OpenAPI_occurrence_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_occurrence_info_t *OpenAPI_occurrence_info_copy(OpenAPI_occurrence_info_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

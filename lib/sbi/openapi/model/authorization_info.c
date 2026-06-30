@@ -16,7 +16,7 @@ OpenAPI_authorization_info_t *OpenAPI_authorization_info_create(
 )
 {
     OpenAPI_authorization_info_t *authorization_info_local_var = ogs_malloc(sizeof(OpenAPI_authorization_info_t));
-    ogs_assert(authorization_info_local_var);
+    log_assert(authorization_info_local_var);
 
     authorization_info_local_var->snssai = snssai;
     authorization_info_local_var->dnn = dnn;
@@ -78,70 +78,70 @@ cJSON *OpenAPI_authorization_info_convertToJSON(OpenAPI_authorization_info_t *au
     OpenAPI_lnode_t *node = NULL;
 
     if (authorization_info == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [AuthorizationInfo]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [AuthorizationInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!authorization_info->snssai) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [snssai]");
         return NULL;
     }
     cJSON *snssai_local_JSON = OpenAPI_snssai_convertToJSON(authorization_info->snssai);
     if (snssai_local_JSON == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [snssai]");
         goto end;
     }
     cJSON_AddItemToObject(item, "snssai", snssai_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [snssai]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [snssai]");
         goto end;
     }
 
     if (!authorization_info->dnn) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [dnn]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "dnn", authorization_info->dnn) == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [dnn]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [dnn]");
         goto end;
     }
 
     if (!authorization_info->mtc_provider_information) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [mtc_provider_information]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "mtcProviderInformation", authorization_info->mtc_provider_information) == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [mtc_provider_information]");
         goto end;
     }
 
     if (!authorization_info->auth_update_callback_uri) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [auth_update_callback_uri]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [auth_update_callback_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "authUpdateCallbackUri", authorization_info->auth_update_callback_uri) == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [auth_update_callback_uri]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [auth_update_callback_uri]");
         goto end;
     }
 
     if (authorization_info->af_id) {
     if (cJSON_AddStringToObject(item, "afId", authorization_info->af_id) == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [af_id]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [af_id]");
         goto end;
     }
     }
 
     if (authorization_info->nef_id) {
     if (cJSON_AddStringToObject(item, "nefId", authorization_info->nef_id) == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [nef_id]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [nef_id]");
         goto end;
     }
     }
 
     if (authorization_info->validity_time) {
     if (cJSON_AddStringToObject(item, "validityTime", authorization_info->validity_time) == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [validity_time]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [validity_time]");
         goto end;
     }
     }
@@ -149,12 +149,12 @@ cJSON *OpenAPI_authorization_info_convertToJSON(OpenAPI_authorization_info_t *au
     if (authorization_info->context_info) {
     cJSON *context_info_local_JSON = OpenAPI_context_info_convertToJSON(authorization_info->context_info);
     if (context_info_local_JSON == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [context_info]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [context_info]");
         goto end;
     }
     cJSON_AddItemToObject(item, "contextInfo", context_info_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed [context_info]");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed [context_info]");
         goto end;
     }
     }
@@ -179,49 +179,49 @@ OpenAPI_authorization_info_t *OpenAPI_authorization_info_parseFromJSON(cJSON *au
     OpenAPI_context_info_t *context_info_local_nonprim = NULL;
     snssai = cJSON_GetObjectItemCaseSensitive(authorization_infoJSON, "snssai");
     if (!snssai) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [snssai]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [snssai]");
         goto end;
     }
     snssai_local_nonprim = OpenAPI_snssai_parseFromJSON(snssai);
     if (!snssai_local_nonprim) {
-        ogs_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
+        log_error("OpenAPI_snssai_parseFromJSON failed [snssai]");
         goto end;
     }
 
     dnn = cJSON_GetObjectItemCaseSensitive(authorization_infoJSON, "dnn");
     if (!dnn) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [dnn]");
         goto end;
     }
     if (!cJSON_IsString(dnn)) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [dnn]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [dnn]");
         goto end;
     }
 
     mtc_provider_information = cJSON_GetObjectItemCaseSensitive(authorization_infoJSON, "mtcProviderInformation");
     if (!mtc_provider_information) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [mtc_provider_information]");
         goto end;
     }
     if (!cJSON_IsString(mtc_provider_information)) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [mtc_provider_information]");
         goto end;
     }
 
     auth_update_callback_uri = cJSON_GetObjectItemCaseSensitive(authorization_infoJSON, "authUpdateCallbackUri");
     if (!auth_update_callback_uri) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [auth_update_callback_uri]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [auth_update_callback_uri]");
         goto end;
     }
     if (!cJSON_IsString(auth_update_callback_uri)) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [auth_update_callback_uri]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [auth_update_callback_uri]");
         goto end;
     }
 
     af_id = cJSON_GetObjectItemCaseSensitive(authorization_infoJSON, "afId");
     if (af_id) {
     if (!cJSON_IsString(af_id) && !cJSON_IsNull(af_id)) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [af_id]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [af_id]");
         goto end;
     }
     }
@@ -229,7 +229,7 @@ OpenAPI_authorization_info_t *OpenAPI_authorization_info_parseFromJSON(cJSON *au
     nef_id = cJSON_GetObjectItemCaseSensitive(authorization_infoJSON, "nefId");
     if (nef_id) {
     if (!cJSON_IsString(nef_id) && !cJSON_IsNull(nef_id)) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [nef_id]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [nef_id]");
         goto end;
     }
     }
@@ -237,7 +237,7 @@ OpenAPI_authorization_info_t *OpenAPI_authorization_info_parseFromJSON(cJSON *au
     validity_time = cJSON_GetObjectItemCaseSensitive(authorization_infoJSON, "validityTime");
     if (validity_time) {
     if (!cJSON_IsString(validity_time) && !cJSON_IsNull(validity_time)) {
-        ogs_error("OpenAPI_authorization_info_parseFromJSON() failed [validity_time]");
+        log_error("OpenAPI_authorization_info_parseFromJSON() failed [validity_time]");
         goto end;
     }
     }
@@ -246,7 +246,7 @@ OpenAPI_authorization_info_t *OpenAPI_authorization_info_parseFromJSON(cJSON *au
     if (context_info) {
     context_info_local_nonprim = OpenAPI_context_info_parseFromJSON(context_info);
     if (!context_info_local_nonprim) {
-        ogs_error("OpenAPI_context_info_parseFromJSON failed [context_info]");
+        log_error("OpenAPI_context_info_parseFromJSON failed [context_info]");
         goto end;
     }
     }
@@ -280,10 +280,10 @@ OpenAPI_authorization_info_t *OpenAPI_authorization_info_copy(OpenAPI_authorizat
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_authorization_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_authorization_info_convertToJSON() failed");
+        log_error("OpenAPI_authorization_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -291,14 +291,14 @@ OpenAPI_authorization_info_t *OpenAPI_authorization_info_copy(OpenAPI_authorizat
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

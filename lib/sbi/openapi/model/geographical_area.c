@@ -10,7 +10,7 @@ OpenAPI_geographical_area_t *OpenAPI_geographical_area_create(
 )
 {
     OpenAPI_geographical_area_t *geographical_area_local_var = ogs_malloc(sizeof(OpenAPI_geographical_area_t));
-    ogs_assert(geographical_area_local_var);
+    log_assert(geographical_area_local_var);
 
     geographical_area_local_var->civic_address = civic_address;
     geographical_area_local_var->shapes = shapes;
@@ -42,7 +42,7 @@ cJSON *OpenAPI_geographical_area_convertToJSON(OpenAPI_geographical_area_t *geog
     OpenAPI_lnode_t *node = NULL;
 
     if (geographical_area == NULL) {
-        ogs_error("OpenAPI_geographical_area_convertToJSON() failed [GeographicalArea]");
+        log_error("OpenAPI_geographical_area_convertToJSON() failed [GeographicalArea]");
         return NULL;
     }
 
@@ -50,12 +50,12 @@ cJSON *OpenAPI_geographical_area_convertToJSON(OpenAPI_geographical_area_t *geog
     if (geographical_area->civic_address) {
     cJSON *civic_address_local_JSON = OpenAPI_civic_address_convertToJSON(geographical_area->civic_address);
     if (civic_address_local_JSON == NULL) {
-        ogs_error("OpenAPI_geographical_area_convertToJSON() failed [civic_address]");
+        log_error("OpenAPI_geographical_area_convertToJSON() failed [civic_address]");
         goto end;
     }
     cJSON_AddItemToObject(item, "civicAddress", civic_address_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_geographical_area_convertToJSON() failed [civic_address]");
+        log_error("OpenAPI_geographical_area_convertToJSON() failed [civic_address]");
         goto end;
     }
     }
@@ -63,12 +63,12 @@ cJSON *OpenAPI_geographical_area_convertToJSON(OpenAPI_geographical_area_t *geog
     if (geographical_area->shapes) {
     cJSON *shapes_local_JSON = OpenAPI_geographic_area_convertToJSON(geographical_area->shapes);
     if (shapes_local_JSON == NULL) {
-        ogs_error("OpenAPI_geographical_area_convertToJSON() failed [shapes]");
+        log_error("OpenAPI_geographical_area_convertToJSON() failed [shapes]");
         goto end;
     }
     cJSON_AddItemToObject(item, "shapes", shapes_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_geographical_area_convertToJSON() failed [shapes]");
+        log_error("OpenAPI_geographical_area_convertToJSON() failed [shapes]");
         goto end;
     }
     }
@@ -89,7 +89,7 @@ OpenAPI_geographical_area_t *OpenAPI_geographical_area_parseFromJSON(cJSON *geog
     if (civic_address) {
     civic_address_local_nonprim = OpenAPI_civic_address_parseFromJSON(civic_address);
     if (!civic_address_local_nonprim) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON failed [civic_address]");
+        log_error("OpenAPI_civic_address_parseFromJSON failed [civic_address]");
         goto end;
     }
     }
@@ -98,7 +98,7 @@ OpenAPI_geographical_area_t *OpenAPI_geographical_area_parseFromJSON(cJSON *geog
     if (shapes) {
     shapes_local_nonprim = OpenAPI_geographic_area_parseFromJSON(shapes);
     if (!shapes_local_nonprim) {
-        ogs_error("OpenAPI_geographic_area_parseFromJSON failed [shapes]");
+        log_error("OpenAPI_geographic_area_parseFromJSON failed [shapes]");
         goto end;
     }
     }
@@ -126,10 +126,10 @@ OpenAPI_geographical_area_t *OpenAPI_geographical_area_copy(OpenAPI_geographical
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_geographical_area_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_geographical_area_convertToJSON() failed");
+        log_error("OpenAPI_geographical_area_convertToJSON() failed");
         return NULL;
     }
 
@@ -137,14 +137,14 @@ OpenAPI_geographical_area_t *OpenAPI_geographical_area_copy(OpenAPI_geographical
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -11,7 +11,7 @@ OpenAPI_transfer_mo_data_req_data_t *OpenAPI_transfer_mo_data_req_data_create(
 )
 {
     OpenAPI_transfer_mo_data_req_data_t *transfer_mo_data_req_data_local_var = ogs_malloc(sizeof(OpenAPI_transfer_mo_data_req_data_t));
-    ogs_assert(transfer_mo_data_req_data_local_var);
+    log_assert(transfer_mo_data_req_data_local_var);
 
     transfer_mo_data_req_data_local_var->mo_data = mo_data;
     transfer_mo_data_req_data_local_var->mo_exp_data_counter = mo_exp_data_counter;
@@ -48,35 +48,35 @@ cJSON *OpenAPI_transfer_mo_data_req_data_convertToJSON(OpenAPI_transfer_mo_data_
     OpenAPI_lnode_t *node = NULL;
 
     if (transfer_mo_data_req_data == NULL) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [TransferMoDataReqData]");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [TransferMoDataReqData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!transfer_mo_data_req_data->mo_data) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_data]");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_data]");
         return NULL;
     }
     cJSON *mo_data_local_JSON = OpenAPI_ref_to_binary_data_convertToJSON(transfer_mo_data_req_data->mo_data);
     if (mo_data_local_JSON == NULL) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_data]");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_data]");
         goto end;
     }
     cJSON_AddItemToObject(item, "moData", mo_data_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_data]");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_data]");
         goto end;
     }
 
     if (transfer_mo_data_req_data->mo_exp_data_counter) {
     cJSON *mo_exp_data_counter_local_JSON = OpenAPI_mo_exp_data_counter_convertToJSON(transfer_mo_data_req_data->mo_exp_data_counter);
     if (mo_exp_data_counter_local_JSON == NULL) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_exp_data_counter]");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_exp_data_counter]");
         goto end;
     }
     cJSON_AddItemToObject(item, "moExpDataCounter", mo_exp_data_counter_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_exp_data_counter]");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [mo_exp_data_counter]");
         goto end;
     }
     }
@@ -84,12 +84,12 @@ cJSON *OpenAPI_transfer_mo_data_req_data_convertToJSON(OpenAPI_transfer_mo_data_
     if (transfer_mo_data_req_data->ue_location) {
     cJSON *ue_location_local_JSON = OpenAPI_user_location_convertToJSON(transfer_mo_data_req_data->ue_location);
     if (ue_location_local_JSON == NULL) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [ue_location]");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [ue_location]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueLocation", ue_location_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [ue_location]");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed [ue_location]");
         goto end;
     }
     }
@@ -110,12 +110,12 @@ OpenAPI_transfer_mo_data_req_data_t *OpenAPI_transfer_mo_data_req_data_parseFrom
     OpenAPI_user_location_t *ue_location_local_nonprim = NULL;
     mo_data = cJSON_GetObjectItemCaseSensitive(transfer_mo_data_req_dataJSON, "moData");
     if (!mo_data) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_parseFromJSON() failed [mo_data]");
+        log_error("OpenAPI_transfer_mo_data_req_data_parseFromJSON() failed [mo_data]");
         goto end;
     }
     mo_data_local_nonprim = OpenAPI_ref_to_binary_data_parseFromJSON(mo_data);
     if (!mo_data_local_nonprim) {
-        ogs_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [mo_data]");
+        log_error("OpenAPI_ref_to_binary_data_parseFromJSON failed [mo_data]");
         goto end;
     }
 
@@ -123,7 +123,7 @@ OpenAPI_transfer_mo_data_req_data_t *OpenAPI_transfer_mo_data_req_data_parseFrom
     if (mo_exp_data_counter) {
     mo_exp_data_counter_local_nonprim = OpenAPI_mo_exp_data_counter_parseFromJSON(mo_exp_data_counter);
     if (!mo_exp_data_counter_local_nonprim) {
-        ogs_error("OpenAPI_mo_exp_data_counter_parseFromJSON failed [mo_exp_data_counter]");
+        log_error("OpenAPI_mo_exp_data_counter_parseFromJSON failed [mo_exp_data_counter]");
         goto end;
     }
     }
@@ -132,7 +132,7 @@ OpenAPI_transfer_mo_data_req_data_t *OpenAPI_transfer_mo_data_req_data_parseFrom
     if (ue_location) {
     ue_location_local_nonprim = OpenAPI_user_location_parseFromJSON(ue_location);
     if (!ue_location_local_nonprim) {
-        ogs_error("OpenAPI_user_location_parseFromJSON failed [ue_location]");
+        log_error("OpenAPI_user_location_parseFromJSON failed [ue_location]");
         goto end;
     }
     }
@@ -165,10 +165,10 @@ OpenAPI_transfer_mo_data_req_data_t *OpenAPI_transfer_mo_data_req_data_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_transfer_mo_data_req_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed");
+        log_error("OpenAPI_transfer_mo_data_req_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -176,14 +176,14 @@ OpenAPI_transfer_mo_data_req_data_t *OpenAPI_transfer_mo_data_req_data_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

@@ -31,7 +31,7 @@ int lmf_sbi_open(void)
 
     /* Initialize SELF NF instance */
     nf_instance = ogs_sbi_self()->nf_instance;
-    ogs_assert(nf_instance);
+    log_assert(nf_instance);
     ogs_sbi_nf_fsm_init(nf_instance);
 
     /* Build NF instance information. It will be transmitted to NRF. */
@@ -43,7 +43,7 @@ int lmf_sbi_open(void)
     if (ogs_sbi_nf_service_is_available(OGS_SBI_SERVICE_NAME_NLMF_LOC)) {
         service = ogs_sbi_nf_service_build_default(
                     nf_instance, OGS_SBI_SERVICE_NAME_NLMF_LOC);
-        ogs_assert(service);
+        log_assert(service);
         ogs_sbi_nf_service_add_version(
                     service, OGS_SBI_API_V1, OGS_SBI_API_V1_0_0, NULL);
         ogs_sbi_nf_service_add_allowed_nf_type(service, OpenAPI_nf_type_AMF);
@@ -75,16 +75,16 @@ int lmf_amf_sbi_discover_and_send(
     int rv;
     ogs_sbi_xact_t *xact = NULL;
 
-    ogs_assert(service_type);
-    ogs_assert(location_request);
-    ogs_assert(build);
+    log_assert(service_type);
+    log_assert(location_request);
+    log_assert(build);
 
     xact = ogs_sbi_xact_add(
             location_request->id, &location_request->sbi, 
             service_type, discovery_option,
             (ogs_sbi_build_f)build, location_request, data);
     if (!xact) {
-        ogs_error("ogs_sbi_xact_add() failed");
+        log_error("ogs_sbi_xact_add() failed");
         return OGS_ERROR;
     }
 
@@ -92,7 +92,7 @@ int lmf_amf_sbi_discover_and_send(
 
     rv = ogs_sbi_discover_and_send(xact);
     if (rv != OGS_OK) {
-        ogs_error("ogs_sbi_discover_and_send() failed");
+        log_error("ogs_sbi_discover_and_send() failed");
         ogs_sbi_xact_remove(xact);
         return rv;
     }

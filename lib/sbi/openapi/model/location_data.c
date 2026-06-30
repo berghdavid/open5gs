@@ -29,7 +29,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_create(
 )
 {
     OpenAPI_location_data_t *location_data_local_var = ogs_malloc(sizeof(OpenAPI_location_data_t));
-    ogs_assert(location_data_local_var);
+    log_assert(location_data_local_var);
 
     location_data_local_var->location_estimate = location_estimate;
     location_data_local_var->accuracy_fulfilment_indicator = accuracy_fulfilment_indicator;
@@ -138,49 +138,49 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     OpenAPI_lnode_t *node = NULL;
 
     if (location_data == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [LocationData]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [LocationData]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!location_data->location_estimate) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [location_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [location_estimate]");
         return NULL;
     }
     cJSON *location_estimate_local_JSON = OpenAPI_geographic_area_convertToJSON(location_data->location_estimate);
     if (location_estimate_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [location_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [location_estimate]");
         goto end;
     }
     cJSON_AddItemToObject(item, "locationEstimate", location_estimate_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [location_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [location_estimate]");
         goto end;
     }
 
     if (location_data->accuracy_fulfilment_indicator) {
     cJSON *accuracy_fulfilment_indicator_local_JSON = OpenAPI_accuracy_fulfilment_indicator_convertToJSON(location_data->accuracy_fulfilment_indicator);
     if (accuracy_fulfilment_indicator_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [accuracy_fulfilment_indicator]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [accuracy_fulfilment_indicator]");
         goto end;
     }
     cJSON_AddItemToObject(item, "accuracyFulfilmentIndicator", accuracy_fulfilment_indicator_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [accuracy_fulfilment_indicator]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [accuracy_fulfilment_indicator]");
         goto end;
     }
     }
 
     if (location_data->is_age_of_location_estimate) {
     if (cJSON_AddNumberToObject(item, "ageOfLocationEstimate", location_data->age_of_location_estimate) == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [age_of_location_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [age_of_location_estimate]");
         goto end;
     }
     }
 
     if (location_data->timestamp_of_location_estimate) {
     if (cJSON_AddStringToObject(item, "timestampOfLocationEstimate", location_data->timestamp_of_location_estimate) == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [timestamp_of_location_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [timestamp_of_location_estimate]");
         goto end;
     }
     }
@@ -188,12 +188,12 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->velocity_estimate) {
     cJSON *velocity_estimate_local_JSON = OpenAPI_velocity_estimate_convertToJSON(location_data->velocity_estimate);
     if (velocity_estimate_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [velocity_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [velocity_estimate]");
         goto end;
     }
     cJSON_AddItemToObject(item, "velocityEstimate", velocity_estimate_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [velocity_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [velocity_estimate]");
         goto end;
     }
     }
@@ -201,12 +201,12 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->civic_address) {
     cJSON *civic_address_local_JSON = OpenAPI_civic_address_convertToJSON(location_data->civic_address);
     if (civic_address_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [civic_address]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [civic_address]");
         goto end;
     }
     cJSON_AddItemToObject(item, "civicAddress", civic_address_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [civic_address]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [civic_address]");
         goto end;
     }
     }
@@ -214,12 +214,12 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->local_location_estimate) {
     cJSON *local_location_estimate_local_JSON = OpenAPI_local_area_convertToJSON(location_data->local_location_estimate);
     if (local_location_estimate_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [local_location_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [local_location_estimate]");
         goto end;
     }
     cJSON_AddItemToObject(item, "localLocationEstimate", local_location_estimate_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [local_location_estimate]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [local_location_estimate]");
         goto end;
     }
     }
@@ -227,13 +227,13 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->positioning_data_list) {
     cJSON *positioning_data_listList = cJSON_AddArrayToObject(item, "positioningDataList");
     if (positioning_data_listList == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [positioning_data_list]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [positioning_data_list]");
         goto end;
     }
     OpenAPI_list_for_each(location_data->positioning_data_list, node) {
         cJSON *itemLocal = OpenAPI_positioning_method_and_usage_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_location_data_convertToJSON() failed [positioning_data_list]");
+            log_error("OpenAPI_location_data_convertToJSON() failed [positioning_data_list]");
             goto end;
         }
         cJSON_AddItemToArray(positioning_data_listList, itemLocal);
@@ -243,13 +243,13 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->gnss_positioning_data_list) {
     cJSON *gnss_positioning_data_listList = cJSON_AddArrayToObject(item, "gnssPositioningDataList");
     if (gnss_positioning_data_listList == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [gnss_positioning_data_list]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [gnss_positioning_data_list]");
         goto end;
     }
     OpenAPI_list_for_each(location_data->gnss_positioning_data_list, node) {
         cJSON *itemLocal = OpenAPI_gnss_positioning_method_and_usage_convertToJSON(node->data);
         if (itemLocal == NULL) {
-            ogs_error("OpenAPI_location_data_convertToJSON() failed [gnss_positioning_data_list]");
+            log_error("OpenAPI_location_data_convertToJSON() failed [gnss_positioning_data_list]");
             goto end;
         }
         cJSON_AddItemToArray(gnss_positioning_data_listList, itemLocal);
@@ -259,12 +259,12 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->ecgi) {
     cJSON *ecgi_local_JSON = OpenAPI_ecgi_convertToJSON(location_data->ecgi);
     if (ecgi_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [ecgi]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [ecgi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ecgi", ecgi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [ecgi]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [ecgi]");
         goto end;
     }
     }
@@ -272,40 +272,40 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->ncgi) {
     cJSON *ncgi_local_JSON = OpenAPI_ncgi_convertToJSON(location_data->ncgi);
     if (ncgi_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [ncgi]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [ncgi]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ncgi", ncgi_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [ncgi]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [ncgi]");
         goto end;
     }
     }
 
     if (location_data->is_altitude) {
     if (cJSON_AddNumberToObject(item, "altitude", location_data->altitude) == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [altitude]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [altitude]");
         goto end;
     }
     }
 
     if (location_data->is_barometric_pressure) {
     if (cJSON_AddNumberToObject(item, "barometricPressure", location_data->barometric_pressure) == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [barometric_pressure]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [barometric_pressure]");
         goto end;
     }
     }
 
     if (location_data->serving_lmf_identification) {
     if (cJSON_AddStringToObject(item, "servingLMFIdentification", location_data->serving_lmf_identification) == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [serving_lmf_identification]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [serving_lmf_identification]");
         goto end;
     }
     }
 
     if (location_data->ue_positioning_cap) {
     if (cJSON_AddStringToObject(item, "uePositioningCap", location_data->ue_positioning_cap) == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [ue_positioning_cap]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [ue_positioning_cap]");
         goto end;
     }
     }
@@ -313,19 +313,19 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->ue_area_ind) {
     cJSON *ue_area_ind_local_JSON = OpenAPI_ue_area_indication_convertToJSON(location_data->ue_area_ind);
     if (ue_area_ind_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [ue_area_ind]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [ue_area_ind]");
         goto end;
     }
     cJSON_AddItemToObject(item, "ueAreaInd", ue_area_ind_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [ue_area_ind]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [ue_area_ind]");
         goto end;
     }
     }
 
     if (location_data->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", location_data->supported_features) == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -333,12 +333,12 @@ cJSON *OpenAPI_location_data_convertToJSON(OpenAPI_location_data_t *location_dat
     if (location_data->achieved_qos) {
     cJSON *achieved_qos_local_JSON = OpenAPI_minor_location_qo_s_convertToJSON(location_data->achieved_qos);
     if (achieved_qos_local_JSON == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [achieved_qos]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [achieved_qos]");
         goto end;
     }
     cJSON_AddItemToObject(item, "achievedQos", achieved_qos_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed [achieved_qos]");
+        log_error("OpenAPI_location_data_convertToJSON() failed [achieved_qos]");
         goto end;
     }
     }
@@ -382,12 +382,12 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     OpenAPI_minor_location_qo_s_t *achieved_qos_local_nonprim = NULL;
     location_estimate = cJSON_GetObjectItemCaseSensitive(location_dataJSON, "locationEstimate");
     if (!location_estimate) {
-        ogs_error("OpenAPI_location_data_parseFromJSON() failed [location_estimate]");
+        log_error("OpenAPI_location_data_parseFromJSON() failed [location_estimate]");
         goto end;
     }
     location_estimate_local_nonprim = OpenAPI_geographic_area_parseFromJSON(location_estimate);
     if (!location_estimate_local_nonprim) {
-        ogs_error("OpenAPI_geographic_area_parseFromJSON failed [location_estimate]");
+        log_error("OpenAPI_geographic_area_parseFromJSON failed [location_estimate]");
         goto end;
     }
 
@@ -395,7 +395,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (accuracy_fulfilment_indicator) {
     accuracy_fulfilment_indicator_local_nonprim = OpenAPI_accuracy_fulfilment_indicator_parseFromJSON(accuracy_fulfilment_indicator);
     if (!accuracy_fulfilment_indicator_local_nonprim) {
-        ogs_error("OpenAPI_accuracy_fulfilment_indicator_parseFromJSON failed [accuracy_fulfilment_indicator]");
+        log_error("OpenAPI_accuracy_fulfilment_indicator_parseFromJSON failed [accuracy_fulfilment_indicator]");
         goto end;
     }
     }
@@ -403,7 +403,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     age_of_location_estimate = cJSON_GetObjectItemCaseSensitive(location_dataJSON, "ageOfLocationEstimate");
     if (age_of_location_estimate) {
     if (!cJSON_IsNumber(age_of_location_estimate)) {
-        ogs_error("OpenAPI_location_data_parseFromJSON() failed [age_of_location_estimate]");
+        log_error("OpenAPI_location_data_parseFromJSON() failed [age_of_location_estimate]");
         goto end;
     }
     }
@@ -411,7 +411,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     timestamp_of_location_estimate = cJSON_GetObjectItemCaseSensitive(location_dataJSON, "timestampOfLocationEstimate");
     if (timestamp_of_location_estimate) {
     if (!cJSON_IsString(timestamp_of_location_estimate) && !cJSON_IsNull(timestamp_of_location_estimate)) {
-        ogs_error("OpenAPI_location_data_parseFromJSON() failed [timestamp_of_location_estimate]");
+        log_error("OpenAPI_location_data_parseFromJSON() failed [timestamp_of_location_estimate]");
         goto end;
     }
     }
@@ -420,7 +420,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (velocity_estimate) {
     velocity_estimate_local_nonprim = OpenAPI_velocity_estimate_parseFromJSON(velocity_estimate);
     if (!velocity_estimate_local_nonprim) {
-        ogs_error("OpenAPI_velocity_estimate_parseFromJSON failed [velocity_estimate]");
+        log_error("OpenAPI_velocity_estimate_parseFromJSON failed [velocity_estimate]");
         goto end;
     }
     }
@@ -429,7 +429,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (civic_address) {
     civic_address_local_nonprim = OpenAPI_civic_address_parseFromJSON(civic_address);
     if (!civic_address_local_nonprim) {
-        ogs_error("OpenAPI_civic_address_parseFromJSON failed [civic_address]");
+        log_error("OpenAPI_civic_address_parseFromJSON failed [civic_address]");
         goto end;
     }
     }
@@ -438,7 +438,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (local_location_estimate) {
     local_location_estimate_local_nonprim = OpenAPI_local_area_parseFromJSON(local_location_estimate);
     if (!local_location_estimate_local_nonprim) {
-        ogs_error("OpenAPI_local_area_parseFromJSON failed [local_location_estimate]");
+        log_error("OpenAPI_local_area_parseFromJSON failed [local_location_estimate]");
         goto end;
     }
     }
@@ -447,7 +447,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (positioning_data_list) {
         cJSON *positioning_data_list_local = NULL;
         if (!cJSON_IsArray(positioning_data_list)) {
-            ogs_error("OpenAPI_location_data_parseFromJSON() failed [positioning_data_list]");
+            log_error("OpenAPI_location_data_parseFromJSON() failed [positioning_data_list]");
             goto end;
         }
 
@@ -455,12 +455,12 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
 
         cJSON_ArrayForEach(positioning_data_list_local, positioning_data_list) {
             if (!cJSON_IsObject(positioning_data_list_local)) {
-                ogs_error("OpenAPI_location_data_parseFromJSON() failed [positioning_data_list]");
+                log_error("OpenAPI_location_data_parseFromJSON() failed [positioning_data_list]");
                 goto end;
             }
             OpenAPI_positioning_method_and_usage_t *positioning_data_listItem = OpenAPI_positioning_method_and_usage_parseFromJSON(positioning_data_list_local);
             if (!positioning_data_listItem) {
-                ogs_error("No positioning_data_listItem");
+                log_error("No positioning_data_listItem");
                 goto end;
             }
             OpenAPI_list_add(positioning_data_listList, positioning_data_listItem);
@@ -471,7 +471,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (gnss_positioning_data_list) {
         cJSON *gnss_positioning_data_list_local = NULL;
         if (!cJSON_IsArray(gnss_positioning_data_list)) {
-            ogs_error("OpenAPI_location_data_parseFromJSON() failed [gnss_positioning_data_list]");
+            log_error("OpenAPI_location_data_parseFromJSON() failed [gnss_positioning_data_list]");
             goto end;
         }
 
@@ -479,12 +479,12 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
 
         cJSON_ArrayForEach(gnss_positioning_data_list_local, gnss_positioning_data_list) {
             if (!cJSON_IsObject(gnss_positioning_data_list_local)) {
-                ogs_error("OpenAPI_location_data_parseFromJSON() failed [gnss_positioning_data_list]");
+                log_error("OpenAPI_location_data_parseFromJSON() failed [gnss_positioning_data_list]");
                 goto end;
             }
             OpenAPI_gnss_positioning_method_and_usage_t *gnss_positioning_data_listItem = OpenAPI_gnss_positioning_method_and_usage_parseFromJSON(gnss_positioning_data_list_local);
             if (!gnss_positioning_data_listItem) {
-                ogs_error("No gnss_positioning_data_listItem");
+                log_error("No gnss_positioning_data_listItem");
                 goto end;
             }
             OpenAPI_list_add(gnss_positioning_data_listList, gnss_positioning_data_listItem);
@@ -495,7 +495,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (ecgi) {
     ecgi_local_nonprim = OpenAPI_ecgi_parseFromJSON(ecgi);
     if (!ecgi_local_nonprim) {
-        ogs_error("OpenAPI_ecgi_parseFromJSON failed [ecgi]");
+        log_error("OpenAPI_ecgi_parseFromJSON failed [ecgi]");
         goto end;
     }
     }
@@ -504,7 +504,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (ncgi) {
     ncgi_local_nonprim = OpenAPI_ncgi_parseFromJSON(ncgi);
     if (!ncgi_local_nonprim) {
-        ogs_error("OpenAPI_ncgi_parseFromJSON failed [ncgi]");
+        log_error("OpenAPI_ncgi_parseFromJSON failed [ncgi]");
         goto end;
     }
     }
@@ -512,7 +512,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     altitude = cJSON_GetObjectItemCaseSensitive(location_dataJSON, "altitude");
     if (altitude) {
     if (!cJSON_IsNumber(altitude)) {
-        ogs_error("OpenAPI_location_data_parseFromJSON() failed [altitude]");
+        log_error("OpenAPI_location_data_parseFromJSON() failed [altitude]");
         goto end;
     }
     }
@@ -520,7 +520,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     barometric_pressure = cJSON_GetObjectItemCaseSensitive(location_dataJSON, "barometricPressure");
     if (barometric_pressure) {
     if (!cJSON_IsNumber(barometric_pressure)) {
-        ogs_error("OpenAPI_location_data_parseFromJSON() failed [barometric_pressure]");
+        log_error("OpenAPI_location_data_parseFromJSON() failed [barometric_pressure]");
         goto end;
     }
     }
@@ -528,7 +528,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     serving_lmf_identification = cJSON_GetObjectItemCaseSensitive(location_dataJSON, "servingLMFIdentification");
     if (serving_lmf_identification) {
     if (!cJSON_IsString(serving_lmf_identification) && !cJSON_IsNull(serving_lmf_identification)) {
-        ogs_error("OpenAPI_location_data_parseFromJSON() failed [serving_lmf_identification]");
+        log_error("OpenAPI_location_data_parseFromJSON() failed [serving_lmf_identification]");
         goto end;
     }
     }
@@ -536,7 +536,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     ue_positioning_cap = cJSON_GetObjectItemCaseSensitive(location_dataJSON, "uePositioningCap");
     if (ue_positioning_cap) {
     if (!cJSON_IsString(ue_positioning_cap) && !cJSON_IsNull(ue_positioning_cap)) {
-        ogs_error("OpenAPI_location_data_parseFromJSON() failed [ue_positioning_cap]");
+        log_error("OpenAPI_location_data_parseFromJSON() failed [ue_positioning_cap]");
         goto end;
     }
     }
@@ -545,7 +545,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (ue_area_ind) {
     ue_area_ind_local_nonprim = OpenAPI_ue_area_indication_parseFromJSON(ue_area_ind);
     if (!ue_area_ind_local_nonprim) {
-        ogs_error("OpenAPI_ue_area_indication_parseFromJSON failed [ue_area_ind]");
+        log_error("OpenAPI_ue_area_indication_parseFromJSON failed [ue_area_ind]");
         goto end;
     }
     }
@@ -553,7 +553,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     supported_features = cJSON_GetObjectItemCaseSensitive(location_dataJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_location_data_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_location_data_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -562,7 +562,7 @@ OpenAPI_location_data_t *OpenAPI_location_data_parseFromJSON(cJSON *location_dat
     if (achieved_qos) {
     achieved_qos_local_nonprim = OpenAPI_minor_location_qo_s_parseFromJSON(achieved_qos);
     if (!achieved_qos_local_nonprim) {
-        ogs_error("OpenAPI_minor_location_qo_s_parseFromJSON failed [achieved_qos]");
+        log_error("OpenAPI_minor_location_qo_s_parseFromJSON failed [achieved_qos]");
         goto end;
     }
     }
@@ -651,10 +651,10 @@ OpenAPI_location_data_t *OpenAPI_location_data_copy(OpenAPI_location_data_t *dst
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_location_data_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_location_data_convertToJSON() failed");
+        log_error("OpenAPI_location_data_convertToJSON() failed");
         return NULL;
     }
 
@@ -662,14 +662,14 @@ OpenAPI_location_data_t *OpenAPI_location_data_copy(OpenAPI_location_data_t *dst
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

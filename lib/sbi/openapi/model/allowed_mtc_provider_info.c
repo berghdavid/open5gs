@@ -10,7 +10,7 @@ OpenAPI_allowed_mtc_provider_info_t *OpenAPI_allowed_mtc_provider_info_create(
 )
 {
     OpenAPI_allowed_mtc_provider_info_t *allowed_mtc_provider_info_local_var = ogs_malloc(sizeof(OpenAPI_allowed_mtc_provider_info_t));
-    ogs_assert(allowed_mtc_provider_info_local_var);
+    log_assert(allowed_mtc_provider_info_local_var);
 
     allowed_mtc_provider_info_local_var->mtc_provider_information = mtc_provider_information;
     allowed_mtc_provider_info_local_var->af_id = af_id;
@@ -42,21 +42,21 @@ cJSON *OpenAPI_allowed_mtc_provider_info_convertToJSON(OpenAPI_allowed_mtc_provi
     OpenAPI_lnode_t *node = NULL;
 
     if (allowed_mtc_provider_info == NULL) {
-        ogs_error("OpenAPI_allowed_mtc_provider_info_convertToJSON() failed [AllowedMtcProviderInfo]");
+        log_error("OpenAPI_allowed_mtc_provider_info_convertToJSON() failed [AllowedMtcProviderInfo]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (allowed_mtc_provider_info->mtc_provider_information) {
     if (cJSON_AddStringToObject(item, "mtcProviderInformation", allowed_mtc_provider_info->mtc_provider_information) == NULL) {
-        ogs_error("OpenAPI_allowed_mtc_provider_info_convertToJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_allowed_mtc_provider_info_convertToJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
 
     if (allowed_mtc_provider_info->af_id) {
     if (cJSON_AddStringToObject(item, "afId", allowed_mtc_provider_info->af_id) == NULL) {
-        ogs_error("OpenAPI_allowed_mtc_provider_info_convertToJSON() failed [af_id]");
+        log_error("OpenAPI_allowed_mtc_provider_info_convertToJSON() failed [af_id]");
         goto end;
     }
     }
@@ -74,7 +74,7 @@ OpenAPI_allowed_mtc_provider_info_t *OpenAPI_allowed_mtc_provider_info_parseFrom
     mtc_provider_information = cJSON_GetObjectItemCaseSensitive(allowed_mtc_provider_infoJSON, "mtcProviderInformation");
     if (mtc_provider_information) {
     if (!cJSON_IsString(mtc_provider_information) && !cJSON_IsNull(mtc_provider_information)) {
-        ogs_error("OpenAPI_allowed_mtc_provider_info_parseFromJSON() failed [mtc_provider_information]");
+        log_error("OpenAPI_allowed_mtc_provider_info_parseFromJSON() failed [mtc_provider_information]");
         goto end;
     }
     }
@@ -82,7 +82,7 @@ OpenAPI_allowed_mtc_provider_info_t *OpenAPI_allowed_mtc_provider_info_parseFrom
     af_id = cJSON_GetObjectItemCaseSensitive(allowed_mtc_provider_infoJSON, "afId");
     if (af_id) {
     if (!cJSON_IsString(af_id) && !cJSON_IsNull(af_id)) {
-        ogs_error("OpenAPI_allowed_mtc_provider_info_parseFromJSON() failed [af_id]");
+        log_error("OpenAPI_allowed_mtc_provider_info_parseFromJSON() failed [af_id]");
         goto end;
     }
     }
@@ -102,10 +102,10 @@ OpenAPI_allowed_mtc_provider_info_t *OpenAPI_allowed_mtc_provider_info_copy(Open
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_allowed_mtc_provider_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_allowed_mtc_provider_info_convertToJSON() failed");
+        log_error("OpenAPI_allowed_mtc_provider_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -113,14 +113,14 @@ OpenAPI_allowed_mtc_provider_info_t *OpenAPI_allowed_mtc_provider_info_copy(Open
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

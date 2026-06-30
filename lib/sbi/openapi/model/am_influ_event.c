@@ -8,7 +8,7 @@ OpenAPI_am_influ_event_t *OpenAPI_am_influ_event_create(
 )
 {
     OpenAPI_am_influ_event_t *am_influ_event_local_var = ogs_malloc(sizeof(OpenAPI_am_influ_event_t));
-    ogs_assert(am_influ_event_local_var);
+    log_assert(am_influ_event_local_var);
 
 
     return am_influ_event_local_var;
@@ -30,7 +30,7 @@ cJSON *OpenAPI_am_influ_event_convertToJSON(OpenAPI_am_influ_event_t *am_influ_e
     OpenAPI_lnode_t *node = NULL;
 
     if (am_influ_event == NULL) {
-        ogs_error("OpenAPI_am_influ_event_convertToJSON() failed [AmInfluEvent]");
+        log_error("OpenAPI_am_influ_event_convertToJSON() failed [AmInfluEvent]");
         return NULL;
     }
 
@@ -56,10 +56,10 @@ OpenAPI_am_influ_event_t *OpenAPI_am_influ_event_copy(OpenAPI_am_influ_event_t *
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_am_influ_event_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_am_influ_event_convertToJSON() failed");
+        log_error("OpenAPI_am_influ_event_convertToJSON() failed");
         return NULL;
     }
 
@@ -67,14 +67,14 @@ OpenAPI_am_influ_event_t *OpenAPI_am_influ_event_copy(OpenAPI_am_influ_event_t *
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

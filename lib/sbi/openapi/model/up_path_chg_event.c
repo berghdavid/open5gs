@@ -13,7 +13,7 @@ OpenAPI_up_path_chg_event_t *OpenAPI_up_path_chg_event_create(
 )
 {
     OpenAPI_up_path_chg_event_t *up_path_chg_event_local_var = ogs_malloc(sizeof(OpenAPI_up_path_chg_event_t));
-    ogs_assert(up_path_chg_event_local_var);
+    log_assert(up_path_chg_event_local_var);
 
     up_path_chg_event_local_var->notification_uri = notification_uri;
     up_path_chg_event_local_var->notif_corre_id = notif_corre_id;
@@ -48,41 +48,41 @@ cJSON *OpenAPI_up_path_chg_event_convertToJSON(OpenAPI_up_path_chg_event_t *up_p
     OpenAPI_lnode_t *node = NULL;
 
     if (up_path_chg_event == NULL) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed [UpPathChgEvent]");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed [UpPathChgEvent]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!up_path_chg_event->notification_uri) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed [notification_uri]");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed [notification_uri]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "notificationUri", up_path_chg_event->notification_uri) == NULL) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed [notification_uri]");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed [notification_uri]");
         goto end;
     }
 
     if (!up_path_chg_event->notif_corre_id) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed [notif_corre_id]");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed [notif_corre_id]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "notifCorreId", up_path_chg_event->notif_corre_id) == NULL) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed [notif_corre_id]");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed [notif_corre_id]");
         goto end;
     }
 
     if (up_path_chg_event->dnai_chg_type == OpenAPI_dnai_change_type_NULL) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed [dnai_chg_type]");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed [dnai_chg_type]");
         return NULL;
     }
     if (cJSON_AddStringToObject(item, "dnaiChgType", OpenAPI_dnai_change_type_ToString(up_path_chg_event->dnai_chg_type)) == NULL) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed [dnai_chg_type]");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed [dnai_chg_type]");
         goto end;
     }
 
     if (up_path_chg_event->is_af_ack_ind) {
     if (cJSON_AddBoolToObject(item, "afAckInd", up_path_chg_event->af_ack_ind) == NULL) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed [af_ack_ind]");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed [af_ack_ind]");
         goto end;
     }
     }
@@ -102,31 +102,31 @@ OpenAPI_up_path_chg_event_t *OpenAPI_up_path_chg_event_parseFromJSON(cJSON *up_p
     cJSON *af_ack_ind = NULL;
     notification_uri = cJSON_GetObjectItemCaseSensitive(up_path_chg_eventJSON, "notificationUri");
     if (!notification_uri) {
-        ogs_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [notification_uri]");
+        log_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [notification_uri]");
         goto end;
     }
     if (!cJSON_IsString(notification_uri)) {
-        ogs_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [notification_uri]");
+        log_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [notification_uri]");
         goto end;
     }
 
     notif_corre_id = cJSON_GetObjectItemCaseSensitive(up_path_chg_eventJSON, "notifCorreId");
     if (!notif_corre_id) {
-        ogs_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [notif_corre_id]");
+        log_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [notif_corre_id]");
         goto end;
     }
     if (!cJSON_IsString(notif_corre_id)) {
-        ogs_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [notif_corre_id]");
+        log_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [notif_corre_id]");
         goto end;
     }
 
     dnai_chg_type = cJSON_GetObjectItemCaseSensitive(up_path_chg_eventJSON, "dnaiChgType");
     if (!dnai_chg_type) {
-        ogs_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [dnai_chg_type]");
+        log_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [dnai_chg_type]");
         goto end;
     }
     if (!cJSON_IsString(dnai_chg_type)) {
-        ogs_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [dnai_chg_type]");
+        log_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [dnai_chg_type]");
         goto end;
     }
     dnai_chg_typeVariable = OpenAPI_dnai_change_type_FromString(dnai_chg_type->valuestring);
@@ -134,7 +134,7 @@ OpenAPI_up_path_chg_event_t *OpenAPI_up_path_chg_event_parseFromJSON(cJSON *up_p
     af_ack_ind = cJSON_GetObjectItemCaseSensitive(up_path_chg_eventJSON, "afAckInd");
     if (af_ack_ind) {
     if (!cJSON_IsBool(af_ack_ind)) {
-        ogs_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [af_ack_ind]");
+        log_error("OpenAPI_up_path_chg_event_parseFromJSON() failed [af_ack_ind]");
         goto end;
     }
     }
@@ -157,10 +157,10 @@ OpenAPI_up_path_chg_event_t *OpenAPI_up_path_chg_event_copy(OpenAPI_up_path_chg_
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_up_path_chg_event_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_up_path_chg_event_convertToJSON() failed");
+        log_error("OpenAPI_up_path_chg_event_convertToJSON() failed");
         return NULL;
     }
 
@@ -168,14 +168,14 @@ OpenAPI_up_path_chg_event_t *OpenAPI_up_path_chg_event_copy(OpenAPI_up_path_chg_
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

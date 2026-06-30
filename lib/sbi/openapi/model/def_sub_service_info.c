@@ -10,7 +10,7 @@ OpenAPI_def_sub_service_info_t *OpenAPI_def_sub_service_info_create(
 )
 {
     OpenAPI_def_sub_service_info_t *def_sub_service_info_local_var = ogs_malloc(sizeof(OpenAPI_def_sub_service_info_t));
-    ogs_assert(def_sub_service_info_local_var);
+    log_assert(def_sub_service_info_local_var);
 
     def_sub_service_info_local_var->versions = versions;
     def_sub_service_info_local_var->supported_features = supported_features;
@@ -45,7 +45,7 @@ cJSON *OpenAPI_def_sub_service_info_convertToJSON(OpenAPI_def_sub_service_info_t
     OpenAPI_lnode_t *node = NULL;
 
     if (def_sub_service_info == NULL) {
-        ogs_error("OpenAPI_def_sub_service_info_convertToJSON() failed [DefSubServiceInfo]");
+        log_error("OpenAPI_def_sub_service_info_convertToJSON() failed [DefSubServiceInfo]");
         return NULL;
     }
 
@@ -53,12 +53,12 @@ cJSON *OpenAPI_def_sub_service_info_convertToJSON(OpenAPI_def_sub_service_info_t
     if (def_sub_service_info->versions) {
     cJSON *versionsList = cJSON_AddArrayToObject(item, "versions");
     if (versionsList == NULL) {
-        ogs_error("OpenAPI_def_sub_service_info_convertToJSON() failed [versions]");
+        log_error("OpenAPI_def_sub_service_info_convertToJSON() failed [versions]");
         goto end;
     }
     OpenAPI_list_for_each(def_sub_service_info->versions, node) {
         if (cJSON_AddStringToObject(versionsList, "", (char*)node->data) == NULL) {
-            ogs_error("OpenAPI_def_sub_service_info_convertToJSON() failed [versions]");
+            log_error("OpenAPI_def_sub_service_info_convertToJSON() failed [versions]");
             goto end;
         }
     }
@@ -66,7 +66,7 @@ cJSON *OpenAPI_def_sub_service_info_convertToJSON(OpenAPI_def_sub_service_info_t
 
     if (def_sub_service_info->supported_features) {
     if (cJSON_AddStringToObject(item, "supportedFeatures", def_sub_service_info->supported_features) == NULL) {
-        ogs_error("OpenAPI_def_sub_service_info_convertToJSON() failed [supported_features]");
+        log_error("OpenAPI_def_sub_service_info_convertToJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -86,7 +86,7 @@ OpenAPI_def_sub_service_info_t *OpenAPI_def_sub_service_info_parseFromJSON(cJSON
     if (versions) {
         cJSON *versions_local = NULL;
         if (!cJSON_IsArray(versions)) {
-            ogs_error("OpenAPI_def_sub_service_info_parseFromJSON() failed [versions]");
+            log_error("OpenAPI_def_sub_service_info_parseFromJSON() failed [versions]");
             goto end;
         }
 
@@ -96,7 +96,7 @@ OpenAPI_def_sub_service_info_t *OpenAPI_def_sub_service_info_parseFromJSON(cJSON
             double *localDouble = NULL;
             int *localInt = NULL;
             if (!cJSON_IsString(versions_local)) {
-                ogs_error("OpenAPI_def_sub_service_info_parseFromJSON() failed [versions]");
+                log_error("OpenAPI_def_sub_service_info_parseFromJSON() failed [versions]");
                 goto end;
             }
             OpenAPI_list_add(versionsList, ogs_strdup(versions_local->valuestring));
@@ -106,7 +106,7 @@ OpenAPI_def_sub_service_info_t *OpenAPI_def_sub_service_info_parseFromJSON(cJSON
     supported_features = cJSON_GetObjectItemCaseSensitive(def_sub_service_infoJSON, "supportedFeatures");
     if (supported_features) {
     if (!cJSON_IsString(supported_features) && !cJSON_IsNull(supported_features)) {
-        ogs_error("OpenAPI_def_sub_service_info_parseFromJSON() failed [supported_features]");
+        log_error("OpenAPI_def_sub_service_info_parseFromJSON() failed [supported_features]");
         goto end;
     }
     }
@@ -133,10 +133,10 @@ OpenAPI_def_sub_service_info_t *OpenAPI_def_sub_service_info_copy(OpenAPI_def_su
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_def_sub_service_info_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_def_sub_service_info_convertToJSON() failed");
+        log_error("OpenAPI_def_sub_service_info_convertToJSON() failed");
         return NULL;
     }
 
@@ -144,14 +144,14 @@ OpenAPI_def_sub_service_info_t *OpenAPI_def_sub_service_info_copy(OpenAPI_def_su
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 

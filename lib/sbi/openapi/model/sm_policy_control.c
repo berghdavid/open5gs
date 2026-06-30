@@ -10,7 +10,7 @@ OpenAPI_sm_policy_control_t *OpenAPI_sm_policy_control_create(
 )
 {
     OpenAPI_sm_policy_control_t *sm_policy_control_local_var = ogs_malloc(sizeof(OpenAPI_sm_policy_control_t));
-    ogs_assert(sm_policy_control_local_var);
+    log_assert(sm_policy_control_local_var);
 
     sm_policy_control_local_var->context = context;
     sm_policy_control_local_var->policy = policy;
@@ -42,38 +42,38 @@ cJSON *OpenAPI_sm_policy_control_convertToJSON(OpenAPI_sm_policy_control_t *sm_p
     OpenAPI_lnode_t *node = NULL;
 
     if (sm_policy_control == NULL) {
-        ogs_error("OpenAPI_sm_policy_control_convertToJSON() failed [SmPolicyControl]");
+        log_error("OpenAPI_sm_policy_control_convertToJSON() failed [SmPolicyControl]");
         return NULL;
     }
 
     item = cJSON_CreateObject();
     if (!sm_policy_control->context) {
-        ogs_error("OpenAPI_sm_policy_control_convertToJSON() failed [context]");
+        log_error("OpenAPI_sm_policy_control_convertToJSON() failed [context]");
         return NULL;
     }
     cJSON *context_local_JSON = OpenAPI_sm_policy_context_data_convertToJSON(sm_policy_control->context);
     if (context_local_JSON == NULL) {
-        ogs_error("OpenAPI_sm_policy_control_convertToJSON() failed [context]");
+        log_error("OpenAPI_sm_policy_control_convertToJSON() failed [context]");
         goto end;
     }
     cJSON_AddItemToObject(item, "context", context_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sm_policy_control_convertToJSON() failed [context]");
+        log_error("OpenAPI_sm_policy_control_convertToJSON() failed [context]");
         goto end;
     }
 
     if (!sm_policy_control->policy) {
-        ogs_error("OpenAPI_sm_policy_control_convertToJSON() failed [policy]");
+        log_error("OpenAPI_sm_policy_control_convertToJSON() failed [policy]");
         return NULL;
     }
     cJSON *policy_local_JSON = OpenAPI_sm_policy_decision_convertToJSON(sm_policy_control->policy);
     if (policy_local_JSON == NULL) {
-        ogs_error("OpenAPI_sm_policy_control_convertToJSON() failed [policy]");
+        log_error("OpenAPI_sm_policy_control_convertToJSON() failed [policy]");
         goto end;
     }
     cJSON_AddItemToObject(item, "policy", policy_local_JSON);
     if (item->child == NULL) {
-        ogs_error("OpenAPI_sm_policy_control_convertToJSON() failed [policy]");
+        log_error("OpenAPI_sm_policy_control_convertToJSON() failed [policy]");
         goto end;
     }
 
@@ -91,23 +91,23 @@ OpenAPI_sm_policy_control_t *OpenAPI_sm_policy_control_parseFromJSON(cJSON *sm_p
     OpenAPI_sm_policy_decision_t *policy_local_nonprim = NULL;
     context = cJSON_GetObjectItemCaseSensitive(sm_policy_controlJSON, "context");
     if (!context) {
-        ogs_error("OpenAPI_sm_policy_control_parseFromJSON() failed [context]");
+        log_error("OpenAPI_sm_policy_control_parseFromJSON() failed [context]");
         goto end;
     }
     context_local_nonprim = OpenAPI_sm_policy_context_data_parseFromJSON(context);
     if (!context_local_nonprim) {
-        ogs_error("OpenAPI_sm_policy_context_data_parseFromJSON failed [context]");
+        log_error("OpenAPI_sm_policy_context_data_parseFromJSON failed [context]");
         goto end;
     }
 
     policy = cJSON_GetObjectItemCaseSensitive(sm_policy_controlJSON, "policy");
     if (!policy) {
-        ogs_error("OpenAPI_sm_policy_control_parseFromJSON() failed [policy]");
+        log_error("OpenAPI_sm_policy_control_parseFromJSON() failed [policy]");
         goto end;
     }
     policy_local_nonprim = OpenAPI_sm_policy_decision_parseFromJSON(policy);
     if (!policy_local_nonprim) {
-        ogs_error("OpenAPI_sm_policy_decision_parseFromJSON failed [policy]");
+        log_error("OpenAPI_sm_policy_decision_parseFromJSON failed [policy]");
         goto end;
     }
 
@@ -134,10 +134,10 @@ OpenAPI_sm_policy_control_t *OpenAPI_sm_policy_control_copy(OpenAPI_sm_policy_co
     cJSON *item = NULL;
     char *content = NULL;
 
-    ogs_assert(src);
+    log_assert(src);
     item = OpenAPI_sm_policy_control_convertToJSON(src);
     if (!item) {
-        ogs_error("OpenAPI_sm_policy_control_convertToJSON() failed");
+        log_error("OpenAPI_sm_policy_control_convertToJSON() failed");
         return NULL;
     }
 
@@ -145,14 +145,14 @@ OpenAPI_sm_policy_control_t *OpenAPI_sm_policy_control_copy(OpenAPI_sm_policy_co
     cJSON_Delete(item);
 
     if (!content) {
-        ogs_error("cJSON_Print() failed");
+        log_error("cJSON_Print() failed");
         return NULL;
     }
 
     item = cJSON_Parse(content);
     ogs_free(content);
     if (!item) {
-        ogs_error("cJSON_Parse() failed");
+        log_error("cJSON_Parse() failed");
         return NULL;
     }
 
