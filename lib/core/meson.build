@@ -227,8 +227,10 @@ libcore_sources = files('''
 
     log.c
     log.h
-    optparse.h
     optparse.c
+    optparse.h
+    signal_handler.c
+    signal_handler.h
 
     ogs-compat.h
     ogs-macros.h
@@ -247,7 +249,6 @@ libcore_sources = files('''
     ogs-rand.h
     ogs-uuid.h
     ogs-thread.h
-    ogs-signal.h
     ogs-process.h
     ogs-sockaddr.h
     ogs-socket.h
@@ -280,7 +281,6 @@ libcore_sources = files('''
     ogs-rand.c
     ogs-uuid.c
     ogs-thread.c
-    ogs-signal.c
     ogs-process.c
     ogs-sockaddr.c
     ogs-socket.c

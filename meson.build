@@ -1,5 +1,5 @@
 project('lmf', 'c', 'cpp',
-    version : '0.0.0',
+    version : '0.0.1',
     meson_version : '>= 0.55.0',
     default_options : [
         'warning_level=1',
@@ -7,7 +7,7 @@ project('lmf', 'c', 'cpp',
     ],
 )
 
-genlib_version = '0.0.0'
+genlib_version = '0.0.1'
 
 prefix = get_option('prefix')
 bindir = join_paths(prefix, get_option('bindir'))

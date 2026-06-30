@@ -32,55 +32,19 @@ static void show_version(void)
 static void show_help(const char *name)
 {
     printf("Usage: %s [options]\n"
-        "Options:\n"
-       "   -c filename    : set configuration file\n"
-       "   -l filename    : set logging file\n"
-       "   -e level       : set global log-level (default:info)\n"
-       "   -m domain      : set log-domain (e.g. mme:sgw:gtp)\n"
-       "   -d             : print lots of debugging information\n"
-       "   -t             : print tracing information for developer\n"
-       "   -D             : start as a daemon\n"
-       "   -v             : show version number and exit\n"
-       "   -h             : show this message and exit\n"
-       "   -k             : use <id> config section\n"
-       "\n", name);
-}
-
-static int check_signal(int signum)
-{
-    switch (signum) {
-    case SIGTERM:
-    case SIGINT:
-        ogs_info("%s received", 
-                signum == SIGTERM ? "SIGTERM" : "SIGINT");
-
-        return 1;
-    case SIGHUP:
-        ogs_info("SIGHUP received");
-        ogs_log_cycle();
-
-        break;
-    case SIGUSR1:
-        fprintf(stderr,
-                "%*s%-30s contains %6lu bytes in %3lu blocks (ref %d) %p\n",
-                0, "", "core",
-                (unsigned long)talloc_total_size(__ogs_talloc_core),
-                (unsigned long)talloc_total_blocks(__ogs_talloc_core),
-                (int)talloc_reference_count(__ogs_talloc_core),
-                __ogs_talloc_core);
-        break;
-
-    case SIGUSR2:
-        talloc_report_full(__ogs_talloc_core, stderr);
-        break;
-
-    default:
-        ogs_error("Signal-NUM[%d] received (%s)",
-                signum, ogs_signal_description_get(signum));
-        break;
-            
-    }
-    return 0;
+           "Options:\n"
+           "   -c filename    : set configuration file\n"
+           "   -l filename    : set logging file\n"
+           "   -e level       : set global log-level (default:info)\n"
+           "   -m domain      : set log-domain (e.g. mme:sgw:gtp)\n"
+           "   -d             : print lots of debugging information\n"
+           "   -t             : print tracing information for developer\n"
+           "   -D             : start as a daemon\n"
+           "   -v             : show version number and exit\n"
+           "   -h             : show this message and exit\n"
+           "   -k             : use <id> config section\n"
+           "\n",
+           name);
 }
 
 static void terminate(void)
@@ -99,7 +63,8 @@ int main(int argc, const char *const argv[])
      */
     int rv, i, opt;
     struct optparse options;
-    struct {
+    struct
+    {
         char *config_file;
         char *config_section;
         char *log_file;
@@ -109,13 +74,15 @@ int main(int argc, const char *const argv[])
         bool enable_debug;
         bool enable_trace;
     } optarg;
-    const char *argv_out[argc+1];
+    const char *argv_out[argc + 1];
 
     memset(&optarg, 0, sizeof(optarg));
 
-    optparse_init(&options, (char**)argv);
-    while ((opt = optparse(&options, "vhDc:l:e:m:dtk:")) != -1) {
-        switch (opt) {
+    optparse_init(&options, (char **)argv);
+    while ((opt = optparse(&options, "vhDc:l:e:m:dtk:")) != -1)
+    {
+        switch (opt)
+        {
         case 'v':
             show_version();
             return OGS_OK;
@@ -143,7 +110,7 @@ int main(int argc, const char *const argv[])
 #else
             printf("%s: Not Support in WINDOWS", argv[0]);
 #endif
-            break;
+        break;
         case 'c':
             optarg.config_file = options.optarg;
             break;
@@ -175,40 +142,50 @@ int main(int argc, const char *const argv[])
         }
     }
 
-    if (optarg.enable_debug) optarg.log_level = (char*)"debug";
-    if (optarg.enable_trace) optarg.log_level = (char*)"trace";
+    if (optarg.enable_debug)
+        optarg.log_level = (char *)"debug";
+    if (optarg.enable_trace)
+        optarg.log_level = (char *)"trace";
 
     i = 0;
     argv_out[i++] = argv[0];
 
-    if (optarg.config_file) {
+    if (optarg.config_file)
+    {
         argv_out[i++] = "-c";
         argv_out[i++] = optarg.config_file;
     }
-    if (optarg.log_file) {
+    if (optarg.log_file)
+    {
         argv_out[i++] = "-l";
         argv_out[i++] = optarg.log_file;
     }
-    if (optarg.log_level) {
+    if (optarg.log_level)
+    {
         argv_out[i++] = "-e";
         argv_out[i++] = optarg.log_level;
     }
-    if (optarg.domain_mask) {
+    if (optarg.domain_mask)
+    {
         argv_out[i++] = "-m";
         argv_out[i++] = optarg.domain_mask;
     }
-    if (optarg.config_section) {
+    if (optarg.config_section)
+    {
         argv_out[i++] = "-k";
         argv_out[i++] = optarg.config_section;
     }
 
     argv_out[i] = NULL;
 
-    ogs_signal_init();
-    ogs_setup_signal_thread();
+    pthread_t signal_thread;
+    sigset_t set;
+
+    initialize_signal_handler(&signal_thread, &set);
 
     rv = ogs_app_initialize(LMF_VERSION, DEFAULT_CONFIG_FILENAME, argv_out);
-    if (rv != OGS_OK) {
+    if (rv != OGS_OK)
+    {
         if (rv == OGS_RETRY)
             return EXIT_SUCCESS;
 
@@ -217,7 +194,8 @@ int main(int argc, const char *const argv[])
     }
 
     rv = app_initialize(argv_out);
-    if (rv != OGS_OK) {
+    if (rv != OGS_OK)
+    {
         if (rv == OGS_RETRY)
             return EXIT_SUCCESS;
 
@@ -226,10 +204,9 @@ int main(int argc, const char *const argv[])
     }
 
     atexit(terminate);
-    ogs_signal_thread(check_signal);
+    pthread_join(signal_thread, NULL);
 
     ogs_info("Open5GS daemon terminating...");
 
     return OGS_OK;
 }
-
