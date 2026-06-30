@@ -27,7 +27,9 @@ static void log_signal(int sig)
 	int i;
 	for (i = 0; i < sizeof(signals); i++) {
 		if (signals[i].signal == sig) {
-			log_log(signals[i].log_level, "Signal %d received (%s)", sig, signals[i].description);
+			log_log(signals[i].log_level, __FILE__, __LINE__,
+				"Signal %d received (%s)",
+				sig, signals[i].description);
 			return;
 		}
 	}

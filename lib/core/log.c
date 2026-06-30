@@ -23,6 +23,7 @@
 #include "log.h"
 
 #define MAX_CALLBACKS 32
+#define LOG_DEFAULT LOG_INFO
 
 typedef struct
 {
@@ -51,20 +52,18 @@ const size_t log_level_count = sizeof(level_strings) / sizeof(level_strings[0]);
 static void stdout_callback(log_Event *ev)
 {
 	char buf[16];
-	buf[strftime(buf, sizeof(buf), "%H:%M:%S", ev->time)] = '\0';
+	buf[strftime(buf, sizeof(buf), "%m/%d %H:%M:%S", ev->time)] = '\0';
 	
-	if (L.level <= LOG_TRACE) {
-		fprintf(
-			ev->udata, "%s %s%-5s\x1b[0m \x1b[90m%s:%d:\x1b[0m ",
-			buf, level_colors[ev->level], level_strings[ev->level],
-			ev->file, ev->line);
-	} else {
-		fprintf(
-			ev->udata, "%s %s%-5s\x1b[0m \x1b[90m:\x1b[0m ",
-			buf, level_colors[ev->level], level_strings[ev->level]);
-	}
+	fprintf(ev->udata, "%s %s%s\x1b[0m: ",
+		buf, level_colors[ev->level], level_strings[ev->level]);
 
 	vfprintf(ev->udata, ev->fmt, ev->ap);
+
+	if (L.level <= LOG_DEBUG) {
+		fprintf(ev->udata, " \x1b[90m(%s:%d)\x1b[0m",
+			ev->file, ev->line);
+	}
+
 	fprintf(ev->udata, "\n");
 	fflush(ev->udata);
 }
@@ -109,21 +108,20 @@ void log_set_lock(log_LockFn fn, void *udata)
 void log_set_level_str(const char *level)
 {
 	if (level == NULL) {
-		// Default
-		log_set_level(LOG_INFO);
+		log_set_level(LOG_DEFAULT);
 		return;
 	}
 
 	int i;
 	for (i = 0; i < log_level_count; i++) {
-		if (strcmp(level, level_strings[i]) == 0) {
+		if (strcasecmp(level, level_strings[i]) == 0) {
 			log_set_level(i);
 			return;
 		}
 	}
 
-	log_set_level(LOG_INFO);
-	log_error("Unrecognized log level %s defaulting to info", level);
+	log_set_level(LOG_DEFAULT);
+	log_error("Unrecognized log level %s, defaulting to info", level);
 }
 
 void log_set_level(int level)

@@ -99,7 +99,7 @@ int ogs_app_initialize(
      */
     if (optarg.log_file)
         ogs_app()->logger.file = optarg.log_file;
-        log_add_fp(optarg.log_file, L.level);
+        // TODO: Add file handler
 
     if (ogs_app()->logger.file) {
         if (ogs_log_add_file(ogs_app()->logger.file) == NULL) {
@@ -112,9 +112,10 @@ int ogs_app_initialize(
     if (optarg.domain_mask)
         ogs_app()->logger.domain = optarg.domain_mask;
 
-    if (optarg.log_level) 
+    if (optarg.log_level) {
         ogs_app()->logger.level = optarg.log_level;
-        log_set_level_str(optarg.log_level);
+    }
+    log_set_level_str(ogs_app()->logger.level);
 
     rv = ogs_log_config_domain(
             ogs_app()->logger.domain, ogs_app()->logger.level);
