@@ -27,12 +27,12 @@ libasn1c_util = library('ogsasn1c-util',
     version : genlib_version,
     c_args : libasn1c_common_cc_flags,
     include_directories : libasn1c_util_inc,
-    dependencies : libasn1c_common_dep,
+    dependencies : [libcore_dep, libnrppa_dep],
     install : true,
 )
 
 libasn1c_util_dep = declare_dependency(
     link_with : libasn1c_util,
     include_directories : libasn1c_util_inc,
-    dependencies : libasn1c_common_dep,
+    dependencies : [libcore_dep, libnrppa_dep],
 )

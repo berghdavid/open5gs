@@ -75,15 +75,6 @@ void ogs_asn_buffer_to_BIT_STRING(
         void *buf, int size, int unused, BIT_STRING_t *bit_string);
 void ogs_asn_uint32_to_BIT_STRING(
         uint32_t uint32, uint8_t bitsize, BIT_STRING_t *bit_string);
-void ogs_asn_BIT_STRING_to_uint32(BIT_STRING_t *bit_string, uint32_t *uint32);
-
-int ogs_asn_BIT_STRING_to_ip(
-        BIT_STRING_t *bit_string, ogs_ip_t *ip);
-int ogs_asn_ip_to_BIT_STRING(
-        ogs_ip_t *ip, BIT_STRING_t *bit_string);
-
-int ogs_asn_copy_ie(
-        const asn_TYPE_descriptor_t *td, void *src, void *dst);
 
 #ifdef __cplusplus
 }
