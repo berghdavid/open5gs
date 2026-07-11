@@ -22,6 +22,7 @@
 
 #include "context.h"
 #include "nrppa-types.h"
+#include "E-CIDMeasurementInitiationResponse.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,11 +32,10 @@ int lmf_location_determine(lmf_location_request_t *location_request);
 int lmf_location_determine_cellid(lmf_location_request_t *location_request);
 int lmf_location_determine_ecid(
         lmf_location_request_t *location_request,
-        lmf_nrppa_ecid_response_t *ecid_response);
+        E_CIDMeasurementInitiationResponse_t *ecid_response_ie);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* LMF_LOCATION_DETERMINATION_H */
-

@@ -21,6 +21,11 @@
 #include "nrppa-parse.h"
 #include "location-determination.h"
 #include "namf-path.h"
+#include "NRPPA-PDU.h"
+#include "SuccessfulOutcome.h"
+#include "UnsuccessfulOutcome.h"
+#include "ProtocolIE-Container.h"
+#include "ProtocolIE-Field.h"
 
 #include <string.h>
 
@@ -31,7 +36,7 @@ void lmf_namf_handler_nrppa_measurement_response(
     ogs_sbi_message_t message;
     lmf_location_request_t *location_request = NULL;
     ogs_pkbuf_t *nrppa_pkbuf = NULL;
-    lmf_nrppa_pdu_t nrppa_pdu;
+    NRPPA_PDU_t pdu;
 
     log_assert(response);
     log_assert(data);
@@ -48,16 +53,14 @@ void lmf_namf_handler_nrppa_measurement_response(
         /* Also check HTTP status - 503/404 might indicate UE not reachable.
          * But only fallback if explicitly enabled (hAccuracy < 1m).
          * For high-accuracy requests (hAccuracy >= 1m, < 100m), fallback should NOT occur. */
-        if (response) {
-            if (response->status == OGS_SBI_HTTP_STATUS_NOT_FOUND ||
-                response->status == OGS_SBI_HTTP_STATUS_SERVICE_UNAVAILABLE) {
-                if (should_fallback) {
-                    log_info("[%s] ECID failed with HTTP %d (UE not found/unavailable), attempting CELLID fallback",
-                            location_request->supi, response->status);
-                } else {
-                    log_warn("[%s] ECID failed with HTTP %d, but fallback not enabled (high-accuracy request). Returning error.",
-                            location_request->supi, response->status);
-                }
+        if (response->status == OGS_SBI_HTTP_STATUS_NOT_FOUND ||
+            response->status == OGS_SBI_HTTP_STATUS_SERVICE_UNAVAILABLE) {
+            if (should_fallback) {
+                log_info("[%s] ECID failed with HTTP %d (UE not found/unavailable), attempting CELLID fallback",
+                        location_request->supi, response->status);
+            } else {
+                log_warn("[%s] ECID failed with HTTP %d, but fallback not enabled (high-accuracy request). Returning error.",
+                        location_request->supi, response->status);
             }
         }
 
@@ -378,8 +381,10 @@ void lmf_namf_handler_nrppa_measurement_response(
     }
 
     /* Parse NRPPa PDU */
-    rv = lmf_nrppa_parse_pdu(nrppa_pkbuf, &nrppa_pdu);
+    memset(&pdu, 0, sizeof(NRPPA_PDU_t));
+    rv = lmf_nrppa_parse_pdu(nrppa_pkbuf, &pdu);
     ogs_pkbuf_free(nrppa_pkbuf);
+    // `return` after this point must free the memory held by PDU, as is done after :end tag
 
     if (rv != OGS_OK) {
         ogs_sbi_stream_t *stream = NULL;
@@ -408,16 +413,20 @@ void lmf_namf_handler_nrppa_measurement_response(
         ogs_sbi_message_free(&message);
         ogs_sbi_response_free(response);
         lmf_location_request_remove(location_request);
-        return;
+        goto end;
     }
 
     /* Store parsed NRPPa response in location request */
-    if (nrppa_pdu.message_type == NRPPA_MESSAGE_TYPE_ECID_MEASUREMENT_INITIATION_RESPONSE) {
-        log_info("[%s] ECID measurement response parsed successfully",
-                location_request->supi);
+    if (pdu.present == NRPPA_PDU_PR_successfulOutcome) {
+        SuccessfulOutcome_t *successfulOutcome = (SuccessfulOutcome_t*)pdu.choice.successfulOutcome;
+        if (successfulOutcome->value.present != SuccessfulOutcome__value_PR_E_CIDMeasurementInitiationResponse) {
+            goto end;
+        }
+
+        log_info("[%s] ECID measurement response parsed successfully", location_request->supi);
 
         /* Continue with location determination process */
-        rv = lmf_location_determine_ecid(location_request, &nrppa_pdu.u.ecid_response);
+        rv = lmf_location_determine_ecid(location_request, successfulOutcome->value.choice.E_CIDMeasurementInitiationResponse);
         if (rv != OGS_OK) {
             log_error("[%s] lmf_location_determine_ecid() failed",
                     location_request->supi);
@@ -436,26 +445,50 @@ void lmf_namf_handler_nrppa_measurement_response(
         /* Free message first (frees its owned pkbufs and OpenAPI structures), then response (frees shared strings) */
         ogs_sbi_message_free(&message);
         ogs_sbi_response_free(response);
-    } else if (nrppa_pdu.message_type == NRPPA_MESSAGE_TYPE_ECID_MEASUREMENT_FAILURE_INDICATION) {
-        log_warn("[%s] gNB rejected NRPPa measurement request (cause=%u)",
-                location_request->supi, nrppa_pdu.u.ecid_failure.cause);
+    } else if (pdu.present == NRPPA_PDU_PR_unsuccessfulOutcome) {
+        UnsuccessfulOutcome_t *unsuccessfulOutcome = pdu.choice.unsuccessfulOutcome;
+        if (unsuccessfulOutcome->value.present != UnsuccessfulOutcome__value_PR_E_CIDMeasurementInitiationFailure) {
+            log_error("Unexpected unsuccessful outcome [%d]", unsuccessfulOutcome->value.present);
+            goto end;
+        }
+        E_CIDMeasurementInitiationFailure_t *ecid_meas_init_failure = (E_CIDMeasurementInitiationFailure_t*)unsuccessfulOutcome->value.choice.E_CIDMeasurementInitiationFailure;
+
+        ProtocolIE_Container_97P2_t *ecid_failures = (ProtocolIE_Container_97P2_t*)ecid_meas_init_failure->protocolIEs;
+        E_CIDMeasurementInitiationFailure_IEs_t *ecid_failure;
+        Cause_t *cause = NULL;
+        int i;
+        for (i = 0; i < ecid_failures->list.count; i++) {
+            ecid_failure = ecid_failures->list.array[i];
+            if (ecid_failure->value.present == E_CIDMeasurementInitiationFailure_IEs__value_PR_Cause) {
+                cause = ecid_failure->value.choice.Cause;
+                break;
+            }
+        }
+        
+        log_cause(location_request->supi, cause);
+        if (!cause) {
+            goto end;
+        }
 
         /* Check if we should fallback to CELLID */
         /* Fallback is enabled for explicit ECID requests or when UE is not reachable */
         bool should_fallback = location_request->ecid_fallback_to_cellid;
         
         /* Check failure cause - fallback for UE not reachable, resource unavailable, etc. */
-        uint8_t cause = nrppa_pdu.u.ecid_failure.cause;
         /* Common causes that warrant fallback: 
          * 0 = undefined
          * 1 = radio network - temporary network problem
          * 2 = radio network - UE not reachable
          * 3 = radio network - resource unavailable
          */
-        if (cause == 2 || cause == 3) {
+        if (cause->present == Cause_PR_radioNetwork && (
+            cause->choice.radioNetwork == CauseRadioNetwork_requested_item_temporarily_not_available ||
+            cause->choice.radioNetwork == CauseRadioNetwork_serving_NG_RAN_node_changed ||
+            cause->choice.radioNetwork == CauseRadioNetwork_requested_item_not_supported_on_time
+        )) {
             should_fallback = true;
-            log_info("[%s] ECID failed due to UE not reachable or resource unavailable (cause=%u), attempting CELLID fallback",
-                    location_request->supi, cause);
+            log_info("[%s] ECID failed due to UE not reachable or resource unavailable, attempting CELLID fallback",
+                    location_request->supi);
         }
 
         if (should_fallback) {
@@ -498,7 +531,7 @@ void lmf_namf_handler_nrppa_measurement_response(
                 lmf_location_request_remove(location_request);
             }
             /* Response will be handled asynchronously in lmf_namf_handler_location_info_response */
-            return;
+            goto end;
         }
 
         /* No fallback - send error response */
@@ -507,8 +540,8 @@ void lmf_namf_handler_nrppa_measurement_response(
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            error_detail = ogs_msprintf("gNB rejected NRPPa measurement request (cause=%u)",
-                    nrppa_pdu.u.ecid_failure.cause);
+            error_detail = ogs_msprintf("gNB rejected NRPPa measurement request (causetype=%d)",
+                cause->present);
 
             /* Try to send error response - stream might be closed already, so don't assert */
             bool sent = ogs_sbi_server_send_error(stream,
@@ -556,13 +589,12 @@ void lmf_namf_handler_nrppa_measurement_response(
         ogs_sbi_stream_t *stream = NULL;
         char *error_detail = NULL;
 
-        log_error("[%s] Unexpected NRPPa message type: %u",
-                location_request->supi, nrppa_pdu.message_type);
+        log_error("[%s] Unexpected NRPPa message type: %d",
+                location_request->supi, pdu.present);
 
         stream = ogs_sbi_stream_find_by_id(location_request->stream_id);
         if (stream) {
-            error_detail = ogs_msprintf("Unexpected NRPPa message type: %u",
-                    nrppa_pdu.message_type);
+            error_detail = ogs_msprintf("Unexpected NRPPa message type: %u", pdu.present);
 
             log_assert(true ==
                 ogs_sbi_server_send_error(stream,
@@ -590,6 +622,9 @@ void lmf_namf_handler_nrppa_measurement_response(
         
         lmf_location_request_remove(location_request);
     }
+
+end:
+    ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NRPPA_PDU, &pdu);
 }
 
 void lmf_namf_handler_location_info_response(

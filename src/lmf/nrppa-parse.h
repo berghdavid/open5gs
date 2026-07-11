@@ -20,15 +20,34 @@
 #ifndef LMF_NRPPA_PARSE_H
 #define LMF_NRPPA_PARSE_H
 
+#include "NRPPA-PDU.h"
+#include "Cause.h"
+#include "NRCellIdentifier.h"
+#include "PLMN-Identity.h"
 #include "ogs-core.h"
-#include "nrppa-types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Parse NRPPa PDU */
-int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, lmf_nrppa_pdu_t *pdu);
+int lmf_nrppa_parse_pdu(ogs_pkbuf_t *pkbuf, NRPPA_PDU_t *pdu);
+void log_cause(const char *supi, Cause_t *cause);
+
+/* Returns the complete 36-bit NR Cell Identity. */
+uint64_t get_cell_id(const BIT_STRING_t *nci);
+
+/* Returns the eNB-ID.
+ */
+uint32_t get_enb_id(const BIT_STRING_t *nci);
+
+/* Returns the gNB-ID.
+ * gnb_id_bits must be between 22 and 32.
+ */
+uint32_t get_gnb_id(const BIT_STRING_t *nci, unsigned gnb_id_bits);
+
+/* Returns the Cell ID part (optional). */
+uint16_t get_sector_id(const BIT_STRING_t *nci, unsigned gnb_id_bits);
 
 #ifdef __cplusplus
 }

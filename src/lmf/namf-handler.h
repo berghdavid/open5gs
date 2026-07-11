@@ -37,6 +37,3 @@ void lmf_namf_handler_location_info_response(
 #endif
 
 #endif /* LMF_NAMF_HANDLER_H */
-
-
-

@@ -1,8 +1,4 @@
 /*
- * Copyright (C) 2025 by Juraj Elias <juraj.elias@gmail.com>
- *
- * This file is part of Open5GS.
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -38,6 +34,3 @@ int lmf_nlmf_handle_nrppa_measurement_notification(
 #endif
 
 #endif /* LMF_NLMF_HANDLER_H */
-
-
-
