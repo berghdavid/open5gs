@@ -45,12 +45,12 @@ liblmf_sources = files('''
 
 liblmf = static_library('lmf',
     sources : liblmf_sources,
-    dependencies : [libsbi_dep, libm, libasn1c_nrppa_dep],
+    dependencies : [libsbi_dep, libm, libnrppa_dep],
     install : false)
 
 liblmf_dep = declare_dependency(
     link_with : liblmf,
-    dependencies : [libsbi_dep, libm, libasn1c_nrppa_dep])
+    dependencies : [libsbi_dep, libm, libnrppa_dep])
 
 lmf_sources = files('''
     app.c

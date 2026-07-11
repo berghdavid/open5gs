@@ -35,14 +35,8 @@ ogs_pkbuf_t *lmf_nrppa_build_ecid_measurement_request(
         uint64_t ue_ngap_id,
         uint8_t requested_measurements);
 
-/* Free NRPPa PDU structure */
-void lmf_nrppa_pdu_free(lmf_nrppa_pdu_t *pdu);
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* LMF_NRPPA_BUILD_H */
-
-
-
