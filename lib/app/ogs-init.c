@@ -127,8 +127,7 @@ int ogs_app_initialize(
      * Stage 7 : Print Banner
      */
     if (ogs_app()->version) {
-        log_msg(LOG_INFO,
-                "Open5GS daemon %s\n\n", ogs_app()->version);
+        log_msg(LOG_INFO, "LMF daemon %s", ogs_app()->version);
 
         log_info("Configuration: '%s'", ogs_app()->file);
 
