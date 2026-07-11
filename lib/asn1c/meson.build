@@ -27,4 +27,3 @@ libasn1c_common_cc_flags += cc.get_supported_arguments([
 ])
 
 subdir('gen')
-subdir('util')
