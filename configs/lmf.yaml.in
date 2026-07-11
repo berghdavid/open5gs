@@ -1,7 +1,7 @@
 logger:
   file:
     level: debug   # fatal|error|warn|info(default)|debug|tracelogger:
-  level: debug   # fatal|error|warn|info(default)|debug|tracelogger:
+  level: info   # fatal|error|warn|info(default)|debug|tracelogger:
 
 global:
   max:
